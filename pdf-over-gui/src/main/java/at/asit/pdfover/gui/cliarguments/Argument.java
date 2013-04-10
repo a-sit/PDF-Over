@@ -23,6 +23,8 @@ import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
 
 /**
  * CLI Argument base class
+ * 
+ * Implementing arguments have to be registered in PrepareConfigurationState
  */
 public abstract class Argument {
 
