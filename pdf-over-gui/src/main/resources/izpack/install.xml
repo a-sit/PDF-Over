@@ -27,12 +27,10 @@
 
 	<resources>
 		<res id="Unix_shortcutSpec.xml" src="./unix_shortcutSpec.xml" />
-		<res id="Win_shortcutSpec.xml" src="./win_shortcutSpec.xml" />
-		<res id="Win_shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
 		<res id="shortcutSpec.xml" src="./win_shortcutSpec.xml" />
 		<res id="shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
 		<res id="TargetPanel.dir.windows" src="defaultInstallDirWinProfile.txt" />
-		<res id="JFrameIcon.png" src="icon16x16.png"/>
+		<res id="JFrameIcon.png" src="icon16x16.png" />
 		<res id="customicons.xml" src="./customicons.xml" />
 		<res id="Installer.image" src="logo.gif" />
 		<res id="Installer.image.0" src="logo.gif" />
@@ -65,6 +63,8 @@
 			<file src="PDF-Over-Un.ini" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
 			<singlefile src="PDF-Over.exe" target="$INSTALL_PATH/Uninstaller/PDF-Over-Un.exe" os="windows"/>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
+				os="unix" stage="never"></executable>
+			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win.bat"
 				os="windows" stage="never"></executable>
