@@ -403,19 +403,5 @@
 			<id>swt-repo</id>
 			<url>https://swt-repo.googlecode.com/svn/repo/</url>
 		</repository>
-		<repository>
-			<id>akathist-repository</id>
-			<name>Akathist Repository</name>
-			<url>http://www.9stmaryrd.com/maven</url>
-		</repository>
 	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>akathist-repository</id>
-			<name>Akathist Repository</name>
-			<url>http://www.9stmaryrd.com/maven</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 </project>
