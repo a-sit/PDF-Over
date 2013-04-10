@@ -91,7 +91,7 @@ public class SigningState extends State {
 					SWT.NONE, Messages.getString("error.Signatur"), this.threadException, true);  //$NON-NLS-1$
 			this.threadException = null;
 			if(error.open()) {
-				this.stateMachine.update();
+				this.setNextState(new BKUSelectionState(this.stateMachine));
 			} else {
 				this.stateMachine.exit();
 			}

@@ -43,6 +43,7 @@ import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
 import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
@@ -302,6 +303,24 @@ public class MainWindow {
 		this.btn_sign.setLayoutData(fd_btn_sign);
 		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
+		this.btn_sign.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				MainWindow.this.stateMachine.jumpToState(new BKUSelectionState(
+						MainWindow.this.stateMachine));
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// NOTHING TO DO HERE
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// NOTHING TO DO HERE
+			}
+		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
 		MainBarEndButton end = new MainBarEndButton(composite, SWT.NONE);

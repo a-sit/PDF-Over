@@ -115,6 +115,9 @@ public class OutputState extends State {
 	 */
 	@Override
 	public void cleanUp() {
+		
+		this.stateMachine.getStatus().setSignResult(null);
+		
 		if (this.outputComposite != null)
 			this.outputComposite.dispose();
 	}
