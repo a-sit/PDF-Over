@@ -84,8 +84,8 @@ public class LocalBKUState extends State {
 				SLRequest request = this.state.signingState
 						.getSignatureRequest();
 
-				//String sl_request = request.getBase64Request();
-				String sl_request = request.getFileUploadRequest();
+				String sl_request = request.getBase64Request();
+				//String sl_request = request.getFileUploadRequest();
 
 				HttpClient client = new HttpClient();
 
@@ -95,17 +95,17 @@ public class LocalBKUState extends State {
 				StringPart xmlpart = new StringPart(
 						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+				/*FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
 						new FileUploadSource(request.getSignatureData()));
 
 				Part[] parts = { xmlpart, filepart };
 				
 				method.setRequestEntity(new MultipartRequestEntity(parts, method
-						.getParams()));
+						.getParams()));*/
 				
 				//log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
 
-				//method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 
 				int returnCode = client.executeMethod(method);
 
