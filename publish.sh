@@ -4,8 +4,8 @@
 PUBLISH_DIR="/srv/apache2/www/pdfover"
 LOG_DIR="log"
 VERSION="4.0.0-SNAPSHOT"
-CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdfover\/"
-CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdfover\/"
+CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
+CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
 
 
