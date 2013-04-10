@@ -43,12 +43,15 @@ public class Constants {
 
 	/** Main bar active background - light start of gradient */
 	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = new Color(display, 0xB4, 0xCD, 0xEC);
+//	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = new Color(display, 0xEC, 0xAD, 0xE7);
 
 	/** Main bar active background - dark end of gradient */
 	public static final Color MAINBAR_ACTIVE_BACK_DARK = new Color(display, 0x6B, 0xA5, 0xD9);
+//	public static final Color MAINBAR_ACTIVE_BACK_DARK = new Color(display, 0xD9, 0x53, 0x9C);
 
 	/** Main bar inactive background */
 	public static final Color MAINBAR_INACTIVE_BACK = new Color(display, 0xD4, 0xE7, 0xF1);
+//	public static final Color MAINBAR_INACTIVE_BACK = new Color(display, 0xF1, 0xD1, 0xE8);
 
 	/** Main bar active text color */
 	public static final Color MAINBAR_ACTIVE_TEXTCOLOR = new Color(display, 0x00, 0x00, 0x00);
