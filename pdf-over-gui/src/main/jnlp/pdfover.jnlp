@@ -21,68 +21,19 @@
 
   <update check="timeout" policy="prompt-update"/>
 
-  <resources os="Linux" arch="i386">
+  <resources os="Linux">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_linux_x86.jar" main="true"/>
-  </resources>
-  <resources os="Linux" arch="x86">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_linux_x86.jar" main="true"/>
+    <jar href="setup_pdfover_linux.jar" main="true"/>
   </resources>
 
-  <resources os="Linux" arch="x86_64">
+  <resources os="Windows">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_linux_x64.jar" main="true"/>
-  </resources>
-  <resources os="Linux" arch="amd64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_linux_x64.jar" main="true"/>
-  </resources>
-  <resources os="Linux" arch="ppc64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_linux_x64.jar" main="true"/>
+    <jar href="setup_pdfover_windows.jar" main="true"/>
   </resources>
 
-
-  <resources os="Windows" arch="x86">
+  <resources os="Mac OS X">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_windows_x86.jar" main="true"/>
-  </resources>
-
-  <resources os="Windows" arch="x86_64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_windows_x64.jar" main="true"/>
-  </resources>
-  <resources os="Windows" arch="amd64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_windows_x64.jar" main="true"/>
-  </resources>
-
-
-  <resources os="Mac OS X" arch="x86">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x86.jar" main="true"/>
-  </resources>
-  <resources os="Mac OS X" arch="i386">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x86.jar" main="true"/>
-  </resources>
-  <resources os="Mac OS X" arch="ppc">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x86.jar" main="true"/>
-  </resources>
-
-  <resources os="Mac OS X" arch="x86_64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x64.jar" main="true"/>
-  </resources>
-  <resources os="Mac OS X" arch="amd64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x64.jar" main="true"/>
-  </resources>
-  <resources os="Mac OS X" arch="ppc64">
-    <java version="1.6+"/>
-    <jar href="setup_pdfover_mac_x64.jar" main="true"/>
+    <jar href="setup_pdfover_mac" main="true"/>
   </resources>
 
   <application-desc main-class="com.izforge.izpack.installer.Installer"/>

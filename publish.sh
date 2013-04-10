@@ -44,8 +44,8 @@ echo -e "Publishing to: $TYELLOW$PUBLISH_DIR$TNORMAL"
 mkdir -p $PUBLISH_DIR
 mkdir -p $LOG_DIR
 
-profiles=( linux linux-64 windows windows-64 mac mac-64 )
-names=( linux_x86 linux_x64 windows_x86 windows_x64 mac_x86 mac_x64 )
+profiles=( linux windows mac )
+names=( linux windows mac )
 
 for (( i = 0 ; i < ${#names[@]} ; i++ )) do
  	PROFILE=${profiles[$i]}

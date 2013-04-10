@@ -118,7 +118,7 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<excludeScope>system</excludeScope> <!-- this excludes tools.jar, e.g. -->
-							<excludeGroupIds>org.codehaus.izpack</excludeGroupIds>
+							<excludeGroupIds>org.codehaus.izpack,org.eclipse.swt</excludeGroupIds>
 						</configuration>
 					</execution>
 				</executions>
@@ -167,8 +167,9 @@
 								<resource>
 									<directory>src/main/resources</directory>
 									<includes>
-										<include>scripts/*</include>
 										<include>icons/*</include>
+										<include>lib-swt/swt-${target.name}-*</include>
+										<include>scripts/*</include>
 									</includes>
 								</resource>
 								<resource>
@@ -211,6 +212,7 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>izpack/*</exclude>
+					<exclude>lib-swt/*</exclude>
 					<exclude>scripts/*</exclude>
 					<exclude>keystore.jks</exclude>
 				</excludes>
@@ -240,8 +242,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/linux-64</staging.dir>
-				<target.name>linux-64</target.name>
+				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
+				<target.name>linux</target.name>
 			</properties>
 		</profile>
 		<profile>
@@ -283,8 +285,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/windows-64</staging.dir>
-				<target.name>windows-64</target.name>
+				<staging.dir>${project.build.directory}/staging/windows</staging.dir>
+				<target.name>windows</target.name>
 			</properties>
 		</profile>
 
@@ -312,8 +314,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/mac-64</staging.dir>
-				<target.name>mac-64</target.name>
+				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
+				<target.name>mac</target.name>
 			</properties>
 		</profile>
 	</profiles>

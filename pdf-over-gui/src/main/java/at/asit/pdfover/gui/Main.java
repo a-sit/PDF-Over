@@ -21,6 +21,8 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
@@ -37,20 +39,23 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		StateMachineImpl stateMachine = new StateMachineImpl(args);
-		
+		log.debug("Loading SWT libraries"); //$NON-NLS-1$
+		try {
+			SWTLoader.loadSWT();
+		} catch (InitializationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
-		
 		if(!configDir.exists()) {
 			configDir.mkdir();
-			
 		}
-		
+
+		StateMachineImpl stateMachine = new StateMachineImpl(args);
+
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
-		
 		stateMachine.start();
-		
 		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
 	}
-
 }
