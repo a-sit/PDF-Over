@@ -238,12 +238,8 @@ public class OutputComposite extends StateComposite {
 		}
 		log.debug("Trying to save to '" + outputFileName + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		this.saveFailed = !saveResultAsFile(inputFolder, outputFileName);
-
-		if (!this.saveFailed) {
-			// Save successful
-			this.outputFile = new File(inputFolder, outputFileName);
-		}
+		this.outputFile = saveResultAsFile(inputFolder, outputFileName);
+		this.saveFailed = (this.outputFile == null);
 
 		// If saving failed, enable save button
 		enableSaveButton(this.saveFailed);
@@ -256,15 +252,17 @@ public class OutputComposite extends StateComposite {
 	 * @param inputFolder the Folder the original document is located at
 	 * @param target the filename to save the document as
 	 * 
-	 * @return whether save was successful
+	 * @return saved File (or null if unsuccessful)
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private boolean saveResultAsFile(File inputFolder, String target) {
+	private File saveResultAsFile(File inputFolder, String target) {
 		if (target == null)
-			return false;
+			return null;
 
-		File targetFile = new File(inputFolder, target);
+		File targetFile = new File(target);
+		if (!targetFile.isAbsolute())
+			targetFile = new File(inputFolder, target);
 
 		if (targetFile.exists()) {
 			Dialog dialog = new Dialog(this.getShell(), 
@@ -272,7 +270,7 @@ public class OutputComposite extends StateComposite {
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)
 			{
-				return false;
+				return null;
 			}
 		}
 
@@ -285,13 +283,15 @@ public class OutputComposite extends StateComposite {
 			outstream.close();
 		} catch (FileNotFoundException e) {
 			log.debug("File not found", e); //$NON-NLS-1$
-			return false;
+			return null;
 		} catch (IOException e) {
 			log.debug("IO Error", e); //$NON-NLS-1$
-			return false;
+			return null;
 		}
 
-		return targetFile.exists();
+		if (!targetFile.exists())
+			return null;
+		return targetFile;
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class OutputComposite extends StateComposite {
 		name = FilenameUtils.getName(name);
 		String extension = FilenameUtils.getExtension(name);
 		name = FilenameUtils.removeExtension(name);
-		return name + Constants.SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
+		return name + Constants.SIGNED_SUFFIX + FilenameUtils.EXTENSION_SEPARATOR  + extension;
 	}
 
 	/**
@@ -345,10 +345,12 @@ public class OutputComposite extends StateComposite {
 				if (!OutputComposite.this.outputFile.exists())
 					return;
 
-				// Desktop supported check already done in constructor
+				// Normalize filename
+				File f = new File(FilenameUtils.normalize(
+						OutputComposite.this.outputFile.getAbsolutePath()));
+				log.debug("Trying to open " + f.toString()); //$NON-NLS-1$
 				if (Desktop.isDesktopSupported()) {
-					Desktop.getDesktop().open(
-							OutputComposite.this.outputFile);
+					Desktop.getDesktop().open(f);
 				} else {
 					log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
 				}
