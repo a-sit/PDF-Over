@@ -68,7 +68,8 @@
   <modules>
   	<module>pdf-signer-interface</module>
   	<module>pdf-signer-pdf-as</module>
-  	
-  	
+
+
+  	<module>pdf-gui</module>
   </modules>
 </project>
