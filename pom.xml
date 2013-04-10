@@ -160,6 +160,11 @@
 				<artifactId>pdfview</artifactId>
 				<version>0.9.2-Borisvl</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jpedal</groupId>
+				<artifactId>jbig2</artifactId>
+				<version>1.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
