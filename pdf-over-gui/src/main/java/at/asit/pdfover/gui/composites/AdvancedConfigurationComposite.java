@@ -47,7 +47,6 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.exceptions.OutputfolderDontExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
-import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
@@ -396,7 +395,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		String[] localeStrings = new String[Constants.SUPPORTED_LOCALES.length];
 
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
+			localeStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage(Constants.SUPPORTED_LOCALES[i]);
 		}
 
 		this.cmbLocaleAuswahl.setItems(localeStrings);
