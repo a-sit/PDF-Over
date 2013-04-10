@@ -23,8 +23,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
@@ -36,7 +36,7 @@ public class OutputFolderArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public OutputFolderArgument() {
-		super(new String[] {"-o"}, "Sets the output folder to use. Example: -o <folder>"); //$NON-NLS-1$
+		super(new String[] {"-o"}, Messages.getString("argument.help.output")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class OutputFolderArgument extends CLIArgument {
 				}
 				
 				if(!outputFolderDir.isDirectory()) {
-					throw new IOException(outputFolderDir + " is not a directory");
+					throw new IOException(outputFolderDir + Messages.getString("argument.error.output")); //$NON-NLS-1$
 				}
 				
 				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
@@ -76,11 +76,11 @@ public class OutputFolderArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Output folder argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Output folder argument invalid! Use: " + this.getHelpText(), ex);
+					Messages.getString("argument.invalid.output") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				"Output folder argument invalid! Use: " + this.getHelpText(), null);
+				Messages.getString("argument.invalid.output") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }

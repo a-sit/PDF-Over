@@ -27,8 +27,6 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -42,7 +40,6 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -54,6 +51,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
@@ -61,7 +59,6 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
-import org.eclipse.swt.layout.FillLayout;
 
 /**
  * 
@@ -84,7 +81,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			FileDialog dialog = new FileDialog(
 					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
 			dialog.setFilterExtensions(new String[] { "*.jpg", "*.gif" }); //$NON-NLS-1$ //$NON-NLS-2$
-			dialog.setFilterNames(new String[] { "JPG Dateien", "Gif Dateien" });
+			dialog.setFilterNames(new String[] { 
+					Messages.getString("common.JPGExtension_Description"),  //$NON-NLS-1$
+					Messages.getString("common.GIFExtension_Description") }); //$NON-NLS-1$
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -206,7 +205,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.recalculateEmblemSize();
 		} catch (Exception e) {
 			this.lblEmblem
-					.setText("No Image. Drag and Drop a Image. Or use the browse button to select an emblem.");
+					.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
 			this.lblEmblem.setImage(null);
 			if (this.origEmblem != null) {
 				this.origEmblem.dispose();
@@ -226,7 +225,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			plainEmblemSetter(filename);
 		} catch (Exception ex) {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to load the emblem", ex, false);
+			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, 
+					Messages.getString("error.FailedToLoadEmblem"), ex, false); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
@@ -248,7 +248,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		} catch (Exception ex) {
 			this.txtMobileNumberErrorMarker.setVisible(true);
 			this.txtMobileNumberErrorMarker
-					.setToolTipText("Phone number is invalid! Please provide in the form: +43676123456789");
+					.setToolTipText(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 			log.error("processNumberChanged: ", ex); //$NON-NLS-1$
 		}
 	}
@@ -349,14 +349,14 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpHandySignatur.top = new FormAttachment(0, 5);
 		fd_grpHandySignatur.bottom = new FormAttachment(20, -5);
 		grpHandySignatur.setLayoutData(fd_grpHandySignatur);
-		grpHandySignatur.setText("Handy Signatur");
+		grpHandySignatur.setText(Messages.getString("simple_config.MobileBKU_Title")); //$NON-NLS-1$
 		grpHandySignatur.setLayout(new GridLayout(2, false));
 
 		Label lblMobileNumber = new Label(grpHandySignatur, SWT.NONE
 				| SWT.RESIZE);
 		lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		lblMobileNumber.setText("Handy Nummer:");
+		lblMobileNumber.setText(Messages.getString("simple_config.PhoneNumber")); //$NON-NLS-1$
 
 		Composite composite_2 = new Composite(grpHandySignatur, SWT.NONE);
 		composite_2.setLayout(new FormLayout());
@@ -392,7 +392,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtMobileNumber.setMessage("+43676123456789");
+		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber")); //$NON-NLS-1$
 
 		this.txtMobileNumber.addFocusListener(new FocusListener() {
 
@@ -415,7 +415,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpBildmarke.top = new FormAttachment(20, 5);
 		grpBildmarke.setLayoutData(fd_grpBildmarke);
 		grpBildmarke.setLayout(new GridLayout(5, false));
-		grpBildmarke.setText("Bildmarke");
+		grpBildmarke.setText(Messages.getString("simple_config.Emblem_Title")); //$NON-NLS-1$
 		new Label(grpBildmarke, SWT.NONE);
 		new Label(grpBildmarke, SWT.NONE);
 
@@ -424,7 +424,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				true, 3, 1));
 		this.lblEmblem.setAlignment(SWT.CENTER);
 		this.lblEmblem
-				.setText("No Image. Drag and Drop a Image. Or use the browse button to select an emblem.");
+				.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
 		this.lblEmblem.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -499,7 +499,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		new Label(grpBildmarke, SWT.NONE);
 
 		this.btnUseImage = new Button(grpBildmarke, SWT.CHECK);
-		this.btnUseImage.setText("Use Image");
+		this.btnUseImage.setText(Messages.getString("simple_config.UseEmblem")); //$NON-NLS-1$
 		this.btnUseImage.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -512,7 +512,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						SimpleConfigurationComposite.this.configurationContainer
 								.setEmblem(null);
 					} catch (InvalidEmblemFile e1) {
-						log.error("THIS EXCEPTION IS IMPOSSIBLE! ", e1); //$NON-NLS-1$
+						// This exception should not occur!
+						log.error("Failed to load emblem", e1); //$NON-NLS-1$
 					}
 				}
 			}
@@ -528,7 +529,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		btnBrowseEmblem.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
 		btnBrowseEmblem.addSelectionListener(new ImageFileBrowser());
-		btnBrowseEmblem.setText("Browse");
+		btnBrowseEmblem.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
 		Group grpProxy = new Group(this, SWT.NONE);
 		FormData fd_grpProxy = new FormData();
@@ -537,7 +538,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpProxy.left = new FormAttachment(0, 5);
 		fd_grpProxy.bottom = new FormAttachment(90, -5);
 		grpProxy.setLayoutData(fd_grpProxy);
-		grpProxy.setText("Proxy");
+		grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 		grpProxy.setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(grpProxy, SWT.NONE);
@@ -546,7 +547,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		gd_lblNewLabel.widthHint = 66;
 		lblNewLabel.setLayoutData(gd_lblNewLabel);
 		lblNewLabel.setBounds(0, 0, 57, 15);
-		lblNewLabel.setText("Host:");
+		lblNewLabel.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
 
 		Composite composite = new Composite(grpProxy, SWT.NONE);
 		composite.setLayout(new FormLayout());
@@ -571,7 +572,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.proxyHostErrorMarker.setVisible(false);
 		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
 
-		this.txtProxyHost.setMessage("Hostname or IP of proxy server");
+		this.txtProxyHost.setMessage(Messages.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
 
 		this.txtProxyHost.addFocusListener(new FocusListener() {
 
@@ -598,7 +599,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		Label lblNewLabel_1 = new Label(grpProxy, SWT.NONE);
 		lblNewLabel_1.setBounds(0, 0, 57, 15);
-		lblNewLabel_1.setText("Port:");
+		lblNewLabel_1.setText(Messages.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 
 		Composite composite_1 = new Composite(grpProxy, SWT.NONE);
 		composite_1.setLayout(new FormLayout());
@@ -632,7 +633,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				.setLayoutData(this.fd_txtProxyPortErrorMarker);
 		this.txtProxyPortErrorMarker.setVisible(false);
 
-		this.txtProxyPort.setMessage("port proxy server [1-65535]");
+		this.txtProxyPort.setMessage(Messages.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
 
 		this.txtProxyPort.addFocusListener(new FocusListener() {
 
@@ -728,7 +729,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				this.btnUseImage.setSelection(true);
 			} catch (Exception e1) {
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
-				ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to load emblem.", e1, false);
+				ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, Messages.getString("error.FailedToLoadEmblem"), e1, false); //$NON-NLS-1$
 				dialog.open();
 			}
 		}

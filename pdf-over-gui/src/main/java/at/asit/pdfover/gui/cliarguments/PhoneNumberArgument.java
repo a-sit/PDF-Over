@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.cliarguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -32,7 +33,7 @@ public class PhoneNumberArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public PhoneNumberArgument() {
-		super(new String[] {"-n" }, "Sets the telephone number to use for mobile bku. Example: -n <number>"); //$NON-NLS-1$
+		super(new String[] {"-n" }, Messages.getString("argument.help.number")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -67,11 +68,11 @@ public class PhoneNumberArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Phone Number Argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Phone Number Argument invalid! Use: " + this.getHelpText(), ex);
+					Messages.getString("argument.invalid.number") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				"Phone Number invalid! Use: " + this.getHelpText(), null);
+				Messages.getString("argument.invalid.number") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }

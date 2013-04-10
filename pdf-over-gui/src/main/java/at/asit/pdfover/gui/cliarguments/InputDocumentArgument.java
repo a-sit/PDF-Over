@@ -15,31 +15,37 @@
  */
 package at.asit.pdfover.gui.cliarguments;
 
+// Imports
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * 
  */
-public class BKUArgument extends CLIArgument {
+public class InputDocumentArgument extends CLIArgument {
 	/**
 	 * Constructor
 	 */
-	public BKUArgument() {
-		super(
-				new String[] { "-b" }, Messages.getString("argument.help.bku")); //$NON-NLS-1$ //$NON-NLS-2$
+	public InputDocumentArgument() {
+		super(new String[] {"-i"}, Messages.getString("argument.help.input")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang
-	 * .String[], int, at.asit.pdfover.gui.workflow.StateMachine,
-	 * at.asit.pdfover.gui.cliarguments.ArgumentHandler)
+	/**
+	 * SLF4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(InputDocumentArgument.class);
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
@@ -48,21 +54,27 @@ public class BKUArgument extends CLIArgument {
 		try {
 			if (args.length > argOffset + 1) {
 
-				BKUs argumentValue = BKUs.valueOf(args[argOffset + 1]);
-
-				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
+				String signatureDocument = args[argOffset + 1];
 				
-				configManipulator.setDefaultBKU(argumentValue);
+				File signatureDocumentFile = new File(signatureDocument);
+				
+				if(!signatureDocumentFile.exists()) {
+					throw new FileNotFoundException(signatureDocument);
+				}
+				
+				Status status = stateMachine.getStatus();
+				status.setDocument(signatureDocumentFile);
 				
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
+			log.error("Document to sign argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					Messages.getString("argument.invalid.bku") + this.getHelpText(), ex);  //$NON-NLS-1$
+					Messages.getString("argument.invalid.input") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.bku") + this.getHelpText(), null);  //$NON-NLS-1$
+				Messages.getString("argument.invalid.input") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }

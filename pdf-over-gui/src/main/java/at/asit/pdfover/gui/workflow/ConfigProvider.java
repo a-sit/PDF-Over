@@ -86,6 +86,12 @@ public interface ConfigProvider {
 	public String getDefaultOutputFolder();
 	
 	/**
+	 * Gets the mobile BKU URL
+	 * @return the mobile BKU URL
+	 */
+	public String getMobileBKUURL();
+	
+	/**
 	 * Loads the current configuration to the current configuration file
 	 * @param configSource 
 	 * @throws IOException 

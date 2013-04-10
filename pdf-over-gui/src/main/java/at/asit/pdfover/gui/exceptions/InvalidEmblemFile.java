@@ -18,8 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 // Imports
 import java.io.File;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import at.asit.pdfover.gui.Messages;
 
 /**
  * 
@@ -29,25 +28,21 @@ public class InvalidEmblemFile extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = -5826910929131650685L;
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(InvalidEmblemFile.class);
 
 	/**
 	 * Constructor
 	 * @param file
 	 */
 	public InvalidEmblemFile(final File file) {
-		super("File: " + file.getAbsolutePath() + " is an invalid emblem file!");
+		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile")); //$NON-NLS-1$
 	}
 	
 	/**
 	 * Constructor
 	 * @param file
+	 * @param reason 
 	 */
 	public InvalidEmblemFile(final File file, Throwable reason) {
-		super("File: " + file.getAbsolutePath() + " is an invalid emblem file!", reason);
+		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile"), reason); //$NON-NLS-1$
 	}
 }

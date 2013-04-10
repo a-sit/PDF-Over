@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
@@ -151,7 +152,7 @@ public class MobileBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
 					SWT.NONE,
-					"Unexpected Error", this.threadException, false);
+					Messages.getString("error.Unexpected"), this.threadException, false); //$NON-NLS-1$
 			//error.setException(this.threadException);
 			//this.setNextState(error);
 			error.open();
@@ -164,7 +165,7 @@ public class MobileBKUState extends State {
 			this.stateMachine.getGUIProvider().display(
 					this.getWaitingComposite());
 			Thread postSLRequestThread = new Thread(new PostSLRequestThread(
-					this));
+					this, this.stateMachine.getConfigProvider().getMobileBKUURL()));
 			postSLRequestThread.start();
 			break;
 		case POST_NUMBER:

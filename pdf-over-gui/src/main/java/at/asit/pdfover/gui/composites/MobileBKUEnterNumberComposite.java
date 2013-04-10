@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -78,7 +79,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			} catch(InvalidNumberException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
-				.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
+				.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 			} catch(InvalidPasswordException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
@@ -87,7 +88,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			catch (Exception ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
-						.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
+						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 				return;
 			}
 			
@@ -175,7 +176,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_number.setEditable(true);
 
 		Label lbl_number = new Label(this, SWT.NATIVE);
-		lbl_number.setText("Nummer:");
+		lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
 		FormData fd_lbl_number = new FormData();
 		fd_lbl_number.top = new FormAttachment(30, -15);
 		fd_lbl_number.bottom = new FormAttachment(30, 15);
@@ -194,7 +195,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_password.setEditable(true);
 
 		Label lbl_password = new Label(this, SWT.NATIVE);
-		lbl_password.setText("Passwort:");
+		lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
 		FormData fd_lbl_password = new FormData();
 		fd_lbl_password.top = new FormAttachment(50, -15);
 		fd_lbl_password.bottom = new FormAttachment(50, 15);
@@ -211,7 +212,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_error.setLayoutData(fd_lbl_error);
 
 		Button btn_ok = new Button(this, SWT.NATIVE);
-		btn_ok.setText("Ok");
+		btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		FormData fd_btn_ok = new FormData();
 		fd_btn_ok.top = new FormAttachment(87, 0);
 		fd_btn_ok.bottom = new FormAttachment(95, 0);

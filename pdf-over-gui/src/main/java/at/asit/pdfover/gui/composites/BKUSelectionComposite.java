@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 
@@ -110,7 +111,7 @@ public class BKUSelectionComposite extends StateComposite {
 		
 		
 		Button btn_mobile = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_mobile.setText("MOBILE");
+		btn_mobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
 		//Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_mobile = new FormData();
 		//fd_btn_mobile.left = new FormAttachment(40, 0);
@@ -120,12 +121,12 @@ public class BKUSelectionComposite extends StateComposite {
 		btn_mobile.setLayoutData(fd_btn_mobile);
 		btn_mobile.addSelectionListener(new MobileSelectionListener());
 
-		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/handy.gif")));
+		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"))); //$NON-NLS-1$
 		
 		btn_mobile.setImage(mobile);
 		
 		Button btn_card = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_card.setText("CARD");
+		btn_card.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
 		//Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_card = new FormData();
 		fd_btn_card.left = new FormAttachment(50, 5);
@@ -135,7 +136,7 @@ public class BKUSelectionComposite extends StateComposite {
 		btn_card.setLayoutData(fd_btn_card);
 		btn_card.addSelectionListener(new LocalSelectionListener());
 		
-		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif")));
+		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif"))); //$NON-NLS-1$
 		
 		btn_card.setImage(karte);
 		

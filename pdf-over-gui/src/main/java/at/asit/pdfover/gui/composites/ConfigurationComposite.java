@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -72,7 +73,7 @@ public class ConfigurationComposite extends StateComposite {
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
-				ConfigurationComposite.this.btnAdvanced.setText("Simple");
+				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 			} else {
 				// switch to simple
 				ConfigurationComposite.this.configComposite.dispose();
@@ -81,7 +82,7 @@ public class ConfigurationComposite extends StateComposite {
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
-				ConfigurationComposite.this.btnAdvanced.setText("Advanced");
+				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 			}
 
 			ConfigurationComposite.this.configComposite.loadConfiguration();
@@ -247,14 +248,14 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		});
-		btnSpeichern.setText("Speichern");
+		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 
 		Button btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
 		fd_btnAbrechen.left = new FormAttachment(btnSpeichern, 10);
 		fd_btnAbrechen.bottom = new FormAttachment(100, -5);
 		btnAbbrechen.setLayoutData(fd_btnAbrechen);
-		btnAbbrechen.setText("Abbrechen");
+		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 		btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -268,7 +269,7 @@ public class ConfigurationComposite extends StateComposite {
 		fd_btnAdvanced.right = new FormAttachment(100, -5);
 		fd_btnAdvanced.bottom = new FormAttachment(100, -5);
 		this.btnAdvanced.setLayoutData(fd_btnAdvanced);
-		this.btnAdvanced.setText("Advanced");
+		this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 		this.btnAdvanced
 				.addSelectionListener(new ConfigurationModeSelectionListener());
 
@@ -308,7 +309,7 @@ public class ConfigurationComposite extends StateComposite {
 			ErrorDialog dialog = new ErrorDialog(
 					getShell(),
 					SWT.NONE,
-					"Invalid settings are still present. Please check your input.",
+					Messages.getString("error.InvalidSettings"), //$NON-NLS-1$
 					e, false);
 			dialog.open();
 			return false;
@@ -325,7 +326,7 @@ public class ConfigurationComposite extends StateComposite {
 			} catch (IOException e) {
 				log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
-						"Failed to save configuration file!", e, true);
+						Messages.getString("error.FailedToSaveSettings"), e, true); //$NON-NLS-1$
 				redo = dialog.open();
 				
 				//return false;

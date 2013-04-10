@@ -28,6 +28,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 
@@ -43,13 +44,17 @@ public class PostSLRequestThread implements Runnable {
 
 	private MobileBKUState state;
 
+	private String mobileBKUUrl = ConfigManipulator.MOBILE_BKU_URL_CONFIG;
+	
 	/**
 	 * Constructor
 	 * 
 	 * @param state
+	 * @param mobileBKUUrl 
 	 */
-	public PostSLRequestThread(MobileBKUState state) {
+	public PostSLRequestThread(MobileBKUState state, String mobileBKUUrl) {
 		this.state = state;
+		this.mobileBKUUrl = mobileBKUUrl;
 	}
 
 	/*
@@ -69,11 +74,9 @@ public class PostSLRequestThread implements Runnable {
 			HttpClient client = new HttpClient();
 			client.getParams().setParameter("http.useragent", //$NON-NLS-1$
 					LocalBKUState.PDF_OVER_USER_AGENT_STRING);
-
-			// TODO: move URL to config?		
-			String url = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-			//String url = "https://test1.a-trust.at/https-security-layer-request/default.aspx";
-			
+		
+			String url = this.mobileBKUUrl;
+	
 			PostMethod method = new PostMethod(url);
 
 			method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$

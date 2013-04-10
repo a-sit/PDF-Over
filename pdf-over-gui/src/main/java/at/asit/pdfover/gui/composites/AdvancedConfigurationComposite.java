@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -50,6 +51,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 * @param parent
 	 * @param style
 	 * @param state
+	 * @param container 
 	 */
 	public AdvancedConfigurationComposite(Composite parent, int style,
 			State state, ConfigurationContainer container) {
@@ -65,7 +67,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		tabFolder.setLayoutData(fd_tabFolder);
 
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
-		simpleTabItem.setText("Simple");
+		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
 		this.simpleComposite = new SimpleConfigurationComposite(tabFolder,
 				SWT.NONE, state, container);
@@ -73,7 +75,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		simpleTabItem.setControl(this.simpleComposite);
 
 		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NULL);
-		advancedTabItem.setText("Advanced");
+		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 
 		Composite advancedComposite = new Composite(tabFolder, SWT.NONE);
 
@@ -81,7 +83,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		advancedComposite.setLayout(new FormLayout());
 
 		Group grpSignaturPosition = new Group(advancedComposite, SWT.NONE);
-		grpSignaturPosition.setText("Signatur Position");
+		grpSignaturPosition.setText(Messages.getString("advanced_config.AutoPosition_Title")); //$NON-NLS-1$
 		grpSignaturPosition.setLayout(new FormLayout());
 		FormData fd_grpSignaturPosition = new FormData();
 		fd_grpSignaturPosition.top = new FormAttachment(0, 5);
@@ -98,7 +100,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnAutomatischePositionierung.left = new FormAttachment(0, 5);
 		this.btnAutomatischePositionierung
 				.setLayoutData(fd_btnAutomatischePositionierung);
-		this.btnAutomatischePositionierung.setText("Automatische Positionierung");
+		this.btnAutomatischePositionierung.setText(Messages.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
 		
 		this.btnAutomatischePositionierung.addSelectionListener(new SelectionListener() {
 			
@@ -115,7 +117,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		Group grpBkuAuswahl = new Group(advancedComposite, SWT.NONE);
-		grpBkuAuswahl.setText("BKU Selection");
+		grpBkuAuswahl.setText(Messages.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
 		grpBkuAuswahl.setLayout(new FormLayout());
 		FormData fd_grpBkuAuswahl = new FormData();
 		fd_grpBkuAuswahl.top = new FormAttachment(33, 5);
@@ -134,9 +136,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.bkuStrings = new String[blen];
 
-		// TODO: Implement translation into user language for ENUM Values!!
 		for (int i = 0; i < blen; i++) {
-			this.bkuStrings[i] = BKUs.values()[i].toString();
+			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
+			this.bkuStrings[i] = Messages.getString(lookup);
 		}
 
 		this.cmbBKUAuswahl.setItems(this.bkuStrings);
@@ -161,7 +163,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		Group grpSpeicherort = new Group(advancedComposite, SWT.NONE);
-		grpSpeicherort.setText("Outputfolder");
+		grpSpeicherort.setText(Messages.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
 		grpSpeicherort.setLayout(new FormLayout());
 		FormData fd_grpSpeicherort = new FormData();
 		fd_grpSpeicherort.top = new FormAttachment(66, 5);
@@ -175,7 +177,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_lblDefaultOutputFolder.top = new FormAttachment(0, 5);
 		fd_lblDefaultOutputFolder.left = new FormAttachment(0, 5);
 		lblDefaultOutputFolder.setLayoutData(fd_lblDefaultOutputFolder);
-		lblDefaultOutputFolder.setText("Default output folder:");
+		lblDefaultOutputFolder.setText(Messages.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
 
 		this.txtOutputFolder = new Text(grpSpeicherort, SWT.BORDER);
 		FormData fd_text = new FormData();
@@ -203,7 +205,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnBrowse.top = new FormAttachment(lblDefaultOutputFolder, 5);
 		fd_btnBrowse.right = new FormAttachment(100, -5);
 		btnBrowse.setLayoutData(fd_btnBrowse);
-		btnBrowse.setText("browse");
+		btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
 		btnBrowse.addSelectionListener(new SelectionListener() {
 
@@ -218,10 +220,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 						.getText());
 
 				// Change the title bar text
-				dlg.setText("Select Output folder");
+				dlg.setText(Messages.getString("advanced_config.OutputFolder.Dialog_Title")); //$NON-NLS-1$
 
 				// Customizable message displayed in the dialog
-				dlg.setMessage("Select a directory");
+				dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog")); //$NON-NLS-1$
 
 				// Calling open() will open and run the dialog.
 				// It will return the selected directory, or
@@ -247,8 +249,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	}
 
 	int getBKUElementIndex(BKUs bku) {
-		// TODO: Translate to user language!
-		String bkuName = bku.toString();
+		String lookup = "BKU." + bku.toString(); //$NON-NLS-1$
+		String bkuName = Messages.getString(lookup);
 		
 		for(int i = 0; i < this.bkuStrings.length; i++) {
 			if(this.bkuStrings[i].equals(bkuName)) {
@@ -269,13 +271,26 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performBKUSelectionChanged(String selected) {
 		try {
-			BKUs bkuvalue = BKUs.valueOf(selected);
+			BKUs bkuvalue = resolvBKU(selected);
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
 			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Invalid BKU selection. Please check.", ex, false);
+			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, Messages.getString("error.InvalidBKU"), ex, false); //$NON-NLS-1$
 			dialog.open();
 		}
+	}
+	
+	BKUs resolvBKU(String localizedBKU) {
+		int blen = BKUs.values().length;
+
+		for (int i = 0; i < blen; i++) {
+			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
+			if(Messages.getString(lookup).equals(localizedBKU)) {
+				return BKUs.values()[i];
+			}
+		}
+
+		return BKUs.NONE;
 	}
 	
 	void performPositionSelection(boolean automatic) {

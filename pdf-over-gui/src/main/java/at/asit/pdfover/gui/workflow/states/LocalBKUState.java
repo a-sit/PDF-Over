@@ -21,12 +21,12 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -54,7 +54,7 @@ public class LocalBKUState extends State {
 	public final static String BKU_REPSONE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
 	/**
-	 * TODO: move to a better location ...
+	 * PDF Over User Agent string
 	 */
 	public static final String PDF_OVER_USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
 
@@ -171,7 +171,7 @@ public class LocalBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
 					this.stateMachine.getGUIProvider().getMainShell(), SWT.NONE,
-					"Please check if a local BKU is running",
+					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
 					this.threadException, true);
 			if (!dialog.open()) {
 				this.stateMachine.exit();

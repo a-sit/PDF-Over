@@ -17,12 +17,13 @@ package at.asit.pdfover.signer.pdfas;
 
 //Imports
 import java.util.HashMap;
-import java.util.Properties;
 
 import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.api.io.DataSource;
 import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
+import at.knowcenter.wag.egov.egiz.exceptions.PDFDocumentException;
 
 /**
  * Implementation of SignatureParameter specific for PDF - AS Library
@@ -33,17 +34,27 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	
 	@Override
 	public SignatureDimension getPlaceholderDimension() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SignatureDimension(487, 206);
 	}
 
 	/**
 	 * Gets the PDFAS Positioning
 	 * @return SignaturePositioning
+	 * @throws PDFDocumentException 
 	 */
-	public SignaturePositioning getPDFASPositioning() {
-		// TODO: implement Signature creation
-		return new SignaturePositioning();
+	public SignaturePositioning getPDFASPositioning() throws PDFDocumentException {
+		SignaturePosition position = this.getSignaturePosition();
+		position.useAutoPositioning();
+		
+		SignaturePositioning positioning = null;
+		if(!position.useAutoPositioning()) {
+			positioning = new SignaturePositioning(String.format("p:%d;x:%f;y:%f", 
+					position.getPage(), position.getX(), position.getY()));
+		} else {
+			positioning = new SignaturePositioning();
+		}
+		
+		return positioning;
 	}
 
 	/**

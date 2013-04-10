@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.exceptions;
 
+import at.asit.pdfover.gui.Messages;
+
 // Imports
 
 /**
@@ -30,7 +32,7 @@ public class PasswordTooShortException extends InvalidPasswordException {
 	 * Constructor
 	 */
 	public PasswordTooShortException() {
-		super("Given password is too short!");
+		super(Messages.getString("exception.PasswordTooShort")); //$NON-NLS-1$
 	}
 
 }

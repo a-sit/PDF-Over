@@ -53,6 +53,11 @@ public interface ConfigManipulator {
 	public static final String MOBILE_NUMBER_CONFIG = "MOBILE_NUMBER"; //$NON-NLS-1$
 	
 	/**
+	 * Mobile bku url config parameter
+	 */
+	public static final String MOBILE_BKU_URL_CONFIG = "MOBILE_BKU_URL"; //$NON-NLS-1$
+	
+	/**
 	 * The emblem config parameter
 	 */
 	public static final String EMBLEM_CONFIG = "EMBLEM"; //$NON-NLS-1$

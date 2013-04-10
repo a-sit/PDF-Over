@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -87,7 +88,7 @@ public class SigningState extends State {
 		
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE, "Signature error", this.threadException, true); 
+					SWT.NONE, Messages.getString("error.Signatur"), this.threadException, true);  //$NON-NLS-1$
 			this.threadException = null;
 			if(error.open()) {
 				this.stateMachine.update();

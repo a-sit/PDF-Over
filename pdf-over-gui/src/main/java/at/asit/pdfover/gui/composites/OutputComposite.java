@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
@@ -62,7 +63,7 @@ public class OutputComposite extends StateComposite {
 			try {
 				FileDialog save = new FileDialog(OutputComposite.this.getShell(), SWT.SAVE | SWT.NATIVE);
 				save.setFilterExtensions(new String[] {"*.pdf"}); //$NON-NLS-1$
-				save.setFilterNames(new String[] {"PDF Dateien"});
+				save.setFilterNames(new String[] {Messages.getString("common.PDFExtension_Description")}); //$NON-NLS-1$
 				
 				String target = save.open();
 				
@@ -104,7 +105,9 @@ public class OutputComposite extends StateComposite {
 					File open = OutputComposite.this.savedFile;
 					if (open == null) {
 						// Save as temp file ...
-						open = new File("tmp_signed.pdf");
+						java.util.Date date= new java.util.Date();
+						String fileName = String.format("%d_tmp_signed.pdf", date.getTime()); //$NON-NLS-1$
+						open = new File(fileName);
 						FileOutputStream outstream = new FileOutputStream(open);
 						outstream.write(source.getByteArray(), 0,
 								source.getByteArray().length);
@@ -118,7 +121,9 @@ public class OutputComposite extends StateComposite {
 					}
 				} else {
 					log.error("OutputComposite:OpenSelectionListener:widgetSelected -> source is null!!"); //$NON-NLS-1$
-					ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to get signed document.", "", false);
+					ErrorDialog dialog = new ErrorDialog(getShell(), 
+							SWT.NONE, Messages.getString("error.FailedToGetSignedDocument"),//$NON-NLS-1$
+							"", false);  //$NON-NLS-1$
 					dialog.open();
 				}
 			} catch (Exception ex) {
@@ -147,7 +152,7 @@ public class OutputComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		Button btn_open = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_open.setText("OPEN");
+		btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
 		// Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_open = new FormData();
 		//fd_btn_open.left = new FormAttachment(40, 0);
@@ -162,7 +167,7 @@ public class OutputComposite extends StateComposite {
 		}
 
 		Button btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_save.setText("SAVE");
+		btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 		// Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_save = new FormData();
 		fd_btn_save.left = new FormAttachment(50, 5);

@@ -25,11 +25,13 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
 import at.asit.pdfover.gui.cliarguments.EmblemArgument;
 import at.asit.pdfover.gui.cliarguments.HelpArgument;
+import at.asit.pdfover.gui.cliarguments.InputDocumentArgument;
 import at.asit.pdfover.gui.cliarguments.OutputFolderArgument;
 import at.asit.pdfover.gui.cliarguments.PasswordArgument;
 import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
@@ -63,9 +65,11 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(new ProxyHostArgument());
 		this.handler.addCLIArgument(new ProxyPortArgument());
 		this.handler.addCLIArgument(new OutputFolderArgument());
+		this.handler.addCLIArgument(new InputDocumentArgument());
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(new ConfigFileArgument());
-
+		
+		
 		this.configFilehandler = new ArgumentHandler(this.stateMachine);
 		this.configFilehandler.addCLIArgument(new ConfigFileArgument());
 	}
@@ -155,7 +159,7 @@ public class PrepareConfigurationState extends State {
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE, "Initialization failed. Please check your configuration.", 
+					SWT.NONE, Messages.getString("error.Initialization"),  //$NON-NLS-1$
 					e, false);
 			//error.setException(e);
 			//this.setNextState(error);

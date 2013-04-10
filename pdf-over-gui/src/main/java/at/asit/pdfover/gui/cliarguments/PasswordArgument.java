@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.cliarguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -32,7 +33,7 @@ public class PasswordArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public PasswordArgument() {
-		super(new String[] {"-p"}, "Sets the password to use for mobile bku. Example: -p <password>"); //$NON-NLS-1$
+		super(new String[] {"-p"}, Messages.getString("argument.help.password")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -64,11 +65,11 @@ public class PasswordArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Mobile BKU password argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Mobile BKU password invalid! Use: " + this.getHelpText(), ex);
+					Messages.getString("argument.invalid.password") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				"Mobile BKU password argument invalid! Use: " + this.getHelpText(), null);
+				Messages.getString("argument.invalid.password") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }

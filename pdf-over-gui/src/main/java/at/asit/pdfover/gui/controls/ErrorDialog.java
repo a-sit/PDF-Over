@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
+
 /**
  * 
  */
@@ -87,7 +89,7 @@ public class ErrorDialog extends Dialog {
 
 	private boolean canRetry = false;
 
-	private boolean doRetry = false;
+	boolean doRetry = false;
 	
 	private String details = null;
 
@@ -140,7 +142,7 @@ public class ErrorDialog extends Dialog {
 		fd_group.top = new FormAttachment(lblerrorMessage, 5);
 		fd_group.left = new FormAttachment(lblErrorImage, 5);
 		group.setLayoutData(fd_group);
-		group.setText("Details");
+		group.setText(Messages.getString("error.Details")); //$NON-NLS-1$
 
 		if (!this.canRetry) {
 
@@ -175,7 +177,7 @@ public class ErrorDialog extends Dialog {
 			fd_btnOk.bottom = new FormAttachment(100, -5);
 			fd_btnOk.right = new FormAttachment(100, -5);
 			btnOk.setLayoutData(fd_btnOk);
-			btnOk.setText("Ok");
+			btnOk.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		} else {
 			Button btnCancel = new Button(shell, SWT.NONE);
 			Button btnRetry = new Button(shell, SWT.NONE);
@@ -218,13 +220,13 @@ public class ErrorDialog extends Dialog {
 			fd_btnCancel.bottom = new FormAttachment(100, -5);
 			fd_btnCancel.right = new FormAttachment(100, -5);
 			btnCancel.setLayoutData(fd_btnCancel);
-			btnCancel.setText("Cancel");
+			btnCancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 			
 			FormData fd_btnRetry = new FormData();
 			fd_btnRetry.bottom = new FormAttachment(100, -5);
 			fd_btnRetry.right = new FormAttachment(btnCancel, -10);
 			btnRetry.setLayoutData(fd_btnRetry);
-			btnRetry.setText("Retry");
+			btnRetry.setText(Messages.getString("error.Retry")); //$NON-NLS-1$
 		}
 		shell.pack();
 		shell.open();

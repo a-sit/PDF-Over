@@ -39,71 +39,81 @@ public class ArgumentHandler {
 			.getLogger(ArgumentHandler.class);
 
 	private Map<String, CLIArgument> cliArguments = new HashMap<String, CLIArgument>();
-	
+
 	private StateMachine stateMachine = null;
-	
+
 	private boolean requiredExit = false;
-	
+
 	/**
 	 * Constructor
-	 * @param stateMachine 
+	 * 
+	 * @param stateMachine
 	 */
 	public ArgumentHandler(StateMachine stateMachine) {
 		this.stateMachine = stateMachine;
 	}
-	
+
 	/**
 	 * Gets available Arguments
+	 * 
 	 * @return the list of available arguments
 	 */
 	public Set<CLIArgument> getArguments() {
 		return new HashSet<CLIArgument>(this.cliArguments.values());
 	}
-	
+
 	/**
 	 * Adds a CLIArgument to the handler
 	 * 
 	 * @param arg
 	 */
 	public void addCLIArgument(CLIArgument arg) {
-		if(arg == null) {
+		if (arg == null) {
 			return;
 		}
-		
+
 		String[] commandOptions = arg.getCommandOptions();
-		
-		if(commandOptions == null) {
+
+		if (commandOptions == null) {
 			return;
 		}
-		
-		for(int i = 0; i < commandOptions.length; i++)
-		{
+
+		for (int i = 0; i < commandOptions.length; i++) {
 			this.cliArguments.put(commandOptions[i], arg);
 		}
 	}
-	
+
 	/**
 	 * Handle CLI Arguments
 	 * 
 	 * @param args
-	 * @throws InitializationException 
+	 * @throws InitializationException
 	 */
 	public void handleArguments(String[] args) throws InitializationException {
-		for(int i = 0; i < args.length; i++) {
-			if(this.cliArguments.containsKey(args[i])) {
-				this.cliArguments.get(args[i]).handleArgument(args, i, this.stateMachine, this);
+
+		for (int i = 0; i < args.length; i++) {
+			if (this.cliArguments.containsKey(args[i])) {
+				i = this.cliArguments.get(args[i]).handleArgument(args, i,
+						this.stateMachine, this);
+			} else {
+				// Assume we got the document we want to sign
+				if (this.cliArguments.containsKey("-i")) { //$NON-NLS-1$
+					i = this.cliArguments.get("-i").handleArgument(args, i-1, //$NON-NLS-1$
+							this.stateMachine, this);
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Set by an cli argument if it wants the program to exit
+	 * 
 	 * @param requireExit
 	 */
 	public void setRequireExit(boolean requireExit) {
 		this.requiredExit = requireExit;
 	}
-	
+
 	/**
 	 * Checks if one argument required the program to exit again
 	 * 

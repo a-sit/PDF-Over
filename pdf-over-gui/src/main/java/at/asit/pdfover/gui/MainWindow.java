@@ -21,7 +21,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -59,7 +58,6 @@ public class MainWindow {
 	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 
 	private Shell shell;
-	private CLabel lbl_status;
 	private Composite container;
 	private StackLayout stack;
 	StateMachine stateMachine;
@@ -114,18 +112,6 @@ public class MainWindow {
 		this.stateMachine = stateMachine;
 
 		this.buttonMap = new EnumMap<MainWindow.Buttons, MainBarButton>(Buttons.class);
-	}
-
-	/**
-	 * Set current status (may be removed in production release)
-	 * 
-	 * @param value
-	 */
-	public void setStatus(String value) {
-		if (this.getShell().isDisposed()) {
-			return;
-		}
-		this.lbl_status.setText("[DEBUG]: Current workflow state: " + value); //$NON-NLS-1$
 	}
 
 	/**
@@ -252,8 +238,8 @@ public class MainWindow {
 		fd_btn_open.top = new FormAttachment(0);
 		fd_btn_open.left = new FormAttachment(0, 45);
 		this.btn_open.setLayoutData(fd_btn_open);
-		this.btn_open.setText(Messages.getString("main.open")); //$NON-NLS-1$
-		this.btn_open.setToolTipText(Messages.getString("main.open")); //$NON-NLS-1$
+		this.btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
+		this.btn_open.setToolTipText(Messages.getString("common.open")); //$NON-NLS-1$
 		this.btn_open.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -327,22 +313,13 @@ public class MainWindow {
 		
 		this.container = new Composite(getShell(), SWT.RESIZE);
 		FormData fd_composite_1 = new FormData();
-		fd_composite_1.bottom = new FormAttachment(100, -25);
+		fd_composite_1.bottom = new FormAttachment(100, -5);
 		fd_composite_1.right = new FormAttachment(100, -5);
 		fd_composite_1.top = new FormAttachment(0, 50);
 		fd_composite_1.left = new FormAttachment(0, 5);
 		this.container.setLayoutData(fd_composite_1);
 		this.stack = new StackLayout();
 		this.container.setLayout(this.stack);
-
-		this.lbl_status = new CLabel(getShell(), SWT.NONE);
-		FormData fd_lblNewLabel = new FormData();
-		fd_lblNewLabel.right = new FormAttachment(100, -5);
-		fd_lblNewLabel.bottom = new FormAttachment(100, -5);
-		fd_lblNewLabel.top = new FormAttachment(100, -20);
-		fd_lblNewLabel.left = new FormAttachment(0, 5);
-		this.lbl_status.setLayoutData(fd_lblNewLabel);
-		this.lbl_status.setText("DEBUG LABEL!!"); //$NON-NLS-1$
 	}
 
 	/**

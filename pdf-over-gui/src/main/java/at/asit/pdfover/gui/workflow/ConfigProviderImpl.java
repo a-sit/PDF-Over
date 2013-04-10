@@ -42,6 +42,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private BKUs defaultBKU = BKUs.NONE;
 
+	/**
+	 * Gets the Default Mobile URL
+	 */
+	public static final String DEFAULT_MOBILE_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	
+	
 	private SignaturePosition defaultSignaturePosition = null;
 
 	/**
@@ -60,6 +66,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private String configurationFile = ConfigManipulator.DEFAULT_CONFIG_FILE;
 
 	private int proxyPort = -1;
+	
+	private String mobileBKU = DEFAULT_MOBILE_URL;
 
 	private String outputFolder = STRING_EMPTY;
 
@@ -344,6 +352,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.setDefaultOutputFolder(config
 						.getProperty(ConfigManipulator.OUTPUT_FOLDER_CONFIG));
 		
+		String bku = config
+				.getProperty(ConfigManipulator.MOBILE_BKU_URL_CONFIG);
+		
+		if(bku != null && !bku.equals("")) { //$NON-NLS-1$
+			this.mobileBKU = bku;
+		}
+		
 		// Set Proxy Port
 		String proxyPortString = config
 				.getProperty(ConfigManipulator.PROXY_PORT_CONFIG);
@@ -431,6 +446,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 
 		this.setDefaultSignaturePosition(position);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
+	 */
+	@Override
+	public String getMobileBKUURL() {
+		return this.mobileBKU;
 	}
 
 }

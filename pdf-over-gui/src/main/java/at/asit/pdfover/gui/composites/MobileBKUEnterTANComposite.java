@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -52,12 +53,12 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			tan = tan.trim();
 			
 			if(MobileBKUEnterTANComposite.this.vergleichswert.startsWith(tan)) {
-				MobileBKUEnterTANComposite.this.setMessage("Sie haben den Vergleichswert eingegeben!");
+				MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
 				return;
 			}
 			
 			if(tan.length() > 6) {
-				MobileBKUEnterTANComposite.this.setMessage("Eingabe zu lange für TAN");
+				MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.TanTooLong")); //$NON-NLS-1$
 				return;
 			}
 			
@@ -70,6 +71,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileBKUEnterTANComposite.class);
 	
@@ -84,10 +86,18 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		return this.userAck;
 	}
 
+	/**
+	 * Set how many tries are left
+	 * @param tries
+	 */
 	public void setTries(int tries) {
-		this.lbl_tries.setText(tries + " tries left!");
+		this.lbl_tries.setText(tries + Messages.getString("tanEnter.tries")); //$NON-NLS-1$
 	}
 	
+	/**
+	 * Sets the message
+	 * @param msg
+	 */
 	public void setMessage(String msg) {
 		this.lbl_tries.setText(msg);
 	}
@@ -123,7 +133,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		if(this.vergleichswert != null) {
 			this.lblvergleich.setText(this.vergleichswert);
 		} else {
-			this.lblvergleich.setText("");
+			this.lblvergleich.setText(""); //$NON-NLS-1$
 		}
 		
 	}
@@ -165,7 +175,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblVergleichswert.top = new FormAttachment(30, -15);
 		fd_lblVergleichswert.bottom = new FormAttachment(30, 15);
 		lblVergleichswert.setLayoutData(fd_lblVergleichswert);
-		lblVergleichswert.setText("Vergleichswert");
+		lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		
 		this.lblvergleich = new Label(this, SWT.NATIVE);
 		FormData fd_lblvergleich = new FormData();
@@ -174,7 +184,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblvergleich.top = new FormAttachment(30, -15);
 		fd_lblvergleich.bottom = new FormAttachment(30, 15);
 		this.lblvergleich.setLayoutData(fd_lblvergleich);
-		this.lblvergleich.setText("New Label"); //$NON-NLS-1$
+		this.lblvergleich.setText(""); //$NON-NLS-1$
 		
 		Label lblTan = new Label(this, SWT.NATIVE);
 		FormData fd_lblTan = new FormData();
@@ -183,7 +193,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblTan.top = new FormAttachment(50, -15);
 		fd_lblTan.bottom = new FormAttachment(50, 15);
 		lblTan.setLayoutData(fd_lblTan);
-		lblTan.setText("TAN:");
+		lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 		
 		this.txt_tan = new Text(this, SWT.BORDER | SWT.NATIVE);
 		FormData fd_text = new FormData();
@@ -204,13 +214,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		
 		Button btn_ok = new Button(this, SWT.NATIVE);
 		FormData fd_btn_ok = new FormData();
-		fd_btn_ok.left = new FormAttachment(15, 0);
+		//fd_btn_ok.left = new FormAttachment(95, 0);
 		fd_btn_ok.right = new FormAttachment(95, 0);
 		fd_btn_ok.top = new FormAttachment(85);
 		fd_btn_ok.bottom = new FormAttachment(95);
 		
 		btn_ok.setLayoutData(fd_btn_ok);
-		btn_ok.setText("Ok");
+		btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		btn_ok.addSelectionListener(new OkSelectionListener());
 
 	}

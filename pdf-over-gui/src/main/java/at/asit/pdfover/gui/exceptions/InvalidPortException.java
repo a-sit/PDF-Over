@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.exceptions;
 
+import at.asit.pdfover.gui.Messages;
+
 /**
  * 
  */
@@ -30,6 +32,6 @@ public class InvalidPortException extends Exception {
 	 * @param port
 	 */
 	public InvalidPortException(int port) {
-		super("Port " + port + " is invalid has to be between 1 and " + 0xffff);
+		super(port + Messages.getString("exception.InvalidPort") + 0xffff); //$NON-NLS-1$
 	}
 }

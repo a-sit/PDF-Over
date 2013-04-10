@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.cliarguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
@@ -32,7 +33,7 @@ public class ProxyPortArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public ProxyPortArgument() {
-		super(new String[] {"-proxyport"}, "Sets the proxy port to use. Example: -proxyport <port>"); //$NON-NLS-1$
+		super(new String[] {"-proxyport"}, Messages.getString("argument.help.proxyport")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -68,11 +69,11 @@ public class ProxyPortArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Proxy port argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Proxy port argument invalid! Use: " + this.getHelpText(), ex);
+					Messages.getString("argument.invalid.proxyport") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				"Proxy port argument invalid! Use: " + this.getHelpText(), null);
+				Messages.getString("argument.invalid.proxyport") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }

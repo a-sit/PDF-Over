@@ -42,6 +42,15 @@ public class DeveloperMain {
 		// Set PDF-AS log4j configuration:
 		//System.setProperty("log4j.configuration", "log4j.properties");
 		
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < args.length; i++) {
+			sb.append(" "); //$NON-NLS-1$
+			sb.append(args[i]);
+		}
+		
+		log.debug("Executing arguments are: " + sb.toString()); //$NON-NLS-1$
+		
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
 		

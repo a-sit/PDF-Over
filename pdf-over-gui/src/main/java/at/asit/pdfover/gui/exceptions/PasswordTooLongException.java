@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.exceptions;
 
+import at.asit.pdfover.gui.Messages;
+
 // Imports
 
 /**
@@ -26,7 +28,7 @@ public class PasswordTooLongException extends InvalidPasswordException {
 	 * Constructor
 	 */
 	public PasswordTooLongException() {
-		super("Given password is too long!");
+		super(Messages.getString("exception.PasswordTooLong")); //$NON-NLS-1$
 	}
 	/**
 	 * 

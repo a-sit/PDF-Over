@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.cliarguments;
 import java.util.Iterator;
 import java.util.Set;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
@@ -31,7 +32,7 @@ public class HelpArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public HelpArgument() {
-		super(new String[] {"-h", "-?" }, "shows this help message"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-h", "-?" }, Messages.getString("argument.help.help")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	/* (non-Javadoc)
@@ -45,7 +46,7 @@ public class HelpArgument extends CLIArgument {
 		
 		Iterator<CLIArgument> argumentIterator = arguments.iterator();
 		
-		System.out.println("The following options are available"); //$NON-NLS-1$
+		System.out.println(Messages.getString("argument.info.help")); //$NON-NLS-1$
 		
 		while(argumentIterator.hasNext()) {
 			CLIArgument agrument = argumentIterator.next();

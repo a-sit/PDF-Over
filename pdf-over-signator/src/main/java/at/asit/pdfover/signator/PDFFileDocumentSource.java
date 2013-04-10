@@ -62,7 +62,7 @@ public class PDFFileDocumentSource implements DocumentSource {
 	@Override
 	public int getLength() {
 		if(this.file.length() > Integer.MAX_VALUE) {
-			// TODO: Handle error somehow or use long ... (Ignore Files larger than 2 GB)
+			log.error("File size to big!" + this.file.length());
 		}
 		this.len = (int) this.file.length();
 		return this.len;

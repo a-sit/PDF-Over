@@ -27,7 +27,6 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
@@ -44,6 +43,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -67,7 +67,9 @@ public class DataSourceSelectComposite extends StateComposite {
 			FileDialog dialog = new FileDialog(
 					DataSourceSelectComposite.this.getShell(), SWT.OPEN);
 			dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
-			dialog.setFilterNames(new String[] { "PDF documents", "All files" });
+			dialog.setFilterNames(new String[] { 
+					Messages.getString("common.PDFExtension_Description"),  //$NON-NLS-1$
+					Messages.getString("common.ALLExtension_Description") }); //$NON-NLS-1$
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -148,7 +150,8 @@ public class DataSourceSelectComposite extends StateComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error("File: " + files[0] + " does not exist!");
+							log.error(Messages.getString("common.file") + " " + files[0] + //$NON-NLS-1$ //$NON-NLS-2$
+									Messages.getString("common.file_not_exists")); //$NON-NLS-1$
 							return;
 						}
 						DataSourceSelectComposite.this.setSelected(file);
@@ -201,15 +204,15 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.fd_lbl_drag.right = new FormAttachment(100, -10);
 		this.fd_lbl_drag.top = new FormAttachment(0, 10);
 		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
-		lbl_drag.setLayoutData(fd_lbl_drag);
+		lbl_drag.setLayoutData(this.fd_lbl_drag);
 		FontData[] fD = lbl_drag.getFont().getFontData();
 		fD[0].setHeight(18);
 		lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		lbl_drag.setText("To sign a document\ndrag and drop it here\nor use the button below");
+		lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
 		lbl_drag.setAlignment(SWT.CENTER);
 		
 		final Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		btn_open.setText("Choose file ...");
+		btn_open.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 		
 		lbl_drag.addListener(SWT.Resize, new Listener() {
 
