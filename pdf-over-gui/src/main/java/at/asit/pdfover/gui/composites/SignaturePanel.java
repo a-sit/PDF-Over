@@ -207,6 +207,8 @@ public class SignaturePanel extends JPanel {
 						clamp((int) ((pageSize.getHeight() / 4) * 3), 0, this.currentImage.getHeight(null) - this.sigScreenHeight));
 				this.sigPagePos = this.currentXform.transform(this.sigScreenPos, this.sigPagePos);
 			}
+			else
+				updateSigPos((int) this.sigScreenPos.getX(), (int) this.sigScreenPos.getY());
 
 			this.prevSize = pageSize;
 
@@ -312,15 +314,9 @@ public class SignaturePanel extends JPanel {
 		private int dragYOffset = 0;
 
 		private void updateSigPos(int sigx, int sigy) {
-			if (SignaturePanel.this.currentImage == null)
-				return;
-			sigx -= SignaturePanel.this.offX;
-			sigx = clamp(sigx, 0, SignaturePanel.this.currentImage.getWidth(null) - SignaturePanel.this.sigScreenWidth);
-			sigy -= SignaturePanel.this.offY;
-			sigy = clamp(sigy, 0, SignaturePanel.this.currentImage.getHeight(null) - SignaturePanel.this.sigScreenHeight);
-			SignaturePanel.this.sigScreenPos = new Point2D.Double(sigx, sigy);
-			SignaturePanel.this.sigPagePos = SignaturePanel.this.currentXform.transform(SignaturePanel.this.sigScreenPos, SignaturePanel.this.sigPagePos);
-			repaint();
+			SignaturePanel.this.updateSigPos(
+					sigx - SignaturePanel.this.offX,
+					sigy - SignaturePanel.this.offY);
 		}
 
 		/** Handles a mousePressed event */
@@ -376,6 +372,21 @@ public class SignaturePanel extends JPanel {
 				this.sigScreenHeight);
 		Point2D pos = new Point2D.Double(x, y);
 		return (sig.contains(pos));
+	}
+
+	/**
+	 * Update the signature placeholder position
+	 * @param sigx X position on the document (screen coordinates)
+	 * @param sigy Y position on the document (screen coordinates)
+	 */
+	void updateSigPos(int sigx, int sigy) {
+		if (this.currentImage == null)
+			return;
+		sigx = clamp(sigx, 0, this.currentImage.getWidth(null) - this.sigScreenWidth);
+		sigy = clamp(sigy, 0, this.currentImage.getHeight(null) - this.sigScreenHeight);
+		this.sigScreenPos = new Point2D.Double(sigx, sigy);
+		this.sigPagePos = this.currentXform.transform(this.sigScreenPos, this.sigPagePos);
+		repaint();
 	}
 
 	/**
