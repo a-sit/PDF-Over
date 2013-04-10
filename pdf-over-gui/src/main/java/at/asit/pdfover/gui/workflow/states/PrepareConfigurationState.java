@@ -192,6 +192,44 @@ public class PrepareConfigurationState extends State {
 						}
 					}
 
+					inputStream = null;
+					pdfOverConfig = null;
+					try {
+						inputStream = this.getClass().getResourceAsStream(
+								"/" + ConfigManipulator.DEFAULT_LOG4J_FILE); //$NON-NLS-1$
+						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
+								+ "/" //$NON-NLS-1$
+								+ ConfigManipulator.DEFAULT_LOG4J_FILE);
+
+						while ((byteCount = inputStream.read(buffer)) >= 0) {
+							pdfOverConfig.write(buffer, 0, byteCount);
+						}
+					} catch (Exception e) {
+						log.error(
+								"Failed to write log4j config file to config directory", e); //$NON-NLS-1$
+						throw new InitializationException(
+								"Failed to write log4j config file to config directory", //$NON-NLS-1$
+								e);
+					} finally {
+						if (pdfOverConfig != null) {
+							try {
+								pdfOverConfig.close();
+							} catch (IOException e) {
+								log.warn(
+										"Failed to close File stream for log4j config", e); //$NON-NLS-1$
+							}
+						}
+
+						if (inputStream != null) {
+							try {
+								inputStream.close();
+							} catch (IOException e) {
+								log.warn(
+										"Failed to close Resource stream for log4j config", e); //$NON-NLS-1$
+							}
+						}
+					}
+					
 					InputStream is = this.getClass().getResourceAsStream(
 							"/cfg/PDFASConfig.zip"); //$NON-NLS-1$
 

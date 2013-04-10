@@ -20,12 +20,14 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SWTLoader;
+import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
@@ -56,8 +58,10 @@ public class Main {
 		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
 		if(!configDir.exists()) {
 			configDir.mkdir();
+		} else {	
+			PropertyConfigurator.configure(configDir.getAbsolutePath() + "/" + ConfigManipulator.DEFAULT_LOG4J_FILE); //$NON-NLS-1$
 		}
-
+		
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
