@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import org.eclipse.swt.graphics.Point;
 
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -89,6 +90,12 @@ public interface PersistentConfigProvider {
 	 * @return the mobile BKU URL
 	 */
 	public String getMobileBKUURL();
+
+	/**
+	 * Gets the mobile BKU type
+	 * @return the mobile BKU type
+	 */
+	public MobileBKUs getMobileBKUType();
 
 	/**
 	 * Get the signature note text to use

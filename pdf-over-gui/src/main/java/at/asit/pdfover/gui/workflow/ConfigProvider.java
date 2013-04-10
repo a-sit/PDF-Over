@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import org.eclipse.swt.graphics.Point;
 
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -29,7 +30,7 @@ import at.asit.pdfover.signator.SignaturePosition;
  */
 public interface ConfigProvider {
 	/**
-	 * Regex for parsing signature position
+	 * RegEx for parsing signature position
 	 */
 	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //$NON-NLS-1$
 
@@ -105,6 +106,12 @@ public interface ConfigProvider {
 	 * @return the mobile BKU URL
 	 */
 	public String getMobileBKUURL();
+
+	/**
+	 * Gets the mobile BKU type
+	 * @return the mobile BKU type
+	 */
+	public MobileBKUs getMobileBKUType();
 
 	/**
 	 * Get the signature note text to use

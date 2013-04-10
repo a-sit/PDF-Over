@@ -29,7 +29,9 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHandler;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus;
 import at.asit.pdfover.gui.workflow.states.mobilebku.PostCredentialsThread;
 import at.asit.pdfover.gui.workflow.states.mobilebku.PostSLRequestThread;
@@ -45,6 +47,16 @@ public class MobileBKUState extends State {
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
 		this.status = new MobileBKUStatus(this.stateMachine.getConfigProvider());
+		switch(this.stateMachine.getConfigProvider().getMobileBKUType()) {
+			case A_TRUST:
+				this.handler = new ATrustHandler(this);
+				break;
+
+			case IAIK:
+				//TODO
+				break;
+		}
+
 	}
 
 	/**
@@ -61,6 +73,8 @@ public class MobileBKUState extends State {
 	MobileBKUCommunicationState communicationState = MobileBKUCommunicationState.POST_REQUEST;
 
 	MobileBKUStatus status = null;
+
+	MobileBKUHandler handler = null;
 
 	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
 
@@ -99,10 +113,27 @@ public class MobileBKUState extends State {
 	}
 
 	/**
-	 * @return the status
+	 * Get the MobileBKUStatus
+	 * @return the MobileBKUStatus
 	 */
 	public MobileBKUStatus getStatus() {
 		return this.status;
+	}
+
+	/**
+	 * Get the MobileBKUHandler
+	 * @return the MobileBKUHandler
+	 */
+	public MobileBKUHandler getHandler() {
+		return this.handler;
+	}
+
+	/**
+	 * Get the mobile BKU URL
+	 * @return the mobile BKU URL
+	 */
+	public String getURL() {
+		return this.stateMachine.getConfigProvider().getMobileBKUURL();
 	}
 
 	/**
@@ -165,9 +196,8 @@ public class MobileBKUState extends State {
 		case POST_REQUEST:
 			this.stateMachine.getGUIProvider().display(
 					this.getWaitingComposite());
-			Thread postSLRequestThread = new Thread(new PostSLRequestThread(
-					this, this.stateMachine.getConfigProvider()
-							.getMobileBKUURL()));
+			Thread postSLRequestThread = new Thread(
+					new PostSLRequestThread(this));
 			postSLRequestThread.start();
 			break;
 		case POST_NUMBER:

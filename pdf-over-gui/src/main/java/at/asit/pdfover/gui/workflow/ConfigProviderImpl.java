@@ -35,6 +35,7 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -121,6 +122,19 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		
 		if (bkuUrl != null && !bkuUrl.isEmpty()) {
 			this.configuration.setMobileBKUURL(bkuUrl);
+		}
+
+		String bkuType = config
+				.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
+
+		if (bkuType != null && !bkuType.isEmpty()) {
+			try {
+				this.configuration.setMobileBKUType(MobileBKUs.valueOf(
+						bkuType.trim().toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				log.error("Invalid BKU type: " + bkuType); //$NON-NLS-1$
+				this.configuration.setMobileBKUType(Constants.DEFAULT_MOBILE_BKU_TYPE);
+			}
 		}
 
 		// Set Proxy Port
@@ -773,6 +787,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public String getMobileBKUURL() {
 		return this.configuration.getMobileBKUURL();
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUType()
+	 */
+	@Override
+	public MobileBKUs getMobileBKUType() {
+		return this.configuration.getMobileBKUType();
 	}
 
 	/*

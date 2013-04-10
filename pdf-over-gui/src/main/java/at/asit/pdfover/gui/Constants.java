@@ -21,6 +21,8 @@ import java.util.Locale;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
+
 /**
  * Various constants
  */
@@ -89,6 +91,9 @@ public class Constants {
 	/** Default Mobile BKU URL */
 	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
+	/** Default Mobile BKU type */
+	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
+
 	/** Configuration directory */
 	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -125,6 +130,9 @@ public class Constants {
 
 	/** Mobile bku url config parameter */
 	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL"; //$NON-NLS-1$
+
+	/** Mobile bku type config parameter */
+	public static final String CFG_MOBILE_BKU_TYPE = "MOBILE_BKU_TYPE"; //$NON-NLS-1$
 
 	/** The emblem config parameter */
 	public static final String CFG_EMBLEM = "EMBLEM"; //$NON-NLS-1$

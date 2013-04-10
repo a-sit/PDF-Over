@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Point;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -193,6 +194,18 @@ public interface ConfigurationContainer {
 	 * @param bkuUrl the mobile BKU URL
 	 */
 	public void setMobileBKUURL(String bkuUrl);
+
+	/**
+	 * Gets the mobile BKU type
+	 * @return the mobile BKU type
+	 */
+	public MobileBKUs getMobileBKUType();
+
+	/**
+	 * Sets the mobile BKU type
+	 * @param bkuType the mobile BKU type
+	 */
+	public void setMobileBKUType(MobileBKUs bkuType);
 
 	/**
 	 * Gets the default signature position

@@ -33,6 +33,7 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -86,6 +87,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** Holds the mobile BKU URL */
 	protected String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
+
+	/** Holds the mobile BKU type */
+	protected MobileBKUs mobileBKUType = Constants.DEFAULT_MOBILE_BKU_TYPE;
 
 	/** Holds the main window size */
 	protected Point mainWindowSize = null;
@@ -358,6 +362,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setMobileBKUURL(String bkuUrl) {
 		this.mobileBKUURL = bkuUrl;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getMobileBKUType()
+	 */
+	@Override
+	public MobileBKUs getMobileBKUType() {
+		return this.mobileBKUType;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setMobileBKUType(at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs)
+	 */
+	@Override
+	public void setMobileBKUType(MobileBKUs bkuType) {
+		this.mobileBKUType = bkuType;
 	}
 
 

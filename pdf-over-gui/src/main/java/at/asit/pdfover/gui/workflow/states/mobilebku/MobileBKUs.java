@@ -13,19 +13,15 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.signator;
+package at.asit.pdfover.gui.workflow.states.mobilebku;
 
 /**
- * Enumeration of available BKU types
- * 
+ * Available mobile BKUs
  */
-public enum BKUs {
-	/** Local BKU */
-	LOCAL,
+public enum MobileBKUs {
+	/** A-Trust BKU */
+	A_TRUST,
 
-	/** Mobile BKU */
-	MOBILE,
-
-	/** No BKU */
-	NONE
+	/** IAIK */
+	IAIK
 }

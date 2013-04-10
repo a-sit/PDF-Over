@@ -36,7 +36,19 @@ public class MobileBKUStatus {
 	 * Maximum number of TAN tries!
 	 */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
-	
+
+	private String viewstate;
+	private String eventvalidation;
+	private String sessionID;
+	private String phoneNumber;
+	private String mobilePassword;
+	private String baseURL;
+	private String refVal;
+	private String errorMessage;
+	private String tan;
+	private String server;
+	private int tanTries = MOBILE_MAX_TAN_TRIES;
+
 	/**
 	 * Constructor
 	 * @param provider 
@@ -45,27 +57,7 @@ public class MobileBKUStatus {
 		this.setPhoneNumber(provider.getDefaultMobileNumber());
 		this.setMobilePassword(provider.getDefaultMobilePassword());
 	}
-	
-	String viewstate;
 
-	String eventvalidation;
-
-	String sessionID;
-
-	String phoneNumber;
-	
-	String mobilePassword;
-
-	String baseURL;
-	
-	String refVal;
-	
-	String errorMessage;
-	
-	String tan;
-	
-	int tanTries = MOBILE_MAX_TAN_TRIES;
-	
 	/**
 	 * @return the tanTries
 	 */
@@ -207,5 +199,19 @@ public class MobileBKUStatus {
 		this.sessionID = sessionID;
 	}
 
+	/**
+	 * Return the SL request server
+	 * @return the SL request server
+	 */
+	public String getServer() {
+		return this.server;
+	}
 
+	/**
+	 * Set the SL request server
+	 * @param server the SL request server
+	 */
+	public void setServer(String server) {
+		this.server = server;
+	}
 }
