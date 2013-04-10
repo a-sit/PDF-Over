@@ -382,7 +382,10 @@ public class ConfigurationComposite extends StateComposite {
 			} while (redo);
 		} catch (Exception e) {
 			log.error("Settings validation failed!", e); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), e.getMessage(),
+			String message = e.getMessage();
+			if (message == null)
+				message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(getShell(), message,
 					BUTTONS.OK);
 			dialog.open();
 			return false;
@@ -435,8 +438,7 @@ public class ConfigurationComposite extends StateComposite {
 				status = true;
 			} catch (IOException e) {
 				log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
-				ErrorDialog dialog = new ErrorDialog(
-						getShell(),
+				ErrorDialog dialog = new ErrorDialog(getShell(),
 						Messages.getString("error.FailedToSaveSettings"), BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
 				redo = (dialog.open() == SWT.RETRY);
 

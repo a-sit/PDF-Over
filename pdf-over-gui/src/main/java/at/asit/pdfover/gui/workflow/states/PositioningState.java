@@ -100,9 +100,12 @@ public class PositioningState extends State {
 				// FIXME 
 				this.positionComposite = null;
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
+				String message = e.getLocalizedMessage();
+				if (message == null)
+					message = Messages.getString("error.IOError"); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						this.stateMachine.getGUIProvider().getMainShell(), 
-						e.getLocalizedMessage(), BUTTONS.RETRY_CANCEL);
+						message, BUTTONS.RETRY_CANCEL);
 				if(dialog.open() == SWT.RETRY) {
 					this.stateMachine.update();
 				} else {

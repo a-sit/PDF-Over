@@ -27,10 +27,16 @@ public class InvalidNumberException extends PDFOverGUIException {
 	private static final long serialVersionUID = -4201886410518715443L;
 
 	/**
-	 * 
+	 * Empty constructor
 	 */
 	public InvalidNumberException() {
-		
 	}
-	
+
+	/**
+	 * Constructor with a message parameter
+	 * @param msg Error message
+	 */
+	public InvalidNumberException(String msg) {
+		super(msg);
+	}
 }

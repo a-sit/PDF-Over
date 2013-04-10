@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
 import at.asit.pdfover.signator.BKUs;
 
@@ -153,8 +154,12 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		if(number == null || number.trim().equals("")) { //$NON-NLS-1$
 			this.mobileNumber = null;
 			return;
-		} 
-		this.mobileNumber = ATrustHelper.normalizeMobileNumber(number);
+		}
+		try {
+			this.mobileNumber = ATrustHelper.normalizeMobileNumber(number);
+		} catch (InvalidNumberException e) {
+			throw new InvalidNumberException(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
+		}
 	}
 
 
