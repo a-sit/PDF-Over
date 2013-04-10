@@ -21,18 +21,24 @@ import java.io.File;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -42,21 +48,55 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.ErrorMarker;
+import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.workflow.states.State;
+import org.eclipse.swt.layout.FillLayout;
 
 /**
  * 
  */
 public class SimpleConfigurationComposite extends BaseConfigurationComposite {
-	
+
+	/**
+	 * 
+	 */
+	private final class ImageFileBrowser extends SelectionAdapter {
+		/**
+		 * 
+		 */
+		public ImageFileBrowser() {
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			FileDialog dialog = new FileDialog(
+					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
+			dialog.setFilterExtensions(new String[] { "*.jpg", "*.gif" }); //$NON-NLS-1$ //$NON-NLS-2$
+			dialog.setFilterNames(new String[] { "JPG Dateien", "Gif Dateien" });
+			String fileName = dialog.open();
+			File file = null;
+			if (fileName != null) {
+				file = new File(fileName);
+				if (file.exists()) {
+					/*
+					 * SimpleConfigurationComposite.this.txtEmblemFile
+					 * .setText(fileName);
+					 */
+					processEmblemChanged(fileName);
+				}
+			}
+		}
+	}
+
 	private Label lblEmblem;
-	private Text text;
-	private Text text_1;
-	private Text txtMobileNumber;
-	Text txtEmblemFile;
+	private Text txtProxyHost;
+	Text txtProxyPort;
+	Text txtMobileNumber;
+	// Text txtEmblemFile;
+	String emblemFile;
 	private Image origEmblem = null;
-	
-	
 
 	void recalculateEmblemSize() {
 		if (this.origEmblem != null) {
@@ -101,70 +141,142 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 			log.debug("Scaling factor: " + betterFactor); //$NON-NLS-1$
 
+			if (betterFactor == 0.0) {
+				betterFactor = 1.0f;
+			}
+
 			Image emblem = new Image(this.getDisplay(), this.origEmblem
 					.getImageData().scaledTo((int) (width * betterFactor),
 							(int) (height * betterFactor)));
 
 			Image old = this.lblEmblem.getImage();
-			
-			if(old != null) {
+
+			if (old != null) {
 				old.dispose();
 			}
-			
+
 			this.lblEmblem.setText(""); //$NON-NLS-1$
 			this.lblEmblem.setImage(emblem);
 		}
 	}
 
 	private void setEmblemFileInternal(final String filename) throws Exception {
-		if (this.configurationContainer.getEmblem() != null) {
-			if (this.configurationContainer.getEmblem().equals(filename)) {
-				return; // Ignore ...
+		this.setEmblemFileInternal(filename, false);
+	}
+
+	private void setEmblemFileInternal(final String filename, boolean force)
+			throws Exception {
+		if (!force) {
+			if (this.configurationContainer.getEmblem() != null) {
+				if (this.configurationContainer.getEmblem().equals(filename)) {
+					return; // Ignore ...
+				}
 			}
 		}
 
 		try {
 			this.configurationContainer.setEmblem(filename);
-			
-			this.txtEmblemFile.setText(this.configurationContainer.getEmblem());
 
-			if(this.origEmblem != null) {
+			if (filename == null || filename.trim().equals("")) { //$NON-NLS-1$
+				return;
+			}
+
+			// this.txtEmblemFile.setText();
+
+			this.emblemFile = this.configurationContainer.getEmblem();
+			if (this.origEmblem != null) {
 				this.origEmblem.dispose();
 			}
-			
+
 			this.origEmblem = new Image(this.getDisplay(), new ImageData(
-					filename));			
+					filename));
 
 			this.lblEmblem.setText(""); //$NON-NLS-1$
-			
+
 			this.recalculateEmblemSize();
 		} catch (Exception e) {
 			this.lblEmblem.setText("No Image");
 			this.lblEmblem.setImage(null);
-			if(this.origEmblem != null) {
+			if (this.origEmblem != null) {
 				this.origEmblem.dispose();
 			}
 			this.origEmblem = null;
 			throw e;
 		}
 
-		this.lblEmblem.pack();
-		this.lblEmblem.getParent().pack();
+		// this.lblEmblem.pack();
+		// this.lblEmblem.getParent().pack();
 		this.doLayout();
 	}
 
-	void processEmblemChanged() {
+	void processEmblemChanged(String filename) {
 		try {
-			String filename = this.txtEmblemFile.getText();
+			// String filename = this.txtEmblemFile.getText();
+			this.emblemFile = filename;
 			this.setEmblemFileInternal(filename);
+			this.btnUseImage.setSelection(true);
 		} catch (Exception ex) {
 			// TODO: Show error message!
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 		}
 	}
-	
+
+	void processNumberChanged() {
+		try {
+
+			this.txtMobileNumberErrorMarker.setVisible(false);
+			String number = this.txtMobileNumber.getText();
+			this.configurationContainer.setNumber(number);
+			number = this.configurationContainer.getNumber();
+			if (number == null) {
+				this.txtMobileNumber.setText(""); //$NON-NLS-1$
+				return;
+			}
+			this.txtMobileNumber.setText(number);
+		} catch (Exception ex) {
+			// TODO: Show error message!
+			this.txtMobileNumberErrorMarker.setVisible(true);
+			this.txtMobileNumberErrorMarker
+					.setToolTipText("Phone number is invalid! Please provide in the form: +43676123456789");
+			log.error("processNumberChanged: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	void processProxyHostChanged() {
+		try {
+			this.proxyHostErrorMarker.setVisible(false);
+			String host = this.txtProxyHost.getText();
+			this.configurationContainer.setProxyHost(host);
+		} catch (Exception ex) {
+			// TODO: Show error message!
+			this.proxyHostErrorMarker.setVisible(true);
+			this.proxyHostErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyHost: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	void processProxyPortChanged() {
+		try {
+			this.txtProxyPortErrorMarker.setVisible(false);
+			String portString = this.txtProxyPort.getText();
+			int port = -1;
+			if (portString == null || portString.trim().equals("")) {
+				port = -1;
+			} else {
+				port = Integer.parseInt(portString);
+			}
+			this.configurationContainer.setProxyPort(port);
+		} catch (Exception ex) {
+			// TODO: Show error message!
+			this.txtProxyPortErrorMarker.setVisible(true);
+			this.txtProxyPortErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyPort: ", ex); //$NON-NLS-1$
+		}
+	}
+
 	ConfigurationComposite configurationComposite;
-	
+	FormData fd_txtProxyPortErrorMarker;
+
 	/**
 	 * @return the configurationComposite
 	 */
@@ -173,7 +285,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	}
 
 	/**
-	 * @param configurationComposite the configurationComposite to set
+	 * @param configurationComposite
+	 *            the configurationComposite to set
 	 */
 	public void setConfigurationComposite(
 			ConfigurationComposite configurationComposite) {
@@ -184,10 +297,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 * @param parent
 	 * @param style
 	 * @param state
-	 * @param container 
+	 * @param container
 	 */
 	public SimpleConfigurationComposite(
-			org.eclipse.swt.widgets.Composite parent, int style, State state, ConfigurationContainer container) {
+			org.eclipse.swt.widgets.Composite parent, int style, State state,
+			ConfigurationContainer container) {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
 
@@ -207,10 +321,54 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				false, 1, 1));
 		lblMobileNumber.setText("Handy Nummer:");
 
-		this.txtMobileNumber = new Text(grpHandySignatur, SWT.BORDER
-				| SWT.RESIZE);
-		this.txtMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		Composite composite_2 = new Composite(grpHandySignatur, SWT.NONE);
+		composite_2.setLayout(new FormLayout());
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+
+		this.txtMobileNumber = new Text(composite_2, SWT.BORDER | SWT.RESIZE);
+		this.fd_txtMobileNumber = new FormData();
+		this.fd_txtMobileNumber.top = new FormAttachment(0);
+		this.fd_txtMobileNumber.left = new FormAttachment(0, 5);
+		this.fd_txtMobileNumber.bottom = new FormAttachment(100);
+		this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
+		this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
+
+		this.txtMobileNumberErrorMarker = new ErrorMarker(composite_2,
+				SWT.NATIVE, null, "", this.txtMobileNumber); //$NON-NLS-1$
+		this.txtMobileNumberErrorMarker.setVisible(false);
+		this.fd_txtMobileNumberErrorMarker = new FormData();
+		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
+		this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(100, -32);
+		this.fd_txtMobileNumberErrorMarker.bottom = new FormAttachment(100);
+		this.fd_txtMobileNumberErrorMarker.right = new FormAttachment(100);
+		this.txtMobileNumberErrorMarker
+				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
+
+		this.txtMobileNumber.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processNumberChanged();
+				}
+			}
+		});
+
+		this.txtMobileNumber.setMessage("+43676123456789");
+
+		this.txtMobileNumber.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processNumberChanged();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// Nothing to do here!
+			}
+		});
 
 		Group grpBildmarke = new Group(this, SWT.NONE);
 		FormData fd_grpBildmarke = new FormData();
@@ -219,83 +377,83 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpBildmarke.bottom = new FormAttachment(65, -5);
 		fd_grpBildmarke.top = new FormAttachment(20, 5);
 		grpBildmarke.setLayoutData(fd_grpBildmarke);
-		grpBildmarke.setLayout(new GridLayout(3, false));
+		grpBildmarke.setLayout(new GridLayout(5, false));
 		grpBildmarke.setText("Bildmarke");
+		new Label(grpBildmarke, SWT.NONE);
+		new Label(grpBildmarke, SWT.NONE);
 
 		this.lblEmblem = new Label(grpBildmarke, SWT.BORDER | SWT.RESIZE);
 		this.lblEmblem.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 4));
+				true, 3, 1));
 		this.lblEmblem.setAlignment(SWT.CENTER);
-		this.lblEmblem.setText("No Image");
+		this.lblEmblem
+				.setText("No Image. Drag and Drop a Image. Or use the browse button to select an emblem.");
 		this.lblEmblem.addListener(SWT.Resize, new Listener() {
-			
+
 			@Override
 			public void handleEvent(Event event) {
 				SimpleConfigurationComposite.this.recalculateEmblemSize();
 			}
 		});
 
-		Label lblDateiname = new Label(grpBildmarke, SWT.NONE);
-		lblDateiname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1));
-		lblDateiname.setText("Dateiname:");
+		/*
+		 * Label lblDateiname = new Label(grpBildmarke, SWT.NONE);
+		 * lblDateiname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER,
+		 * false, false, 1, 1)); lblDateiname.setText("Dateiname:"); new
+		 * Label(grpBildmarke, SWT.NONE);
+		 */
+
+		/*
+		 * this.txtEmblemFile = new Text(grpBildmarke, SWT.BORDER); GridData
+		 * gd_txtEmblemFile = new GridData(SWT.FILL, SWT.FILL, false, false, 2,
+		 * 1); gd_txtEmblemFile.widthHint = 123;
+		 * this.txtEmblemFile.setLayoutData(gd_txtEmblemFile);
+		 * this.txtEmblemFile.addFocusListener(new FocusListener() {
+		 * 
+		 * @Override public void focusLost(FocusEvent e) {
+		 * processEmblemChanged(); }
+		 * 
+		 * @Override public void focusGained(FocusEvent e) { // Nothing to do
+		 * here! } }); this.txtEmblemFile.addTraverseListener(new
+		 * TraverseListener() {
+		 * 
+		 * @Override public void keyTraversed(TraverseEvent e) { if (e.detail ==
+		 * SWT.TRAVERSE_RETURN) { processEmblemChanged(); } } }); new
+		 * Label(grpBildmarke, SWT.NONE);
+		 */
+		new Label(grpBildmarke, SWT.NONE);
 		new Label(grpBildmarke, SWT.NONE);
 
-		this.txtEmblemFile = new Text(grpBildmarke, SWT.BORDER);
-		GridData gd_txtEmblemFile = new GridData(SWT.FILL, SWT.FILL, false,
-				false, 2, 1);
-		gd_txtEmblemFile.widthHint = 123;
-		this.txtEmblemFile.setLayoutData(gd_txtEmblemFile);
-		this.txtEmblemFile.addFocusListener(new FocusListener() {
-
+		this.btnUseImage = new Button(grpBildmarke, SWT.CHECK);
+		this.btnUseImage.setText("Use Image");
+		this.btnUseImage.addSelectionListener(new SelectionListener() {
+			
 			@Override
-			public void focusLost(FocusEvent e) {
-				processEmblemChanged();
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do here!
-			}
-		});
-		this.txtEmblemFile.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processEmblemChanged();
+			public void widgetSelected(SelectionEvent e) {
+				if(SimpleConfigurationComposite.this.btnUseImage.getSelection()) {
+					processEmblemChanged(SimpleConfigurationComposite.this.emblemFile);
+				} else {
+					try {
+						SimpleConfigurationComposite.this.configurationContainer.setEmblem(null);
+					} catch (InvalidEmblemFile e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// Nothing to do
 			}
 		});
 		new Label(grpBildmarke, SWT.NONE);
 
 		Button btnBrowseEmblem = new Button(grpBildmarke, SWT.NONE);
-		btnBrowseEmblem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(SimpleConfigurationComposite.this
-						.getShell(), SWT.OPEN);
-				dialog.setFilterExtensions(new String[] { "*.jpg", "*.gif" }); //$NON-NLS-1$ //$NON-NLS-2$
-				dialog.setFilterNames(new String[] { "JPG Dateien",
-						"Gif Dateien" });
-				String fileName = dialog.open();
-				File file = null;
-				if (fileName != null) {
-					file = new File(fileName);
-					if (file.exists()) {
-						SimpleConfigurationComposite.this.txtEmblemFile
-								.setText(fileName);
-						processEmblemChanged();
-					}
-				}
-			}
-		});
+		btnBrowseEmblem.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
+		btnBrowseEmblem.addSelectionListener(new ImageFileBrowser());
 		btnBrowseEmblem.setText("Browse");
-
-		Label label = new Label(grpBildmarke, SWT.NONE);
-		GridData gd_label = new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1);
-		gd_label.widthHint = 189;
-		label.setLayoutData(gd_label);
 
 		Group grpProxy = new Group(this, SWT.NONE);
 		FormData fd_grpProxy = new FormData();
@@ -315,18 +473,166 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		lblNewLabel.setBounds(0, 0, 57, 15);
 		lblNewLabel.setText("Host:");
 
-		this.text = new Text(grpProxy, SWT.BORDER);
-		this.text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+		Composite composite = new Composite(grpProxy, SWT.NONE);
+		composite.setLayout(new FormLayout());
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
+		this.txtProxyHost = new Text(composite, SWT.BORDER);
+		FormData fd_txtProxyHost = new FormData();
+		fd_txtProxyHost.right = new FormAttachment(100, -42);
+		fd_txtProxyHost.bottom = new FormAttachment(100);
+		fd_txtProxyHost.top = new FormAttachment(0);
+		fd_txtProxyHost.left = new FormAttachment(0, 5);
+
+		this.proxyHostErrorMarker = new ErrorMarker(composite, SWT.NONE, null,
+				"", this.txtProxyHost); //$NON-NLS-1$
+
+		FormData fd_marker = new FormData();
+		fd_marker.right = new FormAttachment(100, -32);
+		fd_marker.bottom = new FormAttachment(100);
+		fd_marker.top = new FormAttachment(0);
+
+		this.proxyHostErrorMarker.setLayoutData(fd_marker);
+		this.proxyHostErrorMarker.setVisible(false);
+		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
+
+		this.txtProxyHost.setMessage("Hostname or IP of proxy server");
+
+		this.txtProxyHost.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyHostChanged();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// Nothing to do here!
+			}
+		});
+
+		this.txtProxyHost.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyHostChanged();
+				}
+			}
+		});
 
 		Label lblNewLabel_1 = new Label(grpProxy, SWT.NONE);
 		lblNewLabel_1.setBounds(0, 0, 57, 15);
 		lblNewLabel_1.setText("Port:");
 
-		this.text_1 = new Text(grpProxy, SWT.BORDER);
-		this.text_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+		Composite composite_1 = new Composite(grpProxy, SWT.NONE);
+		composite_1.setLayout(new FormLayout());
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
 
+		this.txtProxyPort = new Text(composite_1, SWT.BORDER);
+		this.fd_txtProxyPort = new FormData();
+		this.fd_txtProxyPort.top = new FormAttachment(0, 0);
+		this.fd_txtProxyPort.left = new FormAttachment(0, 5);
+		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
+		this.fd_txtProxyPort.bottom = new FormAttachment(100);
+		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
+		this.txtProxyPort.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyPortChanged();
+				}
+			}
+		});
+
+		this.txtProxyPortErrorMarker = new ErrorMarker(composite_1, SWT.NATIVE,
+				null, "", this.txtProxyPort); //$NON-NLS-1$
+		this.fd_txtProxyPortErrorMarker = new FormData();
+		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
+		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
+		this.fd_txtProxyPortErrorMarker.bottom = new FormAttachment(100);
+		this.txtProxyPortErrorMarker
+				.setLayoutData(this.fd_txtProxyPortErrorMarker);
+		this.txtProxyPortErrorMarker.setVisible(false);
+
+		this.txtProxyPort.setMessage("port proxy server [1-65535]");
+
+		this.txtProxyPort.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyPortChanged();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// Nothing to do here!
+			}
+		});
+
+		// Initialize form fields from configuration Container
+		String number = this.configurationContainer.getNumber();
+		if (number != null) {
+			this.txtMobileNumber.setText(number);
+		}
+
+		String emblemFile = this.configurationContainer.getEmblem();
+		if (emblemFile != null && !emblemFile.trim().equals("")) { //$NON-NLS-1$
+			// this.txtEmblemFile.setText(emblemFile);
+			this.emblemFile = emblemFile;
+			try {
+				this.setEmblemFileInternal(emblemFile, true);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				log.error("initialize emblem: ", e1); //$NON-NLS-1$
+			}
+		}
+
+		int port = this.configurationContainer.getProxyPort();
+		if (port > 0) {
+			this.txtProxyPort.setText(Integer.toString(port));
+		}
+
+		String host = this.configurationContainer.getProxyHost();
+
+		if (host != null) {
+			this.txtProxyHost.setText(host);
+		}
+
+		this.addListener(SWT.Resize, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				// Number resize with error Marker
+
+				Point numberSize = new Point(
+						SimpleConfigurationComposite.this.txtMobileNumber
+								.getSize().y,
+						SimpleConfigurationComposite.this.txtMobileNumber
+								.getSize().y);
+				SimpleConfigurationComposite.this.txtMobileNumberErrorMarker
+						.resize(numberSize);
+				SimpleConfigurationComposite.this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(
+						100, -1 * numberSize.y);
+				SimpleConfigurationComposite.this.fd_txtMobileNumber.right = new FormAttachment(
+						100, -1 * (numberSize.y + 10));
+
+				Point portSize = new Point(
+						SimpleConfigurationComposite.this.txtProxyPort
+								.getSize().y,
+						SimpleConfigurationComposite.this.txtProxyPort
+								.getSize().y);
+				SimpleConfigurationComposite.this.txtProxyPortErrorMarker
+						.resize(numberSize);
+				SimpleConfigurationComposite.this.fd_txtProxyPortErrorMarker.left = new FormAttachment(
+						100, -1 * portSize.y);
+				SimpleConfigurationComposite.this.fd_txtProxyPort.right = new FormAttachment(
+						100, -1 * (portSize.y + 10));
+			}
+		});
 	}
 
 	/**
@@ -334,14 +640,22 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(SimpleConfigurationComposite.class);
+	private ErrorMarker proxyHostErrorMarker;
+	ErrorMarker txtMobileNumberErrorMarker;
+	FormData fd_txtMobileNumberErrorMarker;
+	FormData fd_txtMobileNumber;
+	FormData fd_txtProxyPort;
+	ErrorMarker txtProxyPortErrorMarker;
+	Button btnUseImage;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
 	public void doLayout() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 }

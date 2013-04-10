@@ -65,12 +65,18 @@ public interface ConfigurationContainer {
 	
 	/**
 	 * Gets the proxy port
+	 * 
+	 * if port is -1 no port is selected
+	 * 
 	 * @return the proxy port
 	 */
 	public int getProxyPort();
 	
 	/**
 	 * Sets the proxy port
+	 * 
+	 * set to -1 for no port
+	 * 
 	 * @param port the proxy port
 	 * @throws InvalidPortException
 	 */

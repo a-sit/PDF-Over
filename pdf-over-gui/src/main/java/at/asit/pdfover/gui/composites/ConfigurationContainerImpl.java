@@ -91,7 +91,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setEmblem(String emblemFile) throws InvalidEmblemFile {
-		if (this.emblemFile == null || this.emblemFile.trim().equals("")) { //$NON-NLS-1$
+		if (emblemFile == null || emblemFile.trim().equals("")) { //$NON-NLS-1$
 			// Ok to set no file ...
 		} else {
 			File imageFile = new File(emblemFile);
@@ -128,6 +128,10 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setNumber(String number) throws InvalidNumberException {
+		if(number == null || number.trim().equals("")) { //$NON-NLS-1$
+			this.mobileNumber = null;
+			return;
+		} 
 		this.mobileNumber = ATrustHelper.normalizeMobileNumber(number);
 	}
 
@@ -166,6 +170,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	public void setProxyPort(int port) throws InvalidPortException {
 		if(port > 0 && port < 0xFFFF) {
 			this.proxyPort = port;
+			return;
+		}
+		if(port == -1) {
+			this.proxyPort = -1;
+			return;
 		}
 		throw new InvalidPortException(port);
 	}
