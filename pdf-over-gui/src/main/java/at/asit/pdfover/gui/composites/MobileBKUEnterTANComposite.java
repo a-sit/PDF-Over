@@ -101,7 +101,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 * @param tries
 	 */
 	public void setTries(int tries) {
-		this.lbl_tries.setText(String.format(Messages.getString("tanEnter.tries"), tries)); //$NON-NLS-1$
+		this.lbl_tries.setText(
+				tries == 1 ? Messages.getString("tanEnter.try") : //$NON-NLS-1$
+				String.format(Messages.getString("tanEnter.tries"), tries)); //$NON-NLS-1$
 	}
 	
 	/**
