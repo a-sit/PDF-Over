@@ -31,7 +31,8 @@ public class HelpArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public HelpArgument() {
-		super(new String[] {"-h", "-?" }, Messages.getString("argument.help.help")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		super(new String[] {"-h", "-?", "--help" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				Messages.getString("argument.help.help")); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)
