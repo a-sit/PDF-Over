@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+	<!-- <skipIfNotSupported/>  -->
+  <programGroup defaultName="PDFOver"
+  location="applications"/>
+
+  <shortcut
+     name="PDFOver"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/scripts/pdfover_linux.sh"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH"
+     description="PDFOver 4.0"
+     iconFile="$INSTALL_PATH/icons/pdfover.png"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="false"
+     KdeSubstUID="false"
+     initialState="normal">
+     <createForPack name="main"/>
+   </shortcut>
+
+</shortcuts>

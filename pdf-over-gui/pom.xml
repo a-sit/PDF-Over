@@ -17,6 +17,12 @@
 			<version>3.8</version>
 		</dependency>
 		<dependency>
+			<groupId>org.codehaus.izpack</groupId>
+			<artifactId>izpack-standalone-compiler</artifactId>
+			<version>${izpack-standalone.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
@@ -40,6 +46,142 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Ignore/Execute plugin execution -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- copy-dependency plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix></classpathPrefix>
+							<mainClass>at.asit.pdfover.gui.Main</mainClass>
+						</manifest>
+					</archive>
+					<outputDirectory>${staging.dir}/lib</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- copy product jars to izpack staging lib -->
+						<id>copy-product-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${staging.dir}/lib</outputDirectory>
+							<excludeTransitive>false</excludeTransitive>
+							<stripVersion>false</stripVersion>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeScope>system</excludeScope> <!-- this excludes tools.jar, e.g. -->
+							<excludeGroupIds>org.codehaus.izpack</excludeGroupIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>${staging.dir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main</directory>
+									<includes>
+										<include>scripts/*</include>
+										<include>icons/*</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>src/main/izpack</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.izpack</groupId>
+				<artifactId>izpack-maven-plugin</artifactId>
+				<version>1.0-alpha-5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.izpack</groupId>
+						<artifactId>izpack-standalone-compiler</artifactId>
+						<version>${izpack-standalone.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<izpackBasedir>${staging.dir}</izpackBasedir>
+					<izpackOutput>${staging.dir}/setup.jar</izpackOutput>
+				</configuration>
+				<executions>
+					<execution>
+						<id>standard-installer</id>
+						<phase>package</phase>
+						<goals>
+							<goal>izpack</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<staging.dir>${project.build.directory}/staging</staging.dir>
+		<target.name>linux</target.name>
+		<izpack-standalone.version>4.3.5</izpack-standalone.version>
+	</properties>
+
 	<profiles>
 		<profile>
 			<id>linux</id>
@@ -51,6 +193,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
+				<target.name>linux</target.name>
 			</properties>
 		</profile>
 		<profile>
@@ -63,6 +207,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/linux-64</staging.dir>
+				<target.name>linux-64</target.name>
 			</properties>
 		</profile>
 
@@ -76,6 +222,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/windows</staging.dir>
+				<target.name>windows</target.name>
 			</properties>
 		</profile>
 		<profile>
@@ -88,6 +236,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/windows-64</staging.dir>
+				<target.name>windows-64</target.name>
 			</properties>
 		</profile>
 
@@ -101,6 +251,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
+				<target.name>mac</target.name>
 			</properties>
 		</profile>
 		<profile>
@@ -113,6 +265,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/mac-64</staging.dir>
+				<target.name>mac-64</target.name>
 			</properties>
 		</profile>
 	</profiles>
@@ -122,5 +276,19 @@
 			<id>swt-repo</id>
 			<url>https://swt-repo.googlecode.com/svn/repo/</url>
 		</repository>
+		<repository>
+			<id>akathist-repository</id>
+			<name>Akathist Repository</name>
+			<url>http://www.9stmaryrd.com/maven</url>
+		</repository>
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>akathist-repository</id>
+			<name>Akathist Repository</name>
+			<url>http://www.9stmaryrd.com/maven</url>
+		</pluginRepository>
+	</pluginRepositories>
+	
 </project>

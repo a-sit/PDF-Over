@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<installation version="1.0">
+
+	<info>
+		<appname>PDFOver</appname>
+		<appversion>4.0</appversion>
+		<uninstaller write="no" />
+		<javaversion>1.6</javaversion>
+		<authors>
+			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
+		</authors>
+		<uninstaller/>
+		<url>http://www.a-sit.at/</url>
+		<pack200 />
+		<run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7"/>
+	</info>
+
+	<guiprefs resizable="no" width="480" height="360">
+		<laf name="looks">
+			<param name="variant" value="windows" />
+			<os family="windows" />
+		</laf>
+	</guiprefs>
+
+	<locale>
+		<langpack iso3="eng" />
+	</locale>
+	<resources>
+		<res src="./unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
+		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
+	</resources>
+	
+	<native type="izpack" name="ShellLink.dll">
+		<os family="windows" />
+	</native>
+	<native type="izpack" name="ShellLink_x64.dll">
+		<os family="windows" />
+	</native>
+	
+	<variables>
+		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
+	</variables>
+
+	<panels>
+		<panel classname="HelloPanel" />
+		<panel classname="TargetPanel" />
+		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel" />
+		<panel classname="SimpleFinishPanel" />
+	</panels>
+
+	<packs>
+		<pack name="main" required="yes">
+			<description>Main Installation</description>
+			<file src="lib" targetdir="$INSTALL_PATH" />
+			<file src="scripts" targetdir="$INSTALL_PATH" />
+			<file src="icons" targetdir="$INSTALL_PATH" />
+			<executable targetfile="$INSTALL_PATH/scripts/pdfover_linux.sh"
+				os="unix" stage="never"></executable>
+			<executable targetfile="$INSTALL_PATH/scripts/pdfover_win.bat"
+				os="windows" stage="never"></executable>
+			<executable targetfile="$INSTALL_PATH/scripts/pdfover_mac.sh"
+				os="mac" stage="never"></executable>
+		</pack>
+	</packs>
+
+</installation>
