@@ -93,7 +93,7 @@ public class Constants {
 	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The default configuration file name */
-	public static final String DEFAULT_CONFIG_FILENAME = "PDFOver.config"; //$NON-NLS-1$
+	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //$NON-NLS-1$
 
 	/** The default log4j file name */
 	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
