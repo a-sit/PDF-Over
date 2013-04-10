@@ -36,7 +36,7 @@ public class PDFASSigner implements Signer {
 	/**
 	 * The profile ID
 	 */
-	protected static final String PROFILE_ID = "SIGNATURBLOCK_DE";
+	protected static final String PROFILE_ID = "SIGNATURBLOCK_SMALL_DE";
 
 	/**
 	 * The template URL

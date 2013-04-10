@@ -60,7 +60,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	public SignatureDimension getPlaceholderDimension() {
 		// return new SignatureDimension(487, 206);
 
-		return new SignatureDimension(976, 329);
+		return new SignatureDimension(262, 88);
 	}
 
 	/**
@@ -76,9 +76,15 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 		SignaturePositioning positioning = null;
 		if (!position.useAutoPositioning()) {
-			positioning = new SignaturePositioning(String.format(
-					"p:%d;x:%f;y:%f", position.getPage(), position.getX(),
-					position.getY()));
+			if (position.getPage() < 1) {
+				positioning = new SignaturePositioning(String.format(
+						"p:new;x:%f;y:%f;w:262",  position.getX(),
+						position.getY()));
+			} else {
+				positioning = new SignaturePositioning(String.format(
+						"p:%d;x:%f;y:%f;w:262", position.getPage(), position.getX(),
+						position.getY()));
+			}
 		} else {
 			positioning = new SignaturePositioning();
 		}
@@ -149,7 +155,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			this.drawTable(0, 0, (int) width, (int) height, table,
 					table.getStyle(), graphic, heights);
 
-			//save(image, "png");
+			// save(image, "png");
 
 			return image;
 		} catch (Exception ex) {
@@ -157,13 +163,16 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 				return ImageIO.read(PdfAsSignatureParameter.class
 						.getResourceAsStream("/img/fallbackPlaceholder.png"));
 			} catch (IOException e) {
-				return new BufferedImage(getPlaceholderDimension().getWidth(), getPlaceholderDimension().getHeight(), BufferedImage.TYPE_INT_RGB);
+				return new BufferedImage(getPlaceholderDimension().getWidth(),
+						getPlaceholderDimension().getHeight(),
+						BufferedImage.TYPE_INT_RGB);
 			}
 		}
 	}
 
 	/**
 	 * used for debugging ..
+	 * 
 	 * @param image
 	 * @param ext
 	 */
