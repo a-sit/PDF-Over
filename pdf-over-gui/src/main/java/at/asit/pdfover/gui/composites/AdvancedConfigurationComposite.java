@@ -360,7 +360,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	}
 
 	void performPlaceholderTransparency(int transparency) {
-		log.debug("Transparency: " + transparency); //$NON-NLS-1$
 		this.configurationContainer.setPlaceholderTransparency(transparency);
 	}
 

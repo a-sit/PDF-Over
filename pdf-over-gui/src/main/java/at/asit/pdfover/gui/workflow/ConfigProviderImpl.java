@@ -445,7 +445,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			transparency = Integer.parseInt(config
 					.getProperty(ConfigManipulator.SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG));
 		} catch (NumberFormatException e) {
-			log.debug("Couldn't parse placeholder transparency", e);
+			log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
 			// ignore parsing exception
 		}
 		this.setPlaceholderTransparency(transparency);

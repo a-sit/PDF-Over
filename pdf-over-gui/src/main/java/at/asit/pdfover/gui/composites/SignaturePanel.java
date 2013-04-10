@@ -207,7 +207,7 @@ public class SignaturePanel extends JPanel {
 			try {
 				this.currentXform = this.currentXform.createInverse();
 			} catch (NoninvertibleTransformException nte) {
-				log.error("Error inverting page transform!", nte);
+				log.error("Error inverting page transform!", nte); //$NON-NLS-1$
 			}
 
 			if (this.sigPagePos == null)

@@ -55,7 +55,7 @@ public class PositioningState extends State {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument());
+			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument()); //$NON-NLS-1$
 			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
 		}
 		// Update possibly changed values
