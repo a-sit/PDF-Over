@@ -9,13 +9,12 @@
 		<javaversion>1.6</javaversion>
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)"
-				email="" />
+				email="office@a-sit.at" />
 		</authors>
 		<uninstaller />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
-		<run-privileged
-			condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7" />
+		<!-- <run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7" />  -->
 	</info>
 
 	<guiprefs resizable="yes" width="480" height="360">
@@ -38,8 +37,10 @@
 		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
 		<res src="./win_shortcutSpec.xml" id="shortcutSpec.xml" />
 		<res src="defaultInstallDir.txt" id="TargetPanel.dir.windows" />
-		<res id="JFrameIcon.png" src="./icon16x16.png"/>
+		<res id="JFrameIcon.png" src="icon16x16.png"/>
 		<res src="./customicons.xml" id="customicons.xml" />
+		<res id="Installer.image" src="logo.gif" />
+		<res src="logo.gif" id="Installer.image.0"/>
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
