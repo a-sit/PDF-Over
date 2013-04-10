@@ -16,21 +16,17 @@
 package at.asit.pdfover.gui.workflow;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
-import at.asit.pdfover.gui.workflow.states.OpenState;
-import at.asit.pdfover.gui.workflow.states.PositioningState;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 
 /**
  * Workflow holds logical state of signing process and updates the current
@@ -72,37 +68,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 */
 	@Override
 	public void jumpToState(State state) {
-		if (this.status.getCurrentState() != state && state != null) {
-			this.status.setCurrentState(state);
-
-			// TODO rewrite when Config is done ...
-			if (state instanceof PositioningState) {
-				// User jumps to positioning state !
-				// restore possible default for bku selection / forget BKU
-				// selection
-				this.getStatus().setBKU(
-						this.getConfigProvider().getDefaultBKU());
-				// forget position
-				this.getStatus().setSignaturePosition(null);
-			} else if (state instanceof BKUSelectionState) {
-				// User jumps to bku selection state !
-				// forget bku selection
-				this.getStatus().setBKU(BKUs.NONE);
-			} else if (state instanceof OpenState) {
-				// User jumps to data source selection state !
-				// forget bku selection / restore possible default for bku
-				// selection
-				this.getStatus().setBKU(
-						this.getConfigProvider().getDefaultBKU());
-				// forget position / restore possible default for position
-				this.getStatus().setSignaturePosition(
-						this.getConfigProvider().getDefaultSignaturePosition());
-				// forget data source selection
-				this.getStatus().setDocument(null);
-			}
-
-			this.update();
-		}
+		this.status.setCurrentState(state);
+		this.update();
 	}
 
 	/**
@@ -116,7 +83,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			current.run();
 			if (this.mainWindow != null
 					&& !this.mainWindow.getShell().isDisposed()) {
-				log.debug("Allowing MainWindow to update its state for "
+				log.debug("Allowing MainWindow to update its state for " //$NON-NLS-1$
 						+ current);
 				current.updateMainWindowBehavior();
 				this.mainWindow.applyBehavior();
@@ -126,8 +93,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			if (next == current) {
 				break;
 			}
-			log.debug("Changing state from: "
-					+ current + " to "
+			log.debug("Changing state from: " //$NON-NLS-1$
+					+ current + " to " //$NON-NLS-1$
 					+ next.toString());
 			this.status.setCurrentState(next);
 		}
@@ -143,7 +110,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * Invoke Update in UI (Main) Thread
 	 */
 	@Override
-	public void InvokeUpdate() {
+	public void invokeUpdate() {
 		if (this.display != null) {
 			this.display.asyncExec(new Runnable() {
 
@@ -223,12 +190,12 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	}
 
 	@Override
-	public <T> T createComposite(Class<T> compositeClass, int style) {
+	public <T> T createComposite(Class<T> compositeClass, int style, State state) {
 		T composite = null;
 		try {
 			Constructor<T> constructor = compositeClass.getDeclaredConstructor(
-					Composite.class, int.class, BKUSelectionState.class);
-			composite = constructor.newInstance(getComposite(), style, this);
+					Composite.class, int.class, State.class);
+			composite = constructor.newInstance(getComposite(), style, state);
 		} catch (Exception e) {
 			log.error(
 					"Could not create Composite for Class "

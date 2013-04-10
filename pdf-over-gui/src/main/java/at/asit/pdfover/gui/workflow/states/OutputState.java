@@ -47,7 +47,15 @@ public class OutputState extends State {
 		
 		this.stateMachine.exit();
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		// TODO
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */

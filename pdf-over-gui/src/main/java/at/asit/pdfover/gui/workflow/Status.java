@@ -73,4 +73,10 @@ public interface Status {
 	 * @return the main window behavior
 	 */
 	public MainWindowBehavior getBehavior();
+
+	/**
+	 * Gets the previous State
+	 * @return the previous State
+	 */
+	public State getPreviousState();
 }

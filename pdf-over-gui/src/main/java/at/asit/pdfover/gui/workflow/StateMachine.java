@@ -69,7 +69,7 @@ public interface StateMachine {
 	 * Update state machine from other thread
 	 * Calls the next state within the main thread
 	 */
-	public void InvokeUpdate();
+	public void invokeUpdate();
 
 	/**
 	 * Exit state machine execution

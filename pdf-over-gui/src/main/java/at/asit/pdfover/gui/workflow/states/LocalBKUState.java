@@ -50,6 +50,14 @@ public class LocalBKUState extends State {
 		
 		this.setNextState(new SigningState(this.stateMachine));
 	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		// No composite - no cleanup necessary
+	}
 	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()

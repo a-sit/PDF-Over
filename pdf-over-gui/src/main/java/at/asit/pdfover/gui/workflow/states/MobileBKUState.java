@@ -52,6 +52,14 @@ public class MobileBKUState extends State {
 	}
 
 	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		// No composite - no cleanup necessary
+	}
+
+	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override

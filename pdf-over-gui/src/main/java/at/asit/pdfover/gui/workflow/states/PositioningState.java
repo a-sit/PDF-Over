@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.PositioningComposite;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * Decides where to position the signature block
@@ -57,19 +59,35 @@ public class PositioningState extends State {
 
 	@Override
 	public void run() {
-		
-		if(this.stateMachine.getStatus().getSignaturePosition() == null) {
+		Status status = this.stateMachine.getStatus();
+		if (!(status.getPreviousState() instanceof PositioningState) &&
+			!(status.getPreviousState() instanceof OpenState))
+		{
+			status.setSignaturePosition(null);
+		}
+
+
+		if(status.getSignaturePosition() == null) {
 			PositioningComposite position = this.getPositioningComosite();
 			
 			this.stateMachine.getGUIProvider().display(position);
 			
-			this.stateMachine.getStatus().setSignaturePosition(position.getPosition());
+			status.setSignaturePosition(position.getPosition());
 			
-			if(this.stateMachine.getStatus().getSignaturePosition() == null) {
+			if(status.getSignaturePosition() == null) {
 				return;
 			}
 		}
 		this.setNextState(new BKUSelectionState(this.stateMachine));
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		if (this.positionComposite != null)
+			this.positionComposite.dispose();
 	}
 
 	/* (non-Javadoc)

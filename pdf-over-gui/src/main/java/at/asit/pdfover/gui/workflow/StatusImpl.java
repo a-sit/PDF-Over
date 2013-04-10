@@ -44,7 +44,10 @@ public class StatusImpl implements Status {
 	
 	private State currentState = null;
 
+	private State previousState = null;
+
 	private MainWindowBehavior behavior;
+
 
 	/**
 	 * Constructor
@@ -59,11 +62,30 @@ public class StatusImpl implements Status {
 	}
 
 	/**
-	 * Sets the current state
-	 * @param currentState
+	 * Changes the current state
+	 * @param currentState the current State
 	 */
 	public void setCurrentState(State currentState) {
+		if (this.previousState == this.currentState)
+			log.error("Changing to same state? " + this.currentState);
+
+		if (this.previousState != null && this.previousState != currentState)
+		{
+			//Reference to previous state will be lost - perform cleanup
+			log.debug("Cleaning up " + this.previousState);
+			this.previousState.cleanUp();
+		}
+			
+		this.previousState = this.currentState;
 		this.currentState = currentState;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.Status#getPreviousState()
+	 */
+	@Override
+	public State getPreviousState() {
+		return this.previousState;
 	}
 
 	/* (non-Javadoc)
@@ -119,6 +141,6 @@ public class StatusImpl implements Status {
 	 */
 	@Override
 	public MainWindowBehavior getBehavior() {
-		return behavior;
+		return this.behavior;
 	}
 }

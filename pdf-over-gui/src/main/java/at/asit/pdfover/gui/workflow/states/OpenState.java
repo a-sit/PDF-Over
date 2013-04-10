@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * Selects the data source for the signature process.
@@ -47,8 +49,10 @@ public class OpenState extends State {
 
 	private DataSourceSelectComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
-			this.selectionComposite = new DataSourceSelectComposite(
-					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
+			this.selectionComposite =
+					this.stateMachine.getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
+			//this.selectionComposite = new DataSourceSelectComposite(
+			//		this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
@@ -56,25 +60,43 @@ public class OpenState extends State {
 
 	@Override
 	public void run() {
+		Status status = this.stateMachine.getStatus();
+		if (!(status.getPreviousState() instanceof PrepareConfigurationState) &&
+			!(status.getPreviousState() instanceof OpenState))
+		{
+			ConfigProvider config = this.stateMachine.getConfigProvider();
+			status.setBKU(config.getDefaultBKU());
+			status.setDocument(null);
+			status.setSignaturePosition(config.getDefaultSignaturePosition());
+		}
 
-		if (this.stateMachine.getStatus().getDocument() == null) {
+		if (status.getDocument() == null) {
 			DataSourceSelectComposite selection = this
 					.getSelectionComposite();
 
 			this.stateMachine.getGUIProvider().display(selection);
 			selection.layout();
 
-			this.stateMachine.getStatus().setDocument(selection.getSelected());
+			status.setDocument(selection.getSelected());
 
-			if (this.stateMachine.getStatus().getDocument() == null) {
+			if (status.getDocument() == null) {
 				// Not selected yet
 				return;
 			} 
 		}
-		log.debug("Got Datasource: " + this.stateMachine.getStatus().getDocument().getAbsolutePath());
+		log.debug("Got Datasource: " + this.stateMachine.getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
 		this.setNextState(new PositioningState(this.stateMachine));
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		if (this.selectionComposite != null)
+			this.selectionComposite.dispose();
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */

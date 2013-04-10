@@ -25,6 +25,8 @@ import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.signator.Signer;
 
 /**
  * User waiting state, wait for PDF Signator library to prepare document for signing.
@@ -61,24 +63,52 @@ public class PrepareSigningState extends State {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.workflow.InvokeUpdate();
+			this.workflow.invokeUpdate();
 		}
 	}
 
+	private final class PrepareDocumentThread implements Runnable {
+		
+		private PrepareSigningState state;
+		
+		/**
+		 * Default constructor
+		 * @param state
+		 */
+		public PrepareDocumentThread(PrepareSigningState state) {
+			this.state = state;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				
+				
+			} catch (Exception e) {
+				log.error("PrepareDocumentThread: ", e);
+			}
+			finally {
+				this.state.stateMachine.invokeUpdate();
+			}
+		}
+	}
+	
 	/**
 	 * SFL4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
 	
-	private WaitingComposite selectionComposite = null;
+	private SignatureParameter signatureParameter;
+	
+	private WaitingComposite waitingComposite = null;
 
 	private WaitingComposite getSelectionComposite() {
-		if (this.selectionComposite == null) {
-			this.selectionComposite = new WaitingComposite(
+		if (this.waitingComposite == null) {
+			this.waitingComposite = new WaitingComposite(
 					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
-		return this.selectionComposite;
+		return this.waitingComposite;
 	}
 	
 	private boolean run = false;
@@ -87,11 +117,17 @@ public class PrepareSigningState extends State {
 	public void run() {
 		// TODO SHOW BACKGROUND ACTIVITY ....
 		WaitingComposite waiting = this.getSelectionComposite();
-		
+
 		this.stateMachine.getGUIProvider().display(waiting);
 		
+		Signer signer = this.stateMachine.getPDFSigner().getPDFSigner();
+		
+		if(signatureParameter == null) {
+//			signatureParameter = 
+		}
+		
 		if(!this.run) {
-			Thread t = new Thread(new DebugSleeperThread(this.stateMachine));
+			Thread t = new Thread(new PrepareDocumentThread(this));
 			this.run = true;
 			t.start();
 			return;
@@ -108,7 +144,16 @@ public class PrepareSigningState extends State {
 			this.setNextState(new BKUSelectionState(this.stateMachine));
 		}
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		if (this.waitingComposite != null)
+			this.waitingComposite.dispose();
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */

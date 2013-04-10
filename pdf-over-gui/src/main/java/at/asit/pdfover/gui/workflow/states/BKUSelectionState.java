@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.BKUSelectionComposite;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * Decides which BKU to use (preconfigured or let user choose)
@@ -76,23 +78,38 @@ public class BKUSelectionState extends State {
 	
 	@Override
 	public void run() {
-		
-		if(this.stateMachine.getStatus().getBKU() == BKUs.NONE) {
+		Status status = this.stateMachine.getStatus();
+		if (!(status.getPreviousState() instanceof BKUSelectionState))
+		{
+			ConfigProvider config = this.stateMachine.getConfigProvider();
+			status.setBKU(config.getDefaultBKU());
+		}
+
+		if(status.getBKU() == BKUs.NONE) {
 			BKUSelectionComposite selection = this
 					.getSelectionComposite();
 
 			this.stateMachine.getGUIProvider().display(selection);
 			selection.layout();
 			
-			this.stateMachine.getStatus().setBKU(selection.getSelected());
+			status.setBKU(selection.getSelected());
 		
-			if(this.stateMachine.getStatus().getBKU() == BKUs.NONE) {
+			if(status.getBKU() == BKUs.NONE) {
 				return;
 			}
 		} 
 		this.setNextState(new PrepareSigningState(this.stateMachine));
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
+	 */
+	@Override
+	public void cleanUp() {
+		if (this.selectionComposite != null)
+			this.selectionComposite.dispose();
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */

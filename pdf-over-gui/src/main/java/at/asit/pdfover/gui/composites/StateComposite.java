@@ -13,35 +13,37 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow;
+package at.asit.pdfover.gui.composites;
 
+// Imports
 import org.eclipse.swt.widgets.Composite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
 
-
 /**
- * 
+ *	Composite interface for workflow state gui implementations
  */
-public interface GUIProvider {
-	/**
-	 * Get the container Composite
-	 * @return the container Composite
-	 */
-	public Composite getComposite();
+public abstract class StateComposite extends Composite {
+	
+	protected State state;
 	
 	/**
-	 * Create a new Composite
-	 * @param compositeClass The class of the Composite to create
-	 * @param style the SWT style
-	 * @param state the State this Composite belongs to
-	 * @return the new Composite
+	 * The base class for state composites
+	 * 
+	 * @param parent
+	 * @param style
+	 * @param state
 	 */
-	public <T> T createComposite(Class<T> compositeClass, int style, State state);
-
+	public StateComposite(Composite parent, int style, State state) {
+		super(parent, style);
+		this.state = state;
+	}
+	
 	/**
-	 * Display the composite as top most in main window
-	 * @param composite the composite
+	 * Performs layout for all children in composite
+	 * (SWT layout(...) only layouts children no grandchildren!) 
 	 */
-	public void display(final Composite composite);
+	public abstract void doLayout();
 }
