@@ -72,15 +72,16 @@ public class PrepareConfigurationState extends State {
 		super(stateMachine);
 		this.handler = new ArgumentHandler(this.stateMachine);
 		this.handler.addCLIArgument(HelpArgument.class);
-		this.handler.addCLIArgument(AutomaticPositioningArgument.class);
+		this.handler.addCLIArgument(InputDocumentArgument.class);
+		this.handler.addCLIArgument(OutputFolderArgument.class);
 		this.handler.addCLIArgument(BKUArgument.class);
 		this.handler.addCLIArgument(PhoneNumberArgument.class);
-		this.handler.addCLIArgument(EmblemArgument.class);
 		this.handler.addCLIArgument(PasswordArgument.class);
 		this.handler.addCLIArgument(ProxyHostArgument.class);
 		this.handler.addCLIArgument(ProxyPortArgument.class);
-		this.handler.addCLIArgument(OutputFolderArgument.class);
-		this.handler.addCLIArgument(InputDocumentArgument.class);
+		this.handler.addCLIArgument(EmblemArgument.class);
+		this.handler.addCLIArgument(AutomaticPositioningArgument.class);
+		this.handler.addCLIArgument(SkipFinishArgument.class);
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(ConfigFileArgument.class);
 

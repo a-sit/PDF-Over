@@ -16,8 +16,8 @@
 package at.asit.pdfover.gui.cliarguments;
 
 // Imports
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +37,7 @@ public class ArgumentHandler {
 	private static final Logger log = LoggerFactory
 			.getLogger(ArgumentHandler.class);
 
-	private Map<String, Argument> cliArguments = new HashMap<String, Argument>();
+	private Map<String, Argument> cliArguments = new LinkedHashMap<String, Argument>();
 
 	private StateMachine stateMachine = null;
 
@@ -58,7 +58,7 @@ public class ArgumentHandler {
 	 * @return the list of available arguments
 	 */
 	public Set<Argument> getArguments() {
-		return new HashSet<Argument>(this.cliArguments.values());
+		return new LinkedHashSet<Argument>(this.cliArguments.values());
 	}
 
 	/**
