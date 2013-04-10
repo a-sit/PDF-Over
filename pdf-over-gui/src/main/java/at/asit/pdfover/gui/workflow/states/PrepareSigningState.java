@@ -65,6 +65,20 @@ public class PrepareSigningState extends State {
 				
 				ConfigProvider configuration = this.state.stateMachine.getConfigProvider();
 				
+				// SET PROXY HOST and PORT settings
+				String proxyHost = configuration.getProxyHost();
+				int proxyPort = configuration.getProxyPort();
+				
+				if(proxyPort > 0 && proxyPort <= 0xFFFF) {
+					System.setProperty("http.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
+					System.setProperty("https.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
+				} 
+				
+				if(proxyHost != null && !proxyHost.equals("")) { //$NON-NLS-1$
+					System.setProperty("http.proxyHost", proxyHost); //$NON-NLS-1$
+					System.setProperty("https.proxyHost", proxyHost); //$NON-NLS-1$
+				} 
+				
 				if(this.state.signer == null) {
 					this.state.signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
 				}

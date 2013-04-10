@@ -25,9 +25,6 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -75,7 +72,30 @@ public class MainWindow {
 	 * Main bar Buttons
 	 */
 	public enum Buttons {
-		CONFIG, OPEN, POSITION, SIGN, FINAL
+		/**
+		 * the configuration button
+		 */
+		CONFIG, 
+		
+		/**
+		 * the open button
+		 */
+		OPEN, 
+		
+		/**
+		 * the position button
+		 */
+		POSITION, 
+		
+		/**
+		 * the signature button
+		 */
+		SIGN, 
+		
+		/**
+		 * the final button
+		 */
+		FINAL
 	}
 
 	private Map<Buttons, MainBarButton> buttonMap;
@@ -179,7 +199,7 @@ public class MainWindow {
 	protected void createContents() {
 		this.shell = new Shell();
 		getShell().setSize(500, 800);
-		getShell().setText("PDF-Over");
+		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 
 		getShell().setLayout(new FormLayout());
 
@@ -199,7 +219,8 @@ public class MainWindow {
 		fd_btn_config.top = new FormAttachment(0);
 		fd_btn_config.left = new FormAttachment(0, 2);
 		this.btn_config.setLayoutData(fd_btn_config);
-		this.btn_config.setText("Config");
+		this.btn_config.setText(Messages.getString("main.configuration")); //$NON-NLS-1$
+		this.btn_config.setToolTipText(Messages.getString("main.configuration")); //$NON-NLS-1$
 		this.btn_config.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -220,7 +241,7 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 		
-		InputStream is = this.getClass().getResourceAsStream("/img/config.png");
+		InputStream is = this.getClass().getResourceAsStream("/img/config.png"); //$NON-NLS-1$
 		
 		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(is)));
 		
@@ -231,7 +252,8 @@ public class MainWindow {
 		fd_btn_open.top = new FormAttachment(0);
 		fd_btn_open.left = new FormAttachment(0, 45);
 		this.btn_open.setLayoutData(fd_btn_open);
-		this.btn_open.setText("Open");
+		this.btn_open.setText(Messages.getString("main.open")); //$NON-NLS-1$
+		this.btn_open.setToolTipText(Messages.getString("main.open")); //$NON-NLS-1$
 		this.btn_open.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -259,7 +281,8 @@ public class MainWindow {
 		fd_btn_position.top = new FormAttachment(0);
 		fd_btn_position.left = new FormAttachment(35, -5);
 		this.btn_position.setLayoutData(fd_btn_position);
-		this.btn_position.setText("Positon ...");
+		this.btn_position.setText(Messages.getString("main.position")); //$NON-NLS-1$
+		this.btn_position.setToolTipText(Messages.getString("main.position")); //$NON-NLS-1$
 		this.btn_position.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -287,7 +310,8 @@ public class MainWindow {
 		fd_btn_sign.top = new FormAttachment(0);
 		fd_btn_sign.left = new FormAttachment(60, -5);
 		this.btn_sign.setLayoutData(fd_btn_sign);
-		this.btn_sign.setText("Sign ...");
+		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
+		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
 		MainBarEndButton end = new MainBarEndButton(composite, SWT.NONE);
@@ -297,7 +321,8 @@ public class MainWindow {
 		fd_btn_end.top = new FormAttachment(0);
 		fd_btn_end.left = new FormAttachment(85, -5);
 		end.setLayoutData(fd_btn_end);
-		end.setText("Done");
+		end.setText(Messages.getString("main.done")); //$NON-NLS-1$
+		end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
 		this.buttonMap.put(Buttons.FINAL, end);
 		
 		this.container = new Composite(getShell(), SWT.RESIZE);
@@ -317,7 +342,7 @@ public class MainWindow {
 		fd_lblNewLabel.top = new FormAttachment(100, -20);
 		fd_lblNewLabel.left = new FormAttachment(0, 5);
 		this.lbl_status.setLayoutData(fd_lblNewLabel);
-		this.lbl_status.setText("New Label");
+		this.lbl_status.setText("DEBUG LABEL!!"); //$NON-NLS-1$
 	}
 
 	/**

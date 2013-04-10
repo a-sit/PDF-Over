@@ -15,39 +15,32 @@
  */
 package at.asit.pdfover.gui;
 
-//Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
+// Imports
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
- * Main entry point for developers
+ * 
  */
-public class DeveloperMain {
+public class Messages {
+	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //$NON-NLS-1$
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(DeveloperMain.class);
-	
-	/**
-	 * Developer Main Entry point...
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		//BasicConfigurator.configure();
-		
-		// Set PDF-AS log4j configuration:
-		//System.setProperty("log4j.configuration", "log4j.properties");
-		
-		StateMachineImpl stateMachine = new StateMachineImpl(args);
-		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
-		
-		stateMachine.start();
-		
-		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
+			.getBundle(BUNDLE_NAME);
+
+	private Messages() {
 	}
 
+	/**
+	 * Gets the localized message
+	 * @param key
+	 * @return the localized message
+	 */
+	public static String getString(String key) {
+		try {
+			return RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
 }

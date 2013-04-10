@@ -62,11 +62,11 @@ public class ConfigFileArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Configuration File Argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Configuration File Argument invalid! Use: " + this.getHelpText(), ex); //$NON-NLS-1$
+					"Configuration File Argument invalid! Use: " + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				"Configuration File invalid! Use: " + this.getHelpText(), null); //$NON-NLS-1$
+				"Configuration File invalid! Use: " + this.getHelpText(), null);
 	}
 
 }

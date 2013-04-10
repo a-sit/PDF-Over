@@ -36,6 +36,8 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
+
 /**
  * 
  */
@@ -78,7 +80,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						"Not really an IOException! See inner exception", ex);
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //$NON-NLS-1$
 			}
 		}
 	}
@@ -106,7 +108,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						"Not really an IOException! See inner exception", ex);
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //$NON-NLS-1$
 			}
 		}
 	}
@@ -125,7 +127,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 			UnknownHostException, ConnectTimeoutException {
 		try {
 			if (params == null) {
-				throw new IllegalArgumentException("Parameters may not be null");
+				throw new IllegalArgumentException("Parameters may not be null"); //$NON-NLS-1$
 			}
 			int timeout = params.getConnectionTimeout();
 			Socket socket = null;
@@ -151,7 +153,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						"Not really an IOException! See inner exception", ex);
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //$NON-NLS-1$
 			}
 		}
 	}

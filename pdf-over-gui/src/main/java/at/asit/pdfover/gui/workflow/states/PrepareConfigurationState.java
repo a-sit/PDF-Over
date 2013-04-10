@@ -28,8 +28,13 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
+import at.asit.pdfover.gui.cliarguments.EmblemArgument;
 import at.asit.pdfover.gui.cliarguments.HelpArgument;
+import at.asit.pdfover.gui.cliarguments.OutputFolderArgument;
+import at.asit.pdfover.gui.cliarguments.PasswordArgument;
 import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
+import at.asit.pdfover.gui.cliarguments.ProxyHostArgument;
+import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
@@ -53,7 +58,11 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(new HelpArgument());
 		this.handler.addCLIArgument(new BKUArgument());
 		this.handler.addCLIArgument(new PhoneNumberArgument());
-
+		this.handler.addCLIArgument(new EmblemArgument());
+		this.handler.addCLIArgument(new PasswordArgument());
+		this.handler.addCLIArgument(new ProxyHostArgument());
+		this.handler.addCLIArgument(new ProxyPortArgument());
+		this.handler.addCLIArgument(new OutputFolderArgument());
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(new ConfigFileArgument());
 

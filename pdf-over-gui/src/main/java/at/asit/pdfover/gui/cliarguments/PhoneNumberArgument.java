@@ -67,11 +67,11 @@ public class PhoneNumberArgument extends CLIArgument {
 		} catch (Exception ex) {
 			log.error("Phone Number Argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"Phone Number Argument invalid! Use: " + this.getHelpText(), ex); //$NON-NLS-1$
+					"Phone Number Argument invalid! Use: " + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				"Phone Number invalid! Use: " + this.getHelpText(), null); //$NON-NLS-1$
+				"Phone Number invalid! Use: " + this.getHelpText(), null);
 	}
 
 }

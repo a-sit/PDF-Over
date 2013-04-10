@@ -15,30 +15,34 @@
  */
 package at.asit.pdfover.gui.cliarguments;
 
+// Imports
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
 
 /**
  * 
  */
-public class BKUArgument extends CLIArgument {
+public class PasswordArgument extends CLIArgument {
 	/**
 	 * Constructor
 	 */
-	public BKUArgument() {
-		super(
-				new String[] { "-b" }, "Select the BKU to use values are: LOCAL, MOBILE (example: -b <option>"); //$NON-NLS-1$
+	public PasswordArgument() {
+		super(new String[] {"-p"}, "Sets the password to use for mobile bku. Example: -p <password>"); //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang
-	 * .String[], int, at.asit.pdfover.gui.workflow.StateMachine,
-	 * at.asit.pdfover.gui.cliarguments.ArgumentHandler)
+	/**
+	 * SLF4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(PasswordArgument.class);
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
@@ -47,21 +51,24 @@ public class BKUArgument extends CLIArgument {
 		try {
 			if (args.length > argOffset + 1) {
 
-				BKUs argumentValue = BKUs.valueOf(args[argOffset + 1]);
+				String password = args[argOffset + 1];
 
+				ATrustHelper.validatePassword(password);
+				
 				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
 				
-				configManipulator.setDefaultBKU(argumentValue);
+				configManipulator.setDefaultPassword(password);
 				
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
+			log.error("Mobile BKU password argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					"BKU Argument invalid! Use: " + this.getHelpText(), ex); 
+					"Mobile BKU password invalid! Use: " + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				"BKU Argument invalid! Use: " + this.getHelpText(), null); 
+				"Mobile BKU password argument invalid! Use: " + this.getHelpText(), null);
 	}
 
 }
