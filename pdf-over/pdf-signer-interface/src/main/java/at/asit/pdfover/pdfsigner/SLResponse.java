@@ -5,5 +5,14 @@ package at.asit.pdfover.pdfsigner;
  * @author afitzek
  */
 public class SLResponse {
-
+	
+	private String response;
+	
+	public SLResponse(String value) {
+		response = value;
+	}
+	
+	public String GetSLRespone() {
+		return this.response;
+	}
 }

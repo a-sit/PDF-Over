@@ -1,7 +1,5 @@
 package at.asit.pdfover.pdfsigner;
 
-import java.security.SignatureException;
-
 /**
  * PDF Signator base Class
  * This class should be extended to support PDF-AS and PADES.
@@ -17,7 +15,7 @@ public interface PDFSignerInterface {
 	 * @return The siging state (contains the prepared document and the signature request
 	 * @throws SignatureException
 	 */
-	public SigningState Prepare(SignatureParameter parameter) throws SignatureException;
+	public SigningState Prepare(SignatureParameter parameter) throws PDFSignatureException;
 	
 	/**
 	 * Adds the signature to the document.
@@ -26,7 +24,7 @@ public interface PDFSignerInterface {
 	 * @return The signature Result
 	 * @throws SignatureException
 	 */
-	public SignResult Sign(SigningState state) throws SignatureException;
+	public SignResult Sign(SigningState state) throws PDFSignatureException;
 	
 	/**
 	 * Creates new signing profile

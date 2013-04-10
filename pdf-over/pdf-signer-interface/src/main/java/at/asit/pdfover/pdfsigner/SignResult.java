@@ -1,6 +1,6 @@
 package at.asit.pdfover.pdfsigner;
 
-import javax.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 
 /**
  * Signature Result containing the signed document as document source
@@ -24,5 +24,5 @@ public interface SignResult {
 	 * Gets the signer certificate
 	 * @return The signer x509 certificate
 	 */
-	public Certificate GetSignerCertificate();
+	public X509Certificate GetSignerCertificate();
 }

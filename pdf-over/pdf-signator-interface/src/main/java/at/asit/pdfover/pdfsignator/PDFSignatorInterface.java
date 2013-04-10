@@ -3,8 +3,6 @@
  */
 package at.asit.pdfover.pdfsignator;
 
-import java.security.SignatureException;
-
 import at.asit.pdfover.pdfsigner.PDFSignatureException;
 import at.asit.pdfover.pdfsigner.SignResult;
 import at.asit.pdfover.pdfsigner.SignatureParameter;
