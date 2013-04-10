@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Messages;
+import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -64,6 +66,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private String defaultPassword = STRING_EMPTY;
 
+	private Locale locale = Locale.getDefault();
+	
 	private String emblem = STRING_EMPTY;
 
 	private String proxyHost = STRING_EMPTY;
@@ -362,6 +366,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG,
 				Integer.toString(this.getPlaceholderTransparency()));
 
+		Locale configLocale = this.getConfigLocale();
+		if(configLocale != null) {
+			props.setProperty(LOCALE_CONFIG, LocaleSerializer.getParseableString(configLocale));
+		}
+		
 		SignaturePosition pos = this.getDefaultSignaturePosition();
 
 		if (pos == null) {
@@ -416,9 +425,16 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.setDefaultOutputFolder(config
 				.getProperty(ConfigManipulator.OUTPUT_FOLDER_CONFIG));
 
+		String localString = config.getProperty(ConfigManipulator.LOCALE_CONFIG);
+		
+		Locale targetLocal = LocaleSerializer.parseFromString(localString);
+		if(targetLocal != null) {
+			this.setLocale(targetLocal);
+		}
+ 		
 		String bku = config
 				.getProperty(ConfigManipulator.MOBILE_BKU_URL_CONFIG);
-
+		
 		if (bku != null && !bku.equals("")) { //$NON-NLS-1$
 			this.mobileBKU = bku;
 		}
@@ -547,6 +563,28 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			this.signatureNote = STRING_EMPTY;
 		} else {
 			this.signatureNote = note;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigLocale()
+	 */
+	@Override
+	public Locale getConfigLocale() {
+		return this.locale;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setLocale(java.util.Locale)
+	 */
+	@Override
+	public void setLocale(Locale locale) {
+		if(locale == null) {
+			this.locale = Locale.getDefault();
+		} else {
+			this.locale = locale;
+			Locale.setDefault(locale);
+			Messages.setLocale(locale);
 		}
 	}
 

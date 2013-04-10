@@ -101,7 +101,7 @@ public class PositioningState extends State {
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						this.stateMachine.getGUIProvider().getMainShell(), 
-						e.getMessage(), ERROR_BUTTONS.RETRY_CANCEL);
+						e.getLocalizedMessage(), ERROR_BUTTONS.RETRY_CANCEL);
 				if(dialog.open() == SWT.RETRY) {
 					this.stateMachine.update();
 				} else {

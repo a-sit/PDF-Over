@@ -173,8 +173,13 @@ public class PositioningComposite extends StateComposite {
 				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
 		chan.close();
 		rafile.close();
-
-		this.pdf = new PDFFile(buf);
+		try
+		{
+			this.pdf = new PDFFile(buf);
+		}
+		catch (IOException e) {
+			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
+		}
 		if (this.viewer == null) {
 			this.viewer = new SignaturePanel(this.pdf);
 			this.frame.add(this.viewer);

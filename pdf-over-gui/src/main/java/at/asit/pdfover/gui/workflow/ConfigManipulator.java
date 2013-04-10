@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -72,6 +73,11 @@ public interface ConfigManipulator {
 	 * The emblem config parameter
 	 */
 	public static final String EMBLEM_CONFIG = "EMBLEM"; //$NON-NLS-1$
+	
+	/**
+	 * The locale config parameter
+	 */
+	public static final String LOCALE_CONFIG = "LOCALE"; //$NON-NLS-1$
 	
 	/**
 	 * The proxy host config parameter
@@ -163,4 +169,10 @@ public interface ConfigManipulator {
 	 * @throws IOException 
 	 */
 	public void saveCurrentConfiguration() throws IOException;
+	
+	/**
+	 * Sets the locale to be used!
+	 * @param locale the locale
+	 */
+	public void setLocale(Locale locale);
 }

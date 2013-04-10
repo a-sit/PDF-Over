@@ -16,21 +16,63 @@
 package at.asit.pdfover.gui;
 
 // Imports
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Localizes string messages for PDFOver GUI
  */
 public class Messages {
+	
+	/**
+	 * SFL4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory.getLogger(Messages.class);
+	
 	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //$NON-NLS-1$
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-			.getBundle(BUNDLE_NAME);
+	private static HashMap<Locale, ResourceBundle> bundles = new HashMap<Locale, ResourceBundle>();
+	
+	//private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
+	//		.getBundle(BUNDLE_NAME);
 
+	private static Locale currentLocale = Locale.getDefault();
+	
 	private Messages() {
 	}
 
+	/**
+	 * Sets the currently used locals
+	 * @param locale
+	 */
+	public static void setLocale(Locale locale) {
+		currentLocale = locale;
+	}
+	
+	private static ResourceBundle getBundle() {
+		if(!bundles.containsKey(currentLocale)) {
+			ResourceBundle tmp = null;
+			try {
+				tmp = ResourceBundle.getBundle(BUNDLE_NAME, currentLocale);
+			} catch(Exception e) {
+				log.error("NO RESOURCE BUNDLE FOR " + currentLocale.toString(), e); //$NON-NLS-1$
+				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
+			}
+			if(tmp == null) {
+				log.error("NO RESOURCE BUNDLE FOR " + currentLocale.toString()); //$NON-NLS-1$
+				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
+			}
+			bundles.put(currentLocale, tmp);
+			return tmp;
+		}
+		return bundles.get(currentLocale);
+	}
+	
 	/**
 	 * Gets the localized message
 	 * @param key
@@ -38,7 +80,8 @@ public class Messages {
 	 */
 	public static String getString(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return getBundle().getString(key);
+			//return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}

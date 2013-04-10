@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.workflow;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -108,6 +109,12 @@ public interface ConfigProvider {
 	 * @return the signature note text
 	 */
 	public String getSigantureNote();
+	
+	/**
+	 * Gets the configured locale
+	 * @return the configured locale
+	 */
+	public Locale getConfigLocale();
 	
 	/**
 	 * Loads the current configuration to the current configuration file
