@@ -35,7 +35,7 @@ public class SignaturePosition {
 	/**
 	 * The page value of the position
 	 */
-	protected int page = 0;
+	protected int page = 1;
 	
 	/**
 	 * Whether automatic positioning is used
