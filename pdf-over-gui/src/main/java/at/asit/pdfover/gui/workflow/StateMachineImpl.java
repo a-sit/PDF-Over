@@ -20,13 +20,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import at.asit.pdfover.gui.components.BKUSelectionComposite;
 import at.asit.pdfover.gui.components.MainWindow;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.DataSourceSelectionState;
@@ -81,7 +85,7 @@ public class StateMachineImpl implements StateMachine {
 	 * 
 	 * @param state
 	 */
-	public void setWorkflowState(State state) {
+	public void setState(State state) {
 		if (this.state != state && state != null) {
 			this.state = state;
 
@@ -221,6 +225,18 @@ public class StateMachineImpl implements StateMachine {
 		}
 
 		return this.container;
+	}
+
+	@Override
+	public <T> T createComposite(Class<T> compositeClass) {
+		T composite = null;
+		try {
+			Constructor<T> constructor = compositeClass.getDeclaredConstructor(Composite.class, int.class, BKUSelectionState.class);
+			composite = constructor.newInstance(getComposite(), SWT.RESIZE, this);
+		} catch (Exception e) {
+			log.error("Could not create Composite for Class " + compositeClass.getName(), e);
+		}
+		return composite;
 	}
 
 	/**

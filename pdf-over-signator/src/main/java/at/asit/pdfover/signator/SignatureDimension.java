@@ -28,7 +28,7 @@ public class SignatureDimension {
 	 * SFL4J Logger instance
 	 **/
 	private static Logger log = LoggerFactory.getLogger(SignatureDimension.class);
-	
+
 	/**
 	 * The visible Signature block width
 	 */

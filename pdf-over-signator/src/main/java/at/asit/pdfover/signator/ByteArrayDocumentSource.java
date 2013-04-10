@@ -30,7 +30,6 @@ public class ByteArrayDocumentSource implements DocumentSource {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ByteArrayDocumentSource.class);
 	
 	/**

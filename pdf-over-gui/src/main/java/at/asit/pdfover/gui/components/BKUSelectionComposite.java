@@ -116,6 +116,7 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
+	 * @param state 
 	 */
 	public BKUSelectionComposite(Composite parent, int style, BKUSelectionState state) {
 		super(parent, style);

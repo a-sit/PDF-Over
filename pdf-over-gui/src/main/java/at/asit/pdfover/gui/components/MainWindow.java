@@ -16,32 +16,33 @@
 package at.asit.pdfover.gui.components;
 
 // Imports
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.swt.widgets.Composite;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
-import java.lang.Class;
-import java.util.HashMap;
-import java.util.Map;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.components.main_behavior.ConfigOpenEnabled;
 import at.asit.pdfover.gui.components.main_behavior.ConfigOpenPositionEnabled;
 import at.asit.pdfover.gui.components.main_behavior.MainWindowAllDisabled;
 import at.asit.pdfover.gui.components.main_behavior.MainWindowBehavior;
 import at.asit.pdfover.gui.components.main_behavior.OnlyConfigEnabled;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.gui.workflow.State;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.DataSourceSelectionState;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
@@ -71,7 +72,7 @@ public class MainWindow {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MainWindow.this.workflow.setWorkflowState(new DataSourceSelectionState());
+			MainWindow.this.stateMachine.setState(new DataSourceSelectionState());
 		}
 
 		@Override
@@ -88,7 +89,7 @@ public class MainWindow {
 	private CLabel lbl_status;
 	private Composite container;
 	private StackLayout stack;
-	private StateMachineImpl workflow;
+	private StateMachine stateMachine;
 	private Button btn_sign;
 	
 	/**
@@ -133,9 +134,9 @@ public class MainWindow {
 	
 	/**
 	 * Default contsructor
-	 * @param workflow The main workflow
+	 * @param stateMachine The main workflow
 	 */
-	public MainWindow(StateMachineImpl workflow) {
+	public MainWindow(StateMachine stateMachine) {
 		super();
 		
 		this.behavior.put(PrepareConfigurationState.class, new MainWindowAllDisabled());
@@ -152,7 +153,7 @@ public class MainWindow {
 		
 		this.behavior.put(BKUSelectionState.class, new ConfigOpenPositionEnabled());
 		
-		this.workflow = workflow;
+		this.stateMachine = stateMachine;
 	}
 
 	/**
@@ -308,7 +309,7 @@ public class MainWindow {
 	 * Update MainWindow to fit new status
 	 */
 	public void UpdateNewState() {
-		State state = this.workflow.getState();
+		State state = this.stateMachine.getState();
 		
 		log.debug("Updating MainWindow state for : " + state.toString());
 		

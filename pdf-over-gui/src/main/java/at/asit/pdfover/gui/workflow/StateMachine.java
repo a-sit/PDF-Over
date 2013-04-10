@@ -26,12 +26,19 @@ public interface StateMachine {
 	 * @return the ConfigProvider
 	 */
 	public ConfigProvider getConfigProvider();
-	
+
 	/**
 	 * Get the container Composite
 	 * @return the container Composite
 	 */
 	public Composite getComposite();
+
+	/**
+	 * Create a new Composite
+	 * @param compositeClass The class of the Composite to create
+	 * @return the new Composite
+	 */
+	public <T> T createComposite(Class<T> compositeClass);
 
 	//public void display(Composite composite)
 	/**
