@@ -13,4 +13,5 @@ else
 	cp -f icons/icon.icns "$BASEDIR.app"/Contents/Resources/applet.icns
 	mv "$BASEDIR"/* "$BASEDIR.app"/Contents/
 	rmdir "$BASEDIR"
+	ln -s "$BASEDIR.app" "$BASEDIR"
 fi
