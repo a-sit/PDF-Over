@@ -59,6 +59,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected String proxyHost = null;
 	
 	/**
+	 * Holds the signatureNote
+	 */
+	protected String signatureNote = null;
+	
+	/**
 	 * Holds the proxy port number
 	 */
 	protected int proxyPort = -1;
@@ -255,6 +260,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setOutputFolder(String folder) {
 		this.folder = folder;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignatureNote()
+	 */
+	@Override
+	public String getSignatureNote() {
+		return this.signatureNote;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setSignatureNote(java.lang.String)
+	 */
+	@Override
+	public void setSignatureNote(String note) {
+		this.signatureNote = note;
 	}
 	
 }

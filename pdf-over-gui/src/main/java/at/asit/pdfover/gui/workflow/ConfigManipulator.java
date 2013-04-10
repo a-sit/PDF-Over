@@ -58,6 +58,12 @@ public interface ConfigManipulator {
 	public static final String MOBILE_NUMBER_CONFIG = "MOBILE_NUMBER"; //$NON-NLS-1$
 	
 	/**
+	 * The signature note config parameter
+	 */
+	public static final String SIGNATURE_NOTE_CONFIG = "SIGNATURE_NOTE"; //$NON-NLS-1$
+	
+	
+	/**
 	 * Mobile bku url config parameter
 	 */
 	public static final String MOBILE_BKU_URL_CONFIG = "MOBILE_BKU_URL"; //$NON-NLS-1$
@@ -145,6 +151,12 @@ public interface ConfigManipulator {
 	 * @param outputFolder the default output folder
 	 */
 	public void setDefaultOutputFolder(String outputFolder);
+	
+	/**
+	 * Sets the signature note text
+	 * @param note the signature note text
+	 */
+	public void setSignatureNote(String note);
 	
 	/**
 	 * Saves the current configuration to the current configuration file

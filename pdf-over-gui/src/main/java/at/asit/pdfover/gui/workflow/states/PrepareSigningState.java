@@ -97,6 +97,10 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter.setEmblem(new FileNameEmblem(configuration.getDefaultEmblem()));
 				}
 				
+				if(configuration.getSigantureNote() != null && !configuration.getSigantureNote().equals("")) { //$NON-NLS-1$
+					this.state.signatureParameter.setProperty("SIG_NOTE", configuration.getSigantureNote()); //$NON-NLS-1$
+				}
+				
 				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
 				
 			} catch (Exception e) {

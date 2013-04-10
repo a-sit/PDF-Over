@@ -279,6 +279,9 @@ public class ConfigurationComposite extends StateComposite {
 					.setPlaceholderTransparency(this.configProvider
 							.getPlaceholderTransparency());
 
+			this.configurationContainer.setSignatureNote(
+					this.configProvider.getSigantureNote());
+			
 			this.configurationContainer.setBKUSelection(this.configProvider
 					.getDefaultBKU());
 			try {
@@ -397,6 +400,9 @@ public class ConfigurationComposite extends StateComposite {
 				.setDefaultOutputFolder(this.configurationContainer
 						.getOutputFolder());
 
+		this.configManipulator.setSignatureNote(this.configurationContainer
+				.getSignatureNote());
+		
 		this.configManipulator.setProxyHost(this.configurationContainer
 				.getProxyHost());
 		this.configManipulator.setProxyPort(this.configurationContainer

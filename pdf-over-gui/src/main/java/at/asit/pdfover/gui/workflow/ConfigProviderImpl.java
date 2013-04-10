@@ -48,13 +48,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
 
-	
 	/**
 	 * Gets the Default Mobile URL
 	 */
 	public static final String DEFAULT_MOBILE_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-	
-	
+
 	private SignaturePosition defaultSignaturePosition = null;
 
 	/**
@@ -73,10 +71,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private String configurationFile = ConfigManipulator.DEFAULT_CONFIG_FILE;
 
 	private int proxyPort = -1;
-	
+
 	private String mobileBKU = DEFAULT_MOBILE_URL;
 
 	private String outputFolder = STRING_EMPTY;
+
+	private String signatureNote = STRING_EMPTY;
 
 	private int placeholderTransparency = 170;
 
@@ -134,8 +134,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.placeholderTransparency = transparency;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getPlaceholderTransparency()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.ConfigProvider#getPlaceholderTransparency()
 	 */
 	@Override
 	public int getPlaceholderTransparency() {
@@ -289,7 +292,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		return this.outputFolder;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
 	 */
 	@Override
@@ -297,8 +302,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		return this.mobileBKU;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
 	 */
 	@Override
 	public String getConfigurationDirectory() {
@@ -337,7 +345,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	public void saveCurrentConfiguration() throws IOException {
 		String filename = this.getConfigurationFile();
 
-		File configFile = new File(this.getConfigurationDirectory() + "/" + filename); //$NON-NLS-1$
+		File configFile = new File(this.getConfigurationDirectory()
+				+ "/" + filename); //$NON-NLS-1$
 
 		Properties props = new Properties();
 		props.clear();
@@ -347,9 +356,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		props.setProperty(PROXY_PORT_CONFIG,
 				Integer.toString(this.getProxyPort()));
 		props.setProperty(EMBLEM_CONFIG, this.getDefaultEmblem());
+		props.setProperty(SIGNATURE_NOTE_CONFIG, this.getSigantureNote());
 		props.setProperty(MOBILE_NUMBER_CONFIG, this.getDefaultMobileNumber());
 		props.setProperty(OUTPUT_FOLDER_CONFIG, this.getDefaultOutputFolder());
-		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG, Integer.toString(this.getPlaceholderTransparency()));
+		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG,
+				Integer.toString(this.getPlaceholderTransparency()));
 
 		SignaturePosition pos = this.getDefaultSignaturePosition();
 
@@ -382,9 +393,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	public void loadConfiguration(InputStream configSource) throws IOException {
 
 		Properties config = new Properties();
-		
+
 		config.load(configSource);
-		
+
 		// Set Emblem
 		this.setDefaultEmblem(config
 				.getProperty(ConfigManipulator.EMBLEM_CONFIG));
@@ -393,21 +404,25 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.setDefaultMobileNumber(config
 				.getProperty(ConfigManipulator.MOBILE_NUMBER_CONFIG));
 
+		// Set signature note
+		this.setSignatureNote(config
+				.getProperty(ConfigManipulator.SIGNATURE_NOTE_CONFIG));
+
 		// Set Proxy Host
 		this.setProxyHost(config
 				.getProperty(ConfigManipulator.PROXY_HOST_CONFIG));
 
 		// Set Output Folder
 		this.setDefaultOutputFolder(config
-						.getProperty(ConfigManipulator.OUTPUT_FOLDER_CONFIG));
-		
+				.getProperty(ConfigManipulator.OUTPUT_FOLDER_CONFIG));
+
 		String bku = config
 				.getProperty(ConfigManipulator.MOBILE_BKU_URL_CONFIG);
-		
-		if(bku != null && !bku.equals("")) { //$NON-NLS-1$
+
+		if (bku != null && !bku.equals("")) { //$NON-NLS-1$
 			this.mobileBKU = bku;
 		}
-		
+
 		// Set Proxy Port
 		String proxyPortString = config
 				.getProperty(ConfigManipulator.PROXY_PORT_CONFIG);
@@ -442,8 +457,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		// Set Signature placeholder transparency
 		int transparency = 170;
 		try {
-			transparency = Integer.parseInt(config
-					.getProperty(ConfigManipulator.SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG));
+			transparency = Integer
+					.parseInt(config
+							.getProperty(ConfigManipulator.SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG));
 		} catch (NumberFormatException e) {
 			log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
 			// ignore parsing exception
@@ -506,6 +522,32 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 
 		this.setDefaultSignaturePosition(position);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSigantureNote()
+	 */
+	@Override
+	public String getSigantureNote() {
+		return this.signatureNote;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setSignatureNote(java.
+	 * lang.String)
+	 */
+	@Override
+	public void setSignatureNote(String note) {
+		if (note == null || note.trim().equals("")) { //$NON-NLS-1$
+			this.signatureNote = STRING_EMPTY;
+		} else {
+			this.signatureNote = note;
+		}
 	}
 
 }

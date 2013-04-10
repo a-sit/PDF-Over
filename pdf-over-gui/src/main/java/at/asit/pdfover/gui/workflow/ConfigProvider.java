@@ -104,6 +104,12 @@ public interface ConfigProvider {
 	public String getMobileBKUURL();
 	
 	/**
+	 * Get the signature note text to use
+	 * @return the signature note text
+	 */
+	public String getSigantureNote();
+	
+	/**
 	 * Loads the current configuration to the current configuration file
 	 * @param configSource 
 	 * @throws IOException 

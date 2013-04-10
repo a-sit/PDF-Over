@@ -522,6 +522,60 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						100, -1 * (portSize.y + 10));
 			}
 		});
+		
+		// TODO: localize ...
+		Group grpSignatureNote = new Group(this, SWT.NONE);
+		FormData fd_grpSignatureNote = new FormData();
+		fd_grpSignatureNote.right = new FormAttachment(100, -5);
+		fd_grpSignatureNote.top = new FormAttachment(grpProxy, 5);
+		fd_grpSignatureNote.left = new FormAttachment(0, 5);
+		grpSignatureNote.setLayoutData(fd_grpSignatureNote);
+		grpSignatureNote.setLayout(new GridLayout(2, false));
+		grpSignatureNote.setText("Signature Note"); 
+
+		FontData[] fD_grpSignatureNote = grpSignatureNote.getFont().getFontData();
+		fD_grpSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		grpSignatureNote.setFont(new Font(Display.getCurrent(), fD_grpSignatureNote[0]));
+		
+		
+		Label lblSignatureNote = new Label(grpSignatureNote, SWT.NONE);
+		GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
+		gd_lblSignatureNote.widthHint = 66;
+		lblSignatureNote.setLayoutData(gd_lblSignatureNote);
+		lblSignatureNote.setBounds(0, 0, 57, 15);
+		lblSignatureNote.setText("Text:"); 
+
+		FontData[] fD_lblSignatureNote = lblSignatureNote.getFont().getFontData();
+		fD_lblSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		lblSignatureNote.setFont(new Font(Display.getCurrent(), fD_lblSignatureNote[0]));
+
+		this.txtSignatureNote = new Text(grpSignatureNote, SWT.BORDER);
+		this.txtSignatureNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+
+		FontData[] fD_txtSignatureNote = this.txtProxyHost.getFont().getFontData();
+		fD_txtSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtSignatureNote.setFont(new Font(Display.getCurrent(),
+				fD_txtSignatureNote[0]));
+		
+		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				processSignatureNoteChanged();
+			}
+		});
+
+		this.txtSignatureNote.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processSignatureNoteChanged();
+				}
+			}
+		});
 	}
 
 	/**
@@ -564,6 +618,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	Label lblEmblem;
 	private Text txtProxyHost;
 	Text txtProxyPort;
+	Text txtSignatureNote;
 	Text txtMobileNumber;
 	// Text txtEmblemFile;
 	String emblemFile;
@@ -765,6 +820,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			log.error("processProxyHost: ", ex); //$NON-NLS-1$
 		}
 	}
+	
+	void processSignatureNoteChanged() {
+		String note = this.txtSignatureNote.getText();
+		this.configurationContainer.setSignatureNote(note);
+	}
 
 	/**
 	 * 
@@ -878,6 +938,12 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.txtProxyPort.setText(Integer.toString(port));
 		}
 
+		String note = this.configurationContainer.getSignatureNote();
+		
+		if (note != null) {
+			this.txtSignatureNote.setText(note);
+		}
+		
 		String host = this.configurationContainer.getProxyHost();
 
 		if (host != null) {
@@ -905,6 +971,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				// Fall through
 			case 2:
 				this.plainProxyPortSetter();
+			case 3:
+				this.processSignatureNoteChanged();
 		}
 		//this.plainEmblemSetter(this.emblemFile);
 	}

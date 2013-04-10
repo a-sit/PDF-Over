@@ -37,6 +37,12 @@ public class PDFASSigner implements Signer {
 	 * The profile ID
 	 */
 	protected static final String PROFILE_ID = "SIGNATURBLOCK_SMALL_DE";
+	
+	/**
+	 * The profile ID
+	 * if a signature note is set
+	 */
+	protected static final String PROFILE_NOTE_ID = "SIGNATURBLOCK_SMALL_DE_NOTE";
 
 	/**
 	 * The template URL
@@ -83,6 +89,11 @@ public class PDFASSigner implements Signer {
 			if (parameter.getEmblem() != null) {
 				params.setProfileOverrideValue("SIG_LABEL", parameter
 						.getEmblem().getFileName());
+			}
+			
+			if(parameter.getProperty("SIG_NOTE") != null) {
+				params.setProfileOverrideValue("SIG_NOTE", parameter.getProperty("SIG_NOTE"));
+				params.setSignatureProfileId(PROFILE_NOTE_ID);
 			}
 
 			// Prepare Output sink
