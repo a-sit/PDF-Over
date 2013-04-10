@@ -77,8 +77,15 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 	
 	/**
 	 * Called before exit.
-	 * The method validates every setting in the configuration before exit  
-	 * @throws Exception 
+	 * The method validates every setting in the configuration before exit
+	 * 
+	 * There might be settings when the user can decide to ignore a validation exception
+	 * (for example the Outputfolder validation)
+	 * In this case, the validator throws a ResumableException, which includes the
+	 * validator index to resume from (should the user choose to ignore the error)
+	 * 
+	 * @param resumeFrom Resume from this validator index (initially 0)
+	 * @throws Exception
 	 */
-	public abstract void validateSettings() throws Exception;
+	public abstract void validateSettings(int resumeFrom) throws Exception;
 }

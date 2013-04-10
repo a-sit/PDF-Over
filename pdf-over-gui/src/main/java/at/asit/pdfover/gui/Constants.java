@@ -50,6 +50,11 @@ public class Constants {
 	/** Main bar inactive text color */
 	public static final Color MAINBAR_INACTIVE_TEXTCOLOR = new Color(display, 0x40, 0x40, 0x40);
 
+	/**
+	 * Drag and Drop background color
+	 */
+	public static final Color DROP_BACK = new Color(display, 0xFF, 0xFF, 0xFF);
+	
 	/** Drop border color */
 	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_LIGHT;
 

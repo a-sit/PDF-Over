@@ -43,6 +43,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.exceptions.OutputfolderDontExistException;
+import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
@@ -106,9 +109,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_btnAutomatischePositionierung = this.btnAutomatischePositionierung
 				.getFont().getFontData();
-		fD_btnAutomatischePositionierung[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		fD_btnAutomatischePositionierung[0]
+				.setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btnAutomatischePositionierung.setFont(new Font(Display
 				.getCurrent(), fD_btnAutomatischePositionierung[0]));
+
+		this.btnAutomatischePositionierung.setToolTipText(Messages
+				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
 
 		this.btnAutomatischePositionierung
 				.addSelectionListener(new SelectionAdapter() {
@@ -225,6 +232,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.cmbBKUAuswahl.setLayoutData(fd_cmbBKUAuswahl);
 
+		this.cmbBKUAuswahl.setToolTipText(Messages
+				.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
+
 		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -293,6 +303,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 						.getText());
 			}
 		});
+
+		this.txtOutputFolder.setToolTipText(Messages
+				.getString("advanced_config.OutputFolder_ToolTip")); //$NON-NLS-1$
 
 		Button btnBrowse = new Button(grpSpeicherort, SWT.NONE);
 		fd_text.right = new FormAttachment(btnBrowse, -5);
@@ -383,7 +396,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
 			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), Messages.getString("error.InvalidBKU"), false); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(getShell(),
+					Messages.getString("error.InvalidBKU"), ERROR_BUTTONS.OK); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
@@ -451,19 +465,23 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 * ()
 	 */
 	@Override
-	public void validateSettings() throws Exception {
+	public void validateSettings(int resumeIndex) throws Exception {
 		
 		String foldername = this.configurationContainer.getOutputFolder();
 		
-		if (foldername != null && !foldername.equals("")) { //$NON-NLS-1$
-			File outputFolder = new File(foldername);
-			if (!outputFolder.exists()) {
-				throw new Exception(String.format(Messages.getString("exception.PathNotExist"), outputFolder.getAbsolutePath())); //$NON-NLS-1$
-			}
-
-			if (!outputFolder.isDirectory()) {
-				throw new Exception(String.format(Messages.getString("exception.PathNotDirectory"), outputFolder.getAbsolutePath())); //$NON-NLS-1$
-			}
+		switch (resumeIndex) {
+			case 0:
+				if (foldername != null && !foldername.isEmpty()) {
+					File outputFolder = new File(foldername);
+					if (!outputFolder.exists()) {
+						throw new OutputfolderDontExistException(outputFolder, 1); 
+					}
+					if (!outputFolder.isDirectory()) {
+						throw new OutputfolderNotADirectoryException(outputFolder);
+					}
+				}
+				// Fall through
+			case 1:
 		}
 	}
 }

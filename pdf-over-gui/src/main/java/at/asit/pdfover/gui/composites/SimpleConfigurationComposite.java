@@ -60,6 +60,7 @@ import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.ImageConverter;
@@ -125,6 +126,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.fd_txtMobileNumber.bottom = new FormAttachment(100);
 			this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
 			this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
+			this.txtMobileNumber.setToolTipText(Messages.getString("simple_config.ExampleNumber_ToolTip")); //$NON-NLS-1$
 	
 			this.txtMobileNumberErrorMarker = new ErrorMarker(composite_2,
 					SWT.NATIVE, null, "", this.txtMobileNumber); //$NON-NLS-1$
@@ -407,7 +409,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.proxyHostErrorMarker.setLayoutData(fd_marker);
 			this.proxyHostErrorMarker.setVisible(false);
 			this.txtProxyHost.setLayoutData(fd_txtProxyHost);
-	
+			this.txtProxyHost.setToolTipText(Messages.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
 			this.txtProxyHost.setMessage(Messages
 					.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
 	
@@ -450,7 +452,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.fd_txtProxyPort.right = new FormAttachment(100, -42);
 			this.fd_txtProxyPort.bottom = new FormAttachment(100);
 			this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
-	
+			this.txtProxyPort.setToolTipText(Messages.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
+			
 			FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
 			fD_txtProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 			this.txtProxyPort.setFont(new Font(Display.getCurrent(),
@@ -711,7 +714,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		} catch (Exception ex) {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(getShell(),
-					Messages.getString("error.FailedToLoadEmblem"), false); //$NON-NLS-1$
+					Messages.getString("error.FailedToLoadEmblem"), ERROR_BUTTONS.OK); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
@@ -865,7 +868,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						Messages.getString("error.FailedToLoadEmblem"), false); //$NON-NLS-1$
+						Messages.getString("error.FailedToLoadEmblem"), ERROR_BUTTONS.OK); //$NON-NLS-1$
 				dialog.open();
 			}
 		}
@@ -892,10 +895,17 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 * ()
 	 */
 	@Override
-	public void validateSettings() throws Exception {
-		this.plainMobileNumberSetter();
+	public void validateSettings(int resumeFrom) throws Exception {
+		switch (resumeFrom) {
+			case 0:
+				this.plainMobileNumberSetter();
+				// Fall through
+			case 1:
+				this.plainProxyHostSetter();
+				// Fall through
+			case 2:
+				this.plainProxyPortSetter();
+		}
 		//this.plainEmblemSetter(this.emblemFile);
-		this.plainProxyHostSetter();
-		this.plainProxyPortSetter();
 	}
 }

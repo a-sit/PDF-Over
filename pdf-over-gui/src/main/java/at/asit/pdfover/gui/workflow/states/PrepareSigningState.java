@@ -25,6 +25,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -155,9 +156,9 @@ public class PrepareSigningState extends State {
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
 					Messages.getString("error.PrepareDocument"),  //$NON-NLS-1$
-					true);
+					ERROR_BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
-			if(error.open()) {
+			if(error.open() == SWT.RETRY) {
 				this.stateMachine.update();
 			} else {
 				this.stateMachine.exit();

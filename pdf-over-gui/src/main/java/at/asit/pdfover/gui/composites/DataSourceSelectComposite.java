@@ -151,7 +151,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		super(parent, style, state);
 
 		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
-		this.inactiveBackground = Constants.MAINBAR_INACTIVE_BACK;
+		this.inactiveBackground = this.getBackground();//Constants.MAINBAR_INACTIVE_BACK;
 		this.inactiveBorder = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
 		this.activeBorder = Constants.MAINBAR_ACTIVE_BACK_DARK;
 		this.backgroundColor = this.inactiveBackground;

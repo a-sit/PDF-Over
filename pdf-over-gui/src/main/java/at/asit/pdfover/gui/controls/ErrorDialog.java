@@ -30,16 +30,44 @@ public class ErrorDialog {
 	private MessageBox box;
 	
 	/**
-	 * @param parent
-	 * @param message
-	 * @param canRetry
+	 * Message box buttons
 	 */
-	public ErrorDialog(Shell parent, String message, boolean canRetry) {
+	public enum ERROR_BUTTONS {
+		/**
+		 * Display only ok button
+		 */
+		OK,
+		/**
+		 * Display retry and cancel buttons
+		 */
+		RETRY_CANCEL,
+		/**
+		 * Display abort, retry and ignore buttons
+		 */
+		ABORT_RETRY_IGNORE
+	};
+	
+	/**
+	 * @param parent The parent shell
+	 * @param message The error message
+	 * @param button The buttons to be shown
+	 */
+	public ErrorDialog(Shell parent, String message, ERROR_BUTTONS button) {
+		this.initialize(parent, message, button);
+	}
+	
+	private void initialize(Shell parent, String message, ERROR_BUTTONS button) {
 		int boxstyle = SWT.ICON_ERROR ;
-		if(canRetry) {
-			boxstyle |= SWT.RETRY| SWT.CANCEL;
-		} else {
+		switch(button) {
+		case OK:
 			boxstyle |= SWT.OK;
+			break;
+		case RETRY_CANCEL:
+			boxstyle |= SWT.RETRY| SWT.CANCEL;
+			break;
+		case ABORT_RETRY_IGNORE:
+			boxstyle |= SWT.RETRY| SWT.ABORT | SWT.IGNORE;
+			break;
 		}
 		
 		this.box = new MessageBox(parent, boxstyle);
@@ -50,13 +78,9 @@ public class ErrorDialog {
 	/**
 	 * Open error dialog
 	 * 
-	 * @return if the user wants to retry the action which caused the error
+	 * @return SWT.OK | SWT.IGNORE | SWT.ABORT | SWT.RETRY | SWT.CANCEL
 	 */
-	public boolean open() {
-		int rc = this.box.open();
-		if(rc == SWT.RETRY) {
-			return true;
-		} 
-		return false;
+	public int open() {
+		return this.box.open();
 	}
 }

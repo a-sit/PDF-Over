@@ -29,9 +29,11 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.exceptions.ResumeableException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
@@ -56,12 +58,12 @@ import org.eclipse.swt.layout.FormAttachment;
  * Composite for hosting configuration composites
  */
 public class ConfigurationComposite extends StateComposite {
-	
+
 	/**
 	 * The PDF Signer used to produce signature block preview
 	 */
 	protected PDFSigner signer;
-	
+
 	/**
 	 * @return the signer
 	 */
@@ -70,7 +72,8 @@ public class ConfigurationComposite extends StateComposite {
 	}
 
 	/**
-	 * @param signer the signer to set
+	 * @param signer
+	 *            the signer to set
 	 */
 	public void setSigner(PDFSigner signer) {
 		this.signer = signer;
@@ -160,8 +163,9 @@ public class ConfigurationComposite extends StateComposite {
 								.useAutoPositioning());
 			}
 
-			this.configurationContainer.setPlaceholderTransparency(
-					this.configProvider.getPlaceholderTransparency());
+			this.configurationContainer
+					.setPlaceholderTransparency(this.configProvider
+							.getPlaceholderTransparency());
 
 			this.configurationContainer.setBKUSelection(this.configProvider
 					.getDefaultBKU());
@@ -225,16 +229,17 @@ public class ConfigurationComposite extends StateComposite {
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
 		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
-		ScrolledComposite simpleCompositeScr = new ScrolledComposite(
-				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite simpleCompositeScr = new ScrolledComposite(tabFolder,
+				SWT.H_SCROLL | SWT.V_SCROLL);
 		simpleTabItem.setControl(simpleCompositeScr);
 		this.simpleConfigComposite = new SimpleConfigurationComposite(
-				simpleCompositeScr, SWT.NONE, state, this.configurationContainer);
+				simpleCompositeScr, SWT.NONE, state,
+				this.configurationContainer);
 		simpleCompositeScr.setContent(this.simpleConfigComposite);
 		simpleCompositeScr.setExpandHorizontal(true);
 		simpleCompositeScr.setExpandVertical(true);
-		simpleCompositeScr.setMinSize(
-				this.simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
+				SWT.DEFAULT, SWT.DEFAULT));
 
 		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
 		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
@@ -243,12 +248,13 @@ public class ConfigurationComposite extends StateComposite {
 				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
 		advancedTabItem.setControl(advancedCompositeScr);
 		this.advancedConfigComposite = new AdvancedConfigurationComposite(
-				advancedCompositeScr, SWT.NONE, state, this.configurationContainer);
+				advancedCompositeScr, SWT.NONE, state,
+				this.configurationContainer);
 		advancedCompositeScr.setContent(this.advancedConfigComposite);
 		advancedCompositeScr.setExpandHorizontal(true);
 		advancedCompositeScr.setExpandVertical(true);
-		advancedCompositeScr.setMinSize(
-				this.advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		advancedCompositeScr.setMinSize(this.advancedConfigComposite
+				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		tabFolder.setSelection(simpleTabItem);
 
@@ -270,8 +276,9 @@ public class ConfigurationComposite extends StateComposite {
 
 		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
 		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnSpeichern.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
-		
+		btnSpeichern
+				.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
+
 		Button btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
 		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
@@ -288,7 +295,8 @@ public class ConfigurationComposite extends StateComposite {
 
 		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
 		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
+		btnAbbrechen
+				.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
 
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
@@ -300,53 +308,103 @@ public class ConfigurationComposite extends StateComposite {
 		this.compositeStack.topControl = tabFolder;
 
 		this.doLayout();
-}
+	}
 
 	boolean storeConfiguration() {
-
+		boolean status = false;
+		boolean redo = false;
+		int resumeIndex = 0;
 		try {
-			this.simpleConfigComposite.validateSettings();
-			this.advancedConfigComposite.validateSettings();
+			do {
+				try {
+					this.simpleConfigComposite.validateSettings(resumeIndex);
 
-			// Write current Configuration
-			this.configManipulator.setDefaultBKU(this.configurationContainer
-					.getBKUSelection());
-			this.configManipulator
-					.setDefaultMobileNumber(this.configurationContainer
-							.getNumber());
-			if (this.configurationContainer.getAutomaticPosition()) {
-				this.configManipulator
-						.setDefaultSignaturePosition(new SignaturePosition());
-			} else {
-				this.configManipulator.setDefaultSignaturePosition(null);
+					redo = false;
+					status = true;
+				} catch (ResumeableException e) {
+					log.error("Settings validation failed!", e); //$NON-NLS-1$
+					ErrorDialog dialog = new ErrorDialog(getShell(),
+							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);
+					int rc = dialog.open();
+
+					redo = (rc == SWT.RETRY);
+					if (rc == SWT.IGNORE)
+					{
+						resumeIndex = e.getResumeIndex();
+						redo = true;
+					}
+				}
+			} while (redo);
+
+			if (!status) {
+				return false;
 			}
 
-			this.configManipulator.setPlaceholderTransparency(
-					this.configurationContainer.getPlaceholderTransparency());
+			status = false;
+			redo = false;
+			resumeIndex = 0;
 
-			this.configManipulator
-					.setDefaultOutputFolder(this.configurationContainer
-							.getOutputFolder());
+			do {
+				try {
+					this.advancedConfigComposite.validateSettings(resumeIndex);
 
-			this.configManipulator.setProxyHost(this.configurationContainer
-					.getProxyHost());
-			this.configManipulator.setProxyPort(this.configurationContainer
-					.getProxyPort());
-			this.configManipulator.setDefaultEmblem(this.configurationContainer
-					.getEmblem());
+					redo = false;
+					status = true;
+				} catch (ResumeableException e) {
+					log.error("Settings validation failed!", e); //$NON-NLS-1$
+					ErrorDialog dialog = new ErrorDialog(getShell(),
+							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);
+					int rc = dialog.open();
 
+					redo = (rc == SWT.RETRY);
+					if (rc == SWT.IGNORE)
+					{
+						resumeIndex = e.getResumeIndex();
+						redo = true;
+					}
+				}
+			} while (redo);
 		} catch (Exception e) {
 			log.error("Settings validation failed!", e); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(
-					getShell(),
-					e.getMessage(),
-					false);
+			ErrorDialog dialog = new ErrorDialog(getShell(), e.getMessage(),
+					ERROR_BUTTONS.OK);
 			dialog.open();
 			return false;
 		}
 
-		boolean status = false;
-		boolean redo = false;
+		if (!status) {
+			return false;
+		}
+
+		// Write current Configuration
+		this.configManipulator.setDefaultBKU(this.configurationContainer
+				.getBKUSelection());
+		this.configManipulator
+				.setDefaultMobileNumber(this.configurationContainer.getNumber());
+		if (this.configurationContainer.getAutomaticPosition()) {
+			this.configManipulator
+					.setDefaultSignaturePosition(new SignaturePosition());
+		} else {
+			this.configManipulator.setDefaultSignaturePosition(null);
+		}
+
+		this.configManipulator
+				.setPlaceholderTransparency(this.configurationContainer
+						.getPlaceholderTransparency());
+
+		this.configManipulator
+				.setDefaultOutputFolder(this.configurationContainer
+						.getOutputFolder());
+
+		this.configManipulator.setProxyHost(this.configurationContainer
+				.getProxyHost());
+		this.configManipulator.setProxyPort(this.configurationContainer
+				.getProxyPort());
+		this.configManipulator.setDefaultEmblem(this.configurationContainer
+				.getEmblem());
+
+		status = false;
+		redo = false;
 		do {
 			// Save current config to file
 			try {
@@ -355,11 +413,12 @@ public class ConfigurationComposite extends StateComposite {
 				status = true;
 			} catch (IOException e) {
 				log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
-				ErrorDialog dialog = new ErrorDialog(getShell(), 
-						Messages.getString("error.FailedToSaveSettings"), true); //$NON-NLS-1$
-				redo = dialog.open();
-				
-				//return false;
+				ErrorDialog dialog = new ErrorDialog(
+						getShell(),
+						Messages.getString("error.FailedToSaveSettings"), ERROR_BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
+				redo = (dialog.open() == SWT.RETRY);
+
+				// return false;
 			}
 		} while (redo);
 		return status;

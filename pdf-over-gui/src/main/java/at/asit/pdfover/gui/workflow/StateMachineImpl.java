@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -87,7 +88,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			} catch (Exception e) {
 				log.error("StateMachine update: ", e); //$NON-NLS-1$
 				ErrorDialog errorState = new ErrorDialog(this.getMainShell(), 
-						Messages.getString("error.Unexpected"), false); //$NON-NLS-1$
+						Messages.getString("error.Unexpected"), ERROR_BUTTONS.OK); //$NON-NLS-1$
 				//errorState.setException(e);
 				//jumpToState(errorState);
 				errorState.open();
