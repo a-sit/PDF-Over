@@ -201,6 +201,9 @@ public class ConfigurationComposite extends StateComposite {
 								.useAutoPositioning());
 			}
 
+			this.configurationContainer.setPlaceholderTransparency(
+					this.configProvider.getPlaceholderTransparency());
+
 			this.configurationContainer.setBKUSelection(this.configProvider
 					.getDefaultBKU());
 			try {
@@ -331,6 +334,9 @@ public class ConfigurationComposite extends StateComposite {
 			} else {
 				this.configManipulator.setDefaultSignaturePosition(null);
 			}
+
+			this.configManipulator.setPlaceholderTransparency(
+					this.configurationContainer.getPlaceholderTransparency());
 
 			this.configManipulator
 					.setDefaultOutputFolder(this.configurationContainer

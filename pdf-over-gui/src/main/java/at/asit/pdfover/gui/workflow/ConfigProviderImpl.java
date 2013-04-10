@@ -78,6 +78,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private String outputFolder = STRING_EMPTY;
 
+	private int placeholderTransparency = 170;
+
 	/**
 	 * Sets the default bku type
 	 * 
@@ -119,6 +121,25 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public SignaturePosition getDefaultSignaturePosition() {
 		return this.defaultSignaturePosition;
+	}
+
+	/**
+	 * Sets the signature placeholder transparency
+	 * 
+	 * @param transparency
+	 *            the signature placeholder transparency
+	 */
+	@Override
+	public void setPlaceholderTransparency(int transparency) {
+		this.placeholderTransparency = transparency;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getPlaceholderTransparency()
+	 */
+	@Override
+	public int getPlaceholderTransparency() {
+		return this.placeholderTransparency;
 	}
 
 	/**
@@ -246,6 +267,48 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 * (non-Javadoc)
 	 * 
 	 * @see
+	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setDefaultOutputFolder
+	 * (java.lang.String)
+	 */
+	@Override
+	public void setDefaultOutputFolder(String outputFolder) {
+		if (outputFolder == null || outputFolder.trim().equals("")) { //$NON-NLS-1$
+			this.outputFolder = STRING_EMPTY;
+		} else {
+			this.outputFolder = outputFolder;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultOutputFolder()
+	 */
+	@Override
+	public String getDefaultOutputFolder() {
+		return this.outputFolder;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
+	 */
+	@Override
+	public String getMobileBKUURL() {
+		return this.mobileBKU;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
+	 */
+	@Override
+	public String getConfigurationDirectory() {
+		return CONFIG_DIRECTORY;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setConfigurationFile(java
 	 * .lang.String)
 	 */
@@ -286,6 +349,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		props.setProperty(EMBLEM_CONFIG, this.getDefaultEmblem());
 		props.setProperty(MOBILE_NUMBER_CONFIG, this.getDefaultMobileNumber());
 		props.setProperty(OUTPUT_FOLDER_CONFIG, this.getDefaultOutputFolder());
+		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG, Integer.toString(this.getPlaceholderTransparency()));
 
 		SignaturePosition pos = this.getDefaultSignaturePosition();
 
@@ -305,32 +369,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		log.info("Configuration file saved to " + configFile.getAbsolutePath()); //$NON-NLS-1$
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setDefaultOutputFolder
-	 * (java.lang.String)
-	 */
-	@Override
-	public void setDefaultOutputFolder(String outputFolder) {
-		if (outputFolder == null || outputFolder.trim().equals("")) { //$NON-NLS-1$
-			this.outputFolder = STRING_EMPTY;
-		} else {
-			this.outputFolder = outputFolder;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultOutputFolder()
-	 */
-	@Override
-	public String getDefaultOutputFolder() {
-		return this.outputFolder;
 	}
 
 	/*
@@ -401,6 +439,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		this.setDefaultBKU(defaultBKU);
 
+		// Set Signature placeholder transparency
+		int transparency = 170;
+		try {
+			transparency = Integer.parseInt(config
+					.getProperty(ConfigManipulator.SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG));
+		} catch (NumberFormatException e) {
+			log.debug("Couldn't parse placeholder transparency", e);
+			// ignore parsing exception
+		}
+		this.setPlaceholderTransparency(transparency);
+
 		// Set Signature Position
 		String signaturePosition = config
 				.getProperty(ConfigManipulator.SIGNATURE_POSITION_CONFIG);
@@ -457,22 +506,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 
 		this.setDefaultSignaturePosition(position);
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
-	 */
-	@Override
-	public String getMobileBKUURL() {
-		return this.mobileBKU;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
-	 */
-	@Override
-	public String getConfigurationDirectory() {
-		return CONFIG_DIRECTORY;
 	}
 
 }

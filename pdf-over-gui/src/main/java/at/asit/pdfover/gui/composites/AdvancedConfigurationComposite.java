@@ -16,8 +16,27 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Scale;
+import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,29 +46,23 @@ import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Text;
-
 /**
  * Composite for advanced configuration
  */
 public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
+
+	/**
+	 * SLF4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(AdvancedConfigurationComposite.class);
+	SimpleConfigurationComposite simpleComposite;
+	Text txtOutputFolder;
+	Combo cmbBKUAuswahl;
+	String[] bkuStrings;
+	Button btnAutomatischePositionierung;
+	Scale sclTransparenz;
+
 	/**
 	 * @param parent
 	 * @param style
@@ -89,21 +102,21 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		advancedTabItem.setControl(advancedComposite);
 		advancedComposite.setLayout(new FormLayout());
 
-		Group grpSignaturPosition = new Group(advancedComposite, SWT.NONE);
-		grpSignaturPosition.setText(Messages.getString("advanced_config.AutoPosition_Title")); //$NON-NLS-1$
-		grpSignaturPosition.setLayout(new FormLayout());
-		FormData fd_grpSignaturPosition = new FormData();
-		fd_grpSignaturPosition.top = new FormAttachment(0, 5);
-		fd_grpSignaturPosition.bottom = new FormAttachment(33, -5);
-		fd_grpSignaturPosition.right = new FormAttachment(100, -5);
-		fd_grpSignaturPosition.left = new FormAttachment(0, 5);
-		grpSignaturPosition.setLayoutData(fd_grpSignaturPosition);
+		Group grpSignatur = new Group(advancedComposite, SWT.NONE);
+		grpSignatur.setText(Messages.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
+		grpSignatur.setLayout(new FormLayout());
+		FormData fd_grpSignatur = new FormData();
+		fd_grpSignatur.top = new FormAttachment(0, 5);
+		fd_grpSignatur.bottom = new FormAttachment(33, -5);
+		fd_grpSignatur.right = new FormAttachment(100, -5);
+		fd_grpSignatur.left = new FormAttachment(0, 5);
+		grpSignatur.setLayoutData(fd_grpSignatur);
 
-		FontData[] fD_grpSignaturPosition = grpSignaturPosition.getFont().getFontData();
+		FontData[] fD_grpSignaturPosition = grpSignatur.getFont().getFontData();
 		fD_grpSignaturPosition[0].setHeight(TEXT_SIZE_NORMAL);
-		grpSignaturPosition.setFont(new Font(Display.getCurrent(), fD_grpSignaturPosition[0]));
+		grpSignatur.setFont(new Font(Display.getCurrent(), fD_grpSignaturPosition[0]));
 		
-		this.btnAutomatischePositionierung = new Button(grpSignaturPosition,
+		this.btnAutomatischePositionierung = new Button(grpSignatur,
 				SWT.CHECK);
 		FormData fd_btnAutomatischePositionierung = new FormData();
 		fd_btnAutomatischePositionierung.right = new FormAttachment(100, -5);
@@ -123,6 +136,24 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			public void widgetSelected(SelectionEvent e) {
 				AdvancedConfigurationComposite.this.performPositionSelection(
 						AdvancedConfigurationComposite.this.btnAutomatischePositionierung.getSelection());
+			}
+		});
+		log.debug(this.btnAutomatischePositionierung.getBounds().toString());
+
+		this.sclTransparenz = new Scale(grpSignatur, SWT.HORIZONTAL);
+		FormData fd_sldTransparenz = new FormData();
+		fd_sldTransparenz.right = new FormAttachment(100, -5);
+		fd_sldTransparenz.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
+		fd_sldTransparenz.left = new FormAttachment(0, 5);
+		this.sclTransparenz.setLayoutData(fd_sldTransparenz);
+		this.sclTransparenz.setMinimum(0);
+		this.sclTransparenz.setMaximum(255);
+		this.sclTransparenz.setIncrement(1);
+		this.sclTransparenz.setPageIncrement(10);
+		this.sclTransparenz.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				performPlaceholderTransparency(AdvancedConfigurationComposite.this.sclTransparenz.getSelection());
 			}
 		});
 
@@ -328,16 +359,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(AdvancedConfigurationComposite.class);
-	SimpleConfigurationComposite simpleComposite;
-	Text txtOutputFolder;
-	Combo cmbBKUAuswahl;
-	String[] bkuStrings;
-	Button btnAutomatischePositionierung;
+	void performPlaceholderTransparency(int transparency) {
+		log.debug("Transparency: " + transparency); //$NON-NLS-1$
+		this.configurationContainer.setPlaceholderTransparency(transparency);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -367,6 +392,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.performOutputFolderChanged(outputFolder);
 		}
 		this.performPositionSelection(this.configurationContainer.getAutomaticPosition());
+		this.sclTransparenz.setSelection(this.configurationContainer.getPlaceholderTransparency());
 	}
 
 	/* (non-Javadoc)

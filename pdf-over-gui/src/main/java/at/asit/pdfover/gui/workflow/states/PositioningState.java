@@ -56,12 +56,18 @@ public class PositioningState extends State {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
 			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument());
-			SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
-			Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
-			param.setEmblem(emblem);
 			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
-			this.positionComposite.setPlaceholder(param.getPlaceholder(), param.getPlaceholderDimension().getWidth(), param.getPlaceholderDimension().getHeight());
 		}
+		// Update possibly changed values
+		SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
+		Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
+		param.setEmblem(emblem);
+		this.positionComposite.setPlaceholder(
+				param.getPlaceholder(),
+				param.getPlaceholderDimension().getWidth(),
+				param.getPlaceholderDimension().getHeight(),
+				this.stateMachine.getConfigProvider().getPlaceholderTransparency());
+		this.positionComposite.requestFocus();
 
 		return this.positionComposite;
 	}
@@ -74,7 +80,6 @@ public class PositioningState extends State {
 		{
 			status.setSignaturePosition(null);
 		}
-
 
 		if(status.getSignaturePosition() == null) {
 			PositioningComposite position = null;

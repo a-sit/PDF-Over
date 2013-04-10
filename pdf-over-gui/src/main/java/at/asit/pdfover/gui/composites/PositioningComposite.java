@@ -92,6 +92,13 @@ public class PositioningComposite extends StateComposite {
 		this.numPages = this.pdf.getNumPages();
 		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 		showPage(this.numPages);
+	}
+
+	/**
+	 * Request focus (to enable keyboard input)
+	 */
+	public void requestFocus()
+	{
 		this.setFocus();
 		this.frame.requestFocus();
 	}
@@ -102,11 +109,12 @@ public class PositioningComposite extends StateComposite {
 	 * @param placeholder signature placeholder
 	 * @param width width of the placeholder in page space
 	 * @param height height of the placeholder in page space 
+	 * @param transparency transparency of the signature placeholder (0 - 255)
 	 */
-	public void setPlaceholder(Image placeholder, int width, int height) {
+	public void setPlaceholder(Image placeholder, int width, int height, int transparency) {
 		if (this.viewer == null)
 			return;
-		this.viewer.setSignaturePlaceholder(placeholder, width, height);
+		this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
 	}
 
 	/**
@@ -124,8 +132,6 @@ public class PositioningComposite extends StateComposite {
 		this.addKeyListener(this.keyListener);
 		this.frame.addMouseWheelListener(this.mouseListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
-		this.setFocus();
-		this.frame.requestFocus();
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
@@ -222,7 +228,10 @@ public class PositioningComposite extends StateComposite {
 	 */
 	void setFinalPosition() {
 		// TODO: check if this is the real position
-		this.position = new SignaturePosition(this.viewer.getSignaturePositionX(), this.viewer.getSignaturePositionY(), this.currentPage);
+		this.position = new SignaturePosition(
+				this.viewer.getSignaturePositionX(),
+				this.viewer.getSignaturePositionY(),
+				this.currentPage);
 		PositioningComposite.this.state.updateStateMachine();
 	}
 

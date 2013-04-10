@@ -86,6 +86,12 @@ public interface ConfigProvider {
 	public SignaturePosition getDefaultSignaturePosition();
 	
 	/**
+	 * Get the transparency of the signature placeholder
+	 * @return the transparency of the signature placeholder
+	 */
+	public int getPlaceholderTransparency();
+	
+	/**
 	 * Gets the default output folder for signed documents
 	 * @return the default output folder 
 	 */

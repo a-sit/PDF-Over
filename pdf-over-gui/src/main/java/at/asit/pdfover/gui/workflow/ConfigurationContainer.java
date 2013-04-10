@@ -95,6 +95,18 @@ public interface ConfigurationContainer {
 	public void setAutomaticPosition(boolean automatic);
 	
 	/**
+	 * Gets the transparency of the placeholder
+	 * @return transparency of the placeholder (0-255)
+	 */
+	public int getPlaceholderTransparency();
+	
+	/**
+	 * Sets the transparency of the placeholder
+	 * @param transparency transparency of the placeholder (0-255)
+	 */
+	public void setPlaceholderTransparency(int transparency);
+
+	/**
 	 * Gets the default BKU
 	 * @return the default BKU
 	 */

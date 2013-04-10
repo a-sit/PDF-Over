@@ -50,9 +50,6 @@ public class SignaturePanel extends JPanel {
 	/** Default serial version ID */
 	private static final long serialVersionUID = 1L;
 
-	/** Signature transparency (0-255) */
-	private static final int SIG_TRANSPARENCY = 170;
-
 	/** The PDF file being displayed */
 	private PDFFile pdf = null;
 	/** The image of the rendered PDF page being displayed */
@@ -75,6 +72,10 @@ public class SignaturePanel extends JPanel {
 	private Image sigPlaceholder = null;
 	/** Current scaled signature placeholder image */
 	BufferedImage sigPlaceholderScaled = null;
+	/** Transparency of the signature placeholder (0-255) */
+	private int sigPlaceholderTransparency = 170;
+	/** Previous Transparency of the signature placeholder */
+	private int prevSigPlaceholderTransparency = 0;
 	/** Width of the signature placeholder in page space */
 	private int sigPageWidth = 0;
 	/** Height of the signature placeholder in page space */
@@ -116,12 +117,13 @@ public class SignaturePanel extends JPanel {
 	 * @param placeholder signature placeholder
 	 * @param width width of the placeholder in page space
 	 * @param height height of the placeholder in page space 
+	 * @param transparency transparency of the signature placeholder (0 - 255)
 	 */
-	public void setSignaturePlaceholder(Image placeholder, int width, int height)
-	{
+	public void setSignaturePlaceholder(Image placeholder, int width, int height, int transparency) {
 		this.sigPlaceholder = placeholder;
 		this.sigPageWidth = width;
 		this.sigPageHeight = height;
+		this.sigPlaceholderTransparency = transparency;
 	}
 
 	/**
@@ -253,12 +255,15 @@ public class SignaturePanel extends JPanel {
 					g.drawRect(sigX, sigY, 100, 40);
 				}
 				else {
-					if ((this.sigScreenWidth != this.prevSigScreenWidth)
-							|| (this.sigScreenHeight != this.prevSigScreenHeight))
+					if (
+							(this.sigScreenWidth != this.prevSigScreenWidth) ||
+							(this.sigScreenHeight != this.prevSigScreenHeight) ||
+							(this.sigPlaceholderTransparency != this.prevSigPlaceholderTransparency))
 					{
 						// redraw scaled transparent placeholder
 						this.prevSigScreenWidth = this.sigScreenWidth;
 						this.prevSigScreenHeight = this.sigScreenHeight;
+						this.prevSigPlaceholderTransparency = this.sigPlaceholderTransparency;
 						Image placeholder = this.sigPlaceholder.getScaledInstance(
 								this.sigScreenWidth, this.sigScreenHeight, Image.SCALE_SMOOTH);
 						this.sigPlaceholderScaled = new BufferedImage(this.sigScreenWidth, this.sigScreenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -269,7 +274,7 @@ public class SignaturePanel extends JPanel {
 						phpixels = this.sigPlaceholderScaled.getRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
 						for (int i = 0; i < phpixels.length; ++i) {
 							Color c = new Color(phpixels[i]);
-							c = new Color(c.getRed(), c.getGreen(), c.getBlue(), SIG_TRANSPARENCY);
+							c = new Color(c.getRed(), c.getGreen(), c.getBlue(), this.sigPlaceholderTransparency);
 							phpixels[i] = c.getRGB();
 						}
 						this.sigPlaceholderScaled.setRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);

@@ -48,6 +48,11 @@ public interface ConfigManipulator {
 	public static final String SIGNATURE_POSITION_CONFIG = "SIGNATURE_POSITION"; //$NON-NLS-1$
 	
 	/**
+	 * This signature placeholder transparency config parameter (0-255)
+	 */
+	public static final String  SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
+	
+	/**
 	 * The mobile number config parameter
 	 */
 	public static final String MOBILE_NUMBER_CONFIG = "MOBILE_NUMBER"; //$NON-NLS-1$
@@ -77,7 +82,6 @@ public interface ConfigManipulator {
 	 */
 	public static final String OUTPUT_FOLDER_CONFIG = "OUTPUT_FOLDER"; //$NON-NLS-1$
 	
-	
 	/**
 	 * Sets the default bku type
 	 * @param bku the bku type
@@ -90,6 +94,13 @@ public interface ConfigManipulator {
 	 * @param signaturePosition the default signature position
 	 */
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
+	
+	/**
+	 * Sets the signature placeholder transparency
+	 * 
+	 * @param transparency the signature placeholder transparency
+	 */
+	void setPlaceholderTransparency(int transparency);
 	
 	/**
 	 * Sets the default mobile number

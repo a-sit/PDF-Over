@@ -78,6 +78,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	protected boolean automaticPositioning = false;
 
+	/**
+	 * Holds the transparency of the signature placeholder
+	 */
+	protected int placeholderTransparency = 170;
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
 	 */
@@ -196,6 +201,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setAutomaticPosition(boolean automatic) {
 		this.automaticPositioning = automatic;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getPlaceholderTransparency()
+	 */
+	@Override
+	public int getPlaceholderTransparency() {
+		return this.placeholderTransparency;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setPlaceholderTransparency(int)
+	 */
+	@Override
+	public void setPlaceholderTransparency(int transparency) {
+		this.placeholderTransparency = transparency;
 	}
 
 
