@@ -301,25 +301,29 @@ public class PositioningComposite extends StateComposite {
 	};
 
 	void showPage(int page) {
+		final int previousPage = this.currentPage;
 		this.currentPage = page;
 		this.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				PositioningComposite.this.scrollbar.setSelection(
-						PositioningComposite.this.currentPage);
-				PositioningComposite.this.lblPage.setText(String.format(
-						"Page %d of %d", //$NON-NLS-1$
-						PositioningComposite.this.currentPage,
-						PositioningComposite.this.numPages));
-				if (PositioningComposite.this.currentPage > PositioningComposite.this.numPages) {
-					PositioningComposite.this.btnNewPage.setText(
-							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
-					PositioningComposite.this.btnNewPage.setSelection(true);
-				} else {
+				int currentPage = PositioningComposite.this.currentPage;
+				int numPages = PositioningComposite.this.numPages;
+				if ((previousPage > numPages) && (currentPage <= numPages)) {
+					// Was on new page
 					PositioningComposite.this.btnNewPage.setText(
 							Messages.getString("positioning.newPage")); //$NON-NLS-1$
 					PositioningComposite.this.btnNewPage.setSelection(false);
+					PositioningComposite.this.scrollbar.setMaximum(numPages);
+				} else if ((previousPage <= numPages) && (currentPage > numPages)) {
+					// Go to new page
+					PositioningComposite.this.btnNewPage.setText(
+							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
+					PositioningComposite.this.btnNewPage.setSelection(true);
+					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
 				}
+				PositioningComposite.this.scrollbar.setSelection(currentPage);
+				PositioningComposite.this.lblPage.setText(String.format(
+						"Page %d of %d", currentPage, numPages)); //$NON-NLS-1$
 			}
 		});
 		this.viewer.showPage(page);
