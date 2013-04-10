@@ -1,4 +1,4 @@
-package at.asit.pdfover.pdfsignator;
+package at.asit.pdfover.pdfsigner;
 
 import javax.security.cert.Certificate;
 

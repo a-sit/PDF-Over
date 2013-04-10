@@ -1,4 +1,4 @@
-package at.asit.pdfover.pdfsignator;
+package at.asit.pdfover.pdfsigner;
 
 /**
  * The Dimensions of the visible signature block
