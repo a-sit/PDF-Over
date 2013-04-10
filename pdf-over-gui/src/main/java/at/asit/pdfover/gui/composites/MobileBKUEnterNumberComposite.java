@@ -39,6 +39,12 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
+	 * SLF4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory
+			.getLogger(MobileBKUEnterNumberComposite.class);
+
+	/**
 	 * 
 	 */
 	private final class OkSelectionListener extends SelectionAdapter {
@@ -131,12 +137,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			MobileBKUEnterNumberComposite.this.state.updateStateMachine();
 		}
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(MobileBKUEnterNumberComposite.class);
 
 	String mobileNumber;
 

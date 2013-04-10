@@ -46,7 +46,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 	private static final Logger log = LoggerFactory
 			.getLogger(TrustedSocketFactory.class);
 
-	private SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
+	private static SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
 			KeyManagementException {
 		SSLContext sslContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
 		sslContext.init(null, new TrustManager[] { new ASITTrustManager() },
