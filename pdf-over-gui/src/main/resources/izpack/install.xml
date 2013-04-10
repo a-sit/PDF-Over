@@ -65,13 +65,13 @@
 			<file src="PDF-Over.ini" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="PDF-Over-Un.ini" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
 			<singlefile src="PDF-Over.exe" target="$INSTALL_PATH/Uninstaller/PDF-Over-Un.exe" os="windows"/>
-			<executable targetfile="$INSTALL_PATH/scripts/pdfover_linux.sh"
+			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
 				os="unix" stage="never"></executable>
-			<executable targetfile="$INSTALL_PATH/scripts/pdfover_win.bat"
+			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win.bat"
 				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/uninstall_win.bat"
 				os="windows" stage="never"></executable>
-			<executable targetfile="$INSTALL_PATH/scripts/pdfover_mac.sh"
+			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_mac.sh"
 				os="mac" stage="never"></executable>
 		</pack>
 	</packs>

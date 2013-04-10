@@ -12,7 +12,7 @@
      applications="no"
      startMenu="yes"
      startup="no"
-     target="$INSTALL_PATH/scripts/pdfover_linux.sh"
+     target="$INSTALL_PATH/scripts/pdf-over_linux.sh"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
      description="PDF-Over 4.0"

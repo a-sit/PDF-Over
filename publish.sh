@@ -52,7 +52,7 @@ names=( linux windows mac )
 for (( i = 0 ; i < ${#names[@]} ; i++ )) do
  	PROFILE=${profiles[$i]}
  	NAME=${names[$i]}
- 	INSTALLER=setup_pdfover_$NAME.jar
+	INSTALLER=setup_pdf-over_$NAME.jar
 	begin_phase "Building package [$PROFILE] as $INSTALLER..."
  	mvn install -P$PROFILE $MVN_PARAMS > $LOG_DIR/build_$NAME.log 2>&1
  	RETVAL=$?
@@ -74,22 +74,22 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 done
 
 begin_phase "Building JNLP..."
-cp ./pdf-over-gui/src/main/jnlp/pdfover.jnlp $PUBLISH_DIR/pdfover.jnlp
+cp ./pdf-over-gui/src/main/jnlp/pdf-over.jnlp $PUBLISH_DIR/pdf-over.jnlp
 RETVAL=$?
 if [ $RETVAL -ne 0 ]; then
 	end_phase "FAILED"
 else
-	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" $PUBLISH_DIR/pdfover.jnlp
+	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" $PUBLISH_DIR/pdf-over.jnlp
 	RETVAL=$?
 	if [ $RETVAL -ne 0 ]; then
 		end_phase "FAILED"
 	else
-		sed -i "s/##CONTEXT_URL##/$CONTEXT_URL/g" $PUBLISH_DIR/pdfover.jnlp
+		sed -i "s/##CONTEXT_URL##/$CONTEXT_URL/g" $PUBLISH_DIR/pdf-over.jnlp
 		RETVAL=$?
 		if [ $RETVAL -ne 0 ]; then
 			end_phase "FAILED"
 		else
-			sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" $PUBLISH_DIR/pdfover.jnlp
+			sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" $PUBLISH_DIR/pdf-over.jnlp
 			RETVAL=$?
 			if [ $RETVAL -ne 0 ]; then
 				end_phase "FAILED"

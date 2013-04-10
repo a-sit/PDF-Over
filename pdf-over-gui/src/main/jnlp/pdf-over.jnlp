@@ -23,17 +23,17 @@
 
   <resources os="Linux">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_linux.jar" main="true"/>
+    <jar href="setup_pdf-over_linux.jar" main="true"/>
   </resources>
 
   <resources os="Windows">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_windows.jar" main="true"/>
+    <jar href="setup_pdf-over_windows.jar" main="true"/>
   </resources>
 
   <resources os="Mac OS X">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_mac.jar" main="true"/>
+    <jar href="setup_pdf-over_mac.jar" main="true"/>
   </resources>
 
   <application-desc main-class="com.izforge.izpack.installer.Installer"/>
