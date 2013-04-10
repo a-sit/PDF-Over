@@ -70,6 +70,8 @@ public class PositioningComposite extends StateComposite {
 
 	private Composite mainArea = null;
 
+	Button btnNewPage = null;
+
 	Label lblPage = null;
 
 	ScrollBar scrollbar = null;
@@ -113,10 +115,26 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
+		this.btnNewPage = new Button(bottomBar, SWT.TOGGLE);
+		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+		FormData fd_btnNewPage = new FormData();
+		fd_btnNewPage.right = new FormAttachment(btnSign);
+		fd_btnNewPage.top = new FormAttachment(0);
+		this.btnNewPage.setLayoutData(fd_btnNewPage);
+		this.btnNewPage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (PositioningComposite.this.currentPage > PositioningComposite.this.numPages)
+					showPage(PositioningComposite.this.numPages);
+				else
+					showPage(PositioningComposite.this.numPages + 1);
+			}
+		});
+
 		this.lblPage = new Label(bottomBar, SWT.CENTER);
 		FormData fd_lblPage = new FormData();
 		fd_lblPage.left = new FormAttachment(0);
-		fd_lblPage.right = new FormAttachment(btnSign, 5);
+		fd_lblPage.right = new FormAttachment(this.btnNewPage, 5);
 		fd_lblPage.bottom = new FormAttachment(100);
 		this.lblPage.setLayoutData(fd_lblPage);
 
@@ -293,6 +311,15 @@ public class PositioningComposite extends StateComposite {
 						"Page %d of %d", //$NON-NLS-1$
 						PositioningComposite.this.currentPage,
 						PositioningComposite.this.numPages));
+				if (PositioningComposite.this.currentPage > PositioningComposite.this.numPages) {
+					PositioningComposite.this.btnNewPage.setText(
+							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
+					PositioningComposite.this.btnNewPage.setSelection(true);
+				} else {
+					PositioningComposite.this.btnNewPage.setText(
+							Messages.getString("positioning.newPage")); //$NON-NLS-1$
+					PositioningComposite.this.btnNewPage.setSelection(false);
+				}
 			}
 		});
 		this.viewer.showPage(page);

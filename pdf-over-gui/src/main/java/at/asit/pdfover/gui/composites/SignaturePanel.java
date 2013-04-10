@@ -93,6 +93,10 @@ public class SignaturePanel extends JPanel {
 	int prevSigScreenHeight = 0;
 	/** Color of the signature placeholder border */
 	private Color sigPlaceholderBorderColor = Color.BLUE;
+	/** Current page */
+	int page = 0;
+	/** Number of pages in the document */
+	int numPages = 0;
 
 	/**
 	 * Create a new PagePanel.
@@ -114,7 +118,8 @@ public class SignaturePanel extends JPanel {
 	public void setDocument(PDFFile pdf) {
 		this.pdf = pdf;
 		this.sigPagePos = null;
-		showPage(pdf.getNumPages());
+		this.numPages = pdf.getNumPages();
+		showPage(this.numPages);
 	}
 
 	/**
@@ -144,8 +149,17 @@ public class SignaturePanel extends JPanel {
 	 * @param page the number of the page to display
 	 */
 	public void showPage(int page) {
-		//sigPagePos = null;
+		this.page = page;
 		showPage(this.pdf.getPage(page));
+	}
+
+	/**
+	 * Add and display a new page at the end of the document
+	 * 
+	 * This page has the same dimensions as the old last page
+	 */
+	public void addNewLastPage() {
+		showPage(this.numPages + 1);
 	}
 
 	/**
@@ -195,8 +209,17 @@ public class SignaturePanel extends JPanel {
 			this.currentPage.stop(this.prevSize.width, this.prevSize.height, null);
 		}
 
+		boolean newPage = false;
 		// set up the new page
-		this.currentPage = page;
+		if (this.page > this.numPages)
+		{
+			// New last page - use old last page as template
+			this.currentPage = this.pdf.getPage(this.numPages);
+			newPage = true;
+		}
+		else
+			this.currentPage = page;
+
 
 		if (this.currentPage == null) {
 			// no page
@@ -215,8 +238,16 @@ public class SignaturePanel extends JPanel {
 					null);
 
 			// get the new image
-			this.currentImage = this.currentPage.getImage(pageSize.width, pageSize.height,
-					null, this);
+			if (newPage)
+			{
+				this.currentImage = new BufferedImage(pageSize.width, pageSize.height, BufferedImage.TYPE_INT_RGB);
+				Graphics g = this.currentImage.getGraphics();
+				g.setColor(Color.WHITE);
+				g.fillRect(0, 0, pageSize.width, pageSize.height);
+			}
+			else
+				this.currentImage = this.currentPage.getImage(pageSize.width, pageSize.height,
+						null, this);
 
 			// calculate the transform from page to screen space
 			this.currentXform = this.currentPage.getInitialTransform(pageSize.width,
