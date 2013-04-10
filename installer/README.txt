@@ -8,6 +8,8 @@ Windows-Installer:
 	Advanced-Installer-Projektdateien enthalten:
 	* PDF-Over.aip - Einfaches MSI, mit Free-Version erzeugbar
 	* PDF-Over-signed.aip - Benötigt Pro-Version, signiert, Sprachen
+	* User Interface -> Dialogs -> ShortcutsDlg
+		* "Show Desktop Option" & "Checked by default" aktivieren
 
 Mac-DMG-Paket:
 	* Per webstart installieren, Paketinhalt entpacken
