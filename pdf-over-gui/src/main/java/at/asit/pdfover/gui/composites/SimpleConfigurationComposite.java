@@ -27,15 +27,19 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -101,7 +105,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
-	private Label lblEmblem;
+	Label lblEmblem;
 	private Text txtProxyHost;
 	Text txtProxyPort;
 	Text txtMobileNumber;
@@ -433,7 +437,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		new Label(grpBildmarke, SWT.NONE);
 		new Label(grpBildmarke, SWT.NONE);
 
-		this.lblEmblem = new Label(grpBildmarke, SWT.BORDER | SWT.RESIZE);
+		this.lblEmblem = new Label(grpBildmarke, SWT.RESIZE);
 		this.lblEmblem.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 3, 1));
 		this.lblEmblem.setAlignment(SWT.CENTER);
@@ -444,6 +448,20 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void handleEvent(Event event) {
 				SimpleConfigurationComposite.this.recalculateEmblemSize();
+			}
+		});
+		
+		this.lblEmblem.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				//e.gc.setForeground();
+				e.gc.setForeground(new Color(getDisplay(),0x6B, 0xA5, 0xD9));
+				e.gc.setLineWidth(3);
+				e.gc.setLineStyle(SWT.LINE_DASH);
+				e.gc.drawRoundRectangle(e.x, 
+						e.y, e.width - 2, e.height - 2, 
+						10, 10);
 			}
 		});
 
