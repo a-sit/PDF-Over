@@ -3,7 +3,7 @@
 <installation version="1.0">
 
 	<info>
-		<appname>PDFOver</appname>
+		<appname>PDF-Over</appname>
 		<appversion>4.0</appversion>
 		<uninstaller write="yes" />
 		<javaversion>1.6</javaversion>

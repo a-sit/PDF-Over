@@ -2,11 +2,11 @@
 <jnlp spec="1.0+" codebase="##CODEBASE_URL##" context="##CONTEXT_URL##" href="pdfover.jnlp">
 
   <information>
-    <title>PDFOver</title>
+    <title>PDF-Over</title>
     <vendor>Secure Information Technology Center - Austria (A-SIT)</vendor>
     <homepage href="##HOMEPAGE_URL##"/>
-    <description>PDFOver - PDF Signaturtool</description>
-    <description kind="short">PDFOver</description>
+    <description>PDF-Over - PDF Signaturtool</description>
+    <description kind="short">PDF-Over</description>
     <offline-allowed/>
   </information>
   

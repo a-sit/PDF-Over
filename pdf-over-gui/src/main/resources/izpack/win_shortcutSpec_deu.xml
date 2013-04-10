@@ -2,11 +2,11 @@
 
 <shortcuts>
 	<!-- <skipIfNotSupported/>  -->
-  <programGroup defaultName="PDFOver"
+  <programGroup defaultName="PDF-Over"
   location="applications"/>
 
   <shortcut
-     name="PDFOver"
+     name="PDF-Over"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -15,7 +15,7 @@
      target="$INSTALL_PATH/scripts/pdfover_win.bat"
      commandLine=""
      workingDirectory="$INSTALL_PATH/lib"
-     description="PDFOver 4.0"
+     description="PDF-Over 4.0"
      iconFile="$INSTALL_PATH/icons/icon.ico"
      iconIndex="0"
      type="Application"
@@ -34,7 +34,7 @@
      target="$INSTALL_PATH/scripts/uninstall_win.bat"
      commandLine=""
      workingDirectory="$INSTALL_PATH/lib"
-     description="PDFOver 4.0 Uninstall"
+     description="PDF-Over 4.0 Uninstall"
      type="Application"
      encoding="UTF-8"
      initialState="normal">
