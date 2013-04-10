@@ -49,23 +49,24 @@ public class PositioningState extends WorkflowState {
 
 	@Override
 	public void update(Workflow workflow) {
-		// TODO Auto-generated method stub
-		PositioningComposite position = this.getPositioningComosite(workflow);
 		
-		workflow.setTopControl(position);
-		
+		if(workflow.getParameter().getSignaturePosition() == null) {
+			PositioningComposite position = this.getPositioningComosite(workflow);
+			
+			workflow.setTopControl(position);
+			
+			workflow.getParameter().setSignaturePosition(position.getPosition());
+			
+			if(workflow.getParameter().getSignaturePosition() == null) {
+				this.setNextState(this);
+				return;
+			}
+		}
 		this.setNextState(new BKUSelectionState());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
-	 */
 	@Override
-	public void hideGUI() {
-		// TODO Auto-generated method stub
-
+	public String toString()  {
+		return "PositioningState";
 	}
-
 }

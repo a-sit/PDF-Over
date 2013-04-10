@@ -13,34 +13,17 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states;
+package at.asit.pdfover.gui.components.main_behavior;
 
-//Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.components.MainWindow;
 
 /**
- * Logical state for signing process, usually show BKU Dialog during this state.
+ * 
  */
-public class SigningState extends WorkflowState {
-
+public interface MainWindowBehavior {
 	/**
-	 * SFL4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(SigningState.class);
-	
-	@Override
-	public void update(Workflow workflow) {
-		// TODO Wait until output ready and set output
-		
-		this.setNextState(new OutputState());
-	}
-	
-	@Override
-	public String toString()  {
-		return "SigningState";
-	}
+	 * Changes the state of the main window
+	 * @param window
+	 */
+	public void SetState(MainWindow window);
 }

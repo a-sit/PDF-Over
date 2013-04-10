@@ -16,10 +16,9 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.io.File;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,59 +34,47 @@ public class DataSourceSelectionState extends WorkflowState {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(DataSourceSelectionState.class);
-	
+	private static final Logger log = LoggerFactory
+			.getLogger(DataSourceSelectionState.class);
+
 	private DataSourceSelectComposite selectionComposite = null;
-	
+
 	private DataSourceSelectComposite getSelectionComposite(Workflow workflow) {
-		if(this.selectionComposite == null) {
-			this.selectionComposite = new DataSourceSelectComposite(workflow.getComposite(), SWT.RESIZE, workflow);
+		if (this.selectionComposite == null) {
+			this.selectionComposite = new DataSourceSelectComposite(
+					workflow.getComposite(), SWT.RESIZE, workflow);
 		}
-		
+
 		return this.selectionComposite;
 	}
-	
+
 	@Override
 	public void update(Workflow workflow) {
-		DataSourceSelectComposite selection = this.getSelectionComposite(workflow);
-		
-		workflow.setTopControl(selection);
-		selection.layout();
-		
-		if(selection.isPress()) {
-			this.setNextState(new PositioningState());
-		} else {
-			this.setNextState(this);
-		}
-	}
 
-	private void recursiveHide(Control ctrl) {
-		if(ctrl instanceof Composite) {
-			Composite comp = (Composite)ctrl;
-			Control[] childs = comp.getChildren();
-			for(int i = 0; i < childs.length; i++) {
-				this.recursiveHide(childs[i]);
+		if (workflow.getDataSource() == null) {
+			DataSourceSelectComposite selection = this
+					.getSelectionComposite(workflow);
+
+			workflow.setTopControl(selection);
+			selection.layout();
+
+			File source = selection.getSelected();
+			if(source != null) {
+				workflow.setDataSource(source);
 			}
+
+			if (workflow.getDataSource() == null) {
+				// Not selected yet
+				this.setNextState(this);
+				return;
+			} 
 		}
-		ctrl.setVisible(false);
+		log.debug("Got Datasource: " + workflow.getDataSource().getAbsolutePath());
+		this.setNextState(new PositioningState());
 	}
 	
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
-	 */
 	@Override
-	public void hideGUI() {
-		/*if(this.selectionComposite != null) {
-			Shell shell = this.selectionComposite.getShell();
-			Composite comp = this.selectionComposite.getParent();
-			recursiveHide(this.selectionComposite);
-			this.selectionComposite.layout();
-			//this.selectionComposite.setVisible(false);
-			comp.layout();
-			//shell.pack(true);
-			shell.layout(true);
-		}*/
+	public String toString()  {
+		return "DataSourceSelectionState";
 	}
-
 }

@@ -60,9 +60,4 @@ public abstract class WorkflowState {
 	 * @param workflow
 	 */
 	public abstract void update(Workflow workflow);
-	
-	/**
-	 * Hide the GUI components created in the state
-	 */
-	public abstract void hideGUI();
 }

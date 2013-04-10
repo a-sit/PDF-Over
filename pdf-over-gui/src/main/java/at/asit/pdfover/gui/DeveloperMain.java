@@ -28,7 +28,6 @@ public class DeveloperMain {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(DeveloperMain.class);
 	
 	/**
@@ -40,8 +39,11 @@ public class DeveloperMain {
 		//BasicConfigurator.configure();
 		
 		Workflow flow = new Workflow(args);
+		log.debug("Starting workflow ...");
 		
 		flow.start();
+		
+		log.debug("Ended workflow ...");
 	}
 
 }

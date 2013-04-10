@@ -16,10 +16,15 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.workflow.Workflow;
 import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUS;
+import at.asit.pdfover.signator.Signator;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Starting state of workflow proccess
@@ -28,24 +33,65 @@ import at.asit.pdfover.gui.workflow.WorkflowState;
  */
 public class PrepareConfigurationState extends WorkflowState {
 
+	public final static String BKU_SELECTION_CONFIG = "DEFAULT_BKU";
+
 	/**
 	 * SFL4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(PrepareConfigurationState.class);
-	
+	private static final Logger log = LoggerFactory
+			.getLogger(PrepareConfigurationState.class);
+
 	@Override
 	public void update(Workflow workflow) {
+		// TODO: Read config file and command line arguments
+		// Set usedSignerLib ...
+
+		// Create PDF Signer
+		workflow.setPdfSigner(Signator.getSigner(workflow.getUsedSignerLib()));
+
+		workflow.setParameter(workflow.getPdfSigner().newParameter());
+
+		workflow.setSelectedBKU(PrepareConfigurationState.readSelectedBKU(workflow.getConfigurationValues()));
+		
+		workflow.getParameter().setSignaturePosition(readDefinedPosition(workflow.getConfigurationValues()));
+		
 		this.setNextState(new DataSourceSelectionState());
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
-	 */
 	@Override
-	public void hideGUI() {
-		// TODO Auto-generated method stub
-		
+	public String toString() {
+		return "PrepareConfigurationState";
 	}
 
+	/**
+	 * Gets BKUS value from Properties
+	 * @param props
+	 * @return The BKUS value
+	 */
+	public static BKUS readSelectedBKU(final Properties props) {
+		if (props.containsKey(BKU_SELECTION_CONFIG)) {
+			String value = props.getProperty(BKU_SELECTION_CONFIG);
+			value = value.trim().toLowerCase();
+
+			if (value.equals(BKUS.LOCAL.toString().trim().toLowerCase())) {
+
+				return BKUS.LOCAL;
+			} else if (value
+					.equals(BKUS.MOBILE.toString().trim().toLowerCase())) {
+				return BKUS.MOBILE;
+			}
+		}
+		return BKUS.NONE;
+	}
+	
+	/**
+	 * Gets BKUS value from Properties
+	 * @param props
+	 * @return The BKUS value
+	 */
+	public static SignaturePosition readDefinedPosition(final Properties props) {
+		// TODO
+		return null;
+	}
 }

@@ -37,17 +37,13 @@ public class LocalBKUState extends WorkflowState {
 	 */
 	@Override
 	public void update(Workflow workflow) {
-		// TODO Auto-generated method stub
+		// TODO Process SL Request and set SL Response
 		
+		this.setNextState(new SigningState());
 	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
-	 */
+	
 	@Override
-	public void hideGUI() {
-		// TODO Auto-generated method stub
-		
+	public String toString()  {
+		return "LocalBKUState";
 	}
-
 }

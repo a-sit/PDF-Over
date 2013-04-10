@@ -34,17 +34,14 @@ public class OutputState extends WorkflowState {
 	
 	@Override
 	public void update(Workflow workflow) {
-		// TODO Auto-generated method stub
+		// TODO Preform output operations ... end workflow
 		
+		workflow.exitWorkflow();
 	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
-	 */
+	
 	@Override
-	public void hideGUI() {
-		// TODO Auto-generated method stub
-		
+	public String toString()  {
+		return "OutputState";
 	}
 
 }

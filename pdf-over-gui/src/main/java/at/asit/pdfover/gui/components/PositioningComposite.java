@@ -17,12 +17,16 @@ package at.asit.pdfover.gui.components;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.Workflow;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * 
@@ -31,10 +35,55 @@ import at.asit.pdfover.gui.workflow.Workflow;
 public class PositioningComposite extends Composite implements StateComposite {
 
 	/**
+	 * Selection listener when position was fixed
+	 */
+	private final class PositionSelectedListener implements SelectionListener {
+		
+		/**
+		 * Default constructor
+		 */
+		public PositionSelectedListener() {
+			// Nothing to do
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			// TODO: FIX to get real position
+			PositioningComposite.this.setPosition(new SignaturePosition()); // Setting auto position for testing
+			PositioningComposite.this.workflow.update();
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// Nothing to do
+		}
+	}
+
+	/**
 	 * SFL4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
+
+	private Workflow workflow;
+	
+	private SignaturePosition position = null;
+	
+	/**
+	 * Gets the Position
+	 * @return
+	 */
+	public SignaturePosition getPosition() {
+		return this.position;
+	}
+
+	/**
+	 * Sets the position
+	 * @param position
+	 */
+	public void setPosition(SignaturePosition position) {
+		this.position = position;
+	}
 
 	/**
 	 * Create the composite.
@@ -43,9 +92,17 @@ public class PositioningComposite extends Composite implements StateComposite {
 	 */
 	public PositioningComposite(Composite parent, int style, Workflow workflow) {
 		super(parent, style);
+		
+		this.workflow = workflow;
+		
 		Label test = new Label(this, SWT.NATIVE);
-		test.setBounds(10, 20, 100, 50);
-		test.setText("POSITIONING ----");
+		test.setBounds(10, 20, 100, 30);
+		test.setText("POSITIONING ---- TODO!!");
+		
+		Button btn_position = new Button(this, SWT.NATIVE | SWT.RESIZE);
+		btn_position.setBounds(10, 50, 100, 30);
+		btn_position.setText("FAKE Position");
+		btn_position.addSelectionListener(new PositionSelectedListener());
 	}
 
 	@Override
