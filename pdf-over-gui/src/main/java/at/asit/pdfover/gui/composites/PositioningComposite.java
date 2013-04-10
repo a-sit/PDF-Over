@@ -45,8 +45,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 import com.sun.pdfview.PDFFile;
 
 /**
- * 
- *
+ * Composite which allows to position the signature on a preview of the document 
  */
 public class PositioningComposite extends StateComposite {
 	/**
@@ -54,6 +53,9 @@ public class PositioningComposite extends StateComposite {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
+
+	/** How far to displace the signature with the arrow keys */
+	private static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	private SignaturePanel viewer = null;
 
@@ -139,6 +141,8 @@ public class PositioningComposite extends StateComposite {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int newPage = PositioningComposite.this.currentPage;
+			int sigXOffset = 0;
+			int sigYOffset = 0;
 
 			switch (e.keyCode)
 			{
@@ -164,10 +168,29 @@ public class PositioningComposite extends StateComposite {
 				case SWT.KEYPAD_CR:
 					PositioningComposite.this.setFinalPosition();
 					break;
+
+				case SWT.ARROW_LEFT:
+					sigXOffset -= SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					break;
+
+				case SWT.ARROW_RIGHT:
+					sigXOffset += SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					break;
+
+				case SWT.ARROW_UP:
+					sigYOffset -= SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					break;
+
+				case SWT.ARROW_DOWN:
+					sigYOffset += SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					break;
 			}
 
 			if (newPage != PositioningComposite.this.currentPage)
 				showPage(newPage);
+
+			if (sigXOffset != 0 || sigYOffset != 0)
+				PositioningComposite.this.translateSignaturePosition(sigXOffset, sigYOffset);
 		}
 	};
 
@@ -221,6 +244,15 @@ public class PositioningComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		this.layout(true, true);
+	}
+
+	/**
+	 * Translate the signature placeholder position
+	 * @param sigXOffset signature placeholder horizontal position offset
+	 * @param sigYOffset signature placeholder vertical position offset
+	 */
+	public void translateSignaturePosition(int sigXOffset, int sigYOffset) {
+		PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset, sigYOffset);
 	}
 
 	/**

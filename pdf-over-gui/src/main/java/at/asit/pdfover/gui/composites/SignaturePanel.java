@@ -136,6 +136,15 @@ public class SignaturePanel extends JPanel {
 	}
 
 	/**
+	 * Translate the signature placeholder position
+	 * @param sigXOffset signature placeholder horizontal position offset
+	 * @param sigYOffset signature placeholder vertical position offset
+	 */
+	public void translateSignaturePosition(int sigXOffset, int sigYOffset) {
+		updateSigPos((int) this.sigScreenPos.getX() + sigXOffset, (int) this.sigScreenPos.getY() + sigYOffset);
+	}
+
+	/**
 	 * Get the current horizontal position of the signature
 	 * @return signature x coordinate
 	 */
