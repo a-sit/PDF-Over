@@ -347,35 +347,35 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		Properties props = new Properties();
 		props.clear();
 
-		props.setProperty(BKU_CONFIG, this.getDefaultBKU().toString());
-		props.setProperty(PROXY_HOST_CONFIG, this.getProxyHost());
-		props.setProperty(PROXY_PORT_CONFIG,
+		props.setProperty(Constants.CFG_BKU, this.getDefaultBKU().toString());
+		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHost());
+		props.setProperty(Constants.CFG_PROXY_PORT,
 				Integer.toString(this.getProxyPort()));
-		props.setProperty(EMBLEM_CONFIG, this.getDefaultEmblem());
-		props.setProperty(SIGNATURE_NOTE_CONFIG, this.getSignatureNote());
-		props.setProperty(MOBILE_NUMBER_CONFIG, this.getDefaultMobileNumber());
-		props.setProperty(OUTPUT_FOLDER_CONFIG, this.getDefaultOutputFolder());
-		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG,
+		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblem());
+		props.setProperty(Constants.CFG_SIGNATURE_NOTE, this.getSignatureNote());
+		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumber());
+		props.setProperty(Constants.CFG_OUTPUT_FOLDER, this.getDefaultOutputFolder());
+		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(this.getPlaceholderTransparency()));
 
 		Locale configLocale = this.getConfigLocale();
 		if(configLocale != null) {
-			props.setProperty(LOCALE_CONFIG, LocaleSerializer.getParsableString(configLocale));
+			props.setProperty(Constants.CFG_LOCALE, LocaleSerializer.getParsableString(configLocale));
 		}
 		
 		Locale signLocale = this.getSignLocale();
 		if(signLocale != null) {
-			props.setProperty(SIGN_LOCALE_CONFIG, LocaleSerializer.getParsableString(signLocale));
+			props.setProperty(Constants.CFG_SIGN_LOCALE, LocaleSerializer.getParsableString(signLocale));
 		}
 		
 		SignaturePosition pos = this.getDefaultSignaturePosition();
 
 		if (pos == null) {
-			props.setProperty(SIGNATURE_POSITION_CONFIG, ""); //$NON-NLS-1$
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //$NON-NLS-1$
 		} else if (pos.useAutoPositioning()) {
-			props.setProperty(SIGNATURE_POSITION_CONFIG, "auto"); //$NON-NLS-1$
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto"); //$NON-NLS-1$
 		} else {
-			props.setProperty(SIGNATURE_POSITION_CONFIG,
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION,
 					String.format((Locale) null, "x=%f;y=%f;p=%d", //$NON-NLS-1$
 							pos.getX(), pos.getY(), pos.getPage()));
 		}
@@ -404,32 +404,32 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		// Set Emblem
 		this.setDefaultEmblem(config
-				.getProperty(ConfigManipulator.EMBLEM_CONFIG));
+				.getProperty(Constants.CFG_EMBLEM));
 
 		// Set Mobile Phone Number
 		this.setDefaultMobileNumber(config
-				.getProperty(ConfigManipulator.MOBILE_NUMBER_CONFIG));
+				.getProperty(Constants.CFG_MOBILE_NUMBER));
 
 		// Set signature note
 		this.setSignatureNote(config
-				.getProperty(ConfigManipulator.SIGNATURE_NOTE_CONFIG));
+				.getProperty(Constants.CFG_SIGNATURE_NOTE));
 
 		// Set Proxy Host
 		this.setProxyHost(config
-				.getProperty(ConfigManipulator.PROXY_HOST_CONFIG));
+				.getProperty(Constants.CFG_PROXY_HOST));
 
 		// Set Output Folder
 		this.setDefaultOutputFolder(config
-				.getProperty(ConfigManipulator.OUTPUT_FOLDER_CONFIG));
+				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
-		String localString = config.getProperty(ConfigManipulator.LOCALE_CONFIG);
+		String localString = config.getProperty(Constants.CFG_LOCALE);
 		
 		Locale targetLocale = LocaleSerializer.parseFromString(localString);
 		if(targetLocale != null) {
 			this.setLocale(targetLocale);
 		}
 		
-		String signlocalString = config.getProperty(ConfigManipulator.SIGN_LOCALE_CONFIG);
+		String signlocalString = config.getProperty(Constants.CFG_SIGN_LOCALE);
 		
 		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
 		if(signtargetLocale != null) {
@@ -437,7 +437,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
  		
 		String bku = config
-				.getProperty(ConfigManipulator.MOBILE_BKU_URL_CONFIG);
+				.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		
 		if (bku != null && !bku.isEmpty()) {
 			this.mobileBKU = bku;
@@ -445,7 +445,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		// Set Proxy Port
 		String proxyPortString = config
-				.getProperty(ConfigManipulator.PROXY_PORT_CONFIG);
+				.getProperty(Constants.CFG_PROXY_PORT);
 
 		if (proxyPortString != null && !proxyPortString.trim().isEmpty()) {
 			int port = Integer.parseInt(proxyPortString);
@@ -458,7 +458,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 
 		// Set Default BKU
-		String bkuString = config.getProperty(ConfigManipulator.BKU_CONFIG);
+		String bkuString = config.getProperty(Constants.CFG_BKU);
 
 		BKUs defaultBKU = BKUs.NONE;
 
@@ -479,7 +479,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		try {
 			transparency = Integer
 					.parseInt(config
-							.getProperty(ConfigManipulator.SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG));
+							.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY));
 		} catch (NumberFormatException e) {
 			log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
 			// ignore parsing exception
@@ -488,7 +488,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		// Set Signature Position
 		String signaturePosition = config
-				.getProperty(ConfigManipulator.SIGNATURE_POSITION_CONFIG);
+				.getProperty(Constants.CFG_SIGNATURE_POSITION);
 
 		SignaturePosition position = null;
 
@@ -547,7 +547,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSigantureNote()
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureNote()
 	 */
 	@Override
 	public String getSignatureNote() {

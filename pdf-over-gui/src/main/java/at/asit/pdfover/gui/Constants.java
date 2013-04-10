@@ -86,11 +86,56 @@ public class Constants {
 	/** Configuration directory */
 	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
 
-
 	/** The default configuration file name */
 	public static final String DEFAULT_CONFIG_FILENAME = "PDFOver.config"; //$NON-NLS-1$
 
 	/** The default log4j file name */
 	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
+
+	/* Configuration parameters */
+
+	/** The bku config parameter */
+	public static final String CFG_BKU = "BKU"; //$NON-NLS-1$
+
+	/** The value for the Signature position in the configuration file
+	 * values for this entry are:
+	 *
+	 * x=vx;y=vy;p=vp or auto
+	 *
+	 * vx:= float value
+	 * vy:= float value
+	 * vp:= integer value
+	 */
+	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION"; //$NON-NLS-1$
+
+	/** This signature placeholder transparency config parameter (0-255) */
+	public static final String  CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
+
+	/** The mobile number config parameter */
+	public static final String CFG_MOBILE_NUMBER = "MOBILE_NUMBER"; //$NON-NLS-1$
+
+	/** The signature note config parameter */
+	public static final String CFG_SIGNATURE_NOTE = "SIGNATURE_NOTE"; //$NON-NLS-1$
+
+	/** Mobile bku url config parameter */
+	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL"; //$NON-NLS-1$
+
+	/** The emblem config parameter */
+	public static final String CFG_EMBLEM = "EMBLEM"; //$NON-NLS-1$
+
+	/** The locale config parameter */
+	public static final String CFG_LOCALE = "LOCALE"; //$NON-NLS-1$
+
+	/** The signature locale config parameter */
+	public static final String CFG_SIGN_LOCALE = "SIGNLOCALE"; //$NON-NLS-1$
+
+	/** The proxy host config parameter */
+	public static final String CFG_PROXY_HOST = "PROXY_HOST"; //$NON-NLS-1$
+
+	/** The proxy port config parameter */
+	public static final String CFG_PROXY_PORT = "PROXY_PORT"; //$NON-NLS-1$
+
+	/** The output folder config parameter */
+	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 
 }
