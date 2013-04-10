@@ -63,13 +63,10 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			
 			if(!MobileBKUEnterTANComposite.this.btn_ok.getEnabled()) {
 				return;
 			}
-			
-			
-			
+
 			String tan = MobileBKUEnterTANComposite.this.txt_tan.getText();
 
 			tan = tan.trim();
@@ -151,6 +148,19 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lblTries.setText(tries == 1 ? Messages.getString("tanEnter.try") : //$NON-NLS-1$
 				String.format(Messages.getString("tanEnter.tries"), tries)); //$NON-NLS-1$
 	}
+
+	/**
+	 * Set an error message
+	 * @param errorMessage the error message
+	 */
+	public void setErrorMessage(String errorMessage) {
+		if (errorMessage == null)
+			this.lblTries.setText(""); //$NON-NLS-1$
+		else
+			this.lblTries.setText(
+					Messages.getString("error.Title") + ": " + errorMessage); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 
 	/**
 	 * Sets the message
@@ -423,5 +433,4 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 				.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 	}
-
 }

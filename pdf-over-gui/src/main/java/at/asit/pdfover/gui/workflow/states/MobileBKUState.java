@@ -289,13 +289,13 @@ public class MobileBKUState extends State {
 			} else {
 				tan.setRefVal(mobileStatus.getRefVal());
 				tan.setSignatureData(mobileStatus.getSignatureDataURL());
-
+				tan.setErrorMessage(mobileStatus.getErrorMessage());
 				if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
 						&& mobileStatus.getTanTries() > 0) {
 					// show warning message x tries left!
+					// overrides error message
 
 					tan.setTries(mobileStatus.getTanTries());
-
 				}
 				tan.enableButton();
 				this.stateMachine.getGUIProvider().display(tan);

@@ -178,6 +178,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleTANResponse(String responseData) {
+		getStatus().setErrorMessage(null);
 		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 			// success !!
 			
