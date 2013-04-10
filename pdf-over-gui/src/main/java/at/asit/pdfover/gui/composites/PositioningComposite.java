@@ -313,13 +313,13 @@ public class PositioningComposite extends StateComposite {
 					PositioningComposite.this.btnNewPage.setText(
 							Messages.getString("positioning.newPage")); //$NON-NLS-1$
 					PositioningComposite.this.btnNewPage.setSelection(false);
-					PositioningComposite.this.scrollbar.setMaximum(numPages);
+					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
 				} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 					// Go to new page
 					PositioningComposite.this.btnNewPage.setText(
 							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
 					PositioningComposite.this.btnNewPage.setSelection(true);
-					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
+					PositioningComposite.this.scrollbar.setMaximum(numPages + 2);
 				}
 				PositioningComposite.this.scrollbar.setSelection(currentPage);
 				PositioningComposite.this.lblPage.setText(String.format(
