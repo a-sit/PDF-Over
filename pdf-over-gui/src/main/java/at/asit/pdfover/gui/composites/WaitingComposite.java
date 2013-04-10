@@ -21,8 +21,10 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -39,10 +41,19 @@ public class WaitingComposite extends StateComposite {
 		super(parent, style, state);
 		setLayout(new FormLayout());
 		
+		Label lbl_description = new Label(this, SWT.NATIVE);
+		FormData fd_lbl_description = new FormData();
+		fd_lbl_description.bottom = new FormAttachment(50, -10);
+		fd_lbl_description.left = new FormAttachment(0, +10);
+		fd_lbl_description.right = new FormAttachment(100, -10);
+		lbl_description.setLayoutData(fd_lbl_description);
+		lbl_description.setAlignment(SWT.CENTER);
+		lbl_description.setText(Messages.getString("waiting.message")); //$NON-NLS-1$
+		
 		ProgressBar progressBar = new ProgressBar(this, SWT.HORIZONTAL | SWT.INDETERMINATE);
 		FormData fd_progressBar = new FormData();
-		fd_progressBar.top = new FormAttachment(50, -15);
-		fd_progressBar.bottom = new FormAttachment(50, +15);
+		fd_progressBar.top = new FormAttachment(50, +10);
+		fd_progressBar.bottom = new FormAttachment(50, +40);
 		fd_progressBar.left = new FormAttachment(50, -100);
 		fd_progressBar.right = new FormAttachment(50, +100);
 		progressBar.setLayoutData(fd_progressBar);
