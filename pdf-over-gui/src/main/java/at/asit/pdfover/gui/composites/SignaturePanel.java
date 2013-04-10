@@ -27,6 +27,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -49,6 +50,9 @@ public class SignaturePanel extends JPanel {
 	/** Default serial version ID */
 	private static final long serialVersionUID = 1L;
 
+	/** Signature transparency (0-255) */
+	private static final int SIG_TRANSPARENCY = 170;
+
 	/** The PDF file being displayed */
 	private PDFFile pdf = null;
 	/** The image of the rendered PDF page being displayed */
@@ -69,6 +73,8 @@ public class SignaturePanel extends JPanel {
 	Point2D sigScreenPos = null;
 	/** The signature placeholder image */
 	private Image sigPlaceholder = null;
+	/** Current scaled signature placeholder image */
+	BufferedImage sigPlaceholderScaled = null;
 	/** Width of the signature placeholder in page space */
 	private int sigPageWidth = 0;
 	/** Height of the signature placeholder in page space */
@@ -77,6 +83,10 @@ public class SignaturePanel extends JPanel {
 	int sigScreenWidth = 0;
 	/** Height of the signature placeholder in screen space */
 	int sigScreenHeight = 0;
+	/** Previous Width of the signature placeholder in screen space */
+	int prevSigScreenWidth = 0;
+	/** Previous Height of the signature placeholder in screen space */
+	int prevSigScreenHeight = 0;
 
 	/**
 	 * Create a new PagePanel, with a default size of 800 by 600 pixels.
@@ -242,9 +252,28 @@ public class SignaturePanel extends JPanel {
 					g.drawRect(sigX, sigY, 100, 40);
 				}
 				else {
-					Image placeholder = this.sigPlaceholder.getScaledInstance(
-							this.sigScreenWidth, this.sigScreenHeight, Image.SCALE_SMOOTH);
-					g.drawImage(placeholder, sigX, sigY, null);
+					if ((this.sigScreenWidth != this.prevSigScreenWidth)
+							|| (this.sigScreenHeight != this.prevSigScreenHeight))
+					{
+						this.prevSigScreenWidth = this.sigScreenWidth;
+						this.prevSigScreenHeight = this.sigScreenHeight;
+						Image placeholder = this.sigPlaceholder.getScaledInstance(
+								this.sigScreenWidth, this.sigScreenHeight, Image.SCALE_SMOOTH);
+						this.sigPlaceholderScaled = new BufferedImage(this.sigScreenWidth, this.sigScreenHeight, BufferedImage.TYPE_INT_ARGB);
+						Graphics g2 = this.sigPlaceholderScaled.getGraphics();
+						g2.drawImage(placeholder, 0, 0, null);
+						int[] phpixels = new int[this.sigScreenWidth * this.sigScreenHeight];
+						phpixels = this.sigPlaceholderScaled.getRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
+						for (int i = 0; i < phpixels.length; ++i) {
+							Color c = new Color(phpixels[i]);
+							c = new Color(c.getRed(), c.getGreen(), c.getBlue(), SIG_TRANSPARENCY);
+							phpixels[i] = c.getRGB();
+						}
+						this.sigPlaceholderScaled.setRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
+					}
+					g.drawImage(this.sigPlaceholderScaled, sigX, sigY, null);
+					g.setColor(Color.BLUE);
+					g.drawRect(sigX, sigY, this.sigScreenWidth, this.sigScreenHeight);
 				}
 
 			} else {
