@@ -615,12 +615,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setToolTipText(Messages
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
+		this.lblTransparenz.setText(Messages
+				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
 		this.lblTransparenzLinks.setText(Messages
 				.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
 		this.lblTransparenzRechts.setText(Messages
 				.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
-		this.lblTransparenz.setText(Messages
-				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
+		this.sclTransparenz.setToolTipText(Messages
+				.getString("advanced_config.SigPHTransparencyTooltip")); //$NON-NLS-1$
 		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
 		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
 
