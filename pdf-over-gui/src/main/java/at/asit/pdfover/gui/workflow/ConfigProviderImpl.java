@@ -52,7 +52,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	/**
 	 * An empty property entry
 	 */
-	public static final String STRING_EMPTY = ""; //$NON-NLS-1$
+	private static final String STRING_EMPTY = ""; //$NON-NLS-1$
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
@@ -139,30 +139,30 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		// Set Default BKU
 		String bkuString = config.getProperty(Constants.CFG_BKU);
-
 		BKUs defaultBKU = BKUs.NONE;
-
-		try {
-			defaultBKU = BKUs.valueOf(bkuString);
-		} catch (IllegalArgumentException ex) {
-			log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
-			defaultBKU = BKUs.NONE;
-		} catch (NullPointerException ex) {
-			log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
-			defaultBKU = BKUs.NONE;
+		if (bkuString != null) {
+			try {
+				defaultBKU = BKUs.valueOf(bkuString);
+			} catch (IllegalArgumentException ex) {
+				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
+				defaultBKU = BKUs.NONE;
+			} catch (NullPointerException ex) {
+				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
+				defaultBKU = BKUs.NONE;
+			}
 		}
-
 		this.setDefaultBKU(defaultBKU);
 
 		// Set Signature placeholder transparency
 		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
-		try {
-			transparency = Integer
-					.parseInt(config
-							.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY));
-		} catch (NumberFormatException e) {
-			log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
-			// ignore parsing exception
+		String trans = config.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY);
+		if (trans != null) {
+			try {
+				transparency = Integer.parseInt(trans);
+			} catch (NumberFormatException e) {
+				log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
+				// ignore parsing exception
+			}
 		}
 		this.setPlaceholderTransparency(transparency);
 
@@ -367,7 +367,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public BKUs getDefaultBKU() {
 		BKUs bku = this.configurationOverlay.getDefaultBKU();
 		if (bku == BKUs.NONE)
-			bku = this.configuration.getDefaultBKU();
+			bku = getDefaultBKUPersistent();
 		return bku;
 	}
 
@@ -477,7 +477,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getDefaultMobileNumber() {
 		String number = this.configurationOverlay.getMobileNumber();
 		if (number == null)
-			number = this.configuration.getMobileNumber();
+			number = getDefaultMobileNumberPersistent();
 		return number;
 	}
 
@@ -486,7 +486,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultMobileNumberPersistent() {
-		return this.configuration.getMobileNumber();
+		String number = this.configuration.getMobileNumber();
+		if (number == null)
+			number = STRING_EMPTY;
+		return number;
 	}
 
 	/**
@@ -525,7 +528,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getDefaultMobilePassword() {
 		String password = this.configurationOverlay.getMobilePassword();
 		if (password == null)
-			password = this.configuration.getMobilePassword();
+			password = getDefaultMobilePasswordPersistent();
 		return password;
 	}
 
@@ -534,7 +537,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultMobilePasswordPersistent() {
-		return this.configuration.getMobilePassword();
+		String password = this.configuration.getMobilePassword();
+		if (password == null)
+			password = STRING_EMPTY;
+		return password;
 	}
 
 	/**
@@ -591,7 +597,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getDefaultEmblem() {
 		String emblem = this.configurationOverlay.getEmblem();
 		if (emblem == null)
-			emblem = this.configuration.getEmblem();
+			emblem = getDefaultEmblemPersistent();
 		return emblem;
 	}
 
@@ -600,7 +606,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultEmblemPersistent() {
-		return this.configuration.getEmblem();
+		String emblem = this.configuration.getEmblem();
+		if (emblem == null)
+			emblem = STRING_EMPTY;
+		return emblem;
 	}
 
 	/**
@@ -639,7 +648,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getProxyHost() {
 		String host = this.configurationOverlay.getProxyHost();
 		if (host == null)
-			host = this.configuration.getProxyHost();
+			host = getProxyHostPersistent();
 		return host;
 	}
 
@@ -648,7 +657,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyHostPersistent() {
-		return this.configuration.getProxyHost();
+		String host = this.configuration.getProxyHost();
+		if (host == null)
+			host = STRING_EMPTY;
+		return host;
 	}
 
 	/**
@@ -689,8 +701,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public int getProxyPort() {
 		int port = this.configurationOverlay.getProxyPort();
 		if (port == -1)
-			port = this.configuration.getProxyPort();
-		return this.configuration.getProxyPort();
+			port = getProxyPortPersistent();
+		return port;
 	}
 
 	/* (non-Javadoc)
@@ -738,7 +750,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getDefaultOutputFolder() {
 		String outputFolder = this.configurationOverlay.getOutputFolder();
 		if (outputFolder == null)
-			outputFolder = this.configuration.getOutputFolder();
+			outputFolder = getDefaultOutputFolderPersistent();
 		return outputFolder;
 	}
 
@@ -747,7 +759,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultOutputFolderPersistent() {
-		return this.configuration.getOutputFolder();
+		String outputFolder = this.configuration.getOutputFolder();
+		if (outputFolder == null)
+			outputFolder = STRING_EMPTY;
+		return outputFolder;
 	}
 
 	/*
@@ -783,7 +798,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getSignatureNote() {
-		return this.configuration.getSignatureNote();
+		String note = this.configuration.getSignatureNote();
+		if (note == null)
+			note = STRING_EMPTY;
+		return note;
 	}
 
 	/* (non-Javadoc)
