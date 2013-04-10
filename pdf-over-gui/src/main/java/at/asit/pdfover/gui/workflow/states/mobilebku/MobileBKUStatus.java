@@ -59,19 +59,21 @@ public class MobileBKUStatus {
 	}
 
 	/**
-	 * @return the tanTries
+	 * Get number of TAN tries left
+	 * @return the number of TAN tries left
 	 */
 	public int getTanTries() {
 		return this.tanTries;
 	}
 
 	/**
-	 * Decreases the TAN Tries!
+	 * Set number of TAN tries left
+	 * @param tries the number of TAN tries left
 	 */
-	public void decreaseTanTries() {
-		this.tanTries--;
+	public void setTanTries(int tries) {
+		this.tanTries = tries;
 	}
-	
+
 	/**
 	 * @return the tan
 	 */

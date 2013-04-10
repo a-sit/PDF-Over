@@ -122,7 +122,13 @@ public class ATrustHandler extends MobileBKUHandler {
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 			getState().setCommunicationState(MobileBKUCommunicationState.FINAL);
 		} else {
-			getStatus().decreaseTanTries();
+			try {
+				String tries = MobileBKUHelper.extractTag(
+						responseData, "Sie haben noch", "Versuch"); //$NON-NLS-1$ //$NON-NLS-2$
+				getStatus().setTanTries(Integer.parseInt(tries.trim()));
+			} catch (Exception e) {
+				log.debug("Error parsing TAN response", e); //$NON-NLS-1$
+			}
 
 			if (getStatus().getTanTries() <= 0) {
 				// move to POST_REQUEST
