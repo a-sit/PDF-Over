@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui;
 
+import java.util.Locale;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
@@ -24,7 +26,10 @@ import org.eclipse.swt.widgets.Display;
 public class Constants {
 
 	/** Current display - used for Colors */
-	static private Display display = Display.getCurrent();
+	private static Display display = Display.getCurrent();
+
+	/** Supported locales */
+	public static final Locale[] SUPPORTED_LOCALES = { Locale.ENGLISH, Locale.GERMAN };
 
 	/** Main window height */
 	public static final int MAINWINDOW_HEIGHT = 780;
@@ -50,9 +55,7 @@ public class Constants {
 	/** Main bar inactive text color */
 	public static final Color MAINBAR_INACTIVE_TEXTCOLOR = new Color(display, 0x40, 0x40, 0x40);
 
-	/**
-	 * Drag and Drop background color
-	 */
+	/** Drop background color */
 	public static final Color DROP_BACK = new Color(display, 0xFF, 0xFF, 0xFF);
 	
 	/** Drop border color */

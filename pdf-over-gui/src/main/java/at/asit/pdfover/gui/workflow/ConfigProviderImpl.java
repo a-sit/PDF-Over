@@ -368,7 +368,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		Locale configLocale = this.getConfigLocale();
 		if(configLocale != null) {
-			props.setProperty(LOCALE_CONFIG, LocaleSerializer.getParseableString(configLocale));
+			props.setProperty(LOCALE_CONFIG, LocaleSerializer.getParsableString(configLocale));
 		}
 		
 		SignaturePosition pos = this.getDefaultSignaturePosition();
@@ -427,9 +427,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		String localString = config.getProperty(ConfigManipulator.LOCALE_CONFIG);
 		
-		Locale targetLocal = LocaleSerializer.parseFromString(localString);
-		if(targetLocal != null) {
-			this.setLocale(targetLocal);
+		Locale targetLocale = LocaleSerializer.parseFromString(localString);
+		if(targetLocale != null) {
+			this.setLocale(targetLocale);
 		}
  		
 		String bku = config

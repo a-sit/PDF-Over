@@ -68,7 +68,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	Combo cmbBKUAuswahl;
 	Combo cmbLocaleAuswahl;
 	String[] bkuStrings;
-	String[] localeStrings;
 	Button btnAutomatischePositionierung;
 	Scale sclTransparenz;
 	private Group grpSignatur;
@@ -394,12 +393,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.cmbLocaleAuswahl.setFont(new Font(Display.getCurrent(),
 				fD_cmbLocaleAuswahl[0]));
 
-		this.localeStrings = new String[2]; 
-		
-		this.localeStrings[0] = LocaleSerializer.getParseableString(Locale.ENGLISH);
-		this.localeStrings[1] = LocaleSerializer.getParseableString(Locale.GERMAN);
-		
-		this.cmbLocaleAuswahl.setItems(this.localeStrings);
+		String[] localeStrings = new String[Constants.SUPPORTED_LOCALES.length];
+
+		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
+			localeStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
+		}
+
+		this.cmbLocaleAuswahl.setItems(localeStrings);
 
 		this.cmbLocaleAuswahl.setLayoutData(fd_cmbLocaleAuswahl);
 		
@@ -410,14 +410,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int selectionIndex = getLocaleElementIndex((AdvancedConfigurationComposite.this.configurationContainer
-						.getLocale()));
-				if (AdvancedConfigurationComposite.this.cmbLocaleAuswahl
-						.getSelectionIndex() != selectionIndex) {
-					selectionIndex = AdvancedConfigurationComposite.this.cmbLocaleAuswahl
-							.getSelectionIndex();
-					performLocleSelectionChanged((AdvancedConfigurationComposite.this.cmbLocaleAuswahl
-							.getItem(selectionIndex)));
+				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer
+						.getLocale();
+				Locale selectedLocale = Constants.
+						SUPPORTED_LOCALES[AdvancedConfigurationComposite.this.cmbLocaleAuswahl
+						                  .getSelectionIndex()];
+				if (!currentLocale.equals(selectedLocale)) {
+					performLocaleSelectionChanged(selectedLocale);
 				}
 			}
 		});
@@ -454,47 +453,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		log.warn("NO BKU match for " + bkuName); //$NON-NLS-1$
 		return 0;
 	}
-	
-	int getLocaleElementIndex(Locale locale) {
-		String lookup = LocaleSerializer.getParseableString(locale);
-		//String bkuName = Messages.getString(lookup);
-
-		for (int i = 0; i < this.localeStrings.length; i++) {
-			if (this.localeStrings[i].equals(lookup)) {
-				log.debug("BKU: " + lookup + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
-				return i;
-			}
-		}
-
-		log.warn("NO Locale match for " + lookup); //$NON-NLS-1$
-		return 0;
-	}
-	
-	void performLocleSelectionChanged(String selected) {
-		try {
-			Locale locale = LocaleSerializer.parseFromString(selected);
-			if(locale != null) {
-				this.performLocaleSelectionChanged(locale);
-			} else {
-				log.error("Failed to parse LOCALE value: " + selected); //$NON-NLS-1$
-				ErrorDialog dialog = new ErrorDialog(getShell(),
-						Messages.getString("error.InvalidLocale"), ERROR_BUTTONS.OK); //$NON-NLS-1$
-				dialog.open();
-			}
-		} catch (Exception ex) {
-			log.error("Failed to parse LOCALE value: " + selected, ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(),
-					Messages.getString("error.InvalidLocale"), ERROR_BUTTONS.OK); //$NON-NLS-1$
-			dialog.open();
-		}
-	}
-	
-	void performLocaleSelectionChanged(Locale selected) {
-		log.debug("Selected Locale: " + selected.toString()); //$NON-NLS-1$
-		this.configurationContainer.setLocale(selected);
-		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
-	}
-	
 
 	void performBKUSelectionChanged(BKUs selected) {
 		log.debug("Selected BKU: " + selected.toString()); //$NON-NLS-1$
@@ -504,7 +462,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performBKUSelectionChanged(String selected) {
 		try {
-			BKUs bkuvalue = resolvBKU(selected);
+			BKUs bkuvalue = resolveBKU(selected);
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
 			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
@@ -514,7 +472,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
-	BKUs resolvBKU(String localizedBKU) {
+	BKUs resolveBKU(String localizedBKU) {
 		int blen = BKUs.values().length;
 
 		for (int i = 0; i < blen; i++) {
@@ -525,6 +483,24 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		}
 
 		return BKUs.NONE;
+	}
+
+	int getLocaleElementIndex(Locale locale) {
+		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
+			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
+				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
+				return i;
+			}
+		}
+
+		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
+		return 0;
+	}
+
+	void performLocaleSelectionChanged(Locale selected) {
+		log.debug("Selected Locale: " + selected); //$NON-NLS-1$
+		this.configurationContainer.setLocale(selected);
+		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
 	}
 
 	void performPositionSelection(boolean automatic) {

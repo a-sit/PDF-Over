@@ -22,7 +22,6 @@ import java.util.Locale;
  * 
  */
 public class LocaleSerializer {
-
 	/**
 	 * Parse a locale from a string
 	 * @param localeString the string
@@ -34,24 +33,23 @@ public class LocaleSerializer {
 			return null;
 		}
 		
-		Locale targetLocal = null;
+		Locale targetLocale = null;
 		Locale[] locale = Locale.getAvailableLocales();
 		for(int i = 0; i < locale.length; i++) {
 			if(locale[i].toString().equals(localeString)) {
-				targetLocal = locale[i];
+				targetLocale = locale[i];
 				break;
 			}
 		}
-		return targetLocal;
+		return targetLocale;
 	}
-	
+
 	/**
-	 * creates a parseable string for a locale
+	 * creates a parsable string for a locale
 	 * @param locale the locale
-	 * @return the parseable string
+	 * @return the parsable string
 	 */
-	public static String getParseableString(Locale locale) {
+	public static String getParsableString(Locale locale) {
 		return locale.toString();
 	}
-	
 }
