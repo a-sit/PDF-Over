@@ -5,21 +5,28 @@
 	<info>
 		<appname>PDFOver</appname>
 		<appversion>4.0</appversion>
-		<uninstaller write="no" />
+		<uninstaller write="yes" />
 		<javaversion>1.6</javaversion>
 		<authors>
-			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
+			<author name="A-SIT (Secure Information Technology Center - Austria)"
+				email="" />
 		</authors>
-		<uninstaller/>
+		<uninstaller />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
-		<run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7"/>
+		<run-privileged
+			condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7" />
 	</info>
 
-	<guiprefs resizable="no" width="480" height="360">
-		<laf name="looks">
-			<param name="variant" value="windows" />
+	<guiprefs resizable="yes" width="480" height="360">
+		<laf name="substance">
 			<os family="windows" />
+			<os family="unix" />
+			<param name="variant" value="mist-silver" />
+		</laf>
+		<laf name="substance">
+			<os family="mac" />
+			<param name="variant" value="mist-aqua" />
 		</laf>
 	</guiprefs>
 
@@ -29,16 +36,15 @@
 	<resources>
 		<res src="./unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
 		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
-		<res id="TargetPanel.dir.windows" src="defaultInstallDir.txt" />
+		<res src="./win_shortcutSpec.xml" id="shortcutSpec.xml" />
+		<res src="defaultInstallDir.txt" id="TargetPanel.dir.windows" />
+		<res id="JFrameIcon.png" src="./icon16x16.png"/>
+		<res src="./customicons.xml" id="customicons.xml" />
 	</resources>
-	
-	<native type="izpack" name="ShellLink.dll">
-		<os family="windows" />
-	</native>
-	<native type="izpack" name="ShellLink_x64.dll">
-		<os family="windows" />
-	</native>
-	
+
+	<native type="izpack" name="ShellLink.dll" />
+	<native type="izpack" name="ShellLink_x64.dll" />
+
 	<variables>
 		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
 	</variables>

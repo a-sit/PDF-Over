@@ -20,8 +20,23 @@
      iconIndex="0"
      type="Application"
      encoding="UTF-8"
-     terminal="false"
-     KdeSubstUID="false"
+     initialState="normal">
+     <createForPack name="main"/>
+   </shortcut>
+   
+   <shortcut
+     name="Uninstall"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/scripts/uninstall_win.bat"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH/lib"
+     description="PDFOver 4.0 Uninstall"
+     type="Application"
+     encoding="UTF-8"
      initialState="normal">
      <createForPack name="main"/>
    </shortcut>
