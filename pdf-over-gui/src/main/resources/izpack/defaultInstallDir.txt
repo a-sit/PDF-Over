@@ -1,1 +1,1 @@
-${ENV[APPDATA]}\PDF-Over
+${ENV[ProgramFiles]}\PDF-Over
