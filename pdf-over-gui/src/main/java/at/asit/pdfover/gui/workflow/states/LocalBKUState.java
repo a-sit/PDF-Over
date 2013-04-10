@@ -19,13 +19,13 @@ package at.asit.pdfover.gui.workflow.states;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Logical state for performing the BKU Request to a local BKU
  */
-public class LocalBKUState extends WorkflowState {
+public class LocalBKUState extends State {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -36,7 +36,7 @@ public class LocalBKUState extends WorkflowState {
 	 * @see at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui.workflow.Workflow)
 	 */
 	@Override
-	public void update(Workflow workflow) {
+	public void run(StateMachine stateMachine) {
 		// TODO Process SL Request and set SL Response
 		
 		this.setNextState(new SigningState());

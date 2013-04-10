@@ -23,13 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.components.DataSourceSelectComposite;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Selects the data source for the signature process.
  */
-public class DataSourceSelectionState extends WorkflowState {
+public class DataSourceSelectionState extends State {
 
 	/**
 	 * SFL4J Logger instance
@@ -39,7 +40,7 @@ public class DataSourceSelectionState extends WorkflowState {
 
 	private DataSourceSelectComposite selectionComposite = null;
 
-	private DataSourceSelectComposite getSelectionComposite(Workflow workflow) {
+	private DataSourceSelectComposite getSelectionComposite(StateMachineImpl workflow) {
 		if (this.selectionComposite == null) {
 			this.selectionComposite = new DataSourceSelectComposite(
 					workflow.getComposite(), SWT.RESIZE, workflow);
@@ -49,7 +50,7 @@ public class DataSourceSelectionState extends WorkflowState {
 	}
 
 	@Override
-	public void update(Workflow workflow) {
+	public void run(StateMachine stateMachine) {
 
 		if (workflow.getDataSource() == null) {
 			DataSourceSelectComposite selection = this

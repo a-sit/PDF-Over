@@ -25,7 +25,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 
-import at.asit.pdfover.gui.workflow.Workflow;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
  * 
@@ -37,14 +37,14 @@ public class WaitingComposite extends Composite {
 	private static final Logger log = LoggerFactory
 			.getLogger(WaitingComposite.class);
 
-	private Workflow workflow;
+	private StateMachineImpl workflow;
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public WaitingComposite(Composite parent, int style, Workflow workflow) {
+	public WaitingComposite(Composite parent, int style, StateMachineImpl workflow) {
 		super(parent, style);
 		setLayout(new FormLayout());
 		

@@ -21,27 +21,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.components.WaitingComposite;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUS;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.State;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 
 /**
  * User waiting state, wait for PDF Signator library to prepare document for signing.
  */
-public class PrepareSigningState extends WorkflowState {
+public class PrepareSigningState extends State {
 
 	/**
 	 * Debug background thread
 	 */
 	private final class DebugSleeperThread implements Runnable {
 		
-		private Workflow workflow;
+		private StateMachineImpl workflow;
 		
 		/**
 		 * Default constructor
 		 * @param work
 		 */
-		public DebugSleeperThread(Workflow work) {
+		public DebugSleeperThread(StateMachineImpl work) {
 			this.workflow = work;
 		}
 		
@@ -64,7 +65,7 @@ public class PrepareSigningState extends WorkflowState {
 	
 	private WaitingComposite selectionComposite = null;
 
-	private WaitingComposite getSelectionComposite(Workflow workflow) {
+	private WaitingComposite getSelectionComposite(StateMachineImpl workflow) {
 		if (this.selectionComposite == null) {
 			this.selectionComposite = new WaitingComposite(
 					workflow.getComposite(), SWT.RESIZE, workflow);
@@ -76,7 +77,7 @@ public class PrepareSigningState extends WorkflowState {
 	private boolean run = false;
 	
 	@Override
-	public void update(Workflow workflow) {
+	public void run(StateMachine stateMachine) {
 		// TODO SHOW BACKGROUND ACTIVITY ....
 		WaitingComposite waiting = this.getSelectionComposite(workflow);
 		
@@ -91,9 +92,9 @@ public class PrepareSigningState extends WorkflowState {
 		
 		// WAIT FOR SLREQUEST and dispatch according to BKU selection
 		
-		if(workflow.getSelectedBKU() == BKUS.LOCAL) {
+		if(workflow.getSelectedBKU() == BKUs.LOCAL) {
 			this.setNextState(new LocalBKUState());
-		} else if(workflow.getSelectedBKU() == BKUS.MOBILE) {
+		} else if(workflow.getSelectedBKU() == BKUs.MOBILE) {
 			this.setNextState(new MobileBKUState());
 		} else {
 			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");

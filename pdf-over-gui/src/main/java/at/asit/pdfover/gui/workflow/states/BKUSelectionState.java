@@ -21,18 +21,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.components.BKUSelectionComposite;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Decides which BKU to use (preconfigured or let user choose)
  */
-public class BKUSelectionState extends WorkflowState {
+public class BKUSelectionState extends State {
 
 	/**
-	 * Enumeration of available BKU type
+	 * @param stateMachine
 	 */
-	public enum BKUS {
+	public BKUSelectionState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
+
+	/**
+	 * Enumeration of available BKU types
+	 */
+	public enum BKUs {
 		/**
 		 * Local bku
 		 */
@@ -48,7 +56,7 @@ public class BKUSelectionState extends WorkflowState {
 		 */
 		NONE
 	}
-	
+
 	/**
 	 * SFL4J Logger instance
 	 **/
@@ -57,28 +65,28 @@ public class BKUSelectionState extends WorkflowState {
 	
 	private BKUSelectionComposite selectionComposite = null;
 
-	private BKUSelectionComposite getSelectionComposite(Workflow workflow) {
+	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite = new BKUSelectionComposite(
-					workflow.getComposite(), SWT.RESIZE, workflow);
+					this.stateMachine.getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
 	}
 	
 	@Override
-	public void update(Workflow workflow) {
+	public void run() {
 		
-		if(workflow.getSelectedBKU() == BKUS.NONE) {
+		if(this.stateMachine.getStatus().getBKU() == BKUs.NONE) {
 			BKUSelectionComposite selection = this
-					.getSelectionComposite(workflow);
+					.getSelectionComposite();
 
-			workflow.setTopControl(selection);
+			this.stateMachine.setTopControl(selection);
 			selection.layout();
 			
-			workflow.setSelectedBKU(selection.getSelected());
+			this.stateMachine.setSelectedBKU(selection.getSelected());
 		
-			if(workflow.getSelectedBKU() == BKUS.NONE) {
+			if(this.stateMachine.getSelectedBKU() == BKUs.NONE) {
 				this.setNextState(this);
 				return;
 			}

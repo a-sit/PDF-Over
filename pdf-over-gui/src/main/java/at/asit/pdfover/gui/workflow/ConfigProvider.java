@@ -13,38 +13,15 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states;
+package at.asit.pdfover.gui.workflow;
 
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
-
 /**
- * Logical state for performing the BKU Request to the A-Trust Mobile BKU
+ * 
  */
-public class MobileBKUState extends State {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(MobileBKUState.class);
+public interface ConfigProvider {
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui.workflow.Workflow)
-	 */
-	@Override
-	public void run(StateMachine stateMachine) {
-		// TODO Process SL Request and set SL Response
-		
-		
-		this.setNextState(new SigningState());
-	}
-
-	@Override
-	public String toString()  {
-		return "MobileBKUState";
-	}
 }

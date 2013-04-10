@@ -37,7 +37,7 @@ import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-import at.asit.pdfover.gui.workflow.Workflow;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
  * 
@@ -84,7 +84,7 @@ public class DataSourceSelectComposite extends Composite implements
 	private static final Logger log = LoggerFactory
 			.getLogger(DataSourceSelectComposite.class);
 
-	private Workflow workflow;
+	private StateMachineImpl workflow;
 
 	/**
 	 * Set this value through the setter method!!
@@ -116,7 +116,7 @@ public class DataSourceSelectComposite extends Composite implements
 	 * @param style
 	 * @param flow
 	 */
-	public DataSourceSelectComposite(Composite parent, int style, Workflow flow) {
+	public DataSourceSelectComposite(Composite parent, int style, StateMachineImpl flow) {
 		super(parent, style);
 
 		this.workflow = flow;

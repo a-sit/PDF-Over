@@ -19,7 +19,6 @@ package at.asit.pdfover.gui.components;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -28,9 +27,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.Workflow;
+import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUS;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 
 /**
  * 
@@ -53,7 +52,7 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			log.debug("Setting BKU to LOCAL");
-			setSelected(BKUS.LOCAL);
+			setSelected(BKUs.LOCAL);
 		}
 
 		@Override
@@ -77,7 +76,7 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			log.debug("Setting BKU to MOBILE");
-			setSelected(BKUS.MOBILE);
+			setSelected(BKUs.MOBILE);
 		}
 
 		@Override
@@ -92,15 +91,15 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 	private static final Logger log = LoggerFactory
 			.getLogger(BKUSelectionComposite.class);
 
-	private Workflow workflow;
+	private BKUSelectionState state;
 	
-	private BKUS selected = BKUS.NONE;
+	private BKUs selected = BKUs.NONE;
 	
 	/**
 	 * Gets selected BKU type
 	 * @return BKUS enum
 	 */
-	public BKUS getSelected() {
+	public BKUs getSelected() {
 		return this.selected;
 	}
 
@@ -108,9 +107,9 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 	 * Sets selected BKU and updates workflow
 	 * @param selected
 	 */
-	public void setSelected(final BKUS selected) {
+	public void setSelected(final BKUs selected) {
 		this.selected = selected;
-		this.workflow.update();
+		this.state.updateStateMachine();
 	}
 
 	/**
@@ -118,10 +117,10 @@ public class BKUSelectionComposite extends Composite implements StateComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public BKUSelectionComposite(Composite parent, int style, Workflow flow) {
+	public BKUSelectionComposite(Composite parent, int style, BKUSelectionState state) {
 		super(parent, style);
 
-		this.workflow = flow;
+		this.state = state;
 
 		this.setLayout(new FormLayout());
 		

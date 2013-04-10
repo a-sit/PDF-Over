@@ -21,13 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.components.PositioningComposite;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Decides where to position the signature block
  */
-public class PositioningState extends WorkflowState {
+public class PositioningState extends State {
 
 	/**
 	 * SFL4J Logger instance
@@ -38,7 +39,7 @@ public class PositioningState extends WorkflowState {
 
 	private PositioningComposite positionComposite = null;
 
-	private PositioningComposite getPositioningComosite(Workflow workflow) {
+	private PositioningComposite getPositioningComosite(StateMachineImpl workflow) {
 		if (this.positionComposite == null) {
 			this.positionComposite = new PositioningComposite(
 					workflow.getComposite(), SWT.NONE, workflow);
@@ -48,7 +49,7 @@ public class PositioningState extends WorkflowState {
 	}
 
 	@Override
-	public void update(Workflow workflow) {
+	public void run(StateMachine stateMachine) {
 		
 		if(workflow.getParameter().getSignaturePosition() == null) {
 			PositioningComposite position = this.getPositioningComosite(workflow);

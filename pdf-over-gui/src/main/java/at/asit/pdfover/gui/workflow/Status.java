@@ -13,35 +13,23 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states;
+package at.asit.pdfover.gui.workflow;
 
-//Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
 
-import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * Logical state for signing process, usually show BKU Dialog during this state.
+ * 
  */
-public class SigningState extends State {
+public interface Status {
+	public void setDocument(File document);
+	public File getDocument();
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(SigningState.class);
-	
-	@Override
-	public void run(StateMachine stateMachine) {
-		// TODO Wait until output ready and set output
-		
-		this.setNextState(new OutputState());
-	}
-	
-	@Override
-	public String toString()  {
-		return "SigningState";
-	}
+	public void setSignaturePosition(SignaturePosition position);
+	public SignaturePosition getSignaturePosition();
+
+	public void setBKU(BKUSelectionState.BKUs bku);
+	public BKUSelectionState.BKUs getBKU();
 }

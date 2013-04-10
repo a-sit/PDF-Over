@@ -20,9 +20,10 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUS;
+
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.State;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 import at.asit.pdfover.signator.Signator;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -31,7 +32,7 @@ import at.asit.pdfover.signator.SignaturePosition;
  * 
  * Reads configuration, command arguments and initializes configured variables
  */
-public class PrepareConfigurationState extends WorkflowState {
+public class PrepareConfigurationState extends State {
 
 	public final static String BKU_SELECTION_CONFIG = "DEFAULT_BKU";
 
@@ -43,7 +44,7 @@ public class PrepareConfigurationState extends WorkflowState {
 			.getLogger(PrepareConfigurationState.class);
 
 	@Override
-	public void update(Workflow workflow) {
+	public void run(StateMachine stateMachine) {
 		// TODO: Read config file and command line arguments
 		// Set usedSignerLib ...
 
@@ -69,20 +70,20 @@ public class PrepareConfigurationState extends WorkflowState {
 	 * @param props
 	 * @return The BKUS value
 	 */
-	public static BKUS readSelectedBKU(final Properties props) {
+	public static BKUs readSelectedBKU(final Properties props) {
 		if (props.containsKey(BKU_SELECTION_CONFIG)) {
 			String value = props.getProperty(BKU_SELECTION_CONFIG);
 			value = value.trim().toLowerCase();
 
-			if (value.equals(BKUS.LOCAL.toString().trim().toLowerCase())) {
+			if (value.equals(BKUs.LOCAL.toString().trim().toLowerCase())) {
 
-				return BKUS.LOCAL;
+				return BKUs.LOCAL;
 			} else if (value
-					.equals(BKUS.MOBILE.toString().trim().toLowerCase())) {
-				return BKUS.MOBILE;
+					.equals(BKUs.MOBILE.toString().trim().toLowerCase())) {
+				return BKUs.MOBILE;
 			}
 		}
-		return BKUS.NONE;
+		return BKUs.NONE;
 	}
 	
 	/**

@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.Workflow;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
@@ -65,7 +65,7 @@ public class PositioningComposite extends Composite implements StateComposite {
 	private static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
 
-	private Workflow workflow;
+	private StateMachineImpl workflow;
 	
 	private SignaturePosition position = null;
 	
@@ -90,7 +90,7 @@ public class PositioningComposite extends Composite implements StateComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public PositioningComposite(Composite parent, int style, Workflow workflow) {
+	public PositioningComposite(Composite parent, int style, StateMachineImpl workflow) {
 		super(parent, style);
 		
 		this.workflow = workflow;

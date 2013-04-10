@@ -40,8 +40,8 @@ import at.asit.pdfover.gui.components.main_behavior.ConfigOpenPositionEnabled;
 import at.asit.pdfover.gui.components.main_behavior.MainWindowAllDisabled;
 import at.asit.pdfover.gui.components.main_behavior.MainWindowBehavior;
 import at.asit.pdfover.gui.components.main_behavior.OnlyConfigEnabled;
-import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
+import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.State;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.DataSourceSelectionState;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
@@ -88,7 +88,7 @@ public class MainWindow {
 	private CLabel lbl_status;
 	private Composite container;
 	private StackLayout stack;
-	private Workflow workflow;
+	private StateMachineImpl workflow;
 	private Button btn_sign;
 	
 	/**
@@ -135,7 +135,7 @@ public class MainWindow {
 	 * Default contsructor
 	 * @param workflow The main workflow
 	 */
-	public MainWindow(Workflow workflow) {
+	public MainWindow(StateMachineImpl workflow) {
 		super();
 		
 		this.behavior.put(PrepareConfigurationState.class, new MainWindowAllDisabled());
@@ -308,7 +308,7 @@ public class MainWindow {
 	 * Update MainWindow to fit new status
 	 */
 	public void UpdateNewState() {
-		WorkflowState state = this.workflow.getState();
+		State state = this.workflow.getState();
 		
 		log.debug("Updating MainWindow state for : " + state.toString());
 		
