@@ -70,6 +70,8 @@ public class PositioningComposite extends StateComposite {
 
 	private Composite mainArea = null;
 
+	Composite bottomBar = null;
+
 	Button btnNewPage = null;
 
 	Label lblPage = null;
@@ -93,15 +95,15 @@ public class PositioningComposite extends StateComposite {
 		super(parent, style, state);
 		this.setLayout(new FormLayout());
 
-		Composite bottomBar = new Composite(this, SWT.NONE);
+		this.bottomBar = new Composite(this, SWT.NONE);
 		FormData fd_bottomBar = new FormData();
 		fd_bottomBar.left = new FormAttachment(0);
 		fd_bottomBar.right = new FormAttachment(100);
 		fd_bottomBar.bottom = new FormAttachment(100);
-		bottomBar.setLayoutData(fd_bottomBar);
-		bottomBar.setLayout(new FormLayout());
+		this.bottomBar.setLayoutData(fd_bottomBar);
+		this.bottomBar.setLayout(new FormLayout());
 
-		this.btnSign = new Button(bottomBar, SWT.PUSH);
+		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
 		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
@@ -115,7 +117,7 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
-		this.btnNewPage = new Button(bottomBar, SWT.TOGGLE);
+		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
 		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
 		FormData fd_btnNewPage = new FormData();
 		fd_btnNewPage.right = new FormAttachment(this.btnSign);
@@ -133,7 +135,7 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
-		this.lblPage = new Label(bottomBar, SWT.CENTER);
+		this.lblPage = new Label(this.bottomBar, SWT.CENTER);
 		FormData fd_lblPage = new FormData();
 		fd_lblPage.left = new FormAttachment(0);
 		fd_lblPage.right = new FormAttachment(this.btnNewPage, 5);
@@ -145,7 +147,7 @@ public class PositioningComposite extends StateComposite {
 		fd_mainArea.left = new FormAttachment(0);
 		fd_mainArea.right = new FormAttachment(100);
 		fd_mainArea.top = new FormAttachment(0);
-		fd_mainArea.bottom = new FormAttachment(bottomBar, -5);
+		fd_mainArea.bottom = new FormAttachment(this.bottomBar, -5);
 		this.mainArea.setLayoutData(fd_mainArea);
 		this.scrollbar = this.mainArea.getVerticalBar();
 
@@ -331,12 +333,14 @@ public class PositioningComposite extends StateComposite {
 					PositioningComposite.this.btnNewPage.setText(
 							Messages.getString("positioning.newPage")); //$NON-NLS-1$
 					PositioningComposite.this.btnNewPage.setSelection(false);
+					PositioningComposite.this.bottomBar.layout();
 					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
 				} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 					// Go to new page
 					PositioningComposite.this.btnNewPage.setText(
 							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
 					PositioningComposite.this.btnNewPage.setSelection(true);
+					PositioningComposite.this.bottomBar.layout();
 					PositioningComposite.this.scrollbar.setMaximum(numPages + 2);
 				}
 				PositioningComposite.this.scrollbar.setSelection(currentPage);
