@@ -71,6 +71,9 @@ public class DeveloperMain {
 		stateMachine.start();
 		
 		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
+		
+		// Workaround for remaining AWT-Shutdown thread on OSX
+		System.exit(0);
 	}
 
 }
