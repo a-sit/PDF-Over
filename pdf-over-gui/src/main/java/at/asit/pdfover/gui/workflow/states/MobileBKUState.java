@@ -30,6 +30,8 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHandler;
+import at.asit.pdfover.gui.workflow.states.mobilebku.IAIKHandler;
+import at.asit.pdfover.gui.workflow.states.mobilebku.IAIKStatus;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustStatus;
@@ -54,7 +56,8 @@ public class MobileBKUState extends State {
 				break;
 
 			case IAIK:
-				//TODO
+				this.status = new IAIKStatus(this.stateMachine.getConfigProvider());
+				this.handler = new IAIKHandler(this);
 				break;
 		}
 
