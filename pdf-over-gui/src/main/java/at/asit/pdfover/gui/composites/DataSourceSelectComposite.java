@@ -32,7 +32,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -326,13 +325,9 @@ public class DataSourceSelectComposite extends StateComposite {
 		*/
 		// lbl_drag.setBackground(back);
 
-		Point size = this.btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		this.fd_btn_open = new FormData();
-		this.fd_btn_open.left = new FormAttachment(50, (size.x / 2 ) * -1);
-		//this.fd_btn_open.right = new FormAttachment(100, -5);
-		//this.fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
+		this.fd_btn_open.left = new FormAttachment(this.lbl_drag2, 0, SWT.CENTER);
 		this.fd_btn_open.top = new FormAttachment(this.lbl_drag2, 10);
-		//this.fd_btn_open.bottom = new FormAttachment(100, -5);
 		this.btn_open.setLayoutData(this.fd_btn_open);
 
 		// btn_open.setBackground(back);
