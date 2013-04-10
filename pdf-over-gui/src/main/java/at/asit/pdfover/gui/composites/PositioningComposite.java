@@ -422,7 +422,10 @@ public class PositioningComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+		if (this.currentPage <= this.numPages)
+			this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+		else
+			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
 		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 		this.lblPage.setText(String.format(Messages.getString("positioning.page"), //$NON-NLS-1$
 				this.currentPage, this.numPages));
