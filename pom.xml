@@ -150,6 +150,11 @@
 				<artifactId>commons-httpclient</artifactId>
 				<version>3.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.icepdf</groupId>
+				<artifactId>icepdf-core</artifactId>
+				<version>4.3.3</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
