@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
+import at.asit.pdfover.gui.cliarguments.AutomaticPositioningArgument;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
 import at.asit.pdfover.gui.cliarguments.EmblemArgument;
@@ -71,6 +72,7 @@ public class PrepareConfigurationState extends State {
 		super(stateMachine);
 		this.handler = new ArgumentHandler(this.stateMachine);
 		this.handler.addCLIArgument(HelpArgument.class);
+		this.handler.addCLIArgument(AutomaticPositioningArgument.class);
 		this.handler.addCLIArgument(BKUArgument.class);
 		this.handler.addCLIArgument(PhoneNumberArgument.class);
 		this.handler.addCLIArgument(EmblemArgument.class);
