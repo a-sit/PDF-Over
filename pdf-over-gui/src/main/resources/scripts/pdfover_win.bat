@@ -1,1 +1,1 @@
-..\lib\pdf-over-gui-4.0.0-SNAPSHOT.jar %*
+@start /b ..\lib\pdf-over-gui-4.0.0-SNAPSHOT.jar %*

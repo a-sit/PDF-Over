@@ -20,7 +20,7 @@
      iconIndex="0"
      type="Application"
      encoding="UTF-8"
-     initialState="normal">
+     initialState="minimized">
      <createForPack name="main"/>
    </shortcut>
    
@@ -37,7 +37,7 @@
      description="PDF-Over 4.0 Uninstall"
      type="Application"
      encoding="UTF-8"
-     initialState="normal">
+     initialState="minimized">
      <createForPack name="main"/>
    </shortcut>
 
