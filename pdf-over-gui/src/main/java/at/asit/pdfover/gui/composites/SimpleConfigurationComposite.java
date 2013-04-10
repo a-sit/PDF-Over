@@ -40,7 +40,6 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -62,7 +61,6 @@ import at.asit.pdfover.gui.ImageConverter;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
-import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
@@ -116,15 +114,21 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	// Text txtEmblemFile;
 	String emblemFile;
 	private Image origEmblem = null;
+	private Image origlogo = null;
 
 	void recalculateEmblemSize() {
-		if (this.origEmblem != null) {
+		this.recalculateEmblemSize(this.origEmblem, this.lblEmblem);
+		this.recalculateEmblemSize(this.origlogo, this.lbl_logo);
+	}
+	
+	void recalculateEmblemSize(Image image, Label parent) {
+		if (image != null) {
 
-			int width = this.origEmblem.getBounds().width;
-			int height = this.origEmblem.getBounds().height;
+			int width = image.getBounds().width;
+			int height = image.getBounds().height;
 
-			int scaledWidth = this.lblEmblem.getSize().x;
-			int scaledHeight = this.lblEmblem.getSize().y;
+			int scaledWidth = parent.getSize().x;
+			int scaledHeight = parent.getSize().y;
 
 			float scaleFactorWidth = (float) scaledWidth / (float) width;
 			float scaleFactorHeight = (float) scaledHeight / (float) height;
@@ -164,7 +168,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				betterFactor = 1.0f;
 			}
 
-			BufferedImage awt_image = ImageConverter.convertToAWT(this.origEmblem.getImageData());
+			BufferedImage awt_image = ImageConverter.convertToAWT(image.getImageData());
 			
 			java.awt.Image scaled_awt = awt_image.getScaledInstance((int) (width * betterFactor),
 							(int) (height * betterFactor), java.awt.Image.SCALE_SMOOTH);
@@ -175,16 +179,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			
 			Image emblem = new Image(this.getDisplay(), ImageConverter.convertToSWT(scaled_buffered));
 
-			Image old = this.lblEmblem.getImage();
+			Image old = parent.getImage();
 
 			if (old != null) {
 				old.dispose();
 			}
 
-			this.lblEmblem.setText(""); //$NON-NLS-1$
-			this.lblEmblem.setImage(emblem);
+			parent.setText(""); //$NON-NLS-1$
+			parent.setImage(emblem);
 		} else {
-			this.lblEmblem.setImage(null);
+			parent.setImage(null);
 		}
 	}
 
@@ -210,6 +214,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	void setVisibleImage() {
 		String image = this.configurationContainer.getEmblem();
 		ImageData img = null;
+		ImageData logo = null;
+		
 		try {
 
 			if (image == null || image.trim().equals("")) { //$NON-NLS-1$
@@ -227,6 +233,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				} else {
 					img = new ImageData(image);
 				}
+				logo = new ImageData(image);
 			}
 		} catch (Exception e) {
 			log.error("Failed to load image for display...", e); //$NON-NLS-1$
@@ -236,6 +243,12 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.origEmblem = new Image(this.getDisplay(), img);
 		} else {
 			this.origEmblem = null;
+		}
+		
+		if (logo != null) {
+			this.origlogo = new Image(this.getDisplay(), logo);
+		} else {
+			this.origlogo = null;
 		}
 
 		this.recalculateEmblemSize();
@@ -272,6 +285,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.txtMobileNumberErrorMarker.setToolTipText(Messages
 					.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 			log.error("processNumberChanged: ", ex); //$NON-NLS-1$
+			this.redraw();
+			this.doLayout();
 		}
 	}
 
@@ -476,7 +491,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_containerComposite.top = new FormAttachment(0);
 		fd_containerComposite.bottom = new FormAttachment(100);
 		containerComposite.setLayoutData(fd_containerComposite);
-		containerComposite.addPaintListener(new PaintListener() {
+		
+		Composite controlComposite = new Composite(containerComposite, SWT.NONE);
+		controlComposite.setLayout(new FormLayout());
+		FormData fd_controlComposite = new FormData();
+		fd_controlComposite.left = new FormAttachment(0, 20);
+		fd_controlComposite.right = new FormAttachment(0, 300);
+		fd_controlComposite.top = new FormAttachment(0, 20);
+		fd_controlComposite.bottom = new FormAttachment(100, -20);
+		controlComposite.setLayoutData(fd_controlComposite);
+		controlComposite.addPaintListener(new PaintListener() {
 
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -488,24 +512,38 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						10, 10);
 			}
 		});
-
+		
 		this.lblEmblem = new Label(containerComposite, SWT.RESIZE);
 
-		Label lbl_drop = new Label(containerComposite, SWT.NATIVE);
-		lbl_drop.setText(Messages.getString("simple_config.EmblemEmpty"));
-		this.btnClearImage = new Button(containerComposite, SWT.NATIVE);
+		Button btnBrowseEmblem = new Button(controlComposite, SWT.NONE);
+		
+		Label lbl_drop = new Label(controlComposite, SWT.NATIVE);
+		
+		this.lbl_logo = new Label(controlComposite, SWT.NATIVE);
+		this.lbl_logo.setAlignment(SWT.CENTER);
+		FormData fd_lbl_logo = new FormData();
+		fd_lbl_logo.left = new FormAttachment(0, 20);
+		fd_lbl_logo.right = new FormAttachment(100, -20);
+		fd_lbl_logo.top = new FormAttachment(0, 20);
+		fd_lbl_logo.bottom = new FormAttachment(lbl_drop, -20);
+		
+		this.lbl_logo.setLayoutData(fd_lbl_logo);
+		
+		
+		lbl_drop.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
+		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
 
 		FormData fd_lbl_drop = new FormData();
-		// fd_lbl_drop.left = new FormAttachment(0);
+		fd_lbl_drop.left = new FormAttachment(0, 20);
 		fd_lbl_drop.right = new FormAttachment(100, -20);
-		// fd_lbl_drop.top = new FormAttachment(0, 20);
-		fd_lbl_drop.bottom = new FormAttachment(50, -10);
+		//fd_lbl_drop.top = new FormAttachment(50, -20);
+		fd_lbl_drop.bottom = new FormAttachment(btnBrowseEmblem, -20);
 
 		lbl_drop.setLayoutData(fd_lbl_drop);
 
 		FormData fd_lblEmblem = new FormData();
-		fd_lblEmblem.left = new FormAttachment(0, 20);
-		fd_lblEmblem.right = new FormAttachment(lbl_drop, -20);
+		fd_lblEmblem.left = new FormAttachment(controlComposite, 20);
+		fd_lblEmblem.right = new FormAttachment(100, -20);
 		fd_lblEmblem.top = new FormAttachment(0, 20);
 		fd_lblEmblem.bottom = new FormAttachment(100, -20);
 
@@ -524,7 +562,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fD_lblEmblem[0].setHeight(TEXT_SIZE_NORMAL);
 		this.lblEmblem.setFont(new Font(Display.getCurrent(), fD_lblEmblem[0]));
 
-		DropTarget dnd_target = new DropTarget(containerComposite,
+		DropTarget dnd_target = new DropTarget(controlComposite,
 				DND.DROP_DEFAULT | DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
 		Transfer[] types = new Transfer[] { fileTransfer };
@@ -601,18 +639,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.btnClearImage.setFont(new Font(Display.getCurrent(),
 				fD_btnUseImage[0]));
 
-		Button btnBrowseEmblem = new Button(containerComposite, SWT.NONE);
-
 		FormData fd_btnUseImage = new FormData();
 
-		fd_btnUseImage.top = new FormAttachment(50, 10);
+		fd_btnUseImage.bottom = new FormAttachment(100, -20);
 		fd_btnUseImage.right = new FormAttachment(btnBrowseEmblem, -10);
 
 		this.btnClearImage.setLayoutData(fd_btnUseImage);
 
 		FormData fd_btnBrowseEmblem = new FormData();
 
-		fd_btnBrowseEmblem.top = new FormAttachment(50, 10);
+		fd_btnBrowseEmblem.bottom = new FormAttachment(100, -20);
 		fd_btnBrowseEmblem.right = new FormAttachment(100, -20);
 
 		btnBrowseEmblem.setLayoutData(fd_btnBrowseEmblem);
@@ -803,6 +839,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	FormData fd_txtProxyPort;
 	ErrorMarker txtProxyPortErrorMarker;
 	Button btnClearImage;
+	private Label lbl_logo;
 
 	/*
 	 * (non-Javadoc)
@@ -811,7 +848,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// Nothing to do here
+		this.layout(true, true);
 	}
 
 	/*

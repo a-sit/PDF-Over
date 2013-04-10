@@ -124,6 +124,33 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<phase>install</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archiveDirectory>target</archiveDirectory>
+					<excludes>
+						<exclude>**/S*.jar</exclude>
+					</excludes>
+					<includes>
+						<include>*.jar</include>
+					</includes>
+					<keystore>src/main/resources/keystore.jks</keystore>
+					<alias>pdfover_test</alias>
+					<storepass>123456</storepass>
+					<keypass>123456</keypass>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4.2</version>
 				<executions>
@@ -295,5 +322,5 @@
 			<url>http://www.9stmaryrd.com/maven</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 </project>

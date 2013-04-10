@@ -42,16 +42,18 @@ import at.asit.pdfover.gui.Messages;
  * 
  */
 public class ErrorDialog extends Dialog {
+
+	private static final boolean VERBOSE_ERROR = false;
+
 	/**
 	 * @param parent
 	 * @param style
 	 * @param message
 	 * @param exception
-	 * @param canRetry 
+	 * @param canRetry
 	 */
 	public ErrorDialog(Shell parent, int style, String message,
-			Throwable exception,
-			boolean canRetry) {
+			Throwable exception, boolean canRetry) {
 		super(parent, style);
 		this.message = message;
 		this.canRetry = canRetry;
@@ -90,7 +92,7 @@ public class ErrorDialog extends Dialog {
 	private boolean canRetry = false;
 
 	boolean doRetry = false;
-	
+
 	private String details = null;
 
 	/**
@@ -102,6 +104,7 @@ public class ErrorDialog extends Dialog {
 
 	/**
 	 * Open error dialog
+	 * 
 	 * @return if the user wants to retry the action which caused the error
 	 */
 	public boolean open() {
@@ -134,53 +137,106 @@ public class ErrorDialog extends Dialog {
 		lblerrorMessage.setLayoutData(fd_lblerrorMessage);
 		lblerrorMessage.setText(this.message);
 
-		Group group = new Group(shell, SWT.NONE);
-		group.setLayout(new FormLayout());
-		FormData fd_group = new FormData();
+		if (VERBOSE_ERROR) {
 
-		fd_group.right = new FormAttachment(100, -5);
-		fd_group.top = new FormAttachment(lblerrorMessage, 5);
-		fd_group.left = new FormAttachment(lblErrorImage, 5);
-		group.setLayoutData(fd_group);
-		group.setText(Messages.getString("error.Details")); //$NON-NLS-1$
+			Group group = new Group(shell, SWT.NONE);
+			group.setLayout(new FormLayout());
+			FormData fd_group = new FormData();
 
-		if (!this.canRetry) {
+			fd_group.right = new FormAttachment(100, -5);
+			fd_group.top = new FormAttachment(lblerrorMessage, 5);
+			fd_group.left = new FormAttachment(lblErrorImage, 5);
+			group.setLayoutData(fd_group);
+			group.setText(Messages.getString("error.Details")); //$NON-NLS-1$
 
-			Button btnOk = new Button(shell, SWT.NONE);
-			btnOk.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					shell.dispose();
-				}
-			});
-			fd_group.bottom = new FormAttachment(btnOk, -5);
+			if (!this.canRetry) {
 
-			ScrolledComposite scrolledComposite = new ScrolledComposite(group,
-					SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-			FormData fd_scrolledComposite = new FormData();
-			fd_scrolledComposite.top = new FormAttachment(0, 5);
-			fd_scrolledComposite.left = new FormAttachment(0, 5);
-			fd_scrolledComposite.bottom = new FormAttachment(100, -5);
-			fd_scrolledComposite.right = new FormAttachment(100, -5);
-			scrolledComposite.setLayoutData(fd_scrolledComposite);
-			scrolledComposite.setExpandHorizontal(true);
-			scrolledComposite.setExpandVertical(true);
+				Button btnOk = new Button(shell, SWT.NONE);
+				btnOk.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						shell.dispose();
+					}
+				});
+				fd_group.bottom = new FormAttachment(btnOk, -5);
 
-			Label lblDetails = new Label(scrolledComposite, SWT.NONE);
+				ScrolledComposite scrolledComposite = new ScrolledComposite(
+						group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+				FormData fd_scrolledComposite = new FormData();
+				fd_scrolledComposite.top = new FormAttachment(0, 5);
+				fd_scrolledComposite.left = new FormAttachment(0, 5);
+				fd_scrolledComposite.bottom = new FormAttachment(100, -5);
+				fd_scrolledComposite.right = new FormAttachment(100, -5);
+				scrolledComposite.setLayoutData(fd_scrolledComposite);
+				scrolledComposite.setExpandHorizontal(true);
+				scrolledComposite.setExpandVertical(true);
 
-			lblDetails.setText(this.details);
+				Label lblDetails = new Label(scrolledComposite, SWT.NONE);
 
-			scrolledComposite.setContent(lblDetails);
-			scrolledComposite.setMinSize(lblDetails.computeSize(SWT.DEFAULT,
-					SWT.DEFAULT));
-			FormData fd_btnOk = new FormData();
-			fd_btnOk.bottom = new FormAttachment(100, -5);
-			fd_btnOk.right = new FormAttachment(100, -5);
-			btnOk.setLayoutData(fd_btnOk);
-			btnOk.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+				lblDetails.setText(this.details);
+
+				scrolledComposite.setContent(lblDetails);
+				scrolledComposite.setMinSize(lblDetails.computeSize(
+						SWT.DEFAULT, SWT.DEFAULT));
+				FormData fd_btnOk = new FormData();
+				fd_btnOk.bottom = new FormAttachment(100, -5);
+				fd_btnOk.right = new FormAttachment(100, -5);
+				btnOk.setLayoutData(fd_btnOk);
+				btnOk.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+			} else {
+				Button btnCancel = new Button(shell, SWT.NONE);
+				Button btnRetry = new Button(shell, SWT.NONE);
+
+				btnCancel.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						shell.dispose();
+					}
+				});
+
+				btnRetry.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						ErrorDialog.this.doRetry = true;
+						shell.dispose();
+					}
+				});
+				fd_group.bottom = new FormAttachment(btnCancel, -5);
+
+				ScrolledComposite scrolledComposite = new ScrolledComposite(
+						group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+				FormData fd_scrolledComposite = new FormData();
+				fd_scrolledComposite.top = new FormAttachment(0, 5);
+				fd_scrolledComposite.left = new FormAttachment(0, 5);
+				fd_scrolledComposite.bottom = new FormAttachment(100, -5);
+				fd_scrolledComposite.right = new FormAttachment(100, -5);
+				scrolledComposite.setLayoutData(fd_scrolledComposite);
+				scrolledComposite.setExpandHorizontal(true);
+				scrolledComposite.setExpandVertical(true);
+
+				Label lblDetails = new Label(scrolledComposite, SWT.NONE);
+
+				lblDetails.setText(this.details);
+
+				scrolledComposite.setContent(lblDetails);
+				scrolledComposite.setMinSize(lblDetails.computeSize(
+						SWT.DEFAULT, SWT.DEFAULT));
+				FormData fd_btnCancel = new FormData();
+				fd_btnCancel.bottom = new FormAttachment(100, -5);
+				fd_btnCancel.right = new FormAttachment(100, -5);
+				btnCancel.setLayoutData(fd_btnCancel);
+				btnCancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+
+				FormData fd_btnRetry = new FormData();
+				fd_btnRetry.bottom = new FormAttachment(100, -5);
+				fd_btnRetry.right = new FormAttachment(btnCancel, -10);
+				btnRetry.setLayoutData(fd_btnRetry);
+				btnRetry.setText(Messages.getString("error.Retry")); //$NON-NLS-1$
+			}
+
 		} else {
+			
 			Button btnCancel = new Button(shell, SWT.NONE);
-			Button btnRetry = new Button(shell, SWT.NONE);
 			
 			btnCancel.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -189,44 +245,34 @@ public class ErrorDialog extends Dialog {
 				}
 			});
 			
-			btnRetry.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					ErrorDialog.this.doRetry = true;
-					shell.dispose();
-				}
-			});
-			fd_group.bottom = new FormAttachment(btnCancel, -5);
-
-			ScrolledComposite scrolledComposite = new ScrolledComposite(group,
-					SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-			FormData fd_scrolledComposite = new FormData();
-			fd_scrolledComposite.top = new FormAttachment(0, 5);
-			fd_scrolledComposite.left = new FormAttachment(0, 5);
-			fd_scrolledComposite.bottom = new FormAttachment(100, -5);
-			fd_scrolledComposite.right = new FormAttachment(100, -5);
-			scrolledComposite.setLayoutData(fd_scrolledComposite);
-			scrolledComposite.setExpandHorizontal(true);
-			scrolledComposite.setExpandVertical(true);
-
-			Label lblDetails = new Label(scrolledComposite, SWT.NONE);
-
-			lblDetails.setText(this.details);
-
-			scrolledComposite.setContent(lblDetails);
-			scrolledComposite.setMinSize(lblDetails.computeSize(SWT.DEFAULT,
-					SWT.DEFAULT));
 			FormData fd_btnCancel = new FormData();
 			fd_btnCancel.bottom = new FormAttachment(100, -5);
 			fd_btnCancel.right = new FormAttachment(100, -5);
+			fd_btnCancel.top = new FormAttachment(lblerrorMessage, 10);
 			btnCancel.setLayoutData(fd_btnCancel);
-			btnCancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+			btnCancel.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 			
-			FormData fd_btnRetry = new FormData();
-			fd_btnRetry.bottom = new FormAttachment(100, -5);
-			fd_btnRetry.right = new FormAttachment(btnCancel, -10);
-			btnRetry.setLayoutData(fd_btnRetry);
-			btnRetry.setText(Messages.getString("error.Retry")); //$NON-NLS-1$
+			
+			if(this.canRetry) {
+				btnCancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+				
+				Button btnRetry = new Button(shell, SWT.NONE);
+				
+				
+				btnRetry.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						ErrorDialog.this.doRetry = true;
+						shell.dispose();
+					}
+				});
+				FormData fd_btnRetry = new FormData();
+				
+				fd_btnRetry.bottom = new FormAttachment(100, -5);
+				fd_btnRetry.right = new FormAttachment(btnCancel, -10);
+				btnRetry.setLayoutData(fd_btnRetry);
+				btnRetry.setText(Messages.getString("error.Retry")); //$NON-NLS-1$
+			} 
 		}
 		shell.pack();
 		shell.open();
@@ -236,7 +282,7 @@ public class ErrorDialog extends Dialog {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
-		
+
 		return this.doRetry;
 	}
 }

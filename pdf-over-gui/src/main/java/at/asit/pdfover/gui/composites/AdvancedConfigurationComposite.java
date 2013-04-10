@@ -69,16 +69,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_tabFolder.left = new FormAttachment(0, 5);
 		tabFolder.setLayoutData(fd_tabFolder);
 
-		tabFolder.addSelectionListener(new SelectionAdapter() {
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.simpleComposite.signerChanged();
-			}
-		});
-		
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
 		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
