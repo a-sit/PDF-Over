@@ -18,11 +18,13 @@ package at.asit.pdfover.gui.workflow;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.eclipse.swt.graphics.Point;
+
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ * An interface for setting the configuration
  */
 public interface ConfigManipulator {
 	/**
@@ -30,86 +32,92 @@ public interface ConfigManipulator {
 	 * @param bku the bku type
 	 */
 	public void setDefaultBKU(BKUs bku);
-	
+
 	/**
 	 * Sets the default signature position
 	 * 
 	 * @param signaturePosition the default signature position
 	 */
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
-	
+
 	/**
 	 * Sets the signature placeholder transparency
 	 * 
 	 * @param transparency the signature placeholder transparency
 	 */
 	void setPlaceholderTransparency(int transparency);
-	
+
 	/**
 	 * Sets the default mobile number
 	 * @param number the default mobile number
 	 */
 	public void setDefaultMobileNumber(String number);
-	
+
 	/**
 	 * Sets the default password
 	 * @param password the default password
 	 */
 	public void setDefaultPassword(String password);
-	
+
 	/**
 	 * Sets the default emblem
 	 * 
 	 * @param emblem the default emblem
 	 */
 	public void setDefaultEmblem(String emblem);
-	
+
 	/**
 	 * Sets the proxy host
 	 * @param host the proxy host
 	 */
 	public void setProxyHost(String host);
-	
+
 	/**
 	 * Sets the proxy port
 	 * 
 	 * @param port the proxy port
 	 */
 	public void setProxyPort(int port);
-	
+
 	/**
 	 * Sets the configuration file
 	 * @param configurationFile
 	 */
 	public void setConfigurationFile(String configurationFile);
-	
+
 	/**
 	 * Sets the default output folder
 	 * @param outputFolder the default output folder
 	 */
 	public void setDefaultOutputFolder(String outputFolder);
-	
+
 	/**
 	 * Sets the signature note text
 	 * @param note the signature note text
 	 */
 	public void setSignatureNote(String note);
-	
+
 	/**
 	 * Saves the current configuration to the current configuration file
 	 * @throws IOException 
 	 */
 	public void saveCurrentConfiguration() throws IOException;
-	
+
 	/**
-	 * Sets the locale to be used!
+	 * Sets the locale to be used
 	 * @param locale the locale
 	 */
 	public void setLocale(Locale locale);
-	
+
 	/**
-	 * Sets the locale to be used!
-	 * @param locale the locale
+	 * Sets the signature locale to be used
+	 * @param locale the signature locale
 	 */
 	public void setSignLocale(Locale locale);
+
+	/**
+	 * Sets the default main window size
+	 * @param size a Point describing the size
+	 */
+	public void setMainWindowSize(Point size);
 }

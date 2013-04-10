@@ -33,10 +33,10 @@ public class Constants {
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 
 	/** Main window height */
-	public static final int MAINWINDOW_HEIGHT = 780;
+	public static final int DEFAULT_MAINWINDOW_HEIGHT = 780;
 
 	/** Main window width */
-	public static final int MAINWINDOW_WIDTH = 600;
+	public static final int DEFAULT_MAINWINDOW_WIDTH = 600;
 
 	/** Main bar height */
 	public static final int MAINBAR_HEIGHT = 60;
@@ -141,4 +141,6 @@ public class Constants {
 	/** The output folder config parameter */
 	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 
+	/** The main window size. (Format: width,height) */
+	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE"; //$NON-NLS-1$
 }

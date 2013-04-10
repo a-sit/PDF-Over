@@ -105,7 +105,7 @@ public class SignaturePanel extends JPanel {
 	public SignaturePanel(PDFFile pdf) {
 		super(new BorderLayout());
 		setDocument(pdf);
-		setPreferredSize(new Dimension(Constants.MAINWINDOW_WIDTH, Constants.MAINWINDOW_HEIGHT - Constants.MAINBAR_HEIGHT));
+		setPreferredSize(new Dimension(Constants.DEFAULT_MAINWINDOW_WIDTH, Constants.DEFAULT_MAINWINDOW_HEIGHT - Constants.MAINBAR_HEIGHT));
 		setFocusable(true);
 		addMouseListener(this.mouseListener);
 		addMouseMotionListener(this.mouseListener);

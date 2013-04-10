@@ -203,7 +203,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(Constants.MAINWINDOW_WIDTH, Constants.MAINWINDOW_HEIGHT);
+		this.shell.setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
 		try {
 			Display display = Display.getCurrent();
 			Monitor primary = display.getPrimaryMonitor();
@@ -223,9 +223,9 @@ public class MainWindow {
 
 		this.shell.setImage(shellicon);
 
-		getShell().setLayout(new FormLayout());
+		this.shell.setLayout(new FormLayout());
 
-		this.mainbar = new Composite(getShell(), SWT.NONE);
+		this.mainbar = new Composite(this.shell, SWT.NONE);
 		this.mainbar.setLayout(new FormLayout());
 		this.mainBarFormData = new FormData();
 		this.mainBarFormData.left = new FormAttachment(0, 10);
@@ -337,7 +337,7 @@ public class MainWindow {
 		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);
 
-		this.container = new Composite(getShell(), SWT.RESIZE);
+		this.container = new Composite(this.shell, SWT.RESIZE);
 		this.containerFormData = new FormData();
 		this.containerFormData.bottom = new FormAttachment(100, -10);
 		this.containerFormData.right = new FormAttachment(100, -10);

@@ -19,11 +19,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import org.eclipse.swt.graphics.Point;
+
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ * An interface for reading the configuration
  */
 public interface ConfigProvider {
 	/**
@@ -31,31 +33,31 @@ public interface ConfigProvider {
 	 */
 	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //$NON-NLS-1$
 
-	
+
 	/**
 	 * Gets the configuration file
 	 * @return the configuration file
 	 */
 	public String getConfigurationFile();
-	
+
 	/**
 	 * Gets the configuration directory
 	 * @return the configuration directory
 	 */
 	public String getConfigurationDirectory();
-	
+
 	/**
 	 * Gets the default Mobile number
 	 * @return the default mobile number
 	 */
 	public String getDefaultMobileNumber();
-	
+
 	/**
 	 * Gets the password to use for Mobile BKU
 	 * @return the password
 	 */
 	public String getDefaultPassword();
-	
+
 	/**
 	 * Gets the filename of the default emblem
 	 * @return the emblem
@@ -67,61 +69,67 @@ public interface ConfigProvider {
 	 * @return the proxy hostname or ip address
 	 */
 	public String getProxyHost();
-	
+
 	/**
 	 * Gets the proxy port
 	 * @return the proxy port
 	 */
 	public int getProxyPort();
-	
+
 	/**
 	 * Get the default configured BKU
 	 * @return the default configured BKU
 	 */
 	public BKUs getDefaultBKU();
-	
+
 	/**
 	 * Get the default configured SignaturePosition
 	 * @return the default configured SignaturePosition or null if not configured
 	 */
 	public SignaturePosition getDefaultSignaturePosition();
-	
+
 	/**
 	 * Get the transparency of the signature placeholder
 	 * @return the transparency of the signature placeholder
 	 */
 	public int getPlaceholderTransparency();
-	
+
 	/**
 	 * Gets the default output folder for signed documents
 	 * @return the default output folder 
 	 */
 	public String getDefaultOutputFolder();
-	
+
 	/**
 	 * Gets the mobile BKU URL
 	 * @return the mobile BKU URL
 	 */
 	public String getMobileBKUURL();
-	
+
 	/**
 	 * Get the signature note text to use
 	 * @return the signature note text
 	 */
 	public String getSignatureNote();
-	
+
 	/**
 	 * Gets the configured locale
 	 * @return the configured locale
 	 */
 	public Locale getConfigLocale();
-	
+
 	/**
 	 * Gets the configured locale
 	 * @return the configured locale
 	 */
 	public Locale getSignLocale();
-	
+
+	/**
+	 * Gets the configured MainWindow size
+	 * @return the configured MainWindow size
+	 */
+	public Point getMainWindowSize();
+
 	/**
 	 * Loads the current configuration to the current configuration file
 	 * @param configSource 
