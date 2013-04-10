@@ -213,7 +213,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		Button btnSpeichern = new Button(this, SWT.NONE);
 		FormData fd_btnSpeichern = new FormData();
-		fd_btnSpeichern.left = new FormAttachment(0, 5);
+		fd_btnSpeichern.right = new FormAttachment(100, -10);
 		fd_btnSpeichern.bottom = new FormAttachment(100, -5);
 		btnSpeichern.setLayoutData(fd_btnSpeichern);
 		btnSpeichern.addSelectionListener(new SelectionAdapter() {
@@ -233,7 +233,7 @@ public class ConfigurationComposite extends StateComposite {
 		
 		Button btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
-		fd_btnAbrechen.left = new FormAttachment(btnSpeichern, 10);
+		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
 		fd_btnAbrechen.bottom = new FormAttachment(100, -5);
 		btnAbbrechen.setLayoutData(fd_btnAbrechen);
 		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
