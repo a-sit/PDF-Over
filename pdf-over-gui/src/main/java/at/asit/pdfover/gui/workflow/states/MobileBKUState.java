@@ -261,6 +261,7 @@ public class MobileBKUState extends State {
 						// set possible password
 						ui.setMobilePassword(mobileStatus.getMobilePassword());
 					}
+					ui.enableButton();
 					this.stateMachine.getGUIProvider().display(ui);
 				}
 			}
@@ -277,6 +278,10 @@ public class MobileBKUState extends State {
 
 				mobileStatus.setTan(tan.getTan());
 
+				// show waiting composite
+				this.stateMachine.getGUIProvider().display(
+						this.getWaitingComposite());
+				
 				// post to BKU!
 				Thread postTanThread = new Thread(new PostTanThread(this));
 				postTanThread.start();
@@ -292,6 +297,7 @@ public class MobileBKUState extends State {
 					tan.setTries(mobileStatus.getTanTries());
 
 				}
+				tan.enableButton();
 				this.stateMachine.getGUIProvider().display(tan);
 			}
 

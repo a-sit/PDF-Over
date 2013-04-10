@@ -57,6 +57,10 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	private final SelectionListener okListener = new SelectionListener() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+			if(!MobileBKUEnterNumberComposite.this.btn_ok.isEnabled()) {
+				return;
+			}
+			
 			try {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
@@ -75,6 +79,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
 				MobileBKUEnterNumberComposite.this.setUserAck(true);
+				
+				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
+				
 			} catch(InvalidNumberException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
@@ -139,7 +146,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 	private Label lbl_number;
 
-	private Button btn_ok;
+	Button btn_ok;
 
 	/**
 	 * @return the errorMessage
@@ -192,8 +199,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		});
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -100);
-		fd_containerComposite.bottom = new FormAttachment(50, 100);
+		fd_containerComposite.top = new FormAttachment(50, -120);
+		fd_containerComposite.bottom = new FormAttachment(50, 120);
 		fd_containerComposite.left = new FormAttachment(50, -200);
 		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
@@ -278,6 +285,13 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
+	/**
+	 * enables submit button
+	 */
+	public void enableButton() {
+		this.btn_ok.setEnabled(true);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

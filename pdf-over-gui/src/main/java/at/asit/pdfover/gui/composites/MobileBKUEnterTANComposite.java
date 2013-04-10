@@ -63,6 +63,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+			
+			if(!MobileBKUEnterTANComposite.this.btn_ok.getEnabled()) {
+				return;
+			}
+			
+			
+			
 			String tan = MobileBKUEnterTANComposite.this.txt_tan.getText();
 
 			tan = tan.trim();
@@ -81,7 +88,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 			MobileBKUEnterTANComposite.this.tan = tan;
 			MobileBKUEnterTANComposite.this.setUserAck(true);
+			MobileBKUEnterTANComposite.this.btn_ok.setEnabled(false);
 			MobileBKUEnterTANComposite.this.state.updateStateMachine();
+			//MobileBKUEnterTANComposite.this.btn_ok.setEnabled(true);
 		}
 	}
 
@@ -124,6 +133,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	private Label lblTan;
 
+	Button btn_ok;
+
 	/**
 	 * @return the userAck
 	 */
@@ -165,6 +176,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	public String getRefVal() {
 		return this.refVal;
+	}
+	
+	/**
+	 * Enables the submit button
+	 */
+	public void enableButton() {
+		this.btn_ok.setEnabled(true);
 	}
 
 	/**
@@ -260,8 +278,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		});
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -100);
-		fd_containerComposite.bottom = new FormAttachment(50, 100);
+		fd_containerComposite.top = new FormAttachment(50, -120);
+		fd_containerComposite.bottom = new FormAttachment(50, 120);
 		fd_containerComposite.left = new FormAttachment(50, -200);
 		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
@@ -323,7 +341,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			@Override
 			public void keyTraversed(TraverseEvent e) {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
-					(new OkSelectionListener()).widgetSelected(null);
+					if(MobileBKUEnterTANComposite.this.btn_ok.isEnabled()) {
+						(new OkSelectionListener()).widgetSelected(null);
+					}
 				}
 			}
 		});
@@ -344,13 +364,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			}
 		});
 
-		Button btn_ok = new Button(containerComposite, SWT.NATIVE);
+		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 
 		Link lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 
 		FormData fd_lnk_data = new FormData();
 		fd_lnk_data.right = new FormAttachment(100, -20);
-		fd_lnk_data.bottom = new FormAttachment(btn_ok, -5);
+		fd_lnk_data.top = new FormAttachment(0, 20);
 		lnk_sig_data.setEnabled(true);
 		lnk_sig_data.setLayoutData(fd_lnk_data);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
@@ -360,7 +380,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_tries = new FormData();
 		// fd_lbl_tries.left = new FormAttachment(15, 5);
-		fd_lbl_tries.right = new FormAttachment(btn_ok, -10);
+		fd_lbl_tries.right = new FormAttachment(this.btn_ok, -10);
 		// fd_lbl_tries.top = new FormAttachment(70, -15);
 		fd_lbl_tries.bottom = new FormAttachment(100, -20);
 		this.lblTries.setLayoutData(fd_lbl_tries);
@@ -371,9 +391,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		//fd_btn_ok.left = new FormAttachment(100, -70);
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 
-		btn_ok.setLayoutData(fd_btn_ok);
-		btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
-		btn_ok.addSelectionListener(new OkSelectionListener());
+		this.btn_ok.setLayoutData(fd_btn_ok);
+		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+		this.btn_ok.addSelectionListener(new OkSelectionListener());
 
 	}
 
