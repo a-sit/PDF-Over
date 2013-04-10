@@ -265,7 +265,7 @@ public class OutputComposite extends StateComposite {
 			targetFile = new File(inputFolder, target);
 
 		if (targetFile.exists()) {
-			Dialog dialog = new Dialog(this.getShell(), 
+			Dialog dialog = new Dialog(this.getShell(), Messages.getString("common.warning"), //$NON-NLS-1$
 					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //$NON-NLS-1$
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)

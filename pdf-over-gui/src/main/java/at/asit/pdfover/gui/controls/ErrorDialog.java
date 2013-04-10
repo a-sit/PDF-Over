@@ -18,6 +18,8 @@ package at.asit.pdfover.gui.controls;
 // Imports
 import org.eclipse.swt.widgets.Shell;
 
+import at.asit.pdfover.gui.utils.Messages;
+
 /**
  * An error dialog
  */
@@ -28,6 +30,7 @@ public class ErrorDialog extends Dialog {
 	 * @param button The buttons to be shown
 	 */
 	public ErrorDialog(Shell parent, String message, BUTTONS button) {
-		super(parent, message, button, ICON.ERROR);
+		super(parent, Messages.getString("error.Title"), //$NON-NLS-1$
+				message, button, ICON.ERROR);
 	}
 }

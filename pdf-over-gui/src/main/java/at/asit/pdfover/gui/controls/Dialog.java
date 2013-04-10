@@ -20,8 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.gui.utils.Messages;
-
 /**
  * A Message dialog
  */
@@ -61,15 +59,16 @@ public class Dialog {
 	
 	/**
 	 * @param parent The parent shell
-	 * @param message The error message
+	 * @param title The dialog title
+	 * @param message The dialog message
 	 * @param button The BUTTONS to be shown
 	 * @param icon The ICON to be displayed
 	 */
-	public Dialog(Shell parent, String message, BUTTONS button, ICON icon) {
-		this.initialize(parent, message, button, icon);
+	public Dialog(Shell parent, String title, String message, BUTTONS button, ICON icon) {
+		this.initialize(parent, title, message, button, icon);
 	}
 
-	private void initialize(Shell parent, String message, BUTTONS button, ICON icon) {
+	private void initialize(Shell parent, String title, String message, BUTTONS button, ICON icon) {
 		int boxstyle = 0;
 		switch (icon) {
 			case ERROR:
@@ -106,7 +105,7 @@ public class Dialog {
 
 		this.box = new MessageBox(parent, boxstyle);
 		this.box.setMessage(message);
-		this.box.setText(Messages.getString("error.Title")); //$NON-NLS-1$
+		this.box.setText(title);
 	}
 
 	/**
