@@ -3,14 +3,15 @@
 #### CONFIGURE: ######
 PUBLISH_DIR="/srv/apache2/www/pdf-over"
 LOG_DIR="log"
-VERSION="4.0.0-SNAPSHOT"
 CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
 
 
 #### DON'T CONFIGURE ####
+BASEDIR="`dirname $0`"
 
+VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
 TARGET_FILE="pdf-over-gui-$VERSION-standard.jar"
 
 TBOLDGRAY="\033[1;30m"
@@ -41,6 +42,8 @@ function end_phase {
 	PAD=$(($COLS-${#MSG}))
 	printf "%b%${PAD}s%b" "$STATUSCOLOR" "[$STATUS]" "$TNORMAL"
 }
+
+pushd $BASEDIR
 
 echo -e "Publishing to: $TYELLOW$PUBLISH_DIR$TNORMAL"
 mkdir -p $PUBLISH_DIR
@@ -115,3 +118,5 @@ if [ $RETVAL -ne 0 ]; then
 else
 	end_phase "OK"
 fi
+
+popd
