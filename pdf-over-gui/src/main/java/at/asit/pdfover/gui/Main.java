@@ -39,7 +39,7 @@ public class Main {
 	public static void main(String[] args) {
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 		
-		File configDir = new File(System.getProperty("user.home")+"/.pdfover");
+		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
 		
 		if(!configDir.exists()) {
 			configDir.mkdir();

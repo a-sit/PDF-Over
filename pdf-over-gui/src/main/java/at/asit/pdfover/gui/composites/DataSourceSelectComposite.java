@@ -25,21 +25,23 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,14 +127,31 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		// Color back = new Color(Display.getCurrent(), 77, 190, 250);
 
-		this.drop_area = new Composite(this, SWT.RESIZE | SWT.BORDER);
+		this.drop_area = new Composite(this, SWT.RESIZE);
 		FormData fd_drop_area = new FormData();
-		fd_drop_area.left = new FormAttachment(0, 0);
-		fd_drop_area.right = new FormAttachment(100, 0);
-		fd_drop_area.top = new FormAttachment(0, 0);
-		fd_drop_area.bottom = new FormAttachment(100, 0);
+		fd_drop_area.left = new FormAttachment(0, 30);
+		fd_drop_area.right = new FormAttachment(100, -30);
+		fd_drop_area.top = new FormAttachment(0, 30);
+		fd_drop_area.bottom = new FormAttachment(100, -30);
 		this.drop_area.setLayoutData(fd_drop_area);
 		this.drop_area.setLayout(new FormLayout());
+		
+		this.drop_area.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				Rectangle clientArea = DataSourceSelectComposite.this
+						.drop_area.getClientArea();
+				
+				e.gc.setForeground(new Color(getDisplay(), 0x76, 0xC4, 0xC8));
+				e.gc.setLineStyle(SWT.LINE_DASH);
+				e.gc.drawRoundRectangle(clientArea.x, 
+						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
+						10, 10);
+			}
+		});
+		
+		//this.drop_area.
 		// this.drop_area.setBackground(back);
 
 		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_DEFAULT
@@ -198,22 +217,42 @@ public class DataSourceSelectComposite extends StateComposite {
 			}
 		});
 
+		final Label lbl_drag2 = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
+		
 		final Label lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
 		this.fd_lbl_drag = new FormData();
 		this.fd_lbl_drag.left = new FormAttachment(0, 10);
 		this.fd_lbl_drag.right = new FormAttachment(100, -10);
-		this.fd_lbl_drag.top = new FormAttachment(0, 10);
-		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
+		//this.fd_lbl_drag.top = new FormAttachment(40, -10);
+		this.fd_lbl_drag.bottom = new FormAttachment(lbl_drag2, -10);
 		lbl_drag.setLayoutData(this.fd_lbl_drag);
 		FontData[] fD = lbl_drag.getFont().getFontData();
-		fD[0].setHeight(18);
+		fD[0].setHeight(20);
 		lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
 		lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
 		lbl_drag.setAlignment(SWT.CENTER);
 		
-		final Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		btn_open.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 		
+		this.fd_lbl_drag2 = new FormData();
+		this.fd_lbl_drag2.left = new FormAttachment(0, 10);
+		this.fd_lbl_drag2.right = new FormAttachment(100, -10);
+		this.fd_lbl_drag2.top = new FormAttachment(50, -10);
+		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
+		lbl_drag2.setLayoutData(this.fd_lbl_drag2);
+		FontData[] fD2 = lbl_drag2.getFont().getFontData();
+		fD2[0].setHeight(12);
+		lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
+		lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //$NON-NLS-1$
+		lbl_drag2.setAlignment(SWT.CENTER);
+		
+		final Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
+		btn_open.setText(Messages.getString("dataSourceSelection.browse")); //$NON-NLS-1$
+		
+		FontData[] fD_open = btn_open.getFont().getFontData();
+		fD_open[0].setHeight(14);
+		btn_open.setFont(new Font(Display.getCurrent(), fD_open[0]));
+		
+		/*
 		lbl_drag.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -234,14 +273,16 @@ public class DataSourceSelectComposite extends StateComposite {
 						50, (lbl_drag.getSize().y / 2) + 10 + size.y);
 			}
 		});
+		*/
 		// lbl_drag.setBackground(back);
 
 		Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		this.fd_btn_open = new FormData();
-		this.fd_btn_open.left = new FormAttachment(100, size.x * -1 - 10);
-		this.fd_btn_open.right = new FormAttachment(100, -5);
-		this.fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
-		this.fd_btn_open.bottom = new FormAttachment(100, -5);
+		this.fd_btn_open.left = new FormAttachment(50, (size.x / 2 ) * -1);
+		//this.fd_btn_open.right = new FormAttachment(100, -5);
+		//this.fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
+		this.fd_btn_open.top = new FormAttachment(lbl_drag2, 10);
+		//this.fd_btn_open.bottom = new FormAttachment(100, -5);
 		btn_open.setLayoutData(this.fd_btn_open);
 
 		// btn_open.setBackground(back);
@@ -251,9 +292,10 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	private boolean press = false;
 
-	private Composite drop_area;
+	Composite drop_area;
 
 	FormData fd_lbl_drag;
+	FormData fd_lbl_drag2;
 
 	FormData fd_btn_open;
 

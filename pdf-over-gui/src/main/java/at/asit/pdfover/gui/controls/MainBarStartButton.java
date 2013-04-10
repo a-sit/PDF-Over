@@ -50,7 +50,7 @@ public class MainBarStartButton extends MainBarButton {
 
 		Point size = this.getSize();
 
-		int height = size.y - 2;
+		int height = size.y - 3;
 
 		int split = 10;
 		int width = size.x - split;

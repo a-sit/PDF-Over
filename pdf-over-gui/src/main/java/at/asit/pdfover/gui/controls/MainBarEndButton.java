@@ -52,13 +52,13 @@ public class MainBarEndButton extends MainBarButton {
 	@Override
 	protected void paintButton(PaintEvent e) {
 		Point size = this.getSize();
-		int height = size.y - 2;
+		int height = size.y - 3;
 
 		int split = 10;
-		int width = size.x;
+		int width = size.x - 1;
 		
 		e.gc.drawLine(0, 0, width, 0);
-		e.gc.drawLine(width, 0, width+split, (height) / 2);
+		e.gc.drawLine(width, 0, width, height);
 		e.gc.drawLine(width, height, 0, height);
 		e.gc.drawLine(0, height, 0+split, (height) / 2);
 		e.gc.drawLine(0+split, (height) / 2, 0, 0);

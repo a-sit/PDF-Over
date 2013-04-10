@@ -21,6 +21,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
@@ -65,7 +66,9 @@ public abstract class MainBarButton extends Canvas {
 
 		this.inactiveBackground = new Color(getDisplay(), 0x4B, 0x95, 0x00);
 		this.activeBackground = new Color(getDisplay(), 0x98, 0xF2, 0x3D);
-
+		this.textColor = this.getForeground();
+		this.borderColor = new Color(getDisplay(), 0x76, 0xC4, 0xC8);
+		this.textsize = 12;
 	}
 
 	private Color inactiveBackground = null;
@@ -86,6 +89,53 @@ public abstract class MainBarButton extends Canvas {
 		this.activeBackground = activeBackground;
 	}
 
+	/**
+	 * the text size
+	 */
+	protected int textsize = 12;
+	
+	/**
+	 * @return the textsize
+	 */
+	public int getTextsize() {
+		return this.textsize;
+	}
+
+	/**
+	 * @param textsize the textsize to set
+	 */
+	public void setTextsize(int textsize) {
+		this.textsize = textsize;
+	}
+
+	/**
+	 * the used text color
+	 */
+	protected Color textColor = null;
+
+	/**
+	 * @param textColor the textColor to set
+	 */
+	public void setTextColor(Color textColor) {
+		this.textColor = textColor;
+	}
+
+	/**
+	 * @return the borderColor
+	 */
+	public Color getBorderColor() {
+		return this.borderColor;
+	}
+
+	/**
+	 * @param borderColor the borderColor to set
+	 */
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
+	}
+
+	private Color borderColor = null;
+	
 	private Color activeBackground = null;
 
 	private String text = ""; //$NON-NLS-1$
@@ -165,6 +215,7 @@ public abstract class MainBarButton extends Canvas {
 	 */
 	protected void paintBackground(PaintEvent e) {
 
+		/*
 		Point size = this.getSize();
 		int height = size.y - 2;
 
@@ -176,9 +227,8 @@ public abstract class MainBarButton extends Canvas {
 		e.gc.fillGradientRectangle(0, 0, width, factor, true);
 
 		// BOTTOM
-		e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
-				true);
-
+		e.gc.fillGradientRectangle(0, height, width, -1 * (factor), true);
+		*/
 		// LEFT
 		//e.gc.fillGradientRectangle(0, 0, factor, height, false);
 
@@ -194,7 +244,15 @@ public abstract class MainBarButton extends Canvas {
 	 */
 	void paintControl(PaintEvent e) {
 		this.paintBackground(e);
+		
+		Color current = e.gc.getForeground();
+		
+		e.gc.setForeground(getBorderColor());
+		
 		this.paintButton(e);
+		
+		e.gc.setForeground(current);
+		
 		this.paintText(e);
 	}
 
@@ -224,11 +282,26 @@ public abstract class MainBarButton extends Canvas {
 			if (this.getText() != null) {
 				textlen = this.getText().length();
 			}
-
+			
+			Color current = e.gc.getForeground();
+			
+			e.gc.setForeground(this.textColor);
+			
+			String font_name = e.gc.getFont().getFontData()[0].getName();
+			
+			Font font = new Font(this.getDisplay(), font_name, this.getTextsize(), e.gc.getFont().getFontData()[0].getStyle() );
+			
+			e.gc.setFont(font);
+			
 			int texty = (height - e.gc.getFontMetrics().getHeight()) / 2;
 			int textx = (width - e.gc.getFontMetrics().getAverageCharWidth()
 					* textlen) / 2;
+			
 			e.gc.drawText(this.getText(), textx, texty);
+			
+			font.dispose();
+			
+			e.gc.setForeground(current);
 		} else {
 			int imgx = (width - height) / 2;
 			Image tmp = new Image(getDisplay(), this.image.getImageData()

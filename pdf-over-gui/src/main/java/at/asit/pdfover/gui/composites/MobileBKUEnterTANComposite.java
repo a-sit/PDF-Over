@@ -17,6 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
@@ -203,6 +205,19 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_text.left = new FormAttachment(50, 15);
 		this.txt_tan.setEditable(true);
 		this.txt_tan.setLayoutData(fd_text);
+		
+		this.txt_tan.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				
+				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
+				
+				if(text.length() > 3 && MobileBKUEnterTANComposite.this.getVergleichswert().startsWith(text.trim())) {
+					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
+				} 
+			}
+		});
 		
 		this.lbl_tries = new Label(this, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_tries = new FormData();

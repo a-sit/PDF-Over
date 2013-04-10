@@ -65,6 +65,7 @@ public class OutputState extends State {
 			}
 			
 			this.outputComposite.setTempDirectory(tmpDir.getAbsolutePath());
+			this.outputComposite.setInputFile(this.stateMachine.getStatus().getDocument());
 		}
 
 		return this.outputComposite;

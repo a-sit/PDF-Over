@@ -273,7 +273,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	public void saveCurrentConfiguration() throws IOException {
 		String filename = this.getConfigurationFile();
 
-		File configFile = new File(filename);
+		File configFile = new File(this.getConfigurationDirectory() + "/" + filename); //$NON-NLS-1$
 
 		Properties props = new Properties();
 		props.clear();

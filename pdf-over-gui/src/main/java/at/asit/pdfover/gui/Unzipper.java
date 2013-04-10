@@ -21,12 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
@@ -58,7 +53,7 @@ public class Unzipper {
 
 			if (entry.isDirectory()) {
 				log.debug("Extracting directory: " + entry.getName()); //$NON-NLS-1$
-				// This is not robust, just for demonstration purposes.
+				
 				File nDir =new File(targetPath + "/" + entry.getName()); //$NON-NLS-1$
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {

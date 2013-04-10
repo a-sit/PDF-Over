@@ -52,7 +52,7 @@ public class MainBarRectangleButton extends MainBarButton {
 		
 		Point size = this.getSize();
 
-		int height = size.y - 2;
+		int height = size.y - 3;
 
 		int width = size.x;
 		
