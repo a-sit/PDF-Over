@@ -278,18 +278,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		props.setProperty(Constants.CFG_BKU, this.getDefaultBKUPersistent().toString());
 		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHostPersistent());
 		props.setProperty(Constants.CFG_PROXY_PORT,
-				Integer.toString(this.getProxyPortPersistent()));
+				Integer.toString(getProxyPortPersistent()));
 		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblemPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, this.getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumberPersistent());
 		props.setProperty(Constants.CFG_OUTPUT_FOLDER, this.getDefaultOutputFolderPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
-				Integer.toString(this.getPlaceholderTransparency()));
+				Integer.toString(getPlaceholderTransparency()));
 
 		Point size = this.configuration.getMainWindowSize();
 		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //$NON-NLS-1$
 
-		Locale configLocale = this.getLocale();
+		Locale configLocale = getLocale();
 		if(configLocale != null) {
 			props.setProperty(Constants.CFG_LOCALE, LocaleSerializer.getParsableString(configLocale));
 		}
@@ -299,7 +299,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_SIGN_LOCALE, LocaleSerializer.getParsableString(signLocale));
 		}
 
-		SignaturePosition pos = this.getDefaultSignaturePosition();
+		SignaturePosition pos = getDefaultSignaturePosition();
 
 		if (pos == null) {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //$NON-NLS-1$
@@ -310,6 +310,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 					String.format((Locale) null, "x=%f;y=%f;p=%d", //$NON-NLS-1$
 							pos.getX(), pos.getY(), pos.getPage()));
 		}
+
+		String mobileBKUURL = getMobileBKUURL();
+		if (!mobileBKUURL.equals(Constants.DEFAULT_MOBILE_BKU_URL))
+			props.setProperty(Constants.CFG_MOBILE_BKU_URL, mobileBKUURL);
+
+		MobileBKUs mobileBKUType = getMobileBKUType();
+		if (mobileBKUType != Constants.DEFAULT_MOBILE_BKU_TYPE)
+			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
 
