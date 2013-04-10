@@ -113,11 +113,44 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			});
 			log.debug(this.btnAutomatischePositionierung.getBounds().toString());
 	
+			Label lblTransparenz = new Label(grpSignatur, SWT.HORIZONTAL);
+			FormData fd_lblTransparenz = new FormData();
+			fd_lblTransparenz.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
+			fd_lblTransparenz.left = new FormAttachment(0, 5);
+			lblTransparenz.setLayoutData(fd_lblTransparenz);
+			lblTransparenz.setText(Messages.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
+	
+			FontData[] fD_lblTransparenz = lblTransparenz.getFont().getFontData();
+			fD_lblTransparenz[0].setHeight(TEXT_SIZE_NORMAL);
+			lblTransparenz.setFont(new Font(Display.getCurrent(), fD_lblTransparenz[0]));
+
+			Label lblTransparenzLinks = new Label(grpSignatur, SWT.HORIZONTAL);
+			FormData fd_lblTransparenzLinks = new FormData();
+			fd_lblTransparenzLinks.top = new FormAttachment(lblTransparenz, 5);
+			fd_lblTransparenzLinks.left = new FormAttachment(0, 15);
+			lblTransparenzLinks.setLayoutData(fd_lblTransparenzLinks);
+			lblTransparenzLinks.setText(Messages.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
+	
+			FontData[] fD_lblTransparenzLinks = lblTransparenzLinks.getFont().getFontData();
+			fD_lblTransparenzLinks[0].setHeight(TEXT_SIZE_NORMAL);
+			lblTransparenzLinks.setFont(new Font(Display.getCurrent(), fD_lblTransparenzLinks[0]));
+
+			Label lblTransparenzRechts = new Label(grpSignatur, SWT.HORIZONTAL);
+			FormData fd_lblTransparenzRechts = new FormData();
+			fd_lblTransparenzRechts.top = new FormAttachment(lblTransparenz, 5);
+			fd_lblTransparenzRechts.right = new FormAttachment(100, -5);
+			lblTransparenzRechts.setLayoutData(fd_lblTransparenzRechts);
+			lblTransparenzRechts.setText(Messages.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
+	
+			FontData[] fD_lblTransparenzRechts = lblTransparenzRechts.getFont().getFontData();
+			fD_lblTransparenzRechts[0].setHeight(TEXT_SIZE_NORMAL);
+			lblTransparenzRechts.setFont(new Font(Display.getCurrent(), fD_lblTransparenzRechts[0]));
+
 			this.sclTransparenz = new Scale(grpSignatur, SWT.HORIZONTAL);
 			FormData fd_sldTransparenz = new FormData();
-			fd_sldTransparenz.right = new FormAttachment(100, -5);
-			fd_sldTransparenz.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
-			fd_sldTransparenz.left = new FormAttachment(0, 5);
+			fd_sldTransparenz.right = new FormAttachment(lblTransparenzRechts, -5);
+			fd_sldTransparenz.top = new FormAttachment(lblTransparenz, 5);
+			fd_sldTransparenz.left = new FormAttachment(lblTransparenzLinks, 5);
 			this.sclTransparenz.setLayoutData(fd_sldTransparenz);
 			this.sclTransparenz.setMinimum(0);
 			this.sclTransparenz.setMaximum(255);
@@ -211,7 +244,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.txtOutputFolder = new Text(grpSpeicherort, SWT.BORDER);
 			FormData fd_text = new FormData();
 			fd_text.top = new FormAttachment(lblDefaultOutputFolder, 5);
-			fd_text.left = new FormAttachment(0, 5);
+			fd_text.left = new FormAttachment(0, 15);
 			this.txtOutputFolder.setLayoutData(fd_text);
 	
 			FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont().getFontData();
