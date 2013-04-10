@@ -43,7 +43,7 @@ function end_phase {
 	printf "%b%${PAD}s%b" "$STATUSCOLOR" "[$STATUS]" "$TNORMAL"
 }
 
-pushd $BASEDIR
+pushd $BASEDIR > /dev/null
 
 echo -e "Publishing to: $TYELLOW$PUBLISH_DIR$TNORMAL"
 mkdir -p $PUBLISH_DIR
@@ -119,4 +119,4 @@ else
 	end_phase "OK"
 fi
 
-popd
+popd > /dev/null
