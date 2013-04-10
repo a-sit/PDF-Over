@@ -24,8 +24,8 @@ import java.io.InputStream;
 public interface DocumentSource {
 
 	/**
-	 * Gets Document as Input Stream
-	 * @return InputStream of the document
+	 * Gets the InputStream for this Document
+	 * @return InputStream for the document
 	 * @throws IOException 
 	 */
 	public InputStream getInputStream() throws IOException;
