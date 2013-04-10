@@ -214,7 +214,7 @@ public class OutputComposite extends StateComposite {
 				if (OutputComposite.this.outputFile != null) {
 
 					if (OutputComposite.this.outputFile.exists()) {
-						// Desktop supported check allready done in constructor
+						// Desktop supported check already done in constructor
 						if (Desktop.isDesktopSupported()) {
 							Desktop.getDesktop().open(
 									OutputComposite.this.outputFile);

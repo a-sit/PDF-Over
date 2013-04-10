@@ -854,7 +854,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		if (portString == null || portString.trim().equals("")) { //$NON-NLS-1$
 			port = -1;
 		} else {
-			port = Integer.parseInt(portString);
+			try {
+				port = Integer.parseInt(portString);
+			} catch (NumberFormatException e) {
+				throw new InvalidPortException(portString, e);
+			}
 		}
 		this.configurationContainer.setProxyPort(port);
 	}

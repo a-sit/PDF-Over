@@ -34,7 +34,7 @@ public class InvalidEmblemFile extends PDFOverGUIException {
 	 * @param file
 	 */
 	public InvalidEmblemFile(final File file) {
-		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile")); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath())); //$NON-NLS-1$
 	}
 	
 	/**
@@ -43,6 +43,6 @@ public class InvalidEmblemFile extends PDFOverGUIException {
 	 * @param reason 
 	 */
 	public InvalidEmblemFile(final File file, Throwable reason) {
-		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile"), reason); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath()), reason); //$NON-NLS-1$
 	}
 }

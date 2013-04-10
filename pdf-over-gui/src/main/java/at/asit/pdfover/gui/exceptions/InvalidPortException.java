@@ -28,10 +28,19 @@ public class InvalidPortException extends PDFOverGUIException {
 	
 		
 	/**
-	 * Constructor
-	 * @param port
+	 * Constructor with an invalid port number
+	 * @param port invalid port number
 	 */
 	public InvalidPortException(int port) {
-		super(port + Messages.getString("exception.InvalidPort") + 0xffff); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.InvalidPort"), Integer.toString(port), 1, 0xffff)); //$NON-NLS-1$
+	}
+
+	/**
+	 * Constructor with an invalid port string
+	 * @param source InvalidNumberFormat exception
+	 * @param portString invalid port string
+	 */
+	public InvalidPortException(String portString, Throwable source) {
+		super(String.format(Messages.getString("exception.InvalidPort"), portString, 1, 0xffff), source); //$NON-NLS-1$
 	}
 }
