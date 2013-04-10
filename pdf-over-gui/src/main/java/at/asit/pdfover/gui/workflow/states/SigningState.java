@@ -94,6 +94,7 @@ public class SigningState extends State {
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new BKUSelectionState(this.stateMachine));
 			} else {
+				// FIXME: Exit?
 				this.stateMachine.exit();
 			}
 			return;
