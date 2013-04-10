@@ -198,7 +198,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(450, 329);
+		getShell().setSize(500, 800);
 		getShell().setText("PDF-Over");
 
 		getShell().setLayout(new FormLayout());
