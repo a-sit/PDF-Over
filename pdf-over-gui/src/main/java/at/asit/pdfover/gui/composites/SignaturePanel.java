@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.Messages;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -238,7 +239,7 @@ public class SignaturePanel extends JPanel {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if (this.currentImage == null) {
 			g.setColor(Color.black);
-			g.drawString("No page selected", getWidth() / 2 - 30,
+			g.drawString(Messages.getString("error.SignaturePanel.NoPage"), getWidth() / 2 - 30, //$NON-NLS-1$
 					getHeight() / 2);
 			if (this.currentPage != null) {
 				showPage(this.currentPage);
@@ -301,7 +302,7 @@ public class SignaturePanel extends JPanel {
 					showPage(this.currentPage);
 				}
 				g.setColor(Color.black);
-				g.drawString("Could not render page", getWidth() / 2 - 30,
+				g.drawString(Messages.getString("error.SignaturePanel.NoRender"), getWidth() / 2 - 30, //$NON-NLS-1$
 						getHeight() / 2);
 			}
 		}

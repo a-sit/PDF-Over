@@ -118,8 +118,7 @@ public class PositioningComposite extends StateComposite {
 	private void requestFocus()
 	{
 		this.frame.requestFocus();
-		boolean b = setFocus();
-		log.debug("Requesting focus: " + b);
+		setFocus();
 	}
 
 	/**
