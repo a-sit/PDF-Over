@@ -16,6 +16,7 @@ Mac-DMG-Paket:
 	* pdf-over_mac.sh script bearbeiten:
 		* 'cd "$BASEDIR/.."' in 'cd "$BASEDIR"' ändern
 	* App erstellen mit Platypus: Screenshots platypus (drop settings).png
+		* Beispiel-Profil inkludiert
 	* DMG-Image erzeugen mit DmgPress: Screenshot DmgPress.png
 		* Hintergrund für Folder: Background.png
 		* Darstellung -> Als Liste; Darstellung -> Als Symbole
