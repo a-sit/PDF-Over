@@ -33,7 +33,7 @@ public interface Status {
 	 * @param document the document
 	 */
 	public void setDocument(File document);
-	
+
 	/**
 	 * Gets the document
 	 * @return the document

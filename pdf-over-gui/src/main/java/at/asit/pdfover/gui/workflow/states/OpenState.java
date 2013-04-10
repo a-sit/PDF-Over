@@ -52,7 +52,6 @@ public class OpenState extends State {
 			this.selectionComposite =
 					this.stateMachine.getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
 		}
-		
 		return this.selectionComposite;
 	}
 
