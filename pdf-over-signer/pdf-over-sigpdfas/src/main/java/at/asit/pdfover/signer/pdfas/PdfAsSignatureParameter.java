@@ -450,7 +450,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			arrline[i] = lines.get(i);
 		}
 		
-		log.debug(text + " needs " + lines.size() + " lines");
+		//log.debug(text + " needs " + lines.size() + " lines");
 		
 		return arrline;
 	}

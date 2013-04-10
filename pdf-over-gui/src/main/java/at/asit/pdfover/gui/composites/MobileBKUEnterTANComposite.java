@@ -275,7 +275,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			public void modifyText(ModifyEvent e) {
 				
 				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
-				log.debug("Current TAN: " + text); //$NON-NLS-1$
+				//log.debug("Current TAN: " + text); //$NON-NLS-1$
 				if(text.length() > 3 && MobileBKUEnterTANComposite.this.getVergleichswert().startsWith(text.trim())) {
 					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
 				} 
