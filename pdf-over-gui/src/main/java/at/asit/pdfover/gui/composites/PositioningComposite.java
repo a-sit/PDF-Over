@@ -19,6 +19,8 @@ package at.asit.pdfover.gui.composites;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -53,7 +55,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 import com.sun.pdfview.PDFFile;
 
 /**
- * Composite which allows to position the signature on a preview of the document 
+ * Composite which allows to position the signature on a preview of the document
  */
 public class PositioningComposite extends StateComposite {
 	/**
@@ -82,9 +84,9 @@ public class PositioningComposite extends StateComposite {
 
 	int numPages = 0;
 
-
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -128,6 +130,8 @@ public class PositioningComposite extends StateComposite {
 					showPage(PositioningComposite.this.numPages);
 				else
 					showPage(PositioningComposite.this.numPages + 1);
+				
+				PositioningComposite.this.requestFocus();
 			}
 		});
 
@@ -148,6 +152,18 @@ public class PositioningComposite extends StateComposite {
 		this.scrollbar = this.mainArea.getVerticalBar();
 
 		this.frame = SWT_AWT.new_Frame(this.mainArea);
+		this.frame.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				PositioningComposite.this.log.debug(e.paramString());
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				PositioningComposite.this.log.debug(e.paramString());
+			}
+		});
 		this.mainArea.addKeyListener(this.keyListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
 		// Workaround for Windows: Scrollbar always gets the event
@@ -158,27 +174,29 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Set the PDF Document to display
-	 * @param document document to display
-	 * @throws IOException I/O Error
+	 * 
+	 * @param document
+	 *            document to display
+	 * @throws IOException
+	 *             I/O Error
 	 */
 	public void displayDocument(File document) throws IOException {
 		RandomAccessFile rafile = new RandomAccessFile(document, "r"); //$NON-NLS-1$
 		FileChannel chan = rafile.getChannel();
-		ByteBuffer buf = chan.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
+		ByteBuffer buf = chan
+				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
 		chan.close();
 		rafile.close();
 
 		this.pdf = new PDFFile(buf);
-		if (this.viewer == null)
-		{
+		if (this.viewer == null) {
 			this.viewer = new SignaturePanel(this.pdf);
 			this.frame.add(this.viewer);
 			this.viewer.setSignaturePlaceholderBorderColor(new Color(
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
-		}
-		else
+		} else
 			this.viewer.setDocument(this.pdf);
 		this.numPages = this.pdf.getNumPages();
 		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
@@ -188,24 +206,32 @@ public class PositioningComposite extends StateComposite {
 	/**
 	 * Request focus (to enable keyboard input)
 	 */
-	private void requestFocus()
-	{
-		this.frame.requestFocusInWindow();
+	public void requestFocus() {
 		this.mainArea.setFocus();
+		if(!this.frame.hasFocus()) {
+			this.frame.requestFocusInWindow();
+		}
 	}
 
 	/**
-	 * Set the signature placeholder image
-	 * Must be called _after_ displayDocument
-	 * @param placeholder signature placeholder
-	 * @param width width of the placeholder in page space
-	 * @param height height of the placeholder in page space 
-	 * @param transparency transparency of the signature placeholder (0 - 255)
+	 * Set the signature placeholder image Must be called _after_
+	 * displayDocument
+	 * 
+	 * @param placeholder
+	 *            signature placeholder
+	 * @param width
+	 *            width of the placeholder in page space
+	 * @param height
+	 *            height of the placeholder in page space
+	 * @param transparency
+	 *            transparency of the signature placeholder (0 - 255)
 	 */
-	public void setPlaceholder(Image placeholder, int width, int height, int transparency) {
+	public void setPlaceholder(Image placeholder, int width, int height,
+			int transparency) {
 		if (this.viewer == null)
 			return;
-		this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
+		this.viewer.setSignaturePlaceholder(placeholder, width, height,
+				transparency);
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
@@ -215,53 +241,53 @@ public class PositioningComposite extends StateComposite {
 			int sigXOffset = 0;
 			int sigYOffset = 0;
 
-			switch (e.keyCode)
-			{
-				case SWT.PAGE_DOWN:
-					if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
-						++newPage;
-					break;
+			switch (e.keyCode) {
+			case SWT.PAGE_DOWN:
+				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
+					++newPage;
+				break;
 
-				case SWT.PAGE_UP:
-					if (PositioningComposite.this.currentPage > 1)
-						--newPage;
-					break;
+			case SWT.PAGE_UP:
+				if (PositioningComposite.this.currentPage > 1)
+					--newPage;
+				break;
 
-				case SWT.END:
-					newPage = PositioningComposite.this.numPages;
-					break;
+			case SWT.END:
+				newPage = PositioningComposite.this.numPages;
+				break;
 
-				case SWT.HOME:
-					newPage = 1;
-					break;
+			case SWT.HOME:
+				newPage = 1;
+				break;
 
-				case SWT.CR:
-				case SWT.KEYPAD_CR:
-					PositioningComposite.this.setFinalPosition();
-					break;
+			case SWT.CR:
+			case SWT.KEYPAD_CR:
+				PositioningComposite.this.setFinalPosition();
+				break;
 
-				case SWT.ARROW_LEFT:
-					sigXOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
-					break;
+			case SWT.ARROW_LEFT:
+				sigXOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				break;
 
-				case SWT.ARROW_RIGHT:
-					sigXOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
-					break;
+			case SWT.ARROW_RIGHT:
+				sigXOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				break;
 
-				case SWT.ARROW_UP:
-					sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
-					break;
+			case SWT.ARROW_UP:
+				sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				break;
 
-				case SWT.ARROW_DOWN:
-					sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
-					break;
+			case SWT.ARROW_DOWN:
+				sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				break;
 			}
 
 			if (newPage != PositioningComposite.this.currentPage)
 				showPage(newPage);
 
 			if (sigXOffset != 0 || sigYOffset != 0)
-				PositioningComposite.this.translateSignaturePosition(sigXOffset, sigYOffset);
+				PositioningComposite.this.translateSignaturePosition(
+						sigXOffset, sigYOffset);
 		}
 	};
 
@@ -277,26 +303,25 @@ public class PositioningComposite extends StateComposite {
 
 			int newPage = PositioningComposite.this.currentPage;
 
-			if (e.getWheelRotation() < 0)
-			{
+			if (e.getWheelRotation() < 0) {
 				if (PositioningComposite.this.currentPage > 1)
 					newPage--;
-			}
-			else if (e.getWheelRotation() > 0)
-			{
+			} else if (e.getWheelRotation() > 0) {
 				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
 					newPage++;
 			}
 
 			if (newPage != PositioningComposite.this.currentPage)
 				showPage(newPage);
-		}		
+		}
 	};
 
 	private SelectionListener selectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			PositioningComposite.this.showPage(PositioningComposite.this.scrollbar.getSelection());
+			PositioningComposite.this
+					.showPage(PositioningComposite.this.scrollbar
+							.getSelection());
 		}
 	};
 
@@ -334,41 +359,52 @@ public class PositioningComposite extends StateComposite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
 	 */
 	@Override
 	public void doLayout() {
 		this.layout(true, true);
-		requestFocus();
+//		requestFocus();
 	}
 
 	/**
 	 * Translate the signature placeholder position
-	 * @param sigXOffset signature placeholder horizontal position offset
-	 * @param sigYOffset signature placeholder vertical position offset
+	 * 
+	 * @param sigXOffset
+	 *            signature placeholder horizontal position offset
+	 * @param sigYOffset
+	 *            signature placeholder vertical position offset
 	 */
 	public void translateSignaturePosition(int sigXOffset, int sigYOffset) {
-		PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset, sigYOffset);
+		PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset,
+				sigYOffset);
 	}
 
 	/**
 	 * Set the signature position and continue to the next state
-	 * @param position the signature position
+	 * 
+	 * @param position
+	 *            the signature position
 	 */
 	void setFinalPosition() {
 		this.position = new SignaturePosition(
 				this.viewer.getSignaturePositionX(),
-				this.viewer.getSignaturePositionY(),
-				this.currentPage);
+				this.viewer.getSignaturePositionY(), this.currentPage);
 		PositioningComposite.this.state.updateStateMachine();
 	}
 
 	/**
 	 * Set the signature position
-	 * @param x the horizontal signature position
-	 * @param y the vertical signature position
-	 * @param page the page the signature is on
+	 * 
+	 * @param x
+	 *            the horizontal signature position
+	 * @param y
+	 *            the vertical signature position
+	 * @param page
+	 *            the page the signature is on
 	 */
 	public void setPosition(float x, float y, int page) {
 		showPage(page);
@@ -377,6 +413,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Get the signature position
+	 * 
 	 * @return the signature position
 	 */
 	public SignaturePosition getPosition() {

@@ -75,7 +75,7 @@ public class PositioningState extends State {
 					this.previousPosition.getX(),
 					this.previousPosition.getY(),
 					this.previousPosition.getPage());
-
+		
 		return this.positionComposite;
 	}
 
@@ -103,11 +103,12 @@ public class PositioningState extends State {
 			
 			status.setSignaturePosition(position.getPosition());
 			
-			if(status.getSignaturePosition() == null) {
-				return;
+			if(status.getSignaturePosition() != null) {
+				this.setNextState(new BKUSelectionState(this.stateMachine));
 			}
+			
+			this.positionComposite.requestFocus();
 		}
-		this.setNextState(new BKUSelectionState(this.stateMachine));
 	}
 
 	/* (non-Javadoc)
