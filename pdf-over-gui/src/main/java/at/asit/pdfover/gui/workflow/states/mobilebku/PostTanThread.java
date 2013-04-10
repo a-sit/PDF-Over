@@ -72,7 +72,7 @@ public class PostTanThread implements Runnable {
 
 			PostMethod method = new PostMethod(status.getBaseURL()
 					+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
-
+			method.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 			method.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
 			method.addParameter(
 					"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
