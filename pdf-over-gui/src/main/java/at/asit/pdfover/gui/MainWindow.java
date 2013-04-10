@@ -106,7 +106,7 @@ public class MainWindow {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param stateMachine
 	 *            The main workflow
 	 */
@@ -121,7 +121,7 @@ public class MainWindow {
 
 	/**
 	 * Sets top level composite for stack layout
-	 * 
+	 *
 	 * @param ctrl
 	 */
 	public void setTopControl(Control ctrl) {
@@ -149,7 +149,7 @@ public class MainWindow {
 
 	/**
 	 * Gets the container composite
-	 * 
+	 *
 	 * @return the container composite
 	 */
 	public Composite getContainer() {
@@ -158,8 +158,7 @@ public class MainWindow {
 
 	/**
 	 * Open the window.
-	 * 
-	 * @wbp.parser.entryPoint
+	 *
 	 */
 	public void open() {
 		createContents();
@@ -177,14 +176,13 @@ public class MainWindow {
 
 		this.btn_position.setText(Messages.getString("main.position")); //$NON-NLS-1$
 		this.btn_position.setToolTipText(Messages.getString("main.position")); //$NON-NLS-1$
-		
 
 		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
 
 		this.btn_end.setText(Messages.getString("main.done")); //$NON-NLS-1$
 		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
-		
+
 		Control ctrl = this.stack.topControl;
 		if (ctrl instanceof StateComposite) {
 			if (!ctrl.isDisposed()) {
@@ -193,7 +191,7 @@ public class MainWindow {
 			}
 		}
 	}
-	
+
 	/**
 	 * Create contents of the window.
 	 */
@@ -405,7 +403,7 @@ public class MainWindow {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
 			this.containerFormData.top = new FormAttachment(0, 10);
 		}
-		
+
 		this.getShell().getDisplay().update();
 		this.mainbar.layout(true, true);
 		this.mainbar.redraw();
