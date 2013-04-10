@@ -22,7 +22,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
@@ -46,12 +45,12 @@ public class DeveloperMain {
 		// Set PDF-AS log4j configuration:
 		//System.setProperty("log4j.configuration", "log4j.properties");
 		
-		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
+		File configDir = new File(Constants.CONFIG_DIRECTORY);
 		if(!configDir.exists()) {
 			configDir.mkdir();
 		} 
 		
-		File log4j = new File(configDir.getAbsolutePath() + "/" + ConfigManipulator.DEFAULT_LOG4J_FILE);  //$NON-NLS-1$
+		File log4j = new File(configDir.getAbsolutePath() + File.separator + Constants.DEFAULT_LOG4J_FILENAME);
 		if(log4j.exists()) {
 			PropertyConfigurator.configure(log4j.getAbsolutePath());
 		}

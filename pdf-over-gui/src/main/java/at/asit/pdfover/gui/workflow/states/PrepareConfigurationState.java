@@ -26,6 +26,7 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
@@ -42,7 +43,6 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.Unzipper;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.signator.Signator;
 
@@ -98,7 +98,7 @@ public class PrepareConfigurationState extends State {
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
 
 			} catch (FileNotFoundException ex) {
-				if (filename.equals(ConfigManipulator.DEFAULT_CONFIG_FILE)) {
+				if (filename.equals(Constants.DEFAULT_CONFIG_FILENAME)) {
 					// we only check for resource config file if it is the
 					// default value!
 					try {
@@ -138,7 +138,7 @@ public class PrepareConfigurationState extends State {
 
 			File configDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory());
 			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/" //$NON-NLS-1$
-					+ ConfigManipulator.DEFAULT_CONFIG_FILE);
+					+ Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
 				boolean allOK = false;
 
@@ -158,10 +158,9 @@ public class PrepareConfigurationState extends State {
 					FileOutputStream pdfOverConfig = null;
 					try {
 						inputStream = this.getClass().getResourceAsStream(
-								"/" + ConfigManipulator.DEFAULT_CONFIG_FILE); //$NON-NLS-1$
+								"/" + Constants.DEFAULT_CONFIG_FILENAME); //$NON-NLS-1$
 						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ "/" //$NON-NLS-1$
-								+ ConfigManipulator.DEFAULT_CONFIG_FILE);
+								+ "/" + Constants.DEFAULT_CONFIG_FILENAME); //$NON-NLS-1$
 
 						while ((byteCount = inputStream.read(buffer)) >= 0) {
 							pdfOverConfig.write(buffer, 0, byteCount);
@@ -196,10 +195,9 @@ public class PrepareConfigurationState extends State {
 					pdfOverConfig = null;
 					try {
 						inputStream = this.getClass().getResourceAsStream(
-								"/" + ConfigManipulator.DEFAULT_LOG4J_FILE); //$NON-NLS-1$
+								"/" + Constants.DEFAULT_LOG4J_FILENAME); //$NON-NLS-1$
 						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ "/" //$NON-NLS-1$
-								+ ConfigManipulator.DEFAULT_LOG4J_FILE);
+								+ "/" + Constants.DEFAULT_LOG4J_FILENAME); //$NON-NLS-1$
 
 						while ((byteCount = inputStream.read(buffer)) >= 0) {
 							pdfOverConfig.write(buffer, 0, byteCount);

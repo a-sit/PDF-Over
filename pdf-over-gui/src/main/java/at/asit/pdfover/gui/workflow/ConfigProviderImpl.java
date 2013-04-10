@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.signator.BKUs;
@@ -44,16 +45,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			.getLogger(ConfigProviderImpl.class);
 
 	private BKUs defaultBKU = BKUs.NONE;
-
-	/**
-	 * PDFOver config directory
-	 */
-	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
-
-	/**
-	 * Gets the Default Mobile URL
-	 */
-	public static final String DEFAULT_MOBILE_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
 	private SignaturePosition defaultSignaturePosition = null;
 
@@ -73,11 +64,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private String proxyHost = STRING_EMPTY;
 
-	private String configurationFile = ConfigManipulator.DEFAULT_CONFIG_FILE;
+	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
 	private int proxyPort = -1;
 
-	private String mobileBKU = DEFAULT_MOBILE_URL;
+	private String mobileBKU = Constants.DEFAULT_MOBILE_BKU_URL;
 
 	private String outputFolder = STRING_EMPTY;
 
@@ -315,7 +306,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getConfigurationDirectory() {
-		return CONFIG_DIRECTORY;
+		return Constants.CONFIG_DIRECTORY;
 	}
 
 	/*

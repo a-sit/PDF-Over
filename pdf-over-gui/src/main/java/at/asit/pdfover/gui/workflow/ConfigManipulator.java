@@ -27,16 +27,6 @@ import at.asit.pdfover.signator.SignaturePosition;
 public interface ConfigManipulator {
 	
 	/**
-	 * The default config file location
-	 */
-	public static final String DEFAULT_CONFIG_FILE = "PDFOver.config"; //$NON-NLS-1$
-	
-	/**
-	 * The default log4j file
-	 */
-	public static final String DEFAULT_LOG4J_FILE = "log4j.properties"; //$NON-NLS-1$
-	
-	/**
 	 * The bku config parameter
 	 */
 	public static final String BKU_CONFIG = "BKU"; //$NON-NLS-1$

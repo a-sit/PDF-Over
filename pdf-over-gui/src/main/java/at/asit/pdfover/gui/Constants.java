@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.gui;
 
+import java.io.File;
 import java.util.Locale;
 
 import org.eclipse.swt.graphics.Color;
@@ -78,4 +79,18 @@ public class Constants {
 
 	/** File suffix for the signed document */
 	public final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
+
+	/** Default Mobile BKU URL */
+	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+
+	/** Configuration directory */
+	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
+
+
+	/** The default configuration file name */
+	public static final String DEFAULT_CONFIG_FILENAME = "PDFOver.config"; //$NON-NLS-1$
+
+	/** The default log4j file name */
+	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
+
 }

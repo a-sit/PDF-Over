@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SWTLoader;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
@@ -55,12 +54,12 @@ public class Main {
 					JOptionPane.ERROR_MESSAGE);
 		}
 
-		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
+		File configDir = new File(Constants.CONFIG_DIRECTORY);
 		if(!configDir.exists()) {
 			configDir.mkdir();
 		} 
 		
-		File log4j = new File(configDir.getAbsolutePath() + "/" + ConfigManipulator.DEFAULT_LOG4J_FILE);  //$NON-NLS-1$
+		File log4j = new File(configDir.getAbsolutePath() + File.separator + Constants.DEFAULT_LOG4J_FILENAME);
 		if(log4j.exists()) {
 			PropertyConfigurator.configure(log4j.getAbsolutePath());
 		}
