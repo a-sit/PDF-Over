@@ -5,14 +5,13 @@
 	<info>
 		<appname>PDF-Over</appname>
 		<appversion>4.0</appversion>
-		<uninstaller write="yes" />
 		<javaversion>1.6</javaversion>
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
 		</authors>
-		<uninstaller condition="!izpack.macinstall" />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
+		<uninstaller condition="!izpack.macinstall" />
 		<!--run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" /-->
 	</info>
 
