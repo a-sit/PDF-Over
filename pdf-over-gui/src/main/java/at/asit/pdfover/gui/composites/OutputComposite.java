@@ -41,6 +41,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.controls.Dialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
@@ -55,184 +58,23 @@ public class OutputComposite extends StateComposite {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(OutputComposite.class);
 
-	private File inputFile;
+	private Link lnk_saved_file;
 
-	File outputFile = null;
+	private Button btn_save;
+
+	private Label lbl_success_message;
+
+	private DocumentSource signedDocument;
+
+	private File inputFile;
 
 	String outputDir = null;
 
-	/**
-	 * @return the outputDir
-	 */
-	public String getOutputDir() {
-		return this.outputDir;
-	}
+	String tempDirectory = null;
 
-	/**
-	 * @param outputDir
-	 *            the outputDir to set
-	 */
-	public void setOutputDir(String outputDir) {
-		this.outputDir = outputDir;
-	}
+	File outputFile = null;
 
-	/**
-	 * Sets the input file
-	 * 
-	 * @param inputFile
-	 *            the input file
-	 */
-	public void setInputFile(File inputFile) {
-		this.inputFile = inputFile;
-	}
-
-	/**
-	 * Gets the input file
-	 * 
-	 * @return the input file
-	 */
-	public File getInputFile() {
-		return this.inputFile;
-	}
-
-	/**
-	 * Saves the file
-	 * 
-	 * @throws IOException
-	 */
-	void saveFile() throws IOException {
-		FileDialog save = new FileDialog(OutputComposite.this.getShell(),
-				SWT.SAVE | SWT.NATIVE);
-		save.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
-		save.setFilterNames(new String[] { 
-				Messages.getString("common.PDFExtension_Description"), //$NON-NLS-1$
-				Messages.getString("common.AllExtension_Description")}); //$NON-NLS-1$
-
-		String proposed = OutputComposite.this.getInputFile().getAbsolutePath();
-
-		String path = this.getOutputDir();
-
-		if (path == null || path.equals("")) { //$NON-NLS-1$
-			path = FilenameUtils.getFullPath(proposed);
-		}
-
-		if(!path.endsWith(File.separator)) {
-			path += File.separator;
-		}
-		
-		String name = FilenameUtils.getName(proposed);
-
-		String extension = FilenameUtils.getExtension(proposed);
-
-		name = FilenameUtils.removeExtension(name);
-
-		proposed = path + name + Constants.SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
-
-		if (this.getOutputDir() != null && !this.getOutputDir().equals("")) //$NON-NLS-1$
-		{
-			// Output directory is set save there without asking user...
-			
-			saveResultAsFile(proposed);
-		} else {
-
-			save.setFileName(proposed);
-
-			String target = save.open();
-
-			if (target != null) {
-				saveResultAsFile(target);
-			} else {
-				// Show save message ...
-				this.lnk_saved_file.setText(Messages
-						.getString("output.link_save_message")); //$NON-NLS-1$
-				this.btn_save.setVisible(true);
-			}
-		}
-	}
-
-	/**
-	 * @param target
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	private void saveResultAsFile(String target) throws FileNotFoundException,
-			IOException {
-		File targetFile = new File(target);
-
-		DocumentSource source = OutputComposite.this
-				.getSignedDocument();
-
-		FileOutputStream outstream = new FileOutputStream(targetFile);
-		outstream.write(source.getByteArray(), 0,
-				source.getByteArray().length);
-		outstream.close();
-
-		OutputComposite.this.savedFile = targetFile;
-
-		this.outputFile = targetFile;
-		// Show open message ...
-		this.lnk_saved_file.setText(Messages
-				.getString("output.link_open_message")); //$NON-NLS-1$
-		this.layout(true);
-		this.btn_save.setVisible(false);
-	}
-
-	/**
-	 * SelectionListener for save button
-	 */
-	private final class SaveSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public SaveSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				OutputComposite.this.saveFile();
-			} catch (Exception ex) {
-				log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
-			}
-		}
-	}
-
-	/**
-	 * Selection Listener for open button
-	 */
-	private final class OpenSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public OpenSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-
-				if (OutputComposite.this.outputFile != null) {
-
-					if (OutputComposite.this.outputFile.exists()) {
-						// Desktop supported check already done in constructor
-						if (Desktop.isDesktopSupported()) {
-							Desktop.getDesktop().open(
-									OutputComposite.this.outputFile);
-						} else {
-							log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
-						}
-						return;
-					}
-				}
-			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
-			}
-		}
-	}
-
-	File savedFile = null;
-
-	private DocumentSource signedDocument;
+	private boolean saveFailed = false;
 
 	/**
 	 * Create the composite.
@@ -256,16 +98,12 @@ public class OutputComposite extends StateComposite {
 		fd_lbl_success_message.right = new FormAttachment(100);
 		this.lbl_success_message.setLayoutData(fd_lbl_success_message);
 		this.lbl_success_message.setAlignment(SWT.CENTER);
-		this.lbl_success_message.setText(Messages
-				.getString("output.success_message")); //$NON-NLS-1$
 
 		FontData[] fD1 = this.lbl_success_message.getFont().getFontData();
 		fD1[0].setHeight(Constants.TEXT_SIZE_BIG);
 		this.lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
 
 		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);
-		this.lnk_saved_file.setText(Messages
-				.getString("output.link_save_message")); //$NON-NLS-1$
 		FormData fd_lnk_saved_file = new FormData();
 		fd_lnk_saved_file.top = new FormAttachment(this.lbl_success_message, 10);
 		fd_lnk_saved_file.left = new FormAttachment(this.lbl_success_message, 0,
@@ -280,7 +118,6 @@ public class OutputComposite extends StateComposite {
 		this.lnk_saved_file.setFont(new Font(Display.getCurrent(), fD2[0]));
 
 		this.btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 
 		FontData[] fD_btn_save = this.btn_save.getFont().getFontData();
 		fD_btn_save[0].setHeight(Constants.TEXT_SIZE_BUTTON);
@@ -292,17 +129,50 @@ public class OutputComposite extends StateComposite {
 				SWT.CENTER);
 		this.btn_save.setLayoutData(fd_btn_save);
 
-		this.btn_save.setVisible(false);
 		this.btn_save.addSelectionListener(new SaveSelectionListener());
+		enableSaveButton(false);
 
+		reloadResources();
 	}
 
-	String tempDirectory;
+	/**
+	 * @param outputDir
+	 *            the outputDir to set
+	 */
+	public void setOutputDir(String outputDir) {
+		this.outputDir = outputDir;
+	}
+
+	/**
+	 * @return the outputDir
+	 */
+	public String getOutputDir() {
+		return this.outputDir;
+	}
+
+	/**
+	 * Sets the input file
+	 * 
+	 * @param inputFile
+	 *            the input file
+	 */
+	public void setInputFile(File inputFile) {
+		this.inputFile = inputFile;
+	}
+
+	/**
+	 * Gets the input file
+	 * 
+	 * @return the input file
+	 */
+	public File getInputFile() {
+		return this.inputFile;
+	}
 
 	/**
 	 * @param tempDirectory
 	 */
-	public void setTempDirectory(String tempDirectory) {
+	public void setTempDir(String tempDirectory) {
 		this.tempDirectory = tempDirectory;
 	}
 
@@ -325,18 +195,173 @@ public class OutputComposite extends StateComposite {
 		this.signedDocument = signedDocument;
 	}
 
+	private void enableSaveButton(boolean doEnable)
+	{
+		this.btn_save.setEnabled(doEnable);
+		this.btn_save.setVisible(doEnable);
+	}
+
+	/**
+	 * Saves the signed document.
+	 * 
+	 * If user has a default output directory set, try to save there.
+	 * If not (or if directory unavailable), ask user for location.
+	 */
+	public void saveDocument() {
+		File inputFolder = getInputFile().getParentFile();
+		String fileName = getInputFile().getName();
+		String proposedName = getSignedFileName(fileName);
+		String outputFileName;
+
+		String outputFolder = getOutputDir();
+		if (!this.saveFailed && outputFolder != null && !outputFolder.trim().equals("")) { //$NON-NLS-1$
+			// Output folder configured, try to save there
+
+			if(!outputFolder.endsWith(File.separator)) {
+				outputFolder += File.separator;
+			}
+			outputFileName = outputFolder + proposedName;
+		} else {
+			// Ask user where to save
+
+			FileDialog save = new FileDialog(this.getShell(),
+					SWT.SAVE | SWT.NATIVE);
+			save.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
+			save.setFilterNames(new String[] { 
+					Messages.getString("common.PDFExtension_Description"), //$NON-NLS-1$
+					Messages.getString("common.AllExtension_Description")}); //$NON-NLS-1$
+			save.setFilterPath(inputFolder.getAbsolutePath());
+			save.setFileName(proposedName);
+
+			outputFileName = save.open();
+			inputFolder = null;
+		}
+		log.debug("Trying to save to '" + outputFileName + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		this.saveFailed = !saveResultAsFile(inputFolder, outputFileName);
+
+		if (!this.saveFailed) {
+			// Save successful
+			this.outputFile = new File(inputFolder, outputFileName);
+		}
+
+		// If saving failed, enable save button
+		enableSaveButton(this.saveFailed);
+		reloadResources();
+		layout(true);
+	}
+
+	/**
+	 * Save the signed document under the given filename
+	 * @param inputFolder the Folder the original document is located at
+	 * @param target the filename to save the document as
+	 * 
+	 * @return whether save was successful
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	private boolean saveResultAsFile(File inputFolder, String target) {
+		if (target == null)
+			return false;
+
+		File targetFile = new File(inputFolder, target);
+
+		if (targetFile.exists()) {
+			Dialog dialog = new Dialog(this.getShell(), 
+					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //$NON-NLS-1$
+					BUTTONS.OK_CANCEL, ICON.QUESTION);
+			if (dialog.open() == SWT.CANCEL)
+			{
+				return false;
+			}
+		}
+
+		DocumentSource source = this.getSignedDocument();
+
+		try {
+			FileOutputStream outstream = new FileOutputStream(targetFile);
+			outstream.write(source.getByteArray(), 0,
+					source.getByteArray().length);
+			outstream.close();
+		} catch (FileNotFoundException e) {
+			log.debug("File not found", e); //$NON-NLS-1$
+			return false;
+		} catch (IOException e) {
+			log.debug("IO Error", e); //$NON-NLS-1$
+			return false;
+		}
+
+		return targetFile.exists();
+	}
+
+	/**
+	 * Get the proposed filename of a signed document for a given input filename
+	 * @param name input filename
+	 * @return proposed output filename
+	 */
+	private static String getSignedFileName(String name) {
+		name = FilenameUtils.getName(name);
+		String extension = FilenameUtils.getExtension(name);
+		name = FilenameUtils.removeExtension(name);
+		return name + Constants.SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
+	}
+
+	/**
+	 * SelectionListener for save button
+	 */
+	private final class SaveSelectionListener extends SelectionAdapter {
+		/**
+		 * Empty constructor
+		 */
+		public SaveSelectionListener() {
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			try {
+				OutputComposite.this.saveDocument();
+			} catch (Exception ex) {
+				log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
+			}
+		}
+	}
+
+	/**
+	 * Selection Listener for open button
+	 */
+	private final class OpenSelectionListener extends SelectionAdapter {
+		/**
+		 * Empty constructor
+		 */
+		public OpenSelectionListener() {
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			try {
+				if (OutputComposite.this.outputFile == null)
+					return;
+
+				if (!OutputComposite.this.outputFile.exists())
+					return;
+
+				// Desktop supported check already done in constructor
+				if (Desktop.isDesktopSupported()) {
+					Desktop.getDesktop().open(
+							OutputComposite.this.outputFile);
+				} else {
+					log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
+				}
+			} catch (Exception ex) {
+				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+			}
+		}
+	}
+
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
-
-	private boolean save_showed = false;
-
-	private Link lnk_saved_file;
-
-	private Button btn_save;
-
-	private Label lbl_success_message;
 
 	/*
 	 * (non-Javadoc)
@@ -347,14 +372,6 @@ public class OutputComposite extends StateComposite {
 	public void doLayout() {
 		// Nothing to do
 		this.layout(true);
-		try {
-			if (!this.save_showed) {
-				OutputComposite.this.saveFile();
-				this.save_showed = true;
-			}
-		} catch (Exception ex) {
-			log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
-		}
 	}
 
 	/* (non-Javadoc)
@@ -364,6 +381,13 @@ public class OutputComposite extends StateComposite {
 	public void reloadResources() {
 		this.lbl_success_message.setText(Messages
 				.getString("output.success_message")); //$NON-NLS-1$
+		if (this.outputFile == null) {
+			this.lnk_saved_file.setText(Messages
+					.getString("output.link_save_message")); //$NON-NLS-1$
+		} else {
+			this.lnk_saved_file.setText(Messages
+					.getString("output.link_open_message")); //$NON-NLS-1$
+		}
+		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 	}
-
 }

@@ -17,29 +17,21 @@ package at.asit.pdfover.gui.workflow.states;
 
 //Imports
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.OutputComposite;
-import at.asit.pdfover.gui.controls.Dialog;
-import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
-import at.asit.pdfover.gui.controls.Dialog.ICON;
-import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.signator.DocumentSource;
 
 /**
  * Procduces the output of the signature process. (save file, open file)
  */
 public class OutputState extends State {
+
+	private OutputComposite outputComposite = null;
 
 	/**
 	 * @param stateMachine
@@ -48,15 +40,7 @@ public class OutputState extends State {
 		super(stateMachine);
 	}
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(OutputState.class);
-
-	private OutputComposite outputComposite = null;
-
-	private OutputComposite getSelectionComposite() {
+	private OutputComposite getOutputComposite() {
 		if (this.outputComposite == null) {
 			this.outputComposite = this.stateMachine.getGUIProvider()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
@@ -68,48 +52,31 @@ public class OutputState extends State {
 			}
 			
 			this.outputComposite.setOutputDir(this.stateMachine.getConfigProvider().getDefaultOutputFolder());
-			this.outputComposite.setTempDirectory(tmpDir.getAbsolutePath());
+			this.outputComposite.setTempDir(tmpDir.getAbsolutePath());
 			this.outputComposite.setInputFile(this.stateMachine.getStatus().getDocument());
 		}
 
 		return this.outputComposite;
 	}
 
-	private boolean saved = false;
-
 	@Override
 	public void run() {
 		Status status = this.stateMachine.getStatus();
 
-		if (status.getSignResult() != null) {
-			OutputComposite outputComposite = this.getSelectionComposite();
-			outputComposite.setSignedDocument(status.getSignResult()
-					.getSignedDocument());
-			this.stateMachine.getGUIProvider().display(outputComposite);
-
-			if (!this.saved) {
-				this.saved = true;
-				String outputFolder = this.stateMachine.getConfigProvider()
-						.getDefaultOutputFolder();
-				String fileName = status.getDocument().getName();
-				if (outputFolder != null && !outputFolder.trim().equals("")) { //$NON-NLS-1$
-					DocumentSource signedDocument = status.getSignResult().getSignedDocument();
-					FileOutputStream output;
-					try {
-						output = new FileOutputStream(new File(outputFolder + "/" + fileName + "_signed.pdf")); //$NON-NLS-1$ //$NON-NLS-2$
-						output.write(signedDocument.getByteArray(), 0,
-								signedDocument.getByteArray().length);
-						output.close();
-					} catch (IOException e) {
-						log.error("Failed to save signed document to configured output folder.", e); //$NON-NLS-1$
-						ErrorDialog dialog = new ErrorDialog(outputComposite.getShell(), 
-								Messages.getString("error.SaveOutputFolder"), BUTTONS.OK); //$NON-NLS-1$
-						dialog.open();
-					}
-				}
-			}
-
+		if (status.getSignResult() == null) {
+			// TODO
+			return;
 		}
+
+		OutputComposite outputComposite = this.getOutputComposite();
+		outputComposite.setSignedDocument(status.getSignResult()
+				.getSignedDocument());
+
+		// Save signed document
+		outputComposite.saveDocument();
+
+		// Display dialog
+		this.stateMachine.getGUIProvider().display(outputComposite);
 	}
 
 	/*
