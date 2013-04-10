@@ -95,8 +95,7 @@ public class LocalBKUState extends State {
 				if (returnCode == HttpStatus.SC_OK) {
 					String server = ""; //$NON-NLS-1$
 					String userAgent = ""; //$NON-NLS-1$
-					String signatureLayout = null; //$NON-NLS-1$
-
+					String signatureLayout = null; 
 					if (method.getResponseHeader(BKU_REPSONE_HEADER_SERVER) != null&& 
 						!method.getResponseHeader(BKU_REPSONE_HEADER_SERVER).equals("")) { //$NON-NLS-1$
 						server = method.getResponseHeader(
