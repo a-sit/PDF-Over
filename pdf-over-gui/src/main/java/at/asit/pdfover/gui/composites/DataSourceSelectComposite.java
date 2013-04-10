@@ -119,7 +119,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	}
 	
 	void MarkDragLeave() {
-		this.backgroundColor = this.getBackground();
+		this.backgroundColor = this.inactiveBackground;
 		this.borderColor = this.inactiveBorder;
 		this.redrawDrop();
 	}
@@ -133,6 +133,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	}
 	
 	Color activeBackground;
+	Color inactiveBackground;
 	Color inactiveBorder;
 	Color activeBorder;
 	Color borderColor;
@@ -148,10 +149,11 @@ public class DataSourceSelectComposite extends StateComposite {
 	public DataSourceSelectComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 
-		this.activeBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
+		this.activeBackground = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
+		this.inactiveBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
 		this.inactiveBorder = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
 		this.activeBorder = new Color(getDisplay(),0x6B, 0xA5, 0xD9);
-		this.backgroundColor = this.getBackground();
+		this.backgroundColor = this.inactiveBackground;
 		this.borderColor = this.inactiveBorder;
 		
 		this.setLayout(new FormLayout());
@@ -335,6 +337,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		// btn_open.setBackground(back);
 		this.btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();
+		this.redrawDrop();
 	}
 
 	private boolean press = false;
