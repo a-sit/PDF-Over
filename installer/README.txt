@@ -10,3 +10,7 @@ Windows-Installer:
 	* PDF-Over-signed.aip - Benötigt Pro-Version, signiert, Sprachen
 
 Mac-DMG-Paket:
+	* App erstellen mit Platypus: Screenshot platypus.png
+	* DMG-Image erzeugen mit DmgPress: Screenshot DmgPress.png
+		* Hintergrund für Folder: Background.png
+		* App + Link zu Applications-Folder hineinziehen
