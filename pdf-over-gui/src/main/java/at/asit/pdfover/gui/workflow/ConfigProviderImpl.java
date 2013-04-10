@@ -149,7 +149,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultMobileNumber(String number) {
-		if (number == null || number.trim().equals("")) { //$NON-NLS-1$
+		if (number == null || number.trim().isEmpty()) {
 			this.defaultMobileNumber = STRING_EMPTY;
 		} else {
 			this.defaultMobileNumber = number;
@@ -174,7 +174,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultPassword(String password) {
-		if (password == null || password.trim().equals("")) { //$NON-NLS-1$
+		if (password == null || password.trim().isEmpty()) {
 			this.defaultPassword = STRING_EMPTY;
 		} else {
 			this.defaultPassword = password;
@@ -199,7 +199,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultEmblem(String emblem) {
-		if (emblem == null || emblem.trim().equals("")) { //$NON-NLS-1$
+		if (emblem == null || emblem.trim().isEmpty()) {
 			this.emblem = STRING_EMPTY;
 		} else {
 			this.emblem = emblem;
@@ -224,7 +224,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setProxyHost(String host) {
-		if (host == null || host.trim().equals("")) { //$NON-NLS-1$
+		if (host == null || host.trim().isEmpty()) {
 			this.proxyHost = STRING_EMPTY;
 		} else {
 			this.proxyHost = host;
@@ -271,7 +271,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultOutputFolder(String outputFolder) {
-		if (outputFolder == null || outputFolder.trim().equals("")) { //$NON-NLS-1$
+		if (outputFolder == null || outputFolder.trim().isEmpty()) {
 			this.outputFolder = STRING_EMPTY;
 		} else {
 			this.outputFolder = outputFolder;
@@ -439,7 +439,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		String bku = config
 				.getProperty(ConfigManipulator.MOBILE_BKU_URL_CONFIG);
 		
-		if (bku != null && !bku.equals("")) { //$NON-NLS-1$
+		if (bku != null && !bku.isEmpty()) {
 			this.mobileBKU = bku;
 		}
 
@@ -447,7 +447,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		String proxyPortString = config
 				.getProperty(ConfigManipulator.PROXY_PORT_CONFIG);
 
-		if (proxyPortString != null && !proxyPortString.trim().equals("")) { //$NON-NLS-1$
+		if (proxyPortString != null && !proxyPortString.trim().isEmpty()) {
 			int port = Integer.parseInt(proxyPortString);
 
 			if (port > 0 && port <= 0xFFFF) {
@@ -492,7 +492,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 		SignaturePosition position = null;
 
-		if (signaturePosition != null && !signaturePosition.trim().equals("")) { //$NON-NLS-1$
+		if (signaturePosition != null && !signaturePosition.trim().isEmpty()) {
 
 			signaturePosition = signaturePosition.trim().toLowerCase();
 
@@ -563,7 +563,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setSignatureNote(String note) {
-		if (note == null || note.trim().equals("")) { //$NON-NLS-1$
+		if (note == null || note.trim().isEmpty()) {
 			this.signatureNote = STRING_EMPTY;
 		} else {
 			this.signatureNote = note;
