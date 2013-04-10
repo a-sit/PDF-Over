@@ -166,7 +166,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtMobileNumber = new FormData();
 		this.fd_txtMobileNumber.top = new FormAttachment(0);
 		this.fd_txtMobileNumber.left = new FormAttachment(0, 5);
-		this.fd_txtMobileNumber.bottom = new FormAttachment(100);
 		this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
 		this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
 
@@ -176,7 +175,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtMobileNumberErrorMarker = new FormData();
 		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
 		this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(100, -32);
-		this.fd_txtMobileNumberErrorMarker.bottom = new FormAttachment(100);
 		this.fd_txtMobileNumberErrorMarker.right = new FormAttachment(100);
 		this.txtMobileNumberErrorMarker
 				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
@@ -412,7 +410,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbSignatureLang.left = new FormAttachment(0, 10);
 		fd_cmbSignatureLang.right = new FormAttachment(100, -10);
 		fd_cmbSignatureLang.top = new FormAttachment(0, 10);
-		fd_cmbSignatureLang.bottom = new FormAttachment(100, -10);
 		this.cmbSignatureLang.setLayoutData(fd_cmbSignatureLang);
 
 		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
@@ -558,7 +555,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
 		FormData fd_txtProxyHost = new FormData();
 		fd_txtProxyHost.right = new FormAttachment(100, -42);
-		fd_txtProxyHost.bottom = new FormAttachment(100);
 		fd_txtProxyHost.top = new FormAttachment(0);
 		fd_txtProxyHost.left = new FormAttachment(0, 5);
 
@@ -572,7 +568,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		FormData fd_marker = new FormData();
 		fd_marker.right = new FormAttachment(100, -32);
-		fd_marker.bottom = new FormAttachment(100);
 		fd_marker.top = new FormAttachment(0);
 
 		this.proxyHostErrorMarker.setLayoutData(fd_marker);
@@ -616,7 +611,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtProxyPort.top = new FormAttachment(0, 0);
 		this.fd_txtProxyPort.left = new FormAttachment(0, 5);
 		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
-		this.fd_txtProxyPort.bottom = new FormAttachment(100);
 		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
 
 		FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
@@ -639,7 +633,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtProxyPortErrorMarker = new FormData();
 		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
 		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
-		this.fd_txtProxyPortErrorMarker.bottom = new FormAttachment(100);
 		this.txtProxyPortErrorMarker
 				.setLayoutData(this.fd_txtProxyPortErrorMarker);
 		this.txtProxyPortErrorMarker.setVisible(false);
