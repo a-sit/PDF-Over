@@ -25,7 +25,9 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.Signer;
+import at.knowcenter.wag.egov.egiz.exceptions.ConnectorException;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
@@ -88,8 +90,14 @@ public class SigningState extends State {
 		}
 		
 		if(this.threadException != null) {
+			String message = Messages.getString("error.Signatur"); //$NON-NLS-1$
+			if (this.threadException instanceof SignatureException) {
+				Throwable cause = this.threadException.getCause();
+				if (cause instanceof ConnectorException)
+					message += ": " + cause.getMessage(); //$NON-NLS-1$
+			}
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);  //$NON-NLS-1$
+					message, BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new BKUSelectionState(this.stateMachine));
