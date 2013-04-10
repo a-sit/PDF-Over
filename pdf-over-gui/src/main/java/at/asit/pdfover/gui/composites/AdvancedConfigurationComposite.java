@@ -17,7 +17,6 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -35,8 +34,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Scale;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +56,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(AdvancedConfigurationComposite.class);
-	SimpleConfigurationComposite simpleComposite;
 	Text txtOutputFolder;
 	Combo cmbBKUAuswahl;
 	String[] bkuStrings;
@@ -76,42 +72,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			State state, ConfigurationContainer container) {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
-		
-		// TODO: Move this tab folder to the ConfigurationComposite
-		TabFolder tabFolder = new TabFolder(this, SWT.NONE);
-		FormData fd_tabFolder = new FormData();
-		fd_tabFolder.bottom = new FormAttachment(100, -5);
-		fd_tabFolder.right = new FormAttachment(100, -5);
-		fd_tabFolder.top = new FormAttachment(0, 5);
-		fd_tabFolder.left = new FormAttachment(0, 5);
-		tabFolder.setLayoutData(fd_tabFolder);
 
-		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
-		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
-
-		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
-		fD_tabFolder[0].setHeight(TEXT_SIZE_NORMAL);
-		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
-		
-		this.simpleComposite = new SimpleConfigurationComposite(tabFolder,
-				SWT.NONE, state, container);
-
-		simpleTabItem.setControl(this.simpleComposite);
-		tabFolder.setSelection(simpleTabItem);
-
-		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
-		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
-
-		ScrolledComposite advancedCompositeScr = new ScrolledComposite(tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
-		advancedTabItem.setControl(advancedCompositeScr);
-		Composite advancedComposite = new Composite(advancedCompositeScr, SWT.NONE);
-		advancedCompositeScr.setContent(advancedComposite);
-		advancedCompositeScr.setExpandHorizontal(true);
-		advancedCompositeScr.setExpandVertical(true);
-
-		advancedComposite.setLayout(new FormLayout());
-
-		Group grpSignatur = new Group(advancedComposite, SWT.NONE);
+		Group grpSignatur = new Group(this, SWT.NONE);
 		grpSignatur.setText(Messages.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 10;
@@ -168,7 +130,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			});
 
-		Group grpBkuAuswahl = new Group(advancedComposite, SWT.NONE);
+		Group grpBkuAuswahl = new Group(this, SWT.NONE);
 		grpBkuAuswahl.setText(Messages.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
 		layout = new FormLayout();
 		layout.marginHeight = 10;
@@ -219,7 +181,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			});
 
-		Group grpSpeicherort = new Group(advancedComposite, SWT.NONE);
+		Group grpSpeicherort = new Group(this, SWT.NONE);
 		grpSpeicherort.setText(Messages.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
 		layout = new FormLayout();
 		layout.marginHeight = 10;
@@ -305,8 +267,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 					}
 				}
 			});
-
-			advancedCompositeScr.setMinSize(advancedComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	/* (non-Javadoc)
@@ -314,7 +274,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	protected void signerChanged() {
-		this.simpleComposite.setSigner(this.getSigner());
+		// Nothing to do here (yet)
 	}
 	
 	void performOutputFolderChanged(String foldername) {
@@ -397,8 +357,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void loadConfiguration() {
-		this.simpleComposite.loadConfiguration();
-
 		// load advanced settings
 		this.performBKUSelectionChanged(this.configurationContainer.getBKUSelection());
 		String outputFolder = this.configurationContainer.getOutputFolder();
@@ -414,6 +372,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void validateSettings() throws Exception {
-		this.simpleComposite.validateSettings();
+		// Nothing to do here (yet)
 	}
 }

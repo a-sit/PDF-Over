@@ -21,6 +21,8 @@ import java.io.IOException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -70,8 +73,12 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	public void setSigner(PDFSigner signer) {
 		this.signer = signer;
-		if(this.configComposite != null) {
-			this.configComposite.setSigner(getSigner());
+		if (this.simpleConfigComposite != null) {
+			this.simpleConfigComposite.setSigner(getSigner());
+		}
+		if (this.advancedConfigComposite != null) {
+			// TODO: not needed
+			this.advancedConfigComposite.setSigner(getSigner());
 		}
 	}
 
@@ -92,9 +99,14 @@ public class ConfigurationComposite extends StateComposite {
 	ConfigProvider configProvider = null;
 
 	/**
-	 * current base configuration composite
+	 * simple configuration composite
 	 */
-	BaseConfigurationComposite configComposite;
+	BaseConfigurationComposite simpleConfigComposite;
+
+	/**
+	 * advanced configuration composite
+	 */
+	BaseConfigurationComposite advancedConfigComposite;
 
 	/**
 	 * configuration container Keeps state for current configuration changes
@@ -177,7 +189,8 @@ public class ConfigurationComposite extends StateComposite {
 				log.error("Failed to set proxy port!", e); //$NON-NLS-1$
 			}
 
-			this.configComposite.loadConfiguration();
+			this.simpleConfigComposite.loadConfiguration();
+			this.advancedConfigComposite.loadConfiguration();
 		}
 	}
 
@@ -196,10 +209,41 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
-		this.configComposite = new AdvancedConfigurationComposite(
-				this.containerComposite, SWT.FILL | style, state,
-				this.configurationContainer);
+		TabFolder tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
+		FormData fd_tabFolder = new FormData();
+		fd_tabFolder.bottom = new FormAttachment(100, -5);
+		fd_tabFolder.right = new FormAttachment(100, -5);
+		fd_tabFolder.top = new FormAttachment(0, 5);
+		fd_tabFolder.left = new FormAttachment(0, 5);
+		tabFolder.setLayoutData(fd_tabFolder);
+
+		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
+		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+
+		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
+		fD_tabFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
 		
+		this.simpleConfigComposite = new SimpleConfigurationComposite(tabFolder,
+				SWT.NONE, state, this.configurationContainer);
+
+		simpleTabItem.setControl(this.simpleConfigComposite);
+		tabFolder.setSelection(simpleTabItem);
+
+		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
+		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+
+		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
+				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		advancedTabItem.setControl(advancedCompositeScr);
+		this.advancedConfigComposite = new AdvancedConfigurationComposite(
+				advancedCompositeScr, SWT.NONE, state, this.configurationContainer);
+		advancedCompositeScr.setContent(this.advancedConfigComposite);
+		advancedCompositeScr.setExpandHorizontal(true);
+		advancedCompositeScr.setExpandVertical(true);
+		advancedCompositeScr.setMinSize(
+				this.advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
 		fd_composite.bottom = new FormAttachment(90, -5);
@@ -207,7 +251,7 @@ public class ConfigurationComposite extends StateComposite {
 		fd_composite.right = new FormAttachment(100, -5);
 		this.containerComposite.setLayoutData(fd_composite);
 		this.containerComposite.setLayout(this.compositeStack);
-		this.compositeStack.topControl = this.configComposite;
+		this.compositeStack.topControl = tabFolder;
 
 		this.doLayout();
 
@@ -253,7 +297,8 @@ public class ConfigurationComposite extends StateComposite {
 	boolean storeConfiguration() {
 
 		try {
-			this.configComposite.validateSettings();
+			this.simpleConfigComposite.validateSettings();
+			this.advancedConfigComposite.validateSettings();
 
 			// Write current Configuration
 			this.configManipulator.setDefaultBKU(this.configurationContainer
