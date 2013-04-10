@@ -174,8 +174,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				SWT.NONE, ""); //$NON-NLS-1$
 		this.txtMobileNumberErrorMarker.setVisible(false);
 		this.fd_txtMobileNumberErrorMarker = new FormData();
+		this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(100, -32);
 		this.fd_txtMobileNumberErrorMarker.right = new FormAttachment(100);
 		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
+		this.fd_txtMobileNumberErrorMarker.bottom = new FormAttachment(0, 32);
 		this.txtMobileNumberErrorMarker
 				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
 
@@ -567,8 +569,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //$NON-NLS-1$
 
 		FormData fd_proxyHostErrorMarker = new FormData();
+		fd_proxyHostErrorMarker.left = new FormAttachment(100, -32);
 		fd_proxyHostErrorMarker.right = new FormAttachment(100);
 		fd_proxyHostErrorMarker.top = new FormAttachment(0);
+		fd_proxyHostErrorMarker.bottom = new FormAttachment(0, 32);
 
 		this.proxyHostErrorMarker.setLayoutData(fd_proxyHostErrorMarker);
 		this.proxyHostErrorMarker.setVisible(false);
@@ -630,8 +634,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //$NON-NLS-1$
 		this.fd_txtProxyPortErrorMarker = new FormData();
+		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
 		this.fd_txtProxyPortErrorMarker.right = new FormAttachment(100);
 		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
+		this.fd_txtProxyPortErrorMarker.bottom = new FormAttachment(0, 32);
 		this.txtProxyPortErrorMarker
 				.setLayoutData(this.fd_txtProxyPortErrorMarker);
 		this.txtProxyPortErrorMarker.setVisible(false);

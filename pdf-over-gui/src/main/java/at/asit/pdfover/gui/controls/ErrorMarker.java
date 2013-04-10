@@ -57,21 +57,20 @@ public class ErrorMarker extends Label {
 		InputStream stream = this.getClass().getResourceAsStream(IMG_PATH);
 
 		this.errorImg = new Image(getDisplay(), new ImageData(stream));
+
 		this.addPaintListener(new PaintListener() {
+			final Rectangle imgSize = ErrorMarker.this.errorImg.getBounds();
+
 			@Override
 			public void paintControl(PaintEvent e) {
-				Image img = ErrorMarker.this.errorImg;
-				Rectangle imgSize = img.getBounds();
 				Rectangle dstSize = ErrorMarker.this.getBounds();
-				e.gc.fillRectangle(0, 0, dstSize.width, dstSize.height);
-				e.gc.drawImage(img, 0, 0, imgSize.width, imgSize.height,
+				e.gc.drawImage(ErrorMarker.this.errorImg,
+						0, 0, this.imgSize.width, this.imgSize.height,
 						0, 0, dstSize.width, dstSize.height);
 			}
 		});
 
 		setToolTipText(message);
-		
-		setImage(this.errorImg);
 	}
 
 	@Override
