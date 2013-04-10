@@ -41,10 +41,10 @@ import at.asit.pdfover.gui.cliarguments.ProxyHostArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.Unzipper;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.signator.Signator;
-import at.asit.pdfover.utils.Unzipper;
 
 /**
  * Starting state of workflow proccess

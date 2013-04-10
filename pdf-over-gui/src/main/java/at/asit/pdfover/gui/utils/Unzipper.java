@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.utils;
+package at.asit.pdfover.gui.utils;
 
 // Imports
 import java.io.BufferedOutputStream;
