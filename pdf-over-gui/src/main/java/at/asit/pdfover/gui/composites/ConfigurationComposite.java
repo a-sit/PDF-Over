@@ -288,7 +288,7 @@ public class ConfigurationComposite extends StateComposite {
 							.getPlaceholderTransparency());
 
 			this.configurationContainer.setSignatureNote(
-					this.configProvider.getSigantureNote());
+					this.configProvider.getSignatureNote());
 			
 			this.configurationContainer.setLocale(this.configProvider.getConfigLocale());
 			

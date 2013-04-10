@@ -108,7 +108,7 @@ public interface ConfigProvider {
 	 * Get the signature note text to use
 	 * @return the signature note text
 	 */
-	public String getSigantureNote();
+	public String getSignatureNote();
 	
 	/**
 	 * Gets the configured locale

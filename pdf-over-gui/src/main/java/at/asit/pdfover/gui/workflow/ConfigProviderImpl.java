@@ -361,7 +361,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		props.setProperty(PROXY_PORT_CONFIG,
 				Integer.toString(this.getProxyPort()));
 		props.setProperty(EMBLEM_CONFIG, this.getDefaultEmblem());
-		props.setProperty(SIGNATURE_NOTE_CONFIG, this.getSigantureNote());
+		props.setProperty(SIGNATURE_NOTE_CONFIG, this.getSignatureNote());
 		props.setProperty(MOBILE_NUMBER_CONFIG, this.getDefaultMobileNumber());
 		props.setProperty(OUTPUT_FOLDER_CONFIG, this.getDefaultOutputFolder());
 		props.setProperty(SIGNATURE_PLACEHOLDER_TRANSPARENCY_CONFIG,
@@ -559,7 +559,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSigantureNote()
 	 */
 	@Override
-	public String getSigantureNote() {
+	public String getSignatureNote() {
 		return this.signatureNote;
 	}
 
