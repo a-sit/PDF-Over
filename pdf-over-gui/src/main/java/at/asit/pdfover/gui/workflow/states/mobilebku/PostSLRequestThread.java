@@ -34,7 +34,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.DocumentSource;
@@ -84,7 +84,7 @@ public class PostSLRequestThread implements Runnable {
 
 	private MobileBKUState state;
 
-	private String mobileBKUUrl = ConfigManipulator.MOBILE_BKU_URL_CONFIG;
+	private String mobileBKUUrl = Constants.DEFAULT_MOBILE_BKU_URL;
 
 	/**
 	 * Constructor
