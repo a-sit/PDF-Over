@@ -40,6 +40,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,10 @@ public class PositioningComposite extends StateComposite {
 	private PDFFile pdf = null;
 
 	private Frame frame = null;
+
+	private Composite mainArea = null;
+
+	private Label lblPage = null;
 
 	int currentPage = 0;
 
@@ -96,20 +101,27 @@ public class PositioningComposite extends StateComposite {
 		btnSign.setText("Sign");
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
-		fd_btnSign.bottom = new FormAttachment(100);
+		fd_btnSign.top = new FormAttachment(0);
 		btnSign.setLayoutData(fd_btnSign);
 
-		Composite mainArea = new Composite(this, SWT.BORDER | SWT.EMBEDDED | SWT.V_SCROLL);
+		this.lblPage = new Label(bottomBar, SWT.CENTER);
+		FormData fd_lblPage = new FormData();
+		fd_lblPage.left = new FormAttachment(0);
+		fd_lblPage.right = new FormAttachment(btnSign, 5);
+		fd_lblPage.bottom = new FormAttachment(100);
+		this.lblPage.setLayoutData(fd_lblPage);
+
+		this.mainArea = new Composite(this, SWT.BORDER | SWT.EMBEDDED | SWT.V_SCROLL);
 		FormData fd_mainArea = new FormData();
 		fd_mainArea.left = new FormAttachment(0);
 		fd_mainArea.right = new FormAttachment(100);
 		fd_mainArea.top = new FormAttachment(0);
 		fd_mainArea.bottom = new FormAttachment(bottomBar, -5);
-		mainArea.setLayoutData(fd_mainArea);
-		this.scrollbar = mainArea.getVerticalBar();
+		this.mainArea.setLayoutData(fd_mainArea);
+		this.scrollbar = this.mainArea.getVerticalBar();
 
-		this.frame = SWT_AWT.new_Frame(mainArea);
-		this.addKeyListener(this.keyListener);
+		this.frame = SWT_AWT.new_Frame(this.mainArea);
+		this.mainArea.addKeyListener(this.keyListener);
 		this.frame.addMouseWheelListener(this.mouseListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
 		requestFocus();
@@ -149,8 +161,8 @@ public class PositioningComposite extends StateComposite {
 	 */
 	private void requestFocus()
 	{
-		this.frame.requestFocus();
-		setFocus();
+		this.frame.requestFocusInWindow();
+		this.mainArea.setFocus();
 	}
 
 	/**
@@ -260,6 +272,7 @@ public class PositioningComposite extends StateComposite {
 				PositioningComposite.this.scrollbar.setSelection(PositioningComposite.this.currentPage);
 			}
 		});
+		this.lblPage.setText(String.format("Page %d of %d", page, this.numPages));
 		this.viewer.showPage(page);
 	}
 
