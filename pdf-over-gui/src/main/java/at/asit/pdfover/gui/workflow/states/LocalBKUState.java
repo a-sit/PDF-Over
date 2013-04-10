@@ -20,14 +20,19 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -79,16 +84,28 @@ public class LocalBKUState extends State {
 				SLRequest request = this.state.signingState
 						.getSignatureRequest();
 
-				String sl_request = request.getBase64Request();
+				//String sl_request = request.getBase64Request();
+				String sl_request = request.getFileUploadRequest();
 
 				HttpClient client = new HttpClient();
 
 				PostMethod method = new PostMethod(
 						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
 
-				log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
+				StringPart xmlpart = new StringPart(
+						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+						new FileUploadSource(request.getSignatureData()));
+
+				Part[] parts = { xmlpart, filepart };
+				
+				method.setRequestEntity(new MultipartRequestEntity(parts, method
+						.getParams()));
+				
+				//log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
+
+				//method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 
 				int returnCode = client.executeMethod(method);
 

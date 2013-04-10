@@ -17,7 +17,6 @@ package at.asit.pdfover.gui.workflow.states.mobilebku;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -28,15 +27,14 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.PartSource;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
-import at.asit.pdfover.signator.DocumentSource;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SigningState;
 
@@ -51,39 +49,6 @@ public abstract class MobileBKUHandler {
 			.getLogger(MobileBKUHandler.class);
 
 	private MobileBKUState state;
-
-	/**
-	 * A FileUploadSource
-	 */
-	private final class FileUploadSource implements PartSource {
-
-		private DocumentSource source;
-
-		/**
-		 * Constructor
-		 * 
-		 * @param source
-		 *            the source
-		 */
-		public FileUploadSource(DocumentSource source) {
-			this.source = source;
-		}
-
-		@Override
-		public long getLength() {
-			return this.source.getLength();
-		}
-
-		@Override
-		public String getFileName() {
-			return "sign.pdf"; //$NON-NLS-1$
-		}
-
-		@Override
-		public InputStream createInputStream() throws IOException {
-			return this.source.getInputStream();
-		}
-	}
 
 	/**
 	 * Constructor
