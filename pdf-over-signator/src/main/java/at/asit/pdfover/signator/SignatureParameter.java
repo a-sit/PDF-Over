@@ -26,8 +26,6 @@ public abstract class SignatureParameter {
 
 	/**
 	 * The Signature Position
-	 * @uml.property  name="signaturePosition"
-	 * @uml.associationEnd  
 	 */
 	protected SignaturePosition signaturePosition = null;
 
@@ -38,15 +36,11 @@ public abstract class SignatureParameter {
 
 	/**
 	 * The input document
-	 * @uml.property  name="documentSource"
-	 * @uml.associationEnd  
 	 */
 	protected DocumentSource documentSource = null;
 
 	/**
-	 * holds the collimating mark
-	 * @uml.property  name="collimark"
-	 * @uml.associationEnd  
+	 * holds the emblem
 	 */
 	protected Emblem emblem;
 
