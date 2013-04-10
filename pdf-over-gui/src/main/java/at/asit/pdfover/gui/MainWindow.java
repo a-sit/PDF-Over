@@ -184,7 +184,6 @@ public class MainWindow {
 
 		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
-		
 
 		this.btn_end.setText(Messages.getString("main.done")); //$NON-NLS-1$
 		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$

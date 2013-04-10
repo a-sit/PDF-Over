@@ -204,6 +204,23 @@ public class PrepareConfigurationState extends State {
 								"Failed to create local configuration directory!", //$NON-NLS-1$
 								e);
 					}
+					
+					// initialize from config file
+					this.initializeFromConfigurationFile(this.stateMachine
+							.getConfigProvider().getConfigurationFile());
+					
+					this.stateMachine.getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
+					
+					try {
+						this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
+					} catch (IOException e) {
+						log.error(
+								"Failed to set local configuration signature note!", e); //$NON-NLS-1$
+						throw new InitializationException(
+								"Failed to set local configuration signature note!", //$NON-NLS-1$
+								e);
+					}
+					
 					allOK = true;
 				} finally {
 					if (!allOK) {

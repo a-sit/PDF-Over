@@ -37,6 +37,7 @@ import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.api.io.DataSource;
 import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
+import at.gv.egiz.pdfas.api.sign.pos.axis.AxisAlgorithm;
 import at.gv.egiz.pdfas.impl.signator.binary.BinarySignator_1_1_0;
 import at.knowcenter.wag.egov.egiz.exceptions.PDFDocumentException;
 import at.knowcenter.wag.egov.egiz.sig.SignatureObject;
@@ -93,7 +94,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 						position.getY()));
 			}
 		} else {
-			positioning = new SignaturePositioning();
+			positioning = new SignaturePositioning("p:auto;x:auto;y:auto;w:276");
 		}
 
 		return positioning;

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.composites.PositioningComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
@@ -107,6 +108,18 @@ public class PositioningState extends State {
 				} else {
 					this.setNextState(new OpenState(this.stateMachine));
 				}
+				return;
+			} catch(Exception ex) {
+				log.error("Failed to create composite (seems like a mac ...)", ex); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(
+						this.stateMachine.getGUIProvider().getMainShell(), 
+						Messages.getString("error.PositioningNotPossible"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+				dialog.open();
+				
+				status.setSignaturePosition(new SignaturePosition());
+				
+				this.setNextState(new BKUSelectionState(this.stateMachine));
+				
 				return;
 			}
 			
