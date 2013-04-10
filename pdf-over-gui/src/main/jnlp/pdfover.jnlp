@@ -7,6 +7,11 @@
     <homepage href="##HOMEPAGE_URL##"/>
     <description>PDF-Over - PDF Signaturtool</description>
     <description kind="short">PDF-Over</description>
+    <icon kind="default" href="icons/icon16x16.png" width="16" height="16"/>
+    <icon kind="default" href="icons/icon24x24.png" width="24" height="24"/>
+    <icon kind="default" href="icons/icon32x32.png" width="32" height="32"/>
+    <icon kind="default" href="icons/icon48x48.png" width="48" height="48"/>
+    <icon kind="default" href="icons/icon.png" width="96" height="96"/>
     <offline-allowed/>
   </information>
   
