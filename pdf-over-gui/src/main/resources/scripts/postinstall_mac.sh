@@ -1,8 +1,16 @@
 #!/bin/sh
-BASEDIR=$(cd "$(dirname "$0")"; pwd)
+SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
+BASEDIR=$(cd "$(dirname "$0")/.."; pwd)
 export LC_CTYPE="UTF-8"
-cd "$BASEDIR"
+cd "$SCRIPTDIR"
 chmod a+x pdf-over_mac.sh
-cd ..
-osacompile -e "do shell script \"$BASEDIR/pdf-over_mac.sh\"" -x -o PDF-Over.app
-cp -f icons/icon.icns PDF-Over.app/Contents/Resources/applet.icns
+cd "$BASEDIR"
+if [ -d "$BASEDIR.app" ]; then
+	osacompile -e "do shell script \"$SCRIPTDIR/pdf-over_mac.sh\"" -x -o PDF-Over.app
+	cp -f icons/icon.icns PDF-Over.app/Contents/Resources/applet.icns
+else
+	osacompile -e "do shell script \"$BASEDIR.app/Contents/scripts/pdf-over_mac.sh\"" -x -o "$BASEDIR.app"
+	cp -f icons/icon.icns "$BASEDIR.app"/Contents/Resources/applet.icns
+	mv "$BASEDIR"/* "$BASEDIR.app"/Contents/
+	rmdir "$BASEDIR"
+fi

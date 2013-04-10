@@ -10,7 +10,7 @@
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
 		</authors>
-		<uninstaller />
+		<uninstaller condition="!izpack.macinstall" />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
 		<!--run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" /-->
