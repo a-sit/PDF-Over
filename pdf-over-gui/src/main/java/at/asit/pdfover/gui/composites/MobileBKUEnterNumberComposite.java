@@ -182,7 +182,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				Rectangle clientArea = containerComposite.getClientArea();
 				
 				//e.gc.setForeground();
-				e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_LIGHT);
+				e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_DARK);
 				e.gc.setLineWidth(3);
 				e.gc.setLineStyle(SWT.LINE_SOLID);
 				e.gc.drawRoundRectangle(clientArea.x, 

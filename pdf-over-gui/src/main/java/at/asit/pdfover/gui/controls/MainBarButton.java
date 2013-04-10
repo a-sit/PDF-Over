@@ -103,8 +103,8 @@ public abstract class MainBarButton extends Canvas {
 
 
 		this.inactiveBackground = Constants.MAINBAR_INACTIVE_BACK;
-		this.activeBackground1 = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
-		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_DARK;
+		this.activeBackground1 = Constants.MAINBAR_ACTIVE_BACK_DARK;
+		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
 		//this.textColor = this.getForeground();
 		this.textColor = Constants.MAINBAR_ACTIVE_TEXTCOLOR;
 		//this.borderColor = new Color(getDisplay(), 0xf9, 0xf9, 0xf9);

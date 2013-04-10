@@ -36,10 +36,10 @@ public class Constants {
 	public static final int MAINBAR_HEIGHT = 60;
 
 	/** Main bar active background - light start of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = new Color(display, 0x6B, 0xA5, 0xD9);
+	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = new Color(display, 0xB4, 0xCD, 0xEC);
 
 	/** Main bar active background - dark end of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_DARK = new Color(display, 0xB4, 0xCD, 0xEC);
+	public static final Color MAINBAR_ACTIVE_BACK_DARK = new Color(display, 0x6B, 0xA5, 0xD9);
 
 	/** Main bar inactive background */
 	public static final Color MAINBAR_INACTIVE_BACK = new Color(display, 0xD4, 0xE7, 0xF1);
@@ -51,7 +51,7 @@ public class Constants {
 	public static final Color MAINBAR_INACTIVE_TEXTCOLOR = new Color(display, 0x40, 0x40, 0x40);
 
 	/** Drop border color */
-	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_DARK;
+	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_LIGHT;
 
 	/** Normal text size */
 	public static final int TEXT_SIZE_NORMAL = 12;

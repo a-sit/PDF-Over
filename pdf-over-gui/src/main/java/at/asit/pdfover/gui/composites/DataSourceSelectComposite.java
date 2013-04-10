@@ -150,10 +150,10 @@ public class DataSourceSelectComposite extends StateComposite {
 	public DataSourceSelectComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 
-		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_DARK;
+		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
 		this.inactiveBackground = Constants.MAINBAR_INACTIVE_BACK;
-		this.inactiveBorder = Constants.MAINBAR_ACTIVE_BACK_DARK;
-		this.activeBorder = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
+		this.inactiveBorder = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
+		this.activeBorder = Constants.MAINBAR_ACTIVE_BACK_DARK;
 		this.backgroundColor = this.inactiveBackground;
 		this.borderColor = Constants.DROP_BORDER_COLOR;
 		
