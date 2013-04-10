@@ -1,5 +1,23 @@
+/*
+ * Copyright 2012 by A-SIT, Secure Information Technology Center Austria
+ *
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ * the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and
+ * limitations under the Licence.
+ */
 package at.asit.pdfover.gui.workflow;
 
+//Imports
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 import org.eclipse.swt.SWT;
@@ -9,7 +27,21 @@ import org.eclipse.swt.widgets.Shell;
 
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 
+/**
+ * Workflow holds logical state of signing process and updates the current logical state
+ */
 public class Workflow {
+	
+	/**
+	 * SFL4J Logger instance
+	 **/
+	@SuppressWarnings("unused")
+	private static final Logger log = LoggerFactory.getLogger(Workflow.class);
+	
+	/**
+	 * Default constructor
+	 * @param cmdLineArgs
+	 */
 	public Workflow(String[] cmdLineArgs) {
 		setCmdLineAargs(cmdLineArgs);
 	}
@@ -47,7 +79,7 @@ public class Workflow {
 	 * 
 	 * @return the command line arguments
 	 */
-	public String[] GetCmdArgs() {
+	public String[] cetCmdArgs() {
 		return this.cmdLineArgs;
 	}
 
@@ -58,14 +90,14 @@ public class Workflow {
 	 * 
 	 * @return the persistent state
 	 */
-	public Properties GetPersistentState() {
+	public Properties getPersistentState() {
 		return this.persistentState;
 	}
 
 	/**
 	 * Update Workflow logic and let state machine do its job...
 	 */
-	public void Update() {
+	public void update() {
 		WorkflowState next = null;
 		do {
 			this.state.update(this);
@@ -79,7 +111,7 @@ public class Workflow {
 	
 	private Composite container = null;
 	
-	private void CreateMainWindow() {
+	private void createMainWindow() {
 		//TODO: Instantiate Main Window Class
 		this.display = Display.getDefault();
 		this.shell = new Shell();
@@ -98,13 +130,13 @@ public class Workflow {
 	 * 
 	 * @return Composite
 	 */
-	public Composite GetComposite() {
+	public Composite getComposite() {
 		// TODO: implement
 		// Main window will be build on first call
 		// returns SWT Composite container for states to draw their GUI
 		
 		if(this.container == null) {
-			this.CreateMainWindow();
+			this.createMainWindow();
 		}
 		
 		if(this.container == null) {
@@ -119,7 +151,7 @@ public class Workflow {
 	 * 
 	 * @return
 	 */
-	private Shell NonCreatingGetShell() {
+	private Shell nonCreatingGetShell() {
 		return this.shell;
 	}
 
@@ -128,20 +160,20 @@ public class Workflow {
 	 * 
 	 * @return
 	 */
-	private Display NonCreatingGetDisplay() {
+	private Display nonCreatingGetDisplay() {
 		return this.display;
 	}
 
 	/**
 	 * Workflow main entrance point
 	 */
-	public void Start() {
+	public void start() {
 		// Call update to start processing ...
-		this.Update();
+		this.update();
 
 		// if a user interaction is required we have a shell ...
-		Shell shell = this.NonCreatingGetShell();
-		Display display = this.NonCreatingGetDisplay();
+		Shell shell = this.nonCreatingGetShell();
+		Display display = this.nonCreatingGetDisplay();
 
 		if (shell != null && display != null) {
 			while (!shell.isDisposed()) {
