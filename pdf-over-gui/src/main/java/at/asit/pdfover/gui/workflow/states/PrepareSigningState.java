@@ -165,6 +165,7 @@ public class PrepareSigningState extends State {
 			if(error.open() == SWT.RETRY) {
 				this.stateMachine.update();
 			} else {
+				// FIXME: exit?
 				this.stateMachine.exit();
 			}
 			return;
