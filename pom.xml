@@ -151,6 +151,11 @@
 				<version>3.0</version>
 			</dependency>
 			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
 				<groupId>org.icepdf</groupId>
 				<artifactId>icepdf-core</artifactId>
 				<version>4.3.3</version>
