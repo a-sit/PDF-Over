@@ -71,8 +71,8 @@ public class StatusImpl implements Status {
 	 * @param currentState the current State
 	 */
 	public void setCurrentState(State currentState) {
-		if (this.previousState == this.currentState)
-			log.error("Changing to same state? " + this.currentState); //$NON-NLS-1$
+		//if (this.previousState == this.currentState)
+		//	log.error("Changing to same state? " + this.currentState); //$NON-NLS-1$
 
 		if (this.previousState != null && this.previousState != currentState)
 		{

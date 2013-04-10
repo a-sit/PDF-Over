@@ -121,6 +121,8 @@ public class LocalBKUState extends State {
 
 			} catch (Exception e) {
 				log.error("SignLocalBKUThread: ", e); //$NON-NLS-1$
+				// TODO: Is local BKU running?
+				this.state.threadException = e;
 			} finally {
 				this.state.stateMachine.invokeUpdate();
 			}

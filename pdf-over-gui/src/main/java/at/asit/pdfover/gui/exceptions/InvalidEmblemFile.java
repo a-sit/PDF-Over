@@ -13,42 +13,41 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui;
+package at.asit.pdfover.gui.exceptions;
 
-//Imports
+// Imports
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
-
 /**
- * Main entry point for developers
+ * 
  */
-public class DeveloperMain {
+public class InvalidEmblemFile extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5826910929131650685L;
+	/**
+	 * SLF4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(InvalidEmblemFile.class);
 
 	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(DeveloperMain.class);
+	 * Constructor
+	 * @param file
+	 */
+	public InvalidEmblemFile(final File file) {
+		super("File: " + file.getAbsolutePath() + " is an invalid emblem file!");
+	}
 	
 	/**
-	 * Developer Main Entry point...
-	 * @param args
+	 * Constructor
+	 * @param file
 	 */
-	public static void main(String[] args) {
-		
-		//BasicConfigurator.configure();
-		
-		// Set PDF-AS log4j configuration:
-		//System.setProperty("log4j.configuration", "log4j.properties");
-		
-		StateMachineImpl stateMachine = new StateMachineImpl(args);
-		log.debug("Starting stateMachine ...");
-		
-		stateMachine.start();
-		
-		log.debug("Ended stateMachine ...");
+	public InvalidEmblemFile(final File file, Throwable reason) {
+		super("File: " + file.getAbsolutePath() + " is an invalid emblem file!", reason);
 	}
-
 }

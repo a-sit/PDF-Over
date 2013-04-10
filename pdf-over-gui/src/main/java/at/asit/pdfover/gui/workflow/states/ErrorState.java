@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.composites.ErrorComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * 
@@ -67,8 +66,6 @@ public class ErrorState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
-		
 		ErrorComposite errorComposite = this.getComposite();
 		
 		if(this.exception != null && !errorComposite.isUserOk()) {
@@ -94,7 +91,8 @@ public class ErrorState extends State {
 	 */
 	@Override
 	public void cleanUp() {
-		// TODO
+		if (this.errorComposite != null)
+			this.errorComposite.dispose();
 	}
 
 	/* (non-Javadoc)

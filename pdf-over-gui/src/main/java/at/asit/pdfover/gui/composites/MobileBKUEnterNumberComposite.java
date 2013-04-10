@@ -32,7 +32,17 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.exceptions.InvalidNumberException;
+import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
+
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 
 /**
  * 
@@ -47,18 +57,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class OkSelectionListener extends SelectionAdapter {
-		/**
-		 * Regular expression for mobile phone numbers:
-		 * this allows the entrance of mobile numbers in the following formats:
-		 * 
-		 * +(countryCode)99999999999
-		 * 00(countryCode)99999999999
-		 * 099999999999
-		 * 1030199999999999 (A-Trust Test bku)
-		 */
-		private static final String NUMBER_REGEX = "^((\\+[\\d]{2})|(00[\\d]{2})|(0)|(10301))([1-9][\\d]+)$"; //$NON-NLS-1$
-
+	private final class OkSelectionListener implements SelectionListener {
+		
 		/**
 		 * Empty constructor
 		 */
@@ -71,40 +71,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
 
-				// Verify number and normalize
-
-				// Compile and use regular expression
-				Pattern pattern = Pattern.compile(NUMBER_REGEX);
-				Matcher matcher = pattern.matcher(number);
-
-				if (!matcher.find()) {
-					MobileBKUEnterNumberComposite.this
-							.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
-					return;
-				}
-
-				if (matcher.groupCount() != 6) {
-					MobileBKUEnterNumberComposite.this
-							.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
-					return;
-				}
-
-				String countryCode = matcher.group(1);
-
-				String normalNumber = matcher.group(6);
-
-				if (countryCode.equals("10301")) { //$NON-NLS-1$
-					// A-Trust Testnumber!
-				} else {
-
-					countryCode = countryCode.replace("00", "+"); //$NON-NLS-1$ //$NON-NLS-2$
-
-					if (countryCode.equals("0")) { //$NON-NLS-1$
-						countryCode = "+43"; //$NON-NLS-1$
-					}
-
-					number = countryCode + normalNumber;
-				}
+				
+				number = ATrustHelper.normalizeMobileNumber(number);
+				
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
 				MobileBKUEnterNumberComposite.this.mobileNumber = number;
@@ -112,29 +81,36 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				String password = MobileBKUEnterNumberComposite.this.txt_password
 						.getText();
 
-				// TODO: Logic to verify password
-
-				if (password.length() < 6 || password.length() > 20) {
-					if (password.length() < 6) {
-						MobileBKUEnterNumberComposite.this
-								.setErrorMessage("Given password is too short!");
-					} else {
-						MobileBKUEnterNumberComposite.this
-								.setErrorMessage("Given password is too long!");
-					}
-					return;
-				}
+				ATrustHelper.validatePassword(password);
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
 				MobileBKUEnterNumberComposite.this.setUserAck(true);
-			} catch (Exception ex) {
+			} catch(InvalidNumberException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
-				// TODO: NOT VALID
+				MobileBKUEnterNumberComposite.this
+				.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
+			} catch(InvalidPasswordException ex) {
+				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
+				MobileBKUEnterNumberComposite.this
+				.setErrorMessage(ex.getMessage());
+			}
+			catch (Exception ex) {
+				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
 						.setErrorMessage("Given phone number is invalid! Example: +43664123456789");
 				return;
 			}
+			
 			MobileBKUEnterNumberComposite.this.state.updateStateMachine();
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
+		 */
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 

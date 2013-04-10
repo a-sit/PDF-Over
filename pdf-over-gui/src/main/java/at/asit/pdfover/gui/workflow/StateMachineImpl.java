@@ -80,32 +80,45 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		State next = null;
 		while (this.status.getCurrentState() != null) {
 			State current = this.status.getCurrentState();
-			try
-			{
+			try {
 				current.run();
-			}
-			catch(Exception e) {
+			} catch (Exception e) {
 				log.error("StateMachine update: ", e); //$NON-NLS-1$
 				// TODO: GOTO generic error state!
 			}
-			if (this.mainWindow != null
-					&& !this.mainWindow.getShell().isDisposed()) {
-				log.debug("Allowing MainWindow to update its state for " //$NON-NLS-1$
-						+ current);
-				current.updateMainWindowBehavior();
-				this.mainWindow.applyBehavior();
-				this.mainWindow.doLayout();
+
+			if (this.exit) {
+				// exit request ignore
+				next = null;
+				this.status.setCurrentState(next);
+			} else {
+
+				if (this.mainWindow != null
+						&& !this.mainWindow.getShell().isDisposed()) {
+					log.debug("Allowing MainWindow to update its state for " //$NON-NLS-1$
+							+ current);
+					current.updateMainWindowBehavior();
+					this.mainWindow.applyBehavior();
+					this.mainWindow.doLayout();
+				}
+				next = current.nextState();
+				if (next == current) {
+					break;
+				}
+
+				if (next == null) {
+					log.info("Next state is null -> exit"); //$NON-NLS-1$
+					this.status.setCurrentState(next);
+					break;
+				}
+
+				log.debug("Changing state from: " //$NON-NLS-1$
+						+ current + " to " //$NON-NLS-1$
+						+ next.toString());
+				this.status.setCurrentState(next);
 			}
-			next = current.nextState();
-			if (next == current) {
-				break;
-			}
-			log.debug("Changing state from: " //$NON-NLS-1$
-					+ current + " to " //$NON-NLS-1$
-					+ next.toString());
-			this.status.setCurrentState(next);
 		}
-		
+
 		// TODO: Remove following line when releasing ...
 		if (this.status.getCurrentState() != null) {
 			this.setCurrentStateMessage(this.status.getCurrentState()
@@ -205,9 +218,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 					Composite.class, int.class, State.class);
 			composite = constructor.newInstance(getComposite(), style, state);
 		} catch (Exception e) {
-			log.error(
-					"Could not create Composite for Class " //$NON-NLS-1$
-							+ compositeClass.getName(), e);
+			log.error("Could not create Composite for Class " //$NON-NLS-1$
+					+ compositeClass.getName(), e);
 		}
 		return composite;
 	}
@@ -221,12 +233,17 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		return this.shell;
 	}
 
+	private boolean exit = false;
+
 	/**
 	 * Exists the Workflow
 	 */
 	@Override
 	public void exit() {
-		this.shell.dispose();
+		this.exit = true;
+		if (this.shell != null) {
+			this.shell.dispose();
+		}
 	}
 
 	/**
@@ -248,6 +265,12 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		// if a user interaction is required we have a shell ...
 		Shell shell = this.nonCreatingGetShell();
 		Display display = this.nonCreatingGetDisplay();
+
+		if (this.status.getCurrentState() == null) {
+			if (shell != null) {
+				this.shell.dispose();
+			}
+		}
 
 		if (shell != null && display != null) {
 			while (!shell.isDisposed()) {
@@ -288,8 +311,10 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	public PDFSigner getPDFSigner() {
 		return this.pdfSigner;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getGUIProvider()
 	 */
 	@Override
@@ -318,7 +343,16 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * 
 	 * @return the command line arguments
 	 */
+	@Override
 	public String[] getCmdArgs() {
 		return this.cmdLineArgs;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigManipulator()
+	 */
+	@Override
+	public ConfigManipulator getConfigManipulator() {
+		return this.configProvider;
 	}
 }

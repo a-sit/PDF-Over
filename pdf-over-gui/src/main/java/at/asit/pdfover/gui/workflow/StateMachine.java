@@ -28,6 +28,12 @@ public interface StateMachine {
 	public ConfigProvider getConfigProvider();
 
 	/**
+	 * Gets the Config Manipulator
+	 * @return the config manipulator
+	 */
+	public ConfigManipulator getConfigManipulator();
+	
+	/**
 	 * Get the PDF Signer
 	 * @return the PDF Signer
 	 */
@@ -75,4 +81,11 @@ public interface StateMachine {
 	 * Exit state machine execution
 	 */
 	public void exit();
+	
+	/**
+	 * Gets the command line arguments
+	 * 
+	 * @return the command line arguments
+	 */
+	public String[] getCmdArgs();
 }

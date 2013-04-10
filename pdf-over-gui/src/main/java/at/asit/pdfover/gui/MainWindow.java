@@ -24,6 +24,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
 import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
 
@@ -44,6 +46,29 @@ import at.asit.pdfover.gui.workflow.states.PositioningState;
  * The Main Window of PDFOver 4.0
  */
 public class MainWindow {
+
+	/**
+	 * 
+	 */
+	private final class ConfigSelectionListener implements SelectionListener {
+		/**
+		 * 
+		 */
+		public ConfigSelectionListener() {
+			// Nothing to do here
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(
+					MainWindow.this.stateMachine));
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// Nothing to do here
+		}
+	}
 
 	/**
 	 * Selection Listener for Position Button
@@ -220,6 +245,7 @@ public class MainWindow {
 		fd_config.bottom = new FormAttachment(100, 0);
 		this.btn_config.setLayoutData(fd_config);
 		this.btn_config.setText("Config ...");
+		this.btn_config.addSelectionListener(new ConfigSelectionListener());
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 
 		this.btn_open = new Button(composite, SWT.NONE);

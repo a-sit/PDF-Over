@@ -25,6 +25,42 @@ public interface ConfigProvider {
 	//TODO: define interface for config provider ....
 	
 	/**
+	 * Gets the configuration file
+	 * @return the configuration file
+	 */
+	public String getConfigurationFile();
+	
+	/**
+	 * Gets the default Mobile number
+	 * @return the default mobile number
+	 */
+	public String getDefaultMobileNumber();
+	
+	/**
+	 * Gets the password to use for Mobile BKU
+	 * @return the password
+	 */
+	public String getDefaultPassword();
+	
+	/**
+	 * Gets the filename of the default emblem
+	 * @return the emblem
+	 */
+	public String getDefaultEmblem();
+	
+	/**
+	 * Gets the proxy host
+	 * @return the proxy hostname or ip address
+	 */
+	public String getProxyHost();
+	
+	/**
+	 * Gets the proxy port
+	 * @return the proxy port
+	 */
+	public int getProxyPort();
+	
+	/**
 	 * Get the default configured BKU
 	 * @return the default configured BKU
 	 */

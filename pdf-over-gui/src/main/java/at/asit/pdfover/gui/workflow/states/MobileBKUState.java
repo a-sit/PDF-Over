@@ -199,7 +199,7 @@ public class MobileBKUState extends State {
 					postCredentialsThread.start();
 
 				} else {
-					// We need at least number of password => show UI!
+					// We need number and password => show UI!
 					
 					// set possible error message
 					ui.setErrorMessage(mobileStatus.getErrorMessage());
@@ -257,7 +257,12 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void cleanUp() {
-		// No composite - no cleanup necessary
+		if(this.mobileBKUEnterNumberComposite != null)
+			this.mobileBKUEnterNumberComposite.dispose();
+		if(this.mobileBKUEnterTANComposite != null)
+			this.mobileBKUEnterTANComposite.dispose();
+		if(this.waitingComposite != null)
+			this.waitingComposite.dispose();
 	}
 
 	/*
@@ -280,6 +285,9 @@ public class MobileBKUState extends State {
 		return this.getClass().getName();
 	}
 
+	/**
+	 * invoke state machine update in main thread
+	 */
 	public void invokeUpdate() {
 		this.stateMachine.invokeUpdate();
 	}
