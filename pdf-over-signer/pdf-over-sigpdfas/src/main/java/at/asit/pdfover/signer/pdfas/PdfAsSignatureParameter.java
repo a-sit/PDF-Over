@@ -55,6 +55,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAsSignatureParameter.class);
 
+	private static final int PLACEHOLDER_SCALE = 4;
+
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
 	/**
@@ -132,8 +134,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			sign_obj.fillValues(' ', true, false);
 			sign_obj.setKZ(BinarySignator_1_1_0.MY_ID);
 
-			float width = getPlaceholderDimension().getWidth();
-			float height = getPlaceholderDimension().getHeight();
+			float width = getPlaceholderDimension().getWidth() * PLACEHOLDER_SCALE;
+			float height = getPlaceholderDimension().getHeight() * PLACEHOLDER_SCALE;
 
 			Table table = sign_obj.getAbstractTable();
 
@@ -202,9 +204,9 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		if (font_arr.length != 3) {
 			return Font.decode(def);
 		}
-		return Font.decode(String.format("%s-%s-%s", font_arr[0], font_arr[2],
+		Font font = Font.decode(String.format("%s-%s-%s", font_arr[0], font_arr[2],
 				font_arr[1]));
-
+		return font.deriveFont((float) font.getSize() * PLACEHOLDER_SCALE);
 	}
 
 	/**
@@ -222,8 +224,9 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		if (font_arr.length != 3) {
 			return Font.decode(def);
 		}
-		return Font.decode(String.format("%s-%s-%s", font_arr[0], font_arr[2],
+		Font font = Font.decode(String.format("%s-%s-%s", font_arr[0], font_arr[2],
 				font_arr[1]));
+		return font.deriveFont((float) font.getSize() * PLACEHOLDER_SCALE);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -298,8 +301,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 									+ "/"
 									+ entry.getValue().toString()));
 						}
-						int imgWidth = 40;
-						int imgHeight = 40;
+						int imgWidth = 40 * PLACEHOLDER_SCALE;
+						int imgHeight = 40 * PLACEHOLDER_SCALE;
 						Image img = image.getScaledInstance(imgWidth, imgHeight,
 								Image.SCALE_SMOOTH);
 
@@ -366,10 +369,10 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 				if (entry.getType() == 0 || entry.getType() == 1) {
 					String fontString = style.getFont();
 					String[] font_arr = fontString.split(",");
-					int fontSize = 8;
+					int fontSize = 8 * PLACEHOLDER_SCALE;
 
 					if (font_arr.length == 3) {
-						fontSize = Integer.parseInt(font_arr[1]);
+						fontSize = Integer.parseInt(font_arr[1]) * PLACEHOLDER_SCALE;
 					}
 
 					if (rsize < ((style.getPadding() * 2) + fontSize)) {
@@ -407,10 +410,10 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 				if (entry.getType() == 0 || entry.getType() == 1) {
 					String fontString = style.getFont();
 					String[] font_arr = fontString.split(",");
-					int fontSize = 8;
+					int fontSize = 8 * PLACEHOLDER_SCALE;
 
 					if (font_arr.length == 3) {
-						fontSize = Integer.parseInt(font_arr[1]);
+						fontSize = Integer.parseInt(font_arr[1]) * PLACEHOLDER_SCALE;
 					}
 
 					if (rsize < ((style.getPadding() * 2) + fontSize)) {
