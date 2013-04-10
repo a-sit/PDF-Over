@@ -286,8 +286,6 @@ public class PrepareConfigurationState extends State {
 						.getGUIProvider().getMainShell(),
 						Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
 						BUTTONS.OK);
-				// error.setException(e);
-				// this.setNextState(error);
 				error.open();
 				this.stateMachine.exit();
 			}
@@ -317,8 +315,6 @@ public class PrepareConfigurationState extends State {
 							Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
 							BUTTONS.OK);
 				}
-				// error.setException(e);
-				// this.setNextState(error);
 				error.open();
 				this.stateMachine.exit();
 			}
