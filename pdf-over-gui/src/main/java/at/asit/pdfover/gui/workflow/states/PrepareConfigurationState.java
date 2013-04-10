@@ -16,14 +16,12 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
@@ -55,11 +53,7 @@ import at.asit.pdfover.signator.Signator;
  */
 public class PrepareConfigurationState extends State {
 
-	/**
-	 * PDFOver config directory
-	 */
-	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
-
+	
 	/**
 	 * @param stateMachine
 	 */
@@ -98,7 +92,8 @@ public class PrepareConfigurationState extends State {
 
 			try {
 				this.stateMachine.getConfigProvider().loadConfiguration(
-						new FileInputStream(CONFIG_DIRECTORY + "/" + filename)); //$NON-NLS-1$
+						new FileInputStream(
+								this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/" + filename)); //$NON-NLS-1$
 
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
 
@@ -141,8 +136,8 @@ public class PrepareConfigurationState extends State {
 		// Read config file
 		try {
 
-			File configDir = new File(CONFIG_DIRECTORY);
-			File configFile = new File(CONFIG_DIRECTORY + "/" //$NON-NLS-1$
+			File configDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory());
+			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/" //$NON-NLS-1$
 					+ ConfigManipulator.DEFAULT_CONFIG_FILE);
 			if (!configDir.exists() || !configFile.exists()) {
 				boolean allOK = false;
@@ -164,7 +159,7 @@ public class PrepareConfigurationState extends State {
 					try {
 						inputStream = this.getClass().getResourceAsStream(
 								"/" + ConfigManipulator.DEFAULT_CONFIG_FILE); //$NON-NLS-1$
-						pdfOverConfig = new FileOutputStream(CONFIG_DIRECTORY
+						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
 								+ "/" //$NON-NLS-1$
 								+ ConfigManipulator.DEFAULT_CONFIG_FILE);
 
@@ -216,7 +211,7 @@ public class PrepareConfigurationState extends State {
 					}
 				}
 			} else {
-				log.debug("Configuration directory exists!");
+				log.debug("Configuration directory exists!"); //$NON-NLS-1$
 			}
 
 			// Read cli arguments with for config file!

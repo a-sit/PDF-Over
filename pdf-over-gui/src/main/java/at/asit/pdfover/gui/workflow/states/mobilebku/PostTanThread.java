@@ -149,7 +149,7 @@ public class PostTanThread implements Runnable {
 
 			if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 				// success !!
-
+				
 				this.state.getSigningState().setSignatureResponse(
 						new SLResponse(responseData, server, null, null));
 				this.state

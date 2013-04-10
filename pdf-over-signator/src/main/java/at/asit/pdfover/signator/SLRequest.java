@@ -66,6 +66,18 @@ public class SLRequest {
 	}
 
 	/**
+	 * The SL request String with the document defined as file upload
+	 * @return SL request String
+	 */
+	public String getFileUploadRequest() {
+		String fileUploadRequest = this.request.replace(
+				DATAOBJECT_STRING,
+				"<sl:LocRefContent>formdata:fileupload</sl:LocRefContent>"); //$NON-NLS-1$
+
+		return fileUploadRequest;
+	}
+	
+	/**
 	 * The SL request String with the document referenced as an URI
 	 *
 	 * This SL Request is always a detached signature request which contains a

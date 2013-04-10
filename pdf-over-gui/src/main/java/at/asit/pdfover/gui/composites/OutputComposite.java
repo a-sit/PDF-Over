@@ -107,7 +107,7 @@ public class OutputComposite extends StateComposite {
 						// Save as temp file ...
 						java.util.Date date= new java.util.Date();
 						String fileName = String.format("%d_tmp_signed.pdf", date.getTime()); //$NON-NLS-1$
-						open = new File(fileName);
+						open = new File(OutputComposite.this.tempDirectory + "/" + fileName); //$NON-NLS-1$
 						FileOutputStream outstream = new FileOutputStream(open);
 						outstream.write(source.getByteArray(), 0,
 								source.getByteArray().length);
@@ -180,6 +180,15 @@ public class OutputComposite extends StateComposite {
 		this.pack();
 	}
 
+	String tempDirectory;
+	
+	/**
+	 * @param tempDirectory
+	 */
+	public void setTempDirectory(String tempDirectory) {
+		this.tempDirectory = tempDirectory;
+	}
+	
 	/**
 	 * Gets the signed document
 	 * @return the signed document

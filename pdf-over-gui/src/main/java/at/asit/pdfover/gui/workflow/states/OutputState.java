@@ -57,6 +57,14 @@ public class OutputState extends State {
 		if (this.outputComposite == null) {
 			this.outputComposite = this.stateMachine.getGUIProvider()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
+			
+			File tmpDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/tmp"); //$NON-NLS-1$
+			
+			if(!tmpDir.exists()) {
+				tmpDir.mkdir();
+			}
+			
+			this.outputComposite.setTempDirectory(tmpDir.getAbsolutePath());
 		}
 
 		return this.outputComposite;

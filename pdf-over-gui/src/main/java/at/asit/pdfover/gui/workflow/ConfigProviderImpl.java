@@ -43,6 +43,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private BKUs defaultBKU = BKUs.NONE;
 
 	/**
+	 * PDFOver config directory
+	 */
+	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
+
+	
+	/**
 	 * Gets the Default Mobile URL
 	 */
 	public static final String DEFAULT_MOBILE_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
@@ -458,6 +464,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public String getMobileBKUURL() {
 		return this.mobileBKU;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
+	 */
+	@Override
+	public String getConfigurationDirectory() {
+		return CONFIG_DIRECTORY;
 	}
 
 }

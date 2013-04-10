@@ -38,6 +38,12 @@ public interface ConfigProvider {
 	public String getConfigurationFile();
 	
 	/**
+	 * Gets the configuration directory
+	 * @return the configuration directory
+	 */
+	public String getConfigurationDirectory();
+	
+	/**
 	 * Gets the default Mobile number
 	 * @return the default mobile number
 	 */
