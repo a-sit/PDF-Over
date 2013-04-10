@@ -25,12 +25,6 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public interface GUIProvider {
 	/**
-	 * Get the container Composite
-	 * @return the container Composite
-	 */
-	public Composite getComposite();
-	
-	/**
 	 * Create a new Composite
 	 * @param compositeClass The class of the Composite to create
 	 * @param style the SWT style

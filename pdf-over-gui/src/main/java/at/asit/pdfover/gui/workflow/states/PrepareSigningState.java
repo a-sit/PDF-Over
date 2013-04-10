@@ -20,8 +20,8 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
@@ -104,8 +104,8 @@ public class PrepareSigningState extends State {
 
 	private WaitingComposite getSelectionComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite = new WaitingComposite(
-					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
+			this.waitingComposite =
+					this.stateMachine.getGUIProvider().createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.waitingComposite;

@@ -20,8 +20,8 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -51,8 +51,6 @@ public class OpenState extends State {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
 					this.stateMachine.getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
-			//this.selectionComposite = new DataSourceSelectComposite(
-			//		this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;

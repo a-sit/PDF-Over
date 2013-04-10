@@ -173,9 +173,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * 
 	 * @return Composite
 	 */
-	@Override
 	public Composite getComposite() {
-		// Main window will be build on first call
+		// Main window will be built on first call
 		// returns SWT Composite container for states to draw their GUI
 
 		if (this.container == null) {

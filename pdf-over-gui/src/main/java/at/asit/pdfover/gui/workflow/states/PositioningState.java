@@ -20,10 +20,9 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.PositioningComposite;
-import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 
@@ -48,10 +47,10 @@ public class PositioningState extends State {
 
 	private PositioningComposite positionComposite = null;
 
-	private PositioningComposite getPositioningComosite() {
+	private PositioningComposite getPositioningComposite() {
 		if (this.positionComposite == null) {
-			this.positionComposite = new PositioningComposite(
-					this.stateMachine.getGUIProvider().getComposite(), SWT.NONE, this);
+			this.positionComposite =
+					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.positionComposite;
@@ -68,7 +67,7 @@ public class PositioningState extends State {
 
 
 		if(status.getSignaturePosition() == null) {
-			PositioningComposite position = this.getPositioningComosite();
+			PositioningComposite position = this.getPositioningComposite();
 			
 			this.stateMachine.getGUIProvider().display(position);
 			

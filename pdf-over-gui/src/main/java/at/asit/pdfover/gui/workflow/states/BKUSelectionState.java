@@ -20,8 +20,8 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -69,8 +69,8 @@ public class BKUSelectionState extends State {
 
 	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
-			this.selectionComposite =  new BKUSelectionComposite(
-					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
+			this.selectionComposite =
+					this.stateMachine.getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
