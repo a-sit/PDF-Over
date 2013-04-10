@@ -16,10 +16,6 @@
 package at.asit.pdfover.gui.cliarguments;
 
 // Imports
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,21 +48,18 @@ public class OutputFolderArgument extends CLIArgument {
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
-
 				String outputFolder = args[argOffset + 1];
-				
-				File outputFolderDir = new File(outputFolder);
-				
-				if(!outputFolderDir.exists()) {
-					throw new FileNotFoundException(outputFolder);
-				}
-				
-				if(!outputFolderDir.isDirectory()) {
-					throw new IOException(outputFolderDir + Messages.getString("argument.error.output")); //$NON-NLS-1$
-				}
-				
+
+//				File outputFolderDir = new File(outputFolder);
+//				if(!outputFolderDir.exists()) {
+//					throw new FileNotFoundException(outputFolder);
+//				}
+//				if(!outputFolderDir.isDirectory()) {
+//					throw new IOException(outputFolderDir + Messages.getString("argument.error.output")); //$NON-NLS-1$
+//				}
+
 				getConfiguration().setDefaultOutputFolderOverlay(outputFolder);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
