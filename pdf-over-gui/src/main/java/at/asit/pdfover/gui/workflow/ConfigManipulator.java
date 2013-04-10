@@ -68,6 +68,12 @@ public interface ConfigManipulator {
 	public static final String PROXY_PORT_CONFIG = "PROXY_PORT"; //$NON-NLS-1$
 	
 	/**
+	 * The output folder config parameter
+	 */
+	public static final String OUTPUT_FOLDER_CONFIG = "OUTPUT_FOLDER"; //$NON-NLS-1$
+	
+	
+	/**
 	 * Sets the default bku type
 	 * @param bku the bku type
 	 */
@@ -117,6 +123,12 @@ public interface ConfigManipulator {
 	 * @param configurationFile
 	 */
 	public void setConfigurationFile(String configurationFile);
+	
+	/**
+	 * Sets the default output folder
+	 * @param outputFolder the default output folder
+	 */
+	public void setDefaultOutputFolder(String outputFolder);
 	
 	/**
 	 * Saves the current configuration to the current configuration file

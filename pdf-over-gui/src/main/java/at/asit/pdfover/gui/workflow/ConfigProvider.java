@@ -15,6 +15,9 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -23,6 +26,12 @@ import at.asit.pdfover.signator.SignaturePosition;
  */
 public interface ConfigProvider {
 	//TODO: define interface for config provider ....
+	
+	/**
+	 * Regex for parsing signature position
+	 */
+	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //$NON-NLS-1$
+
 	
 	/**
 	 * Gets the configuration file
@@ -71,4 +80,17 @@ public interface ConfigProvider {
 	 * @return the default configured SignaturePosition or null if not configured
 	 */
 	public SignaturePosition getDefaultSignaturePosition();
+	
+	/**
+	 * Gets the default output folder for signed documents
+	 * @return the default output folder 
+	 */
+	public String getDefaultOutputFolder();
+	
+	/**
+	 * Loads the current configuration to the current configuration file
+	 * @param configSource 
+	 * @throws IOException 
+	 */
+	public void loadConfiguration(InputStream configSource) throws IOException;
 }

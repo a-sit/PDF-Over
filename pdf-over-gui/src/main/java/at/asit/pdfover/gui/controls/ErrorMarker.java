@@ -18,13 +18,9 @@ package at.asit.pdfover.gui.controls;
 // Imports
 import java.io.InputStream;
 
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -39,6 +35,7 @@ public class ErrorMarker {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(ErrorMarker.class);
 
@@ -49,6 +46,7 @@ public class ErrorMarker {
 	 * @param style
 	 * @param exception
 	 * @param message
+	 * @param control 
 	 */
 	public ErrorMarker(Composite parent, int style, Throwable exception,
 			String message, Control control) {
@@ -74,19 +72,35 @@ public class ErrorMarker {
 		this.lbl.setImage(this.orig);
 	}
 	
+	/**
+	 * Sets the layout data
+	 * @param object the layout data
+	 */
 	public void setLayoutData(Object object) {
 		this.lbl.setLayoutData(object);
 	}
 	
+	/**
+	 * Sets the visibilty
+	 * @param visible the visibilty
+	 */
 	public void setVisible(boolean visible) {
 		this.lbl.setVisible(visible);
 	}
 
+	/**
+	 * Sets the tooltip text
+	 * @param msg the tooltip text
+	 */
 	public void setToolTipText(String msg) {
 		this.lbl.setToolTipText(msg);
 	}
 	
 	
+	/**
+	 * Scales the image to the new size
+	 * @param size
+	 */
 	public void resize(Point size) {
 		String imgPath = "/img/error.png"; //$NON-NLS-1$
 
@@ -101,6 +115,10 @@ public class ErrorMarker {
 		this.lbl.setImage(this.orig);
 	}
 
+	/**
+	 * Gets the size of the underlying label
+	 * @return the size
+	 */
 	public Point getSize() {
 		return this.lbl.getSize();
 	}

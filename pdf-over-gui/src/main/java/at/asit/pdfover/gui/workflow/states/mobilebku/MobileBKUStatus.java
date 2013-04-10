@@ -19,6 +19,8 @@ package at.asit.pdfover.gui.workflow.states.mobilebku;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.workflow.ConfigProvider;
+
 /**
  * 
  */
@@ -26,16 +28,22 @@ public class MobileBKUStatus {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileBKUStatus.class);
 
+	/**
+	 * Maximum number of TAN tries!
+	 */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
 	
 	/**
 	 * Constructor
+	 * @param provider 
 	 */
-	public MobileBKUStatus() {
-		// TODO: Fill number and password with possible config values!
+	public MobileBKUStatus(ConfigProvider provider) {
+		this.setPhoneNumber(provider.getDefaultMobileNumber());
+		this.setMobilePassword(provider.getDefaultPassword());
 	}
 	
 	String viewstate;
@@ -122,7 +130,7 @@ public class MobileBKUStatus {
 	}
 
 	/**
-	 * @param credentialsFormAction the credentialsFormAction to set
+	 * @param baseURL 
 	 */
 	public void setBaseURL(String baseURL) {
 		this.baseURL = baseURL;

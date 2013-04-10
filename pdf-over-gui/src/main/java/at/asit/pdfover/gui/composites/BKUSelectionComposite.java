@@ -19,6 +19,8 @@ package at.asit.pdfover.gui.composites;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -111,23 +113,31 @@ public class BKUSelectionComposite extends StateComposite {
 		btn_mobile.setText("MOBILE");
 		//Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_mobile = new FormData();
-		fd_btn_mobile.left = new FormAttachment(40, 0);
-		fd_btn_mobile.right = new FormAttachment(50, 0);
-		fd_btn_mobile.top = new FormAttachment(45, 0);
-		fd_btn_mobile.bottom = new FormAttachment(55, 0);
+		//fd_btn_mobile.left = new FormAttachment(40, 0);
+		fd_btn_mobile.right = new FormAttachment(50, -5);
+		fd_btn_mobile.top = new FormAttachment(40, 0);
+		//fd_btn_mobile.bottom = new FormAttachment(55, 0);
 		btn_mobile.setLayoutData(fd_btn_mobile);
 		btn_mobile.addSelectionListener(new MobileSelectionListener());
 
+		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/handy.gif")));
+		
+		btn_mobile.setImage(mobile);
+		
 		Button btn_card = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		btn_card.setText("CARD");
 		//Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_card = new FormData();
-		fd_btn_card.left = new FormAttachment(50, 0);
-		fd_btn_card.right = new FormAttachment(60, 0);
-		fd_btn_card.top = new FormAttachment(45, 0);
-		fd_btn_card.bottom = new FormAttachment(55, 0);
+		fd_btn_card.left = new FormAttachment(50, 5);
+		//fd_btn_card.right = new FormAttachment(60, 0);
+		fd_btn_card.top = new FormAttachment(40, 0);
+		//fd_btn_card.bottom = new FormAttachment(55, 0);
 		btn_card.setLayoutData(fd_btn_card);
 		btn_card.addSelectionListener(new LocalSelectionListener());
+		
+		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif")));
+		
+		btn_card.setImage(karte);
 		
 		this.pack();
 	}

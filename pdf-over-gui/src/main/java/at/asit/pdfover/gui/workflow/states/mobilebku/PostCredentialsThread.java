@@ -68,7 +68,7 @@ public class PostCredentialsThread implements Runnable {
 			client.getParams().setParameter("http.useragent", //$NON-NLS-1$
 					LocalBKUState.PDF_OVER_USER_AGENT_STRING);
 			
-			PostMethod method = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID());
+			PostMethod method = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 			
 			method.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
 			method.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$

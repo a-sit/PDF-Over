@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.workflow;
 
 // Imports
 import java.io.File;
@@ -38,6 +38,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(ConfigurationContainerImpl.class);
 

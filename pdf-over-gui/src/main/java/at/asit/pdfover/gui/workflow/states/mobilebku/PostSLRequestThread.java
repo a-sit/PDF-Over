@@ -70,10 +70,9 @@ public class PostSLRequestThread implements Runnable {
 			client.getParams().setParameter("http.useragent", //$NON-NLS-1$
 					LocalBKUState.PDF_OVER_USER_AGENT_STRING);
 
-			// TODO: move URL to config!!
-			
-			//String url = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
-			String url = "https://test1.a-trust.at/https-security-layer-request/default.aspx";
+			// TODO: move URL to config?		
+			String url = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+			//String url = "https://test1.a-trust.at/https-security-layer-request/default.aspx";
 			
 			PostMethod method = new PostMethod(url);
 

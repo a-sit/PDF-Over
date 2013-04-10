@@ -147,10 +147,10 @@ public class OutputComposite extends StateComposite {
 		btn_open.setText("OPEN");
 		// Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_open = new FormData();
-		fd_btn_open.left = new FormAttachment(40, 0);
-		fd_btn_open.right = new FormAttachment(50, 0);
-		fd_btn_open.top = new FormAttachment(45, 0);
-		fd_btn_open.bottom = new FormAttachment(55, 0);
+		//fd_btn_open.left = new FormAttachment(40, 0);
+		fd_btn_open.right = new FormAttachment(50, -5);
+		fd_btn_open.top = new FormAttachment(40, 0);
+		//fd_btn_open.bottom = new FormAttachment(55, 0);
 		btn_open.setLayoutData(fd_btn_open);
 		btn_open.addSelectionListener(new OpenSelectionListener());
 
@@ -162,10 +162,10 @@ public class OutputComposite extends StateComposite {
 		btn_save.setText("SAVE");
 		// Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		FormData fd_btn_save = new FormData();
-		fd_btn_save.left = new FormAttachment(50, 0);
-		fd_btn_save.right = new FormAttachment(60, 0);
-		fd_btn_save.top = new FormAttachment(45, 0);
-		fd_btn_save.bottom = new FormAttachment(55, 0);
+		fd_btn_save.left = new FormAttachment(50, 5);
+		//fd_btn_save.right = new FormAttachment(60, 0);
+		fd_btn_save.top = new FormAttachment(40, 0);
+		//fd_btn_save.bottom = new FormAttachment(55, 0);
 		btn_save.setLayoutData(fd_btn_save);
 		btn_save.addSelectionListener(new SaveSelectionListener());
 

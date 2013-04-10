@@ -19,6 +19,12 @@ package at.asit.pdfover.gui.composites;
 import java.io.File;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -50,6 +56,9 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
+import at.asit.pdfover.gui.exceptions.InvalidNumberException;
+import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import org.eclipse.swt.layout.FillLayout;
 
@@ -195,7 +204,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 			this.recalculateEmblemSize();
 		} catch (Exception e) {
-			this.lblEmblem.setText("No Image");
+			this.lblEmblem
+					.setText("No Image. Drag and Drop a Image. Or use the browse button to select an emblem.");
 			this.lblEmblem.setImage(null);
 			if (this.origEmblem != null) {
 				this.origEmblem.dispose();
@@ -212,27 +222,27 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	void processEmblemChanged(String filename) {
 		try {
 			// String filename = this.txtEmblemFile.getText();
-			this.emblemFile = filename;
-			this.setEmblemFileInternal(filename);
-			this.btnUseImage.setSelection(true);
+			plainEmblemSetter(filename);
 		} catch (Exception ex) {
 			// TODO: Show error message!
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 		}
 	}
 
+	/**
+	 * @param filename
+	 * @throws Exception
+	 */
+	private void plainEmblemSetter(String filename) throws Exception {
+		this.emblemFile = filename;
+		this.setEmblemFileInternal(filename);
+		this.btnUseImage.setSelection(true);
+	}
+
 	void processNumberChanged() {
 		try {
-
 			this.txtMobileNumberErrorMarker.setVisible(false);
-			String number = this.txtMobileNumber.getText();
-			this.configurationContainer.setNumber(number);
-			number = this.configurationContainer.getNumber();
-			if (number == null) {
-				this.txtMobileNumber.setText(""); //$NON-NLS-1$
-				return;
-			}
-			this.txtMobileNumber.setText(number);
+			plainMobileNumberSetter();
 		} catch (Exception ex) {
 			// TODO: Show error message!
 			this.txtMobileNumberErrorMarker.setVisible(true);
@@ -242,11 +252,24 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
+	/**
+	 * @throws InvalidNumberException
+	 */
+	private void plainMobileNumberSetter() throws InvalidNumberException {
+		String number = this.txtMobileNumber.getText();
+		this.configurationContainer.setNumber(number);
+		number = this.configurationContainer.getNumber();
+		if (number == null) {
+			this.txtMobileNumber.setText(""); //$NON-NLS-1$
+			return;
+		}
+		this.txtMobileNumber.setText(number);
+	}
+
 	void processProxyHostChanged() {
 		try {
 			this.proxyHostErrorMarker.setVisible(false);
-			String host = this.txtProxyHost.getText();
-			this.configurationContainer.setProxyHost(host);
+			plainProxyHostSetter();
 		} catch (Exception ex) {
 			// TODO: Show error message!
 			this.proxyHostErrorMarker.setVisible(true);
@@ -255,23 +278,38 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
+	/**
+	 * 
+	 */
+	private void plainProxyHostSetter() {
+		String host = this.txtProxyHost.getText();
+		this.configurationContainer.setProxyHost(host);
+	}
+
 	void processProxyPortChanged() {
 		try {
 			this.txtProxyPortErrorMarker.setVisible(false);
-			String portString = this.txtProxyPort.getText();
-			int port = -1;
-			if (portString == null || portString.trim().equals("")) {
-				port = -1;
-			} else {
-				port = Integer.parseInt(portString);
-			}
-			this.configurationContainer.setProxyPort(port);
+			plainProxyPortSetter();
 		} catch (Exception ex) {
 			// TODO: Show error message!
 			this.txtProxyPortErrorMarker.setVisible(true);
 			this.txtProxyPortErrorMarker.setToolTipText(ex.getMessage());
 			log.error("processProxyPort: ", ex); //$NON-NLS-1$
 		}
+	}
+
+	/**
+	 * @throws InvalidPortException
+	 */
+	private void plainProxyPortSetter() throws InvalidPortException {
+		String portString = this.txtProxyPort.getText();
+		int port = -1;
+		if (portString == null || portString.trim().equals("")) { //$NON-NLS-1$
+			port = -1;
+		} else {
+			port = Integer.parseInt(portString);
+		}
+		this.configurationContainer.setProxyPort(port);
 	}
 
 	ConfigurationComposite configurationComposite;
@@ -396,45 +434,84 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		/*
-		 * Label lblDateiname = new Label(grpBildmarke, SWT.NONE);
-		 * lblDateiname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER,
-		 * false, false, 1, 1)); lblDateiname.setText("Dateiname:"); new
-		 * Label(grpBildmarke, SWT.NONE);
-		 */
+		DropTarget dnd_target = new DropTarget(this.lblEmblem, DND.DROP_DEFAULT
+				| DND.DROP_COPY);
+		final FileTransfer fileTransfer = FileTransfer.getInstance();
+		Transfer[] types = new Transfer[] { fileTransfer };
+		dnd_target.setTransfer(types);
 
-		/*
-		 * this.txtEmblemFile = new Text(grpBildmarke, SWT.BORDER); GridData
-		 * gd_txtEmblemFile = new GridData(SWT.FILL, SWT.FILL, false, false, 2,
-		 * 1); gd_txtEmblemFile.widthHint = 123;
-		 * this.txtEmblemFile.setLayoutData(gd_txtEmblemFile);
-		 * this.txtEmblemFile.addFocusListener(new FocusListener() {
-		 * 
-		 * @Override public void focusLost(FocusEvent e) {
-		 * processEmblemChanged(); }
-		 * 
-		 * @Override public void focusGained(FocusEvent e) { // Nothing to do
-		 * here! } }); this.txtEmblemFile.addTraverseListener(new
-		 * TraverseListener() {
-		 * 
-		 * @Override public void keyTraversed(TraverseEvent e) { if (e.detail ==
-		 * SWT.TRAVERSE_RETURN) { processEmblemChanged(); } } }); new
-		 * Label(grpBildmarke, SWT.NONE);
-		 */
+		dnd_target.addDropListener(new DropTargetAdapter() {
+			@Override
+			public void drop(DropTargetEvent event) {
+				if (fileTransfer.isSupportedType(event.currentDataType)) {
+					String[] files = (String[]) event.data;
+					if (files.length > 0) {
+						// Only taking first file ...
+						File file = new File(files[0]);
+						if (!file.exists()) {
+							log.error("File: " + files[0] + " does not exist!"); //$NON-NLS-1$//$NON-NLS-2$
+							return;
+						}
+						processEmblemChanged(file.getAbsolutePath());
+					}
+				}
+			}
+
+			@Override
+			public void dragOperationChanged(DropTargetEvent event) {
+				if (event.detail == DND.DROP_DEFAULT) {
+					if ((event.operations & DND.DROP_COPY) != 0) {
+						event.detail = DND.DROP_COPY;
+					} else {
+						event.detail = DND.DROP_NONE;
+					}
+				}
+			}
+
+			@Override
+			public void dragEnter(DropTargetEvent event) {
+				if (event.detail == DND.DROP_DEFAULT) {
+					if ((event.operations & DND.DROP_COPY) != 0) {
+						event.detail = DND.DROP_COPY;
+					} else {
+						event.detail = DND.DROP_NONE;
+					}
+				}
+				// Only drop one item!
+				if (event.dataTypes.length > 1) {
+					event.detail = DND.DROP_NONE;
+					return;
+				}
+				// will accept text but prefer to have files dropped
+				for (int i = 0; i < event.dataTypes.length; i++) {
+					if (fileTransfer.isSupportedType(event.dataTypes[i])) {
+						event.currentDataType = event.dataTypes[i];
+						// files should only be copied
+						if (event.detail != DND.DROP_COPY) {
+							event.detail = DND.DROP_NONE;
+						}
+						break;
+					}
+				}
+			}
+		});
+
 		new Label(grpBildmarke, SWT.NONE);
 		new Label(grpBildmarke, SWT.NONE);
 
 		this.btnUseImage = new Button(grpBildmarke, SWT.CHECK);
 		this.btnUseImage.setText("Use Image");
 		this.btnUseImage.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(SimpleConfigurationComposite.this.btnUseImage.getSelection()) {
+				if (SimpleConfigurationComposite.this.btnUseImage
+						.getSelection()) {
 					processEmblemChanged(SimpleConfigurationComposite.this.emblemFile);
 				} else {
 					try {
-						SimpleConfigurationComposite.this.configurationContainer.setEmblem(null);
+						SimpleConfigurationComposite.this.configurationContainer
+								.setEmblem(null);
 					} catch (InvalidEmblemFile e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -572,35 +649,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		// Initialize form fields from configuration Container
-		String number = this.configurationContainer.getNumber();
-		if (number != null) {
-			this.txtMobileNumber.setText(number);
-		}
-
-		String emblemFile = this.configurationContainer.getEmblem();
-		if (emblemFile != null && !emblemFile.trim().equals("")) { //$NON-NLS-1$
-			// this.txtEmblemFile.setText(emblemFile);
-			this.emblemFile = emblemFile;
-			try {
-				this.setEmblemFileInternal(emblemFile, true);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				log.error("initialize emblem: ", e1); //$NON-NLS-1$
-			}
-		}
-
-		int port = this.configurationContainer.getProxyPort();
-		if (port > 0) {
-			this.txtProxyPort.setText(Integer.toString(port));
-		}
-
-		String host = this.configurationContainer.getProxyHost();
-
-		if (host != null) {
-			this.txtProxyHost.setText(host);
-		}
-
 		this.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -638,7 +686,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(SimpleConfigurationComposite.class);
 	private ErrorMarker proxyHostErrorMarker;
 	ErrorMarker txtMobileNumberErrorMarker;
@@ -655,7 +703,61 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// TODO Auto-generated method stub
+		// Nothing to do here
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration
+	 * ()
+	 */
+	@Override
+	public void loadConfiguration() {
+		// Initialize form fields from configuration Container
+		String number = this.configurationContainer.getNumber();
+		if (number != null) {
+			this.txtMobileNumber.setText(number);
+		}
+
+		String emblemFile = this.configurationContainer.getEmblem();
+		if (emblemFile != null && !emblemFile.trim().equals("")) { //$NON-NLS-1$
+			// this.txtEmblemFile.setText(emblemFile);
+			this.emblemFile = emblemFile;
+			try {
+				this.setEmblemFileInternal(emblemFile, true);
+				this.btnUseImage.setSelection(true);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
+			}
+		}
+
+		int port = this.configurationContainer.getProxyPort();
+		if (port > 0) {
+			this.txtProxyPort.setText(Integer.toString(port));
+		}
+
+		String host = this.configurationContainer.getProxyHost();
+
+		if (host != null) {
+			this.txtProxyHost.setText(host);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#validateSettings
+	 * ()
+	 */
+	@Override
+	public void validateSettings() throws Exception {
+		this.plainMobileNumberSetter();
+		this.plainEmblemSetter(this.emblemFile);
+		this.plainProxyHostSetter();
+		this.plainProxyPortSetter();
 	}
 }

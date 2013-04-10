@@ -23,9 +23,11 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.FileNameEmlbem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
@@ -57,6 +59,11 @@ public class PrepareSigningState extends State {
 		@Override
 		public void run() {
 			try {
+				
+				Status status = this.state.stateMachine.getStatus();
+				
+				ConfigProvider configuration = this.state.stateMachine.getConfigProvider();
+				
 				if(this.state.signer == null) {
 					this.state.signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
 				}
@@ -65,12 +72,15 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter = this.state.signer.newParameter();
 				}
 				
-				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(this.state.stateMachine.getStatus().getDocument()));
-				this.state.signatureParameter.setSignatureDevice(this.state.stateMachine.getStatus().getBKU());
-				this.state.signatureParameter.setSignaturePosition(this.state.stateMachine.getStatus().getSignaturePosition());
+				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.getDocument()));
+				this.state.signatureParameter.setSignatureDevice(status.getBKU());
+				this.state.signatureParameter.setSignaturePosition(status.getSignaturePosition());
 				
 				// TODO: Fill library specific signature Parameters ...
-				// TODO: setEmblem etc.
+				
+				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().equals("")) { //$NON-NLS-1$
+					this.state.signatureParameter.setEmblem(new FileNameEmlbem(configuration.getDefaultEmblem()));
+				}
 				
 				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
 				

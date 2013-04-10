@@ -19,6 +19,9 @@ package at.asit.pdfover.gui.workflow.states;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.ConfigurationComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -30,6 +33,7 @@ public class ConfigurationUIState extends State {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(ConfigurationUIState.class);
 
@@ -41,6 +45,7 @@ public class ConfigurationUIState extends State {
 			this.configurationComposite =
 					this.stateMachine.getGUIProvider().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
 			this.configurationComposite.setConfigManipulator(this.stateMachine.getConfigManipulator());
+			this.configurationComposite.setConfigProvider(this.stateMachine.getConfigProvider());
 		}
 
 		return this.configurationComposite;
@@ -88,6 +93,8 @@ public class ConfigurationUIState extends State {
 	@Override
 	public void updateMainWindowBehavior() {
 		// Leave the state as it is
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.setMainBarVisible(false);
 	}
 
 }

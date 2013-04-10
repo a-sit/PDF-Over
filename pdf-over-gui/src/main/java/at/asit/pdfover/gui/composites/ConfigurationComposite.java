@@ -16,13 +16,23 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import java.io.IOException;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
+import at.asit.pdfover.gui.exceptions.InvalidNumberException;
+import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
+import at.asit.pdfover.gui.workflow.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.pdfover.signator.SignaturePosition;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -38,7 +48,7 @@ import org.eclipse.swt.layout.FormAttachment;
  * 
  */
 public class ConfigurationComposite extends StateComposite {
-	
+
 	/**
 	 * 
 	 */
@@ -57,7 +67,7 @@ public class ConfigurationComposite extends StateComposite {
 				// switch to advanced
 				ConfigurationComposite.this.configComposite.dispose();
 				ConfigurationComposite.this.configComposite = new AdvancedConfigurationComposite(
-						ConfigurationComposite.this.containerComposite, 
+						ConfigurationComposite.this.containerComposite,
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
@@ -66,13 +76,14 @@ public class ConfigurationComposite extends StateComposite {
 				// switch to simple
 				ConfigurationComposite.this.configComposite.dispose();
 				ConfigurationComposite.this.configComposite = new SimpleConfigurationComposite(
-						ConfigurationComposite.this.containerComposite, 
+						ConfigurationComposite.this.containerComposite,
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
 				ConfigurationComposite.this.btnAdvanced.setText("Advanced");
 			}
-			
+
+			ConfigurationComposite.this.configComposite.loadConfiguration();
 			ConfigurationComposite.this.compositeStack.topControl = ConfigurationComposite.this.configComposite;
 			ConfigurationComposite.this.doLayout();
 		}
@@ -91,10 +102,12 @@ public class ConfigurationComposite extends StateComposite {
 
 	ConfigManipulator configManipulator = null;
 
+	ConfigProvider configProvider = null;
+
 	BaseConfigurationComposite configComposite;
 
 	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
-	
+
 	StackLayout compositeStack = new StackLayout();
 
 	int style;
@@ -115,6 +128,54 @@ public class ConfigurationComposite extends StateComposite {
 	}
 
 	/**
+	 * Sets the configuration provider
+	 * 
+	 * @param provider
+	 */
+	public void setConfigProvider(ConfigProvider provider) {
+		this.configProvider = provider;
+		if (this.configProvider != null) {
+
+			// Initialize Configuration Container
+			if (this.configProvider.getDefaultSignaturePosition() != null) {
+				this.configurationContainer
+						.setAutomaticPosition(this.configProvider
+								.getDefaultSignaturePosition()
+								.useAutoPositioning());
+			}
+
+			this.configurationContainer.setBKUSelection(this.configProvider
+					.getDefaultBKU());
+			try {
+				this.configurationContainer.setEmblem(this.configProvider
+						.getDefaultEmblem());
+			} catch (InvalidEmblemFile e) {
+				log.error("Failed to set emblem!", e); //$NON-NLS-1$
+			}
+			try {
+				this.configurationContainer.setNumber(this.configProvider
+						.getDefaultMobileNumber());
+			} catch (InvalidNumberException e) {
+				log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
+			}
+
+			this.configurationContainer.setOutputFolder(this.configProvider
+					.getDefaultOutputFolder());
+
+			this.configurationContainer.setProxyHost(this.configProvider
+					.getProxyHost());
+			try {
+				this.configurationContainer.setProxyPort(this.configProvider
+						.getProxyPort());
+			} catch (InvalidPortException e) {
+				log.error("Failed to set proxy port!", e); //$NON-NLS-1$
+			}
+
+			this.configComposite.loadConfiguration();
+		}
+	}
+
+	/**
 	 * Create the composite.
 	 * 
 	 * @param parent
@@ -130,7 +191,8 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
 		this.configComposite = new SimpleConfigurationComposite(
-				this.containerComposite, SWT.FILL | style, state, this.configurationContainer);
+				this.containerComposite, SWT.FILL | style, state,
+				this.configurationContainer);
 
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
@@ -151,6 +213,10 @@ public class ConfigurationComposite extends StateComposite {
 		btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if (ConfigurationComposite.this.storeConfiguration()) {
+					ConfigurationComposite.this.userDone = true;
+					ConfigurationComposite.this.state.updateStateMachine();
+				}
 			}
 		});
 		btnSpeichern.setText("Speichern");
@@ -180,16 +246,63 @@ public class ConfigurationComposite extends StateComposite {
 
 	}
 
-	private void storeConfiguration() {
-		// TODO: Collect info from UI and set in ConfigManipulator
+	boolean storeConfiguration() {
 
-		// TODO: call save configuration in ConfigManipulator
+		try {
+			this.configComposite.validateSettings();
+
+			// Write current Configuration
+			this.configManipulator.setDefaultBKU(this.configurationContainer
+					.getBKUSelection());
+			this.configManipulator
+					.setDefaultMobileNumber(this.configurationContainer
+							.getNumber());
+			if (this.configurationContainer.getAutomaticPosition()) {
+				this.configManipulator
+						.setDefaultSignaturePosition(new SignaturePosition());
+			} else {
+				this.configManipulator
+				.setDefaultSignaturePosition(null);
+			}
+
+			this.configManipulator
+					.setDefaultOutputFolder(this.configurationContainer
+							.getOutputFolder());
+
+			this.configManipulator.setProxyHost(this.configurationContainer
+					.getProxyHost());
+			this.configManipulator.setProxyPort(this.configurationContainer
+					.getProxyPort());
+			this.configManipulator.setDefaultEmblem(this.configurationContainer
+					.getEmblem());
+
+		} catch (Exception e) {
+			log.error("Settings validation failed!", e); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(
+					getShell(),
+					SWT.NONE,
+					"Invalid settings are still present. Please check your input.",
+					e);
+			dialog.open();
+			return false;
+		}
+		// Save current config to file
+		try {
+			this.configManipulator.saveCurrentConfiguration();
+		} catch (IOException e) {
+			log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
+					"Failed to save configuration file!", e);
+			dialog.open();
+			return false;
+		}
+		return true;
 	}
 
 	/**
 	 * Checks if the user has finished working with the configuration composite
 	 * 
-	 * @return
+	 * @return if the user is done
 	 */
 	public boolean isUserDone() {
 		return this.userDone;

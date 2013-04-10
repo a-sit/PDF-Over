@@ -41,7 +41,7 @@ public class MobileBKUState extends State {
 	 */
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		this.status = new MobileBKUStatus();
+		this.status = new MobileBKUStatus(this.stateMachine.getConfigProvider());
 	}
 
 	/**

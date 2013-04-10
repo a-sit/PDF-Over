@@ -20,9 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +32,7 @@ import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.Signator;
-import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Starting state of workflow proccess
@@ -46,11 +41,7 @@ import at.asit.pdfover.signator.SignaturePosition;
  */
 public class PrepareConfigurationState extends State {
 
-	/**
-	 * Regex for parsing signature position
-	 */
-	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //$NON-NLS-1$
-
+	
 	/**
 	 * @param stateMachine
 	 */
@@ -81,10 +72,12 @@ public class PrepareConfigurationState extends State {
 	private void initializeFromConfigurationFile(String filename)
 			throws InitializationException {
 		try {
-			Properties config = new Properties();
 
 			try {
-				config.load(new FileInputStream(filename));
+				this.stateMachine.getConfigProvider().loadConfiguration(new FileInputStream(filename));
+				
+				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
+				
 			} catch (FileNotFoundException ex) {
 				if (filename.equals(ConfigManipulator.DEFAULT_CONFIG_FILE)) {
 					// we only check for resource config file if it is the
@@ -92,7 +85,9 @@ public class PrepareConfigurationState extends State {
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
 								"/" + filename); //$NON-NLS-1$
-						config.load(is);
+						this.stateMachine.getConfigProvider().loadConfiguration(is);
+						
+						log.info("Loaded config from resource : " + filename); //$NON-NLS-1$
 					} catch (Exception eex) {
 						throw ex;
 					}
@@ -100,112 +95,7 @@ public class PrepareConfigurationState extends State {
 					throw ex;
 				}
 			}
-
-			// Load ok ...
-			ConfigManipulator configManipulator = this.stateMachine
-					.getConfigManipulator();
-
-			// Set Emblem
-			configManipulator.setDefaultEmblem(config
-					.getProperty(ConfigManipulator.EMBLEM_CONFIG));
-
-			// Set Mobile Phone Number
-			configManipulator.setDefaultMobileNumber(config
-					.getProperty(ConfigManipulator.MOBILE_NUMBER_CONFIG));
-
-			// Set Proxy Host
-			configManipulator.setProxyHost(config
-					.getProperty(ConfigManipulator.PROXY_HOST_CONFIG));
-
-			// Set Proxy Port
-			String proxyPortString = config
-					.getProperty(ConfigManipulator.PROXY_PORT_CONFIG);
-
-			if (proxyPortString != null && !proxyPortString.trim().equals("")) { //$NON-NLS-1$
-				int port = Integer.parseInt(proxyPortString);
-
-				if (port > 0 && port <= 0xFFFF) {
-					configManipulator.setProxyPort(port);
-				} else {
-					log.warn("Proxy port is out of range!: " + port); //$NON-NLS-1$
-				}
-			}
-
-			// Set Default BKU
-			String bkuString = config.getProperty(ConfigManipulator.BKU_CONFIG);
-
-			BKUs defaultBKU = BKUs.NONE;
-
-			try {
-				defaultBKU = BKUs.valueOf(bkuString);
-			} catch (IllegalArgumentException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
-				defaultBKU = BKUs.NONE;
-			} catch (NullPointerException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
-				defaultBKU = BKUs.NONE;
-			}
-
-			configManipulator.setDefaultBKU(defaultBKU);
-
-			// Set Signature Position
-			String signaturePosition = config
-					.getProperty(ConfigManipulator.SIGNATURE_POSITION_CONFIG);
-
-			SignaturePosition position = null;
-
-			if (signaturePosition != null
-					&& !signaturePosition.trim().equals("")) { //$NON-NLS-1$
-
-				signaturePosition = signaturePosition.trim().toLowerCase();
-
-				Pattern pattern = Pattern.compile(SIGN_POS_REGEX);
-
-				Matcher matcher = pattern.matcher(signaturePosition);
-
-				if (matcher.matches()) {
-					if (matcher.groupCount() == 8) {
-						if (matcher.group(1) != null) {
-							// we have format: x=..;y=..;p=...
-							try {
-								// group 2 = x value
-								float x = Float.parseFloat(matcher.group(2));
-
-								// group 3 = y value
-								float y = Float.parseFloat(matcher.group(3));
-
-								// group 4 = p value
-								int p = Integer.parseInt(matcher.group(3));
-
-								position = new SignaturePosition(x, y, p);
-							} catch (NumberFormatException ex) {
-								log.error(
-										"Signature Position read from config failed: Not a valid number", ex); //$NON-NLS-1$
-							}
-						} else if (matcher.group(5) != null) {
-							// we have format auto
-							position = new SignaturePosition();
-						} else if (matcher.group(6) != null) {
-							// we have format x=...;y=...;
-							// group 7 = x value
-							float x = Float.parseFloat(matcher.group(7));
-
-							// group 8 = y value
-							float y = Float.parseFloat(matcher.group(8));
-
-							position = new SignaturePosition(x, y);
-						}
-					} else {
-						log.error("Signature Position read from config failed: wrong group Count!"); //$NON-NLS-1$
-					}
-				} else {
-					log.error("Signature Position read from config failed: not matching string"); //$NON-NLS-1$
-				}
-
-			}
-
-			configManipulator.setDefaultSignaturePosition(position);
-
+			
 		} catch (IOException ex) {
 			throw new InitializationException(
 					"Failed to read configuration from config file", ex); //$NON-NLS-1$

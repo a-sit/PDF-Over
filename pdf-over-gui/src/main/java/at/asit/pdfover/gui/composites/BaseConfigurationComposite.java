@@ -17,6 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 
 import org.eclipse.swt.widgets.Composite;
+
+import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -39,4 +41,16 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 		super(parent, style, state);
 		this.configurationContainer = configuration;
 	}
+	
+	/**
+	 * Load configuration from ConfigurationContainer
+	 */
+	public abstract void loadConfiguration();
+	
+	/**
+	 * Called before exit.
+	 * The method validates every setting in the configuration before exit  
+	 * @throws Exception 
+	 */
+	public abstract void validateSettings() throws Exception;
 }

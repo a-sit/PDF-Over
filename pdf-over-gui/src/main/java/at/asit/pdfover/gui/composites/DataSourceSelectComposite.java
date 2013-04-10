@@ -118,9 +118,9 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 
-		Color back = new Color(Display.getCurrent(), 77, 190, 250);
+		//Color back = new Color(Display.getCurrent(), 77, 190, 250);
 
-		this.drop_area = new Composite(this, SWT.RESIZE | SWT.BORDER_DASH);
+		this.drop_area = new Composite(this, SWT.RESIZE | SWT.BORDER);
 		FormData fd_drop_area = new FormData();
 		fd_drop_area.left = new FormAttachment(0, 0);
 		fd_drop_area.right = new FormAttachment(100, 0);
@@ -128,7 +128,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		fd_drop_area.bottom = new FormAttachment(100, 0);
 		this.drop_area.setLayoutData(fd_drop_area);
 		this.drop_area.setLayout(new FormLayout());
-		this.drop_area.setBackground(back);
+		//this.drop_area.setBackground(back);
 
 		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_DEFAULT
 				| DND.DROP_COPY);
@@ -195,17 +195,17 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		final Label lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE);
 		FormData fd_lbl_drag = new FormData();
-		fd_lbl_drag.left = new FormAttachment(5, 5);
-		fd_lbl_drag.right = new FormAttachment(100, -5);
-		fd_lbl_drag.top = new FormAttachment(5, 5);
-		fd_lbl_drag.bottom = new FormAttachment(55, -5);
+		fd_lbl_drag.left = new FormAttachment(0, 10);
+		fd_lbl_drag.right = new FormAttachment(100, -10);
+		fd_lbl_drag.top = new FormAttachment(0, 10);
+		//fd_lbl_drag.bottom = new FormAttachment(100, -10);
 		lbl_drag.setLayoutData(fd_lbl_drag);
 		FontData[] fD = lbl_drag.getFont().getFontData();
 		fD[0].setHeight(18);
 		lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		lbl_drag.setText("Drag and Drop");
+		lbl_drag.setText("To sign a document\ndrag and drop it here\nor use the button below");
 		lbl_drag.setAlignment(SWT.CENTER);
-		lbl_drag.setBackground(back);
+		//lbl_drag.setBackground(back);
 
 		Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
 		btn_open.setText("Choose file ...");
@@ -216,24 +216,9 @@ public class DataSourceSelectComposite extends StateComposite {
 		fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
 		fd_btn_open.bottom = new FormAttachment(100, -5);
 		btn_open.setLayoutData(fd_btn_open);
-		btn_open.setBackground(back);
+		//btn_open.setBackground(back);
 		btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();
-
-		/*
-		 * Button btn = new Button(this, SWT.NATIVE); btn.setBounds(50, 20, 100,
-		 * 50); btn.setText("Click Me"); btn.addSelectionListener(new
-		 * SelectionListener() {
-		 * 
-		 * @Override public void widgetSelected(SelectionEvent arg0) {
-		 * DataSourceSelectComposite.this.setPress(true);
-		 * DataSourceSelectComposite.this.workflow.update(); }
-		 * 
-		 * @Override public void widgetDefaultSelected(SelectionEvent arg0) { //
-		 * TODO Auto-generated method stub
-		 * 
-		 * } });
-		 */
 	}
 
 	private boolean press = false;

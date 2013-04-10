@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.workflow;
 
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;

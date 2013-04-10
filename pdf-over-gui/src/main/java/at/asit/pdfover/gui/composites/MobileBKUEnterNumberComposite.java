@@ -16,12 +16,9 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -36,13 +33,6 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
-
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 
 /**
  * 

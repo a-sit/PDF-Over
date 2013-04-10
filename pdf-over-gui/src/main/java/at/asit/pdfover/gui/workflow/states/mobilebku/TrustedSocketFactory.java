@@ -46,7 +46,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 	private static final Logger log = LoggerFactory
 			.getLogger(TrustedSocketFactory.class);
 
-	private SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
+	private static SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
 			KeyManagementException, Exception {
 		SSLContext sslContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
 		sslContext.init(null, new TrustManager[] { new ASITTrustManager() },
@@ -71,7 +71,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex);
+			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
@@ -99,7 +99,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex);
+			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
@@ -144,7 +144,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 			}
 			return socket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex);
+			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {

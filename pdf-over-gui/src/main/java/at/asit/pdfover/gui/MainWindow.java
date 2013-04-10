@@ -16,19 +16,23 @@
 package at.asit.pdfover.gui;
 
 // Imports
+import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +41,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.composites.StateComposite;
+import at.asit.pdfover.gui.controls.MainBarButton;
+import at.asit.pdfover.gui.controls.MainBarEndButton;
+import at.asit.pdfover.gui.controls.MainBarMiddleButton;
+import at.asit.pdfover.gui.controls.MainBarRectangleButton;
+import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
 import at.asit.pdfover.gui.workflow.states.OpenState;
@@ -48,64 +57,6 @@ import at.asit.pdfover.gui.workflow.states.PositioningState;
 public class MainWindow {
 
 	/**
-	 * 
-	 */
-	private final class ConfigSelectionListener implements SelectionListener {
-		/**
-		 * 
-		 */
-		public ConfigSelectionListener() {
-			// Nothing to do here
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(
-					MainWindow.this.stateMachine));
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do here
-		}
-	}
-
-	/**
-	 * Selection Listener for Position Button
-	 */
-	private final class PositionSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public PositionSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MainWindow.this.stateMachine.jumpToState(new PositioningState(
-					MainWindow.this.stateMachine));
-		}
-	}
-
-	/**
-	 * Selection Listener for Open Button
-	 */
-	private final class DataSourceSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public DataSourceSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MainWindow.this.stateMachine
-					.jumpToState(new OpenState(
-							MainWindow.this.stateMachine));
-		}
-	}
-
-	/**
 	 * SFL4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
@@ -115,10 +66,10 @@ public class MainWindow {
 	private Composite container;
 	private StackLayout stack;
 	StateMachine stateMachine;
-	private Button btn_sign;
-	private Button btn_position;
-	private Button btn_open;
-	private Button btn_config;
+	private MainBarButton btn_sign;
+	private MainBarButton btn_position;
+	private MainBarButton btn_open;
+	private MainBarButton btn_config;
 
 	/**
 	 * Main bar Buttons
@@ -127,7 +78,9 @@ public class MainWindow {
 		CONFIG, OPEN, POSITION, SIGN, FINAL
 	}
 
-	private Map<Buttons, Button> buttonMap;
+	private Map<Buttons, MainBarButton> buttonMap;
+
+	private FormData mainBarFormData;
 
 	/**
 	 * Default constructor
@@ -140,7 +93,7 @@ public class MainWindow {
 
 		this.stateMachine = stateMachine;
 
-		this.buttonMap = new EnumMap<MainWindow.Buttons, Button>(Buttons.class);
+		this.buttonMap = new EnumMap<MainWindow.Buttons, MainBarButton>(Buttons.class);
 	}
 
 	/**
@@ -152,7 +105,7 @@ public class MainWindow {
 		if (this.getShell().isDisposed()) {
 			return;
 		}
-		this.lbl_status.setText("[DEBUG]: Current workflow state: " + value);
+		this.lbl_status.setText("[DEBUG]: Current workflow state: " + value); //$NON-NLS-1$
 	}
 
 	/**
@@ -161,7 +114,7 @@ public class MainWindow {
 	 * @param ctrl
 	 */
 	public void setTopControl(Control ctrl) {
-		log.debug("Top control: " + ctrl.toString());
+		log.debug("Top control: " + ctrl.toString()); //$NON-NLS-1$
 		this.stack.topControl = ctrl;
 		this.doLayout();
 	}
@@ -175,7 +128,9 @@ public class MainWindow {
 		this.shell.layout(true, true);
 		// Note: SWT only layouts children! No grandchildren!
 		if (ctrl instanceof StateComposite) {
-			((StateComposite) ctrl).doLayout();
+			if (!ctrl.isDisposed()) {
+				((StateComposite) ctrl).doLayout();
+			}
 		}
 	}
 
@@ -229,62 +184,127 @@ public class MainWindow {
 		getShell().setLayout(new FormLayout());
 
 		Composite composite = new Composite(getShell(), SWT.NONE);
-		FormData fd_composite = new FormData();
-		fd_composite.left = new FormAttachment(0, 5);
-		fd_composite.right = new FormAttachment(100, -5);
-		fd_composite.top = new FormAttachment(0, 5);
-		fd_composite.bottom = new FormAttachment(0, 40);
-		composite.setLayoutData(fd_composite);
 		composite.setLayout(new FormLayout());
+		this.mainBarFormData = new FormData();
+		this.mainBarFormData.left = new FormAttachment(0, 5);
+		this.mainBarFormData.right = new FormAttachment(100, -5);
+		this.mainBarFormData.top = new FormAttachment(0, 5);
+		this.mainBarFormData.bottom = new FormAttachment(0, 60);
+		composite.setLayoutData(this.mainBarFormData);
 
-		this.btn_config = new Button(composite, SWT.NONE);
-		FormData fd_config = new FormData();
-		fd_config.left = new FormAttachment(0, 0);
-		fd_config.right = new FormAttachment(25, 0);
-		fd_config.top = new FormAttachment(0, 0);
-		fd_config.bottom = new FormAttachment(100, 0);
-		this.btn_config.setLayoutData(fd_config);
-		this.btn_config.setText("Config ...");
-		this.btn_config.addSelectionListener(new ConfigSelectionListener());
+		this.btn_config = new MainBarRectangleButton(composite, SWT.NONE);
+		FormData fd_btn_config = new FormData();
+		fd_btn_config.bottom = new FormAttachment(0, 45);
+		fd_btn_config.right = new FormAttachment(10,0);
+		fd_btn_config.top = new FormAttachment(0);
+		fd_btn_config.left = new FormAttachment(0, 2);
+		this.btn_config.setLayoutData(fd_btn_config);
+		this.btn_config.setText("Config");
+		this.btn_config.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(
+						MainWindow.this.stateMachine));
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// NOTHING TO DO HERE
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// NOTHING TO DO HERE				
+			}
+		});
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
-
-		this.btn_open = new Button(composite, SWT.NONE);
-		FormData fd_open = new FormData();
-		fd_open.left = new FormAttachment(25, 0);
-		fd_open.right = new FormAttachment(50, 0);
-		fd_open.top = new FormAttachment(0, 0);
-		fd_open.bottom = new FormAttachment(100, 0);
-		this.btn_open.setLayoutData(fd_open);
-		this.btn_open.setText("Open ...");
-		this.btn_open.addSelectionListener(new DataSourceSelectionListener());
+		
+		InputStream is = this.getClass().getResourceAsStream("/img/config.png");
+		
+		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(is)));
+		
+		this.btn_open = new MainBarStartButton(composite, SWT.NONE);
+		FormData fd_btn_open = new FormData();
+		fd_btn_open.bottom = new FormAttachment(0, 45);
+		fd_btn_open.right = new FormAttachment(35, 5);
+		fd_btn_open.top = new FormAttachment(0);
+		fd_btn_open.left = new FormAttachment(10, 0);
+		this.btn_open.setLayoutData(fd_btn_open);
+		this.btn_open.setText("Open");
+		this.btn_open.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				MainWindow.this.stateMachine.jumpToState(new OpenState(
+						MainWindow.this.stateMachine));
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// NOTHING TO DO HERE
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// NOTHING TO DO HERE				
+			}
+		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
-		this.btn_position = new Button(composite, SWT.NONE);
-		FormData fd_position = new FormData();
-		fd_position.left = new FormAttachment(50, 0);
-		fd_position.right = new FormAttachment(75, 0);
-		fd_position.top = new FormAttachment(0, 0);
-		fd_position.bottom = new FormAttachment(100, 0);
-		this.btn_position.setLayoutData(fd_position);
+		this.btn_position = new MainBarMiddleButton(composite, SWT.NONE);
+		FormData fd_btn_position = new FormData();
+		fd_btn_position.bottom = new FormAttachment(0, 45);
+		fd_btn_position.right = new FormAttachment(60, 5);
+		fd_btn_position.top = new FormAttachment(0);
+		fd_btn_position.left = new FormAttachment(35, -5);
+		this.btn_position.setLayoutData(fd_btn_position);
 		this.btn_position.setText("Positon ...");
-		this.btn_position.addSelectionListener(new PositionSelectionListener());
+		this.btn_position.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				MainWindow.this.stateMachine.jumpToState(new PositioningState(
+						MainWindow.this.stateMachine));
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// NOTHING TO DO HERE
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// NOTHING TO DO HERE				
+			}
+		});
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
-		this.btn_sign = new Button(composite, SWT.NONE);
-		FormData fd_sign = new FormData();
-		fd_sign.left = new FormAttachment(75, 0);
-		fd_sign.right = new FormAttachment(100, 0);
-		fd_sign.top = new FormAttachment(0, 0);
-		fd_sign.bottom = new FormAttachment(100, 0);
-		this.btn_sign.setLayoutData(fd_sign);
+		this.btn_sign = new MainBarMiddleButton(composite, SWT.NONE);
+		FormData fd_btn_sign = new FormData();
+		fd_btn_sign.bottom = new FormAttachment(0, 45);
+		fd_btn_sign.right = new FormAttachment(85, 5);
+		fd_btn_sign.top = new FormAttachment(0);
+		fd_btn_sign.left = new FormAttachment(60, -5);
+		this.btn_sign.setLayoutData(fd_btn_sign);
 		this.btn_sign.setText("Sign ...");
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
+		MainBarEndButton end = new MainBarEndButton(composite, SWT.NONE);
+		FormData fd_btn_end = new FormData();
+		fd_btn_end.bottom = new FormAttachment(0, 45);
+		fd_btn_end.right = new FormAttachment(100, -2);
+		fd_btn_end.top = new FormAttachment(0);
+		fd_btn_end.left = new FormAttachment(85, -5);
+		end.setLayoutData(fd_btn_end);
+		end.setText("Done");
+		this.buttonMap.put(Buttons.FINAL, end);
+		
 		this.container = new Composite(getShell(), SWT.BORDER | SWT.RESIZE);
 		FormData fd_composite_1 = new FormData();
 		fd_composite_1.bottom = new FormAttachment(100, -25);
 		fd_composite_1.right = new FormAttachment(100, -5);
-		fd_composite_1.top = new FormAttachment(0, 45);
+		fd_composite_1.top = new FormAttachment(0, 60);
 		fd_composite_1.left = new FormAttachment(0, 5);
 		this.container.setLayoutData(fd_composite_1);
 		this.stack = new StackLayout();
@@ -298,7 +318,6 @@ public class MainWindow {
 		fd_lblNewLabel.left = new FormAttachment(0, 5);
 		this.lbl_status.setLayoutData(fd_lblNewLabel);
 		this.lbl_status.setText("New Label");
-
 	}
 
 	/**
@@ -308,21 +327,25 @@ public class MainWindow {
 		MainWindowBehavior behavior = this.stateMachine.getStatus()
 				.getBehavior();
 
-		log.debug("Updating MainWindow state for : "
+		log.debug("Updating MainWindow state for : " //$NON-NLS-1$
 				+ this.stateMachine.getStatus().getCurrentState().toString());
 
 		for (Buttons button : Buttons.values()) {
 			boolean active = behavior.getActive(button);
 			boolean enabled = behavior.getEnabled(button);
 
-			Button theButton = this.buttonMap.get(button);
-			if (theButton != null)
-			{
+			MainBarButton theButton = this.buttonMap.get(button);
+			if (theButton != null) {
 				theButton.setEnabled(enabled);
+				theButton.setActive(active);
 			}
 		}
 
-		//TODO: Display/Hide main bar
+		if(behavior.getMainBarVisible()) {
+			this.mainBarFormData.bottom = new FormAttachment(0, 60);
+		} else {
+			this.mainBarFormData.bottom = new FormAttachment(0, 0);
+		}
 	}
 
 	/**

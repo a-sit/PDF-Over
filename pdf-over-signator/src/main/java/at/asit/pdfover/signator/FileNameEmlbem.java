@@ -15,23 +15,36 @@
  */
 package at.asit.pdfover.signator;
 
+// Imports
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * Enumeration of available BKU types
  * 
  */
-public enum BKUs {
+public class FileNameEmlbem implements Emblem {
 	/**
-	 * Local bku
-	 */
-	LOCAL,
+	 * SLF4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(FileNameEmlbem.class);
 
+	private String fileName = null;
+	
 	/**
-	 * Mobile bku
+	 * Constructor
+	 * @param filename
 	 */
-	MOBILE,
+	public FileNameEmlbem(String filename) {
+		this.fileName = filename;
+	}
+	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.Emblem#getFileName()
+	 */
+	@Override
+	public String getFileName() {
+		return this.fileName;
+	}
 
-	/**
-	 * None bku
-	 */
-	NONE
 }
