@@ -192,7 +192,9 @@ public class SignaturePanel extends JPanel {
 
 			if (this.sigPagePos == null)
 			{
-				this.sigScreenPos = new Point2D.Double((pageSize.getWidth() / 3) * 2, (pageSize.getHeight() / 4) * 3);
+				this.sigScreenPos = new Point2D.Double(
+						clamp((int) (pageSize.getWidth() / 2), 0, this.currentImage.getWidth(null) - this.sigScreenWidth),
+						clamp((int) ((pageSize.getHeight() / 4) * 3), 0, this.currentImage.getHeight(null) - this.sigScreenHeight));
 				this.sigPagePos = this.currentXform.transform(this.sigScreenPos, this.sigPagePos);
 			}
 
