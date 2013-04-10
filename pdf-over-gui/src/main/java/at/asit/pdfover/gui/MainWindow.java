@@ -21,17 +21,20 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,6 +174,18 @@ public class MainWindow {
 	protected void createContents() {
 		this.shell = new Shell();
 		getShell().setSize(1024, 768);
+		try {
+			Display display = new Display();
+			Monitor primary = display.getPrimaryMonitor();
+			Rectangle bounds = primary.getBounds();
+			Rectangle main = this.shell.getBounds();
+			this.shell.setLocation(
+					bounds.x + (bounds.width - main.width) / 2,
+					bounds.y + (bounds.height - main.height) / 2);
+		}
+		catch (SWTError e) {
+			log.debug("Cannot get display", e); //$NON-NLS-1$
+		}
 		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 
 		ImageData data = new ImageData(this.getClass().getResourceAsStream("/icons/icon.png"));//$NON-NLS-1$
