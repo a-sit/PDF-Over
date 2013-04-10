@@ -341,7 +341,7 @@ public class PositioningComposite extends StateComposite {
 				}
 				PositioningComposite.this.scrollbar.setSelection(currentPage);
 				PositioningComposite.this.lblPage.setText(String.format(
-						"Page %d of %d", currentPage, numPages)); //$NON-NLS-1$
+						Messages.getString("positioning.page"), currentPage, numPages)); //$NON-NLS-1$
 			}
 		});
 		this.viewer.showPage(page);
