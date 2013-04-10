@@ -221,10 +221,10 @@
 	</build>
 
 	<properties>
-		<staging.dir>${project.build.directory}/staging</staging.dir>
-		<target.name>linux</target.name>
 		<izpack-standalone.version>4.3.5</izpack-standalone.version>
 		<project.maindir>${project.basedir}/..</project.maindir>
+		<target.name>linux</target.name>
+		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
 	</properties>
 
 	<profiles>
@@ -242,7 +242,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
@@ -256,7 +255,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
@@ -271,7 +269,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/windows</staging.dir>
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
@@ -285,7 +282,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/windows</staging.dir>
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
@@ -300,7 +296,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -314,7 +309,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -328,7 +322,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -342,7 +335,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
