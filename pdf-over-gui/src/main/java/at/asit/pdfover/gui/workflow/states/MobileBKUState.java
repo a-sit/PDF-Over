@@ -175,7 +175,9 @@ public class MobileBKUState extends State {
 
 			// check if we have everything we need!
 			if (mobileStatus.getPhoneNumber() != null
-					&& mobileStatus.getMobilePassword() != null) {
+					&& !mobileStatus.getPhoneNumber().equals("") //$NON-NLS-1$
+					&& mobileStatus.getMobilePassword() != null
+					&& !mobileStatus.getMobilePassword().equals("")) { //$NON-NLS-1$
 				// post to bku
 				Thread postCredentialsThread = new Thread(
 						new PostCredentialsThread(this));
