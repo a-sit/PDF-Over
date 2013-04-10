@@ -99,12 +99,19 @@ public class PositioningComposite extends StateComposite {
 		bottomBar.setLayoutData(fd_bottomBar);
 		bottomBar.setLayout(new FormLayout());
 
-		Button btnSign = new Button(bottomBar, SWT.NONE);
+		Button btnSign = new Button(bottomBar, SWT.PUSH);
 		btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
 		fd_btnSign.top = new FormAttachment(0);
 		btnSign.setLayoutData(fd_btnSign);
+		this.getShell().setDefaultButton(btnSign);
+		btnSign.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PositioningComposite.this.setFinalPosition();
+			}
+		});
 
 		this.lblPage = new Label(bottomBar, SWT.CENTER);
 		FormData fd_lblPage = new FormData();
