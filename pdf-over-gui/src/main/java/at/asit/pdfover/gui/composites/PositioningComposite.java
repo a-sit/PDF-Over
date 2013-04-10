@@ -269,10 +269,14 @@ public class PositioningComposite extends StateComposite {
 		this.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				PositioningComposite.this.scrollbar.setSelection(PositioningComposite.this.currentPage);
+				PositioningComposite.this.scrollbar.setSelection(
+						PositioningComposite.this.currentPage);
+				PositioningComposite.this.lblPage.setText(String.format(
+						"Page %d of %d",
+						PositioningComposite.this.currentPage,
+						PositioningComposite.this.numPages));
 			}
 		});
-		this.lblPage.setText(String.format("Page %d of %d", page, this.numPages));
 		this.viewer.showPage(page);
 	}
 
