@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="##CODEBASE_URL##" context="##CODEBASE_URL##" href="pdfover.jnlp">
+
+  <information>
+    <title>PDFOver</title>
+    <vendor>Secure Information Technology Center - Austria (A-SIT)</vendor>
+    <homepage href="##HOMEPAGE_URL##"/>
+    <description>PDFOver - PDF Signaturtool</description>
+    <description kind="short">PDFOver</description>
+    <offline-allowed/>
+  </information>
+  
+  <security>
+    <all-permissions/>
+  </security>
+
+  <update check="timeout" policy="prompt-update"/>
+
+  <resources os="Linux" arch="x86">
+    <java version="1.6+" java-vm-args="-d32"/> 
+    <jar href="setup_pdfover_linux_x86.jar" main="true"/>
+  </resources>
+  <resources os="Linux" arch="x86_64">
+    <java version="1.6+"/> 
+    <jar href="setup_pdfover_linux_x64.jar" main="true"/>
+  </resources>
+  <resources os="Linux" arch="amd64">
+    <java version="1.6+"/> 
+    <jar href="setup_pdfover_linux_x64.jar" main="true"/>
+  </resources>
+  <resources os="Windows" arch="x86">
+    <java version="1.6+" java-vm-args="-d32"/>
+    <jar href="setup_pdfover_windows_x86.jar" main="true"/>
+  </resources>
+
+  <resources os="Windows" arch="x86_64">
+    <java version="1.6+"/>
+    <jar href="setup_pdfover_windows_x64.jar" main="true"/>
+  </resources>
+
+  <resources os="Windows" arch="amd64">
+    <java version="1.6+"/>
+    <jar href="setup_pdfover_windows_x64.jar" main="true"/>
+  </resources>
+
+  <resources os="Mac OS X" arch="x86">
+    <java version="1.6+" java-vm-args="-d32"/>
+    <jar href="setup_pdfover_mac_x86.jar" main="true"/>
+  </resources>
+
+  <resources os="Mac OS X" arch="x86_64">
+    <java version="1.6+"/>
+    <jar href="setup_pdfover_mac_x64.jar" main="true"/>
+  </resources>
+
+  <resources os="Mac OS X" arch="amd64">
+    <java version="1.6+"/>
+    <jar href="setup_pdfover_mac_x64.jar" main="true"/>
+  </resources>
+
+  <application-desc main-class="com.izforge.izpack.installer.Installer"/>
+</jnlp>
