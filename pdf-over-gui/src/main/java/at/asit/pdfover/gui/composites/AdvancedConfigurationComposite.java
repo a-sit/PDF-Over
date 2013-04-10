@@ -30,10 +30,10 @@ import at.asit.pdfover.signator.BKUs;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormLayout;
@@ -117,17 +117,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fD_btnAutomatischePositionierung[0].setHeight(TEXT_SIZE_BUTTON);
 		this.btnAutomatischePositionierung.setFont(new Font(Display.getCurrent(), fD_btnAutomatischePositionierung[0]));
 		
-		this.btnAutomatischePositionierung.addSelectionListener(new SelectionListener() {
+		this.btnAutomatischePositionierung.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				AdvancedConfigurationComposite.this.performPositionSelection(
 						AdvancedConfigurationComposite.this.btnAutomatischePositionierung.getSelection());
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Nothing to do
 			}
 		});
 
@@ -168,7 +163,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.cmbBKUAuswahl.setLayoutData(fd_cmbBKUAuswahl);
 		
-		this.cmbBKUAuswahl.addSelectionListener(new SelectionListener() {
+		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -177,11 +172,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 					selectionIndex = AdvancedConfigurationComposite.this.cmbBKUAuswahl.getSelectionIndex();
 					performBKUSelectionChanged(AdvancedConfigurationComposite.this.cmbBKUAuswahl.getItem(selectionIndex));
 				}
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Nothing to do here
 			}
 		});
 
@@ -220,16 +210,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fD_txtOutputFolder[0].setHeight(TEXT_SIZE_NORMAL);
 		this.txtOutputFolder.setFont(new Font(Display.getCurrent(), fD_txtOutputFolder[0]));
 		
-		this.txtOutputFolder.addFocusListener(new FocusListener() {
+		this.txtOutputFolder.addFocusListener(new FocusAdapter() {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
 				performOutputFolderChanged(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do here!
 			}
 		});
 		
@@ -246,7 +231,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		btnBrowse.setLayoutData(fd_btnBrowse);
 		btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
-		btnBrowse.addSelectionListener(new SelectionListener() {
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -272,11 +257,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 					// Set the text box to the new selection
 					performOutputFolderChanged(dir);
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Nothing to do
 			}
 		});
 		

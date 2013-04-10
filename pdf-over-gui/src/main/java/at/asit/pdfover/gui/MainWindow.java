@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -212,23 +212,13 @@ public class MainWindow {
 		this.btn_config.setText(Messages.getString("main.configuration")); //$NON-NLS-1$
 		this.btn_config
 				.setToolTipText(Messages.getString("main.configuration")); //$NON-NLS-1$
-		this.btn_config.addMouseListener(new MouseListener() {
+		this.btn_config.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine
 						.jumpToState(new ConfigurationUIState(
 								MainWindow.this.stateMachine));
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// NOTHING TO DO HERE
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// NOTHING TO DO HERE
 			}
 		});
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
@@ -247,22 +237,12 @@ public class MainWindow {
 		this.btn_open.setLayoutData(fd_btn_open);
 		this.btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
 		this.btn_open.setToolTipText(Messages.getString("common.open")); //$NON-NLS-1$
-		this.btn_open.addMouseListener(new MouseListener() {
+		this.btn_open.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine.jumpToState(new OpenState(
 						MainWindow.this.stateMachine));
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// NOTHING TO DO HERE
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// NOTHING TO DO HERE
 			}
 		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
@@ -276,22 +256,12 @@ public class MainWindow {
 		this.btn_position.setLayoutData(fd_btn_position);
 		this.btn_position.setText(Messages.getString("main.position")); //$NON-NLS-1$
 		this.btn_position.setToolTipText(Messages.getString("main.position")); //$NON-NLS-1$
-		this.btn_position.addMouseListener(new MouseListener() {
+		this.btn_position.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine.jumpToState(new PositioningState(
 						MainWindow.this.stateMachine));
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// NOTHING TO DO HERE
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// NOTHING TO DO HERE
 			}
 		});
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
@@ -305,22 +275,12 @@ public class MainWindow {
 		this.btn_sign.setLayoutData(fd_btn_sign);
 		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
-		this.btn_sign.addMouseListener(new MouseListener() {
+		this.btn_sign.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine.jumpToState(new BKUSelectionState(
 						MainWindow.this.stateMachine));
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// NOTHING TO DO HERE
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// NOTHING TO DO HERE
 			}
 		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);

@@ -25,11 +25,10 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Font;
@@ -409,16 +408,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber")); //$NON-NLS-1$
 
-		this.txtMobileNumber.addFocusListener(new FocusListener() {
+		this.txtMobileNumber.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				processNumberChanged();
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do here!
 			}
 		});
 
@@ -524,7 +518,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.btnUseImage = new Button(grpBildmarke, SWT.CHECK);
 		this.btnUseImage.setText(Messages.getString("simple_config.UseEmblem")); //$NON-NLS-1$
-		this.btnUseImage.addSelectionListener(new SelectionListener() {
+		this.btnUseImage.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -540,11 +534,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						log.error("Failed to load emblem", e1); //$NON-NLS-1$
 					}
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Nothing to do
 			}
 		});
 		new Label(grpBildmarke, SWT.NONE);
@@ -620,16 +609,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtProxyHost.setMessage(Messages.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
 
-		this.txtProxyHost.addFocusListener(new FocusListener() {
+		this.txtProxyHost.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				processProxyHostChanged();
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do here!
 			}
 		});
 
@@ -690,16 +674,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtProxyPort.setMessage(Messages.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
 
-		this.txtProxyPort.addFocusListener(new FocusListener() {
+		this.txtProxyPort.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				processProxyPortChanged();
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do here!
 			}
 		});
 
