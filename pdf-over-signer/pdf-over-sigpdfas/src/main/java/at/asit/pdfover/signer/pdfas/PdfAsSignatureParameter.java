@@ -144,16 +144,18 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			log.info("Width: " + width + " Height: " + height);
 			BufferedImage image = new BufferedImage((int) width, (int) height,
 					BufferedImage.TYPE_INT_RGB);
-			Graphics graphic = image.getGraphics();
+			Graphics g = image.getGraphics();
 
-			graphic.setColor(table.getStyle().getBgColor());
-			graphic.fillRect(0, 0, (int) width, (int) height);
+			g.setColor(table.getStyle().getBgColor());
+			g.fillRect(0, 0, (int) width, (int) height);
 
-			graphic.setColor(Color.black);
-			graphic.drawRect(0, 0, (int) width, (int) height);
+			g.setColor(Color.black);
+			g.drawRect(0, 0, (int) width, (int) height);
 
 			this.drawTable(0, 0, (int) width, (int) height, table,
-					table.getStyle(), graphic, heights);
+					table.getStyle(), g, heights);
+
+			g.dispose();
 
 			// save(image, "png");
 
@@ -177,6 +179,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	 * @param ext
 	 */
 	@SuppressWarnings("unused")
+	@Deprecated
 	private static void save(BufferedImage image, String ext) {
 		String fileName = "savingAnImage";
 		File file = new File(fileName + "." + ext);
@@ -222,7 +225,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	@SuppressWarnings("rawtypes")
 	private int drawTable(int xoff, int yoff, int width, int height,
-			Table table, Style parentstyle, Graphics graphic, float[] heights) {
+			Table table, Style parentstyle, Graphics g, float[] heights) {
 		Style style = parentstyle;
 		if (table.getStyle() != null) {
 			style = table.getStyle();
@@ -230,19 +233,20 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 		log.debug(String.format("Table@ %dx%d", xoff, yoff));
 
-		Font oldFont = graphic.getFont();
+		Font oldFont = g.getFont();
 		Font font = PdfAsSignatureParameter.getFont(style);
+		g.setFont(font);
 
 		// draw background
 		// graphic.setColor(style.getBgColor());
 		// graphic.fillRect(xoff, yoff, width, height);
 
-		graphic.setColor(Color.black);
+		g.setColor(Color.black);
 
 		// draw border
 		if (style.getBorder() > 0) {
-			graphic.setColor(Color.black);
-			graphic.drawRect(xoff, yoff, width, height);
+			g.setColor(Color.black);
+			g.drawRect(xoff, yoff, width, height);
 		}
 		float[] colWidths = table.getColsRelativeWith();
 		float sum = 0;
@@ -268,11 +272,11 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 				}
 				if (entry.getType() == 0 || entry.getType() == 1) {
 					// Text
-					graphic.drawRect((int) (xoff + offset),
+					g.drawRect((int) (xoff + offset),
 							(int) (yoff + roffset),
 							(int) (colWidths[j] * perUnit), rsize);
 
-					graphic.drawString(entry.getValue().toString(), (int) (xoff
+					g.drawString(entry.getValue().toString(), (int) (xoff
 							+ offset + padding), (int) (yoff + padding
 							+ roffset + font.getSize() * this.perUnitHeight));
 				} else if (entry.getType() == 2) {
@@ -291,13 +295,15 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 									+ "/"
 									+ entry.getValue().toString()));
 						}
-						Image img = image.getScaledInstance(80, 80,
-								Image.SCALE_DEFAULT);
+						int imgWidth = 40;
+						int imgHeight = 40;
+						Image img = image.getScaledInstance(imgWidth, imgHeight,
+								Image.SCALE_SMOOTH);
 
-						graphic.drawImage(
+						g.drawImage(
 								img,
-								(int) (xoff + offset + padding + (((colWidths[j] * perUnit) - 80 - padding)) / 2),
-								(int) (yoff + roffset + padding + ((rsize - 80 - padding) / 2)),
+								(int) (xoff + offset + padding + (((colWidths[j] * perUnit) - imgWidth - padding)) / 2),
+								(int) (yoff + roffset + padding + ((rsize - imgHeight - padding) / 2)),
 								null);
 					} catch (IOException e) {
 						log.warn("Failed to paint emblem to placeholder image");
@@ -314,7 +320,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 							(int) (colWidths[j] * perUnit),
 							// (int)this.getTableHeight((Table)
 							// entry.getValue(), style),
-							rsize, (Table) entry.getValue(), style, graphic,
+							rsize, (Table) entry.getValue(), style, g,
 							cheights);
 					/*
 					 * if (rsize < tsize) { rsize = tsize; }
@@ -324,7 +330,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			roffset += rsize;
 		}
 
-		graphic.setFont(oldFont);
+		g.setFont(oldFont);
 
 		return (int) roffset;
 	}

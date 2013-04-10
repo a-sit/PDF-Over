@@ -255,6 +255,7 @@ public class SignaturePanel extends JPanel {
 					if ((this.sigScreenWidth != this.prevSigScreenWidth)
 							|| (this.sigScreenHeight != this.prevSigScreenHeight))
 					{
+						// redraw scaled transparent placeholder
 						this.prevSigScreenWidth = this.sigScreenWidth;
 						this.prevSigScreenHeight = this.sigScreenHeight;
 						Image placeholder = this.sigPlaceholder.getScaledInstance(
@@ -262,6 +263,7 @@ public class SignaturePanel extends JPanel {
 						this.sigPlaceholderScaled = new BufferedImage(this.sigScreenWidth, this.sigScreenHeight, BufferedImage.TYPE_INT_ARGB);
 						Graphics g2 = this.sigPlaceholderScaled.getGraphics();
 						g2.drawImage(placeholder, 0, 0, null);
+						g2.dispose();
 						int[] phpixels = new int[this.sigScreenWidth * this.sigScreenHeight];
 						phpixels = this.sigPlaceholderScaled.getRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
 						for (int i = 0; i < phpixels.length; ++i) {
