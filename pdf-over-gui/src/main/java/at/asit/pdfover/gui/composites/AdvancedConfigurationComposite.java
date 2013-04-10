@@ -455,16 +455,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		
 		String foldername = this.configurationContainer.getOutputFolder();
 		
-		if (foldername != null && !foldername.equals("")) {
+		if (foldername != null && !foldername.equals("")) { //$NON-NLS-1$
 			File outputFolder = new File(foldername);
 			if (!outputFolder.exists()) {
-				throw new Exception("Path " + outputFolder.getAbsolutePath()
-								+ " doesnot exists!");
+				throw new Exception(String.format(Messages.getString("exception.PathNotExist"), outputFolder.getAbsolutePath())); //$NON-NLS-1$
 			}
 
 			if (!outputFolder.isDirectory()) {
-				throw new Exception("Path " + outputFolder.getAbsolutePath()
-								+ " is not a directory!");
+				throw new Exception(String.format(Messages.getString("exception.PathNotDirectory"), outputFolder.getAbsolutePath())); //$NON-NLS-1$
 			}
 		}
 	}
