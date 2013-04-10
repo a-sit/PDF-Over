@@ -16,7 +16,11 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
+import org.icepdf.core.exceptions.PDFException;
+import org.icepdf.core.exceptions.PDFSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +51,12 @@ public class PositioningState extends State {
 
 	private PositioningComposite positionComposite = null;
 
-	private PositioningComposite getPositioningComposite() {
+	private PositioningComposite getPositioningComposite() throws PDFException, PDFSecurityException, IOException {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
+			log.debug("Displaying " +  stateMachine.getStatus().getDocument());
+			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
 		}
 
 		return this.positionComposite;
@@ -67,7 +73,19 @@ public class PositioningState extends State {
 
 
 		if(status.getSignaturePosition() == null) {
-			PositioningComposite position = this.getPositioningComposite();
+			PositioningComposite position = null;
+			try {
+				position = this.getPositioningComposite();
+			} catch (PDFException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (PDFSecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			this.stateMachine.getGUIProvider().display(position);
 			

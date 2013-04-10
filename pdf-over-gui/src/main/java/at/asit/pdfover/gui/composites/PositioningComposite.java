@@ -16,12 +16,17 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import java.io.File;
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.icepdf.core.exceptions.PDFException;
+import org.icepdf.core.exceptions.PDFSecurityException;
 
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -31,6 +36,22 @@ import at.asit.pdfover.signator.SignaturePosition;
  *
  */
 public class PositioningComposite extends StateComposite {
+
+	private PDFViewerComposite viewer = null;
+
+	/**
+	 * Set the PDF Document to display
+	 * @param document document to display
+	 * @throws PDFException Error parsing PDF document
+	 * @throws PDFSecurityException Error decrypting PDF document (not supported)
+	 * @throws IOException I/O Error
+	 */
+	public void displayDocument(File document) throws PDFException, PDFSecurityException, IOException {
+		if (this.viewer == null)
+			this.viewer = new PDFViewerComposite(this, SWT.EMBEDDED | SWT.NO_BACKGROUND, document);
+		else
+			this.viewer.setDocument(document);
+	}
 
 	/**
 	 * Selection listener when position was fixed
@@ -76,16 +97,12 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public PositioningComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
-		
-		
-		Label test = new Label(this, SWT.NATIVE);
-		test.setBounds(10, 20, 100, 30);
-		test.setText("POSITIONING ---- TODO!!");
-		
-		Button btn_position = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_position.setBounds(10, 50, 100, 30);
-		btn_position.setText("FAKE Position");
-		btn_position.addSelectionListener(new PositionSelectedListener());
+		this.setLayout(new FillLayout());
+
+//		Button btn_position = new Button(this, SWT.NATIVE | SWT.RESIZE);
+//		btn_position.setBounds(10, 50, 100, 30);
+//		btn_position.setText("FAKE Position");
+//		btn_position.addSelectionListener(new PositionSelectedListener());
 	}
 
 	@Override
