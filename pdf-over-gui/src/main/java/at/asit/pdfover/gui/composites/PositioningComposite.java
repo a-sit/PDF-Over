@@ -182,11 +182,14 @@ public class PositioningComposite extends StateComposite {
 			this.pdf = new PDFFile(buf);
 		}
 		catch (PDFAuthenticationFailureException e) {
-			throw new IOException(Messages.getString("error.PDFProtected"), e); //$NON-NLS-1$
+			throw new IOException(Messages.getString("error.PDFPwdProtected"), e); //$NON-NLS-1$
 		}
 		catch (IOException e) {
 			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
 		}
+		if (this.pdf.getDefaultDecrypter().isEncryptionPresent())
+			throw new IOException(Messages.getString("error.PDFProtected")); //$NON-NLS-1$
+
 		if (this.viewer == null) {
 			this.viewer = new SignaturePanel(this.pdf);
 			this.frame.add(this.viewer, BorderLayout.CENTER);
