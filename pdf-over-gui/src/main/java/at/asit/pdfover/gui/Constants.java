@@ -90,7 +90,7 @@ public class Constants {
 	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
 	/** Configuration directory */
-	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
+	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The default configuration file name */
 	public static final String DEFAULT_CONFIG_FILENAME = "PDFOver.config"; //$NON-NLS-1$

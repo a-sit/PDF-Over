@@ -45,8 +45,9 @@ public class PDFASHelper {
 	 */
 	private static PdfAs createPdfAs() throws PdfAsException {
 		File directory = new File (".");
-		System.setProperty("log4j.configuration", directory.getAbsolutePath()+"/log4j.properties");
-		System.setProperty("pdf-as.work-dir", System.getProperty("user.home")+"/.pdfover");
+		System.setProperty("log4j.configuration", directory.getAbsolutePath() +
+				"/log4j.properties");
+		System.setProperty("pdf-as.work-dir", getWorkDir());
 		return new at.gv.egiz.pdfas.impl.api.PdfAsObject();
 	}
 	
@@ -55,7 +56,7 @@ public class PDFASHelper {
 	 * @return the working directory
 	 */
 	public static String getWorkDir() {
-		return System.getProperty("user.home")+"/.pdfover";
+		return System.getProperty("user.home") + "/.pdf-over";
 	}
 	
 	/**
