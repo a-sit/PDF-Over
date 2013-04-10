@@ -223,7 +223,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_containerComposite.bottom = new FormAttachment(100);
 		containerComposite.setLayoutData(fd_containerComposite);
 
-		Composite controlComposite = new Composite(containerComposite, SWT.NONE);
+		final Composite controlComposite = new Composite(containerComposite, SWT.NONE);
 		controlComposite.setLayout(new FormLayout());
 		FormData fd_controlComposite = new FormData();
 		fd_controlComposite.left = new FormAttachment(0, 20);
@@ -235,6 +235,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 			@Override
 			public void paintControl(PaintEvent e) {
+				//Workaround for paint event being called twice initially
+				if (e.x > 0)
+					return;
 				// e.gc.setForeground();
 				e.gc.setForeground(Constants.DROP_BORDER_COLOR);
 				e.gc.setLineWidth(3);
