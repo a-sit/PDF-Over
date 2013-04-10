@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.google.zxing</groupId>
+  <artifactId>javase</artifactId>
+  <version>1.6-SNAPSHOT</version>
+  <versioning>
+    <versions>
+      <version>1.6-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20120614141241</lastUpdated>
+  </versioning>
+</metadata>

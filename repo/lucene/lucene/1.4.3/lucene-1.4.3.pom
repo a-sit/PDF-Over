@@ -1,0 +1,6 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>lucene</groupId>
+  <artifactId>lucene</artifactId>
+  <version>1.4.3</version>
+</project>
