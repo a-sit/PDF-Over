@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui;
 
 // Imports
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,6 +26,8 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
@@ -216,7 +219,20 @@ public class MainWindow {
 		catch (SWTError e) {
 			log.debug("Cannot get display", e); //$NON-NLS-1$
 		}
-		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
+		this.shell.setText(Messages.getString("main.title")); //$NON-NLS-1$
+
+		this.shell.addShellListener(new ShellAdapter() {
+			@Override
+			public void shellClosed(ShellEvent e) {
+				log.debug("Closing main window"); //$NON-NLS-1$
+				MainWindow.this.stateMachine.getConfigManipulator().setMainWindowSize(getShell().getSize());
+				try {
+					MainWindow.this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
+				} catch (IOException e1) {
+					log.error("Error saving configuration", e); //$NON-NLS-1$
+				}
+			}
+		});
 
 		ImageData data = new ImageData(this.getClass().getResourceAsStream("/icons/icon.png"));//$NON-NLS-1$
 		Image shellicon = new Image(this.shell.getDisplay(), data);
