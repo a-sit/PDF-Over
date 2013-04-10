@@ -16,17 +16,21 @@
 package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.workflow.ConfigOverlayManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * CLI Argument base class
  */
 public abstract class CLIArgument {
-	
+
 	private String helpText = null;
-	
+
 	private String[] commandOptions = null;
-	
+
+	private StateMachine stateMachine;
+
 	/**
 	 * @param commandOptions
 	 * @param helpText
@@ -35,7 +39,33 @@ public abstract class CLIArgument {
 		this.helpText = helpText;
 		this.commandOptions = commandOptions;
 	}
-	
+
+	/**
+	 * Set the state machine
+	 * Used for configuration overlay manipulator and status
+	 * @param stateMachine the state machine
+	 */
+	protected void setStateMachine(StateMachine stateMachine) {
+		this.stateMachine = stateMachine;
+	}
+
+	/**
+	 * Get the configuration overlay manipulator
+	 * @return the configuration overlay manipulator
+	 */
+	protected ConfigOverlayManipulator getConfiguration() {
+		return this.stateMachine.getConfigOverlayManipulator();
+	}
+
+	/**
+	 * Get the status
+	 * @return the status
+	 */
+	protected Status getStatus() {
+		return this.stateMachine.getStatus();
+	}
+
+
 	/**
 	 * Set help text
 	 * 
@@ -44,7 +74,7 @@ public abstract class CLIArgument {
 	protected void setHelpText(String value) {
 		this.helpText = value;
 	}
-	
+
 	/**
 	 * Gets help text
 	 * 
@@ -53,7 +83,7 @@ public abstract class CLIArgument {
 	public String getHelpText() {
 		return this.helpText;
 	}
-	
+
 	/**
 	 * Set the command option in format: -...
 	 * 
@@ -64,7 +94,7 @@ public abstract class CLIArgument {
 	protected void setCommandOptions(String[] value) {
 		this.commandOptions = value;
 	}
-	
+
 	/**
 	 * Get the command option
 	 * 
@@ -74,7 +104,7 @@ public abstract class CLIArgument {
 	public String[] getCommandOptions() {
 		return this.commandOptions;
 	}
-	
+
 	/**
 	 * Invokes the argument to set stuff within the stateMachine
 	 * 
@@ -91,12 +121,11 @@ public abstract class CLIArgument {
 	 *     offset = 1
 	 *     returns 2
 	 * 
-	 * @param stateMachine
 	 * @param args
 	 * @param argOffset
 	 * @param handler 
 	 * @return returns the argumentOffset ending the section of this Argument
 	 * @throws InitializationException 
 	 */
-	public abstract int handleArgument(String[] args, int argOffset, StateMachine stateMachine, ArgumentHandler handler) throws InitializationException;
+	public abstract int handleArgument(String[] args, int argOffset, ArgumentHandler handler) throws InitializationException;
 }

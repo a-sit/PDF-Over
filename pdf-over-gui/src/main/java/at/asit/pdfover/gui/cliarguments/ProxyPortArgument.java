@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
  * CLI Argument to provide the proxy port
@@ -47,7 +45,7 @@ public class ProxyPortArgument extends CLIArgument {
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
-			StateMachine stateMachine, ArgumentHandler handler)
+			ArgumentHandler handler)
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
@@ -60,9 +58,7 @@ public class ProxyPortArgument extends CLIArgument {
 					throw new InvalidPortException(port);
 				}
 				
-				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
-				
-				configManipulator.setProxyPort(port);
+				getConfiguration().setProxyPortOverlay(port);
 				
 				return argOffset + 1;
 			}

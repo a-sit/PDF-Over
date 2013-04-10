@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.Status;
 
 /**
  * CLI Argument to set the input document to sign
@@ -49,7 +47,7 @@ public class InputDocumentArgument extends CLIArgument {
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
-			StateMachine stateMachine, ArgumentHandler handler)
+			ArgumentHandler handler)
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
@@ -62,8 +60,7 @@ public class InputDocumentArgument extends CLIArgument {
 					throw new FileNotFoundException(signatureDocument);
 				}
 				
-				Status status = stateMachine.getStatus();
-				status.setDocument(signatureDocumentFile);
+				getStatus().setDocument(signatureDocumentFile);
 				
 				return argOffset + 1;
 			}

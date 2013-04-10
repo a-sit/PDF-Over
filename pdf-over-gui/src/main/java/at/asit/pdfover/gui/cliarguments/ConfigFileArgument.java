@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
  * CLI Argument to set the configuration file
@@ -46,16 +44,14 @@ public class ConfigFileArgument extends CLIArgument {
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
-			StateMachine stateMachine, ArgumentHandler handler)
+			ArgumentHandler handler)
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
 
 				String configFile = args[argOffset + 1];
 				
-				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
-				
-				configManipulator.setConfigurationFile(configFile);
+				getConfiguration().setConfigurationFile(configFile);
 				
 				return argOffset + 1;
 			}

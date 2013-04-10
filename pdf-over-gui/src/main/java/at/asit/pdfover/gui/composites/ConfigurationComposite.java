@@ -35,10 +35,10 @@ import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.PDFSigner;
+import at.asit.pdfover.gui.workflow.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -212,7 +212,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * configuration provider
 	 */
-	ConfigProvider configProvider = null;
+	PersistentConfigProvider configProvider = null;
 
 	/**
 	 * simple configuration composite
@@ -271,7 +271,7 @@ public class ConfigurationComposite extends StateComposite {
 	 * 
 	 * @param provider
 	 */
-	public void setConfigProvider(ConfigProvider provider) {
+	public void setConfigProvider(PersistentConfigProvider provider) {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 
@@ -295,28 +295,28 @@ public class ConfigurationComposite extends StateComposite {
 			this.configurationContainer.setSignLocale(this.configProvider.getSignLocale());
 			
 			this.configurationContainer.setDefaultBKU(this.configProvider
-					.getDefaultBKU());
+					.getDefaultBKUPersistent());
 			try {
 				this.configurationContainer.setEmblem(this.configProvider
-						.getDefaultEmblem());
+						.getDefaultEmblemPersistent());
 			} catch (InvalidEmblemFile e) {
 				log.error("Failed to set emblem!", e); //$NON-NLS-1$
 			}
 			try {
 				this.configurationContainer.setMobileNumber(this.configProvider
-						.getDefaultMobileNumber());
+						.getDefaultMobileNumberPersistent());
 			} catch (InvalidNumberException e) {
 				log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
 			}
 
 			this.configurationContainer.setOutputFolder(this.configProvider
-					.getDefaultOutputFolder());
+					.getDefaultOutputFolderPersistent());
 
 			this.configurationContainer.setProxyHost(this.configProvider
-					.getProxyHost());
+					.getProxyHostPersistent());
 			try {
 				this.configurationContainer.setProxyPort(this.configProvider
-						.getProxyPort());
+						.getProxyPortPersistent());
 			} catch (InvalidPortException e) {
 				log.error("Failed to set proxy port!", e); //$NON-NLS-1$
 			}

@@ -41,7 +41,8 @@ import at.asit.pdfover.signator.SignaturePosition;
 /**
  * Implementation of the configuration provider and manipulator
  */
-public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
+public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
+		ConfigOverlayManipulator, PersistentConfigProvider {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -57,11 +58,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private ConfigurationContainer configuration;
 
+	private ConfigurationContainer configurationOverlay;
+
 	/**
 	 * Constructor
 	 */
 	public ConfigProviderImpl() {
 		this.configuration = new ConfigurationContainerImpl();
+		this.configurationOverlay = new ConfigurationContainerImpl();
 	}
 
 	/*
@@ -257,14 +261,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		Properties props = new Properties();
 		props.clear();
 
-		props.setProperty(Constants.CFG_BKU, this.getDefaultBKU().toString());
-		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHost());
+		props.setProperty(Constants.CFG_BKU, this.getDefaultBKUPersistent().toString());
+		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHostPersistent());
 		props.setProperty(Constants.CFG_PROXY_PORT,
-				Integer.toString(this.getProxyPort()));
-		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblem());
+				Integer.toString(this.getProxyPortPersistent()));
+		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblemPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, this.getSignatureNote());
-		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumber());
-		props.setProperty(Constants.CFG_OUTPUT_FOLDER, this.getDefaultOutputFolder());
+		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumberPersistent());
+		props.setProperty(Constants.CFG_OUTPUT_FOLDER, this.getDefaultOutputFolderPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(this.getPlaceholderTransparency()));
 
@@ -345,6 +349,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.configuration.setDefaultBKU(bku);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultBKUOverlay(at.asit.pdfover.signator.BKUs)
+	 */
+	@Override
+	public void setDefaultBKUOverlay(BKUs bku) {
+		this.configurationOverlay.setDefaultBKU(bku);
+		
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -352,6 +365,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public BKUs getDefaultBKU() {
+		BKUs bku = this.configurationOverlay.getDefaultBKU();
+		if (bku == BKUs.NONE)
+			bku = this.configuration.getDefaultBKU();
+		return bku;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultBKUPersistent()
+	 */
+	@Override
+	public BKUs getDefaultBKUPersistent() {
 		return this.configuration.getDefaultBKU();
 	}
 
@@ -423,6 +447,27 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultMobileNumberOverlay(java.lang.String)
+	 */
+	@Override
+	public void setDefaultMobileNumberOverlay(String number) {
+		try {
+			if (number == null || number.trim().isEmpty()) {
+				this.configurationOverlay.setMobileNumber(STRING_EMPTY);
+			} else {
+				this.configurationOverlay.setMobileNumber(number);
+			}
+		} catch (InvalidNumberException e) {
+			log.error("Error setting mobile number", e); //$NON-NLS-1$
+			try {
+				this.configurationOverlay.setMobileNumber(STRING_EMPTY);
+			} catch (InvalidNumberException e1) {
+				// Ignore
+			}
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -430,6 +475,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultMobileNumber() {
+		String number = this.configurationOverlay.getMobileNumber();
+		if (number == null)
+			number = this.configuration.getMobileNumber();
+		return number;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultMobileNumberPersistent()
+	 */
+	@Override
+	public String getDefaultMobileNumberPersistent() {
 		return this.configuration.getMobileNumber();
 	}
 
@@ -448,6 +504,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultMobilePasswordOverlay(java.lang.String)
+	 */
+	@Override
+	public void setDefaultMobilePasswordOverlay(String password) {
+		if (password == null || password.trim().isEmpty()) {
+			this.configurationOverlay.setMobilePassword(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setMobilePassword(password);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -455,6 +523,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultMobilePassword() {
+		String password = this.configurationOverlay.getMobilePassword();
+		if (password == null)
+			password = this.configuration.getMobilePassword();
+		return password;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultMobilePasswordPersistent()
+	 */
+	@Override
+	public String getDefaultMobilePasswordPersistent() {
 		return this.configuration.getMobilePassword();
 	}
 
@@ -482,6 +561,27 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultEmblemOverlay(java.lang.String)
+	 */
+	@Override
+	public void setDefaultEmblemOverlay(String emblem) {
+		try {
+			if (emblem == null || emblem.trim().isEmpty()) {
+				this.configurationOverlay.setEmblem(STRING_EMPTY);
+			} else {
+				this.configurationOverlay.setEmblem(emblem);
+			}
+		} catch (InvalidEmblemFile e) {
+			log.error("Error setting emblem file", e); //$NON-NLS-1$
+			try {
+				this.configurationOverlay.setEmblem(STRING_EMPTY);
+			} catch (InvalidEmblemFile e1) {
+				// Ignore
+			}
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -489,6 +589,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultEmblem() {
+		String emblem = this.configurationOverlay.getEmblem();
+		if (emblem == null)
+			emblem = this.configuration.getEmblem();
+		return emblem;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultEmblemPersistent()
+	 */
+	@Override
+	public String getDefaultEmblemPersistent() {
 		return this.configuration.getEmblem();
 	}
 
@@ -507,6 +618,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setProxyHostOverlay(java.lang.String)
+	 */
+	@Override
+	public void setProxyHostOverlay(String host) {
+		if (host == null || host.trim().isEmpty()) {
+			this.configurationOverlay.setProxyHost(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setProxyHost(host);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -514,6 +637,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getProxyHost() {
+		String host = this.configurationOverlay.getProxyHost();
+		if (host == null)
+			host = this.configuration.getProxyHost();
+		return host;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getProxyHostPersistent()
+	 */
+	@Override
+	public String getProxyHostPersistent() {
 		return this.configuration.getProxyHost();
 	}
 
@@ -533,6 +667,19 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setProxyPortOverlay(int)
+	 */
+	@Override
+	public void setProxyPortOverlay(int port) {
+		try {
+			this.configurationOverlay.setProxyPort(port);
+		} catch (InvalidPortException e) {
+			log.error("Error setting proxy port" , e); //$NON-NLS-1$
+			// ignore
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -540,6 +687,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public int getProxyPort() {
+		int port = this.configurationOverlay.getProxyPort();
+		if (port == -1)
+			port = this.configuration.getProxyPort();
+		return this.configuration.getProxyPort();
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getProxyPortPersistent()
+	 */
+	@Override
+	public int getProxyPortPersistent() {
 		return this.configuration.getProxyPort();
 	}
 
@@ -559,6 +717,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultOutputFolderOverlay(java.lang.String)
+	 */
+	@Override
+	public void setDefaultOutputFolderOverlay(String outputFolder) {
+		if (outputFolder == null || outputFolder.trim().isEmpty()) {
+			this.configurationOverlay.setOutputFolder(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setOutputFolder(outputFolder);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -566,6 +736,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultOutputFolder() {
+		String outputFolder = this.configurationOverlay.getOutputFolder();
+		if (outputFolder == null)
+			outputFolder = this.configuration.getOutputFolder();
+		return outputFolder;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultOutputFolderPersistent()
+	 */
+	@Override
+	public String getDefaultOutputFolderPersistent() {
 		return this.configuration.getOutputFolder();
 	}
 
@@ -662,5 +843,4 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	public Point getMainWindowSize() {
 		return this.configuration.getMainWindowSize();
 	}
-
 }

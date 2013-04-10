@@ -25,8 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
  * CLI Argument to show the usage message
@@ -50,7 +48,7 @@ public class OutputFolderArgument extends CLIArgument {
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
-			StateMachine stateMachine, ArgumentHandler handler)
+			ArgumentHandler handler)
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
@@ -67,9 +65,7 @@ public class OutputFolderArgument extends CLIArgument {
 					throw new IOException(outputFolderDir + Messages.getString("argument.error.output")); //$NON-NLS-1$
 				}
 				
-				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
-				
-				configManipulator.setDefaultOutputFolder(outputFolder);
+				getConfiguration().setDefaultOutputFolderOverlay(outputFolder);
 				
 				return argOffset + 1;
 			}

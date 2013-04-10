@@ -76,12 +76,6 @@ public interface ConfigManipulator {
 	public void setProxyPort(int port);
 
 	/**
-	 * Sets the configuration file
-	 * @param configurationFile
-	 */
-	public void setConfigurationFile(String configurationFile);
-
-	/**
 	 * Sets the default output folder
 	 * @param outputFolder the default output folder
 	 */
@@ -92,12 +86,6 @@ public interface ConfigManipulator {
 	 * @param note the signature note text
 	 */
 	public void setSignatureNote(String note);
-
-	/**
-	 * Saves the current configuration to the current configuration file
-	 * @throws IOException 
-	 */
-	public void saveCurrentConfiguration() throws IOException;
 
 	/**
 	 * Sets the locale to be used
@@ -116,4 +104,10 @@ public interface ConfigManipulator {
 	 * @param size a Point describing the size
 	 */
 	public void setMainWindowSize(Point size);
+
+	/**
+	 * Saves the current configuration to the current configuration file
+	 * @throws IOException
+	 */
+	public void saveCurrentConfiguration() throws IOException;
 }

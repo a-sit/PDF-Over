@@ -17,8 +17,6 @@ package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.signator.BKUs;
 
 /**
@@ -43,16 +41,14 @@ public class BKUArgument extends CLIArgument {
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,
-			StateMachine stateMachine, ArgumentHandler handler)
+			ArgumentHandler handler)
 			throws InitializationException {
 		try {
 			if (args.length > argOffset + 1) {
 
 				BKUs argumentValue = BKUs.valueOf(args[argOffset + 1]);
 
-				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
-				
-				configManipulator.setDefaultBKU(argumentValue);
+				getConfiguration().setDefaultBKUOverlay(argumentValue);
 				
 				return argOffset + 1;
 			}

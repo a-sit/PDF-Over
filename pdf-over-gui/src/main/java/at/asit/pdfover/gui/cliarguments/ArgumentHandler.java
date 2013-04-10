@@ -34,7 +34,6 @@ public class ArgumentHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(ArgumentHandler.class);
 
@@ -65,21 +64,27 @@ public class ArgumentHandler {
 	/**
 	 * Adds a CLIArgument to the handler
 	 * 
-	 * @param arg
+	 * @param cliArgument the CLIArgument subclass to add
 	 */
-	public void addCLIArgument(CLIArgument arg) {
-		if (arg == null) {
-			return;
-		}
+	public void addCLIArgument(Class<? extends CLIArgument> cliArgument) {
 
-		String[] commandOptions = arg.getCommandOptions();
+		CLIArgument arg;
+		try {
+			arg = cliArgument.newInstance();
 
-		if (commandOptions == null) {
-			return;
-		}
+			arg.setStateMachine(this.stateMachine);
 
-		for (int i = 0; i < commandOptions.length; i++) {
-			this.cliArguments.put(commandOptions[i], arg);
+			String[] commandOptions = arg.getCommandOptions();
+
+			if (commandOptions == null) {
+				return;
+			}
+
+			for (int i = 0; i < commandOptions.length; i++) {
+				this.cliArguments.put(commandOptions[i], arg);
+			}
+		} catch (Exception e) {
+			log.error("Error instantiating CLI argument" , e); //$NON-NLS-1$
 		}
 	}
 
@@ -93,13 +98,11 @@ public class ArgumentHandler {
 
 		for (int i = 0; i < args.length; i++) {
 			if (this.cliArguments.containsKey(args[i])) {
-				i = this.cliArguments.get(args[i]).handleArgument(args, i,
-						this.stateMachine, this);
+				i = this.cliArguments.get(args[i]).handleArgument(args, i, this);
 			} else {
 				// Assume we got the document we want to sign
 				if (this.cliArguments.containsKey("-i")) { //$NON-NLS-1$
-					i = this.cliArguments.get("-i").handleArgument(args, i-1, //$NON-NLS-1$
-							this.stateMachine, this);
+					i = this.cliArguments.get("-i").handleArgument(args, i-1, this); //$NON-NLS-1$
 				}
 			}
 		}

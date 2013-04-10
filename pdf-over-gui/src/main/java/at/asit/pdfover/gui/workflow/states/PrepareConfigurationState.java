@@ -71,20 +71,20 @@ public class PrepareConfigurationState extends State {
 	public PrepareConfigurationState(StateMachine stateMachine) {
 		super(stateMachine);
 		this.handler = new ArgumentHandler(this.stateMachine);
-		this.handler.addCLIArgument(new HelpArgument());
-		this.handler.addCLIArgument(new BKUArgument());
-		this.handler.addCLIArgument(new PhoneNumberArgument());
-		this.handler.addCLIArgument(new EmblemArgument());
-		this.handler.addCLIArgument(new PasswordArgument());
-		this.handler.addCLIArgument(new ProxyHostArgument());
-		this.handler.addCLIArgument(new ProxyPortArgument());
-		this.handler.addCLIArgument(new OutputFolderArgument());
-		this.handler.addCLIArgument(new InputDocumentArgument());
+		this.handler.addCLIArgument(HelpArgument.class);
+		this.handler.addCLIArgument(BKUArgument.class);
+		this.handler.addCLIArgument(PhoneNumberArgument.class);
+		this.handler.addCLIArgument(EmblemArgument.class);
+		this.handler.addCLIArgument(PasswordArgument.class);
+		this.handler.addCLIArgument(ProxyHostArgument.class);
+		this.handler.addCLIArgument(ProxyPortArgument.class);
+		this.handler.addCLIArgument(OutputFolderArgument.class);
+		this.handler.addCLIArgument(InputDocumentArgument.class);
 		// adding config file argument to this handler so it appears in help
-		this.handler.addCLIArgument(new ConfigFileArgument());
+		this.handler.addCLIArgument(ConfigFileArgument.class);
 
 		this.configFileHandler = new ArgumentHandler(this.stateMachine);
-		this.configFileHandler.addCLIArgument(new ConfigFileArgument());
+		this.configFileHandler.addCLIArgument(ConfigFileArgument.class);
 	}
 
 	private void initializeFromConfigurationFile(String filename)

@@ -268,7 +268,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigProvider()
 	 */
 	@Override
@@ -278,7 +277,31 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigProvider()
+	 */
+	@Override
+	public PersistentConfigProvider getPersistentConfigProvider() {
+		return this.configProvider;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigManipulator()
+	 */
+	@Override
+	public ConfigManipulator getConfigManipulator() {
+		return this.configProvider;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigOverlayManipulator()
+	 */
+	@Override
+	public ConfigOverlayManipulator getConfigOverlayManipulator() {
+		return this.configProvider;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getStatus()
 	 */
 	@Override
@@ -288,7 +311,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getPDFSigner()
 	 */
 	@Override
@@ -298,7 +320,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getGUIProvider()
 	 */
 	@Override
@@ -330,14 +351,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	@Override
 	public String[] getCmdArgs() {
 		return this.cmdLineArgs;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigManipulator()
-	 */
-	@Override
-	public ConfigManipulator getConfigManipulator() {
-		return this.configProvider;
 	}
 
 	/* (non-Javadoc)

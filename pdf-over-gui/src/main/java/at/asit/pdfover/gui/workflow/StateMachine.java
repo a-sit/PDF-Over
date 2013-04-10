@@ -28,11 +28,23 @@ public interface StateMachine {
 	public ConfigProvider getConfigProvider();
 
 	/**
+	 * Get the PersistentConfigProvider
+	 * @return the PersistentConfigProvider
+	 */
+	public PersistentConfigProvider getPersistentConfigProvider();
+
+	/**
 	 * Gets the Config Manipulator
 	 * @return the config manipulator
 	 */
 	public ConfigManipulator getConfigManipulator();
-	
+
+	/**
+	 * Gets the Config Overlay Manipulator
+	 * @return the config overlay manipulator
+	 */
+	public ConfigOverlayManipulator getConfigOverlayManipulator();
+
 	/**
 	 * Get the PDF Signer
 	 * @return the PDF Signer
