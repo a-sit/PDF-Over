@@ -907,7 +907,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void validateSettings() throws Exception {
 		this.plainMobileNumberSetter();
-		this.plainEmblemSetter(this.emblemFile);
+		//this.plainEmblemSetter(this.emblemFile);
 		this.plainProxyHostSetter();
 		this.plainProxyPortSetter();
 	}
