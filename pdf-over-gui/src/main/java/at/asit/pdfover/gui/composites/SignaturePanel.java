@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -330,10 +331,27 @@ public class SignaturePanel extends JPanel {
 						this.prevSigPlaceholderTransparency = this.sigPlaceholderTransparency;
 						Image placeholder = this.sigPlaceholder.getScaledInstance(
 								this.sigScreenWidth, this.sigScreenHeight, Image.SCALE_SMOOTH);
+
+						//Make placeholder transparent
 						this.sigPlaceholderScaled = new BufferedImage(this.sigScreenWidth, this.sigScreenHeight, BufferedImage.TYPE_INT_ARGB);
-						Graphics g2 = this.sigPlaceholderScaled.getGraphics();
-						g2.drawImage(placeholder, 0, 0, null);
-						g2.dispose();
+						Graphics g_phs = this.sigPlaceholderScaled.getGraphics();
+						g_phs.drawImage(placeholder, 0, 0, null);
+
+						// Draw grey "Signature" overlay
+						String overlay = Messages.getString("positioning.signature"); //$NON-NLS-1$
+						// Voodoo to get overlay font scale
+						float scale = (((float) this.sigScreenWidth) / this.sigPlaceholder.getWidth(null)) * 150;
+						log.debug(Float.toString(scale));
+						g_phs.setFont(getFont().deriveFont(scale));
+						g_phs.setColor(Color.GRAY);
+						Rectangle2D overlay_size = g_phs.getFontMetrics().getStringBounds(overlay, g_phs);
+						int width = (int) overlay_size.getWidth();
+						int height = (int) overlay_size.getHeight();
+						int x = this.sigScreenWidth / 2 - width / 2;
+						int y = this.sigScreenHeight / 2 - height / 2 + g_phs.getFontMetrics().getAscent();
+						g_phs.drawString(overlay, x, y);
+
+						g_phs.dispose();
 						int[] phpixels = new int[this.sigScreenWidth * this.sigScreenHeight];
 						phpixels = this.sigPlaceholderScaled.getRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
 						for (int i = 0; i < phpixels.length; ++i) {
