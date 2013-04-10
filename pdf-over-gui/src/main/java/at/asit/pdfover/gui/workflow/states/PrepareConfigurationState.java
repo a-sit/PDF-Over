@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,7 @@ import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
 import at.asit.pdfover.gui.cliarguments.HelpArgument;
 import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -143,9 +145,13 @@ public class PrepareConfigurationState extends State {
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
-			ErrorState error = new ErrorState(this.stateMachine);
-			error.setException(e);
-			this.setNextState(error);
+			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+					SWT.NONE, "Initialization failed. Please check your configuration.", 
+					e, false);
+			//error.setException(e);
+			//this.setNextState(error);
+			error.open();
+			this.stateMachine.exit();
 		}
 	}
 

@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.workflow;
 //Imports
 import java.lang.reflect.Constructor;
 
-import org.eclipse.swt.SWTException;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow;
-import at.asit.pdfover.gui.workflow.states.ErrorState;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -86,9 +86,12 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 				current.run();
 			} catch (Exception e) {
 				log.error("StateMachine update: ", e); //$NON-NLS-1$
-				ErrorState errorState = new ErrorState(this);
-				errorState.setException(e);
-				jumpToState(errorState);
+				ErrorDialog errorState = new ErrorDialog(this.getMainShell(), 
+						SWT.NONE, "Unexpected Error", e, false);
+				//errorState.setException(e);
+				//jumpToState(errorState);
+				errorState.open();
+				this.exit();
 			}
 
 			if (this.exit) {
@@ -354,5 +357,17 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	@Override
 	public ConfigManipulator getConfigManipulator() {
 		return this.configProvider;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.GUIProvider#getMainShell()
+	 */
+	@Override
+	public Shell getMainShell() {
+		if(this.shell == null) {
+			this.createMainWindow();
+		}
+		
+		return this.shell;
 	}
 }

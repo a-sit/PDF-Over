@@ -54,9 +54,9 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	private final class ConfigurationModeSelectionListener implements
 			SelectionListener {
-		
+
 		/**
-		 * Constructor 
+		 * Constructor
 		 */
 		public ConfigurationModeSelectionListener() {
 			// Nothing to do
@@ -117,13 +117,12 @@ public class ConfigurationComposite extends StateComposite {
 	BaseConfigurationComposite configComposite;
 
 	/**
-	 * configuration container
-	 * Keeps state for current configuration changes
+	 * configuration container Keeps state for current configuration changes
 	 */
 	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
 
 	/**
-	 * The stack layout 
+	 * The stack layout
 	 */
 	StackLayout compositeStack = new StackLayout();
 
@@ -290,8 +289,7 @@ public class ConfigurationComposite extends StateComposite {
 				this.configManipulator
 						.setDefaultSignaturePosition(new SignaturePosition());
 			} else {
-				this.configManipulator
-				.setDefaultSignaturePosition(null);
+				this.configManipulator.setDefaultSignaturePosition(null);
 			}
 
 			this.configManipulator
@@ -311,21 +309,29 @@ public class ConfigurationComposite extends StateComposite {
 					getShell(),
 					SWT.NONE,
 					"Invalid settings are still present. Please check your input.",
-					e);
+					e, false);
 			dialog.open();
 			return false;
 		}
-		// Save current config to file
-		try {
-			this.configManipulator.saveCurrentConfiguration();
-		} catch (IOException e) {
-			log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
-					"Failed to save configuration file!", e);
-			dialog.open();
-			return false;
-		}
-		return true;
+
+		boolean status = false;
+		boolean redo = false;
+		do {
+			// Save current config to file
+			try {
+				this.configManipulator.saveCurrentConfiguration();
+				redo = false;
+				status = true;
+			} catch (IOException e) {
+				log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
+						"Failed to save configuration file!", e, true);
+				redo = dialog.open();
+				
+				//return false;
+			}
+		} while (redo);
+		return status;
 	}
 
 	/**

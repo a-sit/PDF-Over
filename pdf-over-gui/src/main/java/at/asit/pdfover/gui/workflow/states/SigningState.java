@@ -16,9 +16,11 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.Signer;
@@ -84,9 +86,14 @@ public class SigningState extends State {
 		}
 		
 		if(this.threadException != null) {
-			ErrorState error = new ErrorState(this.stateMachine);
-			error.setException(this.threadException);
-			this.setNextState(error);
+			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+					SWT.NONE, "Signature error", this.threadException, true); 
+			this.threadException = null;
+			if(error.open()) {
+				this.stateMachine.update();
+			} else {
+				this.stateMachine.exit();
+			}
 			return;
 		}
 

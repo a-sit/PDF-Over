@@ -118,7 +118,7 @@ public class OutputComposite extends StateComposite {
 					}
 				} else {
 					log.error("OutputComposite:OpenSelectionListener:widgetSelected -> source is null!!"); //$NON-NLS-1$
-					ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to get signed document.", "");
+					ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to get signed document.", "", false);
 					dialog.open();
 				}
 			} catch (Exception ex) {

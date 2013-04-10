@@ -25,6 +25,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus;
@@ -148,9 +149,13 @@ public class MobileBKUState extends State {
 		MobileBKUStatus mobileStatus = this.getStatus();
 
 		if (this.threadException != null) {
-			ErrorState error = new ErrorState(this.stateMachine);
-			error.setException(this.threadException);
-			this.setNextState(error);
+			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+					SWT.NONE,
+					"Unexpected Error", this.threadException, false);
+			//error.setException(this.threadException);
+			//this.setNextState(error);
+			error.open();
+			this.stateMachine.exit();
 			return;
 		}
 

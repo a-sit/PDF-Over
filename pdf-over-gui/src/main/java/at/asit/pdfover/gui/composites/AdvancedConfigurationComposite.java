@@ -273,7 +273,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
 			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Invalid BKU selection. Please check.", ex);
+			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Invalid BKU selection. Please check.", ex, false);
 			dialog.open();
 		}
 	}

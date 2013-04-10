@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -137,9 +138,15 @@ public class PrepareSigningState extends State {
 		} 
 		
 		if(this.threadException != null) {
-			ErrorState error = new ErrorState(this.stateMachine);
-			error.setException(this.threadException);
-			this.setNextState(error);
+			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+					SWT.NONE, "Failed to prepare document for signature.", this.threadException,
+					true);
+			this.threadException = null;
+			if(error.open()) {
+				this.stateMachine.update();
+			} else {
+				this.stateMachine.exit();
+			}
 			return;
 		}
 		

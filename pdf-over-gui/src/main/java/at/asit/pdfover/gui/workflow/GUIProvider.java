@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -38,4 +39,10 @@ public interface GUIProvider {
 	 * @param composite the composite
 	 */
 	public void display(final Composite composite);
+	
+	/**
+	 * Gets the main window shell
+	 * @return the main window shell
+	 */
+	public Shell getMainShell();
 }
