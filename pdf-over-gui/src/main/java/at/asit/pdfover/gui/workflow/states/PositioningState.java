@@ -68,7 +68,7 @@ public class PositioningState extends State {
 		SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
 		Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
 		param.setEmblem(emblem);
-		if(this.stateMachine.getConfigProvider().getSignatureNote() != null && !this.stateMachine.getConfigProvider().getSignatureNote().equals("")) { //$NON-NLS-1$
+		if(this.stateMachine.getConfigProvider().getSignatureNote() != null && !this.stateMachine.getConfigProvider().getSignatureNote().isEmpty()) {
 			param.setProperty("SIG_NOTE", this.stateMachine.getConfigProvider().getSignatureNote()); //$NON-NLS-1$
 		}
 		

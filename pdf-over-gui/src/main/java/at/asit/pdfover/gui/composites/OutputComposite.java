@@ -214,7 +214,7 @@ public class OutputComposite extends StateComposite {
 		String outputFileName;
 
 		String outputFolder = getOutputDir();
-		if (!this.saveFailed && outputFolder != null && !outputFolder.trim().equals("")) { //$NON-NLS-1$
+		if (!this.saveFailed && outputFolder != null && !outputFolder.trim().isEmpty()) {
 			// Output folder configured, try to save there
 
 			if(!outputFolder.endsWith(File.separator)) {

@@ -798,11 +798,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		try {
 
-			if (image == null || image.trim().equals("")) { //$NON-NLS-1$
+			if (image == null || image.trim().isEmpty()) {
 				if (this.signer != null) {
 					SignatureParameter param = this.signer.getPDFSigner()
 							.newParameter();
-					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().equals("")) { //$NON-NLS-1$
+					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
 						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
 					}
 					
@@ -816,7 +816,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				if (this.signer != null) {
 					SignatureParameter param = this.signer.getPDFSigner()
 							.newParameter();
-					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().equals("")) { //$NON-NLS-1$
+					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
 						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
 					}
 					
@@ -958,7 +958,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	private void plainProxyPortSetter() throws InvalidPortException {
 		String portString = this.txtProxyPort.getText();
 		int port = -1;
-		if (portString == null || portString.trim().equals("")) { //$NON-NLS-1$
+		if (portString == null || portString.trim().isEmpty()) {
 			port = -1;
 		} else {
 			try {
@@ -1012,7 +1012,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 
 		String emblemFile = this.configurationContainer.getEmblem();
-		if (emblemFile != null && !emblemFile.trim().equals("")) { //$NON-NLS-1$
+		if (emblemFile != null && !emblemFile.trim().isEmpty()) {
 			// this.txtEmblemFile.setText(emblemFile);
 			this.logoFile = emblemFile;
 			try {

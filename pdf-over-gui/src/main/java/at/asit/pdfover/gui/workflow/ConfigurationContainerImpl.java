@@ -114,7 +114,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setEmblem(String emblemFile) throws InvalidEmblemFile {
-		if (emblemFile == null || emblemFile.trim().equals("")) { //$NON-NLS-1$
+		if (emblemFile == null || emblemFile.trim().isEmpty()) {
 			// Ok to set no file ...
 		} else {
 			File imageFile = new File(emblemFile);
@@ -151,7 +151,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setNumber(String number) throws InvalidNumberException {
-		if(number == null || number.trim().equals("")) { //$NON-NLS-1$
+		if(number == null || number.trim().isEmpty()) {
 			this.mobileNumber = null;
 			return;
 		}

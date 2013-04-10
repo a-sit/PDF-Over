@@ -177,9 +177,9 @@ public class MobileBKUState extends State {
 
 			// check if we have everything we need!
 			if (mobileStatus.getPhoneNumber() != null
-					&& !mobileStatus.getPhoneNumber().equals("") //$NON-NLS-1$
+					&& !mobileStatus.getPhoneNumber().isEmpty()
 					&& mobileStatus.getMobilePassword() != null
-					&& !mobileStatus.getMobilePassword().equals("")) { //$NON-NLS-1$
+					&& !mobileStatus.getMobilePassword().isEmpty()) {
 				// post to bku
 				Thread postCredentialsThread = new Thread(
 						new PostCredentialsThread(this));
@@ -212,7 +212,7 @@ public class MobileBKUState extends State {
 					// We need number and password => show UI!
 
 					if (mobileStatus.getErrorMessage() != null
-							&& !mobileStatus.getErrorMessage().equals("")) { //$NON-NLS-1$
+							&& !mobileStatus.getErrorMessage().isEmpty()) {
 						// set possible error message
 						ui.setErrorMessage(mobileStatus.getErrorMessage());
 						mobileStatus.setErrorMessage(null);
@@ -220,13 +220,13 @@ public class MobileBKUState extends State {
 					
 
 					if (ui.getMobileNumber() == null
-							|| ui.getMobileNumber().equals("")) { //$NON-NLS-1$
+							|| ui.getMobileNumber().isEmpty()) {
 						// set possible phone number
 						ui.setMobileNumber(mobileStatus.getPhoneNumber());
 					}
 
 					if (ui.getMobilePassword() == null
-							|| ui.getMobilePassword().equals("")) { //$NON-NLS-1$
+							|| ui.getMobilePassword().isEmpty()) {
 						// set possible password
 						ui.setMobilePassword(mobileStatus.getMobilePassword());
 					}

@@ -76,7 +76,7 @@ public class PrepareSigningState extends State {
 					System.setProperty("https.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
 				} 
 				
-				if(proxyHost != null && !proxyHost.equals("")) { //$NON-NLS-1$
+				if(proxyHost != null && !proxyHost.isEmpty()) {
 					System.setProperty("http.proxyHost", proxyHost); //$NON-NLS-1$
 					System.setProperty("https.proxyHost", proxyHost); //$NON-NLS-1$
 				} 
@@ -93,11 +93,11 @@ public class PrepareSigningState extends State {
 				this.state.signatureParameter.setSignatureDevice(status.getBKU());
 				this.state.signatureParameter.setSignaturePosition(status.getSignaturePosition());
 				
-				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().equals("")) { //$NON-NLS-1$
+				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().isEmpty()) {
 					this.state.signatureParameter.setEmblem(new FileNameEmblem(configuration.getDefaultEmblem()));
 				}
 				
-				if(configuration.getSignatureNote() != null && !configuration.getSignatureNote().equals("")) { //$NON-NLS-1$
+				if(configuration.getSignatureNote() != null && !configuration.getSignatureNote().isEmpty()) {
 					this.state.signatureParameter.setProperty("SIG_NOTE", configuration.getSignatureNote()); //$NON-NLS-1$
 				}
 				
