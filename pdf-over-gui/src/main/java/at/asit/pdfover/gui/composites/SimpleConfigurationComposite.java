@@ -536,7 +536,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(
 					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
-			//TODO: Test * under windows
 			dialog.setFilterExtensions(new String[] { "*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			dialog.setFilterNames(new String[] {
 					Messages.getString("common.ImageExtension_Description"), //$NON-NLS-1$

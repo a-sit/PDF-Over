@@ -264,7 +264,6 @@ public class PositioningComposite extends StateComposite {
 	 * @param position the signature position
 	 */
 	void setFinalPosition() {
-		// TODO: check if this is the real position
 		this.position = new SignaturePosition(
 				this.viewer.getSignaturePositionX(),
 				this.viewer.getSignaturePositionY(),
