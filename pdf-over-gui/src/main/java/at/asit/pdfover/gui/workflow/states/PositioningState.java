@@ -108,6 +108,8 @@ public class PositioningState extends State {
 			}
 			
 			this.positionComposite.requestFocus();
+		} else {
+			this.setNextState(new BKUSelectionState(this.stateMachine));
 		}
 	}
 
