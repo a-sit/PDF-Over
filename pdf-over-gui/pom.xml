@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>pdf-over</artifactId>
 		<groupId>a-sit.at</groupId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>4.0.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>pdf-over-gui</artifactId>
@@ -29,12 +28,12 @@
 		<dependency>
 			<groupId>a-sit.at</groupId>
 			<artifactId>pdf-over-signator</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>a-sit.at</groupId>
 			<artifactId>pdf-over-sigpdfas</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
@@ -93,7 +92,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix></classpathPrefix>
+							<classpathPrefix />
 							<mainClass>at.asit.pdfover.gui.Main</mainClass>
 						</manifest>
 					</archive>
