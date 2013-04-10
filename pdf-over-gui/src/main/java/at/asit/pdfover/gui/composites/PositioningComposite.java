@@ -152,18 +152,6 @@ public class PositioningComposite extends StateComposite {
 		this.scrollbar = this.mainArea.getVerticalBar();
 
 		this.frame = SWT_AWT.new_Frame(this.mainArea);
-		this.frame.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				PositioningComposite.this.log.debug(e.paramString());
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				PositioningComposite.this.log.debug(e.paramString());
-			}
-		});
 		this.mainArea.addKeyListener(this.keyListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
 		// Workaround for Windows: Scrollbar always gets the event
