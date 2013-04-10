@@ -41,6 +41,7 @@ import at.asit.pdfover.signator.BKUs;
  */
 public class BKUSelectionComposite extends StateComposite {
 	
+	public static final int btnMargin = 2;
 	
 	/**
 	 * Listener for local bku selection 
@@ -151,7 +152,7 @@ public class BKUSelectionComposite extends StateComposite {
 		
 		btn_card.setImage(karte);
 		
-		this.pack();
+		//this.pack();
 	}
 
 	@Override

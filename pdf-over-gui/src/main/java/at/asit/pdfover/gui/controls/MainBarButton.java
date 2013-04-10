@@ -85,7 +85,8 @@ public abstract class MainBarButton extends Canvas {
 		this.activeBackground = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
 		//this.textColor = this.getForeground();
 		this.textColor = new Color(getDisplay(), 0x00, 0x00, 0x00);
-		this.borderColor = new Color(getDisplay(), 0xf9, 0xf9, 0xf9);
+		//this.borderColor = new Color(getDisplay(), 0xf9, 0xf9, 0xf9);
+		this.borderColor = this.getBackground();
 		this.inactiveText = new Color(getDisplay(), 0x40, 0x40, 0x40);
 		this.textsize = StateComposite.TEXT_SIZE_BUTTON;
 
