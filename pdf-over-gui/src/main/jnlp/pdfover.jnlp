@@ -33,7 +33,7 @@
 
   <resources os="Mac OS X">
     <java version="1.6+"/>
-    <jar href="setup_pdfover_mac" main="true"/>
+    <jar href="setup_pdfover_mac.jar" main="true"/>
   </resources>
 
   <application-desc main-class="com.izforge.izpack.installer.Installer"/>
