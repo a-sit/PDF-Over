@@ -10,7 +10,11 @@ Windows-Installer:
 	* PDF-Over-signed.aip - Benötigt Pro-Version, signiert, Sprachen
 
 Mac-DMG-Paket:
-	* App erstellen mit Platypus: Screenshot platypus.png
+	* Per webstart installieren, Paketinhalt entpacken
+	* pdf-over_mac.sh script bearbeiten:
+		* 'cd "$BASEDIR/.."' in 'cd "$BASEDIR"' ändern
+	* App erstellen mit Platypus: Screenshots platypus (drop settings).png
 	* DMG-Image erzeugen mit DmgPress: Screenshot DmgPress.png
 		* Hintergrund für Folder: Background.png
-		* App + Link zu Applications-Folder hineinziehen
+		* Darstellung -> Als Liste; Darstellung -> Als Symbole
+		* App + Link zu Applications-Folder hineinziehen (Screenshot)
