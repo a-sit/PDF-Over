@@ -217,18 +217,23 @@ public class ConfigurationComposite extends StateComposite {
 		fd_tabFolder.left = new FormAttachment(0, 5);
 		tabFolder.setLayoutData(fd_tabFolder);
 
-		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
-		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
-
 		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
 		fD_tabFolder[0].setHeight(TEXT_SIZE_NORMAL);
 		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
-		
-		this.simpleConfigComposite = new SimpleConfigurationComposite(tabFolder,
-				SWT.NONE, state, this.configurationContainer);
 
-		simpleTabItem.setControl(this.simpleConfigComposite);
-		tabFolder.setSelection(simpleTabItem);
+		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
+		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+
+		ScrolledComposite simpleCompositeScr = new ScrolledComposite(
+				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		simpleTabItem.setControl(simpleCompositeScr);
+		this.simpleConfigComposite = new SimpleConfigurationComposite(
+				simpleCompositeScr, SWT.NONE, state, this.configurationContainer);
+		simpleCompositeScr.setContent(this.simpleConfigComposite);
+		simpleCompositeScr.setExpandHorizontal(true);
+		simpleCompositeScr.setExpandVertical(true);
+		simpleCompositeScr.setMinSize(
+				this.simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
 		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
@@ -243,6 +248,8 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setExpandVertical(true);
 		advancedCompositeScr.setMinSize(
 				this.advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+		tabFolder.setSelection(simpleTabItem);
 
 		Button btnSpeichern = new Button(this, SWT.NONE);
 		FormData fd_btnSpeichern = new FormData();
