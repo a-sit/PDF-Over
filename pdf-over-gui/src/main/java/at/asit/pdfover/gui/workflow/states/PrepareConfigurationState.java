@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,12 +191,15 @@ public class PrepareConfigurationState extends State {
 			try {
 				inputStream = this.getClass().getResourceAsStream(
 						RES_PATH + Constants.DEFAULT_LOG4J_FILENAME);
-				pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
+				String filename = this.stateMachine.getConfigProvider().getConfigurationDirectory()
+						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
+				pdfOverConfig = new FileOutputStream(filename);
 
 				while ((byteCount = inputStream.read(buffer)) >= 0) {
 					pdfOverConfig.write(buffer, 0, byteCount);
 				}
+
+				PropertyConfigurator.configureAndWatch(filename);
 			} catch (Exception e) {
 				log.error(
 						"Failed to write log4j config file to config directory", e); //$NON-NLS-1$

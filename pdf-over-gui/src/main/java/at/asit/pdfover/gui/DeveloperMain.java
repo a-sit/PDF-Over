@@ -52,7 +52,7 @@ public class DeveloperMain {
 		
 		File log4j = new File(configDir.getAbsolutePath() + File.separator + Constants.DEFAULT_LOG4J_FILENAME);
 		if(log4j.exists()) {
-			PropertyConfigurator.configure(log4j.getAbsolutePath());
+			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
 		
 		StringBuilder sb = new StringBuilder();
