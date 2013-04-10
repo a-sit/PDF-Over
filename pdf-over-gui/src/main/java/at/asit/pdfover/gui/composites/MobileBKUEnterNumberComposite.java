@@ -24,6 +24,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -192,8 +194,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		FormData fd_containerComposite = new FormData();
 		fd_containerComposite.top = new FormAttachment(50, -100);
 		fd_containerComposite.bottom = new FormAttachment(50, 100);
-		fd_containerComposite.left = new FormAttachment(50, -250);
-		fd_containerComposite.right = new FormAttachment(50, 250);
+		fd_containerComposite.left = new FormAttachment(50, -200);
+		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
 		
 		
@@ -206,15 +208,31 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_number.setLayoutData(fd_number);
 		this.txt_number.setEditable(true);
 
+		
 		Label lbl_number = new Label(containerComposite, SWT.NATIVE);
+		lbl_number.setAlignment(SWT.RIGHT);
 		lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
 		FormData fd_lbl_number = new FormData();
 		//fd_lbl_number.top = new FormAttachment(30, -15);
 		fd_lbl_number.bottom = new FormAttachment(50, -10);
-		fd_lbl_number.left = new FormAttachment(0, 20);
+		//fd_lbl_number.left = new FormAttachment(0, 20);
 		fd_lbl_number.right = new FormAttachment(50, -10);
 		lbl_number.setLayoutData(fd_lbl_number);
 
+		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
+		
+		ImageData data = new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"));//$NON-NLS-1$
+		Image mobile = new Image(getDisplay(), data); 
+		
+		FormData fd_lbl_image = new FormData();
+		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
+		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
+		fd_lbl_image.left = new FormAttachment(0, 10);
+		fd_lbl_image.width = data.width;
+		lbl_image.setLayoutData(fd_lbl_image);
+		lbl_image.setImage(mobile);
+		
+		
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD
 				| SWT.BORDER | SWT.NATIVE);
 		FormData fd_password = new FormData();
@@ -235,11 +253,12 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		});
 
 		Label lbl_password = new Label(containerComposite, SWT.NATIVE);
+		lbl_password.setAlignment(SWT.RIGHT);
 		lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
 		FormData fd_lbl_password = new FormData();
 		fd_lbl_password.top = new FormAttachment(50, 10);
 		//fd_lbl_password.bottom = new FormAttachment(50, 15);
-		fd_lbl_password.left = new FormAttachment(0, 20);
+		//fd_lbl_password.left = new FormAttachment(0, 20);
 		fd_lbl_password.right = new FormAttachment(50, -10);
 		lbl_password.setLayoutData(fd_lbl_password);
 

@@ -184,6 +184,7 @@
 		<staging.dir>${project.build.directory}/staging</staging.dir>
 		<target.name>linux</target.name>
 		<izpack-standalone.version>4.3.5</izpack-standalone.version>
+		<project.maindir>${project.basedir}/..</project.maindir>
 	</properties>
 
 	<profiles>

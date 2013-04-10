@@ -2,11 +2,11 @@
 <metadata>
   <groupId>com.sun</groupId>
   <artifactId>pdfview</artifactId>
-  <version>0.9.2</version>
+  <version>0.9.2-Borisvl</version>
   <versioning>
     <versions>
-      <version>0.9.2</version>
+      <version>0.9.2-Borisvl</version>
     </versions>
-    <lastUpdated>20121023171708</lastUpdated>
+    <lastUpdated>20121024122652</lastUpdated>
   </versioning>
 </metadata>

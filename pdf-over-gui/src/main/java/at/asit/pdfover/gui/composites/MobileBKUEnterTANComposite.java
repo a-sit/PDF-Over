@@ -26,6 +26,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -198,19 +200,33 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		FormData fd_containerComposite = new FormData();
 		fd_containerComposite.top = new FormAttachment(50, -100);
 		fd_containerComposite.bottom = new FormAttachment(50, 100);
-		fd_containerComposite.left = new FormAttachment(50, -250);
-		fd_containerComposite.right = new FormAttachment(50, 250);
+		fd_containerComposite.left = new FormAttachment(50, -200);
+		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
 		
 		
 		Label lblVergleichswert = new Label(containerComposite, SWT.NATIVE);
+		lblVergleichswert.setAlignment(SWT.RIGHT);
 		FormData fd_lblVergleichswert = new FormData();
-		fd_lblVergleichswert.left = new FormAttachment(0, 20);
+		//fd_lblVergleichswert.left = new FormAttachment(0, 20);
 		fd_lblVergleichswert.right = new FormAttachment(50, -10);
 		//fd_lblVergleichswert.top = new FormAttachment(30, -15);
 		fd_lblVergleichswert.bottom = new FormAttachment(50, -10);
 		lblVergleichswert.setLayoutData(fd_lblVergleichswert);
 		lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+		
+		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
+		
+		ImageData data = new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"));//$NON-NLS-1$
+		Image mobile = new Image(getDisplay(), data); 
+		
+		FormData fd_lbl_image = new FormData();
+		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
+		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
+		fd_lbl_image.left = new FormAttachment(0, 10);
+		fd_lbl_image.width = data.width;
+		lbl_image.setLayoutData(fd_lbl_image);
+		lbl_image.setImage(mobile);
 		
 		this.lblvergleich = new Label(containerComposite, SWT.NATIVE);
 		FormData fd_lblvergleich = new FormData();
@@ -222,8 +238,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lblvergleich.setText(""); //$NON-NLS-1$
 		
 		Label lblTan = new Label(containerComposite, SWT.NATIVE);
+		lblTan.setAlignment(SWT.RIGHT);
 		FormData fd_lblTan = new FormData();
-		fd_lblTan.left = new FormAttachment(0, 20);
+		//fd_lblTan.left = new FormAttachment(0, 20);
 		fd_lblTan.right = new FormAttachment(50, -10);
 		fd_lblTan.top = new FormAttachment(50, 10);
 		//fd_lblTan.bottom = new FormAttachment(50, 15);

@@ -9,6 +9,9 @@
 	</parent>
 	<artifactId>pdf-over-sigpdfas</artifactId>
 	<name>PDF-Over PDF-AS Signer</name>
+	<properties>
+		<project.maindir>${project.basedir}/../..</project.maindir>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>a-sit.at</groupId>
