@@ -22,13 +22,13 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  */
-public class FileNameEmlbem implements Emblem {
+public class FileNameEmblem implements Emblem {
 	/**
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
-			.getLogger(FileNameEmlbem.class);
+			.getLogger(FileNameEmblem.class);
 
 	private String fileName = null;
 	
@@ -36,7 +36,7 @@ public class FileNameEmlbem implements Emblem {
 	 * Constructor
 	 * @param filename
 	 */
-	public FileNameEmlbem(String filename) {
+	public FileNameEmblem(String filename) {
 		this.fileName = filename;
 	}
 	

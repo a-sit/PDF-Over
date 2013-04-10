@@ -65,7 +65,7 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.FileNameEmlbem;
+import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
 
 /**
@@ -227,7 +227,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				if (this.signer != null) {
 					SignatureParameter param = this.signer.getPDFSigner()
 							.newParameter();
-					param.setEmblem(new FileNameEmlbem(image));
+					param.setEmblem(new FileNameEmblem(image));
 					img = ImageConverter.convertToSWT((BufferedImage) param
 							.getPlaceholder());
 				} else {

@@ -29,7 +29,7 @@ import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.FileNameEmlbem;
+import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
@@ -93,7 +93,7 @@ public class PrepareSigningState extends State {
 				this.state.signatureParameter.setSignaturePosition(status.getSignaturePosition());
 				
 				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().equals("")) { //$NON-NLS-1$
-					this.state.signatureParameter.setEmblem(new FileNameEmlbem(configuration.getDefaultEmblem()));
+					this.state.signatureParameter.setEmblem(new FileNameEmblem(configuration.getDefaultEmblem()));
 				}
 				
 				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
