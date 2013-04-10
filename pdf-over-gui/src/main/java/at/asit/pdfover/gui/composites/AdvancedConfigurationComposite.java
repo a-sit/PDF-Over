@@ -29,6 +29,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -202,12 +204,17 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.lblSigningLanguage = new Label(this.grpSignatur, SWT.READ_ONLY);
-		FormData fd_lblSigningLanguage = new FormData();
-		//fd_lblSigningLanguage.right = new FormAttachment(100, -5);
-		fd_lblSigningLanguage.top = new FormAttachment(this.sclTransparenz, 5);
-		fd_lblSigningLanguage.left = new FormAttachment(0, 5);
-		this.lblSigningLanguage.setLayoutData(fd_lblSigningLanguage);
+		Composite compSigningLanguageContainer = new Composite(this.grpSignatur, SWT.NONE);
+		FormData fd_compSigningLanguageContainer = new FormData();
+		fd_compSigningLanguageContainer.left = new FormAttachment(0, 5);
+		fd_compSigningLanguageContainer.right = new FormAttachment(100, -5);
+		fd_compSigningLanguageContainer.top = new FormAttachment(this.sclTransparenz, 5);
+		compSigningLanguageContainer.setLayoutData(fd_compSigningLanguageContainer);
+		compSigningLanguageContainer.setLayout(new GridLayout(2, false));
+
+		this.lblSigningLanguage = new Label(compSigningLanguageContainer, SWT.READ_ONLY);
+		this.lblSigningLanguage.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
+				false, false, 1, 1));
 		
 		FontData[] fD_lblSigningLanguage = this.lblSigningLanguage.getFont()
 				.getFontData();
@@ -217,11 +224,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		
 		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
 		
-		this.cmbSigningLangAuswahl = new Combo(this.grpSignatur, SWT.READ_ONLY);
-		FormData fd_cmbSigningLangAuswahl = new FormData();
-		fd_cmbSigningLangAuswahl.right = new FormAttachment(100, -5);
-		fd_cmbSigningLangAuswahl.top = new FormAttachment(this.sclTransparenz, 5);
-		fd_cmbSigningLangAuswahl.left = new FormAttachment(this.lblSigningLanguage, 5);
+		this.cmbSigningLangAuswahl = new Combo(compSigningLanguageContainer, SWT.READ_ONLY);
+		this.cmbSigningLangAuswahl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
 
 		FontData[] fD_cmbSigningLangAuswahl = this.cmbSigningLangAuswahl.getFont()
 				.getFontData();
@@ -230,22 +235,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbSigningLangAuswahl[0]));
 
 		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
-
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage(Constants.SUPPORTED_LOCALES[i]);
+			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
 		}
-		
 		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
-
 		this.cmbSigningLangAuswahl.setItems(localeSignStrings);
-
-		this.cmbSigningLangAuswahl.setLayoutData(fd_cmbSigningLangAuswahl);
-		
-		this.cmbSigningLangAuswahl.setToolTipText(Messages
-				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
-
 		this.cmbSigningLangAuswahl.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer
@@ -258,7 +253,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			}
 		});
-		
+
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
 		this.grpBkuAuswahl.setText(Messages
 				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
