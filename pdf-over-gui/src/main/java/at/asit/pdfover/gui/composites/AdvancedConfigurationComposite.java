@@ -171,7 +171,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fD_grpBkuAuswahl[0].setHeight(TEXT_SIZE_NORMAL);
 		grpBkuAuswahl.setFont(new Font(Display.getCurrent(), fD_grpBkuAuswahl[0]));
 		
-		this.cmbBKUAuswahl = new Combo(grpBkuAuswahl, SWT.NONE);
+		this.cmbBKUAuswahl = new Combo(grpBkuAuswahl, SWT.READ_ONLY);
 		FormData fd_cmbBKUAuswahl = new FormData();
 		fd_cmbBKUAuswahl.right = new FormAttachment(100, -5);
 		fd_cmbBKUAuswahl.top = new FormAttachment(0, 5);
