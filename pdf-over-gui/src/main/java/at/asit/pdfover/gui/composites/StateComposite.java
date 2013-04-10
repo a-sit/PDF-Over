@@ -47,4 +47,9 @@ public abstract class StateComposite extends Composite {
 	 * (SWT layout(...) only layouts children no grandchildren!) 
 	 */
 	public abstract void doLayout();
+	
+	/**
+	 * Reloads the localizeable resources
+	 */
+	public abstract void reloadResources();
 }

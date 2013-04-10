@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.workflow;
 // Imports
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -67,6 +68,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * Holds the proxy port number
 	 */
 	protected int proxyPort = -1;
+	
+	/**
+	 * Holds the locale
+	 */
+	protected Locale locale = null;
 	
 	/**
 	 * Holds the output folder
@@ -278,6 +284,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setSignatureNote(String note) {
 		this.signatureNote = note;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setLocale(java.util.Locale)
+	 */
+	@Override
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getLocale()
+	 */
+	@Override
+	public Locale getLocale() {
+		return this.locale;
 	}
 	
 }

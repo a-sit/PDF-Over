@@ -98,12 +98,12 @@ public class ConfigurationComposite extends StateComposite {
 		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
 
-		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
-		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+		this.simpleTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
 		ScrolledComposite simpleCompositeScr = new ScrolledComposite(tabFolder,
 				SWT.H_SCROLL | SWT.V_SCROLL);
-		simpleTabItem.setControl(simpleCompositeScr);
+		this.simpleTabItem.setControl(simpleCompositeScr);
 		this.simpleConfigComposite = new SimpleConfigurationComposite(
 				simpleCompositeScr, SWT.NONE, state,
 				this.configurationContainer);
@@ -113,12 +113,12 @@ public class ConfigurationComposite extends StateComposite {
 		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
 				SWT.DEFAULT, SWT.DEFAULT));
 
-		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
-		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+		this.advancedTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
 				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
-		advancedTabItem.setControl(advancedCompositeScr);
+		this.advancedTabItem.setControl(advancedCompositeScr);
 		this.advancedConfigComposite = new AdvancedConfigurationComposite(
 				advancedCompositeScr, SWT.NONE, state,
 				this.configurationContainer);
@@ -128,14 +128,14 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setMinSize(this.advancedConfigComposite
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		tabFolder.setSelection(simpleTabItem);
+		tabFolder.setSelection(this.simpleTabItem);
 
-		Button btnSpeichern = new Button(this, SWT.NONE);
+		this.btnSpeichern = new Button(this, SWT.NONE);
 		FormData fd_btnSpeichern = new FormData();
 		fd_btnSpeichern.right = new FormAttachment(100, -5);
 		fd_btnSpeichern.bottom = new FormAttachment(100);
-		btnSpeichern.setLayoutData(fd_btnSpeichern);
-		btnSpeichern.addSelectionListener(new SelectionAdapter() {
+		this.btnSpeichern.setLayoutData(fd_btnSpeichern);
+		this.btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (ConfigurationComposite.this.storeConfiguration()) {
@@ -144,21 +144,21 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		});
-		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
-		this.getShell().setDefaultButton(btnSpeichern);
+		this.btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		this.getShell().setDefaultButton(this.btnSpeichern);
 
-		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
+		FontData[] fD_btnSpeichern = this.btnSpeichern.getFont().getFontData();
 		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnSpeichern
+		this.btnSpeichern
 				.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
 
-		Button btnAbbrechen = new Button(this, SWT.NONE);
+		this.btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
-		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
-		fd_btnAbrechen.bottom = new FormAttachment(btnSpeichern, 0, SWT.BOTTOM);
-		btnAbbrechen.setLayoutData(fd_btnAbrechen);
-		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
-		btnAbbrechen.addSelectionListener(new SelectionAdapter() {
+		fd_btnAbrechen.right = new FormAttachment(this.btnSpeichern, -10);
+		fd_btnAbrechen.bottom = new FormAttachment(this.btnSpeichern, 0, SWT.BOTTOM);
+		this.btnAbbrechen.setLayoutData(fd_btnAbrechen);
+		this.btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ConfigurationComposite.this.userDone = true;
@@ -166,14 +166,14 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 
-		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
+		FontData[] fD_btnAbbrechen = this.btnAbbrechen.getFont().getFontData();
 		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnAbbrechen
+		this.btnAbbrechen
 				.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
 
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
-		fd_composite.bottom = new FormAttachment(btnSpeichern, -10);
+		fd_composite.bottom = new FormAttachment(this.btnSpeichern, -10);
 		fd_composite.left = new FormAttachment(0, 5);
 		fd_composite.right = new FormAttachment(100, -5);
 		this.containerComposite.setLayoutData(fd_composite);
@@ -249,6 +249,14 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	boolean userDone = false;
 
+	private TabItem simpleTabItem;
+
+	private TabItem advancedTabItem;
+
+	private Button btnSpeichern;
+
+	private Button btnAbbrechen;
+
 	/**
 	 * Sets the configuration manipulator
 	 * 
@@ -281,6 +289,8 @@ public class ConfigurationComposite extends StateComposite {
 
 			this.configurationContainer.setSignatureNote(
 					this.configProvider.getSigantureNote());
+			
+			this.configurationContainer.setLocale(this.configProvider.getConfigLocale());
 			
 			this.configurationContainer.setBKUSelection(this.configProvider
 					.getDefaultBKU());
@@ -392,6 +402,8 @@ public class ConfigurationComposite extends StateComposite {
 			this.configManipulator.setDefaultSignaturePosition(null);
 		}
 
+		this.configManipulator.setLocale(this.configurationContainer.getLocale());
+		
 		this.configManipulator
 				.setPlaceholderTransparency(this.configurationContainer
 						.getPlaceholderTransparency());
@@ -428,6 +440,7 @@ public class ConfigurationComposite extends StateComposite {
 				// return false;
 			}
 		} while (redo);
+		
 		return status;
 	}
 
@@ -459,5 +472,16 @@ public class ConfigurationComposite extends StateComposite {
 		if (ctrl instanceof StateComposite) {
 			((StateComposite) ctrl).doLayout();
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+		this.btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		this.btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 	}
 }

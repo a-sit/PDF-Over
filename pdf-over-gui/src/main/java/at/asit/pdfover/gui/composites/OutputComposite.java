@@ -249,26 +249,26 @@ public class OutputComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 
-		Label lbl_success_message = new Label(this, SWT.NATIVE | SWT.RESIZE);
+		this.lbl_success_message = new Label(this, SWT.NATIVE | SWT.RESIZE);
 		FormData fd_lbl_success_message = new FormData();
 		fd_lbl_success_message.top = new FormAttachment(40, 0);
 		fd_lbl_success_message.left = new FormAttachment(0);
 		fd_lbl_success_message.right = new FormAttachment(100);
-		lbl_success_message.setLayoutData(fd_lbl_success_message);
-		lbl_success_message.setAlignment(SWT.CENTER);
-		lbl_success_message.setText(Messages
+		this.lbl_success_message.setLayoutData(fd_lbl_success_message);
+		this.lbl_success_message.setAlignment(SWT.CENTER);
+		this.lbl_success_message.setText(Messages
 				.getString("output.success_message")); //$NON-NLS-1$
 
-		FontData[] fD1 = lbl_success_message.getFont().getFontData();
+		FontData[] fD1 = this.lbl_success_message.getFont().getFontData();
 		fD1[0].setHeight(Constants.TEXT_SIZE_BIG);
-		lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
+		this.lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
 
 		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);
 		this.lnk_saved_file.setText(Messages
 				.getString("output.link_save_message")); //$NON-NLS-1$
 		FormData fd_lnk_saved_file = new FormData();
-		fd_lnk_saved_file.top = new FormAttachment(lbl_success_message, 10);
-		fd_lnk_saved_file.left = new FormAttachment(lbl_success_message, 0,
+		fd_lnk_saved_file.top = new FormAttachment(this.lbl_success_message, 10);
+		fd_lnk_saved_file.left = new FormAttachment(this.lbl_success_message, 0,
 				SWT.CENTER);
 		// fd_lnk_saved_file.right = new FormAttachment(100);
 		this.lnk_saved_file.setLayoutData(fd_lnk_saved_file);
@@ -336,6 +336,8 @@ public class OutputComposite extends StateComposite {
 
 	private Button btn_save;
 
+	private Label lbl_success_message;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -353,6 +355,15 @@ public class OutputComposite extends StateComposite {
 		} catch (Exception ex) {
 			log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.lbl_success_message.setText(Messages
+				.getString("output.success_message")); //$NON-NLS-1$
 	}
 
 }

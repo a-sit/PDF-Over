@@ -352,4 +352,12 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		
 		return this.shell;
 	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.GUIProvider#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.mainWindow.reloadLocalization();
+	}
 }

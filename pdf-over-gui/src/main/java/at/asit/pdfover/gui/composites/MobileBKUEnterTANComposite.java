@@ -128,6 +128,10 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	String tan;
 
 	private Label lbl_tries;
+
+	private Label lblVergleichswert;
+
+	private Label lblTan;
 	
 	/**
 	 * @return the vergleichswert
@@ -205,15 +209,15 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		containerComposite.setLayoutData(fd_containerComposite);
 		
 		
-		Label lblVergleichswert = new Label(containerComposite, SWT.NATIVE);
-		lblVergleichswert.setAlignment(SWT.RIGHT);
+		this.lblVergleichswert = new Label(containerComposite, SWT.NATIVE);
+		this.lblVergleichswert.setAlignment(SWT.RIGHT);
 		FormData fd_lblVergleichswert = new FormData();
 		//fd_lblVergleichswert.left = new FormAttachment(0, 20);
 		fd_lblVergleichswert.right = new FormAttachment(50, -10);
 		//fd_lblVergleichswert.top = new FormAttachment(30, -15);
 		fd_lblVergleichswert.bottom = new FormAttachment(50, -10);
-		lblVergleichswert.setLayoutData(fd_lblVergleichswert);
-		lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+		this.lblVergleichswert.setLayoutData(fd_lblVergleichswert);
+		this.lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 		
@@ -237,15 +241,15 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lblvergleich.setLayoutData(fd_lblvergleich);
 		this.lblvergleich.setText(""); //$NON-NLS-1$
 		
-		Label lblTan = new Label(containerComposite, SWT.NATIVE);
-		lblTan.setAlignment(SWT.RIGHT);
+		this.lblTan = new Label(containerComposite, SWT.NATIVE);
+		this.lblTan.setAlignment(SWT.RIGHT);
 		FormData fd_lblTan = new FormData();
 		//fd_lblTan.left = new FormAttachment(0, 20);
 		fd_lblTan.right = new FormAttachment(50, -10);
 		fd_lblTan.top = new FormAttachment(50, 10);
 		//fd_lblTan.bottom = new FormAttachment(50, 15);
-		lblTan.setLayoutData(fd_lblTan);
-		lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
+		this.lblTan.setLayoutData(fd_lblTan);
+		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 		
 		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
 		FormData fd_text = new FormData();
@@ -312,6 +316,15 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		// Nothing to do
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 	}
 
 }

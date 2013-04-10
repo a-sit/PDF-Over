@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+import java.util.Locale;
+
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
@@ -141,4 +143,16 @@ public interface ConfigurationContainer {
 	 * @param folder the default output folder
 	 */
 	public void setOutputFolder(String folder);
+	
+	/**
+	 * Sets the locale
+	 * @param locale the locale
+	 */
+	public void setLocale(Locale locale);
+	
+	/**
+	 * Gets the locale
+	 * @return the locale
+	 */
+	public Locale getLocale();
 }

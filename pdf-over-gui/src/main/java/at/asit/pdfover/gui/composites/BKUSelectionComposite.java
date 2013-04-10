@@ -88,6 +88,10 @@ public class BKUSelectionComposite extends StateComposite {
 			.getLogger(BKUSelectionComposite.class);
 
 	private BKUs selected = BKUs.NONE;
+
+	private Button btnMobile;
+
+	private Button btnCard;
 	
 	/**
 	 * Gets selected BKU type
@@ -156,25 +160,25 @@ public class BKUSelectionComposite extends StateComposite {
 		
 		btn_card.setImage(karte);
 		
-		Button btnMobile = new Button(this, SWT.NONE);
+		this.btnMobile = new Button(this, SWT.NONE);
 		FormData fd_btnMobile = new FormData();
 		fd_btnMobile.top = new FormAttachment(btn_mobile, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnMobile.right = new FormAttachment(50, -5);
 		fd_btnMobile.width = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-		btnMobile.setLayoutData(fd_btnMobile);
-		btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
-		btnMobile.addSelectionListener(new MobileSelectionListener());
+		this.btnMobile.setLayoutData(fd_btnMobile);
+		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
+		this.btnMobile.addSelectionListener(new MobileSelectionListener());
 		
-		Button btnCard = new Button(this, SWT.NONE);
+		this.btnCard = new Button(this, SWT.NONE);
 		FormData fd_btnCard = new FormData();
 		fd_btnCard.top = new FormAttachment(btn_card, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnCard.left = new FormAttachment(50, 5);
 		fd_btnCard.width = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-		btnCard.setLayoutData(fd_btnCard);
-		btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
-		btnCard.addSelectionListener(new LocalSelectionListener());
+		this.btnCard.setLayoutData(fd_btnCard);
+		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
+		this.btnCard.addSelectionListener(new LocalSelectionListener());
 		//this.pack();
 	}
 
@@ -189,5 +193,14 @@ public class BKUSelectionComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		this.layout(true, true);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
+		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
 	}
 }

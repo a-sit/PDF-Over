@@ -101,14 +101,14 @@ public class PositioningComposite extends StateComposite {
 		bottomBar.setLayoutData(fd_bottomBar);
 		bottomBar.setLayout(new FormLayout());
 
-		Button btnSign = new Button(bottomBar, SWT.PUSH);
-		btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
+		this.btnSign = new Button(bottomBar, SWT.PUSH);
+		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
 		fd_btnSign.top = new FormAttachment(0);
-		btnSign.setLayoutData(fd_btnSign);
-		this.getShell().setDefaultButton(btnSign);
-		btnSign.addSelectionListener(new SelectionAdapter() {
+		this.btnSign.setLayoutData(fd_btnSign);
+		this.getShell().setDefaultButton(this.btnSign);
+		this.btnSign.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PositioningComposite.this.setFinalPosition();
@@ -118,7 +118,7 @@ public class PositioningComposite extends StateComposite {
 		this.btnNewPage = new Button(bottomBar, SWT.TOGGLE);
 		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
 		FormData fd_btnNewPage = new FormData();
-		fd_btnNewPage.right = new FormAttachment(btnSign);
+		fd_btnNewPage.right = new FormAttachment(this.btnSign);
 		fd_btnNewPage.top = new FormAttachment(0);
 		this.btnNewPage.setLayoutData(fd_btnNewPage);
 		this.btnNewPage.addSelectionListener(new SelectionAdapter() {
@@ -316,6 +316,8 @@ public class PositioningComposite extends StateComposite {
 		}
 	};
 
+	private Button btnSign;
+
 	void showPage(int page) {
 		final int previousPage = this.currentPage;
 		this.currentPage = page;
@@ -409,5 +411,14 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public SignaturePosition getPosition() {
 		return this.position;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+	 */
+	@Override
+	public void reloadResources() {
+		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 	}
 }

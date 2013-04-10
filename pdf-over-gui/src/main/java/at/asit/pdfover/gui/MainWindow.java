@@ -105,6 +105,8 @@ public class MainWindow {
 
 	private Map<Buttons, MainBarButton> buttonMap;
 
+	private MainBarEndButton btn_end;
+
 	/**
 	 * Default constructor
 	 * 
@@ -143,6 +145,7 @@ public class MainWindow {
 		if (ctrl instanceof StateComposite) {
 			if (!ctrl.isDisposed()) {
 				((StateComposite) ctrl).doLayout();
+				((StateComposite) ctrl).reloadResources();
 			}
 		}
 	}
@@ -165,6 +168,35 @@ public class MainWindow {
 		createContents();
 	}
 
+	/**
+	 * Reload the localization
+	 */
+	public void reloadLocalization() {
+		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
+		this.btn_config.setText(Messages.getString("main.configuration")); //$NON-NLS-1$
+		this.btn_config.setToolTipText(Messages.getString("main.configuration")); //$NON-NLS-1$
+		this.btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
+		this.btn_open.setToolTipText(Messages.getString("common.open")); //$NON-NLS-1$
+
+		this.btn_position.setText(Messages.getString("main.position")); //$NON-NLS-1$
+		this.btn_position.setToolTipText(Messages.getString("main.position")); //$NON-NLS-1$
+		
+
+		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
+		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
+		
+
+		this.btn_end.setText(Messages.getString("main.done")); //$NON-NLS-1$
+		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
+		
+		Control ctrl = this.stack.topControl;
+		if (ctrl instanceof StateComposite) {
+			if (!ctrl.isDisposed()) {
+				((StateComposite) ctrl).reloadResources();
+			}
+		}
+	}
+	
 	/**
 	 * Create contents of the window.
 	 */
@@ -293,16 +325,16 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
-		MainBarEndButton end = new MainBarEndButton(mainbarContainer, SWT.NONE);
+		this.btn_end = new MainBarEndButton(mainbarContainer, SWT.NONE);
 		FormData fd_btn_end = new FormData();
 		fd_btn_end.left = new FormAttachment(81, -1 * (MainBarButton.SplitFactor / 2));
 		fd_btn_end.right = new FormAttachment(100);
 		fd_btn_end.top = new FormAttachment(0);
 		fd_btn_end.bottom = new FormAttachment(100);
-		end.setLayoutData(fd_btn_end);
-		end.setText(Messages.getString("main.done")); //$NON-NLS-1$
-		end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
-		this.buttonMap.put(Buttons.FINAL, end);
+		this.btn_end.setLayoutData(fd_btn_end);
+		this.btn_end.setText(Messages.getString("main.done")); //$NON-NLS-1$
+		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
+		this.buttonMap.put(Buttons.FINAL, this.btn_end);
 
 		this.container = new Composite(getShell(), SWT.RESIZE);
 		this.containerFormData = new FormData();

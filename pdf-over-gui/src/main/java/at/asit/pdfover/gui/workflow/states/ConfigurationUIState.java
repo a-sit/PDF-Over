@@ -73,6 +73,7 @@ public class ConfigurationUIState extends State {
 
 		if(config.isUserDone())
 		{
+			this.reloadResources();
 			this.setNextState(status.getPreviousState());
 		}
 	}
@@ -98,4 +99,10 @@ public class ConfigurationUIState extends State {
 		behavior.setMainBarVisible(false);
 	}
 
+	/**
+	 * Triggers to reload the resources
+	 */
+	public void reloadResources() {
+		this.stateMachine.getGUIProvider().reloadResources();
+	}
 }

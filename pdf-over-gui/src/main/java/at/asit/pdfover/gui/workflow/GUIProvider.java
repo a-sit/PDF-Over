@@ -45,4 +45,9 @@ public interface GUIProvider {
 	 * @return the main window shell
 	 */
 	public Shell getMainShell();
+	
+	/**
+	 * Reloads the resources on active gui components
+	 */
+	public void reloadResources();
 }
