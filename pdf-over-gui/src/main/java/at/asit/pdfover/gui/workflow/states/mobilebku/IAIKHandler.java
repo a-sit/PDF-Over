@@ -62,7 +62,9 @@ public class IAIKHandler extends MobileBKUHandler {
 		String credentialURL = MobileBKUHelper.extractTag(responseData,
 				"name=\"userCredLogon\" method=\"post\" action=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		URL baseURL = new URL(status.getBaseURL());
-		credentialURL = baseURL.getProtocol() + "://" + baseURL.getHost() + //$NON-NLS-1$
+		int p = baseURL.getPort();
+		String port = ((p != -1) && (p != baseURL.getDefaultPort())) ? ":" + p : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		credentialURL = baseURL.getProtocol() + "://" + baseURL.getHost() + port + //$NON-NLS-1$
 		(credentialURL.startsWith("/") ? "" : "/") + credentialURL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		String viewState = MobileBKUHelper.extractTag(responseData,
@@ -184,7 +186,9 @@ public class IAIKHandler extends MobileBKUHandler {
 			redirectURL = MobileBKUHelper.extractTag(responseData,
 					"redirect url=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			URL baseURL = new URL(status.getBaseURL());
-			redirectURL = baseURL.getProtocol() + "://" + baseURL.getHost() + //$NON-NLS-1$
+			int p = baseURL.getPort();
+			String port = ((p != -1) && (p != baseURL.getDefaultPort())) ? ":" + p : ""; //$NON-NLS-1$ //$NON-NLS-2$
+			redirectURL = baseURL.getProtocol() + "://" + baseURL.getHost() + port +//$NON-NLS-1$
 					(redirectURL.startsWith("/") ? "" : "/") + redirectURL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			responseData = getRedirect(client, redirectURL);
@@ -203,7 +207,9 @@ public class IAIKHandler extends MobileBKUHandler {
 		String tanURL = MobileBKUHelper.extractTag(responseData,
 				"name=\"j_idt6\" method=\"post\" action=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		URL baseURL = new URL(status.getBaseURL());
-		tanURL = baseURL.getProtocol() + "://" + baseURL.getHost() + //$NON-NLS-1$
+		int p = baseURL.getPort();
+		String port = ((p != -1) && (p != baseURL.getDefaultPort())) ? ":" + p : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		tanURL = baseURL.getProtocol() + "://" + baseURL.getHost() + port + //$NON-NLS-1$
 				(tanURL.startsWith("/") ? "" : "/") + tanURL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		tanURL = status.ensureSessionID(tanURL);
 
