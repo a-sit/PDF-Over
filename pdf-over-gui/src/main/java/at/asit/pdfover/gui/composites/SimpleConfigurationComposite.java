@@ -79,32 +79,38 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(SimpleConfigurationComposite.class);
-	private ErrorMarker proxyHostErrorMarker;
-	ErrorMarker txtMobileNumberErrorMarker;
-	FormData fd_txtMobileNumberErrorMarker;
-	FormData fd_txtMobileNumber;
-	FormData fd_txtProxyPort;
-	ErrorMarker txtProxyPortErrorMarker;
-	Button btnClearImage;
-	private Label lbl_logo;
+
+	ConfigurationComposite configurationComposite;
+
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;
-	private Group grpBildmarke;
-	private Label lbl_drop;
-	private Button btnBrowseEmblem;
-	private Group grpProxy;
-	private Label lblNewLabel;
-	private Label lblProxyPort;
-	private Label lblSignatureNote;
-	private Group grpSignatureNote;
-	ConfigurationComposite configurationComposite;
-	FormData fd_txtProxyPortErrorMarker;
-	Label lblEmblem;
-	private Text txtProxyHost;
-	Text txtProxyPort;
-	Text txtSignatureNote;
 	Text txtMobileNumber;
-	String emblemFile;
+	FormData fd_txtMobileNumber;
+	ErrorMarker txtMobileNumberErrorMarker;
+	FormData fd_txtMobileNumberErrorMarker;
+
+	private Group grpLogo;
+	private Label lblLogo;
+	private Label lblDropLogo;
+	Button btnClearImage;
+	private Button btnBrowseLogo;
+	Label lblEmblem;
+
+	private Group grpSignatureNote;
+	private Label lblSignatureNote;
+	Text txtSignatureNote;
+
+	private Group grpProxy;
+	private Label lblProxyHost;
+	private Text txtProxyHost;
+	private ErrorMarker proxyHostErrorMarker;
+	private Label lblProxyPort;
+	Text txtProxyPort;
+	FormData fd_txtProxyPort;
+	ErrorMarker txtProxyPortErrorMarker;
+	FormData fd_txtProxyPortErrorMarker;
+
+	String logoFile;
 	private Image origEmblem = null;
 	private Image origlogo = null;
 
@@ -127,8 +133,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpHandySignatur.top = new FormAttachment(0, 5);
 		this.grpHandySignatur.setLayoutData(fd_grpHandySignatur);
 		this.grpHandySignatur.setLayout(new GridLayout(2, false));
-		this.grpHandySignatur.setText(Messages
-				.getString("simple_config.MobileBKU_Title")); //$NON-NLS-1$
 
 		FontData[] fD_grpHandySignatur = this.grpHandySignatur.getFont()
 				.getFontData();
@@ -140,8 +144,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				| SWT.RESIZE);
 		this.lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				false, false, 1, 1));
-		this.lblMobileNumber.setText(Messages
-				.getString("simple_config.PhoneNumber")); //$NON-NLS-1$
 
 		FontData[] fD_lblMobileNumber = this.lblMobileNumber.getFont()
 				.getFontData();
@@ -161,8 +163,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtMobileNumber.bottom = new FormAttachment(100);
 		this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
 		this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
-		this.txtMobileNumber.setToolTipText(Messages
-				.getString("simple_config.ExampleNumber_ToolTip")); //$NON-NLS-1$
 
 		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer,
 				SWT.NATIVE, null, "", this.txtMobileNumber); //$NON-NLS-1$
@@ -191,9 +191,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtMobileNumber.setMessage(Messages
-				.getString("simple_config.ExampleNumber")); //$NON-NLS-1$
-
 		this.txtMobileNumber.addFocusListener(new FocusAdapter() {
 
 			@Override
@@ -202,22 +199,20 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.grpBildmarke = new Group(this, SWT.NONE);
+		this.grpLogo = new Group(this, SWT.NONE);
 		FormData fd_grpBildmarke = new FormData();
 		fd_grpBildmarke.left = new FormAttachment(0, 5);
 		fd_grpBildmarke.right = new FormAttachment(100, -5);
 		fd_grpBildmarke.top = new FormAttachment(this.grpHandySignatur, 5);
-		this.grpBildmarke.setLayoutData(fd_grpBildmarke);
-		this.grpBildmarke.setLayout(new FormLayout());
-		this.grpBildmarke.setText(Messages
-				.getString("simple_config.Emblem_Title")); //$NON-NLS-1$
+		this.grpLogo.setLayoutData(fd_grpBildmarke);
+		this.grpLogo.setLayout(new FormLayout());
 
-		FontData[] fD_grpBildmarke = this.grpBildmarke.getFont().getFontData();
+		FontData[] fD_grpBildmarke = this.grpLogo.getFont().getFontData();
 		fD_grpBildmarke[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpBildmarke.setFont(new Font(Display.getCurrent(),
+		this.grpLogo.setFont(new Font(Display.getCurrent(),
 				fD_grpBildmarke[0]));
 
-		Composite containerComposite = new Composite(this.grpBildmarke,
+		Composite containerComposite = new Composite(this.grpLogo,
 				SWT.NONE);
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
@@ -250,30 +245,29 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.lblEmblem = new Label(containerComposite, SWT.RESIZE);
 
-		this.btnBrowseEmblem = new Button(controlComposite, SWT.NONE);
+		this.btnBrowseLogo = new Button(controlComposite, SWT.NONE);
 
-		this.lbl_drop = new Label(controlComposite, SWT.NATIVE);
+		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE);
 
-		this.lbl_logo = new Label(controlComposite, SWT.NATIVE);
-		this.lbl_logo.setAlignment(SWT.CENTER);
+		this.lblLogo = new Label(controlComposite, SWT.NATIVE);
+		this.lblLogo.setAlignment(SWT.CENTER);
 		FormData fd_lbl_logo = new FormData();
 		fd_lbl_logo.left = new FormAttachment(0, 20);
 		fd_lbl_logo.right = new FormAttachment(100, -20);
 		fd_lbl_logo.top = new FormAttachment(0, 20);
-		fd_lbl_logo.bottom = new FormAttachment(this.lbl_drop, -20);
+		fd_lbl_logo.bottom = new FormAttachment(this.lblDropLogo, -20);
 
-		this.lbl_logo.setLayoutData(fd_lbl_logo);
+		this.lblLogo.setLayoutData(fd_lbl_logo);
 
-		this.lbl_drop.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
 
 		FormData fd_lbl_drop = new FormData();
 		fd_lbl_drop.left = new FormAttachment(0, 20);
 		fd_lbl_drop.right = new FormAttachment(100, -20);
 		// fd_lbl_drop.top = new FormAttachment(50, -20);
-		fd_lbl_drop.bottom = new FormAttachment(this.btnBrowseEmblem, -20);
+		fd_lbl_drop.bottom = new FormAttachment(this.btnBrowseLogo, -20);
 
-		this.lbl_drop.setLayoutData(fd_lbl_drop);
+		this.lblDropLogo.setLayoutData(fd_lbl_drop);
 
 		FormData fd_lblEmblem = new FormData();
 		fd_lblEmblem.left = new FormAttachment(controlComposite, 20);
@@ -358,8 +352,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.btnClearImage.setText(Messages
-				.getString("simple_config.ClearEmblem")); //$NON-NLS-1$
 		this.btnClearImage.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -376,7 +368,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		FormData fd_btnUseImage = new FormData();
 
 		fd_btnUseImage.bottom = new FormAttachment(100, -20);
-		fd_btnUseImage.right = new FormAttachment(this.btnBrowseEmblem, -10);
+		fd_btnUseImage.right = new FormAttachment(this.btnBrowseLogo, -10);
 
 		this.btnClearImage.setLayoutData(fd_btnUseImage);
 
@@ -385,25 +377,22 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnBrowseEmblem.bottom = new FormAttachment(100, -20);
 		fd_btnBrowseEmblem.right = new FormAttachment(100, -20);
 
-		this.btnBrowseEmblem.setLayoutData(fd_btnBrowseEmblem);
-		this.btnBrowseEmblem.addSelectionListener(new ImageFileBrowser());
-		this.btnBrowseEmblem.setText(Messages.getString("common.browse")); //$NON-NLS-1$
+		this.btnBrowseLogo.setLayoutData(fd_btnBrowseEmblem);
+		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
 
-		FontData[] fD_btnBrowseEmblem = this.btnBrowseEmblem.getFont()
+		FontData[] fD_btnBrowseEmblem = this.btnBrowseLogo.getFont()
 				.getFontData();
 		fD_btnBrowseEmblem[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnBrowseEmblem.setFont(new Font(Display.getCurrent(),
+		this.btnBrowseLogo.setFont(new Font(Display.getCurrent(),
 				fD_btnBrowseEmblem[0]));
 
 		this.grpSignatureNote = new Group(this, SWT.NONE);
 		FormData fd_grpSignatureNote = new FormData();
 		fd_grpSignatureNote.right = new FormAttachment(100, -5);
-		fd_grpSignatureNote.top = new FormAttachment(this.grpBildmarke, 5);
+		fd_grpSignatureNote.top = new FormAttachment(this.grpLogo, 5);
 		fd_grpSignatureNote.left = new FormAttachment(0, 5);
 		this.grpSignatureNote.setLayoutData(fd_grpSignatureNote);
 		this.grpSignatureNote.setLayout(new GridLayout(2, false));
-		this.grpSignatureNote.setText(Messages
-				.getString("simple_config.Note_Title")); //$NON-NLS-1$
 
 		FontData[] fD_grpSignatureNote = this.grpSignatureNote.getFont()
 				.getFontData();
@@ -417,7 +406,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		gd_lblSignatureNote.widthHint = 66;
 		this.lblSignatureNote.setLayoutData(gd_lblSignatureNote);
 		this.lblSignatureNote.setBounds(0, 0, 57, 15);
-		this.lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
 
 		FontData[] fD_lblSignatureNote = this.lblSignatureNote.getFont()
 				.getFontData();
@@ -426,19 +414,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				fD_lblSignatureNote[0]));
 
 		Composite compSignatureNoteContainer = new Composite(this.grpSignatureNote, SWT.NONE);
-		compSignatureNoteContainer.setLayout(new FormLayout());
 		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
+		compSignatureNoteContainer.setLayout(new FormLayout());
 
 		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
 		FormData fd_txtSignatureNote = new FormData();
 		fd_txtSignatureNote.top = new FormAttachment(0, 0);
 		fd_txtSignatureNote.left = new FormAttachment(0, 5);
 		fd_txtSignatureNote.right = new FormAttachment(100, -42);
-		fd_txtSignatureNote.bottom = new FormAttachment(100);
 		this.txtSignatureNote.setLayoutData(fd_txtSignatureNote);
-		this.txtSignatureNote.setToolTipText(Messages
-				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
 
 		FontData[] fD_txtSignatureNote = this.txtSignatureNote.getFont()
 				.getFontData();
@@ -471,23 +456,21 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpProxy.left = new FormAttachment(0, 5);
 		this.grpProxy.setLayoutData(fd_grpProxy);
 		this.grpProxy.setLayout(new GridLayout(2, false));
-		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 
 		FontData[] fD_grpProxy = this.grpProxy.getFont().getFontData();
 		fD_grpProxy[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.grpProxy.setFont(new Font(Display.getCurrent(), fD_grpProxy[0]));
 
-		this.lblNewLabel = new Label(this.grpProxy, SWT.NONE);
+		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
 		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
 		gd_lblNewLabel.widthHint = 66;
-		this.lblNewLabel.setLayoutData(gd_lblNewLabel);
-		this.lblNewLabel.setBounds(0, 0, 57, 15);
-		this.lblNewLabel.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
+		this.lblProxyHost.setLayoutData(gd_lblNewLabel);
+		this.lblProxyHost.setBounds(0, 0, 57, 15);
 
-		FontData[] fD_lblNewLabel = this.lblNewLabel.getFont().getFontData();
+		FontData[] fD_lblNewLabel = this.lblProxyHost.getFont().getFontData();
 		fD_lblNewLabel[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblNewLabel.setFont(new Font(Display.getCurrent(),
+		this.lblProxyHost.setFont(new Font(Display.getCurrent(),
 				fD_lblNewLabel[0]));
 
 		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
@@ -517,10 +500,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.proxyHostErrorMarker.setLayoutData(fd_marker);
 		this.proxyHostErrorMarker.setVisible(false);
 		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
-		this.txtProxyHost.setToolTipText(Messages
-				.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
-		this.txtProxyHost.setMessage(Messages
-				.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
 
 		this.txtProxyHost.addFocusListener(new FocusAdapter() {
 
@@ -542,8 +521,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.lblProxyPort = new Label(this.grpProxy, SWT.NONE);
 		this.lblProxyPort.setBounds(0, 0, 57, 15);
-		this.lblProxyPort.setText(Messages
-				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 
 		FontData[] fD_lblProxyPort = this.lblProxyPort.getFont()
 				.getFontData();
@@ -563,8 +540,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
 		this.fd_txtProxyPort.bottom = new FormAttachment(100);
 		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
-		this.txtProxyPort.setToolTipText(Messages
-				.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
 
 		FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
 		fD_txtProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -591,9 +566,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				.setLayoutData(this.fd_txtProxyPortErrorMarker);
 		this.txtProxyPortErrorMarker.setVisible(false);
 
-		this.txtProxyPort.setMessage(Messages
-				.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
-
 		this.txtProxyPort.addFocusListener(new FocusAdapter() {
 
 			@Override
@@ -602,8 +574,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.addListener(SWT.Resize, new Listener() {
+		// Load localized strings
+		reloadResources();
 
+		this.addListener(SWT.Resize, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 
@@ -676,7 +650,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	void recalculateEmblemSize() {
 		this.recalculateEmblemSize(this.origEmblem, this.lblEmblem);
-		this.recalculateEmblemSize(this.origlogo, this.lbl_logo);
+		this.recalculateEmblemSize(this.origlogo, this.lblLogo);
 	}
 
 	void recalculateEmblemSize(Image image, Label parent) {
@@ -966,7 +940,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		String emblemFile = this.configurationContainer.getEmblem();
 		if (emblemFile != null && !emblemFile.trim().equals("")) { //$NON-NLS-1$
 			// this.txtEmblemFile.setText(emblemFile);
-			this.emblemFile = emblemFile;
+			this.logoFile = emblemFile;
 			try {
 				setEmblemFileInternal(emblemFile, true);
 				this.btnClearImage.setSelection(true);
@@ -1038,26 +1012,31 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				.getString("simple_config.ExampleNumber_ToolTip")); //$NON-NLS-1$
 		this.txtMobileNumber.setMessage(Messages
 				.getString("simple_config.ExampleNumber")); //$NON-NLS-1$
-		this.grpBildmarke.setText(Messages
+
+		this.grpLogo.setText(Messages
 				.getString("simple_config.Emblem_Title")); //$NON-NLS-1$
-		this.lbl_drop.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
+		this.lblDropLogo.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
 		this.btnClearImage.setText(Messages
 				.getString("simple_config.ClearEmblem")); //$NON-NLS-1$
-		this.btnBrowseEmblem.setText(Messages.getString("common.browse")); //$NON-NLS-1$
+		this.btnBrowseLogo.setText(Messages.getString("common.browse")); //$NON-NLS-1$
+
+		this.grpSignatureNote.setText(Messages
+				.getString("simple_config.Note_Title")); //$NON-NLS-1$
+		this.lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
+		this.txtSignatureNote.setToolTipText(Messages
+				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
+
 		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
-		this.lblNewLabel.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
+		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
 		this.txtProxyHost.setToolTipText(Messages
 				.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
+		this.txtProxyHost.setMessage(Messages
+				.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
 		this.lblProxyPort.setText(Messages
 				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 		this.txtProxyPort.setToolTipText(Messages
 				.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
 		this.txtProxyPort.setMessage(Messages
 				.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
-		this.grpSignatureNote.setText(Messages
-				.getString("simple_config.Note_Title")); //$NON-NLS-1$
-		this.lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
-		this.txtSignatureNote.setToolTipText(Messages
-				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
 	}
 }
