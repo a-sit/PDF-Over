@@ -196,6 +196,14 @@ public class OutputComposite extends StateComposite {
 		this.signedDocument = signedDocument;
 	}
 
+	/**
+	 * Return whether the last save was successful
+	 * @return whether the last save was successful
+	 */
+	public boolean getSaveSuccessful() {
+		return !this.saveFailed;
+	}
+
 	private void enableSaveButton(boolean doEnable)
 	{
 		this.btn_save.setEnabled(doEnable);

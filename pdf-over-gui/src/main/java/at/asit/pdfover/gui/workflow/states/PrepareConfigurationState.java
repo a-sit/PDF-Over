@@ -40,6 +40,7 @@ import at.asit.pdfover.gui.cliarguments.PasswordArgument;
 import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyHostArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
+import at.asit.pdfover.gui.cliarguments.SkipFinishArgument;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InitializationException;

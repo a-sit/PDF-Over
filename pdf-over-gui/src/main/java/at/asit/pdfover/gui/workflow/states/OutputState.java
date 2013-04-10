@@ -67,6 +67,10 @@ public class OutputState extends State {
 
 			// Save signed document
 			this.outputComposite.saveDocument();
+
+			if (config.getSkipFinish() && this.outputComposite.getSaveSuccessful()) {
+				this.stateMachine.exit();
+			}
 		}
 
 		return this.outputComposite;

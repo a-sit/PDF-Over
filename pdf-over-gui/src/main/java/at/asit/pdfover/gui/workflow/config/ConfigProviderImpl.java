@@ -920,4 +920,20 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public Point getMainWindowSize() {
 		return this.configuration.getMainWindowSize();
 	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getSkipFinish()
+	 */
+	@Override
+	public boolean getSkipFinish() {
+		return this.configurationOverlay.getSkipFinish();
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setSkipFinishOverlay(boolean)
+	 */
+	@Override
+	public void setSkipFinishOverlay(boolean skipFinish) {
+		this.configurationOverlay.setSkipFinish(skipFinish);
+	}
 }

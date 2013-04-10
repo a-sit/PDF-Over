@@ -97,6 +97,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Holds the default signature position */
 	protected SignaturePosition defaultSignaturePosition = null;
 
+	/** Whether to skip the output state */
+	protected boolean skipFinish = false;
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
 	 */
@@ -398,5 +401,21 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setMainWindowSize(Point size) {
 		this.mainWindowSize = size;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getSkipFinish()
+	 */
+	@Override
+	public boolean getSkipFinish() {
+		return this.skipFinish;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setSkipFinish(boolean)
+	 */
+	@Override
+	public void setSkipFinish(boolean skipFinish) {
+		this.skipFinish = skipFinish;
 	}
 }

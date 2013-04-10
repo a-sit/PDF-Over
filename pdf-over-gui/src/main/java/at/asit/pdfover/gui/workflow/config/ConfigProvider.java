@@ -34,6 +34,13 @@ public interface ConfigProvider {
 	 */
 	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //$NON-NLS-1$
 
+	
+	/**
+	 * Loads the configuration from a configuration file
+	 * @param configSource the configuration file
+	 * @throws IOException 
+	 */
+	public void loadConfiguration(InputStream configSource) throws IOException;
 
 	/**
 	 * Gets the configuration file
@@ -138,9 +145,8 @@ public interface ConfigProvider {
 	public Point getMainWindowSize();
 
 	/**
-	 * Loads the configuration from a configuration file
-	 * @param configSource the configuration file
-	 * @throws IOException 
+	 * Gets whether to skip the finish screen
+	 * @return whether to skip the finish screen
 	 */
-	public void loadConfiguration(InputStream configSource) throws IOException;
+	public boolean getSkipFinish();
 }

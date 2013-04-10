@@ -218,4 +218,16 @@ public interface ConfigurationContainer {
 	 * @param size the main window size
 	 */
 	public void setMainWindowSize(Point size);
+
+	/**
+	 * Gets whether to skip the finish screen
+	 * @return whether to skip the finish screen
+	 */
+	public boolean getSkipFinish();
+
+	/**
+	 * Sets whether to skip the finish screen
+	 * @param skipFinish whether to skip the finish screen
+	 */
+	public void setSkipFinish(boolean skipFinish);
 }

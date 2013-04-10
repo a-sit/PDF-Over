@@ -73,6 +73,12 @@ public interface ConfigOverlayManipulator {
 	public void setDefaultSignaturePositionOverlay(SignaturePosition position);
 
 	/**
+	 * Sets whether to skip the finish screen
+	 * @param skipFinish whether to skip the finish screen
+	 */
+	public void setSkipFinishOverlay(boolean skipFinish);
+
+	/**
 	 * Sets the configuration file
 	 * @param configurationFile
 	 */
