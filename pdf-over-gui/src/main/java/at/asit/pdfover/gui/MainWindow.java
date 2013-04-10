@@ -45,6 +45,7 @@ import at.asit.pdfover.gui.controls.MainBarEndButton;
 import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;

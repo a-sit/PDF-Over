@@ -22,8 +22,8 @@ import java.io.FileNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 

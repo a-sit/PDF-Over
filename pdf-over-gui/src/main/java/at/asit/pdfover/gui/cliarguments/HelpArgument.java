@@ -19,8 +19,8 @@ package at.asit.pdfover.gui.cliarguments;
 import java.util.Iterator;
 import java.util.Set;
 
-import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**

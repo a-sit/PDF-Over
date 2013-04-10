@@ -19,9 +19,9 @@ package at.asit.pdfover.gui.cliarguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 

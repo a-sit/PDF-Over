@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import at.asit.pdfover.gui.Messages;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**

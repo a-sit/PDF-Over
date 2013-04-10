@@ -20,7 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.gui.Messages;
+import at.asit.pdfover.gui.utils.Messages;
 
 /**
  * 
