@@ -42,6 +42,66 @@ public class MainBarStartButton extends MainBarButton {
 	private static final Logger log = LoggerFactory
 			.getLogger(MainBarStartButton.class);
 
+	@Override
+	protected void paintBackground(PaintEvent e) {
+		super.paintBackground(e);
+		/*
+		Point size = this.getSize();
+		int height = size.y - 2;
+
+		int split = SplitFactor;
+		int width = size.x - split;
+
+		int factor = GradientFactor;
+
+		Region left_reg = new Region();
+		left_reg.add(new int[] { 0, 0, factor, factor, factor, height-factor, 0, height, 0, 0 });
+		
+		Region right1_reg = new Region();
+		right1_reg.add(new int[] { width, 0, 
+				width - factor, factor, 
+				width - factor, height-factor, width, height, width, 0 });
+		
+		Region top_reg = new Region();
+		top_reg.add(new int[] { 
+				0, 0, 
+				factor, factor, 
+				width - factor, factor, 
+				width, 0, 
+				0, 0 });
+		
+		Region bottom_reg = new Region();
+		bottom_reg.add(new int[] { 
+				0, height, 
+				factor, height-factor, 
+				width - factor, height-factor, 
+				width, height, 0, height });
+		
+		e.gc.setClipping(top_reg);
+		
+		//TOP 
+		 e.gc.fillGradientRectangle(0, 0, width, factor, true);
+		 
+		 e.gc.setClipping(bottom_reg);
+		 
+		 //BOTTOM 
+		 e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
+		  true);
+		
+		 e.gc.setClipping(left_reg);
+		 
+		// LEFT
+		e.gc.fillGradientRectangle(0, 0, factor, height, false);
+
+		
+		e.gc.setClipping(right1_reg);
+		// RIGTH
+		e.gc.fillGradientRectangle(width, 0, -1 * factor, height,
+				false);
+		
+		e.gc.setClipping((Region)null);*/
+	}
+	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt.events.PaintEvent)
 	 */
@@ -52,7 +112,7 @@ public class MainBarStartButton extends MainBarButton {
 
 		int height = size.y - 3;
 
-		int split = 10;
+		int split = SplitFactor;
 		int width = size.x - split;
 		
 		e.gc.drawLine(0, 0, width, 0);
@@ -72,7 +132,7 @@ public class MainBarStartButton extends MainBarButton {
 
 		int height = size.y - 2;
 
-		int split = 10;
+		int split = SplitFactor;
 
 		int width = size.x - split;
 
@@ -82,4 +142,14 @@ public class MainBarStartButton extends MainBarButton {
 		return reg;
 	}
 
+	
+	/**
+	 * change the text position 
+	 * @param positionX the position
+	 * @return the new position
+	 */
+	@Override
+	protected int changeTextPosition(int positionX) {
+		return positionX - (SplitFactor / 2);
+	}
 }

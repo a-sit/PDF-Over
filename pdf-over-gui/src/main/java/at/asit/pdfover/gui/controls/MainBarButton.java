@@ -36,6 +36,10 @@ import org.slf4j.LoggerFactory;
  * Main Bar Button implementation
  */
 public abstract class MainBarButton extends Canvas {
+	
+	public static final int GradientFactor = 4;
+	public static final int SplitFactor = 10;
+	
 	/**
 	 * @param parent
 	 * @param style
@@ -64,11 +68,13 @@ public abstract class MainBarButton extends Canvas {
 
 		this.setCursor(hand);
 
-		this.inactiveBackground = new Color(getDisplay(), 0x4B, 0x95, 0x00);
-		this.activeBackground = new Color(getDisplay(), 0x98, 0xF2, 0x3D);
+		this.inactiveBackground = new Color(getDisplay(), 0xC7, 0xDD, 0xE7);
+		this.activeBackground = new Color(getDisplay(), 0x7A, 0xC2, 0xD3);
 		this.textColor = this.getForeground();
-		this.borderColor = new Color(getDisplay(), 0x76, 0xC4, 0xC8);
+		this.borderColor = new Color(getDisplay(), 0x7E, 0x9F, 0xA5);
+		this.inactiveText = new Color(getDisplay(), 0x6E, 0x6C, 0x6E);
 		this.textsize = 12;
+
 	}
 
 	private Color inactiveBackground = null;
@@ -93,7 +99,7 @@ public abstract class MainBarButton extends Canvas {
 	 * the text size
 	 */
 	protected int textsize = 12;
-	
+
 	/**
 	 * @return the textsize
 	 */
@@ -102,7 +108,8 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
-	 * @param textsize the textsize to set
+	 * @param textsize
+	 *            the textsize to set
 	 */
 	public void setTextsize(int textsize) {
 		this.textsize = textsize;
@@ -114,7 +121,8 @@ public abstract class MainBarButton extends Canvas {
 	protected Color textColor = null;
 
 	/**
-	 * @param textColor the textColor to set
+	 * @param textColor
+	 *            the textColor to set
 	 */
 	public void setTextColor(Color textColor) {
 		this.textColor = textColor;
@@ -128,15 +136,18 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
-	 * @param borderColor the borderColor to set
+	 * @param borderColor
+	 *            the borderColor to set
 	 */
 	public void setBorderColor(Color borderColor) {
 		this.borderColor = borderColor;
 	}
 
 	private Color borderColor = null;
-	
+
 	private Color activeBackground = null;
+	
+	private Color inactiveText = null;
 
 	private String text = ""; //$NON-NLS-1$
 
@@ -146,6 +157,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Gets the image
+	 * 
 	 * @return the image
 	 */
 	public Image getImage() {
@@ -154,7 +166,9 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Sets the Image
-	 * @param image the imgage to set
+	 * 
+	 * @param image
+	 *            the imgage to set
 	 */
 	public void setImage(Image image) {
 		this.image = image;
@@ -187,6 +201,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Gets the button text
+	 * 
 	 * @return the text
 	 */
 	public String getText() {
@@ -195,7 +210,9 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Sets the text for the button
-	 * @param text the text to set
+	 * 
+	 * @param text
+	 *            the text to set
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -214,50 +231,54 @@ public abstract class MainBarButton extends Canvas {
 	 * @param e
 	 */
 	protected void paintBackground(PaintEvent e) {
-
-		/*
 		Point size = this.getSize();
 		int height = size.y - 2;
 
 		int width = size.x;
-
-		int factor = 4;
-
-		// TOP
-		e.gc.fillGradientRectangle(0, 0, width, factor, true);
-
-		// BOTTOM
-		e.gc.fillGradientRectangle(0, height, width, -1 * (factor), true);
-		*/
+		
+		e.gc.setForeground(activeBackground);
+		e.gc.setBackground(inactiveBackground);
+		
+		e.gc.fillGradientRectangle(0, height, width, -1 * height, true);
+		
+		//e.gc.setBackground(activeBackground);
+		
 		// LEFT
-		//e.gc.fillGradientRectangle(0, 0, factor, height, false);
+		// e.gc.fillGradientRectangle(0, 0, factor, height, false);
 
 		// RIGTH
-		//e.gc.fillGradientRectangle(width, 0, -1 * (width / factor), height,
-		//		false);
+		// e.gc.fillGradientRectangle(width, 0, -1 * (width / factor), height,
+		// false);
 
 	}
 
 	/**
 	 * Main painting method
+	 * 
 	 * @param e
 	 */
 	void paintControl(PaintEvent e) {
-		this.paintBackground(e);
+		Color forecurrent = e.gc.getForeground();
+		Color backcurrent = e.gc.getBackground();
 		
-		Color current = e.gc.getForeground();
-		
+		e.gc.setForeground(getBorderColor());
+		if(this.getActive()) {
+			this.paintBackground(e);
+		}
+
 		e.gc.setForeground(getBorderColor());
 		
 		this.paintButton(e);
-		
-		e.gc.setForeground(current);
-		
+
+		e.gc.setForeground(forecurrent);
+		e.gc.setBackground(backcurrent);
+
 		this.paintText(e);
 	}
 
 	/**
 	 * paint the inner button
+	 * 
 	 * @param e
 	 */
 	protected void paintButton(PaintEvent e) {
@@ -266,6 +287,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Paint the text or image on the button
+	 * 
 	 * @param e
 	 */
 	protected void paintText(PaintEvent e) {
@@ -282,25 +304,34 @@ public abstract class MainBarButton extends Canvas {
 			if (this.getText() != null) {
 				textlen = this.getText().length();
 			}
-			
+
 			Color current = e.gc.getForeground();
-			
-			e.gc.setForeground(this.textColor);
-			
+
+			if(this.getActive() && this.isEnabled()) {
+				e.gc.setForeground(this.textColor);
+			} else {
+				e.gc.setForeground(this.inactiveText);
+			}
+
 			String font_name = e.gc.getFont().getFontData()[0].getName();
-			
-			Font font = new Font(this.getDisplay(), font_name, this.getTextsize(), e.gc.getFont().getFontData()[0].getStyle() );
-			
+
+			Font font = new Font(this.getDisplay(), font_name,
+					this.getTextsize(),
+					e.gc.getFont().getFontData()[0].getStyle());
+
 			e.gc.setFont(font);
-			
+
 			int texty = (height - e.gc.getFontMetrics().getHeight()) / 2;
+
 			int textx = (width - e.gc.getFontMetrics().getAverageCharWidth()
 					* textlen) / 2;
+
+			textx = this.changeTextPosition(textx);
 			
-			e.gc.drawText(this.getText(), textx, texty);
-			
+			e.gc.drawText(this.getText(), textx, texty, true);
+
 			font.dispose();
-			
+
 			e.gc.setForeground(current);
 		} else {
 			int imgx = (width - height) / 2;
@@ -312,7 +343,19 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
+	 * change the text position
+	 * 
+	 * @param positionX
+	 *            the position
+	 * @return the new position
+	 */
+	protected int changeTextPosition(int positionX) {
+		return positionX;
+	}
+
+	/**
 	 * Gets the region of the button
+	 * 
 	 * @return the button region
 	 */
 	protected abstract Region getCustomRegion();

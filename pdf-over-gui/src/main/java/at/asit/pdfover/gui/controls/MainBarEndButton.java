@@ -76,7 +76,7 @@ public class MainBarEndButton extends MainBarButton {
 
 		int height = size.y - 2;
 
-		int split = 10;
+		int split = SplitFactor;
 
 		int width = size.x;
 
@@ -86,4 +86,13 @@ public class MainBarEndButton extends MainBarButton {
 		return reg;
 	}
 
+	/**
+	 * change the text position 
+	 * @param positionX the position
+	 * @return the new position
+	 */
+	@Override
+	protected int changeTextPosition(int positionX) {
+		return positionX + (SplitFactor / 2);
+	}
 }

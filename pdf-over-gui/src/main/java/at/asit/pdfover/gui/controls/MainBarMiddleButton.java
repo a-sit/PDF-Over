@@ -52,7 +52,7 @@ public class MainBarMiddleButton extends MainBarButton {
 	
 		int height = size.y - 3;
 
-		int split = 10;
+		int split = SplitFactor;
 		int width = size.x - split;
 		
 		e.gc.drawLine(0, 0, width, 0);
@@ -64,6 +64,7 @@ public class MainBarMiddleButton extends MainBarButton {
 
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()
 	 */
@@ -73,7 +74,7 @@ public class MainBarMiddleButton extends MainBarButton {
 
 		int height = size.y - 2;
 
-		int split = 10;
+		int split = SplitFactor;
 		
 		int width = size.x - split;
 

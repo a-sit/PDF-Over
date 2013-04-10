@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -26,14 +25,17 @@ import org.apache.commons.io.FilenameUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +56,8 @@ public class OutputComposite extends StateComposite {
 
 	private File inputFile;
 
+	File outputFile = null;
+	
 	/**
 	 * Sets the input file
 	 * 
@@ -108,6 +112,15 @@ public class OutputComposite extends StateComposite {
 			outstream.close();
 
 			OutputComposite.this.savedFile = targetFile;
+			
+			this.outputFile = targetFile;
+			// Show open message ...
+			this.lnk_saved_file.setText(Messages.getString("output.link_open_message")); //$NON-NLS-1$
+			this.btn_save.setVisible(false);
+		} else {
+			// Show save message ...
+			this.lnk_saved_file.setText(Messages.getString("output.link_save_message")); //$NON-NLS-1$
+			this.btn_save.setVisible(true);
 		}
 	}
 
@@ -144,37 +157,14 @@ public class OutputComposite extends StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			try {
-				DocumentSource source = OutputComposite.this
-						.getSignedDocument();
 
-				if (source != null) {
-					File open = OutputComposite.this.savedFile;
-					if (open == null) {
-						// Save as temp file ...
-						java.util.Date date = new java.util.Date();
-						String fileName = String.format(
-								"%d_tmp_signed.pdf", date.getTime()); //$NON-NLS-1$
-						open = new File(OutputComposite.this.tempDirectory
-								+ "/" + fileName); //$NON-NLS-1$
-						FileOutputStream outstream = new FileOutputStream(open);
-						outstream.write(source.getByteArray(), 0,
-								source.getByteArray().length);
-						outstream.close();
-					}
+				if (OutputComposite.this.outputFile != null) {
 
-					if (open.exists()) {
+					if (OutputComposite.this.outputFile.exists()) {
 						// Desktop supported check allready done in constructor
-						Desktop.getDesktop().open(open);
+						Desktop.getDesktop().open(OutputComposite.this.outputFile);
 						return;
 					}
-				} else {
-					log.error("OutputComposite:OpenSelectionListener:widgetSelected -> source is null!!"); //$NON-NLS-1$
-					ErrorDialog dialog = new ErrorDialog(
-							getShell(),
-							SWT.NONE,
-							Messages.getString("error.FailedToGetSignedDocument"),//$NON-NLS-1$
-							"", false); //$NON-NLS-1$
-					dialog.open();
 				}
 			} catch (Exception ex) {
 				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
@@ -201,6 +191,40 @@ public class OutputComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 
+		Label lbl_success_message = new Label(this, SWT.NATIVE | SWT.RESIZE);
+		FormData fd_lbl_success_message = new FormData();
+		fd_lbl_success_message.top = new FormAttachment(40, 0);
+		fd_lbl_success_message.left = new FormAttachment(0);
+		fd_lbl_success_message.right = new FormAttachment(100);
+		lbl_success_message.setLayoutData(fd_lbl_success_message);
+		lbl_success_message.setAlignment(SWT.CENTER);
+		lbl_success_message.setText(Messages.getString("output.success_message")); //$NON-NLS-1$
+		
+		FontData[] fD1 = lbl_success_message.getFont().getFontData();
+		fD1[0].setHeight(12);
+		lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
+		
+		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);		
+		this.lnk_saved_file.setText(Messages.getString("output.link_save_message")); //$NON-NLS-1$
+		FormData fd_lnk_saved_file = new FormData();
+		fd_lnk_saved_file.top = new FormAttachment(lbl_success_message, 10);
+		fd_lnk_saved_file.left = new FormAttachment(lbl_success_message, 0, SWT.CENTER);
+		//fd_lnk_saved_file.right = new FormAttachment(100);
+		this.lnk_saved_file.setLayoutData(fd_lnk_saved_file);
+		
+		this.lnk_saved_file.addSelectionListener(new OpenSelectionListener());
+		
+		this.btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
+		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		
+		FormData fd_btn_save = new FormData();
+		fd_btn_save.top = new FormAttachment(this.lnk_saved_file, 10);
+		fd_btn_save.left = new FormAttachment(this.lnk_saved_file, 0, SWT.CENTER);
+		this.btn_save.setLayoutData(fd_btn_save);
+		
+		this.btn_save.setVisible(false);
+		this.btn_save.addSelectionListener(new SaveSelectionListener());
+		/*
 		Button btn_open = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
 		// Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -226,7 +250,7 @@ public class OutputComposite extends StateComposite {
 		// fd_btn_save.bottom = new FormAttachment(55, 0);
 		btn_save.setLayoutData(fd_btn_save);
 		btn_save.addSelectionListener(new SaveSelectionListener());
-
+		 */
 		//this.pack();
 	}
 
@@ -264,6 +288,10 @@ public class OutputComposite extends StateComposite {
 	}
 
 	private boolean save_showed = false;
+
+	private Link lnk_saved_file;
+
+	private Button btn_save;
 
 	/*
 	 * (non-Javadoc)

@@ -298,6 +298,9 @@ public class MobileBKUState extends State {
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);
 		behavior.setActive(Buttons.SIGN, true);
+		behavior.setEnabled(Buttons.OPEN, true);
+		behavior.setEnabled(Buttons.POSITION, true);
+		//behavior.setEnabled(Buttons.SIGN, true);
 	}
 
 	@Override

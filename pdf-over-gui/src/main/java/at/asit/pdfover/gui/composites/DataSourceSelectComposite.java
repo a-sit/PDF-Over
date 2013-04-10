@@ -143,7 +143,7 @@ public class DataSourceSelectComposite extends StateComposite {
 				Rectangle clientArea = DataSourceSelectComposite.this
 						.drop_area.getClientArea();
 				
-				e.gc.setForeground(new Color(getDisplay(), 0x76, 0xC4, 0xC8));
+				e.gc.setForeground(new Color(getDisplay(), 0x7E, 0x9F, 0xA5));
 				e.gc.setLineStyle(SWT.LINE_DASH);
 				e.gc.drawRoundRectangle(clientArea.x, 
 						clientArea.y, clientArea.width - 2, clientArea.height - 2, 

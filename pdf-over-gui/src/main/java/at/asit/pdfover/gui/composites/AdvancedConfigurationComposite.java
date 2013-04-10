@@ -240,6 +240,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				// Nothing to do
 			}
 		});
+		
+		tabFolder.setSelection(advancedTabItem);
 	}
 
 	void performOutputFolderChanged(String foldername) {

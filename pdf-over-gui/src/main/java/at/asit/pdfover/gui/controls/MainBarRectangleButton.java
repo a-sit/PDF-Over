@@ -44,26 +44,89 @@ public class MainBarRectangleButton extends MainBarButton {
 	private static final Logger log = LoggerFactory
 			.getLogger(MainBarRectangleButton.class);
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt.events.PaintEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt
+	 * .events.PaintEvent)
 	 */
 	@Override
 	protected void paintButton(PaintEvent e) {
-		
+
 		Point size = this.getSize();
 
 		int height = size.y - 3;
 
 		int width = size.x;
-		
+
 		e.gc.drawLine(0, 0, width, 0);
 		e.gc.drawLine(width, 0, width, height);
 		e.gc.drawLine(width, height, 0, height);
 		e.gc.drawLine(0, height, 0, 0);
-		
+
 	}
 
-	/* (non-Javadoc)
+	@Override
+	protected void paintBackground(PaintEvent e) {
+		Point size = this.getSize();
+		int height = size.y - 2;
+
+		int width = size.x;
+
+		int factor = GradientFactor;
+
+		Region left_reg = new Region();
+		left_reg.add(new int[] { 0, 0, factor, factor, factor, height-factor, 0, height, 0, 0 });
+		
+		Region right_reg = new Region();
+		right_reg.add(new int[] { width, 0, 
+				width - factor, factor, 
+				width - factor, height-factor, width, height, width, 0 });
+		
+		Region top_reg = new Region();
+		top_reg.add(new int[] { 
+				0, 0, 
+				factor, factor, 
+				width - factor, factor, 
+				width, 0, 
+				0, 0 });
+		
+		Region bottom_reg = new Region();
+		bottom_reg.add(new int[] { 
+				0, height, 
+				factor, height-factor, 
+				width - factor, height-factor, 
+				width, height, 0, height });
+		
+		e.gc.setClipping(top_reg);
+		
+		//TOP 
+		 e.gc.fillGradientRectangle(0, 0, width, factor, true);
+		 
+		 e.gc.setClipping(bottom_reg);
+		 
+		 //BOTTOM 
+		 e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
+		  true);
+		
+		 e.gc.setClipping(left_reg);
+		 
+		// LEFT
+		e.gc.fillGradientRectangle(0, 0, factor, height, false);
+
+		
+		e.gc.setClipping(right_reg);
+		// RIGTH
+		e.gc.fillGradientRectangle(width, 0, -1 * factor, height,
+				false);
+		
+		e.gc.setClipping((Region)null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()
 	 */
 	@Override
