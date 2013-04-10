@@ -51,6 +51,38 @@ public class PDFViewerComposite extends Composite {
 	protected int page;
 
 	/**
+	 * AWT Canvas displaying the document
+	 */
+	private Canvas canvas = null;
+
+	/**
+	 * Dimension of each page at default zoom
+	 */
+	Dimension[] base_dimensions;
+
+	/**
+	 * Set the document to be displayed
+	 * @param document PDF document to be displayed
+	 * @throws PDFException Error parsing PDF document
+	 * @throws PDFSecurityException Error decrypting PDF document (not supported)
+	 * @throws IOException I/O Error
+	 */
+	public void setDocument(File document) throws PDFException, PDFSecurityException, IOException {
+		this.document = new Document();
+		this.document.setFile(document.getPath());
+		int pages = this.document.getNumberOfPages();
+
+		this.base_dimensions = new Dimension[pages];
+		for (int page = 0; page < pages; ++page)
+			this.base_dimensions[page] = this.document.getPageDimension(page, 0f, 1.0f).toDimension();
+
+		this.page = pages - 1;
+
+		if (this.canvas != null)
+			this.canvas.repaint();
+	}
+
+	/**
 	 * Get the currently selected page in the document
 	 * @return current page
 	 */
@@ -68,12 +100,9 @@ public class PDFViewerComposite extends Composite {
 	}
 
 	/**
-	 * AWT Canvas displaying the document
-	 */
-	private Canvas canvas;
-
-	/**
 	 * Create the PDF Viewer composite.
+	 * Displays a PDF document.
+	 * Starts on the last page.
 	 * @param parent parent Composite
 	 * @param style 
 	 * @param document
@@ -83,15 +112,8 @@ public class PDFViewerComposite extends Composite {
 	 */
 	public PDFViewerComposite(Composite parent, int style, File document) throws PDFException, PDFSecurityException, IOException {
 		super(parent, style);
-		this.document = new Document();
-		this.document.setFile(document.getPath());
-		int pages = this.document.getNumberOfPages();
 
-		final Dimension[] base_dimensions = new Dimension[pages];
-		for (int page = 0; page < pages; ++page)
-			base_dimensions[page] = this.document.getPageDimension(page, 0f, 1.0f).toDimension();
-
-		this.page = pages - 1;
+		setDocument(document);
 
 		Frame frame = SWT_AWT.new_Frame(this);
 		this.canvas = new Canvas() {
@@ -104,13 +126,13 @@ public class PDFViewerComposite extends Composite {
 				int page = getPage();
 				// Make page always fit to window
 				Rectangle2D clip = g.getClip().getBounds2D();
-				double h_zoom = clip.getWidth() / base_dimensions[page].width;
-				double v_zoom = clip.getHeight() / base_dimensions[page].height;
+				double h_zoom = clip.getWidth() / PDFViewerComposite.this.base_dimensions[page].width;
+				double v_zoom = clip.getHeight() / PDFViewerComposite.this.base_dimensions[page].height;
 				float zoom = (float) (h_zoom < v_zoom ? h_zoom : v_zoom);
 				if (v_zoom < h_zoom)
 				{
 					// Page is narrower than window, center it
-					g.translate((int) ((clip.getWidth() - (base_dimensions[page].width * zoom)) / 2), 0);
+					g.translate((int) ((clip.getWidth() - (PDFViewerComposite.this.base_dimensions[page].width * zoom)) / 2), 0);
 				}
 
 				PDFViewerComposite.this.document.paintPage(page, g, GraphicsRenderingHints.SCREEN, Page.BOUNDARY_CROPBOX, 0f, zoom);
