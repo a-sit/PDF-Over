@@ -16,31 +16,29 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.DragDetectListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.icepdf.core.exceptions.PDFException;
-import org.icepdf.core.exceptions.PDFSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
+
+import com.sun.pdfview.PDFFile;
 
 /**
  * 
@@ -53,55 +51,40 @@ public class PositioningComposite extends StateComposite {
 	static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
 
-	PDFViewerComposite viewer = null;
+	private SignaturePanel viewer = null;
 
-	Canvas signature = null;
+	private PDFFile pdf = null;
+
+	private Frame frame = null;
+
+	int currentPage;
+
+	int numPages;
 
 	private SignaturePosition position = null;
-
-	boolean doDrag = false;
-
-	Point origMousePos = null;
-	Rectangle origSigPos = null;
-
-	/**
-	 * Gets the position of the signature
-	 * @return the SignaturePosition
-	 */
-	public SignaturePosition getPosition() {
-		return this.position;
-	}
-
-	/**
-	 * Sets the position
-	 * @param position
-	 */
-	public void setPosition(SignaturePosition position) {
-		this.position = position;
-	}
 
 	/**
 	 * Set the PDF Document to display
 	 * @param document document to display
-	 * @throws PDFException Error parsing PDF document
-	 * @throws PDFSecurityException Error decrypting PDF document (not supported)
 	 * @throws IOException I/O Error
 	 */
-	public void displayDocument(File document) throws PDFException, PDFSecurityException, IOException {
+	public void displayDocument(File document) throws IOException {
+		RandomAccessFile rafile = new RandomAccessFile(document, "r"); //$NON-NLS-1$
+		FileChannel chan = rafile.getChannel();
+		ByteBuffer buf = chan.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
+		chan.close();
+		rafile.close();
+
+		this.pdf = new PDFFile(buf);
 		if (this.viewer == null)
 		{
-			this.viewer = new PDFViewerComposite(this, SWT.EMBEDDED | SWT.NO_BACKGROUND, document);
-			resizeViewer();
+			this.viewer = new SignaturePanel(this.pdf);
+			this.frame.add(this.viewer);
 		}
 		else
-			this.viewer.setDocument(document);
-	}
-
-	void resizeViewer()
-	{
-		Rectangle clientArea = this.getClientArea();
-		log.debug("Resizing to " + clientArea.width + "x" + clientArea.height);
-		this.viewer.setBounds(0, 0, clientArea.width, clientArea.height);
+			this.viewer.setDocument(this.pdf);
+		this.numPages = this.pdf.getNumPages();
+		showPage(this.numPages);
 	}
 
 	/**
@@ -111,62 +94,73 @@ public class PositioningComposite extends StateComposite {
 	 * @param state 
 	 */
 	public PositioningComposite(Composite parent, int style, State state) {
-		super(parent, style, state);
-		this.setLayout(null);
+		super(parent, style | SWT.EMBEDDED, state);
+		//this.setLayout(null);
+		this.frame = SWT_AWT.new_Frame(this);
+		this.addKeyListener(this.keyListener);
+		this.frame.addMouseWheelListener(this.mouseListener);
+	}
 
-		this.addListener(SWT.Resize, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				if (PositioningComposite.this.viewer != null)
-					resizeViewer();
-			}
-		});
+	private KeyListener keyListener = new KeyAdapter() {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int newPage = PositioningComposite.this.currentPage;
 
-		this.signature = new Canvas(this, SWT.NO_BACKGROUND);
-		this.signature.setBounds(200, 200, 150, 40);
-		this.signature.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-//				PositioningComposite.this.viewer.redraw();
-				Rectangle r = ((Canvas) e.widget).getBounds();
-				e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_BLUE));
-				e.gc.drawFocus(5, 5, r.width - 10, r.height - 10);
-				e.gc.drawText("Position Signature", 10, 10);
+			switch (e.keyCode)
+			{
+				case SWT.PAGE_DOWN:
+					if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
+						++newPage;
+					break;
+
+				case SWT.PAGE_UP:
+					if (PositioningComposite.this.currentPage > 1)
+						--newPage;
+					break;
+
+				case SWT.END:
+					newPage = PositioningComposite.this.numPages;
+					break;
+
+				case SWT.HOME:
+					newPage = 1;
+					break;
+
+				case SWT.CR:
+				case SWT.KEYPAD_CR:
+					PositioningComposite.this.setFinalPosition();
+					break;
 			}
-		});
-		this.signature.addDragDetectListener(new DragDetectListener() {
-			@Override
-			public void dragDetected(DragDetectEvent e) {
-				PositioningComposite.this.doDrag = true;
-				origMousePos = Display.getCurrent().getCursorLocation();
-				origSigPos = ((Canvas) e.widget).getBounds();
+
+			if (newPage != PositioningComposite.this.currentPage)
+				showPage(newPage);
+		}
+	};
+
+	private MouseWheelListener mouseListener = new MouseWheelListener() {
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			int newPage = PositioningComposite.this.currentPage;
+
+			if (e.getUnitsToScroll() < 0)
+			{
+				if (PositioningComposite.this.currentPage > 1)
+					newPage--;
 			}
-		});
-		this.signature.addMouseMoveListener(new MouseMoveListener() {
-			@Override
-			public void mouseMove(MouseEvent e) {
-				if (PositioningComposite.this.doDrag)
-				{
-					Point newMousePos = Display.getCurrent().getCursorLocation();
-					int x = origSigPos.x + (newMousePos.x - origMousePos.x);
-					int y = origSigPos.y + (newMousePos.y - origMousePos.y);
-					PositioningComposite.this.signature.setBounds(x, y, origSigPos.width, origSigPos.height);
-				}
+			else if (e.getUnitsToScroll() > 0)
+			{
+				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
+					newPage++;
 			}
-		});
-		this.signature.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				if (PositioningComposite.this.doDrag)
-				{
-					PositioningComposite.this.doDrag = false;
-					return;
-				}
-				// TODO: FIX to get real position
-				PositioningComposite.this.setPosition(new SignaturePosition()); // Setting auto position for testing
-				PositioningComposite.this.state.updateStateMachine();
-			}
-		});
+
+			if (newPage != PositioningComposite.this.currentPage)
+				showPage(newPage);
+		}		
+	};
+
+	void showPage(int page) {
+		this.currentPage = page;
+		this.viewer.showPage(page);
 	}
 
 	@Override
@@ -180,5 +174,23 @@ public class PositioningComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		this.layout(true, true);
+	}
+
+	/**
+	 * Set the signature position and continue to the next state
+	 * @param position the signature position
+	 */
+	void setFinalPosition() {
+		// TODO: check if this is the real position
+		this.position = new SignaturePosition(this.viewer.getSignaturePositionX(), this.viewer.getSignaturePositionY());
+		PositioningComposite.this.state.updateStateMachine();
+	}
+
+	/**
+	 * Get the signature position
+	 * @return the signature position
+	 */
+	public SignaturePosition getPosition() {
+		return this.position;
 	}
 }

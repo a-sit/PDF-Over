@@ -19,8 +19,6 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
-import org.icepdf.core.exceptions.PDFException;
-import org.icepdf.core.exceptions.PDFSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +27,10 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.PositioningComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.Emblem;
+import at.asit.pdfover.signator.FileNameEmblem;
+import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signator.SignatureParameter;
 
 /**
  * Decides where to position the signature block
@@ -50,7 +52,7 @@ public class PositioningState extends State {
 
 	private PositioningComposite positionComposite = null;
 
-	private PositioningComposite getPositioningComposite() throws PDFException, PDFSecurityException, IOException {
+	private PositioningComposite getPositioningComposite() throws IOException {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
@@ -75,14 +77,9 @@ public class PositioningState extends State {
 			PositioningComposite position = null;
 			try {
 				position = this.getPositioningComposite();
-			} catch (PDFException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (PDFSecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				// FIXME
 				e.printStackTrace();
 			}
 			

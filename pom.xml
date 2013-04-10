@@ -157,11 +157,6 @@
 				<version>2.4</version>
 			</dependency>
 			<dependency>
-				<groupId>org.icepdf</groupId>
-				<artifactId>icepdf-core</artifactId>
-				<version>4.3.3</version>
-			</dependency>
-			<dependency>
 				<groupId>com.sun</groupId>
 				<artifactId>pdfview</artifactId>
 				<version>0.9.2-Borisvl</version>
@@ -179,11 +174,6 @@
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Repository for Maven 2</name>
 			<url>http://download.java.net/maven/2/</url>
-		</repository>
-		<repository>
-			<id>icepdf</id>
-			<name>ICEpdf repository</name>
-			<url>http://anonsvn.icesoft.org/repo/maven2/releases/</url>
 		</repository>
 		<repository>
 			<id>local-repo</id>

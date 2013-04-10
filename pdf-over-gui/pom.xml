@@ -45,8 +45,8 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.icepdf</groupId>
-			<artifactId>icepdf-core</artifactId>
+			<groupId>com.sun</groupId>
+			<artifactId>pdfview</artifactId>
 		</dependency>
 	</dependencies>
 
