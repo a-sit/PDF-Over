@@ -92,6 +92,8 @@ public class PositioningComposite extends StateComposite {
 		this.numPages = this.pdf.getNumPages();
 		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 		showPage(this.numPages);
+		this.setFocus();
+		this.frame.requestFocus();
 	}
 
 	/**
@@ -122,6 +124,8 @@ public class PositioningComposite extends StateComposite {
 		this.addKeyListener(this.keyListener);
 		this.frame.addMouseWheelListener(this.mouseListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
+		this.setFocus();
+		this.frame.requestFocus();
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
