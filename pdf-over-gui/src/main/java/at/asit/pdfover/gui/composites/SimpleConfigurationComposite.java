@@ -1121,8 +1121,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.btnSignatureNoteDefault.setText(Messages
 				.getString("simple_config.Note_SetDefault")); //$NON-NLS-1$
 
-		this.grpSignatureLang.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
-		this.cmbSignatureLang.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
+		this.grpSignatureLang.setText(Messages.getString("simple_config.SigBlockLang_Title")); //$NON-NLS-1$
+		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
 
 		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
