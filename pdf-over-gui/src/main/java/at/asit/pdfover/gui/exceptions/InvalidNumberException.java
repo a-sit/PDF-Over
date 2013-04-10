@@ -20,7 +20,7 @@ package at.asit.pdfover.gui.exceptions;
 /**
  * 
  */
-public class InvalidNumberException extends Exception {
+public class InvalidNumberException extends PDFOverGUIException {
 	/**
 	 * 
 	 */

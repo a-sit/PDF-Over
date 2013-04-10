@@ -24,10 +24,7 @@ import at.asit.pdfover.gui.Messages;
 /**
  * 
  */
-/**
- * 
- */
-public class OutputfolderNotADirectoryException extends Exception {
+public class OutputfolderNotADirectoryException extends PDFOverGUIException {
 	/**
 	 * 
 	 */

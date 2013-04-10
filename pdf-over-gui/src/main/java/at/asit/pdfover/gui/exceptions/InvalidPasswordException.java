@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 /**
  * Base Class for Invalid password exceptions
  */
-public abstract class InvalidPasswordException extends Exception {
+public abstract class InvalidPasswordException extends PDFOverGUIException {
 
 	/**
 	 * 

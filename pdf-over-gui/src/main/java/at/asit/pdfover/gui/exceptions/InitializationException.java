@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 /**
  * 
  */
-public class InitializationException extends Exception {
+public class InitializationException extends PDFOverGUIException {
 	/**
 	 * 
 	 */

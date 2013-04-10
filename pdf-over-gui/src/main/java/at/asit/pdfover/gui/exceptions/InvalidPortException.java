@@ -20,7 +20,7 @@ import at.asit.pdfover.gui.Messages;
 /**
  * 
  */
-public class InvalidPortException extends Exception {
+public class InvalidPortException extends PDFOverGUIException {
 	/**
 	 * 
 	 */

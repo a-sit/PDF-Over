@@ -15,34 +15,44 @@
  */
 package at.asit.pdfover.gui.exceptions;
 
-// Imports
-import java.io.File;
-
-import at.asit.pdfover.gui.Messages;
-
 /**
- * 
+ * Base class for GUI Exceptions
  */
-public class InvalidEmblemFile extends PDFOverGUIException {
+public class PDFOverGUIException extends Exception {
 	/**
-	 * 
+	 * Serial Version UID
 	 */
-	private static final long serialVersionUID = -5826910929131650685L;
+	private static final long serialVersionUID = -3942861617701033882L;
 
 	/**
 	 * Constructor
-	 * @param file
 	 */
-	public InvalidEmblemFile(final File file) {
-		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile")); //$NON-NLS-1$
+	public PDFOverGUIException() {
 	}
-	
+
 	/**
 	 * Constructor
-	 * @param file
-	 * @param reason 
+	 * @param msg Exception message
 	 */
-	public InvalidEmblemFile(final File file, Throwable reason) {
-		super(file.getAbsolutePath() + Messages.getString("exception.InvalidEmblemFile"), reason); //$NON-NLS-1$
+	public PDFOverGUIException(String msg) {
+		super(msg);
 	}
+
+	/**
+	 * Constructor
+	 * @param cause Exception causing this one
+	 */
+	public PDFOverGUIException(Throwable cause) {
+		super(cause);
+	}
+
+	/**
+	 * Constructor
+	 * @param msg Exception message
+	 * @param cause Exception causing this one
+	 */
+	public PDFOverGUIException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }

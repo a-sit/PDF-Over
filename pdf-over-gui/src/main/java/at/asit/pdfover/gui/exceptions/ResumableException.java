@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 /**
  * 
  */
-public class ResumableException extends Exception {
+public class ResumableException extends PDFOverGUIException {
 
 	/**
 	 * 
