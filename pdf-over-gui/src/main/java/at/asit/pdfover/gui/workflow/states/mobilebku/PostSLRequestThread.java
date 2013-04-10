@@ -34,7 +34,6 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.DocumentSource;
@@ -84,7 +83,7 @@ public class PostSLRequestThread implements Runnable {
 
 	private MobileBKUState state;
 
-	private String mobileBKUUrl = Constants.DEFAULT_MOBILE_BKU_URL;
+	private String mobileBKUUrl;
 
 	/**
 	 * Constructor
@@ -185,7 +184,7 @@ public class PostSLRequestThread implements Runnable {
 
 			// Now we have received some data lets check it:
 
-			log.debug("Repsonse from A-Trust: " + responseData); //$NON-NLS-1$
+			log.debug("Response from A-Trust: " + responseData); //$NON-NLS-1$
 
 			// Extract infos:
 
