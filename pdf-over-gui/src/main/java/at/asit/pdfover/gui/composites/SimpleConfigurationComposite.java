@@ -115,12 +115,12 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.lblMobileNumber.setFont(new Font(Display.getCurrent(),
 				fD_lblMobileNumber[0]));
 
-		Composite composite_2 = new Composite(this.grpHandySignatur, SWT.NONE);
-		composite_2.setLayout(new FormLayout());
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+		Composite compMobileNumerContainer = new Composite(this.grpHandySignatur, SWT.NONE);
+		compMobileNumerContainer.setLayout(new FormLayout());
+		compMobileNumerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
 
-		this.txtMobileNumber = new Text(composite_2, SWT.BORDER | SWT.RESIZE);
+		this.txtMobileNumber = new Text(compMobileNumerContainer, SWT.BORDER | SWT.RESIZE);
 		this.fd_txtMobileNumber = new FormData();
 		this.fd_txtMobileNumber.top = new FormAttachment(0);
 		this.fd_txtMobileNumber.left = new FormAttachment(0, 5);
@@ -130,7 +130,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtMobileNumber.setToolTipText(Messages
 				.getString("simple_config.ExampleNumber_ToolTip")); //$NON-NLS-1$
 
-		this.txtMobileNumberErrorMarker = new ErrorMarker(composite_2,
+		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer,
 				SWT.NATIVE, null, "", this.txtMobileNumber); //$NON-NLS-1$
 		this.txtMobileNumberErrorMarker.setVisible(false);
 		this.fd_txtMobileNumberErrorMarker = new FormData();
@@ -387,11 +387,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.lblNewLabel.setFont(new Font(Display.getCurrent(),
 				fD_lblNewLabel[0]));
 
-		Composite composite = new Composite(this.grpProxy, SWT.NONE);
-		composite.setLayout(new FormLayout());
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyHostContainer.setLayout(new FormLayout());
+		compProxyHostContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
-		this.txtProxyHost = new Text(composite, SWT.BORDER);
+		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
 		FormData fd_txtProxyHost = new FormData();
 		fd_txtProxyHost.right = new FormAttachment(100, -42);
 		fd_txtProxyHost.bottom = new FormAttachment(100);
@@ -403,7 +403,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtProxyHost.setFont(new Font(Display.getCurrent(),
 				fD_txtProxyHost[0]));
 
-		this.proxyHostErrorMarker = new ErrorMarker(composite, SWT.NONE, null,
+		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, null,
 				"", this.txtProxyHost); //$NON-NLS-1$
 
 		FormData fd_marker = new FormData();
@@ -437,23 +437,23 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.lblNewLabel_1 = new Label(this.grpProxy, SWT.NONE);
-		this.lblNewLabel_1.setBounds(0, 0, 57, 15);
-		this.lblNewLabel_1.setText(Messages
+		this.lblProxyPort = new Label(this.grpProxy, SWT.NONE);
+		this.lblProxyPort.setBounds(0, 0, 57, 15);
+		this.lblProxyPort.setText(Messages
 				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 
-		FontData[] fD_lblNewLabel_1 = this.lblNewLabel_1.getFont()
+		FontData[] fD_lblProxyPort = this.lblProxyPort.getFont()
 				.getFontData();
-		fD_lblNewLabel_1[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblNewLabel_1.setFont(new Font(Display.getCurrent(),
-				fD_lblNewLabel_1[0]));
+		fD_lblProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblProxyPort.setFont(new Font(Display.getCurrent(),
+				fD_lblProxyPort[0]));
 
-		Composite composite_1 = new Composite(this.grpProxy, SWT.NONE);
-		composite_1.setLayout(new FormLayout());
-		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+		Composite compProxyPortContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyPortContainer.setLayout(new FormLayout());
+		compProxyPortContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
 
-		this.txtProxyPort = new Text(composite_1, SWT.BORDER);
+		this.txtProxyPort = new Text(compProxyPortContainer, SWT.BORDER);
 		this.fd_txtProxyPort = new FormData();
 		this.fd_txtProxyPort.top = new FormAttachment(0, 0);
 		this.fd_txtProxyPort.left = new FormAttachment(0, 5);
@@ -478,7 +478,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtProxyPortErrorMarker = new ErrorMarker(composite_1, SWT.NATIVE,
+		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NATIVE,
 				null, "", this.txtProxyPort); //$NON-NLS-1$
 		this.fd_txtProxyPortErrorMarker = new FormData();
 		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
@@ -529,13 +529,22 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.lblSignatureNote.setFont(new Font(Display.getCurrent(),
 				fD_lblSignatureNote[0]));
 
-		this.txtSignatureNote = new Text(this.grpSignatureNote, SWT.BORDER);
-		this.txtSignatureNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, false, 1, 1));
+		Composite compSignatureNoteContainer = new Composite(this.grpSignatureNote, SWT.NONE);
+		compSignatureNoteContainer.setLayout(new FormLayout());
+		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+
+		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
+		FormData fd_txtSignatureNote = new FormData();
+		fd_txtSignatureNote.top = new FormAttachment(0, 0);
+		fd_txtSignatureNote.left = new FormAttachment(0, 5);
+		fd_txtSignatureNote.right = new FormAttachment(100, -42);
+		fd_txtSignatureNote.bottom = new FormAttachment(100);
+		this.txtSignatureNote.setLayoutData(fd_txtSignatureNote);
 		this.txtSignatureNote.setToolTipText(Messages
 				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
 
-		FontData[] fD_txtSignatureNote = this.txtProxyHost.getFont()
+		FontData[] fD_txtSignatureNote = this.txtSignatureNote.getFont()
 				.getFontData();
 		fD_txtSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.txtSignatureNote.setFont(new Font(Display.getCurrent(),
@@ -928,7 +937,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	private Button btnBrowseEmblem;
 	private Group grpProxy;
 	private Label lblNewLabel;
-	private Label lblNewLabel_1;
+	private Label lblProxyPort;
 	private Label lblSignatureNote;
 	private Group grpSignatureNote;
 
@@ -1042,7 +1051,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.lblNewLabel.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
 		this.txtProxyHost.setToolTipText(Messages
 				.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
-		this.lblNewLabel_1.setText(Messages
+		this.lblProxyPort.setText(Messages
 				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 		this.txtProxyPort.setToolTipText(Messages
 				.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
