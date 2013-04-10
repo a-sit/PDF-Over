@@ -54,23 +54,23 @@ public class Messages {
 		currentLocale = locale;
 	}
 	
-	private static ResourceBundle getBundle() {
-		if(!bundles.containsKey(currentLocale)) {
+	private static ResourceBundle getBundle(Locale locale) {
+		if(!bundles.containsKey(locale)) {
 			ResourceBundle tmp = null;
 			try {
-				tmp = ResourceBundle.getBundle(BUNDLE_NAME, currentLocale);
+				tmp = ResourceBundle.getBundle(BUNDLE_NAME, locale);
 			} catch(Exception e) {
-				log.error("NO RESOURCE BUNDLE FOR " + currentLocale.toString(), e); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR " + locale.toString(), e); //$NON-NLS-1$
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			if(tmp == null) {
-				log.error("NO RESOURCE BUNDLE FOR " + currentLocale.toString()); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR " + locale.toString()); //$NON-NLS-1$
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
-			bundles.put(currentLocale, tmp);
+			bundles.put(locale, tmp);
 			return tmp;
 		}
-		return bundles.get(currentLocale);
+		return bundles.get(locale);
 	}
 	
 	/**
@@ -80,7 +80,22 @@ public class Messages {
 	 */
 	public static String getString(String key) {
 		try {
-			return getBundle().getString(key);
+			return getBundle(currentLocale).getString(key);
+			//return RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
+	
+	/**
+	 * Gets the localized message
+	 * @param key the key
+	 * @param locale the locale to use
+	 * @return the localized message
+	 */
+	public static String getString(String key, Locale locale) {
+		try {
+			return getBundle(locale).getString(key);
 			//return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';

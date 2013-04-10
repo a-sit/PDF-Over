@@ -101,6 +101,8 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter.setProperty("SIG_NOTE", configuration.getSigantureNote()); //$NON-NLS-1$
 				}
 				
+				this.state.signatureParameter.setSignatureLanguage(configuration.getSignLocale().getLanguage());
+				
 				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
 				
 			} catch (Exception e) {

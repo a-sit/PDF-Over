@@ -67,6 +67,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private String defaultPassword = STRING_EMPTY;
 
 	private Locale locale = Locale.getDefault();
+	private Locale signLocale = Locale.getDefault();
 	
 	private String emblem = STRING_EMPTY;
 
@@ -371,6 +372,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			props.setProperty(LOCALE_CONFIG, LocaleSerializer.getParsableString(configLocale));
 		}
 		
+		Locale signLocale = this.getSignLocale();
+		if(signLocale != null) {
+			props.setProperty(SIGN_LOCALE_CONFIG, LocaleSerializer.getParsableString(signLocale));
+		}
+		
 		SignaturePosition pos = this.getDefaultSignaturePosition();
 
 		if (pos == null) {
@@ -430,6 +436,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		Locale targetLocale = LocaleSerializer.parseFromString(localString);
 		if(targetLocale != null) {
 			this.setLocale(targetLocale);
+		}
+		
+		String signlocalString = config.getProperty(ConfigManipulator.SIGN_LOCALE_CONFIG);
+		
+		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
+		if(signtargetLocale != null) {
+			this.setSignLocale(signtargetLocale);
 		}
  		
 		String bku = config
@@ -586,6 +599,26 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			Locale.setDefault(locale);
 			Messages.setLocale(locale);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setSignLocale(java.util.Locale)
+	 */
+	@Override
+	public void setSignLocale(Locale locale) {
+		if(locale == null) {
+			this.signLocale = Locale.getDefault();
+		} else {
+			this.signLocale = locale;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignLocale()
+	 */
+	@Override
+	public Locale getSignLocale() {
+		return this.signLocale;
 	}
 
 }

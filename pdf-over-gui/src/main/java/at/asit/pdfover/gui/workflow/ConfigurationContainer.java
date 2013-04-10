@@ -155,4 +155,16 @@ public interface ConfigurationContainer {
 	 * @return the locale
 	 */
 	public Locale getLocale();
+	
+	/**
+	 * Sets the locale
+	 * @param locale the locale
+	 */
+	public void setSignLocale(Locale locale);
+	
+	/**
+	 * Gets the locale
+	 * @return the locale
+	 */
+	public Locale getSignLocale();
 }

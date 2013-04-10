@@ -467,7 +467,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				SimpleConfigurationComposite.this.txtSignatureNote.setText(
-						Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
+						Messages.getString("simple_config.Note_Default", //$NON-NLS-1$
+						SimpleConfigurationComposite.this.configurationContainer.getSignLocale())); 
 			}
 		});
 

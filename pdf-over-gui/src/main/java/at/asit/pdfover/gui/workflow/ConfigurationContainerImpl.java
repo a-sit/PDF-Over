@@ -75,6 +75,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected Locale locale = null;
 	
 	/**
+	 * Holds the locale
+	 */
+	protected Locale signLocale = null;
+	
+	/**
 	 * Holds the output folder
 	 */
 	protected String folder = null;
@@ -302,6 +307,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public Locale getLocale() {
 		return this.locale;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setSignLocale(java.util.Locale)
+	 */
+	@Override
+	public void setSignLocale(Locale locale) {
+		this.signLocale = locale;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignLocale()
+	 */
+	@Override
+	public Locale getSignLocale() {
+		return this.signLocale;
 	}
 	
 }

@@ -292,6 +292,8 @@ public class ConfigurationComposite extends StateComposite {
 			
 			this.configurationContainer.setLocale(this.configProvider.getConfigLocale());
 			
+			this.configurationContainer.setSignLocale(this.configProvider.getSignLocale());
+			
 			this.configurationContainer.setBKUSelection(this.configProvider
 					.getDefaultBKU());
 			try {
@@ -403,6 +405,7 @@ public class ConfigurationComposite extends StateComposite {
 		}
 
 		this.configManipulator.setLocale(this.configurationContainer.getLocale());
+		this.configManipulator.setSignLocale(this.configurationContainer.getSignLocale());
 		
 		this.configManipulator
 				.setPlaceholderTransparency(this.configurationContainer

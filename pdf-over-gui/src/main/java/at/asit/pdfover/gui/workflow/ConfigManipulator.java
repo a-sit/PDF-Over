@@ -80,6 +80,11 @@ public interface ConfigManipulator {
 	public static final String LOCALE_CONFIG = "LOCALE"; //$NON-NLS-1$
 	
 	/**
+	 * The locale config parameter
+	 */
+	public static final String SIGN_LOCALE_CONFIG = "SIGNLOCALE"; //$NON-NLS-1$
+	
+	/**
 	 * The proxy host config parameter
 	 */
 	public static final String PROXY_HOST_CONFIG = "PROXY_HOST"; //$NON-NLS-1$
@@ -175,4 +180,10 @@ public interface ConfigManipulator {
 	 * @param locale the locale
 	 */
 	public void setLocale(Locale locale);
+	
+	/**
+	 * Sets the locale to be used!
+	 * @param locale the locale
+	 */
+	public void setSignLocale(Locale locale);
 }

@@ -117,6 +117,12 @@ public interface ConfigProvider {
 	public Locale getConfigLocale();
 	
 	/**
+	 * Gets the configured locale
+	 * @return the configured locale
+	 */
+	public Locale getSignLocale();
+	
+	/**
 	 * Loads the current configuration to the current configuration file
 	 * @param configSource 
 	 * @throws IOException 
