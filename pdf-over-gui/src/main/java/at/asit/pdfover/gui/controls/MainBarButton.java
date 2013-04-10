@@ -42,7 +42,7 @@ public abstract class MainBarButton extends Canvas {
 	/**
 	 * If borders are drawn with a gradient effect this sets the size
 	 */
-	public static final int GradientFactor = 4;
+	public static final int GradientFactor = 5;
 	
 	/**
 	 * Number of pixel of the altitude of the triangle representing the arrow within the button shapes
@@ -79,16 +79,19 @@ public abstract class MainBarButton extends Canvas {
 
 		this.setCursor(hand);
 
-		this.inactiveBackground = new Color(getDisplay(), 0xC7, 0xDD, 0xE7);
-		this.activeBackground = new Color(getDisplay(), 0x7A, 0xC2, 0xD3);
+
+		this.inactiveBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
+		this.activeBackground1 = new Color(getDisplay(),0x6B, 0xA5, 0xD9);
+		this.activeBackground = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
 		this.textColor = this.getForeground();
-		this.borderColor = new Color(getDisplay(), 0x7E, 0x9F, 0xA5);
-		this.inactiveText = new Color(getDisplay(), 0x6E, 0x6C, 0x6E);
+		this.borderColor = new Color(getDisplay(), 0xf9, 0xf9, 0xf9);
+		this.inactiveText = new Color(getDisplay(), 0x40, 0x40, 0x40);
 		this.textsize = StateComposite.TEXT_SIZE_BUTTON;
 
 	}
 
 	private Color inactiveBackground = null;
+	private Color activeBackground1 = null;
 
 	/**
 	 * @param inactiveBackground
@@ -153,6 +156,7 @@ public abstract class MainBarButton extends Canvas {
 	public void setBorderColor(Color borderColor) {
 		this.borderColor = borderColor;
 	}
+	
 
 	private Color borderColor = null;
 
@@ -243,12 +247,12 @@ public abstract class MainBarButton extends Canvas {
 	 */
 	protected void paintBackground(PaintEvent e) {
 		Point size = this.getSize();
-		int height = size.y - 2;
+		int height = size.y - 4;
 
 		int width = size.x;
 		
-		e.gc.setForeground(this.activeBackground);
-		e.gc.setBackground(this.inactiveBackground);
+		e.gc.setForeground(this.activeBackground1);
+		e.gc.setBackground(this.activeBackground);
 		
 		e.gc.fillGradientRectangle(0, height, width, -1 * height, true);
 		
