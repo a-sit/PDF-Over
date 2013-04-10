@@ -52,7 +52,7 @@ public class MobileBKUState extends State {
 		switch(this.stateMachine.getConfigProvider().getMobileBKUType()) {
 			case A_TRUST:
 				this.status = new ATrustStatus(this.stateMachine.getConfigProvider());
-				this.handler = new ATrustHandler(this);
+				this.handler = new ATrustHandler(this, this.stateMachine.getGUIProvider().getMainShell());
 				break;
 
 			case IAIK:
@@ -204,6 +204,7 @@ public class MobileBKUState extends State {
 					new PostSLRequestThread(this));
 			postSLRequestThread.start();
 			break;
+
 		case POST_NUMBER:
 			// Check if number and password is set ...
 			// if not show UI
@@ -269,6 +270,7 @@ public class MobileBKUState extends State {
 				}
 			}
 			break;
+
 		case POST_TAN:
 			// Get TAN from UI
 
@@ -303,10 +305,14 @@ public class MobileBKUState extends State {
 				tan.enableButton();
 				this.stateMachine.getGUIProvider().display(tan);
 			}
-
 			break;
+
 		case FINAL:
 			this.setNextState(new SigningState(this.stateMachine));
+			break;
+
+		case CANCEL:
+			this.setNextState(new BKUSelectionState(this.stateMachine));
 			break;
 		}
 	}

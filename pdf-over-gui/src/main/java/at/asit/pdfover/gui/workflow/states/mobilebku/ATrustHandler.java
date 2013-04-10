@@ -21,9 +21,16 @@ import java.io.IOException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.Dialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
@@ -32,11 +39,15 @@ import at.asit.pdfover.signator.SLResponse;
  * A-Trust mobile BKU handler
  */
 public class ATrustHandler extends MobileBKUHandler {
+	Shell shell;
+
 	/**
 	 * @param state
+	 * @param shell
 	 */
-	public ATrustHandler(MobileBKUState state) {
+	public ATrustHandler(MobileBKUState state, Shell shell) {
 		super(state);
+		this.shell = shell;
 	}
 
 	/**
@@ -196,8 +207,21 @@ public class ATrustHandler extends MobileBKUHandler {
 			}
 
 			if (getStatus().getTanTries() <= 0) {
-				// move to POST_REQUEST
-				getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+				Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"), //$NON-NLS-1$
+								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
+								BUTTONS.OK_CANCEL, ICON.QUESTION);
+						if (dialog.open() == SWT.CANCEL) {
+							// Cancel
+							getState().setCommunicationState(MobileBKUCommunicationState.CANCEL);
+						} else {
+							// move to POST_REQUEST again
+							getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+						}
+					}
+				});
 			}
 		}
 	}

@@ -20,23 +20,18 @@ package at.asit.pdfover.gui.workflow.states.mobilebku;
  */
 public enum MobileBKUCommunicationState {
 	
-	/**
-	 * POST SL Request to A-Trust BKU
-	 */
+	/** POST SL Request to A-Trust BKU */
 	POST_REQUEST,
 	
-	/**
-	 * POST User informations (number, password) to A-Trust BKU
-	 */
+	/** POST User informations (number, password) to A-Trust BKU */
 	POST_NUMBER,
 	
-	/**
-	 * POST tan to A-Trust BKU and retrieve SL Response
-	 */
+	/** POST tan to A-Trust BKU and retrieve SL Response */
 	POST_TAN,
 	
-	/**
-	 * Final state
-	 */
-	FINAL
+	/** Final state */
+	FINAL,
+
+	/** Cancel state */
+	CANCEL
 }
