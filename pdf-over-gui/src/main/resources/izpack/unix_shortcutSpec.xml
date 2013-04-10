@@ -16,7 +16,7 @@
      commandLine=""
      workingDirectory="$INSTALL_PATH"
      description="PDFOver 4.0"
-     iconFile="$INSTALL_PATH/icons/pdfover.png"
+     iconFile="$INSTALL_PATH/icons/icon.png"
      iconIndex="0"
      type="Application"
      encoding="UTF-8"

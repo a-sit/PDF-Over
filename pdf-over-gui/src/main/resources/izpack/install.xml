@@ -29,6 +29,7 @@
 	<resources>
 		<res src="./unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
 		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
+		<res id="TargetPanel.dir.windows" src="defaultInstallDir.txt" />
 	</resources>
 	
 	<native type="izpack" name="ShellLink.dll">
