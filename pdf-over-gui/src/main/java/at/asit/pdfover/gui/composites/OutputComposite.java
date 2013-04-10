@@ -44,6 +44,7 @@ import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
@@ -265,7 +266,7 @@ public class OutputComposite extends StateComposite {
 			targetFile = new File(inputFolder, target);
 
 		if (targetFile.exists()) {
-			Dialog dialog = new Dialog(this.getShell(), Messages.getString("common.warning"), //$NON-NLS-1$
+			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"), //$NON-NLS-1$
 					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //$NON-NLS-1$
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)
@@ -275,22 +276,42 @@ public class OutputComposite extends StateComposite {
 		}
 
 		DocumentSource source = this.getSignedDocument();
+		boolean retry;
 
-		try {
-			FileOutputStream outstream = new FileOutputStream(targetFile);
-			outstream.write(source.getByteArray(), 0,
-					source.getByteArray().length);
-			outstream.close();
-		} catch (FileNotFoundException e) {
-			log.debug("File not found", e); //$NON-NLS-1$
-			return null;
-		} catch (IOException e) {
-			log.debug("IO Error", e); //$NON-NLS-1$
-			return null;
-		}
+		do {
+			retry = false;
+			try {
+				FileOutputStream outstream = new FileOutputStream(targetFile);
+				outstream.write(source.getByteArray(), 0,
+						source.getByteArray().length);
+				outstream.close();
+			} catch (FileNotFoundException e) {
+				log.error("File not found", e); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(getShell(),
+						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
+								targetFile.getName(), e.getLocalizedMessage()),
+						BUTTONS.RETRY_CANCEL);
+				if (dialog.open() == SWT.CANCEL)
+					return null;
+				retry = true;
+			} catch (IOException e) {
+				log.error("IO Error", e); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(getShell(),
+						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
+								targetFile.getName(), e.getLocalizedMessage()),
+						BUTTONS.RETRY_CANCEL);
+				if (dialog.open() == SWT.CANCEL)
+					return null;
+				retry = true;
+			}
+		} while (retry);
 
 		if (!targetFile.exists())
+		{
+			log.error("Tried to save file " + targetFile.getName() + //$NON-NLS-1$
+					", but it doesn't exist"); //$NON-NLS-1$
 			return null;
+		}
 		return targetFile;
 	}
 
