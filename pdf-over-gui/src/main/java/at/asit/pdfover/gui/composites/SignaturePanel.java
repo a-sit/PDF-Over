@@ -49,23 +49,25 @@ public class SignaturePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/** The PDF file being displayed */
-	private PDFFile pdf;
+	private PDFFile pdf = null;
 	/** The image of the rendered PDF page being displayed */
-	Image currentImage;
+	Image currentImage = null;
 	/** The current PDFPage that was rendered into currentImage */
-	private PDFPage currentPage;
+	private PDFPage currentPage = null;
 	/** The current transform from screen to page space */
-	AffineTransform currentXform;
+	AffineTransform currentXform = null;
 	/** The horizontal offset of the image from the left edge of the panel */
-	int offx;
+	int offx = 0;
 	/** The vertical offset of the image from the top of the panel */
-	int offy;
+	int offy = 0;
 	/** The size of the image */
-	private Dimension prevSize;
+	private Dimension prevSize = null;
 	/** The position of the signature, in document space */
-	Point2D sigPagePos;
+	Point2D sigPagePos = null;
 	/** The position of the signature, in screen space */
-	Point2D sigScreenPos;
+	Point2D sigScreenPos = null;
+	/** The signature placeholder image */
+	private Image sigPlaceholder = null;
 
 	/**
 	 * Create a new PagePanel, with a default size of 800 by 600 pixels.
@@ -73,8 +75,7 @@ public class SignaturePanel extends JPanel {
 	 */
 	public SignaturePanel(PDFFile pdf) {
 		super(new BorderLayout());
-		this.pdf = pdf;
-		this.sigPagePos = null;
+		setDocument(pdf);
 		setPreferredSize(new Dimension(800, 600));
 		setFocusable(true);
 		addMouseListener(this.mouseListener);
@@ -90,6 +91,15 @@ public class SignaturePanel extends JPanel {
 		this.pdf = pdf;
 		this.sigPagePos = null;
 		showPage(pdf.getNumPages());
+	}
+
+	/**
+	 * Set the signature placeholder image
+	 * @param placeholder signature placeholder
+	 */
+	public void setSignaturePlaceholder(Image placeholder)
+	{
+		this.sigPlaceholder = placeholder;
 	}
 
 	/**
@@ -204,12 +214,19 @@ public class SignaturePanel extends JPanel {
 			if ((imwid == sz.width && imhgt <= sz.height)
 					|| (imhgt == sz.height && imwid <= sz.width)) {
 
+				// draw document
 				g.drawImage(this.currentImage, this.offx, this.offy, this);
 
-				g.setColor(Color.red);
+				// draw signature
 				int sigx = (int) (this.offx + this.sigScreenPos.getX());
 				int sigy = (int) (this.offy + this.sigScreenPos.getY());
-				g.drawRect(sigx - 10, sigy - 10, 20, 20);
+				if (this.sigPlaceholder == null) {
+					g.setColor(Color.red);
+					g.drawRect(sigx - 10, sigy - 10, 20, 20);
+				}
+				else {
+					g.drawImage(this.sigPlaceholder, sigx, sigy, null);
+				}
 
 			} else {
 				// the image is bogus. try again, or give up.

@@ -56,7 +56,11 @@ public class PositioningState extends State {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
 			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument());
+			SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
+			Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
+			param.setEmblem(emblem);
 			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
+			this.positionComposite.setPlaceholder(param.getPlaceholder());
 		}
 
 		return this.positionComposite;

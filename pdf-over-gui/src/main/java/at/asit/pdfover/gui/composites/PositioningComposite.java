@@ -35,7 +35,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,5 +215,15 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public SignaturePosition getPosition() {
 		return this.position;
+	}
+
+	/**
+	 * Set the signature placeholder image
+	 * @param placeholder signature placeholder
+	 */
+	public void setPlaceholder(Image placeholder) {
+		if (this.viewer == null)
+			return;
+		this.viewer.setSignaturePlaceholder(placeholder);
 	}
 }
