@@ -175,7 +175,7 @@ public class MainWindow {
 		this.shell = new Shell();
 		getShell().setSize(550, 768);
 		try {
-			Display display = new Display();
+			Display display = Display.getCurrent();
 			Monitor primary = display.getPrimaryMonitor();
 			Rectangle bounds = primary.getBounds();
 			Rectangle main = this.shell.getBounds();
