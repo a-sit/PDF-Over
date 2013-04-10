@@ -46,8 +46,8 @@ function end_phase {
 pushd $BASEDIR > /dev/null
 
 echo -e "Publishing to: $TYELLOW$PUBLISH_DIR$TNORMAL"
-mkdir -p $PUBLISH_DIR
-mkdir -p $LOG_DIR
+mkdir -p "$PUBLISH_DIR"
+mkdir -p "$LOG_DIR"
 
 profiles=( linux windows mac )
 names=( linux windows mac )
@@ -60,12 +60,12 @@ if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
 fi
 
 for (( i = 0 ; i < ${#names[@]} ; i++ )) do
- 	PROFILE=${profiles[$i]}
- 	NAME=${names[$i]}
+	PROFILE=${profiles[$i]}
+	NAME=${names[$i]}
 	INSTALLER=setup_pdf-over_$NAME.jar
 	begin_phase "Building package [$PROFILE] as $INSTALLER..."
- 	mvn install -P$PROFILE $MVN_PARAMS > $LOG_DIR/build_$NAME.log 2>&1
- 	RETVAL=$?
+	mvn install -P$PROFILE $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
+	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		end_phase "OK"
 	else
@@ -74,8 +74,8 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 	fi
 
 	begin_phase "Moving Installer..."
-  	mv ./pdf-over-gui/target/$TARGET_FILE $PUBLISH_DIR/$INSTALLER
-  	RETVAL=$?
+	mv "./pdf-over-gui/target/$TARGET_FILE" "$PUBLISH_DIR/$INSTALLER"
+	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		end_phase "OK"
 	else
@@ -84,22 +84,22 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 done
 
 begin_phase "Building JNLP..."
-cp ./pdf-over-gui/src/main/jnlp/pdf-over.jnlp $PUBLISH_DIR/pdf-over.jnlp
+cp ./pdf-over-gui/src/main/jnlp/pdf-over.jnlp "$PUBLISH_DIR/pdf-over.jnlp"
 RETVAL=$?
 if [ $RETVAL -ne 0 ]; then
 	end_phase "FAILED"
 else
-	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" $PUBLISH_DIR/pdf-over.jnlp
+	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
 	RETVAL=$?
 	if [ $RETVAL -ne 0 ]; then
 		end_phase "FAILED"
 	else
-		sed -i "s/##CONTEXT_URL##/$CONTEXT_URL/g" $PUBLISH_DIR/pdf-over.jnlp
+		sed -i "s/##CONTEXT_URL##/$CONTEXT_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
 		RETVAL=$?
 		if [ $RETVAL -ne 0 ]; then
 			end_phase "FAILED"
 		else
-			sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" $PUBLISH_DIR/pdf-over.jnlp
+			sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
 			RETVAL=$?
 			if [ $RETVAL -ne 0 ]; then
 				end_phase "FAILED"
@@ -110,8 +110,17 @@ else
 	fi
 fi
 
-begin_phase "Copying images... "
-cp -r ./pdf-over-gui/src/main/resources/icons $PUBLISH_DIR
+begin_phase "Copying images..."
+cp -r ./pdf-over-gui/src/main/resources/icons "$PUBLISH_DIR"
+RETVAL=$?
+if [ $RETVAL -ne 0 ]; then
+	end_phase "FAILED"
+else
+	end_phase "OK"
+fi
+
+begin_phase "Building javadoc..."
+mvn javadoc:aggregate > "$LOG_DIR/javadoc.log" 2>&1 && cp -r target/site/apidocs/ "$PUBLISH_DIR"
 RETVAL=$?
 if [ $RETVAL -ne 0 ]; then
 	end_phase "FAILED"
