@@ -95,6 +95,17 @@ public class PositioningComposite extends StateComposite {
 	}
 
 	/**
+	 * Set the signature placeholder image
+	 * Must be called _after_ displayDocument
+	 * @param placeholder signature placeholder
+	 */
+	public void setPlaceholder(Image placeholder) {
+		if (this.viewer == null)
+			return;
+		this.viewer.setSignaturePlaceholder(placeholder);
+	}
+
+	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
@@ -215,15 +226,5 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public SignaturePosition getPosition() {
 		return this.position;
-	}
-
-	/**
-	 * Set the signature placeholder image
-	 * @param placeholder signature placeholder
-	 */
-	public void setPlaceholder(Image placeholder) {
-		if (this.viewer == null)
-			return;
-		this.viewer.setSignaturePlaceholder(placeholder);
 	}
 }

@@ -26,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D.Double;
 
 import javax.swing.JPanel;
 
@@ -258,6 +260,8 @@ public class SignaturePanel extends JPanel {
 	private MouseAdapter mouseListener = new MouseAdapter() {
 
 		private boolean doDrag = false;
+		private int dragXOffset = 0;
+		private int dragYOffset = 0;
 
 		private void updateSigPos(int sigx, int sigy) {
 			if (SignaturePanel.this.currentImage == null)
@@ -276,8 +280,20 @@ public class SignaturePanel extends JPanel {
 		public void mousePressed(MouseEvent evt) {
 			if (evt.getButton() == MouseEvent.BUTTON1)
 			{
-				updateSigPos(evt.getX(), evt.getY());
 				this.doDrag = true;
+				if (isOnSignature(evt.getX(), evt.getY())) {
+					this.dragXOffset = (int)
+							(SignaturePanel.this.sigScreenPos.getX() -
+							(evt.getX() - SignaturePanel.this.offx));
+					this.dragYOffset = (int)
+							(SignaturePanel.this.sigScreenPos.getY() -
+							(evt.getY() - SignaturePanel.this.offy));
+				}
+				else {
+					this.dragXOffset = 0;
+					this.dragYOffset = 0;
+				}
+				updateSigPos(evt.getX() + this.dragXOffset, evt.getY() + this.dragYOffset);
 			}
 		}
 
@@ -293,9 +309,26 @@ public class SignaturePanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent evt) {
 			if (this.doDrag)
-				updateSigPos(evt.getX(), evt.getY());
+				updateSigPos(evt.getX() + this.dragXOffset, evt.getY() + this.dragYOffset);
 		}
 	};
+
+	/**
+	 * Check whether given point is on signature placeholder
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return true if given point is on signature placeholder
+	 */
+	boolean isOnSignature(int x, int y)
+	{
+		Rectangle2D sig = new Rectangle2D.Double(
+				this.sigScreenPos.getX() + this.offx,
+				this.sigScreenPos.getY() + this.offy,
+				this.sigPlaceholder.getWidth(null),
+				this.sigPlaceholder.getHeight(null));
+		Point2D pos = new Point2D.Double(x, y);
+		return (sig.contains(pos));
+	}
 
 	/**
 	 * Clamp x to be within [min-max]
