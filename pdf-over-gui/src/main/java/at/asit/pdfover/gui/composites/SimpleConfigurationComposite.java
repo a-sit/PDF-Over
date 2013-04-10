@@ -88,10 +88,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(
 					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] { "*.jpg", "*.gif" }); //$NON-NLS-1$ //$NON-NLS-2$
+			dialog.setFilterExtensions(new String[] { "*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			dialog.setFilterNames(new String[] {
+					Messages.getString("common.ImageExtension_Description"), //$NON-NLS-1$
 					Messages.getString("common.JPGExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.GIFExtension_Description") }); //$NON-NLS-1$
+					Messages.getString("common.PNGExtension_Description"), //$NON-NLS-1$
+					Messages.getString("common.GIFExtension_Description"), //$NON-NLS-1$
+					Messages.getString("common.AllExtension_Description")}); //$NON-NLS-1$
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -192,8 +195,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
-	private void setEmblemFileInternal(final String filename) throws Exception {
-		this.setEmblemFileInternal(filename, false);
+	private void setEmblemFile(final String filename) throws Exception {
+		setEmblemFileInternal(filename, false);
 	}
 
 	private void setEmblemFileInternal(final String filename, boolean force)
@@ -256,24 +259,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	void processEmblemChanged(String filename) {
 		try {
-			// String filename = this.txtEmblemFile.getText();
-			plainEmblemSetter(filename);
+			setEmblemFile(filename);
 		} catch (Exception ex) {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
 					Messages.getString("error.FailedToLoadEmblem"), ex, false); //$NON-NLS-1$
 			dialog.open();
 		}
-	}
-
-	/**
-	 * @param filename
-	 * @throws Exception
-	 */
-	private void plainEmblemSetter(String filename) throws Exception {
-		//this.emblemFile = filename;
-		this.setEmblemFileInternal(filename);
-		// this.btnClearImage.setSelection(true);
 	}
 
 	void processNumberChanged() {
@@ -871,7 +863,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			// this.txtEmblemFile.setText(emblemFile);
 			this.emblemFile = emblemFile;
 			try {
-				this.setEmblemFileInternal(emblemFile, true);
+				setEmblemFileInternal(emblemFile, true);
 				this.btnClearImage.setSelection(true);
 			} catch (Exception e1) {
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$

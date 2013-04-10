@@ -107,7 +107,7 @@ public class OutputComposite extends StateComposite {
 		save.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
 		save.setFilterNames(new String[] { 
 				Messages.getString("common.PDFExtension_Description"), //$NON-NLS-1$
-				Messages.getString("common.ALLExtension_Description")}); //$NON-NLS-1$
+				Messages.getString("common.AllExtension_Description")}); //$NON-NLS-1$
 
 		String proposed = OutputComposite.this.getInputFile().getAbsolutePath();
 

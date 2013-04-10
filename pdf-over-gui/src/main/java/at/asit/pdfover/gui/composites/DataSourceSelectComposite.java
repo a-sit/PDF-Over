@@ -70,7 +70,7 @@ public class DataSourceSelectComposite extends StateComposite {
 			dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
 			dialog.setFilterNames(new String[] { 
 					Messages.getString("common.PDFExtension_Description"),  //$NON-NLS-1$
-					Messages.getString("common.ALLExtension_Description") }); //$NON-NLS-1$
+					Messages.getString("common.AllExtension_Description") }); //$NON-NLS-1$
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
