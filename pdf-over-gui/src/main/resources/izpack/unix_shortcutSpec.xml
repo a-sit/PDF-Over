@@ -10,7 +10,7 @@
      programGroup="yes"
      desktop="yes"
      applications="no"
-     startMenu="yes"
+     startMenu="no"
      startup="no"
      target="$INSTALL_PATH/scripts/pdf-over_linux.sh"
      commandLine=""
