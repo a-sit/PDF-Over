@@ -29,8 +29,6 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -68,7 +66,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	Text txtOutputFolder;
 	Combo cmbBKUAuswahl;
 	Combo cmbLocaleAuswahl;
-	Combo cmbSigningLangAuswahl;
 	String[] bkuStrings;
 	Button btnAutomatischePositionierung;
 	Scale sclTransparenz;
@@ -81,7 +78,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private Label lblTransparenzRechts;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenz;
-	private Label lblSigningLanguage;
 
 	/**
 	 * @param parent
@@ -188,53 +184,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			public void widgetSelected(SelectionEvent e) {
 				performPlaceholderTransparency(AdvancedConfigurationComposite.this.sclTransparenz
 						.getSelection());
-			}
-		});
-
-		Composite compSigningLanguageContainer = new Composite(this.grpSignatur, SWT.NONE);
-		FormData fd_compSigningLanguageContainer = new FormData();
-		fd_compSigningLanguageContainer.left = new FormAttachment(0, 5);
-		fd_compSigningLanguageContainer.right = new FormAttachment(100, -5);
-		fd_compSigningLanguageContainer.top = new FormAttachment(this.sclTransparenz, 5);
-		compSigningLanguageContainer.setLayoutData(fd_compSigningLanguageContainer);
-		compSigningLanguageContainer.setLayout(new GridLayout(2, false));
-
-		this.lblSigningLanguage = new Label(compSigningLanguageContainer, SWT.READ_ONLY);
-		this.lblSigningLanguage.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
-				false, false, 1, 1));
-		
-		FontData[] fD_lblSigningLanguage = this.lblSigningLanguage.getFont()
-				.getFontData();
-		fD_lblSigningLanguage[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblSigningLanguage.setFont(new Font(Display.getCurrent(),
-				fD_lblSigningLanguage[0]));
-		
-		this.cmbSigningLangAuswahl = new Combo(compSigningLanguageContainer, SWT.READ_ONLY);
-		this.cmbSigningLangAuswahl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-
-		FontData[] fD_cmbSigningLangAuswahl = this.cmbSigningLangAuswahl.getFont()
-				.getFontData();
-		fD_cmbSigningLangAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbSigningLangAuswahl.setFont(new Font(Display.getCurrent(),
-				fD_cmbSigningLangAuswahl[0]));
-
-		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
-		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
-		}
-		this.cmbSigningLangAuswahl.setItems(localeSignStrings);
-		this.cmbSigningLangAuswahl.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer
-						.getSignLocale();
-				Locale selectedLocale = Constants.
-						SUPPORTED_LOCALES[AdvancedConfigurationComposite.this.cmbSigningLangAuswahl
-						                  .getSelectionIndex()];
-				if (!currentLocale.equals(selectedLocale)) {
-					performSignLocaleSelectionChanged(selectedLocale);
-				}
 			}
 		});
 
@@ -508,28 +457,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		return 0;
 	}
 	
-	int getSignLocaleElementIndex(Locale locale) {
-		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
-			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
-				return i;
-			}
-		}
-
-		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
-		return 0;
-	}
-
 	void performLocaleSelectionChanged(Locale selected) {
 		log.debug("Selected Locale: " + selected); //$NON-NLS-1$
 		this.configurationContainer.setLocale(selected);
 		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
-	}
-	
-	void performSignLocaleSelectionChanged(Locale selected) {
-		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
-		this.configurationContainer.setSignLocale(selected);
-		this.cmbSigningLangAuswahl.select(this.getSignLocaleElementIndex(selected));
 	}
 
 	void performPositionSelection(boolean automatic) {
@@ -573,7 +504,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
-		this.performSignLocaleSelectionChanged(this.configurationContainer.getSignLocale());
 	}
 
 	/*
@@ -623,8 +553,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
 		this.sclTransparenz.setToolTipText(Messages
 				.getString("advanced_config.SigPHTransparencyTooltip")); //$NON-NLS-1$
-		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
-		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
 
 		this.grpBkuAuswahl.setText(Messages
 				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$

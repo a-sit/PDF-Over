@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Locale;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -45,6 +46,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -100,6 +102,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	private Label lblSignatureNote;
 	Text txtSignatureNote;
 	private Button btnSignatureNoteDefault;
+
+	private Group grpSignatureLang;
+	Combo cmbSignatureLang;
 
 	private Group grpProxy;
 	private Label lblProxyHost;
@@ -387,10 +392,59 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.btnBrowseLogo.setFont(new Font(Display.getCurrent(),
 				fD_btnBrowseEmblem[0]));
 
+
+		this.grpSignatureLang = new Group(this, SWT.NONE);
+		FormData fd_grpSignatureLang = new FormData();
+		fd_grpSignatureLang.right = new FormAttachment(100, -5);
+		fd_grpSignatureLang.top = new FormAttachment(this.grpLogo, 5);
+		fd_grpSignatureLang.left = new FormAttachment(0, 5);
+		this.grpSignatureLang.setLayoutData(fd_grpSignatureLang);
+		this.grpSignatureLang.setLayout(new FormLayout());
+
+		FontData[] fD_grpSignatureLang = this.grpSignatureLang.getFont()
+				.getFontData();
+		fD_grpSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpSignatureLang.setFont(new Font(Display.getCurrent(),
+				fD_grpSignatureLang[0]));
+
+		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
+		FormData fd_cmbSignatureLang = new FormData();
+		fd_cmbSignatureLang.left = new FormAttachment(0, 10);
+		fd_cmbSignatureLang.right = new FormAttachment(100, -10);
+		fd_cmbSignatureLang.top = new FormAttachment(0, 10);
+		fd_cmbSignatureLang.bottom = new FormAttachment(100, -10);
+		this.cmbSignatureLang.setLayoutData(fd_cmbSignatureLang);
+
+		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
+				.getFontData();
+		fD_cmbSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.cmbSignatureLang.setFont(new Font(Display.getCurrent(),
+				fD_cmbSignatureLang[0]));
+
+		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
+		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
+			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
+		}
+		this.cmbSignatureLang.setItems(localeSignStrings);
+		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer
+						.getSignLocale();
+				Locale selectedLocale = Constants.
+						SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang
+						                  .getSelectionIndex()];
+				if (!currentLocale.equals(selectedLocale)) {
+					performSignatureLangSelectionChanged(selectedLocale);
+				}
+			}
+		});
+
+
 		this.grpSignatureNote = new Group(this, SWT.NONE);
 		FormData fd_grpSignatureNote = new FormData();
 		fd_grpSignatureNote.right = new FormAttachment(100, -5);
-		fd_grpSignatureNote.top = new FormAttachment(this.grpLogo, 5);
+		fd_grpSignatureNote.top = new FormAttachment(this.grpSignatureLang, 5);
 		fd_grpSignatureNote.left = new FormAttachment(0, 5);
 		this.grpSignatureNote.setLayoutData(fd_grpSignatureNote);
 		this.grpSignatureNote.setLayout(new GridLayout(2, false));
@@ -433,7 +487,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				fD_txtSignatureNote[0]));
 
 		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				processSignatureNoteChanged();
@@ -441,7 +494,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		this.txtSignatureNote.addTraverseListener(new TraverseListener() {
-
 			@Override
 			public void keyTraversed(TraverseEvent e) {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -468,6 +520,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						SimpleConfigurationComposite.this.configurationContainer.getSignLocale())); 
 			}
 		});
+
 
 		this.grpProxy = new Group(this, SWT.NONE);
 		FormData fd_grpProxy = new FormData();
@@ -838,6 +891,24 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 
+	int getLocaleElementIndex(Locale locale) {
+		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
+			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
+				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
+				return i;
+			}
+		}
+
+		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
+		return 0;
+	}
+
+	void performSignatureLangSelectionChanged(Locale selected) {
+		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
+		this.configurationContainer.setSignLocale(selected);
+		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -991,6 +1062,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 
 		this.setVisibleImage();
+		
+		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignLocale());
 	}
 
 	/*
@@ -1047,6 +1120,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
 		this.btnSignatureNoteDefault.setText(Messages
 				.getString("simple_config.Note_SetDefault")); //$NON-NLS-1$
+
+		this.grpSignatureLang.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
+		this.cmbSignatureLang.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
 
 		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
