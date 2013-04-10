@@ -39,7 +39,7 @@ import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ * Implementation of the configuration provider and manipulator
  */
 public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	/**
@@ -56,33 +56,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
 	private ConfigurationContainer configuration;
-
-//	private BKUs defaultBKU = BKUs.NONE;
-//
-//	private SignaturePosition defaultSignaturePosition = null;
-//
-//	private String defaultMobileNumber = STRING_EMPTY;
-//
-//	private String defaultPassword = STRING_EMPTY;
-//
-//	private Locale locale = Messages.getDefaultLocale();
-//	private Locale signLocale = this.locale;
-//	
-//	private String emblem = STRING_EMPTY;
-//
-//	private String proxyHost = STRING_EMPTY;
-//
-//	private int proxyPort = -1;
-//
-//	private String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
-//
-//	private String outputFolder = STRING_EMPTY;
-//
-//	private String signatureNote = STRING_EMPTY;
-//
-//	private int placeholderTransparency = 170;
-//
-//	private Point mainWindowSize;
 
 	/**
 	 * Constructor

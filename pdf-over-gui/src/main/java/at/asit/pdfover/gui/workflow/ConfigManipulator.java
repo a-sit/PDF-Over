@@ -35,14 +35,12 @@ public interface ConfigManipulator {
 
 	/**
 	 * Sets the default signature position
-	 * 
 	 * @param signaturePosition the default signature position
 	 */
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
 
 	/**
 	 * Sets the signature placeholder transparency
-	 * 
 	 * @param transparency the signature placeholder transparency
 	 */
 	void setPlaceholderTransparency(int transparency);
@@ -61,7 +59,6 @@ public interface ConfigManipulator {
 
 	/**
 	 * Sets the default emblem
-	 * 
 	 * @param emblem the default emblem
 	 */
 	public void setDefaultEmblem(String emblem);
@@ -74,7 +71,6 @@ public interface ConfigManipulator {
 
 	/**
 	 * Sets the proxy port
-	 * 
 	 * @param port the proxy port
 	 */
 	public void setProxyPort(int port);
