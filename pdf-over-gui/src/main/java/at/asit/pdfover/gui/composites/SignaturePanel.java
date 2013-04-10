@@ -91,6 +91,8 @@ public class SignaturePanel extends JPanel {
 	int prevSigScreenWidth = 0;
 	/** Previous Height of the signature placeholder in screen space */
 	int prevSigScreenHeight = 0;
+	/** Color of the signature placeholder border */
+	private Color sigPlaceholderBorderColor = Color.BLUE;
 
 	/**
 	 * Create a new PagePanel.
@@ -129,6 +131,13 @@ public class SignaturePanel extends JPanel {
 		this.sigPlaceholderTransparency = transparency;
 	}
 
+	/**
+	 * Set the color of the signature placeholder border
+	 * @param color new signature placeholder border color
+	 */
+	public void setSignaturePlaceholderBorderColor(Color color) {
+		this.sigPlaceholderBorderColor = color;
+	}
 	/**
 	 * Change the currently displayed page
 	 * @param page the number of the page to display
@@ -292,8 +301,8 @@ public class SignaturePanel extends JPanel {
 						this.sigPlaceholderScaled.setRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
 					}
 					g.drawImage(this.sigPlaceholderScaled, sigX, sigY, null);
-					g.setColor(Color.BLUE);
-					g.drawRect(sigX, sigY, this.sigScreenWidth, this.sigScreenHeight);
+					g.setColor(this.sigPlaceholderBorderColor);
+					g.drawRect(sigX, sigY, this.sigScreenWidth-1, this.sigScreenHeight-1);
 				}
 
 			} else {

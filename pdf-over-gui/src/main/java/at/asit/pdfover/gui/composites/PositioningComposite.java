@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.MouseWheelEvent;
@@ -104,6 +105,10 @@ public class PositioningComposite extends StateComposite {
 		{
 			this.viewer = new SignaturePanel(this.pdf);
 			this.frame.add(this.viewer);
+			this.viewer.setSignaturePlaceholderBorderColor(new Color(
+					Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
+					Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
+					Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
 		}
 		else
 			this.viewer.setDocument(this.pdf);
