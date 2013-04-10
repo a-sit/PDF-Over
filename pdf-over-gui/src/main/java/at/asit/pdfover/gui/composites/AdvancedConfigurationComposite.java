@@ -333,7 +333,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		// load advanced settings
 		this.performBKUSelectionChanged(this.configurationContainer.getBKUSelection());
-		this.performOutputFolderChanged(this.configurationContainer.getOutputFolder());
+		String outputFolder = this.configurationContainer.getOutputFolder();
+		if(outputFolder != null) {
+			this.performOutputFolderChanged(outputFolder);
+		}
 		this.performPositionSelection(this.configurationContainer.getAutomaticPosition());
 	}
 

@@ -16,16 +16,21 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Messages;
+import at.asit.pdfover.gui.Unzipper;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
@@ -50,7 +55,11 @@ import at.asit.pdfover.signator.Signator;
  */
 public class PrepareConfigurationState extends State {
 
-	
+	/**
+	 * PDFOver config directory
+	 */
+	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.pdfover"; //$NON-NLS-1$ //$NON-NLS-2$
+
 	/**
 	 * @param stateMachine
 	 */
@@ -68,8 +77,7 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(new InputDocumentArgument());
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(new ConfigFileArgument());
-		
-		
+
 		this.configFilehandler = new ArgumentHandler(this.stateMachine);
 		this.configFilehandler.addCLIArgument(new ConfigFileArgument());
 	}
@@ -89,10 +97,11 @@ public class PrepareConfigurationState extends State {
 		try {
 
 			try {
-				this.stateMachine.getConfigProvider().loadConfiguration(new FileInputStream(filename));
-				
+				this.stateMachine.getConfigProvider().loadConfiguration(
+						new FileInputStream(CONFIG_DIRECTORY + "/" + filename)); //$NON-NLS-1$
+
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
-				
+
 			} catch (FileNotFoundException ex) {
 				if (filename.equals(ConfigManipulator.DEFAULT_CONFIG_FILE)) {
 					// we only check for resource config file if it is the
@@ -100,8 +109,9 @@ public class PrepareConfigurationState extends State {
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
 								"/" + filename); //$NON-NLS-1$
-						this.stateMachine.getConfigProvider().loadConfiguration(is);
-						
+						this.stateMachine.getConfigProvider()
+								.loadConfiguration(is);
+
 						log.info("Loaded config from resource : " + filename); //$NON-NLS-1$
 					} catch (Exception eex) {
 						throw ex;
@@ -110,7 +120,7 @@ public class PrepareConfigurationState extends State {
 					throw ex;
 				}
 			}
-			
+
 		} catch (IOException ex) {
 			throw new InitializationException(
 					"Failed to read configuration from config file", ex); //$NON-NLS-1$
@@ -130,6 +140,85 @@ public class PrepareConfigurationState extends State {
 	public void run() {
 		// Read config file
 		try {
+
+			File configDir = new File(CONFIG_DIRECTORY);
+			File configFile = new File(CONFIG_DIRECTORY + "/" //$NON-NLS-1$
+					+ ConfigManipulator.DEFAULT_CONFIG_FILE);
+			if (!configDir.exists() || !configFile.exists()) {
+				boolean allOK = false;
+
+				log.info("Creating configuration directory"); //$NON-NLS-1$
+
+				try {
+					if (!configDir.exists()) {
+						configDir.mkdir();
+					}
+					// Copy PDFOver config to config Dir
+
+					// 1Kb buffer
+					byte[] buffer = new byte[1024];
+					int byteCount = 0;
+
+					InputStream inputStream = null;
+					FileOutputStream pdfOverConfig = null;
+					try {
+						inputStream = this.getClass().getResourceAsStream(
+								"/" + ConfigManipulator.DEFAULT_CONFIG_FILE); //$NON-NLS-1$
+						pdfOverConfig = new FileOutputStream(CONFIG_DIRECTORY
+								+ "/" //$NON-NLS-1$
+								+ ConfigManipulator.DEFAULT_CONFIG_FILE);
+
+						while ((byteCount = inputStream.read(buffer)) >= 0) {
+							pdfOverConfig.write(buffer, 0, byteCount);
+						}
+					} catch (Exception e) {
+						log.error(
+								"Failed to write PDF Over config file to config directory", e); //$NON-NLS-1$
+						throw new InitializationException(
+								"Failed to write PDF Over config file to config directory",
+								e);
+					} finally {
+						if (pdfOverConfig != null) {
+							try {
+								pdfOverConfig.close();
+							} catch (IOException e) {
+								log.warn(
+										"Failed to close File stream for PDFOver config", e); //$NON-NLS-1$
+							}
+						}
+
+						if (inputStream != null) {
+							try {
+								inputStream.close();
+							} catch (IOException e) {
+								log.warn(
+										"Failed to close Resource stream for PDFOver config", e); //$NON-NLS-1$
+							}
+						}
+					}
+
+					InputStream is = this.getClass().getResourceAsStream(
+							"/cfg/PDFASConfig.zip"); //$NON-NLS-1$
+
+					try {
+						Unzipper.unzip(is, configDir.getAbsolutePath());
+					} catch (IOException e) {
+						log.error(
+								"Failed to create local configuration directory!", e); //$NON-NLS-1$
+						throw new InitializationException(
+								"Failed to create local configuration directory!",
+								e);
+					}
+					allOK = true;
+				} finally {
+					if (!allOK) {
+						configDir.delete();
+					}
+				}
+			} else {
+				log.debug("Configuration directory exists!");
+			}
+
 			// Read cli arguments with for config file!
 			this.initializeFromArguments(this.stateMachine.getCmdArgs(),
 					this.configFilehandler);
@@ -158,11 +247,12 @@ public class PrepareConfigurationState extends State {
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
-			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE, Messages.getString("error.Initialization"),  //$NON-NLS-1$
+			ErrorDialog error = new ErrorDialog(this.stateMachine
+					.getGUIProvider().getMainShell(), SWT.NONE,
+					Messages.getString("error.Initialization"), //$NON-NLS-1$
 					e, false);
-			//error.setException(e);
-			//this.setNextState(error);
+			// error.setException(e);
+			// this.setNextState(error);
 			error.open();
 			this.stateMachine.exit();
 		}

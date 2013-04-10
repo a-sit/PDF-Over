@@ -48,6 +48,9 @@ public abstract class SignatureParameter {
 	 */
 	protected Emblem emblem;
 
+	/**
+	 * The signature device
+	 */
 	protected BKUs signatureDevice;
 	
 	/**

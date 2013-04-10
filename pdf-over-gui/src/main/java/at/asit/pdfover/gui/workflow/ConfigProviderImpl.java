@@ -309,7 +309,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultOutputFolder(String outputFolder) {
-		this.outputFolder = outputFolder;
+		if (outputFolder == null || outputFolder.trim().equals("")) { //$NON-NLS-1$
+			this.outputFolder = STRING_EMPTY;
+		} else {
+			this.outputFolder = outputFolder;
+		}
 	}
 
 	/*

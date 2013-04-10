@@ -150,11 +150,12 @@ public class MobileBKUState extends State {
 		MobileBKUStatus mobileStatus = this.getStatus();
 
 		if (this.threadException != null) {
-			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+			ErrorDialog error = new ErrorDialog(
+					this.stateMachine.getGUIProvider().getMainShell(),
 					SWT.NONE,
 					Messages.getString("error.Unexpected"), this.threadException, false); //$NON-NLS-1$
-			//error.setException(this.threadException);
-			//this.setNextState(error);
+			// error.setException(this.threadException);
+			// this.setNextState(error);
 			error.open();
 			this.stateMachine.exit();
 			return;
@@ -165,7 +166,8 @@ public class MobileBKUState extends State {
 			this.stateMachine.getGUIProvider().display(
 					this.getWaitingComposite());
 			Thread postSLRequestThread = new Thread(new PostSLRequestThread(
-					this, this.stateMachine.getConfigProvider().getMobileBKUURL()));
+					this, this.stateMachine.getConfigProvider()
+							.getMobileBKUURL()));
 			postSLRequestThread.start();
 			break;
 		case POST_NUMBER:
@@ -208,16 +210,26 @@ public class MobileBKUState extends State {
 
 				} else {
 					// We need number and password => show UI!
+
+					if (mobileStatus.getErrorMessage() != null
+							&& !mobileStatus.getErrorMessage().equals("")) { //$NON-NLS-1$
+						// set possible error message
+						ui.setErrorMessage(mobileStatus.getErrorMessage());
+						mobileStatus.setErrorMessage(null);
+					}
 					
-					// set possible error message
-					ui.setErrorMessage(mobileStatus.getErrorMessage());
-					
-					// set possible phone number
-					ui.setMobileNumber(mobileStatus.getPhoneNumber());
-					
-					// set possible password
-					ui.setMobilePassword(mobileStatus.getMobilePassword());
-					
+
+					if (ui.getMobileNumber() == null
+							|| ui.getMobileNumber().equals("")) { //$NON-NLS-1$
+						// set possible phone number
+						ui.setMobileNumber(mobileStatus.getPhoneNumber());
+					}
+
+					if (ui.getMobilePassword() == null
+							|| ui.getMobilePassword().equals("")) { //$NON-NLS-1$
+						// set possible password
+						ui.setMobilePassword(mobileStatus.getMobilePassword());
+					}
 					this.stateMachine.getGUIProvider().display(ui);
 				}
 			}
@@ -231,23 +243,23 @@ public class MobileBKUState extends State {
 			if (tan.isUserAck()) {
 				// user hit ok!
 				tan.setUserAck(false);
-				
+
 				mobileStatus.setTan(tan.getTan());
-				
+
 				// post to BKU!
 				Thread postTanThread = new Thread(new PostTanThread(this));
 				postTanThread.start();
 
 			} else {
 				tan.setVergleichswert(mobileStatus.getVergleichswert());
-				
-				if(mobileStatus.getTanTries() < MobileBKUStatus.MOBILE_MAX_TAN_TRIES 
+
+				if (mobileStatus.getTanTries() < MobileBKUStatus.MOBILE_MAX_TAN_TRIES
 						&& mobileStatus.getTanTries() > 0) {
 					// show warning message x tries left!
-					
+
 					tan.setTries(mobileStatus.getTanTries());
-					
-				} 
+
+				}
 				this.stateMachine.getGUIProvider().display(tan);
 			}
 
@@ -265,11 +277,11 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void cleanUp() {
-		if(this.mobileBKUEnterNumberComposite != null)
+		if (this.mobileBKUEnterNumberComposite != null)
 			this.mobileBKUEnterNumberComposite.dispose();
-		if(this.mobileBKUEnterTANComposite != null)
+		if (this.mobileBKUEnterTANComposite != null)
 			this.mobileBKUEnterTANComposite.dispose();
-		if(this.waitingComposite != null)
+		if (this.waitingComposite != null)
 			this.waitingComposite.dispose();
 	}
 
