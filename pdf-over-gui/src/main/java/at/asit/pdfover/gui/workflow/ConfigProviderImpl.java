@@ -319,6 +319,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (mobileBKUType != Constants.DEFAULT_MOBILE_BKU_TYPE)
 			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
 
+		if (Constants.THEME != Constants.Themes.DEFAULT)
+			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());
+
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
 
 		props.store(outputstream, "Configuration file was generated!"); //$NON-NLS-1$

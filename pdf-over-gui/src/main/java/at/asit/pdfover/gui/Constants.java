@@ -16,7 +16,9 @@
 package at.asit.pdfover.gui;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Locale;
+import java.util.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -31,126 +33,17 @@ public class Constants {
 	/** Current display - used for Colors */
 	private static Display display = Display.getCurrent();
 
-	private static enum Themes { DEFAULT, GEMPLUSH };
-
-	private static Themes theme = Themes.DEFAULT;
-
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 
-	/** Main window height */
-	public static final int DEFAULT_MAINWINDOW_HEIGHT = 780;
+	/** Configuration directory */
+	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** Main window width */
-	public static final int DEFAULT_MAINWINDOW_WIDTH = 600;
+	/** The default configuration file name */
+	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //$NON-NLS-1$
 
-	/** Main bar height */
-	public static final int MAINBAR_HEIGHT = 60;
-
-	/** Main bar active background - light start of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = getMainbarActiveBackLight();
-	private static Color getMainbarActiveBackLight() {
-		switch (theme) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0xB4, 0xCD, 0xEC);
-			case GEMPLUSH:
-				return new Color(display, 0xEC, 0xAD, 0xE7);
-		}
-	}
-
-	/** Main bar active background - dark end of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_DARK = getMainbarActiveBackDark();
-	private static Color getMainbarActiveBackDark() {
-		switch (theme) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0x6B, 0xA5, 0xD9);
-			case GEMPLUSH:
-				return new Color(display, 0xD9, 0x53, 0x9C);
-		}
-	}
-
-	/** Main bar inactive background */
-	public static final Color MAINBAR_INACTIVE_BACK = getMainbarInactiveBack();
-	private static Color getMainbarInactiveBack() {
-		switch (theme) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0xD4, 0xE7, 0xF1);
-			case GEMPLUSH:
-				return new Color(display, 0xF1, 0xD1, 0xE8);
-		}
-	}
-
-	/** Main bar active text color */
-	public static final Color MAINBAR_ACTIVE_TEXTCOLOR = new Color(display, 0x00, 0x00, 0x00);
-
-	/** Main bar inactive text color */
-	public static final Color MAINBAR_INACTIVE_TEXTCOLOR = new Color(display, 0x40, 0x40, 0x40);
-
-	/** Drop background color */
-	public static final Color DROP_BACK = new Color(display, 0xFF, 0xFF, 0xFF);
-	
-	/** Drop border color */
-	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_LIGHT;
-
-	/** Normal text size */
-	public static final int TEXT_SIZE_NORMAL = 12;
-
-	/** Button text size */
-	public static final int TEXT_SIZE_BUTTON = 12;
-
-	/** Small text size */
-	public static final int TEXT_SIZE_SMALL = 10;
-
-	/** Big text size */
-	public static final int TEXT_SIZE_BIG = 14;
-
-	/** Shell icon resource */
-	public static final String RES_ICON = "/icons/icon.png"; //$NON-NLS-1$
-
-	/** Config image resource */
-	public static final String RES_IMG_CONFIG = getResImgConfig();
-	private static String getResImgConfig() {
-		switch (theme) {
-			default:
-			case DEFAULT:
-				return "/img/config.png"; //$NON-NLS-1$
-			case GEMPLUSH:
-				return "/img/config_p.png"; //$NON-NLS-1$
-		}
-	}
-
-	/** Config inactive image resource */
-	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png"; //$NON-NLS-1$
-
-	/** Error image resource */
-	public static final String RES_IMG_ERROR = "/img/error.png"; //$NON-NLS-1$
-
-	/** Card image resource */
-	public static final String RES_IMG_CARD = "/img/karte.gif"; //$NON-NLS-1$
-
-	/** Mobile phone image resource */
-	public static final String RES_IMG_MOBILE = "/img/handy.gif"; //$NON-NLS-1$
-
-	/** Package resource path */
-	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
-
-	/** Zipped configuration resource */
-	public static final String RES_CFG_ZIP = "/cfg/PDFASConfig.zip"; //$NON-NLS-1$
-
-	/** Accepted certificate resource path */
-	public static final String RES_CERT_PATH = "/certificates/"; //$NON-NLS-1$
-
-	/** Accepted certificate list resource */
-	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
-
-	/** Default signature placeholder transparency */
-	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
-
-	/** How far to displace the signature with the arrow keys */
-	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
+	/** The default log4j file name */
+	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
 
 	/** File suffix for the signed document */
 	public final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
@@ -161,14 +54,12 @@ public class Constants {
 	/** Default Mobile BKU type */
 	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
 
-	/** Configuration directory */
-	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
+	/** Default signature placeholder transparency */
+	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
 
-	/** The default configuration file name */
-	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //$NON-NLS-1$
+	/** How far to displace the signature with the arrow keys */
+	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
-	/** The default log4j file name */
-	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
 
 	/* Configuration parameters */
 
@@ -219,6 +110,146 @@ public class Constants {
 	/** The output folder config parameter */
 	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 
-	/** The main window size. (Format: width,height) */
+	/** The main window size (Format: width,height) */
 	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE"; //$NON-NLS-1$
+
+	/** The theme */
+	public static final String CFG_THEME = "THEME"; //$NON-NLS-1$
+
+
+	/* Theme constants */
+
+	/** The available themes */
+	public static enum Themes {
+		/** Default theme */ DEFAULT,
+		/** GemPlush theme */ GEMPLUSH
+	};
+
+	/** The used theme */
+	public static final Themes THEME = getTheme();
+	private static Themes getTheme() {
+		File f = new File(CONFIG_DIRECTORY + File.separatorChar + DEFAULT_CONFIG_FILENAME);
+		if (f.canRead())
+		{
+			try {
+				Properties config = new Properties();
+				config.load(new FileInputStream(f));
+				return Themes.valueOf(config.getProperty(CFG_THEME).toUpperCase());
+			} catch (Exception e) {
+				// Ignore
+			}
+		}
+		return Themes.DEFAULT;
+	}
+
+	/** Main window height */
+	public static final int DEFAULT_MAINWINDOW_HEIGHT = 780;
+
+	/** Main window width */
+	public static final int DEFAULT_MAINWINDOW_WIDTH = 600;
+
+	/** Main bar height */
+	public static final int MAINBAR_HEIGHT = 60;
+
+	/** Main bar active background - light start of gradient */
+	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = getMainbarActiveBackLight();
+	private static Color getMainbarActiveBackLight() {
+		switch (THEME) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0xB4, 0xCD, 0xEC);
+			case GEMPLUSH:
+				return new Color(display, 0xEC, 0xAD, 0xE7);
+		}
+	}
+
+	/** Main bar active background - dark end of gradient */
+	public static final Color MAINBAR_ACTIVE_BACK_DARK = getMainbarActiveBackDark();
+	private static Color getMainbarActiveBackDark() {
+		switch (THEME) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0x6B, 0xA5, 0xD9);
+			case GEMPLUSH:
+				return new Color(display, 0xD9, 0x53, 0x9C);
+		}
+	}
+
+	/** Main bar inactive background */
+	public static final Color MAINBAR_INACTIVE_BACK = getMainbarInactiveBack();
+	private static Color getMainbarInactiveBack() {
+		switch (THEME) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0xD4, 0xE7, 0xF1);
+			case GEMPLUSH:
+				return new Color(display, 0xF1, 0xD1, 0xE8);
+		}
+	}
+
+	/** Main bar active text color */
+	public static final Color MAINBAR_ACTIVE_TEXTCOLOR = new Color(display, 0x00, 0x00, 0x00);
+
+	/** Main bar inactive text color */
+	public static final Color MAINBAR_INACTIVE_TEXTCOLOR = new Color(display, 0x40, 0x40, 0x40);
+
+	/** Drop background color */
+	public static final Color DROP_BACK = new Color(display, 0xFF, 0xFF, 0xFF);
+	
+	/** Drop border color */
+	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_LIGHT;
+
+	/** Normal text size */
+	public static final int TEXT_SIZE_NORMAL = 12;
+
+	/** Button text size */
+	public static final int TEXT_SIZE_BUTTON = 12;
+
+	/** Small text size */
+	public static final int TEXT_SIZE_SMALL = 10;
+
+	/** Big text size */
+	public static final int TEXT_SIZE_BIG = 14;
+
+
+	/* Resources */
+
+	/** Shell icon resource */
+	public static final String RES_ICON = "/icons/icon.png"; //$NON-NLS-1$
+
+	/** Config image resource */
+	public static final String RES_IMG_CONFIG = getResImgConfig();
+	private static String getResImgConfig() {
+		switch (THEME) {
+			default:
+			case DEFAULT:
+				return "/img/config.png"; //$NON-NLS-1$
+			case GEMPLUSH:
+				return "/img/config_p.png"; //$NON-NLS-1$
+		}
+	}
+
+	/** Config inactive image resource */
+	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png"; //$NON-NLS-1$
+
+	/** Error image resource */
+	public static final String RES_IMG_ERROR = "/img/error.png"; //$NON-NLS-1$
+
+	/** Card image resource */
+	public static final String RES_IMG_CARD = "/img/karte.gif"; //$NON-NLS-1$
+
+	/** Mobile phone image resource */
+	public static final String RES_IMG_MOBILE = "/img/handy.gif"; //$NON-NLS-1$
+
+	/** Package resource path */
+	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
+
+	/** Zipped configuration resource */
+	public static final String RES_CFG_ZIP = "/cfg/PDFASConfig.zip"; //$NON-NLS-1$
+
+	/** Accepted certificate resource path */
+	public static final String RES_CERT_PATH = "/certificates/"; //$NON-NLS-1$
+
+	/** Accepted certificate list resource */
+	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
 }
