@@ -17,8 +17,14 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -166,60 +172,95 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		super(parent, style, state);
 		setLayout(new FormLayout());
 
-		this.txt_number = new Text(this, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
+		final Composite containerComposite = new Composite(this, SWT.NATIVE);
+		containerComposite.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				Rectangle clientArea = containerComposite.getClientArea();
+				
+				//e.gc.setForeground();
+				e.gc.setForeground(new Color(getDisplay(),0x6B, 0xA5, 0xD9));
+				e.gc.setLineWidth(3);
+				e.gc.setLineStyle(SWT.LINE_SOLID);
+				e.gc.drawRoundRectangle(clientArea.x, 
+						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
+						10, 10);
+			}
+		});
+		containerComposite.setLayout(new FormLayout());
+		FormData fd_containerComposite = new FormData();
+		fd_containerComposite.top = new FormAttachment(50, -100);
+		fd_containerComposite.bottom = new FormAttachment(50, 100);
+		fd_containerComposite.left = new FormAttachment(50, -250);
+		fd_containerComposite.right = new FormAttachment(50, 250);
+		containerComposite.setLayoutData(fd_containerComposite);
+		
+		
+		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
 		FormData fd_number = new FormData();
-		fd_number.top = new FormAttachment(30, -15);
-		fd_number.bottom = new FormAttachment(30, 15);
-		fd_number.left = new FormAttachment(50, 0);
-		fd_number.right = new FormAttachment(85, 0);
+		//fd_number.top = new FormAttachment(0, 20);
+		fd_number.bottom = new FormAttachment(50, -10);
+		fd_number.left = new FormAttachment(50, 10);
+		fd_number.right = new FormAttachment(100, -20);
 		this.txt_number.setLayoutData(fd_number);
 		this.txt_number.setEditable(true);
 
-		Label lbl_number = new Label(this, SWT.NATIVE);
+		Label lbl_number = new Label(containerComposite, SWT.NATIVE);
 		lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
 		FormData fd_lbl_number = new FormData();
-		fd_lbl_number.top = new FormAttachment(30, -15);
-		fd_lbl_number.bottom = new FormAttachment(30, 15);
-		fd_lbl_number.left = new FormAttachment(15, 0);
-		fd_lbl_number.right = new FormAttachment(45, 0);
+		//fd_lbl_number.top = new FormAttachment(30, -15);
+		fd_lbl_number.bottom = new FormAttachment(50, -10);
+		fd_lbl_number.left = new FormAttachment(0, 20);
+		fd_lbl_number.right = new FormAttachment(50, -10);
 		lbl_number.setLayoutData(fd_lbl_number);
 
-		this.txt_password = new Text(this, SWT.SINGLE | SWT.PASSWORD
+		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD
 				| SWT.BORDER | SWT.NATIVE);
 		FormData fd_password = new FormData();
-		fd_password.top = new FormAttachment(50, -15);
-		fd_password.bottom = new FormAttachment(50, 15);
-		fd_password.left = new FormAttachment(50, 0);
-		fd_password.right = new FormAttachment(85, 0);
+		fd_password.top = new FormAttachment(50, 10);
+		//fd_password.bottom = new FormAttachment(50, 15);
+		fd_password.left = new FormAttachment(50, 10);
+		fd_password.right = new FormAttachment(100, -20);
 		this.txt_password.setLayoutData(fd_password);
 		this.txt_password.setEditable(true);
+		this.txt_password.addTraverseListener(new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					(new OkSelectionListener()).widgetSelected(null);
+				}
+			}
+		});
 
-		Label lbl_password = new Label(this, SWT.NATIVE);
+		Label lbl_password = new Label(containerComposite, SWT.NATIVE);
 		lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
 		FormData fd_lbl_password = new FormData();
-		fd_lbl_password.top = new FormAttachment(50, -15);
-		fd_lbl_password.bottom = new FormAttachment(50, 15);
-		fd_lbl_password.left = new FormAttachment(15, 0);
-		fd_lbl_password.right = new FormAttachment(45, 0);
+		fd_lbl_password.top = new FormAttachment(50, 10);
+		//fd_lbl_password.bottom = new FormAttachment(50, 15);
+		fd_lbl_password.left = new FormAttachment(0, 20);
+		fd_lbl_password.right = new FormAttachment(50, -10);
 		lbl_password.setLayoutData(fd_lbl_password);
 
-		this.lbl_error = new Label(this, SWT.WRAP | SWT.NATIVE);
-		FormData fd_lbl_error = new FormData();
-		fd_lbl_error.top = new FormAttachment(70, -15);
-		fd_lbl_error.bottom = new FormAttachment(70, 15);
-		fd_lbl_error.left = new FormAttachment(15, 0);
-		fd_lbl_error.right = new FormAttachment(85, 0);
-		this.lbl_error.setLayoutData(fd_lbl_error);
-
-		Button btn_ok = new Button(this, SWT.NATIVE);
+		Button btn_ok = new Button(containerComposite, SWT.NATIVE);
 		btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		FormData fd_btn_ok = new FormData();
-		fd_btn_ok.top = new FormAttachment(87, 0);
-		fd_btn_ok.bottom = new FormAttachment(95, 0);
-		fd_btn_ok.left = new FormAttachment(75, 0);
-		fd_btn_ok.right = new FormAttachment(95, 0);
+		//fd_btn_ok.top = new FormAttachment(87, 0);
+		fd_btn_ok.bottom = new FormAttachment(100, -20);
+		fd_btn_ok.right = new FormAttachment(100, -20);
+		fd_btn_ok.left = new FormAttachment(100, -70);
 		btn_ok.setLayoutData(fd_btn_ok);
 		btn_ok.addSelectionListener(new OkSelectionListener());
+		
+		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		FormData fd_lbl_error = new FormData();
+		//fd_lbl_error.top = new FormAttachment(70, -15);
+		fd_lbl_error.bottom = new FormAttachment(100, -20);
+		//fd_lbl_error.left = new FormAttachment(15, 0);
+		fd_lbl_error.right = new FormAttachment(btn_ok, -10);
+		this.lbl_error.setLayoutData(fd_lbl_error);
+
 	}
 
 	@Override

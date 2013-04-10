@@ -19,8 +19,14 @@ package at.asit.pdfover.gui.composites;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -74,8 +80,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(MobileBKUEnterTANComposite.class);
 	
 	Text txt_tan;
@@ -103,6 +108,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	public void setMessage(String msg) {
 		this.lbl_tries.setText(msg);
+		this.lbl_tries.redraw();
+		this.lbl_tries.getParent().layout(true, true);
 	}
 	
 	/**
@@ -171,41 +178,75 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		super(parent, style, state);
 		setLayout(new FormLayout());
 		
-		Label lblVergleichswert = new Label(this, SWT.NATIVE);
+		final Composite containerComposite = new Composite(this, SWT.NATIVE);
+		containerComposite.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				Rectangle clientArea = containerComposite.getClientArea();
+				
+				//e.gc.setForeground();
+				e.gc.setForeground(new Color(getDisplay(),0x6B, 0xA5, 0xD9));
+				e.gc.setLineWidth(3);
+				e.gc.setLineStyle(SWT.LINE_SOLID);
+				e.gc.drawRoundRectangle(clientArea.x, 
+						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
+						10, 10);
+			}
+		});
+		containerComposite.setLayout(new FormLayout());
+		FormData fd_containerComposite = new FormData();
+		fd_containerComposite.top = new FormAttachment(50, -100);
+		fd_containerComposite.bottom = new FormAttachment(50, 100);
+		fd_containerComposite.left = new FormAttachment(50, -250);
+		fd_containerComposite.right = new FormAttachment(50, 250);
+		containerComposite.setLayoutData(fd_containerComposite);
+		
+		
+		Label lblVergleichswert = new Label(containerComposite, SWT.NATIVE);
 		FormData fd_lblVergleichswert = new FormData();
-		fd_lblVergleichswert.left = new FormAttachment(15, 0);
-		fd_lblVergleichswert.right = new FormAttachment(50, 0);
-		fd_lblVergleichswert.top = new FormAttachment(30, -15);
-		fd_lblVergleichswert.bottom = new FormAttachment(30, 15);
+		fd_lblVergleichswert.left = new FormAttachment(0, 20);
+		fd_lblVergleichswert.right = new FormAttachment(50, -10);
+		//fd_lblVergleichswert.top = new FormAttachment(30, -15);
+		fd_lblVergleichswert.bottom = new FormAttachment(50, -10);
 		lblVergleichswert.setLayoutData(fd_lblVergleichswert);
 		lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		
-		this.lblvergleich = new Label(this, SWT.NATIVE);
+		this.lblvergleich = new Label(containerComposite, SWT.NATIVE);
 		FormData fd_lblvergleich = new FormData();
-		fd_lblvergleich.left = new FormAttachment(50, 0);
-		fd_lblvergleich.right = new FormAttachment(85, 0);
-		fd_lblvergleich.top = new FormAttachment(30, -15);
-		fd_lblvergleich.bottom = new FormAttachment(30, 15);
+		fd_lblvergleich.left = new FormAttachment(50, 10);
+		fd_lblvergleich.right = new FormAttachment(100, -20);
+		//fd_lblvergleich.top = new FormAttachment(30, -15);
+		fd_lblvergleich.bottom = new FormAttachment(50, -10);
 		this.lblvergleich.setLayoutData(fd_lblvergleich);
 		this.lblvergleich.setText(""); //$NON-NLS-1$
 		
-		Label lblTan = new Label(this, SWT.NATIVE);
+		Label lblTan = new Label(containerComposite, SWT.NATIVE);
 		FormData fd_lblTan = new FormData();
-		fd_lblTan.left = new FormAttachment(15, 5);
-		fd_lblTan.right = new FormAttachment(50, -5);
-		fd_lblTan.top = new FormAttachment(50, -15);
-		fd_lblTan.bottom = new FormAttachment(50, 15);
+		fd_lblTan.left = new FormAttachment(0, 20);
+		fd_lblTan.right = new FormAttachment(50, -10);
+		fd_lblTan.top = new FormAttachment(50, 10);
+		//fd_lblTan.bottom = new FormAttachment(50, 15);
 		lblTan.setLayoutData(fd_lblTan);
 		lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 		
-		this.txt_tan = new Text(this, SWT.BORDER | SWT.NATIVE);
+		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
 		FormData fd_text = new FormData();
-		fd_text.left = new FormAttachment(50, 0);
-		fd_text.right = new FormAttachment(85, 0);
-		fd_text.top = new FormAttachment(50, -15);
-		fd_text.left = new FormAttachment(50, 15);
+		fd_text.left = new FormAttachment(50, 10);
+		fd_text.right = new FormAttachment(100, -20);
+		fd_text.top = new FormAttachment(50, 10);
 		this.txt_tan.setEditable(true);
 		this.txt_tan.setLayoutData(fd_text);
+		
+		this.txt_tan.addTraverseListener(new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					(new OkSelectionListener()).widgetSelected(null);
+				}
+			}
+		});
 		
 		this.txt_tan.addModifyListener(new ModifyListener() {
 			
@@ -213,27 +254,29 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			public void modifyText(ModifyEvent e) {
 				
 				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
-				
+				log.debug("Current TAN: " + text); //$NON-NLS-1$
 				if(text.length() > 3 && MobileBKUEnterTANComposite.this.getVergleichswert().startsWith(text.trim())) {
 					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
 				} 
 			}
 		});
 		
-		this.lbl_tries = new Label(this, SWT.WRAP | SWT.NATIVE);
+		Button btn_ok = new Button(containerComposite, SWT.NATIVE);
+		
+		this.lbl_tries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_tries = new FormData();
-		fd_lbl_tries.left = new FormAttachment(15, 5);
-		fd_lbl_tries.right = new FormAttachment(85, -5);
-		fd_lbl_tries.top = new FormAttachment(70, -15);
-		fd_lbl_tries.bottom = new FormAttachment(70, 15);
+		//fd_lbl_tries.left = new FormAttachment(15, 5);
+		fd_lbl_tries.right = new FormAttachment(btn_ok, -10);
+		//fd_lbl_tries.top = new FormAttachment(70, -15);
+		fd_lbl_tries.bottom = new FormAttachment(100, -20);
 		this.lbl_tries.setLayoutData(fd_lbl_tries);
 		
-		Button btn_ok = new Button(this, SWT.NATIVE);
+		
 		FormData fd_btn_ok = new FormData();
 		//fd_btn_ok.left = new FormAttachment(95, 0);
-		fd_btn_ok.right = new FormAttachment(95, 0);
-		fd_btn_ok.top = new FormAttachment(85);
-		fd_btn_ok.bottom = new FormAttachment(95);
+		fd_btn_ok.right = new FormAttachment(100, -20);
+		fd_btn_ok.left = new FormAttachment(100, -70);
+		fd_btn_ok.bottom = new FormAttachment(100,-20);
 		
 		btn_ok.setLayoutData(fd_btn_ok);
 		btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
