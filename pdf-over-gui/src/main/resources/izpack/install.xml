@@ -13,7 +13,7 @@
 		<uninstaller />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
-		<run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" />
+		<!--run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" /-->
 	</info>
 
 	<guiprefs resizable="yes" width="500" height="360">
@@ -32,8 +32,7 @@
 		<res id="Win_shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
 		<res id="shortcutSpec.xml" src="./win_shortcutSpec.xml" />
 		<res id="shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
-		<res id="TargetPanel.dir.windows" src="defaultInstallDirWin.txt" />
-		<res id="TargetPanel.dir.windows_xp" src="defaultInstallDirWinXP.txt" />
+		<res id="TargetPanel.dir.windows" src="defaultInstallDirWinProfile.txt" />
 		<res id="JFrameIcon.png" src="icon16x16.png"/>
 		<res id="customicons.xml" src="./customicons.xml" />
 		<res id="Installer.image" src="logo.gif" />
