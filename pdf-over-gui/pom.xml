@@ -364,9 +364,9 @@
 						<version>1.2</version>
 						<configuration>
 							<keystore>src/main/resources/keystore.jks</keystore>
-							<alias>pdfover_test</alias>
-							<storepass>123456</storepass>
-							<keypass>123456</keypass>
+							<alias>test-applet signer</alias>
+							<storepass>storepass</storepass>
+							<keypass>keypass</keypass>
 						</configuration>
 					</plugin>
 				</plugins>
