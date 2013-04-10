@@ -219,6 +219,10 @@ public abstract class MobileBKUHandler {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				post.getRequestEntity().writeRequest(os);
 				req = os.toString();
+				if (req.contains("passwort=")) //$NON-NLS-1$
+					req = req.replaceAll("passwort=[^&]*", "passwort=******"); //$NON-NLS-1$ //$NON-NLS-2$
+				if (req.contains(":pwd=")) //$NON-NLS-1$
+					req = req.replaceAll(":pwd=[^&]*", ":pwd=******"); //$NON-NLS-1$ //$NON-NLS-2$
 				os.close();
 			} else {
 				req = post.getRequestEntity().getContentLength() + " bytes"; //$NON-NLS-1$
