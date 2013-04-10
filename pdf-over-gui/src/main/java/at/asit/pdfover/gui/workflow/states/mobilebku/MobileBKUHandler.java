@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.gui.workflow.states.mobilebku;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -212,6 +213,19 @@ public abstract class MobileBKUHandler {
 	 * @throws IOException IO error
 	 */
 	protected String executePost(HttpClient client, PostMethod post) throws IOException {
+		if (log.isDebugEnabled()) {
+			String req;
+			if (post.getRequestEntity().getContentLength() < 1024) {
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				post.getRequestEntity().writeRequest(os);
+				req = os.toString();
+				os.close();
+			} else {
+				req = post.getRequestEntity().getContentLength() + " bytes"; //$NON-NLS-1$
+			}
+			log.debug("Posting to " + post.getURI() + ": " + req); //$NON-NLS-1$ //$NON-NLS-2$
+			//TODO: Remove me (sensitive data)
+		}
 		int returnCode = client.executeMethod(post);
 
 		String redirectLocation = null;
