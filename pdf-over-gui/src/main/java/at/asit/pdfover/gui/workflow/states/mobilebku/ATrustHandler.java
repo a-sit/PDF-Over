@@ -50,10 +50,9 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleSLRequestResponse(String responseData) throws Exception {
-		ATrustStatus status = (ATrustStatus) getStatus();
+		ATrustStatus status = getStatus();
 
 		// Extract infos:
-
 		String sessionID = MobileBKUHelper.extractTag(responseData,
 				"identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -79,7 +78,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public String postCredentials() throws Exception {
-		ATrustStatus status = (ATrustStatus) getStatus();
+		ATrustStatus status = getStatus();
 	
 		Protocol.registerProtocol("https", //$NON-NLS-1$
 				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
@@ -104,7 +103,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleCredentialsResponse(String responseData) throws Exception {
-		ATrustStatus status = (ATrustStatus) getStatus();
+		ATrustStatus status = getStatus();
 		String viewState = status.getViewstate();
 		String eventValidation = status.getEventvalidation();
 		String sessionID = status.getSessionID();
@@ -148,7 +147,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public String postTAN() throws IOException {
-		ATrustStatus status = (ATrustStatus) getStatus();
+		ATrustStatus status = getStatus();
 	
 		Protocol.registerProtocol("https", //$NON-NLS-1$
 				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
@@ -195,5 +194,10 @@ public class ATrustHandler extends MobileBKUHandler {
 				getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
 			}
 		}
+	}
+
+	@Override
+	public ATrustStatus getStatus() {
+		return (ATrustStatus) getState().getStatus();
 	}
 }
