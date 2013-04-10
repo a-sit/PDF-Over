@@ -244,21 +244,10 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setMinSize(
 				this.advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(0, 5);
-		fd_composite.bottom = new FormAttachment(90, -5);
-		fd_composite.left = new FormAttachment(0, 5);
-		fd_composite.right = new FormAttachment(100, -5);
-		this.containerComposite.setLayoutData(fd_composite);
-		this.containerComposite.setLayout(this.compositeStack);
-		this.compositeStack.topControl = tabFolder;
-
-		this.doLayout();
-
 		Button btnSpeichern = new Button(this, SWT.NONE);
 		FormData fd_btnSpeichern = new FormData();
-		fd_btnSpeichern.right = new FormAttachment(100, -10);
-		fd_btnSpeichern.bottom = new FormAttachment(100, -5);
+		fd_btnSpeichern.right = new FormAttachment(100, -5);
+		fd_btnSpeichern.bottom = new FormAttachment(100);
 		btnSpeichern.setLayoutData(fd_btnSpeichern);
 		btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -278,7 +267,7 @@ public class ConfigurationComposite extends StateComposite {
 		Button btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
 		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
-		fd_btnAbrechen.bottom = new FormAttachment(100, -5);
+		fd_btnAbrechen.bottom = new FormAttachment(btnSpeichern, 0, SWT.BOTTOM);
 		btnAbbrechen.setLayoutData(fd_btnAbrechen);
 		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 		btnAbbrechen.addSelectionListener(new SelectionAdapter() {
@@ -292,7 +281,18 @@ public class ConfigurationComposite extends StateComposite {
 		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
 		fD_btnAbbrechen[0].setHeight(TEXT_SIZE_BUTTON);
 		btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
-	}
+
+		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(0, 5);
+		fd_composite.bottom = new FormAttachment(btnSpeichern, -10);
+		fd_composite.left = new FormAttachment(0, 5);
+		fd_composite.right = new FormAttachment(100, -5);
+		this.containerComposite.setLayoutData(fd_composite);
+		this.containerComposite.setLayout(this.compositeStack);
+		this.compositeStack.topControl = tabFolder;
+
+		this.doLayout();
+}
 
 	boolean storeConfiguration() {
 
