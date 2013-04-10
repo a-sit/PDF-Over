@@ -38,7 +38,7 @@ public class MobileBKUHelper {
 			.getLogger(MobileBKUHelper.class);
 
 	/**
-	 * Regular expression for mobile phone numbers: this allows the entrance of
+	 * Regular expression for mobile phone numbers: this allows the entry of
 	 * mobile numbers in the following formats:
 	 * 
 	 * +(countryCode)99999999999 00(countryCode)99999999999 099999999999

@@ -202,7 +202,8 @@ public class IAIKHandler extends MobileBKUHandler {
 		signatureDataURL = signatureDataURL.substring(0, signatureDataURL.lastIndexOf('/') + 1);
 		signatureDataURL += "viewer.jsf" + //$NON-NLS-1$
 				MobileBKUHelper.extractTag(responseData, "viewer.jsf", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-		signatureDataURL = status.ensureSessionID(signatureDataURL);
+		signatureDataURL += (signatureDataURL.contains("?") ? "&" : "?") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"pdfoversessionid=" + status.getSessionID(); //$NON-NLS-1$
 
 		String tanURL = MobileBKUHelper.extractTag(responseData,
 				"name=\"j_idt6\" method=\"post\" action=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
