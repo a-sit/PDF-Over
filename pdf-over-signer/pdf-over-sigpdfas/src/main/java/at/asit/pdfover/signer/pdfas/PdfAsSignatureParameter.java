@@ -75,12 +75,12 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			if (position.getPage() < 1) {
 				positioning = new SignaturePositioning(String.format(
 						(Locale) null,
-						"p:new;x:%f;y:%f;w:262",  position.getX(),
+						"p:new;x:%f;y:%f;w:276",  position.getX(),
 						position.getY()));
 			} else {
 				positioning = new SignaturePositioning(String.format(
 						(Locale) null,
-						"p:%d;x:%f;y:%f;w:262", position.getPage(), position.getX(),
+						"p:%d;x:%f;y:%f;w:276", position.getPage(), position.getX(),
 						position.getY()));
 			}
 		} else {
@@ -114,7 +114,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	public SignatureDimension getPlaceholderDimension() {
 		// return new SignatureDimension(487, 206);
 
-		return new SignatureDimension(262, 88);
+		return new SignatureDimension(276, 95);
 	}
 
 	/*
@@ -168,7 +168,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 			g.dispose();
 
-			// save(image, "png");
+			//save(image, "png");
 
 			return image;
 		} catch (Exception ex) {

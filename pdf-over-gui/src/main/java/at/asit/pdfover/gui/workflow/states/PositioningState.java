@@ -19,7 +19,6 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
