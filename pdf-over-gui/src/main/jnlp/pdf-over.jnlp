@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="##CODEBASE_URL##" context="##CONTEXT_URL##" href="pdfover.jnlp">
+<jnlp spec="1.0+" codebase="##CODEBASE_URL##" context="##CONTEXT_URL##" href="pdf-over.jnlp">
 
   <information>
     <title>PDF-Over</title>
