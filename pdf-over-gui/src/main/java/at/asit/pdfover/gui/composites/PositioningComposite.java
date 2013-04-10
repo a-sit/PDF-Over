@@ -117,10 +117,11 @@ public class PositioningComposite extends StateComposite {
 	/**
 	 * Request focus (to enable keyboard input)
 	 */
-	public void requestFocus()
+	private void requestFocus()
 	{
-		this.setFocus();
 		this.frame.requestFocus();
+		boolean b = setFocus();
+		log.debug("Requesting focus: " + b);
 	}
 
 	/**
@@ -244,6 +245,7 @@ public class PositioningComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		this.layout(true, true);
+		requestFocus();
 	}
 
 	/**

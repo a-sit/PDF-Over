@@ -67,7 +67,6 @@ public class PositioningState extends State {
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
 				this.stateMachine.getConfigProvider().getPlaceholderTransparency());
-		this.positionComposite.requestFocus();
 
 		return this.positionComposite;
 	}
