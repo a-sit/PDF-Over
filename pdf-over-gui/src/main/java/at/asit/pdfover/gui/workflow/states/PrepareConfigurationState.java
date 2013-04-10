@@ -38,7 +38,7 @@ import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyHostArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.Unzipper;
@@ -262,7 +262,7 @@ public class PrepareConfigurationState extends State {
 			ErrorDialog error = new ErrorDialog(this.stateMachine
 					.getGUIProvider().getMainShell(), 
 					Messages.getString("error.Initialization"), //$NON-NLS-1$
-					ERROR_BUTTONS.OK);
+					BUTTONS.OK);
 			// error.setException(e);
 			// this.setNextState(error);
 			error.open();

@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
@@ -340,7 +340,7 @@ public class ConfigurationComposite extends StateComposite {
 				} catch (ResumableException e) {
 					log.error("Settings validation failed!", e); //$NON-NLS-1$
 					ErrorDialog dialog = new ErrorDialog(getShell(),
-							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);
+							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 					int rc = dialog.open();
 
 					redo = (rc == SWT.RETRY);
@@ -369,7 +369,7 @@ public class ConfigurationComposite extends StateComposite {
 				} catch (ResumableException e) {
 					log.error("Settings validation failed!", e); //$NON-NLS-1$
 					ErrorDialog dialog = new ErrorDialog(getShell(),
-							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);
+							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 					int rc = dialog.open();
 
 					redo = (rc == SWT.RETRY);
@@ -383,7 +383,7 @@ public class ConfigurationComposite extends StateComposite {
 		} catch (Exception e) {
 			log.error("Settings validation failed!", e); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(getShell(), e.getMessage(),
-					ERROR_BUTTONS.OK);
+					BUTTONS.OK);
 			dialog.open();
 			return false;
 		}
@@ -437,7 +437,7 @@ public class ConfigurationComposite extends StateComposite {
 				log.error("Failed to save configuration to file!", e); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						Messages.getString("error.FailedToSaveSettings"), ERROR_BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
+						Messages.getString("error.FailedToSaveSettings"), BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
 				redo = (dialog.open() == SWT.RETRY);
 
 				// return false;

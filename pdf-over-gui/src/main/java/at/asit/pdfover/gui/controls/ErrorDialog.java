@@ -16,71 +16,18 @@
 package at.asit.pdfover.gui.controls;
 
 // Imports
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.gui.utils.Messages;
-
 /**
- * 
+ * An error dialog
  */
-public class ErrorDialog {
-
-	private MessageBox box;
-	
-	/**
-	 * Message box buttons
-	 */
-	public enum ERROR_BUTTONS {
-		/**
-		 * Display only ok button
-		 */
-		OK,
-		/**
-		 * Display retry and cancel buttons
-		 */
-		RETRY_CANCEL,
-		/**
-		 * Display abort, retry and ignore buttons
-		 */
-		ABORT_RETRY_IGNORE
-	};
-	
+public class ErrorDialog extends Dialog {
 	/**
 	 * @param parent The parent shell
 	 * @param message The error message
 	 * @param button The buttons to be shown
 	 */
-	public ErrorDialog(Shell parent, String message, ERROR_BUTTONS button) {
-		this.initialize(parent, message, button);
-	}
-	
-	private void initialize(Shell parent, String message, ERROR_BUTTONS button) {
-		int boxstyle = SWT.ICON_ERROR ;
-		switch(button) {
-		case OK:
-			boxstyle |= SWT.OK;
-			break;
-		case RETRY_CANCEL:
-			boxstyle |= SWT.RETRY| SWT.CANCEL;
-			break;
-		case ABORT_RETRY_IGNORE:
-			boxstyle |= SWT.RETRY| SWT.ABORT | SWT.IGNORE;
-			break;
-		}
-		
-		this.box = new MessageBox(parent, boxstyle);
-		this.box.setMessage(message);
-		this.box.setText(Messages.getString("error.Title")); //$NON-NLS-1$
-	}
-
-	/**
-	 * Open error dialog
-	 * 
-	 * @return SWT.OK | SWT.IGNORE | SWT.ABORT | SWT.RETRY | SWT.CANCEL
-	 */
-	public int open() {
-		return this.box.open();
+	public ErrorDialog(Shell parent, String message, BUTTONS button) {
+		super(parent, message, button, ICON.ERROR);
 	}
 }

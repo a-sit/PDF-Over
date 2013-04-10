@@ -26,7 +26,7 @@ import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
@@ -153,7 +153,7 @@ public class MobileBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(
 					this.stateMachine.getGUIProvider().getMainShell(),
-					Messages.getString("error.Unexpected"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+					Messages.getString("error.Unexpected"), BUTTONS.OK); //$NON-NLS-1$
 			// error.setException(this.threadException);
 			// this.setNextState(error);
 			error.open();

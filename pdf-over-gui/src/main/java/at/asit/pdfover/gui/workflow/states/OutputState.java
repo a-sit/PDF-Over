@@ -27,8 +27,10 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.OutputComposite;
+import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -101,7 +103,7 @@ public class OutputState extends State {
 					} catch (IOException e) {
 						log.error("Failed to save signed document to configured output folder.", e); //$NON-NLS-1$
 						ErrorDialog dialog = new ErrorDialog(outputComposite.getShell(), 
-								Messages.getString("error.SaveOutputFolder"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+								Messages.getString("error.SaveOutputFolder"), BUTTONS.OK); //$NON-NLS-1$
 						dialog.open();
 					}
 				}

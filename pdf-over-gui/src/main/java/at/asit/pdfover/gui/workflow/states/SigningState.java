@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -89,7 +89,7 @@ public class SigningState extends State {
 		
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					Messages.getString("error.Signatur"), ERROR_BUTTONS.RETRY_CANCEL);  //$NON-NLS-1$
+					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);  //$NON-NLS-1$
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new BKUSelectionState(this.stateMachine));

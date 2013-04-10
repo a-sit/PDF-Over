@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -173,7 +173,7 @@ public class LocalBKUState extends State {
 			ErrorDialog dialog = new ErrorDialog(
 					this.stateMachine.getGUIProvider().getMainShell(), 
 					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
-					ERROR_BUTTONS.RETRY_CANCEL);
+					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
 				//this.stateMachine.exit();
 				this.setNextState(new BKUSelectionState(this.stateMachine));

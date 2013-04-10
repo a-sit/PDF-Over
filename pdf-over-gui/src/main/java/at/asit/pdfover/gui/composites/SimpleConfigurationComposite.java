@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.ImageConverter;
@@ -877,7 +877,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(
 					getShell(),
-					Messages.getString("error.FailedToLoadEmblem"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+					Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
@@ -1044,7 +1044,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						Messages.getString("error.FailedToLoadEmblem"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+						Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //$NON-NLS-1$
 				dialog.open();
 			}
 		}

@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.OutputfolderDontExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.utils.Messages;
@@ -427,7 +427,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		} catch (Exception ex) {
 			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(getShell(),
-					Messages.getString("error.InvalidBKU"), ERROR_BUTTONS.OK); //$NON-NLS-1$
+					Messages.getString("error.InvalidBKU"), BUTTONS.OK); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
