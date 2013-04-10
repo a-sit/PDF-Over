@@ -58,8 +58,6 @@ public class PrepareConfigurationState extends State {
 	private static final Logger log = LoggerFactory
 			.getLogger(PrepareConfigurationState.class);
 
-	private static String RES_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
-
 	private static String FILE_SEPARATOR = File.separator;
 
 	private ArgumentHandler handler;
@@ -105,7 +103,7 @@ public class PrepareConfigurationState extends State {
 					// default value!
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
-								RES_PATH + filename);
+								Constants.RES_PKG_PATH + filename);
 						this.stateMachine.getConfigProvider()
 								.loadConfiguration(is);
 
@@ -151,8 +149,8 @@ public class PrepareConfigurationState extends State {
 			InputStream inputStream = null;
 			FileOutputStream pdfOverConfig = null;
 			try {
-				inputStream = this.getClass().getResourceAsStream(RES_PATH +
-						Constants.DEFAULT_CONFIG_FILENAME);
+				inputStream = this.getClass().getResourceAsStream(
+						Constants.RES_PKG_PATH + Constants.DEFAULT_CONFIG_FILENAME);
 				pdfOverConfig = new FileOutputStream(
 						this.stateMachine.getConfigProvider().getConfigurationDirectory() +
 						FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
@@ -190,7 +188,7 @@ public class PrepareConfigurationState extends State {
 			pdfOverConfig = null;
 			try {
 				inputStream = this.getClass().getResourceAsStream(
-						RES_PATH + Constants.DEFAULT_LOG4J_FILENAME);
+						Constants.RES_PKG_PATH + Constants.DEFAULT_LOG4J_FILENAME);
 				String filename = this.stateMachine.getConfigProvider().getConfigurationDirectory()
 						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
 				pdfOverConfig = new FileOutputStream(filename);
@@ -227,7 +225,7 @@ public class PrepareConfigurationState extends State {
 			}
 			
 			InputStream is = this.getClass().getResourceAsStream(
-					"/cfg/PDFASConfig.zip"); //$NON-NLS-1$
+					Constants.RES_CFG_ZIP);
 
 			try {
 				Unzipper.unzip(is, configDir.getAbsolutePath());

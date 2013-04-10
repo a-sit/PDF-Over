@@ -33,6 +33,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import at.asit.pdfover.gui.Constants;
+
 /**
  * 
  */
@@ -42,9 +44,6 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(SimpleXMLTrustManager.class);
-
-	private static final String certificateList = "/certificates/certificates.xml"; //$NON-NLS-1$
-
 
 	/*
 	 * The default X509TrustManager returned by SunX509. We'll delegate
@@ -93,7 +92,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 		Document doc = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder()
-				.parse(this.getClass().getResourceAsStream(certificateList));
+				.parse(this.getClass().getResourceAsStream(Constants.RES_CERT_LIST));
 
 		Node certificates = doc.getFirstChild();
 
@@ -118,7 +117,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 					continue;
 				}
 
-				String certResource = "/certificates/" + certificateNode.getTextContent(); //$NON-NLS-1$
+				String certResource = Constants.RES_CERT_PATH + certificateNode.getTextContent();
 
 				X509Certificate cert = (X509Certificate) CertificateFactory
 						.getInstance("X509"). //$NON-NLS-1$

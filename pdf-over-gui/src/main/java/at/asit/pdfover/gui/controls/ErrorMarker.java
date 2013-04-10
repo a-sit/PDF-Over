@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
+
 /**
  * 
  */
@@ -39,8 +41,6 @@ public class ErrorMarker extends Label {
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(ErrorMarker.class);
-
-	private static final String IMG_PATH = "/img/error.png"; //$NON-NLS-1$
 
 	Image errorImg;
 
@@ -54,7 +54,7 @@ public class ErrorMarker extends Label {
 			String message) {
 		super(parent, style);
 		
-		InputStream stream = this.getClass().getResourceAsStream(IMG_PATH);
+		InputStream stream = this.getClass().getResourceAsStream(Constants.RES_IMG_ERROR);
 
 		this.errorImg = new Image(getDisplay(), new ImageData(stream));
 

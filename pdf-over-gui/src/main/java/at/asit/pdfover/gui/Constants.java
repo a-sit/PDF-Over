@@ -79,6 +79,34 @@ public class Constants {
 	/** Big text size */
 	public static final int TEXT_SIZE_BIG = 14;
 
+	/** Shell icon resource */
+	public static final String RES_ICON = "/icons/icon.png"; //$NON-NLS-1$
+
+	/** Config image resource */
+	public static final String RES_IMG_CONFIG = "/img/config.png"; //$NON-NLS-1$
+//	public static final String RES_IMG_CONFIG = "/img/config_p.png"; //$NON-NLS-1$
+
+	/** Error image resource */
+	public static final String RES_IMG_ERROR = "/img/error.png"; //$NON-NLS-1$
+
+	/** Card image resource */
+	public static final String RES_IMG_CARD = "/img/karte.gif"; //$NON-NLS-1$
+
+	/** Mobile phone image resource */
+	public static final String RES_IMG_MOBILE = "/img/handy.gif"; //$NON-NLS-1$
+
+	/** Package resource path */
+	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
+
+	/** Zipped configuration resource */
+	public static final String RES_CFG_ZIP = "/cfg/PDFASConfig.zip"; //$NON-NLS-1$
+
+	/** Accepted certificate resource path */
+	public static final String RES_CERT_PATH = "/certificates/"; //$NON-NLS-1$
+
+	/** Accepted certificate list resource */
+	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
+
 	/** Default signature placeholder transparency */
 	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
 

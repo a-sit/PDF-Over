@@ -228,7 +228,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 		
-		ImageData data = new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"));//$NON-NLS-1$
+		ImageData data = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Image mobile = new Image(getDisplay(), data); 
 		
 		FormData fd_lbl_image = new FormData();

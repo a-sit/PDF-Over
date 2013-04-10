@@ -146,7 +146,7 @@ public class BKUSelectionComposite extends StateComposite {
 		});
 		cc_mobile.setLayoutData(fd_cc_mobile);
 		
-		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"))); //$NON-NLS-1$
+		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
 		cc_mobile.setImage(mobile);
 		FontData[] fD_cc_mobile = cc_mobile.getFont().getFontData();
 		fD_cc_mobile[0].setHeight(Constants.TEXT_SIZE_BUTTON);
@@ -175,7 +175,7 @@ public class BKUSelectionComposite extends StateComposite {
 		});
 		cc_karte.setLayoutData(fd_cc_karte);
 		
-		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif"))); //$NON-NLS-1$
+		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
 		
 		cc_karte.setImage(karte);
 		FontData[] fD_cc_karte = cc_mobile.getFont().getFontData();

@@ -273,7 +273,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
 		containerComposite.addPaintListener(new PaintListener() {
-
 			@Override
 			public void paintControl(PaintEvent e) {
 				Rectangle clientArea = containerComposite.getClientArea();
@@ -308,7 +307,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 
 		ImageData data = new ImageData(this.getClass().getResourceAsStream(
-				"/img/handy.gif"));//$NON-NLS-1$
+				Constants.RES_IMG_MOBILE));
 		Image mobile = new Image(getDisplay(), data);
 
 		FormData fd_lbl_image = new FormData();

@@ -256,7 +256,7 @@ public class MainWindow {
 			}
 		});
 
-		ImageData data = new ImageData(this.getClass().getResourceAsStream("/icons/icon.png"));//$NON-NLS-1$
+		ImageData data = new ImageData(this.getClass().getResourceAsStream(Constants.RES_ICON));
 		Image shellicon = new Image(this.shell.getDisplay(), data);
 
 		this.shell.setImage(shellicon);
@@ -293,7 +293,7 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 
-		InputStream is = this.getClass().getResourceAsStream("/img/config.png"); //$NON-NLS-1$
+		InputStream is = this.getClass().getResourceAsStream(Constants.RES_IMG_CONFIG);
 
 		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(
 				is)));
