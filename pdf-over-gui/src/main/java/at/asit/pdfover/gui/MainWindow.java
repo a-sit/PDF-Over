@@ -58,6 +58,10 @@ public class MainWindow {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 
+	/** Main bar height */
+	private static final int MAINBAR_HEIGHT = 60;
+	
+
 	private Shell shell;
 	private Composite container;
 	private StackLayout stack;
@@ -205,7 +209,7 @@ public class MainWindow {
 		this.mainBarFormData.left = new FormAttachment(0, 10);
 		this.mainBarFormData.right = new FormAttachment(100, -10);
 		this.mainBarFormData.top = new FormAttachment(0, 10);
-		this.mainBarFormData.bottom = new FormAttachment(0, 67);
+		this.mainBarFormData.bottom = new FormAttachment(0, MAINBAR_HEIGHT);
 		this.mainbar.setLayoutData(this.mainBarFormData);
 
 		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
@@ -335,7 +339,7 @@ public class MainWindow {
 		}
 
 		if (behavior.getMainBarVisible()) {
-			this.mainBarFormData.bottom = new FormAttachment(0, 60);
+			this.mainBarFormData.bottom = new FormAttachment(0, MAINBAR_HEIGHT);
 		} else {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
 		}
