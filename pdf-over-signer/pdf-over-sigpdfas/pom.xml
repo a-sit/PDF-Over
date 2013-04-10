@@ -18,9 +18,9 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>knowcenter</groupId>
-			<artifactId>pdf-as</artifactId>
-			<version>3.2</version>
+			<groupId>eu.europa.ec.joinup.egovlabs.pdf-as</groupId>
+			<artifactId>pdf-as-lib</artifactId>
+			<version>3.3</version>
 		</dependency>
 	</dependencies>
 </project>

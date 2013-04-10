@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>eu.europa.ec.joinup.egovlabs.pdf-as</groupId>
+  <artifactId>pdf-as-lib</artifactId>
+  <version>3.3</version>
+  <versioning>
+    <versions>
+      <version>3.3</version>
+    </versions>
+    <lastUpdated>20130328111047</lastUpdated>
+  </versioning>
+</metadata>
