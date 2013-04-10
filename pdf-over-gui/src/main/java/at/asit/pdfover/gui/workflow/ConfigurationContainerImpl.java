@@ -174,7 +174,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setProxyPort(int port) throws InvalidPortException {
-		if(port > 0 && port < 0xFFFF) {
+		if(port > 0 && port <= 0xFFFF) {
 			this.proxyPort = port;
 			return;
 		}
