@@ -33,6 +33,13 @@ public abstract class WorkflowState {
 	private WorkflowState _next = null;
 	
 	/**
+	 * Default Workflow State constructor
+	 */
+	public WorkflowState() {
+		this._next = this;
+	}
+	
+	/**
 	 * Gets the next logical state or null if this their is no state transition
 	 * @return the next state (or null)
 	 */
@@ -53,4 +60,9 @@ public abstract class WorkflowState {
 	 * @param workflow
 	 */
 	public abstract void update(Workflow workflow);
+	
+	/**
+	 * Hide the GUI components created in the state
+	 */
+	public abstract void hideGUI();
 }

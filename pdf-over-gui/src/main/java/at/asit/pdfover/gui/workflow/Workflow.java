@@ -21,25 +21,32 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import at.asit.pdfover.gui.components.MainWindow;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 
 /**
- * Workflow holds logical state of signing process and updates the current logical state
+ * Workflow holds logical state of signing process and updates the current
+ * logical state
  */
 public class Workflow {
-	
+
 	/**
 	 * SFL4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(Workflow.class);
-	
+
 	/**
 	 * Default constructor
+	 * 
 	 * @param cmdLineArgs
 	 */
 	public Workflow(String[] cmdLineArgs) {
@@ -99,50 +106,82 @@ public class Workflow {
 	 */
 	public void update() {
 		WorkflowState next = null;
-		do {
+		while (this.state != null) {
 			this.state.update(this);
 			next = this.state.nextState();
-		} while (next != null);
+			if (next == this.state) {
+				break;
+			}
+			//this.state.hideGUI();
+			this.state = next;
+		}
+		if (this.state != null) {
+			this.setCurrentStateMessage(this.state.toString());
+		} else {
+			this.setCurrentStateMessage("");
+		}
 	}
 
 	private Display display = null;
-	
+
 	private Shell shell = null;
-	
+
 	private Composite container = null;
+
+	private MainWindow mainWindow = null;
 	
+	private final StackLayout stack = new StackLayout();
+
+	/**
+	 * Helper method for developing
+	 * @param value
+	 */
+	public void setCurrentStateMessage(String value) {
+		if(this.mainWindow != null) {
+			this.mainWindow.setStatus(value);
+		}
+	}
+	
+	/**
+	 * Used by active workflow state to show its own gui component
+	 * @param ctrl
+	 */
+	public void setTopControl(final Control ctrl) {
+		this.mainWindow.setTopControl(ctrl);
+	}
+
 	private void createMainWindow() {
-		//TODO: Instantiate Main Window Class
 		this.display = Display.getDefault();
-		this.shell = new Shell();
-		this.shell.setSize(608, 340);
-		this.shell.setText("PDFOver 4.0!! :)");
 		
-		this.container = new Composite(this.shell, SWT.NONE);
-		this.container.setBounds(20, 44, 572, 257);
+		this.mainWindow = new MainWindow();
+		
+		this.mainWindow.open();
+		
+		this.shell = this.mainWindow.getShell();
+		
+		this.container = this.mainWindow.getContainer();
 		
 		this.shell.open();
 		this.shell.layout();
 	}
-	
+
 	/**
 	 * Gets the Shell for drawing the ui
 	 * 
 	 * @return Composite
 	 */
 	public Composite getComposite() {
-		// TODO: implement
 		// Main window will be build on first call
 		// returns SWT Composite container for states to draw their GUI
-		
-		if(this.container == null) {
+
+		if (this.container == null) {
 			this.createMainWindow();
 		}
-		
-		if(this.container == null) {
+
+		if (this.container == null) {
 			// TODO throw Exception...
 		}
-		
+
 		return this.container;
 	}
 

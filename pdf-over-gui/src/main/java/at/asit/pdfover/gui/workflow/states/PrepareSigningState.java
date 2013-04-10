@@ -38,4 +38,13 @@ public class PrepareSigningState extends WorkflowState {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
+	 */
+	@Override
+	public void hideGUI() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

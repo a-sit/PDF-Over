@@ -36,7 +36,16 @@ public class PrepareConfigurationState extends WorkflowState {
 	
 	@Override
 	public void update(Workflow workflow) {
+		this.setNextState(new DataSourceSelectionState());
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
+	 */
+	@Override
+	public void hideGUI() {
 		// TODO Auto-generated method stub
+		
 	}
 
 }

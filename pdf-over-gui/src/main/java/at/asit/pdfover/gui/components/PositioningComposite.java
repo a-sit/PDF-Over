@@ -13,38 +13,51 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states;
+package at.asit.pdfover.gui.components;
 
-//Imports
+// Imports
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.gui.workflow.Workflow;
-import at.asit.pdfover.gui.workflow.WorkflowState;
 
 /**
- * Decides which BKU to use (preconfigured or let user choose)
+ * 
+ *
  */
-public class BKUSelectionState extends WorkflowState {
+public class PositioningComposite extends Composite implements StateComposite {
 
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(BKUSelectionState.class);
-	
+	private static final Logger log = LoggerFactory
+			.getLogger(PositioningComposite.class);
+
+	/**
+	 * Create the composite.
+	 * @param parent
+	 * @param style
+	 */
+	public PositioningComposite(Composite parent, int style, Workflow workflow) {
+		super(parent, style);
+		Label test = new Label(this, SWT.NATIVE);
+		test.setBounds(10, 20, 100, 50);
+		test.setText("POSITIONING ----");
+	}
+
 	@Override
-	public void update(Workflow workflow) {
-		// TODO Auto-generated method stub
-		
+	protected void checkSubclass() {
+		// Disable the check that prevents subclassing of SWT components
 	}
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
+	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
 	 */
 	@Override
-	public void hideGUI() {
-		// TODO Auto-generated method stub
-		
+	public void doLayout() {
+		this.layout(true, true);
 	}
-
 }

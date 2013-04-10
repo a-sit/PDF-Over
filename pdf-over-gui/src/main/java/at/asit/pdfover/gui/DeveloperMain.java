@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui;
 
 //Imports
+import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.workflow.Workflow;
@@ -36,6 +37,9 @@ public class DeveloperMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		BasicConfigurator.configure();
+		
 		Workflow flow = new Workflow(args);
 		
 		flow.start();
