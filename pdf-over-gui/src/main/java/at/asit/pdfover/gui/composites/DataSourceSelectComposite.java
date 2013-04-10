@@ -203,6 +203,10 @@ public class DataSourceSelectComposite extends StateComposite {
 			@Override
 			public void drop(DropTargetEvent event) {
 				if (fileTransfer.isSupportedType(event.currentDataType)) {
+					if (event.data == null) {
+						log.error("Dropped file name was null"); //$NON-NLS-1$
+						return;
+					}
 					String[] files = (String[]) event.data;
 					if (files.length > 0) {
 						// Only taking first file ...
