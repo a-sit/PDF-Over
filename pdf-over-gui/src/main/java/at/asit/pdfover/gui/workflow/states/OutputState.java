@@ -28,11 +28,9 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.signator.SignatureException;
-import at.knowcenter.wag.egov.egiz.exceptions.ConnectorException;
 
 /**
- * Procduces the output of the signature process. (save file, open file)
+ * Produces the output of the signature process. (save file, open file)
  */
 public class OutputState extends State {
 
