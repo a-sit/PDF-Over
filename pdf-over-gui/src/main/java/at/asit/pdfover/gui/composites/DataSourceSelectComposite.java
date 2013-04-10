@@ -64,16 +64,16 @@ public class DataSourceSelectComposite extends StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] {"*.pdf"}); //$NON-NLS-1$
-			dialog.setFilterNames(new String[] {"PDF Dateien"});
+			dialog.setFilterExtensions(new String[] {"*.pdf", "*"}); //$NON-NLS-1$ //$NON-NLS-2$
+			dialog.setFilterNames(new String[] {"PDF documents", "All files"});
 			String fileName = dialog.open();
-	        File file = null;
-	        if (fileName != null) {
-	            file = new File(fileName);
-	            if(file.exists()) {
-	            	DataSourceSelectComposite.this.setSelected(file);
-	            }
-	        }
+			File file = null;
+			if (fileName != null) {
+				file = new File(fileName);
+				if (file.exists()) {
+					DataSourceSelectComposite.this.setSelected(file);
+				}
+			}
 		}
 
 		@Override
