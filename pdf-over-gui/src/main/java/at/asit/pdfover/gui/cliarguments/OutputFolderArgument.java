@@ -25,12 +25,12 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to show the usage message
  */
-public class OutputFolderArgument extends CLIArgument {
+public class OutputFolderArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public OutputFolderArgument() {
-		super(new String[] {"-o"}, Messages.getString("argument.help.output")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-o"}, "argument.help.output"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

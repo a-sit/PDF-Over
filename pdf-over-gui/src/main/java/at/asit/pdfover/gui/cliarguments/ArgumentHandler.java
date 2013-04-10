@@ -37,7 +37,7 @@ public class ArgumentHandler {
 	private static final Logger log = LoggerFactory
 			.getLogger(ArgumentHandler.class);
 
-	private Map<String, CLIArgument> cliArguments = new HashMap<String, CLIArgument>();
+	private Map<String, Argument> cliArguments = new HashMap<String, Argument>();
 
 	private StateMachine stateMachine = null;
 
@@ -57,8 +57,8 @@ public class ArgumentHandler {
 	 * 
 	 * @return the list of available arguments
 	 */
-	public Set<CLIArgument> getArguments() {
-		return new HashSet<CLIArgument>(this.cliArguments.values());
+	public Set<Argument> getArguments() {
+		return new HashSet<Argument>(this.cliArguments.values());
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class ArgumentHandler {
 	 * 
 	 * @param cliArgument the CLIArgument subclass to add
 	 */
-	public void addCLIArgument(Class<? extends CLIArgument> cliArgument) {
+	public void addCLIArgument(Class<? extends Argument> cliArgument) {
 
-		CLIArgument arg;
+		Argument arg;
 		try {
 			arg = cliArgument.newInstance();
 

@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.ConfigOverlayManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -23,9 +24,9 @@ import at.asit.pdfover.gui.workflow.Status;
 /**
  * CLI Argument base class
  */
-public abstract class CLIArgument {
+public abstract class Argument {
 
-	private String helpText = null;
+	private String helpTextKey = null;
 
 	private String[] commandOptions = null;
 
@@ -33,10 +34,10 @@ public abstract class CLIArgument {
 
 	/**
 	 * @param commandOptions
-	 * @param helpText
+	 * @param helpTextKey
 	 */
-	protected CLIArgument(String[] commandOptions, String helpText) {
-		this.helpText = helpText;
+	protected Argument(String[] commandOptions, String helpTextKey) {
+		this.helpTextKey = helpTextKey;
 		this.commandOptions = commandOptions;
 	}
 
@@ -65,23 +66,20 @@ public abstract class CLIArgument {
 		return this.stateMachine.getStatus();
 	}
 
-
 	/**
-	 * Set help text
-	 * 
-	 * @param value
+	 * Set help text key
+	 * @param key
 	 */
-	protected void setHelpText(String value) {
-		this.helpText = value;
+	protected void setHelpTextKey(String key) {
+		this.helpTextKey = key;
 	}
 
 	/**
 	 * Gets help text
-	 * 
 	 * @return help text
 	 */
 	public String getHelpText() {
-		return this.helpText;
+		return Messages.getString(this.helpTextKey);
 	}
 
 	/**
@@ -108,7 +106,7 @@ public abstract class CLIArgument {
 	/**
 	 * Invokes the argument to set stuff within the stateMachine
 	 * 
-	 * It should return the offset within the args array where the last used argument of this CLIArgument was used.
+	 * It should return the offset within the args array where the last used argument of this Argument was used.
 	 * 
 	 * Example:
 	 * args[] = { "-h", "-b", "LOCAL" }

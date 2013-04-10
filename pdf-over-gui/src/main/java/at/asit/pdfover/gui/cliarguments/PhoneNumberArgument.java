@@ -26,12 +26,12 @@ import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 /**
  * CLI Argument to provide Mobile BKU phone number to use
  */
-public class PhoneNumberArgument extends CLIArgument {
+public class PhoneNumberArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public PhoneNumberArgument() {
-		super(new String[] {"-n" }, Messages.getString("argument.help.number")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-n" }, "argument.help.number"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 

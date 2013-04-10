@@ -26,12 +26,12 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to provide the proxy port
  */
-public class ProxyPortArgument extends CLIArgument {
+public class ProxyPortArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public ProxyPortArgument() {
-		super(new String[] {"-proxyport"}, Messages.getString("argument.help.proxyport")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-proxyport"}, "argument.help.proxyport"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

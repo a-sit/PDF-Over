@@ -25,12 +25,12 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to provide the proxy host
  */
-public class ProxyHostArgument extends CLIArgument {
+public class ProxyHostArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public ProxyHostArgument() {
-		super(new String[] {"-proxy"}, Messages.getString("argument.help.proxyhost")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-proxy"}, "argument.help.proxyhost"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

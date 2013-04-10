@@ -103,17 +103,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
-		String localString = config.getProperty(Constants.CFG_LOCALE);
+		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
-		Locale targetLocale = LocaleSerializer.parseFromString(localString);
-		if(targetLocale != null) {
+		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
+		if (targetLocale != null) {
 			this.setLocale(targetLocale);
 		}
 		
 		String signlocalString = config.getProperty(Constants.CFG_SIGN_LOCALE);
 		
 		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
-		if(signtargetLocale != null) {
+		if (signtargetLocale != null) {
 			this.setSignLocale(signtargetLocale);
 		}
  		

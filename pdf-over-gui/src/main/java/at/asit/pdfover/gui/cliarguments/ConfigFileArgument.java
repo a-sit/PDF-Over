@@ -25,7 +25,7 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to set the configuration file
  */
-public class ConfigFileArgument extends CLIArgument {
+public class ConfigFileArgument extends Argument {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -36,7 +36,7 @@ public class ConfigFileArgument extends CLIArgument {
 	 * Constructor
 	 */
 	public ConfigFileArgument() {
-		super(new String[] {"-c"}, Messages.getString("argument.help.config")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-c"}, "argument.help.config"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/* (non-Javadoc)

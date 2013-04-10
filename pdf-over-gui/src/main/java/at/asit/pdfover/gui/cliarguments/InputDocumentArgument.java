@@ -28,12 +28,12 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to set the input document to sign
  */
-public class InputDocumentArgument extends CLIArgument {
+public class InputDocumentArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public InputDocumentArgument() {
-		super(new String[] {"-i"}, Messages.getString("argument.help.input")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-i"}, "argument.help.input"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class InputDocumentArgument extends CLIArgument {
 			.getLogger(InputDocumentArgument.class);
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
+	 * @see at.asit.pdfovewr.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
 	@Override
 	public int handleArgument(String[] args, int argOffset,

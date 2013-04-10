@@ -22,13 +22,13 @@ import at.asit.pdfover.signator.BKUs;
 /**
  * CLI Argument to set the BKU to use
  */
-public class BKUArgument extends CLIArgument {
+public class BKUArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public BKUArgument() {
 		super(
-				new String[] { "-b" }, Messages.getString("argument.help.bku")); //$NON-NLS-1$ //$NON-NLS-2$
+				new String[] { "-b" }, "argument.help.bku"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/*

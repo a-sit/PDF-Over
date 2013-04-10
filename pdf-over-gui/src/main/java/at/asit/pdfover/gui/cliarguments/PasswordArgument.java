@@ -26,12 +26,12 @@ import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 /**
  * CLI Argument to provide Mobile BKU password
  */
-public class PasswordArgument extends CLIArgument {
+public class PasswordArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public PasswordArgument() {
-		super(new String[] {"-p"}, Messages.getString("argument.help.password")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-p"}, "argument.help.password"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

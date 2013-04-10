@@ -25,14 +25,14 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to show the useage message
  */
-public class HelpArgument extends CLIArgument {
+public class HelpArgument extends Argument {
 	
 	/**
 	 * Constructor
 	 */
 	public HelpArgument() {
 		super(new String[] {"-h", "-?", "--help" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				Messages.getString("argument.help.help")); //$NON-NLS-1$
+				"argument.help.help"); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)
@@ -42,26 +42,26 @@ public class HelpArgument extends CLIArgument {
 	public int handleArgument(String[] args, int argOffset,
 			ArgumentHandler handler)
 			throws InitializationException {
-		Set<CLIArgument> arguments = handler.getArguments();
+		Set<Argument> arguments = handler.getArguments();
 		
-		Iterator<CLIArgument> argumentIterator = arguments.iterator();
+		Iterator<Argument> argumentIterator = arguments.iterator();
 		
 		System.out.println(Messages.getString("argument.info.help")); //$NON-NLS-1$
 		
 		while(argumentIterator.hasNext()) {
-			CLIArgument agrument = argumentIterator.next();
+			Argument argument = argumentIterator.next();
 			StringBuilder sb = new StringBuilder();
 			
-			for(int i = 0; i < agrument.getCommandOptions().length; i++) {
-				sb.append(agrument.getCommandOptions()[i]);
+			for(int i = 0; i < argument.getCommandOptions().length; i++) {
+				sb.append(argument.getCommandOptions()[i]);
 				
-				if(i < agrument.getCommandOptions().length -1) {
+				if(i < argument.getCommandOptions().length -1) {
 					sb.append(", "); //$NON-NLS-1$
 				}
 			}
 			
 			System.out.println(sb.toString() + ":"); //$NON-NLS-1$
-			System.out.println("\t" + agrument.getHelpText()); //$NON-NLS-1$
+			System.out.println("\t" + argument.getHelpText()); //$NON-NLS-1$
 		}
 		
 		handler.setRequireExit(true);

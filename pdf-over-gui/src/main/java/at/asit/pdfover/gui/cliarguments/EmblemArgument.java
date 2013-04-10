@@ -28,12 +28,12 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * CLI Argument to set the emblem file to use for signature
  */
-public class EmblemArgument extends CLIArgument {
+public class EmblemArgument extends Argument {
 	/**
 	 * Constructor
 	 */
 	public EmblemArgument() {
-		super(new String[] {"-e"}, Messages.getString("argument.help.emblem")); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-e"}, "argument.help.emblem"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
