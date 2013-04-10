@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>${swt.artifactId}</artifactId>
-			<version>3.8</version>
+			<version>4.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.izpack</groupId>
@@ -305,7 +305,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>mac</id>
+			<id>mac-2</id>
 			<activation>
 				<os>
 					<name>mac os x</name>
@@ -333,7 +333,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>mac-64</id>
+			<id>mac-64-2</id>
 			<activation>
 				<os>
 					<name>mac os x</name>
