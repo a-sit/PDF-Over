@@ -61,7 +61,11 @@ public class SWTLoader {
 		}
 	}
 
-	private static int getArchBits() {
+	/**
+	 * Get bit-ness of the JVM
+	 * @return 32 or 64
+	 */
+	public static int getArchBits() {
 		String arch = System.getProperty("os.arch");
 		return arch.contains("64") ? 64 : 32;
 	}

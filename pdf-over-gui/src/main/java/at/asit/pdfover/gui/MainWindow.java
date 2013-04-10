@@ -18,6 +18,8 @@ package at.asit.pdfover.gui;
 // Imports
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -31,7 +33,6 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.cocoa.NSWindow;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -50,6 +51,7 @@ import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
@@ -210,8 +212,22 @@ public class MainWindow {
 		this.shell.setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) { //$NON-NLS-1$ //$NON-NLS-2$
 			// Workaround for SWT bug on Mac: disable full screen mode
-			NSWindow nswindow = this.shell.view.window();
-			nswindow.setCollectionBehavior(0);
+			try {
+				Field field = Control.class.getDeclaredField("view"); //$NON-NLS-1$
+				Object /*NSView*/ view = field.get(this.shell);
+				if (view != null)
+				{
+					Class<?> c = Class.forName("org.eclipse.swt.internal.cocoa.NSView"); //$NON-NLS-1$
+					Object nswindow = c.getDeclaredMethod("window").invoke(view); //$NON-NLS-1$
+					c = Class.forName("org.eclipse.swt.internal.cocoa.NSWindow"); //$NON-NLS-1$
+					Method setCollectionBehavior = c.getDeclaredMethod(
+							"setCollectionBehavior", //$NON-NLS-1$
+							(SWTLoader.getArchBits() == 64) ? long.class : int.class);
+					setCollectionBehavior.invoke(nswindow, 0);
+				}
+			} catch (Exception e) {
+				log.error("Error disabling full screen mode", e); //$NON-NLS-1$
+			}
 		}
 		try {
 			Display display = Display.getCurrent();
