@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.composites;
 import org.eclipse.swt.widgets.Composite;
 
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -30,6 +31,33 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 	 * the configuration container
 	 */
 	protected ConfigurationContainer configurationContainer;
+	
+	/**
+	 * The PDF Signer used to produce signature block preview
+	 */
+	protected PDFSigner signer;
+	
+	/**
+	 * @return the signer
+	 */
+	public PDFSigner getSigner() {
+		return this.signer;
+	}
+
+	/**
+	 * @param signer the signer to set
+	 */
+	public void setSigner(PDFSigner signer) {
+		this.signer = signer;
+		this.signerChanged();
+	}
+
+	/**
+	 * Called when the signer is changed!
+	 */
+	protected void signerChanged() {
+		// overwrite 
+	}
 	
 	/**
 	 * @param parent

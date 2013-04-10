@@ -69,6 +69,16 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_tabFolder.left = new FormAttachment(0, 5);
 		tabFolder.setLayoutData(fd_tabFolder);
 
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.simpleComposite.signerChanged();
+			}
+		});
+		
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
 		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
@@ -263,6 +273,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		tabFolder.setSelection(advancedTabItem);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
+	 */
+	@Override
+	protected void signerChanged() {
+		this.simpleComposite.setSigner(this.getSigner());
+	}
+	
 	void performOutputFolderChanged(String foldername) {
 		log.debug("Selected Output folder: " + foldername); //$NON-NLS-1$
 		this.configurationContainer.setOutputFolder(foldername);

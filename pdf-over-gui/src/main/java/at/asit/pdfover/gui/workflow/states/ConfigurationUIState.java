@@ -37,6 +37,7 @@ public class ConfigurationUIState extends State {
 			.getLogger(ConfigurationUIState.class);
 
 	
+	
 	private ConfigurationComposite configurationComposite = null;
 
 	private ConfigurationComposite getConfigurationComposite() {
@@ -45,6 +46,7 @@ public class ConfigurationUIState extends State {
 					this.stateMachine.getGUIProvider().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
 			this.configurationComposite.setConfigManipulator(this.stateMachine.getConfigManipulator());
 			this.configurationComposite.setConfigProvider(this.stateMachine.getConfigProvider());
+			this.configurationComposite.setSigner(this.stateMachine.getPDFSigner());
 		}
 
 		return this.configurationComposite;

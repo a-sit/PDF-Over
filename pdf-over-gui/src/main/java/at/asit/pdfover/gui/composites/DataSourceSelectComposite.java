@@ -149,7 +149,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		super(parent, style, state);
 
 		this.activeBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
-		this.inactiveBorder = this.activeBackground;
+		this.inactiveBorder = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
 		this.activeBorder = new Color(getDisplay(),0x6B, 0xA5, 0xD9);
 		this.backgroundColor = this.getBackground();
 		this.borderColor = this.inactiveBorder;

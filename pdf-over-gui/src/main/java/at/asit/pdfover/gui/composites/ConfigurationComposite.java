@@ -33,6 +33,7 @@ import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.ConfigurationContainerImpl;
+import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -52,6 +53,28 @@ import org.eclipse.swt.layout.FormAttachment;
  * Composite for hosting configuration composites
  */
 public class ConfigurationComposite extends StateComposite {
+	
+	/**
+	 * The PDF Signer used to produce signature block preview
+	 */
+	protected PDFSigner signer;
+	
+	/**
+	 * @return the signer
+	 */
+	public PDFSigner getSigner() {
+		return this.signer;
+	}
+
+	/**
+	 * @param signer the signer to set
+	 */
+	public void setSigner(PDFSigner signer) {
+		this.signer = signer;
+		if(this.configComposite != null) {
+			this.configComposite.setSigner(getSigner());
+		}
+	}
 	
 	/**
 	 * Configuration Mode selection listener
@@ -76,6 +99,7 @@ public class ConfigurationComposite extends StateComposite {
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
+				ConfigurationComposite.this.configComposite.setSigner(getSigner());
 				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 			} else {
 				// switch to simple
@@ -85,6 +109,7 @@ public class ConfigurationComposite extends StateComposite {
 						ConfigurationComposite.this.style,
 						ConfigurationComposite.this.state,
 						ConfigurationComposite.this.configurationContainer);
+				ConfigurationComposite.this.configComposite.setSigner(getSigner());
 				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 			}
 
@@ -225,7 +250,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.configComposite = new SimpleConfigurationComposite(
 				this.containerComposite, SWT.FILL | style, state,
 				this.configurationContainer);
-
+		
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
 		fd_composite.bottom = new FormAttachment(90, -5);
