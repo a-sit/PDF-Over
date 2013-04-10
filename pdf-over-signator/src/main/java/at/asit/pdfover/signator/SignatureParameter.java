@@ -129,7 +129,6 @@ public abstract class SignatureParameter {
 	 */
 	public abstract Image getPlaceholder();
 	
-	
 	/**
 	 * Gets the Emblem
 	 * @return the Emblem

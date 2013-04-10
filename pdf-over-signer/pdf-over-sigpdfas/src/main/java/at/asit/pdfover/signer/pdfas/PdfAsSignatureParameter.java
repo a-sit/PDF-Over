@@ -57,13 +57,6 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
-	@Override
-	public SignatureDimension getPlaceholderDimension() {
-		// return new SignatureDimension(487, 206);
-
-		return new SignatureDimension(262, 88);
-	}
-
 	/**
 	 * Gets the PDFAS Positioning
 	 * 
@@ -113,6 +106,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	@Override
 	public String getProperty(String key) {
 		return this.genericProperties.get(key);
+	}
+
+	@Override
+	public SignatureDimension getPlaceholderDimension() {
+		// return new SignatureDimension(487, 206);
+
+		return new SignatureDimension(262, 88);
 	}
 
 	/*

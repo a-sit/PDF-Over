@@ -105,8 +105,7 @@ public class SignaturePanel extends JPanel {
 	 * Set a new document to be displayed
 	 * @param pdf the PDFFile to be displayed
 	 */
-	public void setDocument(PDFFile pdf)
-	{
+	public void setDocument(PDFFile pdf) {
 		this.pdf = pdf;
 		this.sigPagePos = null;
 		showPage(pdf.getNumPages());

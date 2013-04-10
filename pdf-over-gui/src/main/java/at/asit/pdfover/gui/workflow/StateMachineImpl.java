@@ -59,7 +59,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		this.status.setCurrentState(new PrepareConfigurationState(this));
 		this.pdfSigner = new PDFSignerImpl();
 		this.configProvider = new ConfigProviderImpl();
-		setCmdLineAargs(cmdLineArgs);
+		setCmdLineArgs(cmdLineArgs);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * 
 	 * @param cmdLineArgs
 	 */
-	private void setCmdLineAargs(String[] cmdLineArgs) {
+	private void setCmdLineArgs(String[] cmdLineArgs) {
 		this.cmdLineArgs = cmdLineArgs;
 	}
 
