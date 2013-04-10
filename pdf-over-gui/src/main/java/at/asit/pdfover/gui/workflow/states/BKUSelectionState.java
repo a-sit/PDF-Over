@@ -36,6 +36,7 @@ public class BKUSelectionState extends WorkflowState {
 	public void update(Workflow workflow) {
 		// TODO Auto-generated method stub
 		
+		this.setNextState(state)
 	}
 
 	/* (non-Javadoc)
