@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -98,7 +99,7 @@ public class PositioningComposite extends StateComposite {
 		bottomBar.setLayout(new FormLayout());
 
 		Button btnSign = new Button(bottomBar, SWT.NONE);
-		btnSign.setText("Sign");
+		btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
 		fd_btnSign.top = new FormAttachment(0);
@@ -111,7 +112,7 @@ public class PositioningComposite extends StateComposite {
 		fd_lblPage.bottom = new FormAttachment(100);
 		this.lblPage.setLayoutData(fd_lblPage);
 
-		this.mainArea = new Composite(this, SWT.BORDER | SWT.EMBEDDED | SWT.V_SCROLL);
+		this.mainArea = new Composite(this, SWT.EMBEDDED | SWT.V_SCROLL);
 		FormData fd_mainArea = new FormData();
 		fd_mainArea.left = new FormAttachment(0);
 		fd_mainArea.right = new FormAttachment(100);
