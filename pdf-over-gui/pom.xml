@@ -215,20 +215,10 @@
 	</properties>
 
 	<profiles>
-		<profile>
-			<id>linux</id>
-			<activation>
-				<os>
-					<name>linux</name>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>org.eclipse.swt.gtk.linux.x86</swt.artifactId>
-				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
-				<target.name>linux</target.name>
-			</properties>
-		</profile>
+		<!--
+			Note: Build system profile has to come first!
+			Else it overwrites the chosen profile
+		 -->
 		<profile>
 			<id>linux-64</id>
 			<activation>
@@ -241,6 +231,20 @@
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
 				<staging.dir>${project.build.directory}/staging/linux-64</staging.dir>
 				<target.name>linux-64</target.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<name>linux</name>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>org.eclipse.swt.gtk.linux.x86</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/linux</staging.dir>
+				<target.name>linux</target.name>
 			</properties>
 		</profile>
 
