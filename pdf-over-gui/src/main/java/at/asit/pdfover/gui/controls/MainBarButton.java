@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -49,12 +50,12 @@ public abstract class MainBarButton extends Canvas {
 
 			@Override
 			public void paintControl(PaintEvent e) {
-				MainBarButton.this.paintButton(e);
+				MainBarButton.this.paintControl(e);
 			}
 		});
 
 		final Cursor hand = new Cursor(this.getDisplay(), SWT.CURSOR_HAND);
-		
+
 		this.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -120,6 +121,7 @@ public abstract class MainBarButton extends Canvas {
 	 *            the active state
 	 */
 	public void setActive(boolean active) {
+
 		this.active = active;
 		if (this.active) {
 			this.setBackground(this.activeBackground);
@@ -158,14 +160,51 @@ public abstract class MainBarButton extends Canvas {
 	private static final Logger log = LoggerFactory
 			.getLogger(MainBarButton.class);
 
-	/**
-	 * @param e
-	 */
-	protected void paintButton(PaintEvent e) {
+	protected void paintBackground(PaintEvent e) {
+
 		Point size = this.getSize();
 		int height = size.y - 2;
 
 		int width = size.x;
+
+		int factor = 4;
+
+		// TOP
+		e.gc.fillGradientRectangle(0, 0, width, factor, true);
+
+		// BOTTOM
+		e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
+				true);
+
+		// LEFT
+		//e.gc.fillGradientRectangle(0, 0, factor, height, false);
+
+		// RIGTH
+		//e.gc.fillGradientRectangle(width, 0, -1 * (width / factor), height,
+		//		false);
+
+	}
+
+	private void paintControl(PaintEvent e) {
+		this.paintBackground(e);
+		this.paintButton(e);
+		this.paintBorderAndText(e);
+	}
+
+	protected void paintButton(PaintEvent e) {
+		// could be overwritten by subclasses
+	}
+
+	/**
+	 * @param e
+	 */
+	protected void paintBorderAndText(PaintEvent e) {
+		Point size = this.getSize();
+		int height = size.y - 2;
+
+		int width = size.x;
+
+		// e.gc.fillGradientRectangle(0, 1, width, height / 4, true);
 
 		if (this.image == null) {
 			int textlen = 0;
@@ -184,6 +223,7 @@ public abstract class MainBarButton extends Canvas {
 					.scaledTo(height, height));
 			e.gc.drawImage(tmp, imgx, 0);
 		}
+
 	}
 
 	/**

@@ -241,22 +241,6 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.fd_btn_open.bottom = new FormAttachment(100, -5);
 		btn_open.setLayoutData(this.fd_btn_open);
 
-		lbl_drag.addListener(SWT.Resize, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				/*Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				DataSourceSelectComposite.this.fd_btn_open.top = new FormAttachment(
-						50, (lbl_drag.getSize().x / 2) + 10);
-				DataSourceSelectComposite.this.fd_btn_open.left = new FormAttachment(
-						50, -1 * (size.x / 2));
-				DataSourceSelectComposite.this.fd_btn_open.right = new FormAttachment(
-						50, (size.x / 2));
-				DataSourceSelectComposite.this.fd_btn_open.bottom = new FormAttachment(
-						50, (size.y / 2) + (lbl_drag.getSize().x) + 10);*/
-			}
-		});
-
 		// btn_open.setBackground(back);
 		btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();

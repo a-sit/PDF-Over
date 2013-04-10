@@ -62,7 +62,6 @@ public class MainBarEndButton extends MainBarButton {
 		e.gc.drawLine(0, height, 0+split, (height) / 2);
 		e.gc.drawLine(0+split, (height) / 2, 0, 0);
 
-		super.paintButton(e);
 	}
 
 	/*

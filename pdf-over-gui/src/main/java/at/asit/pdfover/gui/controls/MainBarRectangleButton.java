@@ -48,6 +48,7 @@ public class MainBarRectangleButton extends MainBarButton {
 	 */
 	@Override
 	protected void paintButton(PaintEvent e) {
+		
 		Point size = this.getSize();
 
 		int height = size.y - 2;
@@ -59,7 +60,6 @@ public class MainBarRectangleButton extends MainBarButton {
 		e.gc.drawLine(width, height, 0, height);
 		e.gc.drawLine(0, height, 0, 0);
 		
-		super.paintButton(e);
 	}
 
 	/* (non-Javadoc)

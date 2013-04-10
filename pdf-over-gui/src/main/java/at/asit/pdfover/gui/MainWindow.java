@@ -189,13 +189,13 @@ public class MainWindow {
 		this.mainBarFormData.left = new FormAttachment(0, 5);
 		this.mainBarFormData.right = new FormAttachment(100, -5);
 		this.mainBarFormData.top = new FormAttachment(0, 5);
-		this.mainBarFormData.bottom = new FormAttachment(0, 60);
+		this.mainBarFormData.bottom = new FormAttachment(0, 50);
 		composite.setLayoutData(this.mainBarFormData);
 
 		this.btn_config = new MainBarRectangleButton(composite, SWT.NONE);
 		FormData fd_btn_config = new FormData();
 		fd_btn_config.bottom = new FormAttachment(0, 45);
-		fd_btn_config.right = new FormAttachment(10,0);
+		fd_btn_config.right = new FormAttachment(0,45);
 		fd_btn_config.top = new FormAttachment(0);
 		fd_btn_config.left = new FormAttachment(0, 2);
 		this.btn_config.setLayoutData(fd_btn_config);
@@ -229,7 +229,7 @@ public class MainWindow {
 		fd_btn_open.bottom = new FormAttachment(0, 45);
 		fd_btn_open.right = new FormAttachment(35, 5);
 		fd_btn_open.top = new FormAttachment(0);
-		fd_btn_open.left = new FormAttachment(10, 0);
+		fd_btn_open.left = new FormAttachment(0, 45);
 		this.btn_open.setLayoutData(fd_btn_open);
 		this.btn_open.setText("Open");
 		this.btn_open.addMouseListener(new MouseListener() {
@@ -304,7 +304,7 @@ public class MainWindow {
 		FormData fd_composite_1 = new FormData();
 		fd_composite_1.bottom = new FormAttachment(100, -25);
 		fd_composite_1.right = new FormAttachment(100, -5);
-		fd_composite_1.top = new FormAttachment(0, 60);
+		fd_composite_1.top = new FormAttachment(0, 50);
 		fd_composite_1.left = new FormAttachment(0, 5);
 		this.container.setLayoutData(fd_composite_1);
 		this.stack = new StackLayout();
