@@ -58,6 +58,7 @@
 		<pack name="main" required="yes">
 			<description>Main Installation</description>
 			<file src="lib" targetdir="$INSTALL_PATH" />
+			<file src="lib-swt" targetdir="$INSTALL_PATH" />
 			<file src="scripts" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<executable targetfile="$INSTALL_PATH/scripts/pdfover_linux.sh"
