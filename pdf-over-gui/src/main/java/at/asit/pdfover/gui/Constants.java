@@ -98,6 +98,9 @@ public class Constants {
 					"/img/config.png" : //$NON-NLS-1$
 					"/img/config_p.png"; //$NON-NLS-1$
 
+	/** Config inactive image resource */
+	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png"; //$NON-NLS-1$
+
 	/** Error image resource */
 	public static final String RES_IMG_ERROR = "/img/error.png"; //$NON-NLS-1$
 

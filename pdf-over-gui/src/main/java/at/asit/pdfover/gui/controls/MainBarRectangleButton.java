@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.controls;
 
 // Imports
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.widgets.Composite;
@@ -27,6 +28,17 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class MainBarRectangleButton extends MainBarButton {
+
+	/**
+	 * SLF4J Logger instance
+	 **/
+	@SuppressWarnings("unused")
+	private static final Logger log = LoggerFactory
+			.getLogger(MainBarRectangleButton.class);
+
+	private Image enabledImg = null;
+	private Image disabledImg = null;
+
 	/**
 	 * @param parent
 	 * @param style
@@ -38,11 +50,24 @@ public class MainBarRectangleButton extends MainBarButton {
 	}
 
 	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MainBarRectangleButton.class);
+	 * Set the image to display while this control is enabled
+	 * @param enabledImg enabled image
+	 */
+	public void setEnabledImage(Image enabledImg) {
+		this.enabledImg = enabledImg;
+		if (getEnabled())
+			setImage(enabledImg);
+	}
+
+	/**
+	 * Set the image to display while this control is disabled
+	 * @param disabledImg disabled image
+	 */
+	public void setDisabledImage(Image disabledImg) {
+		this.disabledImg = disabledImg;
+		if (!getEnabled())
+			setImage(disabledImg);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -142,4 +167,9 @@ public class MainBarRectangleButton extends MainBarButton {
 		return reg;
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+		setImage(enabled ? this.enabledImg : this.disabledImg);
+		super.setEnabled(enabled);
+	}
 }

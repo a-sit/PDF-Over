@@ -84,29 +84,19 @@ public class MainWindow {
 	 * Main bar Buttons
 	 */
 	public enum Buttons {
-		/**
-		 * the configuration button
-		 */
+		/** the configuration button */
 		CONFIG,
 
-		/**
-		 * the open button
-		 */
+		/** the open button */
 		OPEN,
 
-		/**
-		 * the position button
-		 */
+		/** the position button */
 		POSITION,
 
-		/**
-		 * the signature button
-		 */
+		/** the signature button */
 		SIGN,
 
-		/**
-		 * the final button
-		 */
+		/** the final button */
 		FINAL
 	}
 
@@ -283,7 +273,6 @@ public class MainWindow {
 		this.btn_config
 				.setToolTipText(Messages.getString("main.configuration")); //$NON-NLS-1$
 		this.btn_config.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine
@@ -294,9 +283,11 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 
 		InputStream is = this.getClass().getResourceAsStream(Constants.RES_IMG_CONFIG);
-
-		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(
-				is)));
+		((MainBarRectangleButton) this.btn_config).setEnabledImage(
+				new Image(Display.getDefault(), new ImageData(is)));
+		is = this.getClass().getResourceAsStream(Constants.RES_IMG_CONFIG_DISABLED);
+		((MainBarRectangleButton) this.btn_config).setDisabledImage(
+				new Image(Display.getDefault(), new ImageData(is)));
 
 		Composite mainbarContainer = new Composite(this.mainbar, SWT.NONE);
 		mainbarContainer.setLayout(new FormLayout());
