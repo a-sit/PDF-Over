@@ -112,16 +112,16 @@ public interface ConfigurationContainer {
 	public void setProxyPort(int port) throws InvalidPortException;
 
 	/**
-	 * Gets the automatic position
-	 * @return the automatic position
+	 * Gets the automatic positioning
+	 * @return whether automatic positioning is enabled
 	 */
-	public boolean getAutomaticPosition();
+	public boolean getAutomaticPositioning();
 
 	/**
-	 * Sets the automatic position
-	 * @param automatic the automatic position
+	 * Sets the automatic positioning
+	 * @param automatic whether to enable automatic positioning
 	 */
-	public void setAutomaticPosition(boolean automatic);
+	public void setAutomaticPositioning(boolean automatic);
 
 	/**
 	 * Gets the transparency of the placeholder

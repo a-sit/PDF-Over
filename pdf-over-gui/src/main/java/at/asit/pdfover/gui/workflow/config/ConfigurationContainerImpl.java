@@ -225,7 +225,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getAutomaticPosition()
 	 */
 	@Override
-	public boolean getAutomaticPosition() {
+	public boolean getAutomaticPositioning() {
 		return this.automaticPositioning;
 	}
 
@@ -234,7 +234,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setAutomaticPosition(boolean)
 	 */
 	@Override
-	public void setAutomaticPosition(boolean automatic) {
+	public void setAutomaticPositioning(boolean automatic) {
 		this.automaticPositioning = automatic;
 	}
 

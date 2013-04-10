@@ -278,7 +278,7 @@ public class ConfigurationComposite extends StateComposite {
 			// Initialize Configuration Container
 			if (this.configProvider.getDefaultSignaturePosition() != null) {
 				this.configurationContainer
-						.setAutomaticPosition(this.configProvider
+						.setAutomaticPositioning(this.configProvider
 								.getDefaultSignaturePosition()
 								.useAutoPositioning());
 			}
@@ -400,7 +400,7 @@ public class ConfigurationComposite extends StateComposite {
 				.getDefaultBKU());
 		this.configManipulator
 				.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
-		if (this.configurationContainer.getAutomaticPosition()) {
+		if (this.configurationContainer.getAutomaticPositioning()) {
 			this.configManipulator
 					.setDefaultSignaturePosition(new SignaturePosition());
 		} else {

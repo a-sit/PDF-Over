@@ -465,7 +465,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performPositionSelection(boolean automatic) {
 		log.debug("Selected Position: " + automatic); //$NON-NLS-1$
-		this.configurationContainer.setAutomaticPosition(automatic);
+		this.configurationContainer.setAutomaticPositioning(automatic);
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
@@ -500,7 +500,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.performOutputFolderChanged(outputFolder);
 		}
 		this.performPositionSelection(this.configurationContainer
-				.getAutomaticPosition());
+				.getAutomaticPositioning());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
