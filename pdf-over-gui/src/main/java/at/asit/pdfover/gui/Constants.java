@@ -29,7 +29,7 @@ public class Constants {
 	private static Display display = Display.getCurrent();
 
 	/** Supported locales */
-	public static final Locale[] SUPPORTED_LOCALES = { Locale.ENGLISH, Locale.GERMAN };
+	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 
 	/** Main window height */
 	public static final int MAINWINDOW_HEIGHT = 780;

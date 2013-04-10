@@ -66,8 +66,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 
 	private String defaultPassword = STRING_EMPTY;
 
-	private Locale locale = Locale.getDefault();
-	private Locale signLocale = Locale.getDefault();
+	private Locale locale = Messages.getDefaultLocale();
+	private Locale signLocale = this.locale;
 	
 	private String emblem = STRING_EMPTY;
 
@@ -593,7 +593,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setLocale(Locale locale) {
 		if(locale == null) {
-			this.locale = Locale.getDefault();
+			this.locale = Messages.getDefaultLocale();
 		} else {
 			this.locale = locale;
 			Locale.setDefault(locale);
@@ -607,7 +607,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setSignLocale(Locale locale) {
 		if(locale == null) {
-			this.signLocale = Locale.getDefault();
+			this.signLocale = Messages.getDefaultLocale();
 		} else {
 			this.signLocale = locale;
 		}

@@ -41,9 +41,22 @@ public class Messages {
 	//private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 	//		.getBundle(BUNDLE_NAME);
 
-	private static Locale currentLocale = Locale.getDefault();
+	private static Locale currentLocale = getDefaultLocale();
 	
 	private Messages() {
+	}
+
+	/**
+	 * Get the closest match to the system default Locale out of the supported locales
+	 * @return the default locale
+	 */
+	public static Locale getDefaultLocale() {
+		Locale ld = Locale.getDefault();
+		for (Locale l : Constants.SUPPORTED_LOCALES) {
+			if (l.equals(ld) || l.getLanguage().equals(ld.getLanguage()))
+				return l;
+		}
+		return Constants.SUPPORTED_LOCALES[0];
 	}
 
 	/**
@@ -56,9 +69,11 @@ public class Messages {
 	
 	private static ResourceBundle getBundle(Locale locale) {
 		if(!bundles.containsKey(locale)) {
+			log.debug("Loading resource bundle for " + locale); //$NON-NLS-1$
 			ResourceBundle tmp = null;
 			try {
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME, locale);
+				log.debug("Received bundle for " + tmp.getLocale()); //$NON-NLS-1$
 			} catch(Exception e) {
 				log.error("NO RESOURCE BUNDLE FOR " + locale.toString(), e); //$NON-NLS-1$
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
