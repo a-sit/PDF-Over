@@ -16,12 +16,23 @@
 package at.asit.pdfover.gui.workflow.states;
 
 // Imports
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.composites.BKUSelectionComposite;
+import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
+import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
+import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus;
+import at.asit.pdfover.gui.workflow.states.mobilebku.PostCredentialsThread;
+import at.asit.pdfover.gui.workflow.states.mobilebku.PostSLRequestThread;
+import at.asit.pdfover.gui.workflow.states.mobilebku.PostTanThread;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -32,6 +43,7 @@ public class MobileBKUState extends State {
 	 */
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
+		this.status = new MobileBKUStatus();
 	}
 
 	/**
@@ -41,17 +53,208 @@ public class MobileBKUState extends State {
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileBKUState.class);
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui.workflow.Workflow)
+	at.asit.pdfover.signator.SigningState signingState;
+
+	Exception threadException = null;
+
+	MobileBKUCommunicationState communicationState = MobileBKUCommunicationState.POST_REQUEST;
+
+	MobileBKUStatus status = null;
+
+	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
+
+	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
+
+	WaitingComposite waitingComposite = null;
+
+	private WaitingComposite getWaitingComposite() {
+		if (this.waitingComposite == null) {
+			this.waitingComposite = this.stateMachine.getGUIProvider()
+					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
+		}
+
+		return this.waitingComposite;
+	}
+
+	private MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
+		if (this.mobileBKUEnterTANComposite == null) {
+			this.mobileBKUEnterTANComposite = this.stateMachine
+					.getGUIProvider().createComposite(
+							MobileBKUEnterTANComposite.class, SWT.RESIZE, this);
+		}
+
+		return this.mobileBKUEnterTANComposite;
+	}
+
+	private MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
+		if (this.mobileBKUEnterNumberComposite == null) {
+			this.mobileBKUEnterNumberComposite = this.stateMachine
+					.getGUIProvider().createComposite(
+							MobileBKUEnterNumberComposite.class, SWT.RESIZE,
+							this);
+		}
+
+		return this.mobileBKUEnterNumberComposite;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public MobileBKUStatus getStatus() {
+		return this.status;
+	}
+
+	/**
+	 * @return the communicationState
+	 */
+	public MobileBKUCommunicationState getCommunicationState() {
+		return this.communicationState;
+	}
+
+	/**
+	 * @param communicationState
+	 *            the communicationState to set
+	 */
+	public void setCommunicationState(
+			MobileBKUCommunicationState communicationState) {
+		this.communicationState = communicationState;
+	}
+
+	/**
+	 * @return the signingState
+	 */
+	public at.asit.pdfover.signator.SigningState getSigningState() {
+		return this.signingState;
+	}
+
+	/**
+	 * @param threadException
+	 *            the threadException to set
+	 */
+	public void setThreadException(Exception threadException) {
+		this.threadException = threadException;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui
+	 * .workflow.Workflow)
 	 */
 	@Override
 	public void run() {
-		// TODO Process SL Request and set SL Response
-		
-		this.setNextState(new SigningState(this.stateMachine));
+
+		this.signingState = this.stateMachine.getStatus().getSigningState();
+
+		MobileBKUStatus mobileStatus = this.getStatus();
+
+		if (this.threadException != null) {
+			ErrorState error = new ErrorState(this.stateMachine);
+			error.setException(this.threadException);
+			this.setNextState(error);
+			return;
+		}
+
+		switch (this.communicationState) {
+		case POST_REQUEST:
+			this.stateMachine.getGUIProvider().display(
+					this.getWaitingComposite());
+			Thread postSLRequestThread = new Thread(new PostSLRequestThread(
+					this));
+			postSLRequestThread.start();
+			break;
+		case POST_NUMBER:
+			// Check if number and password is set ...
+			// if not show UI
+			// else start thread
+
+			// check if we have everything we need!
+			if (mobileStatus.getPhoneNumber() != null
+					&& mobileStatus.getMobilePassword() != null) {
+				// post to bku
+				Thread postCredentialsThread = new Thread(
+						new PostCredentialsThread(this));
+				postCredentialsThread.start();
+				// resets password if incorrect to null
+			} else {
+
+				MobileBKUEnterNumberComposite ui = this
+						.getMobileBKUEnterNumberComposite();
+
+				if (ui.isUserAck()) {
+					// user hit ok
+
+					ui.setUserAck(false);
+
+					// get number and password from UI
+					mobileStatus.setPhoneNumber(ui.getMobileNumber());
+					mobileStatus.setMobilePassword(ui.getMobilePassword());
+
+					// show waiting composite
+					this.stateMachine.getGUIProvider().display(
+							this.getWaitingComposite());
+
+					// post to BKU
+					Thread postCredentialsThread = new Thread(
+							new PostCredentialsThread(this));
+					postCredentialsThread.start();
+
+				} else {
+					// We need at least number of password => show UI!
+					
+					// set possible error message
+					ui.setErrorMessage(mobileStatus.getErrorMessage());
+					
+					// set possible phone number
+					ui.setMobileNumber(mobileStatus.getPhoneNumber());
+					
+					// set possible password
+					ui.setMobilePassword(mobileStatus.getMobilePassword());
+					
+					this.stateMachine.getGUIProvider().display(ui);
+				}
+			}
+			break;
+		case POST_TAN:
+			// Get TAN from UI
+
+			MobileBKUEnterTANComposite tan = this
+					.getMobileBKUEnterTANComposite();
+
+			if (tan.isUserAck()) {
+				// user hit ok!
+				tan.setUserAck(false);
+				
+				mobileStatus.setTan(tan.getTan());
+				
+				// post to BKU!
+				Thread postTanThread = new Thread(new PostTanThread(this));
+				postTanThread.start();
+
+			} else {
+				tan.setVergleichswert(mobileStatus.getVergleichswert());
+				
+				if(mobileStatus.getTanTries() < MobileBKUStatus.MOBILE_MAX_TAN_TRIES 
+						&& mobileStatus.getTanTries() > 0) {
+					// show warning message x tries left!
+					
+					tan.setTries(mobileStatus.getTanTries());
+					
+				} 
+				this.stateMachine.getGUIProvider().display(tan);
+			}
+
+			break;
+		case FINAL:
+			this.setNextState(new SigningState(this.stateMachine));
+			break;
+		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
@@ -59,12 +262,15 @@ public class MobileBKUState extends State {
 		// No composite - no cleanup necessary
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = this.stateMachine.getStatus()
+				.getBehavior();
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);
@@ -72,7 +278,11 @@ public class MobileBKUState extends State {
 	}
 
 	@Override
-	public String toString()  {
+	public String toString() {
 		return this.getClass().getName();
+	}
+
+	public void invokeUpdate() {
+		this.stateMachine.invokeUpdate();
 	}
 }

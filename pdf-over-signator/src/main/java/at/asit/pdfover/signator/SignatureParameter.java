@@ -48,6 +48,22 @@ public abstract class SignatureParameter {
 	 */
 	protected Emblem emblem;
 
+	protected BKUs signatureDevice;
+	
+	/**
+	 * @return the signatureDevice
+	 */
+	public BKUs getSignatureDevice() {
+		return this.signatureDevice;
+	}
+
+	/**
+	 * @param signatureDevice the signatureDevice to set
+	 */
+	public void setSignatureDevice(BKUs signatureDevice) {
+		this.signatureDevice = signatureDevice;
+	}
+
 	/** 
 	 * Getter of the property <tt>signaturePosition</tt>
 	 * @return  Returns the signaturePosition.

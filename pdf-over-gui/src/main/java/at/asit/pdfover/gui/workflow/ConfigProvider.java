@@ -15,7 +15,7 @@
  */
 package at.asit.pdfover.gui.workflow;
 
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**

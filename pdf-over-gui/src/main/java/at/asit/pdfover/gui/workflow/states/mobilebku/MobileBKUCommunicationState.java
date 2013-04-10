@@ -13,40 +13,30 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui;
-
-//Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
+package at.asit.pdfover.gui.workflow.states.mobilebku;
 
 /**
- * Main entry point for developers
+ * Communication states for Mobile BKU
  */
-public class DeveloperMain {
-
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(DeveloperMain.class);
+public enum MobileBKUCommunicationState {
 	
 	/**
-	 * Developer Main Entry point...
-	 * @param args
+	 * POST SL Request to A-Trust BKU
 	 */
-	public static void main(String[] args) {
-		
-		//BasicConfigurator.configure();
-		
-		// Set PDF-AS log4j configuration:
-		System.setProperty("log4j.configuration", "log4j.properties");
-		
-		StateMachineImpl flow = new StateMachineImpl(args);
-		log.debug("Starting workflow ...");
-		
-		flow.start();
-		
-		log.debug("Ended workflow ...");
-	}
-
+	POST_REQUEST,
+	
+	/**
+	 * POST User informations (number, password) to A-Trust BKU
+	 */
+	POST_NUMBER,
+	
+	/**
+	 * POST tan to A-Trust BKU and retrieve SL Response
+	 */
+	POST_TAN,
+	
+	/**
+	 * Final state
+	 */
+	FINAL
 }

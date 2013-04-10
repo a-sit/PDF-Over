@@ -25,7 +25,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
@@ -66,7 +66,7 @@ public class PrepareSigningState extends State {
 				}
 				
 				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(this.state.stateMachine.getStatus().getDocument()));
-				
+				this.state.signatureParameter.setSignatureDevice(this.state.stateMachine.getStatus().getBKU());
 				this.state.signatureParameter.setSignaturePosition(this.state.stateMachine.getStatus().getSignaturePosition());
 				
 				// TODO: Fill library specific signature Parameters ...
@@ -129,7 +129,10 @@ public class PrepareSigningState extends State {
 		} 
 		
 		if(this.threadException != null) {
-			// TODO: Jump to error state!
+			ErrorState error = new ErrorState(this.stateMachine);
+			error.setException(this.threadException);
+			this.setNextState(error);
+			return;
 		}
 		
 		if(this.signingState == null || this.signingState.getSignatureRequest() == null) {

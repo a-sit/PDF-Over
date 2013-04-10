@@ -37,8 +37,15 @@ public class ErrorState extends State {
 
 	private Exception exception;
 	
-	private boolean userInformed = false;
+	private State recoverState = null;
 	
+	/**
+	 * @param recoverState the recoverState to set
+	 */
+	public void setRecoverState(State recoverState) {
+		this.recoverState = recoverState;
+	}
+
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -62,22 +69,24 @@ public class ErrorState extends State {
 	public void run() {
 		Status status = this.stateMachine.getStatus();
 		
-		if(this.errorComposite != null) {
-			this.userInformed = this.errorComposite.isUserOk();
-		}
+		ErrorComposite errorComposite = this.getComposite();
 		
-		if(this.exception != null && !this.userInformed) {
+		if(this.exception != null && !errorComposite.isUserOk()) {
 			// Display Exception ....
-			ErrorComposite errorComposite = this.getComposite();
 			this.errorComposite.setException(this.exception);
 			
-			this.userInformed = this.errorComposite.isUserOk();
-			
 			this.stateMachine.getGUIProvider().display(errorComposite);
+			return;
 		}
 		
-		// TODO: Think should we do this? (possible infinity loop with exception ...)
-		this.setNextState(status.getPreviousState());
+		// User was informed! 
+		if(this.recoverState != null) {
+			// see if we can recover!
+			this.setNextState(this.recoverState);
+		} else {
+			// we cannot recover exit!
+			this.stateMachine.exit();
+		}
 	}
 
 	/* (non-Javadoc)

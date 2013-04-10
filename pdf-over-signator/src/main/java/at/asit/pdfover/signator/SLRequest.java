@@ -55,7 +55,7 @@ public class SLRequest {
 	 * @return SL request String
 	 */
 	public String getBase64Request() {
-		byte[] b64content = Base64.encodeBase64(getSignatureData().getByteArray());
+		String b64content = new String(Base64.encodeBase64(getSignatureData().getByteArray()));
 
 		String b64request = this.request.replace(
 						DATAOBJECT_STRING,

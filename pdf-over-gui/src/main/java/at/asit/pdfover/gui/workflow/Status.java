@@ -20,6 +20,7 @@ import java.io.File;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;
@@ -56,13 +57,13 @@ public interface Status {
 	 * Sets the selected BKU
 	 * @param bku the selected BKU
 	 */
-	public void setBKU(BKUSelectionState.BKUs bku);
+	public void setBKU(BKUs bku);
 	
 	/**
 	 * Gets the selected BKU
 	 * @return the selected BKU
 	 */
-	public BKUSelectionState.BKUs getBKU();
+	public BKUs getBKU();
 	
 	/**
 	 * Gets the current state

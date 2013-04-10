@@ -65,6 +65,7 @@ public class ErrorComposite extends StateComposite {
 	}
 
 	private Exception exception;
+	private Label lbl_message;
 	
 	
 	/**
@@ -73,6 +74,7 @@ public class ErrorComposite extends StateComposite {
 	 */
 	public void setException(Exception exception) {
 		this.exception = exception;
+		this.lbl_message.setText(this.exception.getMessage());
 	}
 
 	/**
@@ -86,14 +88,14 @@ public class ErrorComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 
-		Label lbl_message = new Label(this, SWT.NATIVE | SWT.RESIZE);
+		this.lbl_message = new Label(this, SWT.WRAP | SWT.NATIVE | SWT.RESIZE);
 		FormData fd_lbl_message = new FormData();
 		fd_lbl_message.left = new FormAttachment(10, 0);
 		fd_lbl_message.right = new FormAttachment(90, 0);
-		fd_lbl_message.top = new FormAttachment(40, 0);
-		fd_lbl_message.bottom = new FormAttachment(50, 0);
-		lbl_message.setLayoutData(fd_lbl_message);
-		lbl_message.setText(this.exception.getMessage());
+		fd_lbl_message.top = new FormAttachment(10, 0);
+		fd_lbl_message.bottom = new FormAttachment(80, 0);
+		this.lbl_message.setLayoutData(fd_lbl_message);
+		//lbl_message.setText(this.exception.getMessage());
 		
 		Button btn_ok = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		btn_ok.setText("OK");
@@ -101,8 +103,8 @@ public class ErrorComposite extends StateComposite {
 		FormData fd_btn_ok = new FormData();
 		fd_btn_ok.left = new FormAttachment(45, 0);
 		fd_btn_ok.right = new FormAttachment(55, 0);
-		fd_btn_ok.top = new FormAttachment(70, 0);
-		fd_btn_ok.bottom = new FormAttachment(75, 0);
+		fd_btn_ok.top = new FormAttachment(85, 0);
+		fd_btn_ok.bottom = new FormAttachment(95, 0);
 		btn_ok.setLayoutData(fd_btn_ok);
 		btn_ok.addSelectionListener(new OkSelectionListener());
 	}

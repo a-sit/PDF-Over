@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;

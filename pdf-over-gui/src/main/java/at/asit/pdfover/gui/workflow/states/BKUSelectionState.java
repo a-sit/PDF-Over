@@ -26,6 +26,7 @@ import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.BKUs;
 
 /**
  * Decides which BKU to use (preconfigured or let user choose)
@@ -37,26 +38,6 @@ public class BKUSelectionState extends State {
 	 */
 	public BKUSelectionState(StateMachine stateMachine) {
 		super(stateMachine);
-	}
-
-	/**
-	 * Enumeration of available BKU types
-	 */
-	public enum BKUs {
-		/**
-		 * Local bku
-		 */
-		LOCAL,
-		
-		/**
-		 * Mobile bku
-		 */
-		MOBILE,
-		
-		/**
-		 * None bku
-		 */
-		NONE
 	}
 
 	/**

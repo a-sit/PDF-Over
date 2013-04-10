@@ -50,12 +50,16 @@ public class LocalBKUState extends State {
 	 */
 	public final static String BKU_REPSONE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 	
+	/**
+	 * TODO: move to a better location ...
+	 */
+	public static final String PDF_OVER_USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
 	
 	/**
 	 * 
 	 */
 	private final class SignLocalBKUThread implements Runnable {
-
+		
 		private LocalBKUState state;
 
 		/**
@@ -74,11 +78,13 @@ public class LocalBKUState extends State {
 				String sl_request = request.getBase64Request();
 
 				HttpClient client = new HttpClient();
-				client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-						"PDF-Over 4.0"); //$NON-NLS-1$
+				
 
 				PostMethod method = new PostMethod(
 						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
+				
+				log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
+				
 				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 
 				int returnCode = client.executeMethod(method);
@@ -160,7 +166,10 @@ public class LocalBKUState extends State {
 		}
 
 		if(this.threadException != null) {
-			// TODO: Jump to error state!
+			ErrorState error = new ErrorState(this.stateMachine);
+			error.setException(this.threadException);
+			this.setNextState(error);
+			return;
 		}
 		
 		if(!this.signingState.hasSignatureResponse()) {

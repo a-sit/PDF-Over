@@ -1,5 +1,6 @@
 package at.asit.pdfover.signer.pdfas;
 
+import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
@@ -58,7 +59,14 @@ public class PDFASSigner implements Signer {
 
 			SignParameters params = new SignParameters();
 			params.setSignaturePositioning(sign_para.getPDFASPositioning());
-			params.setSignatureDevice(Constants.SIGNATURE_DEVICE_BKU);
+			
+			if(parameter.getSignatureDevice() == BKUs.LOCAL) {
+				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_BKU);
+			} else if(parameter.getSignatureDevice() == BKUs.MOBILE) {
+				// TODO: change to MOBILE!!
+				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILE);
+				//params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILETEST);
+			}
 			params.setSignatureType(Constants.SIGNATURE_TYPE_BINARY);
 			params.setSignatureProfileId(PROFILE_ID);
 
