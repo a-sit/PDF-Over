@@ -261,8 +261,12 @@ public class SignaturePanel extends JPanel {
 						null, this);
 
 			// calculate the transform from page to screen space
-			this.currentXform = this.currentPage.getInitialTransform(pageSize.width,
-					pageSize.height, null);
+			this.currentXform = new AffineTransform(1, 0, 0, -1, 0, pageSize.height);
+			Rectangle2D clip = this.currentPage.getBBox();
+			double scaleX = pageSize.width / clip.getWidth();
+			double scaleY = pageSize.height / clip.getHeight();
+			this.currentXform.scale(scaleX, scaleY);
+			this.currentXform.translate(-clip.getMinX(), -clip.getMinY());
 
 			if (this.sigPagePos != null)
 				this.sigScreenPos = this.currentXform.transform(this.sigPagePos, this.sigScreenPos);
