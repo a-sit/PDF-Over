@@ -240,6 +240,8 @@ public class SignaturePanel extends JPanel {
 
 	private MouseAdapter mouseListener = new MouseAdapter() {
 
+		private boolean doDrag = false;
+
 		private void updateSigPos(int sigx, int sigy) {
 			if (SignaturePanel.this.currentImage == null)
 				return;
@@ -255,7 +257,17 @@ public class SignaturePanel extends JPanel {
 		/** Handles a mousePressed event */
 		@Override
 		public void mousePressed(MouseEvent evt) {
-			updateSigPos(evt.getX(), evt.getY());
+			if (evt.getButton() == MouseEvent.BUTTON1)
+			{
+				updateSigPos(evt.getX(), evt.getY());
+				this.doDrag = true;
+			}
+		}
+
+		/** Handles a mouseReleased event */
+		@Override
+		public void mouseReleased(MouseEvent evt) {
+			this.doDrag = false;
 		}
 
 		/**
@@ -263,7 +275,8 @@ public class SignaturePanel extends JPanel {
 		 */
 		@Override
 		public void mouseDragged(MouseEvent evt) {
-			updateSigPos(evt.getX(), evt.getY());
+			if (this.doDrag)
+				updateSigPos(evt.getX(), evt.getY());
 		}
 	};
 
