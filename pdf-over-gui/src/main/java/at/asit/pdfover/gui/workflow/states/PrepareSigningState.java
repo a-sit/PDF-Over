@@ -144,34 +144,34 @@ public class PrepareSigningState extends State {
 		WaitingComposite waiting = this.getSelectionComposite();
 
 		this.stateMachine.getGUIProvider().display(waiting);
-		
+
 		this.signer = this.stateMachine.getPDFSigner().getPDFSigner();
-		
+
 		Status status = this.stateMachine.getStatus();
-		
+
 		if(this.signatureParameter == null) {
 			this.signatureParameter = this.signer.newParameter(); 
 		}
-		
+
 		if(this.signingState == null && this.threadException == null) {
 			Thread t = new Thread(new PrepareDocumentThread(this));
 			t.start();
 			return;
-		} 
-		
+		}
+
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
 					Messages.getString("error.PrepareDocument"),  //$NON-NLS-1$
 					BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
-				this.stateMachine.update();
+				run();
 			} else {
 				this.setNextState(new BKUSelectionState(this.stateMachine));
 			}
 			return;
 		}
-		
+
 		// We got the Request set it into status and move on to next state ...
 		status.setSigningState(this.signingState);
 		
@@ -207,7 +207,7 @@ public class PrepareSigningState extends State {
 	}
 
 	@Override
-	public String toString()  {
+	public String toString() {
 		return this.getClass().getName();
 	}
 }
