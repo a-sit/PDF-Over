@@ -306,12 +306,6 @@ public abstract class MainBarButton extends Canvas {
 		// e.gc.fillGradientRectangle(0, 1, width, height / 4, true);
 
 		if (this.image == null) {
-			int textlen = 0;
-
-			if (this.getText() != null) {
-				textlen = this.getText().length();
-			}
-
 			Color current = e.gc.getForeground();
 
 			if(this.getActive() && this.isEnabled()) {
@@ -326,17 +320,13 @@ public abstract class MainBarButton extends Canvas {
 					this.getTextsize(),
 					e.gc.getFont().getFontData()[0].getStyle());
 
+			String text = this.getText();
 			e.gc.setFont(font);
-
-			int texty = (height - e.gc.getFontMetrics().getHeight()) / 2;
-
-			int textx = (width - e.gc.getFontMetrics().getAverageCharWidth()
-					* textlen) / 2;
-
+			size = e.gc.stringExtent(text);
+			int texty = (height - size.y) / 2;
+			int textx = (width - size.x) / 2;
 			textx = this.changeTextPosition(textx);
-			
 			e.gc.drawText(this.getText(), textx, texty, true);
-
 			font.dispose();
 
 			e.gc.setForeground(current);
