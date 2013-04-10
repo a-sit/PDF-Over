@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.workflow.states;
 // Imports
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -45,6 +46,11 @@ import at.asit.pdfover.signator.SLResponse;
 public class LocalBKUState extends State {
 
 	/**
+	 * SLF4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory.getLogger(LocalBKUState.class);
+
+	/**
 	 * HTTP Response server HEADER
 	 */
 	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //$NON-NLS-1$
@@ -59,10 +65,23 @@ public class LocalBKUState extends State {
 	 */
 	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
+	at.asit.pdfover.signator.SigningState signingState;
+
+	Exception threadException = null;
+
 	/**
-	 * Whether to use Base64 or FileUpload Request
+	 * Null-Operation SL-Request
 	 */
-	public static final boolean USE_BASE64_REQUEST = true;
+	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + //$NON-NLS-1$
+			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>"; //$NON-NLS-1$
+
+	/**
+	 * Constructor
+	 * @param stateMachine the StateMachine
+	 */
+	public LocalBKUState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
 
 	/**
 	 * 
@@ -71,6 +90,10 @@ public class LocalBKUState extends State {
 
 		private LocalBKUState state;
 
+		/** Whether to use Base64 or FileUpload Request */
+		private boolean useBase64Request = false;
+
+		
 		/**
 		 * @param localBKUState
 		 */
@@ -89,8 +112,19 @@ public class LocalBKUState extends State {
 				PostMethod method = new PostMethod(
 						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
 
-				String sl_request = null;
-				if (USE_BASE64_REQUEST)
+				String sl_request = NULL_OPERATION_REQUEST;
+				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				int returnCode = client.executeMethod(method);
+
+				String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
+				String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
+				if (server != null && server.contains("trustDeskbasic")) //$NON-NLS-1$
+					this.useBase64Request = true; // TDB doesn't support MultiPart requests
+
+				method = new PostMethod(
+						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
+
+				if (this.useBase64Request)
 				{
 					sl_request = request.getBase64Request();
 					method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
@@ -109,31 +143,16 @@ public class LocalBKUState extends State {
 				}
 				//log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
 
-				int returnCode = client.executeMethod(method);
+				returnCode = client.executeMethod(method);
 
 				if (returnCode == HttpStatus.SC_OK) {
-					String server = ""; //$NON-NLS-1$
-					String userAgent = ""; //$NON-NLS-1$
-					String signatureLayout = null; 
-					if (method.getResponseHeader(BKU_RESPONSE_HEADER_SERVER) != null &&
-						!method.getResponseHeader(BKU_RESPONSE_HEADER_SERVER).getValue().isEmpty()) {
-						server = method.getResponseHeader(
-								BKU_RESPONSE_HEADER_SERVER).getValue();
-					}
-
-					if (method.getResponseHeader(BKU_RESPONSE_HEADER_USERAGENT) != null &&
-						!method.getResponseHeader(BKU_RESPONSE_HEADER_USERAGENT).getValue().isEmpty()) {
-						userAgent = method.getResponseHeader(
-								BKU_RESPONSE_HEADER_USERAGENT).getValue();
-					}
-
-					if (method
-							.getResponseHeader(BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT) != null &&
-						!method
-							.getResponseHeader(BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT).getValue().isEmpty()) {
-						signatureLayout = method.getResponseHeader(
-								BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT).getValue();
-					}
+					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
+					if (server == null)
+						server = ""; //$NON-NLS-1$
+					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
+					if (userAgent == null)
+						userAgent = ""; //$NON-NLS-1$
+					String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
 
 					String response = method.getResponseBodyAsString();
 					log.debug("SL Response: " + response); //$NON-NLS-1$
@@ -153,23 +172,19 @@ public class LocalBKUState extends State {
 				this.state.stateMachine.invokeUpdate();
 			}
 		}
+
+		/**
+		 * Returns the value corresponding to the given header name
+		 * @param method the HTTP method
+		 * @param headerName the header name
+		 * @return the header value (or null if not found)
+		 */
+		private String getResponseHeader(HttpMethod method, String headerName) {
+			if (method.getResponseHeader(headerName) == null)
+				return null;
+			return method.getResponseHeader(headerName).getValue();
+		}
 	}
-
-	/**
-	 * @param stateMachine
-	 */
-	public LocalBKUState(StateMachine stateMachine) {
-		super(stateMachine);
-	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(LocalBKUState.class);
-
-	at.asit.pdfover.signator.SigningState signingState;
-
-	Exception threadException = null;
 
 	/*
 	 * (non-Javadoc)
