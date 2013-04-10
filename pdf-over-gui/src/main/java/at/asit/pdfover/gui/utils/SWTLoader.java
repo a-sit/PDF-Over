@@ -42,12 +42,12 @@ public class SWTLoader {
 	 */
 	public static void loadSWT() throws InitializationException {
 		try {
-			log.debug("loading " + getSwtJarName());
 			URLClassLoader cl = (URLClassLoader)SWTLoader.class.getClassLoader();
 			Method addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
 			addUrlMethod.setAccessible(true);
 
-			String swtLibPath = "lib-swt/" + getSwtJarName();
+			String swtLibPath = getSwtJarPath() + getSwtJarName();
+			log.debug("loading " + swtLibPath);
 			File swtLib = new File(swtLibPath);
 			if (!swtLib.isFile())
 				throw new SWTLoadFailedException("Library " + swtLibPath + " not found");
@@ -79,6 +79,14 @@ public class SWTLoader {
 		return "swt-" + os + "-" + getArchBits() + ".jar";
 	}
 
+	private static String getSwtJarPath() {
+		String path = SWTLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		int idx = path.lastIndexOf('/');
+		idx = path.lastIndexOf('/', idx - 1);
+		path = path.substring(0, idx + 1);
+		return path + "lib-swt/";
+	}
+
 	private static class SWTLoadFailedException extends Exception {
 		private static final long serialVersionUID = 1L;
 
@@ -86,4 +94,5 @@ public class SWTLoader {
 			super(msg);
 		}
 	}
+
 }
