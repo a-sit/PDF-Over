@@ -2,6 +2,7 @@ package at.asit.pdfover.pdfsignator;
 
 /**
  * The Dimensions of the visible signature block
+ * @author afitzek
  */
 public class SignatureDimension {
 

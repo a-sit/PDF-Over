@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="PDFSignerInterface" size="1512,303" id="at.asit.pdfover.pdfsignator" metadata="uml2-1.0" initialized="true" zoom="0.75" tag="1000" key="32303037303533312D31303030207064662D7369676E65722D696E746572666163652F616669747A656B">
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.3/@sourceConnections.1" name="SigningState" location="46,29" size="198,117" id="at.asit.pdfover.pdfsignator/SigningState" runTimeClassModel="GetSLSignatureRequest(),SetSLSignatureResponse(Ljava.lang.String;),GetPreparedDocument()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="175,54">
+      <children xsi:type="editmodel:MethodEditModel" name="GetPreparedDocument" id="at.asit.pdfover.pdfsignator/SigningState#GetPreparedDocument()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetSLSignatureRequest" id="at.asit.pdfover.pdfsignator/SigningState#GetSLSignatureRequest()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetSLSignatureResponse" id="at.asit.pdfover.pdfsignator/SigningState#SetSLSignatureResponse(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SigningState-Soyatec::Import->at.asit.pdfover.pdfsignator/DocumentSource" source="//@children.0" target="//@children.5" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="198,103" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="50,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.6/@sourceConnections.0 //@children.5/@sourceConnections.0 //@children.3/@sourceConnections.2" name="SignatureParameter" location="449,315" size="200,212" id="at.asit.pdfover.pdfsignator/SignatureParameter" runTimeClassModel="SetInputDocument(Lat.asit.pdfover.pdfsignator.DocumentSource;),SetCollimatingMark(Lat.asit.pdfover.pdfsignator.CollimatingMark;),GetCollimatingMark(),GetInputDocument(),SetKeyIdentifier(Ljava.lang.String;),GetPlaceholderDimension(),GetKeyIdentifier(),SetSignaturePosition(Lat.asit.pdfover.pdfsignator.SignaturePosition;),GetSignaturePosition()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="177,162">
+      <children xsi:type="editmodel:MethodEditModel" name="GetCollimatingMark" id="at.asit.pdfover.pdfsignator/SignatureParameter#GetCollimatingMark()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetInputDocument" id="at.asit.pdfover.pdfsignator/SignatureParameter#GetInputDocument()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetKeyIdentifier" location="346,527" id="at.asit.pdfover.pdfsignator/SignatureParameter#GetKeyIdentifier()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetPlaceholderDimension" id="at.asit.pdfover.pdfsignator/SignatureParameter#GetPlaceholderDimension()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetSignaturePosition" id="at.asit.pdfover.pdfsignator/SignatureParameter#GetSignaturePosition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetCollimatingMark" id="at.asit.pdfover.pdfsignator/SignatureParameter#SetCollimatingMark(Lat.asit.pdfover.pdfsignator.CollimatingMark;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetInputDocument" id="at.asit.pdfover.pdfsignator/SignatureParameter#SetInputDocument(Lat.asit.pdfover.pdfsignator.DocumentSource;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetKeyIdentifier" id="at.asit.pdfover.pdfsignator/SignatureParameter#SetKeyIdentifier(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetSignaturePosition" id="at.asit.pdfover.pdfsignator/SignatureParameter#SetSignaturePosition(Lat.asit.pdfover.pdfsignator.SignaturePosition;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignaturePosition@signaturePosition+at.asit.pdfover.pdfsignator/SignatureParameter@" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,150" id="at.asit.pdfover.pdfsignator/SignaturePosition@signaturePosition+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/SignatureParameter#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="signaturePosition" location="172,61" id="at.asit.pdfover.pdfsignator/SignaturePosition@signaturePosition+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/SignaturePosition#signaturePosition" multiplicityLabel="//@children.1/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.1/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" # signaturePosition" location="208,444" size="116,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="208,471" size="7,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignatureParameter-Soyatec::Import->at.asit.pdfover.pdfsignator/CollimatingMark" source="//@children.1" target="//@children.6" targetEnd="//@children.1/@sourceConnections.1/@children.2" label="//@children.1/@sourceConnections.1/@children.0" sourceEnd="//@children.1/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,30" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="140,15"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignatureParameter-Soyatec::Import->at.asit.pdfover.pdfsignator/DocumentSource" source="//@children.1" target="//@children.5" targetEnd="//@children.1/@sourceConnections.2/@children.2" label="//@children.1/@sourceConnections.2/@children.0" sourceEnd="//@children.1/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="23,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="142,30"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignatureParameter-Soyatec::Import->at.asit.pdfover.pdfsignator/SignatureDimension" source="//@children.1" target="//@children.4" targetEnd="//@children.1/@sourceConnections.3/@children.2" label="//@children.1/@sourceConnections.3/@children.0" sourceEnd="//@children.1/@sourceConnections.3/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="29,212" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="160,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignatureParameter-Soyatec::Import->at.asit.pdfover.pdfsignator/SignaturePosition" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.4/@children.2" label="//@children.1/@sourceConnections.4/@children.0" sourceEnd="//@children.1/@sourceConnections.4/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,154" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="172,91"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.0 //@children.1/@sourceConnections.4 //@children.7/@sourceConnections.1" name="SignaturePosition" location="30,404" size="172,212" id="at.asit.pdfover.pdfsignator/SignaturePosition" runTimeClassModel="GetPage(),SignaturePosition(),GetX(),SignaturePosition(III),SetPage(I),SetX(I),SignaturePosition(II),SetY(I),GetY()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="131,162">
+      <children xsi:type="editmodel:MethodEditModel" name="GetPage" id="at.asit.pdfover.pdfsignator/SignaturePosition#GetPage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetX" id="at.asit.pdfover.pdfsignator/SignaturePosition#GetX()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetY" id="at.asit.pdfover.pdfsignator/SignaturePosition#GetY()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetPage" id="at.asit.pdfover.pdfsignator/SignaturePosition#SetPage(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetX" id="at.asit.pdfover.pdfsignator/SignaturePosition#SetX(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetY" id="at.asit.pdfover.pdfsignator/SignaturePosition#SetY(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SignaturePosition" id="at.asit.pdfover.pdfsignator/SignaturePosition#SignaturePosition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SignaturePosition" id="at.asit.pdfover.pdfsignator/SignaturePosition#SignaturePosition(III)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SignaturePosition" id="at.asit.pdfover.pdfsignator/SignaturePosition#SignaturePosition(II)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="PDFSignerInterface" location="412,44" size="185,117" id="at.asit.pdfover.pdfsignator/PDFSignerInterface" runTimeClassModel="GetParameter(),Sign(Lat.asit.pdfover.pdfsignator.SigningState;),Prepare(Lat.asit.pdfover.pdfsignator.SignatureParameter;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="111,54">
+      <children xsi:type="editmodel:MethodEditModel" name="GetParameter" id="at.asit.pdfover.pdfsignator/PDFSignerInterface#GetParameter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Prepare" id="at.asit.pdfover.pdfsignator/PDFSignerInterface#Prepare(Lat.asit.pdfover.pdfsignator.SignatureParameter;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Sign" id="at.asit.pdfover.pdfsignator/PDFSignerInterface#Sign(Lat.asit.pdfover.pdfsignator.SigningState;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/PDFSignerInterface-Soyatec::Import->at.asit.pdfover.pdfsignator/SignResult" source="//@children.3" target="//@children.7" targetEnd="//@children.3/@sourceConnections.0/@children.2" label="//@children.3/@sourceConnections.0/@children.0" sourceEnd="//@children.3/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,93" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="174,25"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/PDFSignerInterface-Soyatec::Import->at.asit.pdfover.pdfsignator/SigningState" source="//@children.3" target="//@children.0" targetEnd="//@children.3/@sourceConnections.1/@children.2" label="//@children.3/@sourceConnections.1/@children.0" sourceEnd="//@children.3/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,51" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="198,66"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/PDFSignerInterface-Soyatec::Import->at.asit.pdfover.pdfsignator/SignatureParameter" source="//@children.3" target="//@children.1" targetEnd="//@children.3/@sourceConnections.2/@children.2" label="//@children.3/@sourceConnections.2/@children.0" sourceEnd="//@children.3/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="110,117" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="73,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.3" name="SignatureDimension" location="318,554" size="190,140" id="at.asit.pdfover.pdfsignator/SignatureDimension" runTimeClassModel="SetHeight(I),SignatureDimension(II),GetWidth(),GetHeight(),SetWidth(I)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="146,90">
+      <children xsi:type="editmodel:MethodEditModel" name="GetHeight" id="at.asit.pdfover.pdfsignator/SignatureDimension#GetHeight()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetWidth" id="at.asit.pdfover.pdfsignator/SignatureDimension#GetWidth()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetHeight" id="at.asit.pdfover.pdfsignator/SignatureDimension#SetHeight(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SetWidth" id="at.asit.pdfover.pdfsignator/SignatureDimension#SetWidth(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="SignatureDimension" id="at.asit.pdfover.pdfsignator/SignatureDimension#SignatureDimension(II)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.2 //@children.0/@sourceConnections.0 //@children.7/@sourceConnections.0" name="DocumentSource" location="330,194" size="167,30" id="at.asit.pdfover.pdfsignator/DocumentSource" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/DocumentSource@documentSource+at.asit.pdfover.pdfsignator/SignatureParameter@" source="//@children.5" target="//@children.1" targetEnd="//@children.5/@sourceConnections.0/@children.2" label="//@children.5/@sourceConnections.0/@children.0" sourceEnd="//@children.5/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="documentSource" location="12,30" id="at.asit.pdfover.pdfsignator/DocumentSource@documentSource+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/DocumentSource#documentSource" attachSource="true" multiplicityLabel="//@children.5/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.5/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" # documentSource" location="221,231" size="113,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="348,231" size="7,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="3,0" id="at.asit.pdfover.pdfsignator/DocumentSource@documentSource+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/SignatureParameter#"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.1" name="CollimatingMark" location="168,330" size="162,30" id="at.asit.pdfover.pdfsignator/CollimatingMark" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/CollimatingMark@collimark+at.asit.pdfover.pdfsignator/SignatureParameter@" source="//@children.6" target="//@children.1" targetEnd="//@children.6/@sourceConnections.0/@children.2" label="//@children.6/@sourceConnections.0/@children.0" sourceEnd="//@children.6/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="collimark" location="135,0" id="at.asit.pdfover.pdfsignator/CollimatingMark@collimark+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/CollimatingMark#collimark" attachSource="true" multiplicityLabel="//@children.6/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.6/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" # collimark" location="227,309" size="68,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="309,309" size="22,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" id="at.asit.pdfover.pdfsignator/CollimatingMark@collimark+at.asit.pdfover.pdfsignator/SignatureParameter@|at.asit.pdfover.pdfsignator/SignatureParameter#"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.3/@sourceConnections.0" name="SignResult" location="57,180" size="174,117" id="at.asit.pdfover.pdfsignator/SignResult" runTimeClassModel="GetSignedDocument(),GetSignerCertificate(),GetSignaturePosition()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="151,54">
+      <children xsi:type="editmodel:MethodEditModel" name="GetSignaturePosition" id="at.asit.pdfover.pdfsignator/SignResult#GetSignaturePosition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetSignedDocument" id="at.asit.pdfover.pdfsignator/SignResult#GetSignedDocument()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GetSignerCertificate" id="at.asit.pdfover.pdfsignator/SignResult#GetSignerCertificate()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignResult-Soyatec::Import->at.asit.pdfover.pdfsignator/DocumentSource" source="//@children.7" target="//@children.5" targetEnd="//@children.7/@sourceConnections.0/@children.2" label="//@children.7/@sourceConnections.0/@children.0" sourceEnd="//@children.7/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="174,28" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,14"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="at.asit.pdfover.pdfsignator/SignResult-Soyatec::Import->at.asit.pdfover.pdfsignator/SignaturePosition" source="//@children.7" target="//@children.2" targetEnd="//@children.7/@sourceConnections.1/@children.2" label="//@children.7/@sourceConnections.1/@children.0" sourceEnd="//@children.7/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="72,117" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="99,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=7;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>
