@@ -27,10 +27,10 @@ public class Constants {
 	static private Display display = Display.getCurrent();
 
 	/** Main window height */
-	public static final int MAINWINDOW_HEIGHT = 768;
+	public static final int MAINWINDOW_HEIGHT = 780;
 
 	/** Main window width */
-	public static final int MAINWINDOW_WIDTH = 550;
+	public static final int MAINWINDOW_WIDTH = 600;
 
 	/** Main bar height */
 	public static final int MAINBAR_HEIGHT = 60;
