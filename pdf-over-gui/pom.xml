@@ -138,16 +138,10 @@
 				</executions>
 				<configuration>
 					<archiveDirectory>target</archiveDirectory>
-					<excludes>
-						<exclude>**/S*.jar</exclude>
-					</excludes>
 					<includes>
 						<include>*.jar</include>
 					</includes>
-					<keystore>src/main/resources/keystore.jks</keystore>
-					<alias>pdfover_test</alias>
-					<storepass>123456</storepass>
-					<keypass>123456</keypass>
+					<verify>true</verify>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -323,6 +317,55 @@
 				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
 				<target.name>mac</target.name>
 			</properties>
+		</profile>
+		<profile>
+			<id>dummy-sign</id>
+			<!-- Standard profile - sign using a dummy cert -->
+			<activation>
+				<property>
+					<!-- Simple hack to deactivate this profile when using pkcs11-sign -->
+					<name>!pkcs11-pass</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<configuration>
+							<keystore>src/main/resources/keystore.jks</keystore>
+							<alias>pdfover_test</alias>
+							<storepass>123456</storepass>
+							<keypass>123456</keypass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pkcs11-sign</id>
+			<!-- Activate this profile to sign the package using the secure token -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<configuration>
+							<keystore>NONE</keystore>
+							<storetype>PKCS11</storetype>
+							<providerClass>iaik.pkcs.pkcs11.provider.IAIKPkcs11</providerClass>
+							<alias>a-sit-2</alias>
+							<storepass>${pkcs11-pass}</storepass>
+							<keystoreConfig>
+								<delete>false</delete>
+								<gen>false</gen>
+							</keystoreConfig>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 

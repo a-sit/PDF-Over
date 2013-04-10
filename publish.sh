@@ -24,6 +24,8 @@ TNORMAL="\033[0;39m"
 
 COLS=$(tput cols)
 
+MVN_PARAMS="$@"
+
 function begin_phase {
 	MSG=$@
 	printf "$MSG"
@@ -52,7 +54,7 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
  	NAME=${names[$i]}
  	INSTALLER=setup_pdfover_$NAME.jar
 	begin_phase "Building package [$PROFILE] as $INSTALLER..."
- 	mvn install -P$PROFILE > $LOG_DIR/build_$NAME.log 2>&1
+ 	mvn install -P$PROFILE $MVN_PARAMS > $LOG_DIR/build_$NAME.log 2>&1
  	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		end_phase "OK"
