@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.signator;
 
+import java.awt.Image;
+
 //Imports
 
 /**
@@ -120,6 +122,13 @@ public abstract class SignatureParameter {
 	 * @return the placeholder dimensions
 	 */
 	public abstract SignatureDimension getPlaceholderDimension();
+	
+	/**
+	 * Gets the Dimension to display the Placeholder
+	 * @return the placeholder dimensions
+	 */
+	public abstract Image getPlaceholder() throws SignatureException;
+	
 	
 	/**
 	 * Gets the Emblem

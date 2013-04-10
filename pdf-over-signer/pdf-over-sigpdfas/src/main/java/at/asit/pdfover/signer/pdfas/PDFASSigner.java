@@ -1,5 +1,11 @@
 package at.asit.pdfover.signer.pdfas;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SLResponse;
@@ -19,11 +25,17 @@ import at.gv.egiz.pdfas.api.commons.Constants;
 import at.gv.egiz.pdfas.api.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.api.internal.LocalBKUParams;
 import at.gv.egiz.pdfas.api.internal.PdfAsInternal;
+import at.knowcenter.wag.egov.egiz.cfg.SettingsReader;
 
 /**
  * PDF AS Signer Implementation
  */
 public class PDFASSigner implements Signer {
+
+	/**
+	 * SFL4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory.getLogger(PDFASSigner.class);
 
 	/**
 	 * The profile ID
@@ -38,8 +50,9 @@ public class PDFASSigner implements Signer {
 	/**
 	 * Location reference string
 	 */
-	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE + "</sl:LocRefContent>";
-	
+	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE
+			+ "</sl:LocRefContent>";
+
 	@Override
 	public SigningState prepare(SignatureParameter parameter)
 			throws SignatureException {
@@ -60,12 +73,12 @@ public class PDFASSigner implements Signer {
 
 			SignParameters params = new SignParameters();
 			params.setSignaturePositioning(sign_para.getPDFASPositioning());
-			
-			if(parameter.getSignatureDevice() == BKUs.LOCAL) {
+
+			if (parameter.getSignatureDevice() == BKUs.LOCAL) {
 				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_BKU);
-			} else if(parameter.getSignatureDevice() == BKUs.MOBILE) {
+			} else if (parameter.getSignatureDevice() == BKUs.MOBILE) {
 				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILE);
-				//params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILETEST);
+				// params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILETEST);
 			}
 			params.setSignatureType(Constants.SIGNATURE_TYPE_BINARY);
 			params.setSignatureProfileId(PROFILE_ID);
@@ -75,7 +88,7 @@ public class PDFASSigner implements Signer {
 				params.setProfileOverrideValue("SIG_LABEL", parameter
 						.getEmblem().getFileName());
 			}
-			
+
 			// Prepare Output sink
 			state.setOutput(new ByteArrayDataSink());
 			params.setOutput(state.getOutput());
@@ -95,17 +108,18 @@ public class PDFASSigner implements Signer {
 			String slRequest = pdfasInternal.prepareLocalSignRequest(params,
 					false, URL_TEMPLATE, sdi);
 
-			at.gv.egiz.pdfas.api.io.DataSource sig_data = sdi.getSignatureData();
-			
-			PDFASSLRequest request = new PDFASSLRequest(slRequest, sig_data.getAsByteArray());
+			at.gv.egiz.pdfas.api.io.DataSource sig_data = sdi
+					.getSignatureData();
+
+			PDFASSLRequest request = new PDFASSLRequest(slRequest,
+					sig_data.getAsByteArray());
 
 			state.setSignatureRequest(request);
 
 			return state;
-		} catch(PDFASSLRequestException e) {
+		} catch (PDFASSLRequestException e) {
 			throw new SignatureException(e);
-		}
-		catch (PdfAsException e) {
+		} catch (PdfAsException e) {
 			throw new SignatureException(e);
 		}
 	}
@@ -130,13 +144,14 @@ public class PDFASSigner implements Signer {
 
 			SignParameters params = sstate.getSignParameters();
 
-			
 			SignatureDetailInformation sdi = sstate
 					.getSignatureDetailInformation();
 
 			SLResponse slResponse = sstate.getSignatureResponse();
-			
-			LocalBKUParams bkuParams = new LocalBKUParams(slResponse.getServer(), slResponse.getUserAgent(), slResponse.getSignaturLayout());
+
+			LocalBKUParams bkuParams = new LocalBKUParams(
+					slResponse.getServer(), slResponse.getUserAgent(),
+					slResponse.getSignaturLayout());
 
 			// Perform signature
 			at.gv.egiz.pdfas.api.sign.SignResult signResult = pdfasInternal
@@ -154,12 +169,15 @@ public class PDFASSigner implements Signer {
 			// Set Signature position
 			SignaturePosition pos = new SignaturePosition(pdfasPos.getX(),
 					pdfasPos.getY(), pdfasPos.getPage());
-/*			pos.SetAuto(sstate.getPDFAsSignatureParameter()
-					.getSignaturePosition().useAutoPositioning());*/
+			/*
+			 * pos.SetAuto(sstate.getPDFAsSignatureParameter()
+			 * .getSignaturePosition().useAutoPositioning());
+			 */
 			result.setSignaturePosition(pos);
 
 			// Set signed Document
-			result.setSignedDocument(new ByteArrayDocumentSource(((ByteArrayDataSink)sstate.getOutput()).getData()));
+			result.setSignedDocument(new ByteArrayDocumentSource(
+					((ByteArrayDataSink) sstate.getOutput()).getData()));
 
 			return result;
 		} catch (PdfAsException e) {

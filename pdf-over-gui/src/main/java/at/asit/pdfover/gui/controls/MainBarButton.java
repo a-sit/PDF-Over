@@ -309,7 +309,7 @@ public abstract class MainBarButton extends Canvas {
 	 */
 	protected void paintText(PaintEvent e) {
 		Point size = this.getSize();
-		int height = size.y - 2;
+		int height = size.y;
 
 		int width = size.x;
 
@@ -351,9 +351,21 @@ public abstract class MainBarButton extends Canvas {
 
 			e.gc.setForeground(current);
 		} else {
-			int imgx = (width - height) / 2;
-			Image tmp = new Image(getDisplay(), this.image.getImageData());
-			e.gc.drawImage(tmp, imgx, 0);
+			
+			//log.debug("Width: " + width + " Height: " + height);
+			
+			int w = 0;
+			Image tmp = null;
+			if(this.image.getImageData().width < width) {
+				tmp = new Image(getDisplay(), this.image.getImageData());
+				w = (width - this.image.getImageData().width) / 2;
+			} else if(this.image.getImageData().width > width) {
+				tmp = new Image(getDisplay(), this.image.getImageData().scaledTo(width, width));
+			} else {
+				tmp = new Image(getDisplay(), this.image.getImageData());
+			}
+			
+			e.gc.drawImage(tmp, w, w);
 		}
 
 	}

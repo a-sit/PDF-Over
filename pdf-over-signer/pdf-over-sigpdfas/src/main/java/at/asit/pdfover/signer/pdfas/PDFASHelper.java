@@ -50,6 +50,10 @@ public class PDFASHelper {
 		return new at.gv.egiz.pdfas.impl.api.PdfAsObject();
 	}
 	
+	public static String getWorkDir() {
+		return System.getProperty("user.home")+"/.pdfover";
+	}
+	
 	/**
 	 * Creates a PDF-AS Internal object
 	 * @return the PDF-AS Internal object

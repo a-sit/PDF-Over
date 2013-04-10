@@ -26,6 +26,9 @@ import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.FileNameEmlbem;
+import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signator.SignatureParameter;
 
 /**
  * Selects the data source for the signature process.
@@ -58,6 +61,9 @@ public class OpenState extends State {
 
 	@Override
 	public void run() {
+		
+		
+		
 		Status status = this.stateMachine.getStatus();
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState) &&
 			!(status.getPreviousState() instanceof OpenState))
@@ -67,7 +73,7 @@ public class OpenState extends State {
 			status.setDocument(null);
 			status.setSignaturePosition(config.getDefaultSignaturePosition());
 		}
-
+		
 		if (status.getDocument() == null) {
 			DataSourceSelectComposite selection = this
 					.getSelectionComposite();
