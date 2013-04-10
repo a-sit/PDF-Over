@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -149,12 +150,12 @@ public class DataSourceSelectComposite extends StateComposite {
 	public DataSourceSelectComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 
-		this.activeBackground = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
-		this.inactiveBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
-		this.inactiveBorder = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
-		this.activeBorder = new Color(getDisplay(),0x6B, 0xA5, 0xD9);
+		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_DARK;
+		this.inactiveBackground = Constants.MAINBAR_INACTIVE_BACK;
+		this.inactiveBorder = Constants.MAINBAR_ACTIVE_BACK_DARK;
+		this.activeBorder = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
 		this.backgroundColor = this.inactiveBackground;
-		this.borderColor = this.inactiveBorder;
+		this.borderColor = Constants.DROP_BORDER_COLOR;
 		
 		this.setLayout(new FormLayout());
 
@@ -276,7 +277,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.fd_lbl_drag.bottom = new FormAttachment(this.lbl_drag2, -10);
 		this.lbl_drag.setLayoutData(this.fd_lbl_drag);
 		FontData[] fD = this.lbl_drag.getFont().getFontData();
-		fD[0].setHeight(TEXT_SIZE_BIG);
+		fD[0].setHeight(Constants.TEXT_SIZE_BIG);
 		this.lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
 		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
 		this.lbl_drag.setAlignment(SWT.CENTER);
@@ -289,7 +290,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
 		this.lbl_drag2.setLayoutData(this.fd_lbl_drag2);
 		FontData[] fD2 = this.lbl_drag2.getFont().getFontData();
-		fD2[0].setHeight(TEXT_SIZE_NORMAL);
+		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
 		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //$NON-NLS-1$
 		this.lbl_drag2.setAlignment(SWT.CENTER);
@@ -298,7 +299,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //$NON-NLS-1$
 		
 		FontData[] fD_open = this.btn_open.getFont().getFontData();
-		fD_open[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_open[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btn_open.setFont(new Font(Display.getCurrent(), fD_open[0]));
 		
 		/*

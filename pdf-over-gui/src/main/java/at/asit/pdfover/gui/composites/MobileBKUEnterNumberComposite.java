@@ -23,7 +23,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
@@ -37,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
@@ -182,7 +182,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				Rectangle clientArea = containerComposite.getClientArea();
 				
 				//e.gc.setForeground();
-				e.gc.setForeground(new Color(getDisplay(),0x6B, 0xA5, 0xD9));
+				e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_LIGHT);
 				e.gc.setLineWidth(3);
 				e.gc.setLineStyle(SWT.LINE_SOLID);
 				e.gc.drawRoundRectangle(clientArea.x, 

@@ -16,7 +16,6 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

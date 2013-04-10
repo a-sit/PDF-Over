@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.workflow;
 //Imports
 import java.lang.reflect.Constructor;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;

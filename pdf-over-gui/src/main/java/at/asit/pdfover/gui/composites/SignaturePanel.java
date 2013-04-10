@@ -34,6 +34,8 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
+
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
@@ -90,13 +92,13 @@ public class SignaturePanel extends JPanel {
 	int prevSigScreenHeight = 0;
 
 	/**
-	 * Create a new PagePanel, with a default size of 800 by 600 pixels.
+	 * Create a new PagePanel.
 	 * @param pdf the PDFFile to display
 	 */
 	public SignaturePanel(PDFFile pdf) {
 		super(new BorderLayout());
 		setDocument(pdf);
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(Constants.MAINWINDOW_WIDTH, Constants.MAINWINDOW_HEIGHT - Constants.MAINBAR_HEIGHT));
 		setFocusable(true);
 		addMouseListener(this.mouseListener);
 		addMouseMotionListener(this.mouseListener);

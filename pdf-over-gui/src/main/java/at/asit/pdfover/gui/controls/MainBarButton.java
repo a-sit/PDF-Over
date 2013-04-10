@@ -29,10 +29,8 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.composites.StateComposite;
+import at.asit.pdfover.gui.Constants;
 
 /**
  * Main Bar Button implementation
@@ -50,7 +48,31 @@ public abstract class MainBarButton extends Canvas {
 	 * This should be a multiple of 2!
 	 */
 	public static final int SplitFactor = 10;
-	
+
+	/**
+	 * the used text color
+	 */
+	protected Color textColor = null;
+
+	/**
+	 * the text size
+	 */
+	protected int textsize = Constants.TEXT_SIZE_BUTTON;
+
+	private Color inactiveBackground = null;
+	private Color activeBackground1 = null;
+	private Color borderColor = null;
+	private Color activeBackground = null;
+
+	private Color inactiveText = null;
+
+	private String text = ""; //$NON-NLS-1$
+
+	private boolean active = true;
+
+	private Image image = null;
+
+
 	/**
 	 * @param parent
 	 * @param style
@@ -80,20 +102,17 @@ public abstract class MainBarButton extends Canvas {
 		this.setCursor(hand);
 
 
-		this.inactiveBackground = new Color(getDisplay(),0xD4, 0xE7, 0xF1);
-		this.activeBackground1 = new Color(getDisplay(),0x6B, 0xA5, 0xD9);
-		this.activeBackground = new Color(getDisplay(),0xB4, 0xCD, 0xEC);
+		this.inactiveBackground = Constants.MAINBAR_INACTIVE_BACK;
+		this.activeBackground1 = Constants.MAINBAR_ACTIVE_BACK_LIGHT;
+		this.activeBackground = Constants.MAINBAR_ACTIVE_BACK_DARK;
 		//this.textColor = this.getForeground();
-		this.textColor = new Color(getDisplay(), 0x00, 0x00, 0x00);
+		this.textColor = Constants.MAINBAR_ACTIVE_TEXTCOLOR;
 		//this.borderColor = new Color(getDisplay(), 0xf9, 0xf9, 0xf9);
 		this.borderColor = this.getBackground();
-		this.inactiveText = new Color(getDisplay(), 0x40, 0x40, 0x40);
-		this.textsize = StateComposite.TEXT_SIZE_BUTTON;
+		this.inactiveText = Constants.MAINBAR_INACTIVE_TEXTCOLOR;
+		this.textsize = Constants.TEXT_SIZE_BUTTON;
 
 	}
-
-	private Color inactiveBackground = null;
-	private Color activeBackground1 = null;
 
 	/**
 	 * @param inactiveBackground
@@ -112,11 +131,6 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
-	 * the text size
-	 */
-	protected int textsize = StateComposite.TEXT_SIZE_BUTTON;
-
-	/**
 	 * @return the textsize
 	 */
 	public int getTextsize() {
@@ -130,11 +144,6 @@ public abstract class MainBarButton extends Canvas {
 	public void setTextsize(int textsize) {
 		this.textsize = textsize;
 	}
-
-	/**
-	 * the used text color
-	 */
-	protected Color textColor = null;
 
 	/**
 	 * @param textColor
@@ -159,18 +168,6 @@ public abstract class MainBarButton extends Canvas {
 		this.borderColor = borderColor;
 	}
 	
-
-	private Color borderColor = null;
-
-	private Color activeBackground = null;
-	
-	private Color inactiveText = null;
-
-	private String text = ""; //$NON-NLS-1$
-
-	private boolean active = true;
-
-	private Image image = null;
 
 	/**
 	 * Gets the image
@@ -234,13 +231,6 @@ public abstract class MainBarButton extends Canvas {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MainBarButton.class);
 
 	/**
 	 * Paint 3D style borders

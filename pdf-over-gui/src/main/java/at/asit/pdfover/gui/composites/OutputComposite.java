@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
@@ -53,8 +54,6 @@ public class OutputComposite extends StateComposite {
 	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(OutputComposite.class);
-
-	private final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
 
 	private File inputFile;
 
@@ -127,7 +126,7 @@ public class OutputComposite extends StateComposite {
 
 		name = FilenameUtils.removeExtension(name);
 
-		proposed = path + name + SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
+		proposed = path + name + Constants.SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
 
 		if (this.getOutputDir() != null && !this.getOutputDir().equals("")) //$NON-NLS-1$
 		{
@@ -261,7 +260,7 @@ public class OutputComposite extends StateComposite {
 				.getString("output.success_message")); //$NON-NLS-1$
 
 		FontData[] fD1 = lbl_success_message.getFont().getFontData();
-		fD1[0].setHeight(TEXT_SIZE_BIG);
+		fD1[0].setHeight(Constants.TEXT_SIZE_BIG);
 		lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
 
 		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);
@@ -277,14 +276,14 @@ public class OutputComposite extends StateComposite {
 		this.lnk_saved_file.addSelectionListener(new OpenSelectionListener());
 
 		FontData[] fD2 = this.lnk_saved_file.getFont().getFontData();
-		fD2[0].setHeight(TEXT_SIZE_NORMAL);
+		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lnk_saved_file.setFont(new Font(Display.getCurrent(), fD2[0]));
 
 		this.btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 
 		FontData[] fD_btn_save = this.btn_save.getFont().getFontData();
-		fD_btn_save[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btn_save[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btn_save.setFont(new Font(Display.getCurrent(), fD_btn_save[0]));
 
 		FormData fd_btn_save = new FormData();

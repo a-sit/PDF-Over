@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
@@ -89,7 +90,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		grpSignatur.setLayoutData(fd_grpSignatur);
 
 		FontData[] fD_grpSignaturPosition = grpSignatur.getFont().getFontData();
-		fD_grpSignaturPosition[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_grpSignaturPosition[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		grpSignatur.setFont(new Font(Display.getCurrent(),
 				fD_grpSignaturPosition[0]));
 
@@ -105,7 +106,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_btnAutomatischePositionierung = this.btnAutomatischePositionierung
 				.getFont().getFontData();
-		fD_btnAutomatischePositionierung[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btnAutomatischePositionierung[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btnAutomatischePositionierung.setFont(new Font(Display
 				.getCurrent(), fD_btnAutomatischePositionierung[0]));
 
@@ -131,7 +132,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
 
 		FontData[] fD_lblTransparenz = lblTransparenz.getFont().getFontData();
-		fD_lblTransparenz[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_lblTransparenz[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		lblTransparenz.setFont(new Font(Display.getCurrent(),
 				fD_lblTransparenz[0]));
 
@@ -145,7 +146,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_lblTransparenzLinks = lblTransparenzLinks.getFont()
 				.getFontData();
-		fD_lblTransparenzLinks[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_lblTransparenzLinks[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		lblTransparenzLinks.setFont(new Font(Display.getCurrent(),
 				fD_lblTransparenzLinks[0]));
 
@@ -159,7 +160,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_lblTransparenzRechts = lblTransparenzRechts.getFont()
 				.getFontData();
-		fD_lblTransparenzRechts[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_lblTransparenzRechts[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		lblTransparenzRechts.setFont(new Font(Display.getCurrent(),
 				fD_lblTransparenzRechts[0]));
 
@@ -195,7 +196,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		grpBkuAuswahl.setLayoutData(fd_grpBkuAuswahl);
 
 		FontData[] fD_grpBkuAuswahl = grpBkuAuswahl.getFont().getFontData();
-		fD_grpBkuAuswahl[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_grpBkuAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		grpBkuAuswahl.setFont(new Font(Display.getCurrent(),
 				fD_grpBkuAuswahl[0]));
 
@@ -207,7 +208,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_cmbBKUAuswahl = this.cmbBKUAuswahl.getFont()
 				.getFontData();
-		fD_cmbBKUAuswahl[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_cmbBKUAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.cmbBKUAuswahl.setFont(new Font(Display.getCurrent(),
 				fD_cmbBKUAuswahl[0]));
 
@@ -254,7 +255,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		grpSpeicherort.setLayoutData(fd_grpSpeicherort);
 
 		FontData[] fD_grpSpeicherort = grpSpeicherort.getFont().getFontData();
-		fD_grpSpeicherort[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_grpSpeicherort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		grpSpeicherort.setFont(new Font(Display.getCurrent(),
 				fD_grpSpeicherort[0]));
 
@@ -268,7 +269,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_lblDefaultOutputFolder = lblDefaultOutputFolder.getFont()
 				.getFontData();
-		fD_lblDefaultOutputFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_lblDefaultOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		lblDefaultOutputFolder.setFont(new Font(Display.getCurrent(),
 				fD_lblDefaultOutputFolder[0]));
 
@@ -280,7 +281,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont()
 				.getFontData();
-		fD_txtOutputFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.txtOutputFolder.setFont(new Font(Display.getCurrent(),
 				fD_txtOutputFolder[0]));
 
@@ -297,7 +298,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_text.right = new FormAttachment(btnBrowse, -5);
 
 		FontData[] fD_btnBrowse = btnBrowse.getFont().getFontData();
-		fD_btnBrowse[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
 
 		FormData fd_btnBrowse = new FormData();

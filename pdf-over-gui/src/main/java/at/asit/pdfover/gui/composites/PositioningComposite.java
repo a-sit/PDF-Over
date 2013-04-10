@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -53,9 +54,6 @@ public class PositioningComposite extends StateComposite {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
-
-	/** How far to displace the signature with the arrow keys */
-	private static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	private SignaturePanel viewer = null;
 
@@ -171,19 +169,19 @@ public class PositioningComposite extends StateComposite {
 					break;
 
 				case SWT.ARROW_LEFT:
-					sigXOffset -= SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					sigXOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 					break;
 
 				case SWT.ARROW_RIGHT:
-					sigXOffset += SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					sigXOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 					break;
 
 				case SWT.ARROW_UP:
-					sigYOffset -= SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 					break;
 
 				case SWT.ARROW_DOWN:
-					sigYOffset += SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+					sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 					break;
 			}
 

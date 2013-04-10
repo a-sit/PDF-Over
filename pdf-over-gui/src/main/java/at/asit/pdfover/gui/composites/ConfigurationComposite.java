@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
@@ -218,7 +219,7 @@ public class ConfigurationComposite extends StateComposite {
 		tabFolder.setLayoutData(fd_tabFolder);
 
 		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
-		fD_tabFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
 
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
@@ -268,7 +269,7 @@ public class ConfigurationComposite extends StateComposite {
 		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 
 		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
-		fD_btnSpeichern[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		btnSpeichern.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
 		
 		Button btnAbbrechen = new Button(this, SWT.NONE);
@@ -286,7 +287,7 @@ public class ConfigurationComposite extends StateComposite {
 		});
 
 		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
-		fD_btnAbbrechen[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
 
 		FormData fd_composite = new FormData();
@@ -338,7 +339,7 @@ public class ConfigurationComposite extends StateComposite {
 			log.error("Settings validation failed!", e); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(
 					getShell(),
-					e.getMessage(), //$NON-NLS-1$ 
+					e.getMessage(),
 					false);
 			dialog.open();
 			return false;

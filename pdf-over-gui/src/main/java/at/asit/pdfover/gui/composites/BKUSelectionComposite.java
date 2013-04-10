@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
@@ -133,7 +134,7 @@ public class BKUSelectionComposite extends StateComposite {
 		btn_mobile.setImage(mobile);
 		
 		FontData[] fD_btn_mobile = btn_mobile.getFont().getFontData();
-		fD_btn_mobile[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btn_mobile[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		btn_mobile.setFont(new Font(Display.getCurrent(), fD_btn_mobile[0]));
 		
 		Button btn_card = new Button(this, SWT.NATIVE | SWT.RESIZE);
@@ -148,7 +149,7 @@ public class BKUSelectionComposite extends StateComposite {
 		btn_card.addSelectionListener(new LocalSelectionListener());
 		
 		FontData[] fD_btn_card = btn_card.getFont().getFontData();
-		fD_btn_card[0].setHeight(TEXT_SIZE_BUTTON);
+		fD_btn_card[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		btn_card.setFont(new Font(Display.getCurrent(), fD_btn_card[0]));
 		
 		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif"))); //$NON-NLS-1$

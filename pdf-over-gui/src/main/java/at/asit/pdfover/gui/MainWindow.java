@@ -61,10 +61,6 @@ public class MainWindow {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 
-	/** Main bar height */
-	private static final int MAINBAR_HEIGHT = 60;
-	
-
 	private Shell shell;
 	private Composite mainbar;
 	private FormData mainBarFormData;
@@ -173,7 +169,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(550, 768);
+		getShell().setSize(Constants.MAINWINDOW_WIDTH, Constants.MAINWINDOW_HEIGHT);
 		try {
 			Display display = Display.getCurrent();
 			Monitor primary = display.getPrimaryMonitor();
@@ -202,7 +198,7 @@ public class MainWindow {
 		this.mainBarFormData.left = new FormAttachment(0, 10);
 		this.mainBarFormData.right = new FormAttachment(100, -10);
 		this.mainBarFormData.top = new FormAttachment(0, 10);
-		this.mainBarFormData.bottom = new FormAttachment(0, MAINBAR_HEIGHT);
+		this.mainBarFormData.bottom = new FormAttachment(0, Constants.MAINBAR_HEIGHT);
 		this.mainbar.setLayoutData(this.mainBarFormData);
 
 		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
@@ -303,7 +299,7 @@ public class MainWindow {
 		this.containerFormData = new FormData();
 		this.containerFormData.bottom = new FormAttachment(100, -10);
 		this.containerFormData.right = new FormAttachment(100, -10);
-		this.containerFormData.top = new FormAttachment(0, MAINBAR_HEIGHT + 10);
+		this.containerFormData.top = new FormAttachment(0, Constants.MAINBAR_HEIGHT + 10);
 		this.containerFormData.left = new FormAttachment(0, 10);
 		this.container.setLayoutData(this.containerFormData);
 		this.stack = new StackLayout();
@@ -332,8 +328,8 @@ public class MainWindow {
 		}
 
 		if (behavior.getMainBarVisible()) {
-			this.mainBarFormData.bottom = new FormAttachment(0, MAINBAR_HEIGHT);
-			this.containerFormData.top = new FormAttachment(0, MAINBAR_HEIGHT + 10);
+			this.mainBarFormData.bottom = new FormAttachment(0, Constants.MAINBAR_HEIGHT);
+			this.containerFormData.top = new FormAttachment(0, Constants.MAINBAR_HEIGHT + 10);
 		} else {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
 			this.containerFormData.top = new FormAttachment(0, 10);

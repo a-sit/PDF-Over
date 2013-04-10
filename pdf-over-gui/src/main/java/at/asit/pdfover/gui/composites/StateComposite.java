@@ -24,32 +24,12 @@ import at.asit.pdfover.gui.workflow.states.State;
  *	Composite interface for workflow state gui implementations
  */
 public abstract class StateComposite extends Composite {
-	
-	/**
-	 * Normal Text size
-	 */
-	public static final int TEXT_SIZE_NORMAL = 12;
-	
-	/**
-	 * 
-	 */
-	public static final int TEXT_SIZE_BIG = 14;
-	
-	/**
-	 * 
-	 */
-	public static final int TEXT_SIZE_SMALL = 10;
-	
-	/**
-	 * 
-	 */
-	public static final int TEXT_SIZE_BUTTON = 12;
-	
+
 	/**
 	 * Current State
 	 */
 	protected State state;
-	
+
 	/**
 	 * The base class for state composites
 	 * 
@@ -61,7 +41,7 @@ public abstract class StateComposite extends Composite {
 		super(parent, style);
 		this.state = state;
 	}
-	
+
 	/**
 	 * Performs layout for all children in composite
 	 * (SWT layout(...) only layouts children no grandchildren!) 
