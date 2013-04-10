@@ -60,7 +60,7 @@ public class PositioningState extends State {
 			Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
 			param.setEmblem(emblem);
 			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
-			this.positionComposite.setPlaceholder(param.getPlaceholder());
+			this.positionComposite.setPlaceholder(param.getPlaceholder(), param.getPlaceholderDimension().getWidth(), param.getPlaceholderDimension().getHeight());
 		}
 
 		return this.positionComposite;

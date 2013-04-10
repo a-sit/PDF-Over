@@ -27,7 +27,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Point2D.Double;
 
 import javax.swing.JPanel;
 
@@ -59,17 +58,25 @@ public class SignaturePanel extends JPanel {
 	/** The current transform from screen to page space */
 	AffineTransform currentXform = null;
 	/** The horizontal offset of the image from the left edge of the panel */
-	int offx = 0;
+	int offX = 0;
 	/** The vertical offset of the image from the top of the panel */
-	int offy = 0;
+	int offY = 0;
 	/** The size of the image */
 	private Dimension prevSize = null;
-	/** The position of the signature, in document space */
+	/** The position of the signature, in page space */
 	Point2D sigPagePos = null;
 	/** The position of the signature, in screen space */
 	Point2D sigScreenPos = null;
 	/** The signature placeholder image */
 	private Image sigPlaceholder = null;
+	/** Width of the signature placeholder in page space */
+	private int sigPageWidth = 0;
+	/** Height of the signature placeholder in page space */
+	private int sigPageHeight = 0;
+	/** Width of the signature placeholder in screen space */
+	private int sigScreenWidth = 0;
+	/** Height of the signature placeholder in screen space */
+	private int sigScreenHeight = 0;
 
 	/**
 	 * Create a new PagePanel, with a default size of 800 by 600 pixels.
@@ -98,10 +105,14 @@ public class SignaturePanel extends JPanel {
 	/**
 	 * Set the signature placeholder image
 	 * @param placeholder signature placeholder
+	 * @param width width of the placeholder in page space
+	 * @param height height of the placeholder in page space 
 	 */
-	public void setSignaturePlaceholder(Image placeholder)
+	public void setSignaturePlaceholder(Image placeholder, int width, int height)
 	{
 		this.sigPlaceholder = placeholder;
+		this.sigPageWidth = width;
+		this.sigPageHeight = height;
 	}
 
 	/**
@@ -169,6 +180,8 @@ public class SignaturePanel extends JPanel {
 
 			if (this.sigPagePos != null)
 				this.sigScreenPos = this.currentXform.transform(this.sigPagePos, this.sigScreenPos);
+			this.sigScreenWidth = (int) Math.round(this.sigPageWidth * this.currentXform.getScaleX());
+			this.sigScreenHeight = (int) Math.round(this.sigPageHeight * this.currentXform.getScaleX());
 
 			// invert the transform (screen to page space)
 			try {
@@ -210,24 +223,26 @@ public class SignaturePanel extends JPanel {
 			int imhgt = this.currentImage.getHeight(null);
 
 			// draw it centered within the panel
-			this.offx = (sz.width - imwid) / 2;
-			this.offy = (sz.height - imhgt) / 2;
+			this.offX = (sz.width - imwid) / 2;
+			this.offY = (sz.height - imhgt) / 2;
 
 			if ((imwid == sz.width && imhgt <= sz.height)
 					|| (imhgt == sz.height && imwid <= sz.width)) {
 
 				// draw document
-				g.drawImage(this.currentImage, this.offx, this.offy, this);
+				g.drawImage(this.currentImage, this.offX, this.offY, this);
 
 				// draw signature
-				int sigx = (int) (this.offx + this.sigScreenPos.getX());
-				int sigy = (int) (this.offy + this.sigScreenPos.getY());
+				int sigX = (int) (this.offX + this.sigScreenPos.getX());
+				int sigY = (int) (this.offY + this.sigScreenPos.getY());
 				if (this.sigPlaceholder == null) {
 					g.setColor(Color.red);
-					g.drawRect(sigx - 10, sigy - 10, 20, 20);
+					g.drawRect(sigX, sigY, 100, 40);
 				}
 				else {
-					g.drawImage(this.sigPlaceholder, sigx, sigy, null);
+					Image placeholder = this.sigPlaceholder.getScaledInstance(
+							this.sigScreenWidth, this.sigScreenHeight, Image.SCALE_SMOOTH);
+					g.drawImage(placeholder, sigX, sigY, null);
 				}
 
 			} else {
@@ -252,7 +267,7 @@ public class SignaturePanel extends JPanel {
 	public boolean imageUpdate(Image img, int infoflags, int x, int y,
 			int width, int height) {
 		if ((infoflags & (SOMEBITS | ALLBITS)) != 0) {
-			repaint(x + this.offx, y + this.offy, width, height);
+			repaint(x + this.offX, y + this.offY, width, height);
 		}
 		return ((infoflags & (ALLBITS | ERROR | ABORT)) == 0);
 	}
@@ -266,9 +281,9 @@ public class SignaturePanel extends JPanel {
 		private void updateSigPos(int sigx, int sigy) {
 			if (SignaturePanel.this.currentImage == null)
 				return;
-			sigx -= SignaturePanel.this.offx;
+			sigx -= SignaturePanel.this.offX;
 			sigx = clamp(sigx, 0, SignaturePanel.this.currentImage.getWidth(null));
-			sigy -= SignaturePanel.this.offy;
+			sigy -= SignaturePanel.this.offY;
 			sigy = clamp(sigy, 0, SignaturePanel.this.currentImage.getHeight(null));
 			SignaturePanel.this.sigScreenPos = new Point2D.Double(sigx, sigy);
 			SignaturePanel.this.sigPagePos = SignaturePanel.this.currentXform.transform(SignaturePanel.this.sigScreenPos, SignaturePanel.this.sigPagePos);
@@ -284,10 +299,10 @@ public class SignaturePanel extends JPanel {
 				if (isOnSignature(evt.getX(), evt.getY())) {
 					this.dragXOffset = (int)
 							(SignaturePanel.this.sigScreenPos.getX() -
-							(evt.getX() - SignaturePanel.this.offx));
+							(evt.getX() - SignaturePanel.this.offX));
 					this.dragYOffset = (int)
 							(SignaturePanel.this.sigScreenPos.getY() -
-							(evt.getY() - SignaturePanel.this.offy));
+							(evt.getY() - SignaturePanel.this.offY));
 				}
 				else {
 					this.dragXOffset = 0;
@@ -322,10 +337,10 @@ public class SignaturePanel extends JPanel {
 	boolean isOnSignature(int x, int y)
 	{
 		Rectangle2D sig = new Rectangle2D.Double(
-				this.sigScreenPos.getX() + this.offx,
-				this.sigScreenPos.getY() + this.offy,
-				this.sigPlaceholder.getWidth(null),
-				this.sigPlaceholder.getHeight(null));
+				this.sigScreenPos.getX() + this.offX,
+				this.sigScreenPos.getY() + this.offY,
+				this.sigScreenWidth,
+				this.sigScreenHeight);
 		Point2D pos = new Point2D.Double(x, y);
 		return (sig.contains(pos));
 	}

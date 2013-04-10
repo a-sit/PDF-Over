@@ -98,11 +98,13 @@ public class PositioningComposite extends StateComposite {
 	 * Set the signature placeholder image
 	 * Must be called _after_ displayDocument
 	 * @param placeholder signature placeholder
+	 * @param width width of the placeholder in page space
+	 * @param height height of the placeholder in page space 
 	 */
-	public void setPlaceholder(Image placeholder) {
+	public void setPlaceholder(Image placeholder, int width, int height) {
 		if (this.viewer == null)
 			return;
-		this.viewer.setSignaturePlaceholder(placeholder);
+		this.viewer.setSignaturePlaceholder(placeholder, width, height);
 	}
 
 	/**
