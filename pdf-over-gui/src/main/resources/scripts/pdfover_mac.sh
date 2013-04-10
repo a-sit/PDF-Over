@@ -1,2 +1,2 @@
 #!/bin/sh
-java -cp "lib/*" at.asit.pdfover.gui.Main
+java -XstartOnFirstThread -cp "lib/*" at.asit.pdfover.gui.Main
