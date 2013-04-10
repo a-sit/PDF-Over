@@ -100,10 +100,9 @@ public class SigningState extends State {
 					message, BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new PrepareSigningState(this.stateMachine));
 			} else {
-				// FIXME: Exit?
-				this.stateMachine.exit();
+				this.setNextState(new BKUSelectionState(this.stateMachine));
 			}
 			return;
 		}

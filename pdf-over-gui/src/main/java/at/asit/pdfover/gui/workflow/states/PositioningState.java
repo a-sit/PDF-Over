@@ -102,8 +102,7 @@ public class PositioningState extends State {
 			PositioningComposite position = null;
 			try {
 				position = this.getPositioningComposite();
-			} catch (IOException e) {
-				// FIXME 
+			} catch (IOException e) { 
 				this.positionComposite = null;
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
 				String message = e.getLocalizedMessage();

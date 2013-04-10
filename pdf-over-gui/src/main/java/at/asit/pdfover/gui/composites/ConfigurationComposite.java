@@ -193,7 +193,7 @@ public class ConfigurationComposite extends StateComposite {
 			this.simpleConfigComposite.setSigner(getSigner());
 		}
 		if (this.advancedConfigComposite != null) {
-			// TODO: not needed
+			// not needed at the moment
 			this.advancedConfigComposite.setSigner(getSigner());
 		}
 	}

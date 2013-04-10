@@ -23,8 +23,13 @@ import org.eclipse.swt.SWT;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.OutputComposite;
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.SignatureException;
+import at.knowcenter.wag.egov.egiz.exceptions.ConnectorException;
 
 /**
  * Procduces the output of the signature process. (save file, open file)
@@ -64,7 +69,13 @@ public class OutputState extends State {
 		Status status = this.stateMachine.getStatus();
 
 		if (status.getSignResult() == null) {
-			// TODO
+			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
+			if(error.open() == SWT.RETRY) {
+				this.setNextState(new PrepareSigningState(this.stateMachine));
+			} else {
+				this.setNextState(new BKUSelectionState(this.stateMachine));
+			}
 			return;
 		}
 
