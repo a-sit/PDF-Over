@@ -17,17 +17,12 @@ package at.asit.pdfover.gui.controls;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * Main Bar Button implementation
  */
 public abstract class MainBarButton extends Canvas {
 	/**
@@ -100,15 +95,16 @@ public abstract class MainBarButton extends Canvas {
 	private Image image = null;
 
 	/**
-	 * @return the imgage
+	 * Gets the image
+	 * @return the image
 	 */
 	public Image getImage() {
 		return this.image;
 	}
 
 	/**
-	 * @param imgage
-	 *            the imgage to set
+	 * Sets the Image
+	 * @param image the imgage to set
 	 */
 	public void setImage(Image image) {
 		this.image = image;
@@ -140,6 +136,7 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
+	 * Gets the button text
 	 * @return the text
 	 */
 	public String getText() {
@@ -147,8 +144,8 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
-	 * @param text
-	 *            the text to set
+	 * Sets the text for the button
+	 * @param text the text to set
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -157,9 +154,15 @@ public abstract class MainBarButton extends Canvas {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MainBarButton.class);
 
+	/**
+	 * Paint 3D style borders
+	 * 
+	 * @param e
+	 */
 	protected void paintBackground(PaintEvent e) {
 
 		Point size = this.getSize();
@@ -185,20 +188,29 @@ public abstract class MainBarButton extends Canvas {
 
 	}
 
-	private void paintControl(PaintEvent e) {
+	/**
+	 * Main painting method
+	 * @param e
+	 */
+	void paintControl(PaintEvent e) {
 		this.paintBackground(e);
 		this.paintButton(e);
-		this.paintBorderAndText(e);
+		this.paintText(e);
 	}
 
+	/**
+	 * paint the inner button
+	 * @param e
+	 */
 	protected void paintButton(PaintEvent e) {
 		// could be overwritten by subclasses
 	}
 
 	/**
+	 * Paint the text or image on the button
 	 * @param e
 	 */
-	protected void paintBorderAndText(PaintEvent e) {
+	protected void paintText(PaintEvent e) {
 		Point size = this.getSize();
 		int height = size.y - 2;
 
@@ -227,7 +239,8 @@ public abstract class MainBarButton extends Canvas {
 	}
 
 	/**
-	 * @return
+	 * Gets the region of the button
+	 * @return the button region
 	 */
 	protected abstract Region getCustomRegion();
 }

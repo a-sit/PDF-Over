@@ -10,6 +10,7 @@ import at.asit.pdfover.signator.SignResultImpl;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;
+import at.asit.pdfover.signer.pdfas.exceptions.PDFASSLRequestException;
 import at.gv.egiz.pdfas.api.PdfAs;
 import at.gv.egiz.pdfas.api.sign.SignParameters;
 import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
@@ -63,7 +64,6 @@ public class PDFASSigner implements Signer {
 			if(parameter.getSignatureDevice() == BKUs.LOCAL) {
 				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_BKU);
 			} else if(parameter.getSignatureDevice() == BKUs.MOBILE) {
-				// TODO: change to MOBILE!!
 				params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILE);
 				//params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILETEST);
 			}
@@ -102,7 +102,10 @@ public class PDFASSigner implements Signer {
 			state.setSignatureRequest(request);
 
 			return state;
-		} catch (PdfAsException e) {
+		} catch(PDFASSLRequestException e) {
+			throw new SignatureException(e);
+		}
+		catch (PdfAsException e) {
 			throw new SignatureException(e);
 		}
 	}

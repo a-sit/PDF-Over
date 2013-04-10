@@ -195,7 +195,7 @@ public class DataSourceSelectComposite extends StateComposite {
 			}
 		});
 
-		final Label lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE);
+		final Label lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
 		this.fd_lbl_drag = new FormData();
 		this.fd_lbl_drag.left = new FormAttachment(0, 10);
 		this.fd_lbl_drag.right = new FormAttachment(100, -10);

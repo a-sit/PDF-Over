@@ -16,6 +16,9 @@
 package at.asit.pdfover.signer.pdfas;
 
 //Imports
+import java.util.HashMap;
+import java.util.Properties;
+
 import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.gv.egiz.pdfas.api.io.DataSource;
@@ -26,6 +29,8 @@ import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
  */
 public class PdfAsSignatureParameter extends SignatureParameter {
 
+	private HashMap<String, String> genericProperties = new HashMap<String, String>(); 
+	
 	@Override
 	public SignatureDimension getPlaceholderDimension() {
 		// TODO Auto-generated method stub
@@ -46,19 +51,16 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	 * @return ByteArrayPDFASDataSource
 	 */
 	public DataSource getPDFASDataSource() {
-		// TODO: implement Signature creation
 		return new ByteArrayPDFASDataSource(this.getInputDocument().getByteArray());
 	}
 
 	@Override
 	public void setProperty(String key, String value) {
-		// TODO Auto-generated method stub
-
+		this.genericProperties.put(key, value);
 	}
 
 	@Override
 	public String getProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.genericProperties.get(key);
 	}
 }

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SLRequest;
+import at.asit.pdfover.signer.pdfas.exceptions.PDFASSLRequestException;
 
 /**
  * PDF - AS Security Layer Request implementation
@@ -36,12 +37,13 @@ public class PDFASSLRequest extends SLRequest {
 	 * Default constructor
 	 * @param slRequest
 	 * @param signData 
+	 * @throws PDFASSLRequestException 
 	 */
-	public PDFASSLRequest(String slRequest, byte[] signData) {
+	public PDFASSLRequest(String slRequest, byte[] signData) throws PDFASSLRequestException {
 		if(!slRequest.contains(PDFASSigner.LOC_REF)) {
-			// TODO: throw Exception (Failed to prepare SL Request)
 			log.error("PDF-AS SL request doesn't contain " + PDFASSigner.LOC_REF);
 			log.debug("Request: " + slRequest);
+			throw new PDFASSLRequestException("PDF-AS SL request doesn't contain " + PDFASSigner.LOC_REF);
 		}
 
 		// Modifing SL Request ...

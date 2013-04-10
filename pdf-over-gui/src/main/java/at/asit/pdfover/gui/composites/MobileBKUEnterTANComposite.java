@@ -61,8 +61,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 				return;
 			}
 			
-			// TODO: Check TAN!
-			
 			MobileBKUEnterTANComposite.this.tan = tan;
 			MobileBKUEnterTANComposite.this.setUserAck(true);
 			MobileBKUEnterTANComposite.this.state.updateStateMachine();
@@ -227,8 +225,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// TODO Auto-generated method stub
-		
+		// Nothing to do
 	}
 
 }

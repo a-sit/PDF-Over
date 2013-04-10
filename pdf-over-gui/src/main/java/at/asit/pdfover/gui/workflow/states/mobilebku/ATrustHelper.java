@@ -67,11 +67,9 @@ public class ATrustHelper {
 			if (endidx > startidx) {
 				return data.substring(startidx, endidx);
 			}
-			// TODO: throw proper exception
 			log.error("extracting Tag: end tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
 			throw new Exception("end tag not available!"); //$NON-NLS-1$
 		}
-		// TODO: throw proper exception
 		log.error("extracting Tag: start tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
 		throw new Exception("start tag not available!"); //$NON-NLS-1$
 	}

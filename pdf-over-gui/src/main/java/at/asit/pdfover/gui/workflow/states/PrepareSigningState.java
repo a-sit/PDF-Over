@@ -76,8 +76,6 @@ public class PrepareSigningState extends State {
 				this.state.signatureParameter.setSignatureDevice(status.getBKU());
 				this.state.signatureParameter.setSignaturePosition(status.getSignaturePosition());
 				
-				// TODO: Fill library specific signature Parameters ...
-				
 				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().equals("")) { //$NON-NLS-1$
 					this.state.signatureParameter.setEmblem(new FileNameEmlbem(configuration.getDefaultEmblem()));
 				}
@@ -143,11 +141,6 @@ public class PrepareSigningState extends State {
 			error.setException(this.threadException);
 			this.setNextState(error);
 			return;
-		}
-		
-		if(this.signingState == null || this.signingState.getSignatureRequest() == null) {
-			// This shouldnot happen!! PrepareDocumentThread allready performed, either we have a valid signingState or an exception!!
-			// TODO: Jump to error state!
 		}
 		
 		// We got the Request set it into status and move on to next state ...

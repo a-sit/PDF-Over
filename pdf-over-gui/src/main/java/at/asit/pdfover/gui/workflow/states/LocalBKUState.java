@@ -20,11 +20,14 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SLRequest;
@@ -86,7 +89,7 @@ public class LocalBKUState extends State {
 				log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
 				
 				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
-
+				
 				int returnCode = client.executeMethod(method);
 				
 				if(returnCode == HttpStatus.SC_OK)
@@ -115,13 +118,12 @@ public class LocalBKUState extends State {
 					SLResponse slResponse = new SLResponse(response, server, userAgent, signatureLayout);
 					this.state.signingState.setSignatureResponse(slResponse);
 				} else {
-					// TODO: Create HTTP exception
 					this.state.threadException = new HttpException(method.getResponseBodyAsString());
 				}
 
 			} catch (Exception e) {
 				log.error("SignLocalBKUThread: ", e); //$NON-NLS-1$
-				// TODO: Is local BKU running?
+				//
 				this.state.threadException = e;
 			} finally {
 				this.state.stateMachine.invokeUpdate();
@@ -168,15 +170,11 @@ public class LocalBKUState extends State {
 		}
 
 		if(this.threadException != null) {
-			ErrorState error = new ErrorState(this.stateMachine);
-			error.setException(this.threadException);
-			this.setNextState(error);
+			ErrorDialog dialog = new ErrorDialog(Display.getCurrent().getActiveShell(), SWT.NONE, "Please check if a local BKU is running", this.threadException);
+			dialog.open();
+			this.threadException = null;
+			this.run();
 			return;
-		}
-		
-		if(!this.signingState.hasSignatureResponse()) {
-			// The thread should set the response or the thread exception!!!
-			// TODO: Jump to error state!
 		}
 		
 		// OK

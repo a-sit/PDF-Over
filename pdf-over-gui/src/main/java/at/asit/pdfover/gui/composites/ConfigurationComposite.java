@@ -50,12 +50,13 @@ import org.eclipse.swt.layout.FormAttachment;
 public class ConfigurationComposite extends StateComposite {
 
 	/**
-	 * 
+	 * Configuration Mode selection listener
 	 */
 	private final class ConfigurationModeSelectionListener implements
 			SelectionListener {
+		
 		/**
-		 * 
+		 * Constructor 
 		 */
 		public ConfigurationModeSelectionListener() {
 			// Nothing to do
@@ -100,22 +101,50 @@ public class ConfigurationComposite extends StateComposite {
 	private static final Logger log = LoggerFactory
 			.getLogger(ConfigurationComposite.class);
 
+	/**
+	 * configuration manipulator
+	 */
 	ConfigManipulator configManipulator = null;
 
+	/**
+	 * configuration provider
+	 */
 	ConfigProvider configProvider = null;
 
+	/**
+	 * current base configuration composite
+	 */
 	BaseConfigurationComposite configComposite;
 
+	/**
+	 * configuration container
+	 * Keeps state for current configuration changes
+	 */
 	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
 
+	/**
+	 * The stack layout 
+	 */
 	StackLayout compositeStack = new StackLayout();
 
+	/**
+	 * SWT style
+	 */
 	int style;
 
+	/**
+	 * base configuration container
+	 */
 	Composite containerComposite;
 
+	/**
+	 * checks wether the user is done
+	 */
 	boolean userDone = false;
 
+	/**
+	 * Button advanced
+	 */
 	Button btnAdvanced;
 
 	/**

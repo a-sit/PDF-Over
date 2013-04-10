@@ -99,8 +99,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		 */
 		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-			
+			// Nothing to do here
 		}
 	}
 

@@ -25,8 +25,6 @@ import at.asit.pdfover.signator.SignaturePosition;
  * 
  */
 public interface ConfigProvider {
-	//TODO: define interface for config provider ....
-	
 	/**
 	 * Regex for parsing signature position
 	 */

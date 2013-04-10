@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
 
@@ -116,7 +117,9 @@ public class OutputComposite extends StateComposite {
 						return;
 					}
 				} else {
-					// TODO: Handle exception ...
+					log.error("OutputComposite:OpenSelectionListener:widgetSelected -> source is null!!"); //$NON-NLS-1$
+					ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to get signed document.", "");
+					dialog.open();
 				}
 			} catch (Exception ex) {
 				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
@@ -200,8 +203,7 @@ public class OutputComposite extends StateComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// TODO Auto-generated method stub
-
+		// Nothing to do
 	}
 
 }

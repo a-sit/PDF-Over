@@ -77,7 +77,7 @@ public class PostSLRequestThread implements Runnable {
 			PostMethod method = new PostMethod(url);
 
 			method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
-
+			
 			int returnCode = client.executeMethod(method);
 
 			String redirectLocation = null;

@@ -61,8 +61,7 @@ public class ByteArrayPDFASDataSource implements DataSource {
 
 	@Override
 	public String getCharacterEncoding() {
-		//TODO
-		return null;
+		return "UTF8";
 	}
 
 }

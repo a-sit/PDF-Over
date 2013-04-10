@@ -100,8 +100,7 @@ public class ErrorState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		// TODO Auto-generated method stub
-		
+		// Stay in previous state behavior
 	}
 
 	/**

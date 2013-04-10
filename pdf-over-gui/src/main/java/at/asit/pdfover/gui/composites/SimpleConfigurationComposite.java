@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -75,7 +76,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		 * 
 		 */
 		public ImageFileBrowser() {
-			// TODO Auto-generated constructor stub
+			// Nothing to do
 		}
 
 		@Override
@@ -224,8 +225,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			// String filename = this.txtEmblemFile.getText();
 			plainEmblemSetter(filename);
 		} catch (Exception ex) {
-			// TODO: Show error message!
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to load the emblem", ex);
+			dialog.open();
 		}
 	}
 
@@ -244,7 +246,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.txtMobileNumberErrorMarker.setVisible(false);
 			plainMobileNumberSetter();
 		} catch (Exception ex) {
-			// TODO: Show error message!
 			this.txtMobileNumberErrorMarker.setVisible(true);
 			this.txtMobileNumberErrorMarker
 					.setToolTipText("Phone number is invalid! Please provide in the form: +43676123456789");
@@ -271,7 +272,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.proxyHostErrorMarker.setVisible(false);
 			plainProxyHostSetter();
 		} catch (Exception ex) {
-			// TODO: Show error message!
 			this.proxyHostErrorMarker.setVisible(true);
 			this.proxyHostErrorMarker.setToolTipText(ex.getMessage());
 			log.error("processProxyHost: ", ex); //$NON-NLS-1$
@@ -291,7 +291,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.txtProxyPortErrorMarker.setVisible(false);
 			plainProxyPortSetter();
 		} catch (Exception ex) {
-			// TODO: Show error message!
 			this.txtProxyPortErrorMarker.setVisible(true);
 			this.txtProxyPortErrorMarker.setToolTipText(ex.getMessage());
 			log.error("processProxyPort: ", ex); //$NON-NLS-1$
@@ -513,8 +512,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						SimpleConfigurationComposite.this.configurationContainer
 								.setEmblem(null);
 					} catch (InvalidEmblemFile e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						log.error("THIS EXCEPTION IS IMPOSSIBLE! ", e1); //$NON-NLS-1$
 					}
 				}
 			}
@@ -729,8 +727,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				this.setEmblemFileInternal(emblemFile, true);
 				this.btnUseImage.setSelection(true);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE, "Failed to load emblem.", e1);
+				dialog.open();
 			}
 		}
 

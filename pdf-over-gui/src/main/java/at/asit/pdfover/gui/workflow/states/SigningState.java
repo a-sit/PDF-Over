@@ -89,12 +89,7 @@ public class SigningState extends State {
 			this.setNextState(error);
 			return;
 		}
-		
-		if(status.getSignResult() == null) {
-			// The thread should set the threadException or create a valid signResult
-			// TODO: Jump to error state
-		}
-		
+
 		this.setNextState(new OutputState(this.stateMachine));
 	}
 

@@ -66,8 +66,6 @@ public class OutputState extends State {
 
 	@Override
 	public void run() {
-		// TODO Preform output operations ... end workflow
-
 		Status status = this.stateMachine.getStatus();
 
 		if (status.getSignResult() != null) {
@@ -97,20 +95,7 @@ public class OutputState extends State {
 				}
 			}
 
-			/*
-			 * DocumentSource signedDocument =
-			 * status.getSignResult().getSignedDocument();
-			 * 
-			 * FileOutputStream output; try { output = new FileOutputStream(new
-			 * File("/tmp/test.pdf"));
-			 * output.write(signedDocument.getByteArray(), 0,
-			 * signedDocument.getByteArray().length); output.close(); } catch
-			 * (IOException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
-			 */
 		}
-
-		// this.stateMachine.exit();
 	}
 
 	/*

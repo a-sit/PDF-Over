@@ -114,7 +114,7 @@ public class ErrorComposite extends StateComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// TODO Auto-generated method stub
+		// Nothing to do
 	}
 
 }
