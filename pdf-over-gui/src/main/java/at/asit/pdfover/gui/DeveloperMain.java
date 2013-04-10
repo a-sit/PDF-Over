@@ -39,7 +39,7 @@ public class DeveloperMain {
 		//BasicConfigurator.configure();
 		
 		// Set PDF-AS log4j configuration:
-		System.setProperty("log4j.configuration", "log4j.properties");
+		//System.setProperty("log4j.configuration", "log4j.properties");
 		
 		StateMachineImpl flow = new StateMachineImpl(args);
 		log.debug("Starting workflow ...");
