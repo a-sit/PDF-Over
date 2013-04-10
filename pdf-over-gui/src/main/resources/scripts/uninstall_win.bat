@@ -1,1 +1,1 @@
-Uninstaller\uninstaller.jar
+@start /b Uninstaller\uninstaller.jar
