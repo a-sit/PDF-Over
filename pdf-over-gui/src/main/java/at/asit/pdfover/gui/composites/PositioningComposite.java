@@ -52,6 +52,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
 import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 
 /**
  * Composite which allows to position the signature on a preview of the document
@@ -179,6 +180,9 @@ public class PositioningComposite extends StateComposite {
 		try
 		{
 			this.pdf = new PDFFile(buf);
+		}
+		catch (PDFAuthenticationFailureException e) {
+			throw new IOException(Messages.getString("error.PDFProtected"), e); //$NON-NLS-1$
 		}
 		catch (IOException e) {
 			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
