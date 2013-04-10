@@ -19,12 +19,15 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.PositioningComposite;
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.Emblem;
@@ -94,9 +97,18 @@ public class PositioningState extends State {
 			try {
 				position = this.getPositioningComposite();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// FIXME
-				e.printStackTrace();
+				// FIXME 
+				this.positionComposite = null;
+				log.error("Failed to display PDF document", e); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(
+						this.stateMachine.getGUIProvider().getMainShell(), 
+						e.getMessage(), ERROR_BUTTONS.RETRY_CANCEL);
+				if(dialog.open() == SWT.RETRY) {
+					this.stateMachine.update();
+				} else {
+					this.setNextState(new OpenState(this.stateMachine));
+				}
+				return;
 			}
 			
 			this.stateMachine.getGUIProvider().display(position);

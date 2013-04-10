@@ -175,7 +175,8 @@ public class LocalBKUState extends State {
 					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
 					ERROR_BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
-				this.stateMachine.exit();
+				//this.stateMachine.exit();
+				this.setNextState(new BKUSelectionState(this.stateMachine));
 				return;
 			}
 			this.threadException = null;

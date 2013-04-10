@@ -126,7 +126,8 @@ public class MainWindow {
 	 * @param ctrl
 	 */
 	public void setTopControl(Control ctrl) {
-		log.debug("Top control: " + ctrl.toString()); //$NON-NLS-1$
+		if(ctrl != null)
+			log.debug("Top control: " + ctrl.toString()); //$NON-NLS-1$
 		this.stack.topControl = ctrl;
 		this.doLayout();
 	}

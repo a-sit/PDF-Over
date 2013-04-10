@@ -166,7 +166,8 @@ public class PrepareSigningState extends State {
 				this.stateMachine.update();
 			} else {
 				// FIXME: exit?
-				this.stateMachine.exit();
+				//this.stateMachine.exit();
+				this.setNextState(new BKUSelectionState(this.stateMachine));
 			}
 			return;
 		}
