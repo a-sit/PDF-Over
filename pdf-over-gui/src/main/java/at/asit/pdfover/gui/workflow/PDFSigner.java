@@ -13,20 +13,31 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.components;
+package at.asit.pdfover.gui.workflow;
 
 // Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import at.asit.pdfover.signator.Signator;
+import at.asit.pdfover.signator.Signer;
 
 /**
- *	Composite interface for workflow state gui implementations
+ * 
  */
-public interface StateComposite {
+public interface PDFSigner {
+	/**
+	 * Gets the PDF Signer Type
+	 * @return the signer type
+	 */
+	public Signator.Signers getUsedPDFSignerLibrary();
 	
 	/**
-	 * Performs layout for all children in composite
-	 * (SWT layout(...) only layouts children no grandchildren!) 
+	 * Set PDF Signer Type
+	 * @param signer the signer type
 	 */
-	public void doLayout();
+	public void setUsedPDFSignerLibrary(Signator.Signers signer);
+	
+	/**
+	 * Gets the currently used PDF Signer
+	 * @return the pdf signer
+	 */
+	public Signer getPDFSigner();
 }

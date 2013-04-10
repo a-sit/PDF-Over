@@ -13,10 +13,10 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.components;
+package at.asit.pdfover.gui;
 
 // Imports
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -35,23 +35,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.main_behavior.ConfigOpenEnabled;
-import at.asit.pdfover.gui.components.main_behavior.ConfigOpenPositionEnabled;
-import at.asit.pdfover.gui.components.main_behavior.MainWindowAllDisabled;
-import at.asit.pdfover.gui.components.main_behavior.MainWindowBehavior;
-import at.asit.pdfover.gui.components.main_behavior.OnlyConfigEnabled;
-import at.asit.pdfover.gui.workflow.State;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
-import at.asit.pdfover.gui.workflow.states.DataSourceSelectionState;
-import at.asit.pdfover.gui.workflow.states.LocalBKUState;
-import at.asit.pdfover.gui.workflow.states.MobileBKUState;
-import at.asit.pdfover.gui.workflow.states.OutputState;
+import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
-import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
-import at.asit.pdfover.gui.workflow.states.PrepareSigningState;
-import at.asit.pdfover.gui.workflow.states.SigningState;
 
 /**
  * The Main Window of PDFOver 4.0
@@ -59,12 +46,35 @@ import at.asit.pdfover.gui.workflow.states.SigningState;
 public class MainWindow {
 
 	/**
-	 * 
+	 * Selection Listener for Position Button
+	 */
+	private final class PositionSelectionListener implements SelectionListener {
+		/**
+		 * Default constructor
+		 */
+		public PositionSelectionListener() {
+			// Nothing to do here
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MainWindow.this.stateMachine.jumpToState(new PositioningState(
+					MainWindow.this.stateMachine));
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// Nothing to do here
+		}
+	}
+
+	/**
+	 * Selection Listener for Open Button
 	 */
 	private final class DataSourceSelectionListener implements
 			SelectionListener {
 		/**
-		 * 
+		 * Default constructor
 		 */
 		public DataSourceSelectionListener() {
 			// Nothing to do here
@@ -72,7 +82,9 @@ public class MainWindow {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MainWindow.this.stateMachine.setState(new DataSourceSelectionState());
+			MainWindow.this.stateMachine
+					.jumpToState(new OpenState(
+							MainWindow.this.stateMachine));
 		}
 
 		@Override
@@ -84,84 +96,45 @@ public class MainWindow {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory.getLogger(MainWindow.class);
+	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
+
 	private Shell shell;
 	private CLabel lbl_status;
 	private Composite container;
 	private StackLayout stack;
-	private StateMachine stateMachine;
+	StateMachine stateMachine;
 	private Button btn_sign;
-	
-	/**
-	 * Gets the sign button
-	 * @return the sign button
-	 */
-	public Button getBtn_sign() {
-		return this.btn_sign;
-	}
-
 	private Button btn_position;
-	
-	/**
-	 * Gets the position button
-	 * @return the position button
-	 */
-	public Button getBtn_position() {
-		return this.btn_position;
-	}
-
 	private Button btn_open;
-	
-	/**
-	 * Gets the open button
-	 * @return the open button
-	 */
-	public Button getBtn_open() {
-		return this.btn_open;
-	}
-
 	private Button btn_config;
-	
-	/**
-	 * Gets the config button
-	 * @return the config button
-	 */
-	public Button getBtn_config() {
-		return this.btn_config;
+
+	public enum Buttons {
+		CONFIG, OPEN, POSITION, SIGN, FINAL
 	}
 
-	private Map<Class, MainWindowBehavior> behavior = new HashMap<Class, MainWindowBehavior>();
-	
+	private Map<Buttons, Button> buttonMap;
+
 	/**
-	 * Default contsructor
-	 * @param stateMachine The main workflow
+	 * Default constructor
+	 * 
+	 * @param stateMachine
+	 *            The main workflow
 	 */
 	public MainWindow(StateMachine stateMachine) {
 		super();
-		
-		this.behavior.put(PrepareConfigurationState.class, new MainWindowAllDisabled());
-		this.behavior.put(PrepareSigningState.class, new MainWindowAllDisabled());
-		this.behavior.put(SigningState.class, new MainWindowAllDisabled());
-		this.behavior.put(LocalBKUState.class, new MainWindowAllDisabled());
-		this.behavior.put(MobileBKUState.class, new MainWindowAllDisabled());
-		
-		this.behavior.put(OutputState.class, new MainWindowAllDisabled());
-		
-		this.behavior.put(DataSourceSelectionState.class, new OnlyConfigEnabled());
-		
-		this.behavior.put(PositioningState.class, new ConfigOpenEnabled());
-		
-		this.behavior.put(BKUSelectionState.class, new ConfigOpenPositionEnabled());
-		
+
 		this.stateMachine = stateMachine;
+
+		this.buttonMap = new EnumMap<MainWindow.Buttons, Button>(Buttons.class);
 	}
 
 	/**
 	 * Set current status (may be removed in production release)
+	 * 
 	 * @param value
 	 */
 	public void setStatus(String value) {
-		if(this.getShell().isDisposed()) {
+		if (this.getShell().isDisposed()) {
 			return;
 		}
 		this.lbl_status.setText("[DEBUG]: Current workflow state: " + value);
@@ -169,6 +142,7 @@ public class MainWindow {
 
 	/**
 	 * Sets top level composite for stack layout
+	 * 
 	 * @param ctrl
 	 */
 	public void setTopControl(Control ctrl) {
@@ -176,7 +150,7 @@ public class MainWindow {
 		this.stack.topControl = ctrl;
 		this.doLayout();
 	}
-	
+
 	/**
 	 * Layout the Main Window
 	 */
@@ -185,30 +159,32 @@ public class MainWindow {
 		this.container.layout(true, true);
 		this.shell.layout(true, true);
 		// Note: SWT only layouts children! No grandchildren!
-		if(ctrl instanceof StateComposite) {
-			((StateComposite)ctrl).doLayout();
+		if (ctrl instanceof StateComposite) {
+			((StateComposite) ctrl).doLayout();
 		}
 	}
-	
+
 	/**
 	 * Gets the container composite
-	 * @return
+	 * 
+	 * @return the container composite
 	 */
 	public Composite getContainer() {
 		return this.container;
 	}
-	
+
 	/**
 	 * Entrance point for swt designer
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Display display = Display.getDefault();
-		
+
 		MainWindow window = new MainWindow(null);
-		
+
 		window.open();
-		
+
 		window.getShell().open();
 		window.getShell().layout();
 		while (!window.getShell().isDisposed()) {
@@ -217,9 +193,10 @@ public class MainWindow {
 			}
 		}
 	}
-	
+
 	/**
 	 * Open the window.
+	 * 
 	 * @wbp.parser.entryPoint
 	 */
 	public void open() {
@@ -232,12 +209,10 @@ public class MainWindow {
 	protected void createContents() {
 		this.shell = new Shell();
 		getShell().setSize(450, 329);
-		getShell().setText("PDF OVER 4.0! :)");
-		
+		getShell().setText("PDF-Over");
+
 		getShell().setLayout(new FormLayout());
-		
-		
-		
+
 		Composite composite = new Composite(getShell(), SWT.NONE);
 		FormData fd_composite = new FormData();
 		fd_composite.left = new FormAttachment(0, 5);
@@ -246,7 +221,7 @@ public class MainWindow {
 		fd_composite.bottom = new FormAttachment(0, 40);
 		composite.setLayoutData(fd_composite);
 		composite.setLayout(new FormLayout());
-		
+
 		this.btn_config = new Button(composite, SWT.NONE);
 		FormData fd_config = new FormData();
 		fd_config.left = new FormAttachment(0, 0);
@@ -255,7 +230,8 @@ public class MainWindow {
 		fd_config.bottom = new FormAttachment(100, 0);
 		this.btn_config.setLayoutData(fd_config);
 		this.btn_config.setText("Config ...");
-		
+		buttonMap.put(Buttons.CONFIG, btn_config);
+
 		this.btn_open = new Button(composite, SWT.NONE);
 		FormData fd_open = new FormData();
 		fd_open.left = new FormAttachment(25, 0);
@@ -265,7 +241,8 @@ public class MainWindow {
 		this.btn_open.setLayoutData(fd_open);
 		this.btn_open.setText("Open ...");
 		this.btn_open.addSelectionListener(new DataSourceSelectionListener());
-		
+		buttonMap.put(Buttons.OPEN, btn_open);
+
 		this.btn_position = new Button(composite, SWT.NONE);
 		FormData fd_position = new FormData();
 		fd_position.left = new FormAttachment(50, 0);
@@ -274,7 +251,9 @@ public class MainWindow {
 		fd_position.bottom = new FormAttachment(100, 0);
 		this.btn_position.setLayoutData(fd_position);
 		this.btn_position.setText("Positon ...");
-		
+		this.btn_position.addSelectionListener(new PositionSelectionListener());
+		buttonMap.put(Buttons.POSITION, btn_position);
+
 		this.btn_sign = new Button(composite, SWT.NONE);
 		FormData fd_sign = new FormData();
 		fd_sign.left = new FormAttachment(75, 0);
@@ -283,7 +262,8 @@ public class MainWindow {
 		fd_sign.bottom = new FormAttachment(100, 0);
 		this.btn_sign.setLayoutData(fd_sign);
 		this.btn_sign.setText("Sign ...");
-		
+		buttonMap.put(Buttons.SIGN, btn_sign);
+
 		this.container = new Composite(getShell(), SWT.BORDER | SWT.RESIZE);
 		FormData fd_composite_1 = new FormData();
 		fd_composite_1.bottom = new FormAttachment(100, -25);
@@ -293,7 +273,7 @@ public class MainWindow {
 		this.container.setLayoutData(fd_composite_1);
 		this.stack = new StackLayout();
 		this.container.setLayout(this.stack);
-		
+
 		this.lbl_status = new CLabel(getShell(), SWT.NONE);
 		FormData fd_lblNewLabel = new FormData();
 		fd_lblNewLabel.right = new FormAttachment(100, -5);
@@ -308,16 +288,27 @@ public class MainWindow {
 	/**
 	 * Update MainWindow to fit new status
 	 */
-	public void UpdateNewState() {
-		State state = this.stateMachine.getState();
-		
-		log.debug("Updating MainWindow state for : " + state.toString());
-		
-		if(this.behavior.containsKey(state.getClass())) {
-			this.behavior.get(state.getClass()).SetState(this);
+	public void applyBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus()
+				.getBehavior();
+
+		log.debug("Updating MainWindow state for : "
+				+ this.stateMachine.getStatus().getCurrentState().toString());
+
+		for (Buttons button : Buttons.values()) {
+			boolean active = behavior.getActive(button);
+			boolean enabled = behavior.getEnabled(button);
+
+			Button theButton = buttonMap.get(button);
+			if (theButton != null)
+			{
+				theButton.setEnabled(enabled);
+			}
 		}
+
+		//TODO: Display/Hide main bar
 	}
-	
+
 	/**
 	 * @return the shell
 	 */

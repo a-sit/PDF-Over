@@ -19,38 +19,36 @@ package at.asit.pdfover.gui.workflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Properties;
-
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.gui.components.BKUSelectionComposite;
-import at.asit.pdfover.gui.components.MainWindow;
+import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
-import at.asit.pdfover.gui.workflow.states.DataSourceSelectionState;
+import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
+import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
-import at.asit.pdfover.signator.Signator;
-import at.asit.pdfover.signator.SignatureParameter;
-import at.asit.pdfover.signator.Signer;
 
 /**
  * Workflow holds logical state of signing process and updates the current
  * logical state
  */
-public class StateMachineImpl implements StateMachine {
+public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * SFL4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(StateMachineImpl.class);
+
+	private StatusImpl status;
+
+	private PDFSignerImpl pdfSigner;
+
+	private ConfigProviderImpl configProvider;
 
 	/**
 	 * Default constructor
@@ -58,61 +56,49 @@ public class StateMachineImpl implements StateMachine {
 	 * @param cmdLineArgs
 	 */
 	public StateMachineImpl(String[] cmdLineArgs) {
+		this.status = new StatusImpl();
+		this.status.setCurrentState(new PrepareConfigurationState(this));
+		this.pdfSigner = new PDFSignerImpl();
+		this.configProvider = new ConfigProviderImpl();
 		setCmdLineAargs(cmdLineArgs);
 	}
 
 	/**
-	 * @uml.property name="state"
-	 * @uml.associationEnd multiplicity="(1 1)" aggregation="shared"
-	 *                     inverse="workflow1:at.asit.pdfover.gui.workflow.WorkflowState"
-	 */
-	private State state = new PrepareConfigurationState();
-
-	/**
-	 * Getter of the property <tt>state</tt>
-	 * 
-	 * @return Returns the state.
-	 * @uml.property name="state"
-	 */
-	public State getState() {
-		return this.state;
-	}
-
-	/**
-	 * Sets the workflow state This method should be used to let the user jump
+	 * Sets the workflow state this method should be used to let the user jump
 	 * around between states. This Method also resets certain properties defined
 	 * by later states then state
 	 * 
 	 * @param state
 	 */
-	public void setState(State state) {
-		if (this.state != state && state != null) {
-			this.state = state;
+	@Override
+	public void jumpToState(State state) {
+		if (this.status.getCurrentState() != state && state != null) {
+			this.status.setCurrentState(state);
 
+			// TODO rewrite when Config is done ...
 			if (state instanceof PositioningState) {
 				// User jumps to positioning state !
 				// restore possible default for bku selection / forget BKU
 				// selection
-				this.setSelectedBKU(PrepareConfigurationState
-						.readSelectedBKU(this.getConfigurationValues()));
+				this.getStatus().setBKU(
+						this.getConfigProvider().getDefaultBKU());
 				// forget position
-				this.getParameter().setSignaturePosition(null);
+				this.getStatus().setSignaturePosition(null);
 			} else if (state instanceof BKUSelectionState) {
 				// User jumps to bku selection state !
 				// forget bku selection
-				this.setSelectedBKU(BKUs.NONE);
-			} else if (state instanceof DataSourceSelectionState) {
+				this.getStatus().setBKU(BKUs.NONE);
+			} else if (state instanceof OpenState) {
 				// User jumps to data source selection state !
 				// forget bku selection / restore possible default for bku
 				// selection
-				this.setSelectedBKU(PrepareConfigurationState
-						.readSelectedBKU(this.getConfigurationValues()));
+				this.getStatus().setBKU(
+						this.getConfigProvider().getDefaultBKU());
 				// forget position / restore possible default for position
-				this.getParameter().setSignaturePosition(
-						PrepareConfigurationState.readDefinedPosition(this
-								.getConfigurationValues()));
+				this.getStatus().setSignaturePosition(
+						this.getConfigProvider().getDefaultSignaturePosition());
 				// forget data source selection
-				this.setDataSource(null);
+				this.getStatus().setDocument(null);
 			}
 
 			this.update();
@@ -125,24 +111,29 @@ public class StateMachineImpl implements StateMachine {
 	@Override
 	public void update() {
 		State next = null;
-		while (this.state != null) {
-			this.state.run();
-			if (this.mainWindow != null && !this.mainWindow.getShell().isDisposed()) {
-				log.debug("Allowing MainWindow to update its state for " + this.state.toString());
-				this.mainWindow.UpdateNewState();
+		while (this.status.getCurrentState() != null) {
+			State current = this.status.getCurrentState();
+			current.run();
+			if (this.mainWindow != null
+					&& !this.mainWindow.getShell().isDisposed()) {
+				log.debug("Allowing MainWindow to update its state for "
+						+ current);
+				current.updateMainWindowBehavior();
+				this.mainWindow.applyBehavior();
 				this.mainWindow.doLayout();
 			}
-			next = this.state.nextState();
-			if (next == this.state) {
+			next = current.nextState();
+			if (next == current) {
 				break;
 			}
-			// this.state.hideGUI();
-			log.debug("Changing state from: " + this.state.toString() + " to "
+			log.debug("Changing state from: "
+					+ current + " to "
 					+ next.toString());
-			this.state = next;
+			this.status.setCurrentState(next);
 		}
-		if (this.state != null) {
-			this.setCurrentStateMessage(this.state.toString());
+		if (this.status.getCurrentState() != null) {
+			this.setCurrentStateMessage(this.status.getCurrentState()
+					.toString());
 		} else {
 			this.setCurrentStateMessage("");
 		}
@@ -151,10 +142,11 @@ public class StateMachineImpl implements StateMachine {
 	/**
 	 * Invoke Update in UI (Main) Thread
 	 */
+	@Override
 	public void InvokeUpdate() {
-		if(this.display != null) {
+		if (this.display != null) {
 			this.display.asyncExec(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					StateMachineImpl.this.update();
@@ -162,7 +154,7 @@ public class StateMachineImpl implements StateMachine {
 			});
 		}
 	}
-	
+
 	private Display display = null;
 
 	private Shell shell = null;
@@ -182,13 +174,16 @@ public class StateMachineImpl implements StateMachine {
 		}
 	}
 
-	/**
-	 * Used by active workflow state to show its own gui component
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param ctrl
+	 * @see
+	 * at.asit.pdfover.gui.workflow.StateMachine#display(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
-	public void setTopControl(final Control ctrl) {
-		this.mainWindow.setTopControl(ctrl);
+	@Override
+	public void display(Composite composite) {
+		this.mainWindow.setTopControl(composite);
 	}
 
 	private void createMainWindow() {
@@ -228,13 +223,16 @@ public class StateMachineImpl implements StateMachine {
 	}
 
 	@Override
-	public <T> T createComposite(Class<T> compositeClass) {
+	public <T> T createComposite(Class<T> compositeClass, int style) {
 		T composite = null;
 		try {
-			Constructor<T> constructor = compositeClass.getDeclaredConstructor(Composite.class, int.class, BKUSelectionState.class);
-			composite = constructor.newInstance(getComposite(), SWT.RESIZE, this);
+			Constructor<T> constructor = compositeClass.getDeclaredConstructor(
+					Composite.class, int.class, BKUSelectionState.class);
+			composite = constructor.newInstance(getComposite(), style, this);
 		} catch (Exception e) {
-			log.error("Could not create Composite for Class " + compositeClass.getName(), e);
+			log.error(
+					"Could not create Composite for Class "
+							+ compositeClass.getName(), e);
 		}
 		return composite;
 	}
@@ -286,22 +284,42 @@ public class StateMachineImpl implements StateMachine {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getConfigProvider()
 	 */
 	@Override
 	public ConfigProvider getConfigProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.configProvider;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see at.asit.pdfover.gui.workflow.StateMachine#getStatus()
 	 */
 	@Override
 	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.status;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getPDFSigner()
+	 */
+	@Override
+	public PDFSigner getPDFSigner() {
+		return this.pdfSigner;
+	}
+	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.StateMachine#getGUIProvider()
+	 */
+	@Override
+	public GUIProvider getGUIProvider() {
+		return this;
 	}
 
 	// Data Section
@@ -327,121 +345,5 @@ public class StateMachineImpl implements StateMachine {
 	 */
 	public String[] getCmdArgs() {
 		return this.cmdLineArgs;
-	}
-
-	// Key Value String properties
-	// -------------------------------------------------------
-	private Properties configurationValues = new Properties();
-
-	/**
-	 * Gets the persistent state
-	 * 
-	 * @return the persistent state
-	 */
-	public Properties getConfigurationValues() {
-		return this.configurationValues;
-	}
-
-	// Data source
-	// -------------------------------------------------------
-	private File dataSource = null;
-
-	/**
-	 * Gets the DataSource
-	 * 
-	 * @return The data source file
-	 */
-	public File getDataSource() {
-		return this.dataSource;
-	}
-
-	/**
-	 * Sets the DataSource
-	 * 
-	 * @param file
-	 */
-	public void setDataSource(File file) {
-		this.dataSource = file;
-	}
-
-	// Selected BKU
-	// -------------------------------------------------------
-
-	/**
-	 * The selected BKU
-	 */
-	private BKUs selectedBKU = BKUs.NONE;
-
-	/**
-	 * Gets the selected BKU
-	 * 
-	 * @return the selectedBKU
-	 */
-	public BKUs getSelectedBKU() {
-		return this.selectedBKU;
-	}
-
-	/**
-	 * Sets the selected BKU
-	 * 
-	 * @param selectedBKU
-	 *            the selectedBKU to set
-	 */
-	public void setSelectedBKU(BKUs selectedBKU) {
-		this.selectedBKU = selectedBKU;
-	}
-
-	private Signator.Signers usedSignerLib = Signator.Signers.PDFAS;
-
-	/**
-	 * The PDF Signer
-	 */
-	private Signer pdfSigner = null;
-
-	/**
-	 * @return the pdfSigner
-	 */
-	public Signer getPdfSigner() {
-		return this.pdfSigner;
-	}
-
-	/**
-	 * @param pdfSigner
-	 *            the pdfSigner to set
-	 */
-	public void setPdfSigner(Signer pdfSigner) {
-		this.pdfSigner = pdfSigner;
-	}
-
-	private SignatureParameter parameter = null;
-
-	/**
-	 * @return the parameter
-	 */
-	public SignatureParameter getParameter() {
-		return this.parameter;
-	}
-
-	/**
-	 * @param parameter
-	 *            the parameter to set
-	 */
-	public void setParameter(SignatureParameter parameter) {
-		this.parameter = parameter;
-	}
-
-	/**
-	 * @return the usedSignerLib
-	 */
-	public Signator.Signers getUsedSignerLib() {
-		return this.usedSignerLib;
-	}
-
-	/**
-	 * @param usedSignerLib
-	 *            the usedSignerLib to set
-	 */
-	public void setUsedSignerLib(Signator.Signers usedSignerLib) {
-		this.usedSignerLib = usedSignerLib;
 	}
 }

@@ -19,13 +19,21 @@ package at.asit.pdfover.gui.workflow.states;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Procduces the output of the signature process. (save file, open file)
  */
 public class OutputState extends State {
+
+	/**
+	 * @param stateMachine
+	 */
+	public OutputState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
 
 	/**
 	 * SFL4J Logger instance
@@ -34,15 +42,31 @@ public class OutputState extends State {
 	private static final Logger log = LoggerFactory.getLogger(OutputState.class);
 	
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 		// TODO Preform output operations ... end workflow
 		
-		stateMachine.exit();
+		this.stateMachine.exit();
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
 	@Override
-	public String toString()  {
-		return "OutputState";
+	public void updateMainWindowBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.reset();
+		behavior.setEnabled(Buttons.CONFIG, true);
+		behavior.setEnabled(Buttons.OPEN, true);
+		behavior.setEnabled(Buttons.POSITION, true);
+		behavior.setEnabled(Buttons.SIGN, true);
+		behavior.setActive(Buttons.OPEN, true);
+		behavior.setActive(Buttons.POSITION, true);
+		behavior.setActive(Buttons.SIGN, true);
+		behavior.setActive(Buttons.FINAL, true);
 	}
 
+	@Override
+	public String toString()  {
+		return this.getClass().getName();
+	}
 }

@@ -76,6 +76,8 @@ public class PDFASSigner implements Signer {
 			String slRequest = pdfasInternal.prepareLocalSignRequest(params,
 					false, URL_TEMPLATE, sdi);
 
+			//DataSource sig_data = sdi.getSignatureData();
+			
 			PDFASSLRequest request = new PDFASSLRequest(slRequest);
 
 			state.setSignatureRequest(request);

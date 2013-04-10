@@ -17,19 +17,60 @@ package at.asit.pdfover.gui.workflow;
 
 import java.io.File;
 
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
+import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ * Interface for persistent status of state machine
  */
 public interface Status {
+	/**
+	 * Sets the document
+	 * @param document the document
+	 */
 	public void setDocument(File document);
+	
+	/**
+	 * Gets the document
+	 * @return the document
+	 */
 	public File getDocument();
 
+	/**
+	 * Sets the signature position
+	 * @param position the position
+	 */
 	public void setSignaturePosition(SignaturePosition position);
+	
+	/**
+	 * Gets the signature position
+	 * @return the signature position
+	 */
 	public SignaturePosition getSignaturePosition();
 
+	/**
+	 * Sets the selected BKU
+	 * @param bku the selected BKU
+	 */
 	public void setBKU(BKUSelectionState.BKUs bku);
+	
+	/**
+	 * Gets the selected BKU
+	 * @return the selected BKU
+	 */
 	public BKUSelectionState.BKUs getBKU();
+	
+	/**
+	 * Gets the current state
+	 * @return the current state
+	 */
+	public State getCurrentState();
+
+	/**
+	 * Gets the main window behavior
+	 * @return the main window behavior
+	 */
+	public MainWindowBehavior getBehavior();
 }

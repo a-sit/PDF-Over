@@ -32,12 +32,14 @@ public class PDFASSLRequest implements SLRequest {
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(PDFASSLRequest.class);
 	
+	private String request;
+	
 	/**
 	 * Default constructor
 	 * @param slRequest
 	 */
 	public PDFASSLRequest(String slRequest) {
-		//TODO: Analyze Request ...
+		this.request = slRequest;
 	}
 	
 	@Override

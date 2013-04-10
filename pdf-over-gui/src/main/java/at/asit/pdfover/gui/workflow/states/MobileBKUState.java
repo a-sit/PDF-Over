@@ -19,16 +19,25 @@ package at.asit.pdfover.gui.workflow.states;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
  */
 public class MobileBKUState extends State {
 	/**
+	 * @param stateMachine
+	 */
+	public MobileBKUState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
+
+	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileBKUState.class);
 
@@ -36,15 +45,26 @@ public class MobileBKUState extends State {
 	 * @see at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui.workflow.Workflow)
 	 */
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 		// TODO Process SL Request and set SL Response
 		
-		
-		this.setNextState(new SigningState());
+		this.setNextState(new SigningState(this.stateMachine));
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.reset();
+		behavior.setActive(Buttons.OPEN, true);
+		behavior.setActive(Buttons.POSITION, true);
+		behavior.setActive(Buttons.SIGN, true);
 	}
 
 	@Override
 	public String toString()  {
-		return "MobileBKUState";
+		return this.getClass().getName();
 	}
 }

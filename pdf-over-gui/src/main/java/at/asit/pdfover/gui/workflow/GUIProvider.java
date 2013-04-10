@@ -1,4 +1,3 @@
-package at.asit.pdfover.gui.components.main_behavior;
 /*
  * Copyright 2012 by A-SIT, Secure Information Technology Center Austria
  *
@@ -14,33 +13,32 @@ package at.asit.pdfover.gui.components.main_behavior;
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
+package at.asit.pdfover.gui.workflow;
 
-// Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.swt.widgets.Composite;
 
-import at.asit.pdfover.gui.components.MainWindow;
 
 /**
  * 
  */
-public class MainWindowAllEnable implements MainWindowBehavior {
+public interface GUIProvider {
 	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(MainWindowAllEnable.class);
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.components.MainWindowBehavior#SetState(at.asit.pdfover.gui.components.MainWindow)
+	 * Get the container Composite
+	 * @return the container Composite
 	 */
-	@Override
-	public void SetState(MainWindow window) {
-		log.debug("ENABLING ALL");
-		window.getBtn_config().setEnabled(true);
-		window.getBtn_open().setEnabled(true);
-		window.getBtn_position().setEnabled(true);
-		window.getBtn_sign().setEnabled(true);
-	}
+	public Composite getComposite();
+	
+	/**
+	 * Create a new Composite
+	 * @param compositeClass The class of the Composite to create
+	 * @param style the SWT style
+	 * @return the new Composite
+	 */
+	public <T> T createComposite(Class<T> compositeClass, int style);
 
+	/**
+	 * Display the composite as top most in main window
+	 * @param composite the composite
+	 */
+	public void display(final Composite composite);
 }

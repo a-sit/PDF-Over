@@ -16,16 +16,12 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 import at.asit.pdfover.signator.Signator;
-import at.asit.pdfover.signator.SignaturePosition;
+
 
 /**
  * Starting state of workflow proccess
@@ -34,7 +30,12 @@ import at.asit.pdfover.signator.SignaturePosition;
  */
 public class PrepareConfigurationState extends State {
 
-	public final static String BKU_SELECTION_CONFIG = "DEFAULT_BKU";
+	/**
+	 * @param stateMachine
+	 */
+	public PrepareConfigurationState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
 
 	/**
 	 * SFL4J Logger instance
@@ -44,55 +45,29 @@ public class PrepareConfigurationState extends State {
 			.getLogger(PrepareConfigurationState.class);
 
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 		// TODO: Read config file and command line arguments
 		// Set usedSignerLib ...
-
+		this.stateMachine.getPDFSigner().setUsedPDFSignerLibrary(Signator.Signers.PDFAS);
+		
 		// Create PDF Signer
-		workflow.setPdfSigner(Signator.getSigner(workflow.getUsedSignerLib()));
-
-		workflow.setParameter(workflow.getPdfSigner().newParameter());
-
-		workflow.setSelectedBKU(PrepareConfigurationState.readSelectedBKU(workflow.getConfigurationValues()));
+		this.stateMachine.getStatus().setBKU(this.stateMachine.getConfigProvider().getDefaultBKU());
 		
-		workflow.getParameter().setSignaturePosition(readDefinedPosition(workflow.getConfigurationValues()));
+		this.stateMachine.getStatus().setSignaturePosition(this.stateMachine.getConfigProvider().getDefaultSignaturePosition());
 		
-		this.setNextState(new DataSourceSelectionState());
+		this.setNextState(new OpenState(this.stateMachine));
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		//no behavior necessary yet
 	}
 
 	@Override
-	public String toString() {
-		return "PrepareConfigurationState";
-	}
-
-	/**
-	 * Gets BKUS value from Properties
-	 * @param props
-	 * @return The BKUS value
-	 */
-	public static BKUs readSelectedBKU(final Properties props) {
-		if (props.containsKey(BKU_SELECTION_CONFIG)) {
-			String value = props.getProperty(BKU_SELECTION_CONFIG);
-			value = value.trim().toLowerCase();
-
-			if (value.equals(BKUs.LOCAL.toString().trim().toLowerCase())) {
-
-				return BKUs.LOCAL;
-			} else if (value
-					.equals(BKUs.MOBILE.toString().trim().toLowerCase())) {
-				return BKUs.MOBILE;
-			}
-		}
-		return BKUs.NONE;
-	}
-	
-	/**
-	 * Gets BKUS value from Properties
-	 * @param props
-	 * @return The BKUS value
-	 */
-	public static SignaturePosition readDefinedPosition(final Properties props) {
-		// TODO
-		return null;
+	public String toString()  {
+		return this.getClass().getName();
 	}
 }

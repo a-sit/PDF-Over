@@ -16,66 +16,78 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import java.io.File;
-
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.DataSourceSelectComposite;
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
-import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Selects the data source for the signature process.
  */
-public class DataSourceSelectionState extends State {
+public class OpenState extends State {
+
+	/**
+	 * @param stateMachine
+	 */
+	public OpenState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
 
 	/**
 	 * SFL4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
-			.getLogger(DataSourceSelectionState.class);
+			.getLogger(OpenState.class);
 
 	private DataSourceSelectComposite selectionComposite = null;
 
-	private DataSourceSelectComposite getSelectionComposite(StateMachineImpl workflow) {
+	private DataSourceSelectComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite = new DataSourceSelectComposite(
-					workflow.getComposite(), SWT.RESIZE, workflow);
+					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
 	}
 
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 
-		if (workflow.getDataSource() == null) {
+		if (this.stateMachine.getStatus().getDocument() == null) {
 			DataSourceSelectComposite selection = this
-					.getSelectionComposite(workflow);
+					.getSelectionComposite();
 
-			workflow.setTopControl(selection);
+			this.stateMachine.getGUIProvider().display(selection);
 			selection.layout();
 
-			File source = selection.getSelected();
-			if(source != null) {
-				workflow.setDataSource(source);
-			}
+			this.stateMachine.getStatus().setDocument(selection.getSelected());
 
-			if (workflow.getDataSource() == null) {
+			if (this.stateMachine.getStatus().getDocument() == null) {
 				// Not selected yet
-				this.setNextState(this);
 				return;
 			} 
 		}
-		log.debug("Got Datasource: " + workflow.getDataSource().getAbsolutePath());
-		this.setNextState(new PositioningState());
+		log.debug("Got Datasource: " + this.stateMachine.getStatus().getDocument().getAbsolutePath());
+		this.setNextState(new PositioningState(this.stateMachine));
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.reset();
+		behavior.setEnabled(Buttons.CONFIG, true);
+		behavior.setActive(Buttons.OPEN, true);
+	}
+
 	@Override
 	public String toString()  {
-		return "DataSourceSelectionState";
+		return this.getClass().getName();
 	}
 }

@@ -15,7 +15,7 @@
  */
 package at.asit.pdfover.gui.workflow;
 
-import org.eclipse.swt.widgets.Composite;
+import at.asit.pdfover.gui.workflow.states.State;
 
 /**
  * 
@@ -28,30 +28,48 @@ public interface StateMachine {
 	public ConfigProvider getConfigProvider();
 
 	/**
-	 * Get the container Composite
-	 * @return the container Composite
+	 * Get the PDF Signer
+	 * @return the PDF Signer
 	 */
-	public Composite getComposite();
-
-	/**
-	 * Create a new Composite
-	 * @param compositeClass The class of the Composite to create
-	 * @return the new Composite
-	 */
-	public <T> T createComposite(Class<T> compositeClass);
-
-	//public void display(Composite composite)
+	public PDFSigner getPDFSigner();
+	
 	/**
 	 * Get the Status
 	 * @return the Status
 	 */
 	public Status getStatus();
+	
+	/**
+	 * Gets the GUI provider
+	 * @return the GUI provider
+	 */
+	public GUIProvider getGUIProvider();
+	
+	/**
+	 * Jump to specific state
+	 * 
+	 * Sets the state machine state this method should be used to let the user jump
+	 * around between states. This Method also resets certain properties defined
+	 * by later states then the target state.
+	 * 
+	 * Example: Usually the MainWindow allows the user to jump to the states:
+	 * DataSourceSelectionState, PositioningState and BKUSelectionState
+	 * 
+	 * @param state the state to jump to
+	 */
+	public void jumpToState(State state);
 
 	/**
 	 * Update state machine
 	 * Calls the next state.
 	 */
 	public void update();
+	
+	/**
+	 * Update state machine from other thread
+	 * Calls the next state within the main thread
+	 */
+	public void InvokeUpdate();
 
 	/**
 	 * Exit state machine execution

@@ -13,11 +13,14 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow;
+package at.asit.pdfover.gui.workflow.states;
 
 //Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
  * Base state class 
@@ -36,9 +39,10 @@ public abstract class State {
 	private static final Logger log = LoggerFactory.getLogger(State.class);
 	
 	private State nextState = null;
-	
+
 	/**
 	 * Default Workflow State constructor
+	 * @param stateMachine the State Machine
 	 */
 	public State(StateMachine stateMachine) {
 		this.stateMachine = stateMachine;
@@ -63,7 +67,6 @@ public abstract class State {
 	
 	/**
 	 * Perform main logic for this state
-	 * @param stateMachine the state machine
 	 */
 	public abstract void run();
 
@@ -72,6 +75,12 @@ public abstract class State {
 	 */
 	public void updateStateMachine()
 	{
-		stateMachine.update();
+		this.stateMachine.update();
 	}
+
+	/**
+	 * Update the main window behavior of this state if necessary
+	 * Should update this.stateMachine.getStatus().getBehavior() 
+	 */
+	public abstract void updateMainWindowBehavior();
 }

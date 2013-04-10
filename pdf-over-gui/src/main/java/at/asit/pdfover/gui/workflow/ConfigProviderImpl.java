@@ -13,33 +13,42 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.components.main_behavior;
+package at.asit.pdfover.gui.workflow;
 
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.MainWindow;
+import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * 
  */
-public class OnlyConfigEnabled implements MainWindowBehavior  {
+public class ConfigProviderImpl implements ConfigProvider {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
-			.getLogger(OnlyConfigEnabled.class);
+			.getLogger(ConfigProviderImpl.class);
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.components.MainWindowBehavior#SetState(at.asit.pdfover.gui.components.MainWindow)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultBKU()
 	 */
 	@Override
-	public void SetState(MainWindow window) {
-		log.debug("ENABLING ONLY config");
-		window.getBtn_config().setEnabled(true);
-		window.getBtn_open().setEnabled(false);
-		window.getBtn_position().setEnabled(false);
-		window.getBtn_sign().setEnabled(false);
+	public BKUs getDefaultBKU() {
+		// TODO Read Config
+		return BKUs.NONE;
 	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultSignaturePosition()
+	 */
+	@Override
+	public SignaturePosition getDefaultSignaturePosition() {
+		// TODO Read Config
+		return null;
+	}
+
 }

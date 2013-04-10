@@ -20,10 +20,10 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.WaitingComposite;
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
-import at.asit.pdfover.gui.workflow.State;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 
 /**
@@ -32,17 +32,24 @@ import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 public class PrepareSigningState extends State {
 
 	/**
+	 * @param stateMachine
+	 */
+	public PrepareSigningState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
+
+	/**
 	 * Debug background thread
 	 */
 	private final class DebugSleeperThread implements Runnable {
 		
-		private StateMachineImpl workflow;
+		private StateMachine workflow;
 		
 		/**
 		 * Default constructor
 		 * @param work
 		 */
-		public DebugSleeperThread(StateMachineImpl work) {
+		public DebugSleeperThread(final StateMachine work) {
 			this.workflow = work;
 		}
 		
@@ -65,10 +72,10 @@ public class PrepareSigningState extends State {
 	
 	private WaitingComposite selectionComposite = null;
 
-	private WaitingComposite getSelectionComposite(StateMachineImpl workflow) {
+	private WaitingComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite = new WaitingComposite(
-					workflow.getComposite(), SWT.RESIZE, workflow);
+					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
@@ -77,14 +84,14 @@ public class PrepareSigningState extends State {
 	private boolean run = false;
 	
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 		// TODO SHOW BACKGROUND ACTIVITY ....
-		WaitingComposite waiting = this.getSelectionComposite(workflow);
+		WaitingComposite waiting = this.getSelectionComposite();
 		
-		workflow.setTopControl(waiting);
+		this.stateMachine.getGUIProvider().display(waiting);
 		
 		if(!this.run) {
-			Thread t = new Thread(new DebugSleeperThread(workflow));
+			Thread t = new Thread(new DebugSleeperThread(this.stateMachine));
 			this.run = true;
 			t.start();
 			return;
@@ -92,20 +99,30 @@ public class PrepareSigningState extends State {
 		
 		// WAIT FOR SLREQUEST and dispatch according to BKU selection
 		
-		if(workflow.getSelectedBKU() == BKUs.LOCAL) {
-			this.setNextState(new LocalBKUState());
-		} else if(workflow.getSelectedBKU() == BKUs.MOBILE) {
-			this.setNextState(new MobileBKUState());
+		if(this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
+			this.setNextState(new LocalBKUState(this.stateMachine));
+		} else if(this.stateMachine.getStatus().getBKU() == BKUs.MOBILE) {
+			this.setNextState(new MobileBKUState(this.stateMachine));
 		} else {
-			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");
-			this.setNextState(new BKUSelectionState());
+			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!"); //$NON-NLS-1$
+			this.setNextState(new BKUSelectionState(this.stateMachine));
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.reset();
+		behavior.setActive(Buttons.OPEN, true);
+		behavior.setActive(Buttons.POSITION, true);
+		behavior.setActive(Buttons.SIGN, true);
+	}
+
 	@Override
 	public String toString()  {
-		return "PrepareSigningState";
+		return this.getClass().getName();
 	}
-	
-	
 }

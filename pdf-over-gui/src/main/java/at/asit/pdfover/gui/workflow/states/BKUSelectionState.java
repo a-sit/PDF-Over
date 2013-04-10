@@ -20,10 +20,10 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.BKUSelectionComposite;
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
-import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Decides which BKU to use (preconfigured or let user choose)
@@ -67,8 +67,8 @@ public class BKUSelectionState extends State {
 
 	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
-			this.selectionComposite = new BKUSelectionComposite(
-					this.stateMachine.getComposite(), SWT.RESIZE, this);
+			this.selectionComposite =  new BKUSelectionComposite(
+					this.stateMachine.getGUIProvider().getComposite(), SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
@@ -81,21 +81,35 @@ public class BKUSelectionState extends State {
 			BKUSelectionComposite selection = this
 					.getSelectionComposite();
 
-			this.stateMachine.setTopControl(selection);
+			this.stateMachine.getGUIProvider().display(selection);
 			selection.layout();
 			
-			this.stateMachine.setSelectedBKU(selection.getSelected());
+			this.stateMachine.getStatus().setBKU(selection.getSelected());
 		
-			if(this.stateMachine.getSelectedBKU() == BKUs.NONE) {
-				this.setNextState(this);
+			if(this.stateMachine.getStatus().getBKU() == BKUs.NONE) {
 				return;
 			}
 		} 
-		this.setNextState(new PrepareSigningState());
+		this.setNextState(new PrepareSigningState(this.stateMachine));
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		behavior.reset();
+		behavior.setEnabled(Buttons.CONFIG, true);
+		behavior.setEnabled(Buttons.OPEN, true);
+		behavior.setEnabled(Buttons.POSITION, true);
+		behavior.setActive(Buttons.OPEN, true);
+		behavior.setActive(Buttons.POSITION, true);
+		behavior.setActive(Buttons.SIGN, true);
+	}
+
 	@Override
 	public String toString()  {
-		return "BKUSelectionState";
+		return this.getClass().getName();
 	}
 }

@@ -20,12 +20,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.State;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
  */
 public class SigningState extends State {
+
+	/**
+	 * @param stateMachine
+	 */
+	public SigningState(StateMachine stateMachine) {
+		super(stateMachine);
+	}
 
 	/**
 	 * SFL4J Logger instance
@@ -34,14 +40,22 @@ public class SigningState extends State {
 	private static final Logger log = LoggerFactory.getLogger(SigningState.class);
 	
 	@Override
-	public void run(StateMachine stateMachine) {
+	public void run() {
 		// TODO Wait until output ready and set output
 		
-		this.setNextState(new OutputState());
+		this.setNextState(new OutputState(this.stateMachine));
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
+	 */
+	@Override
+	public void updateMainWindowBehavior() {
+		//no change of behavior necessary
+	}
+
 	@Override
 	public String toString()  {
-		return "SigningState";
+		return this.getClass().getName();
 	}
 }
