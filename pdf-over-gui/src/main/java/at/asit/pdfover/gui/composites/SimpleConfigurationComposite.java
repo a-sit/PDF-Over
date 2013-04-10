@@ -490,6 +490,59 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				}
 			});
 
+		Group grpSignatureNote = new Group(this, SWT.NONE);
+		FormData fd_grpSignatureNote = new FormData();
+		fd_grpSignatureNote.right = new FormAttachment(100, -5);
+		fd_grpSignatureNote.top = new FormAttachment(grpProxy, 5);
+		fd_grpSignatureNote.left = new FormAttachment(0, 5);
+		grpSignatureNote.setLayoutData(fd_grpSignatureNote);
+		grpSignatureNote.setLayout(new GridLayout(2, false));
+		grpSignatureNote.setText(Messages.getString("simple_config.Note_Title")); //$NON-NLS-1$
+
+		FontData[] fD_grpSignatureNote = grpSignatureNote.getFont().getFontData();
+		fD_grpSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		grpSignatureNote.setFont(new Font(Display.getCurrent(), fD_grpSignatureNote[0]));
+
+			Label lblSignatureNote = new Label(grpSignatureNote, SWT.NONE);
+			GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER, false,
+					false, 1, 1);
+			gd_lblSignatureNote.widthHint = 66;
+			lblSignatureNote.setLayoutData(gd_lblSignatureNote);
+			lblSignatureNote.setBounds(0, 0, 57, 15);
+			lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
+
+			FontData[] fD_lblSignatureNote = lblSignatureNote.getFont().getFontData();
+			fD_lblSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+			lblSignatureNote.setFont(new Font(Display.getCurrent(), fD_lblSignatureNote[0]));
+
+			this.txtSignatureNote = new Text(grpSignatureNote, SWT.BORDER);
+			this.txtSignatureNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+					1, 1));
+			this.txtSignatureNote.setToolTipText(Messages.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
+
+			FontData[] fD_txtSignatureNote = this.txtProxyHost.getFont().getFontData();
+			fD_txtSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+			this.txtSignatureNote.setFont(new Font(Display.getCurrent(),
+					fD_txtSignatureNote[0]));
+			
+			this.txtSignatureNote.addFocusListener(new FocusAdapter() {
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					processSignatureNoteChanged();
+				}
+			});
+
+			this.txtSignatureNote.addTraverseListener(new TraverseListener() {
+
+				@Override
+				public void keyTraversed(TraverseEvent e) {
+					if (e.detail == SWT.TRAVERSE_RETURN) {
+						processSignatureNoteChanged();
+					}
+				}
+			});
+
 		this.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -520,60 +573,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						100, -1 * portSize.y);
 				SimpleConfigurationComposite.this.fd_txtProxyPort.right = new FormAttachment(
 						100, -1 * (portSize.y + 10));
-			}
-		});
-		
-		// TODO: localize ...
-		Group grpSignatureNote = new Group(this, SWT.NONE);
-		FormData fd_grpSignatureNote = new FormData();
-		fd_grpSignatureNote.right = new FormAttachment(100, -5);
-		fd_grpSignatureNote.top = new FormAttachment(grpProxy, 5);
-		fd_grpSignatureNote.left = new FormAttachment(0, 5);
-		grpSignatureNote.setLayoutData(fd_grpSignatureNote);
-		grpSignatureNote.setLayout(new GridLayout(2, false));
-		grpSignatureNote.setText("Signature Note"); 
-
-		FontData[] fD_grpSignatureNote = grpSignatureNote.getFont().getFontData();
-		fD_grpSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		grpSignatureNote.setFont(new Font(Display.getCurrent(), fD_grpSignatureNote[0]));
-		
-		
-		Label lblSignatureNote = new Label(grpSignatureNote, SWT.NONE);
-		GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_lblSignatureNote.widthHint = 66;
-		lblSignatureNote.setLayoutData(gd_lblSignatureNote);
-		lblSignatureNote.setBounds(0, 0, 57, 15);
-		lblSignatureNote.setText("Text:"); 
-
-		FontData[] fD_lblSignatureNote = lblSignatureNote.getFont().getFontData();
-		fD_lblSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		lblSignatureNote.setFont(new Font(Display.getCurrent(), fD_lblSignatureNote[0]));
-
-		this.txtSignatureNote = new Text(grpSignatureNote, SWT.BORDER);
-		this.txtSignatureNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				1, 1));
-
-		FontData[] fD_txtSignatureNote = this.txtProxyHost.getFont().getFontData();
-		fD_txtSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtSignatureNote.setFont(new Font(Display.getCurrent(),
-				fD_txtSignatureNote[0]));
-		
-		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				processSignatureNoteChanged();
-			}
-		});
-
-		this.txtSignatureNote.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processSignatureNoteChanged();
-				}
 			}
 		});
 	}

@@ -342,7 +342,7 @@ public class SignaturePanel extends JPanel {
 						float scale = (((float) this.sigScreenWidth) / this.sigPlaceholder.getWidth(null)) * 150;
 						log.debug(Float.toString(scale));
 						g_phs.setFont(getFont().deriveFont(scale));
-						g_phs.setColor(sigPlaceholderBorderColor);
+						g_phs.setColor(this.sigPlaceholderBorderColor);
 						Rectangle2D overlay_size = g_phs.getFontMetrics().getStringBounds(overlay, g_phs);
 						int width = (int) overlay_size.getWidth();
 						int height = (int) overlay_size.getHeight();
