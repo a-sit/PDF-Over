@@ -46,6 +46,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -69,6 +71,118 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	public PDFSigner getSigner() {
 		return this.signer;
+	}
+
+	/**
+	 * Create the composite.
+	 * 
+	 * @param parent
+	 * @param style
+	 * @param state
+	 */
+	public ConfigurationComposite(Composite parent, int style, State state) {
+		super(parent, SWT.FILL | style, state);
+		this.style = SWT.FILL | style;
+
+		this.setLayout(new FormLayout());
+
+		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
+
+		TabFolder tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
+		FormData fd_tabFolder = new FormData();
+		fd_tabFolder.bottom = new FormAttachment(100, -5);
+		fd_tabFolder.right = new FormAttachment(100, -5);
+		fd_tabFolder.top = new FormAttachment(0, 5);
+		fd_tabFolder.left = new FormAttachment(0, 5);
+		tabFolder.setLayoutData(fd_tabFolder);
+
+		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
+		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
+
+		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
+		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+
+		ScrolledComposite simpleCompositeScr = new ScrolledComposite(tabFolder,
+				SWT.H_SCROLL | SWT.V_SCROLL);
+		simpleTabItem.setControl(simpleCompositeScr);
+		this.simpleConfigComposite = new SimpleConfigurationComposite(
+				simpleCompositeScr, SWT.NONE, state,
+				this.configurationContainer);
+		simpleCompositeScr.setContent(this.simpleConfigComposite);
+		simpleCompositeScr.setExpandHorizontal(true);
+		simpleCompositeScr.setExpandVertical(true);
+		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
+				SWT.DEFAULT, SWT.DEFAULT));
+
+		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
+		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+
+		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
+				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		advancedTabItem.setControl(advancedCompositeScr);
+		this.advancedConfigComposite = new AdvancedConfigurationComposite(
+				advancedCompositeScr, SWT.NONE, state,
+				this.configurationContainer);
+		advancedCompositeScr.setContent(this.advancedConfigComposite);
+		advancedCompositeScr.setExpandHorizontal(true);
+		advancedCompositeScr.setExpandVertical(true);
+		advancedCompositeScr.setMinSize(this.advancedConfigComposite
+				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+		tabFolder.setSelection(simpleTabItem);
+
+		Button btnSpeichern = new Button(this, SWT.NONE);
+		FormData fd_btnSpeichern = new FormData();
+		fd_btnSpeichern.right = new FormAttachment(100, -5);
+		fd_btnSpeichern.bottom = new FormAttachment(100);
+		btnSpeichern.setLayoutData(fd_btnSpeichern);
+		btnSpeichern.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (ConfigurationComposite.this.storeConfiguration()) {
+					ConfigurationComposite.this.userDone = true;
+					ConfigurationComposite.this.state.updateStateMachine();
+				}
+			}
+		});
+		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		this.getShell().setDefaultButton(btnSpeichern);
+
+		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
+		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		btnSpeichern
+				.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
+
+		Button btnAbbrechen = new Button(this, SWT.NONE);
+		FormData fd_btnAbrechen = new FormData();
+		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
+		fd_btnAbrechen.bottom = new FormAttachment(btnSpeichern, 0, SWT.BOTTOM);
+		btnAbbrechen.setLayoutData(fd_btnAbrechen);
+		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		btnAbbrechen.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ConfigurationComposite.this.userDone = true;
+				ConfigurationComposite.this.state.updateStateMachine();
+			}
+		});
+
+		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
+		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		btnAbbrechen
+				.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
+
+		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(0, 5);
+		fd_composite.bottom = new FormAttachment(btnSpeichern, -10);
+		fd_composite.left = new FormAttachment(0, 5);
+		fd_composite.right = new FormAttachment(100, -5);
+		this.containerComposite.setLayoutData(fd_composite);
+		this.containerComposite.setLayout(this.compositeStack);
+		this.compositeStack.topControl = tabFolder;
+
+		this.doLayout();
 	}
 
 	/**
@@ -197,117 +311,6 @@ public class ConfigurationComposite extends StateComposite {
 			this.simpleConfigComposite.loadConfiguration();
 			this.advancedConfigComposite.loadConfiguration();
 		}
-	}
-
-	/**
-	 * Create the composite.
-	 * 
-	 * @param parent
-	 * @param style
-	 * @param state
-	 */
-	public ConfigurationComposite(Composite parent, int style, State state) {
-		super(parent, SWT.FILL | style, state);
-		this.style = SWT.FILL | style;
-
-		this.setLayout(new FormLayout());
-
-		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
-
-		TabFolder tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
-		FormData fd_tabFolder = new FormData();
-		fd_tabFolder.bottom = new FormAttachment(100, -5);
-		fd_tabFolder.right = new FormAttachment(100, -5);
-		fd_tabFolder.top = new FormAttachment(0, 5);
-		fd_tabFolder.left = new FormAttachment(0, 5);
-		tabFolder.setLayoutData(fd_tabFolder);
-
-		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
-		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
-
-		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NONE);
-		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
-
-		ScrolledComposite simpleCompositeScr = new ScrolledComposite(tabFolder,
-				SWT.H_SCROLL | SWT.V_SCROLL);
-		simpleTabItem.setControl(simpleCompositeScr);
-		this.simpleConfigComposite = new SimpleConfigurationComposite(
-				simpleCompositeScr, SWT.NONE, state,
-				this.configurationContainer);
-		simpleCompositeScr.setContent(this.simpleConfigComposite);
-		simpleCompositeScr.setExpandHorizontal(true);
-		simpleCompositeScr.setExpandVertical(true);
-		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
-				SWT.DEFAULT, SWT.DEFAULT));
-
-		TabItem advancedTabItem = new TabItem(tabFolder, SWT.NONE);
-		advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
-
-		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
-				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
-		advancedTabItem.setControl(advancedCompositeScr);
-		this.advancedConfigComposite = new AdvancedConfigurationComposite(
-				advancedCompositeScr, SWT.NONE, state,
-				this.configurationContainer);
-		advancedCompositeScr.setContent(this.advancedConfigComposite);
-		advancedCompositeScr.setExpandHorizontal(true);
-		advancedCompositeScr.setExpandVertical(true);
-		advancedCompositeScr.setMinSize(this.advancedConfigComposite
-				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-		tabFolder.setSelection(simpleTabItem);
-
-		Button btnSpeichern = new Button(this, SWT.NONE);
-		FormData fd_btnSpeichern = new FormData();
-		fd_btnSpeichern.right = new FormAttachment(100, -5);
-		fd_btnSpeichern.bottom = new FormAttachment(100);
-		btnSpeichern.setLayoutData(fd_btnSpeichern);
-		btnSpeichern.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (ConfigurationComposite.this.storeConfiguration()) {
-					ConfigurationComposite.this.userDone = true;
-					ConfigurationComposite.this.state.updateStateMachine();
-				}
-			}
-		});
-		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
-
-		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
-		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnSpeichern
-				.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
-
-		Button btnAbbrechen = new Button(this, SWT.NONE);
-		FormData fd_btnAbrechen = new FormData();
-		fd_btnAbrechen.right = new FormAttachment(btnSpeichern, -10);
-		fd_btnAbrechen.bottom = new FormAttachment(btnSpeichern, 0, SWT.BOTTOM);
-		btnAbbrechen.setLayoutData(fd_btnAbrechen);
-		btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
-		btnAbbrechen.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ConfigurationComposite.this.userDone = true;
-				ConfigurationComposite.this.state.updateStateMachine();
-			}
-		});
-
-		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
-		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btnAbbrechen
-				.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
-
-		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(0, 5);
-		fd_composite.bottom = new FormAttachment(btnSpeichern, -10);
-		fd_composite.left = new FormAttachment(0, 5);
-		fd_composite.right = new FormAttachment(100, -5);
-		this.containerComposite.setLayoutData(fd_composite);
-		this.containerComposite.setLayout(this.compositeStack);
-		this.compositeStack.topControl = tabFolder;
-
-		this.doLayout();
 	}
 
 	boolean storeConfiguration() {
