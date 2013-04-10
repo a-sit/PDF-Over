@@ -63,7 +63,7 @@ public class PrepareConfigurationState extends State {
 
 	private ArgumentHandler handler;
 
-	private ArgumentHandler configFilehandler;
+	private ArgumentHandler configFileHandler;
 
 	/**
 	 * @param stateMachine
@@ -83,8 +83,8 @@ public class PrepareConfigurationState extends State {
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(new ConfigFileArgument());
 
-		this.configFilehandler = new ArgumentHandler(this.stateMachine);
-		this.configFilehandler.addCLIArgument(new ConfigFileArgument());
+		this.configFileHandler = new ArgumentHandler(this.stateMachine);
+		this.configFileHandler.addCLIArgument(new ConfigFileArgument());
 	}
 
 	private void initializeFromConfigurationFile(String filename)
@@ -127,8 +127,134 @@ public class PrepareConfigurationState extends State {
 			throws InitializationException {
 		handler.handleArguments(args);
 
-		if (handler.IsRequireExit()) {
+		if (handler.doesRequireExit()) {
 			this.stateMachine.exit();
+		}
+	}
+
+	private void createConfiguration(File configDir) throws InitializationException {
+		boolean allOK = false;
+
+		log.info("Creating configuration directory"); //$NON-NLS-1$
+
+		try {
+			if (!configDir.exists()) {
+				configDir.mkdir();
+			}
+			// Copy PDFOver config to config Dir
+
+			// 1Kb buffer
+			byte[] buffer = new byte[1024];
+			int byteCount = 0;
+
+			InputStream inputStream = null;
+			FileOutputStream pdfOverConfig = null;
+			try {
+				inputStream = this.getClass().getResourceAsStream(
+						RES_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
+				pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
+						+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
+
+				while ((byteCount = inputStream.read(buffer)) >= 0) {
+					pdfOverConfig.write(buffer, 0, byteCount);
+				}
+			} catch (Exception e) {
+				log.error(
+						"Failed to write PDF Over config file to config directory", e); //$NON-NLS-1$
+				throw new InitializationException(
+						"Failed to write PDF Over config file to config directory", //$NON-NLS-1$
+						e);
+			} finally {
+				if (pdfOverConfig != null) {
+					try {
+						pdfOverConfig.close();
+					} catch (IOException e) {
+						log.warn(
+								"Failed to close File stream for PDFOver config", e); //$NON-NLS-1$
+					}
+				}
+
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						log.warn(
+								"Failed to close Resource stream for PDFOver config", e); //$NON-NLS-1$
+					}
+				}
+			}
+
+			inputStream = null;
+			pdfOverConfig = null;
+			try {
+				inputStream = this.getClass().getResourceAsStream(
+						RES_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
+				pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
+						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
+
+				while ((byteCount = inputStream.read(buffer)) >= 0) {
+					pdfOverConfig.write(buffer, 0, byteCount);
+				}
+			} catch (Exception e) {
+				log.error(
+						"Failed to write log4j config file to config directory", e); //$NON-NLS-1$
+				throw new InitializationException(
+						"Failed to write log4j config file to config directory", //$NON-NLS-1$
+						e);
+			} finally {
+				if (pdfOverConfig != null) {
+					try {
+						pdfOverConfig.close();
+					} catch (IOException e) {
+						log.warn(
+								"Failed to close File stream for log4j config", e); //$NON-NLS-1$
+					}
+				}
+
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						log.warn(
+								"Failed to close Resource stream for log4j config", e); //$NON-NLS-1$
+					}
+				}
+			}
+			
+			InputStream is = this.getClass().getResourceAsStream(
+					"/cfg/PDFASConfig.zip"); //$NON-NLS-1$
+
+			try {
+				Unzipper.unzip(is, configDir.getAbsolutePath());
+			} catch (IOException e) {
+				log.error(
+						"Failed to create local configuration directory!", e); //$NON-NLS-1$
+				throw new InitializationException(
+						"Failed to create local configuration directory!", //$NON-NLS-1$
+						e);
+			}
+			
+			// initialize from config file
+			this.initializeFromConfigurationFile(this.stateMachine
+					.getConfigProvider().getConfigurationFile());
+			
+			this.stateMachine.getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
+			
+			try {
+				this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
+			} catch (IOException e) {
+				log.error(
+						"Failed to set local configuration signature note!", e); //$NON-NLS-1$
+				throw new InitializationException(
+						"Failed to set local configuration signature note!", //$NON-NLS-1$
+						e);
+			}
+			
+			allOK = true;
+		} finally {
+			if (!allOK) {
+				configDir.delete();
+			}
 		}
 	}
 
@@ -141,136 +267,15 @@ public class PrepareConfigurationState extends State {
 			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory()
 					+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
-				boolean allOK = false;
-
-				log.info("Creating configuration directory"); //$NON-NLS-1$
-
-				try {
-					if (!configDir.exists()) {
-						configDir.mkdir();
-					}
-					// Copy PDFOver config to config Dir
-
-					// 1Kb buffer
-					byte[] buffer = new byte[1024];
-					int byteCount = 0;
-
-					InputStream inputStream = null;
-					FileOutputStream pdfOverConfig = null;
-					try {
-						inputStream = this.getClass().getResourceAsStream(
-								RES_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
-						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
-
-						while ((byteCount = inputStream.read(buffer)) >= 0) {
-							pdfOverConfig.write(buffer, 0, byteCount);
-						}
-					} catch (Exception e) {
-						log.error(
-								"Failed to write PDF Over config file to config directory", e); //$NON-NLS-1$
-						throw new InitializationException(
-								"Failed to write PDF Over config file to config directory", //$NON-NLS-1$
-								e);
-					} finally {
-						if (pdfOverConfig != null) {
-							try {
-								pdfOverConfig.close();
-							} catch (IOException e) {
-								log.warn(
-										"Failed to close File stream for PDFOver config", e); //$NON-NLS-1$
-							}
-						}
-
-						if (inputStream != null) {
-							try {
-								inputStream.close();
-							} catch (IOException e) {
-								log.warn(
-										"Failed to close Resource stream for PDFOver config", e); //$NON-NLS-1$
-							}
-						}
-					}
-
-					inputStream = null;
-					pdfOverConfig = null;
-					try {
-						inputStream = this.getClass().getResourceAsStream(
-								RES_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
-						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
-
-						while ((byteCount = inputStream.read(buffer)) >= 0) {
-							pdfOverConfig.write(buffer, 0, byteCount);
-						}
-					} catch (Exception e) {
-						log.error(
-								"Failed to write log4j config file to config directory", e); //$NON-NLS-1$
-						throw new InitializationException(
-								"Failed to write log4j config file to config directory", //$NON-NLS-1$
-								e);
-					} finally {
-						if (pdfOverConfig != null) {
-							try {
-								pdfOverConfig.close();
-							} catch (IOException e) {
-								log.warn(
-										"Failed to close File stream for log4j config", e); //$NON-NLS-1$
-							}
-						}
-
-						if (inputStream != null) {
-							try {
-								inputStream.close();
-							} catch (IOException e) {
-								log.warn(
-										"Failed to close Resource stream for log4j config", e); //$NON-NLS-1$
-							}
-						}
-					}
-					
-					InputStream is = this.getClass().getResourceAsStream(
-							"/cfg/PDFASConfig.zip"); //$NON-NLS-1$
-
-					try {
-						Unzipper.unzip(is, configDir.getAbsolutePath());
-					} catch (IOException e) {
-						log.error(
-								"Failed to create local configuration directory!", e); //$NON-NLS-1$
-						throw new InitializationException(
-								"Failed to create local configuration directory!", //$NON-NLS-1$
-								e);
-					}
-					
-					// initialize from config file
-					this.initializeFromConfigurationFile(this.stateMachine
-							.getConfigProvider().getConfigurationFile());
-					
-					this.stateMachine.getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
-					
-					try {
-						this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
-					} catch (IOException e) {
-						log.error(
-								"Failed to set local configuration signature note!", e); //$NON-NLS-1$
-						throw new InitializationException(
-								"Failed to set local configuration signature note!", //$NON-NLS-1$
-								e);
-					}
-					
-					allOK = true;
-				} finally {
-					if (!allOK) {
-						configDir.delete();
-					}
-				}
+				log.debug("Creating configuration file"); //$NON-NLS-1$
+				createConfiguration(configDir);
 			} else {
 				log.debug("Configuration directory exists!"); //$NON-NLS-1$
 			}
 
-			// Read cli arguments with for config file!
+			// Read cli arguments for config file first
 			this.initializeFromArguments(this.stateMachine.getCmdArgs(),
-					this.configFilehandler);
+					this.configFileHandler);
 
 			// initialize from config file
 			this.initializeFromConfigurationFile(this.stateMachine

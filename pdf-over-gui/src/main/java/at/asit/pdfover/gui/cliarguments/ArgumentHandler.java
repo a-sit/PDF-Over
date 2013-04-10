@@ -106,7 +106,7 @@ public class ArgumentHandler {
 	}
 
 	/**
-	 * Set by an cli argument if it wants the program to exit
+	 * Set by a cli argument if it wants the program to exit
 	 * 
 	 * @param requireExit
 	 */
@@ -115,11 +115,11 @@ public class ArgumentHandler {
 	}
 
 	/**
-	 * Checks if one argument required the program to exit again
+	 * Checks if one argument required the program to exit immediately
 	 * 
 	 * @return true or false
 	 */
-	public boolean IsRequireExit() {
+	public boolean doesRequireExit() {
 		return this.requiredExit;
 	}
 }
