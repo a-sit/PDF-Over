@@ -16,8 +16,6 @@
 package at.asit.pdfover.signer.pdfas;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.Signer;
 import at.asit.pdfover.signator.SignerFactory;
 
@@ -26,11 +24,6 @@ import at.asit.pdfover.signator.SignerFactory;
  */
 public class PDFASSignerFactory extends SignerFactory {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PDFASSignerFactory.class);
-	
 	@Override
 	public Signer createSigner() {
 		return new PDFASSigner();

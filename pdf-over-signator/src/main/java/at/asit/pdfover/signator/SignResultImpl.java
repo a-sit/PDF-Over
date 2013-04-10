@@ -15,22 +15,14 @@
  */
 package at.asit.pdfover.signator;
 
-import java.security.cert.X509Certificate;
-
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.cert.X509Certificate;
 
 /**
  * The result of a signature operation
  */
 public class SignResultImpl implements SignResult {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static Logger log = LoggerFactory.getLogger(Signator.class);
-	
 	private SignaturePosition position;
 	private DocumentSource source;
 	private X509Certificate certificate;

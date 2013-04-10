@@ -19,9 +19,6 @@ package at.asit.pdfover.signer.pdfas;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.gv.egiz.pdfas.api.io.DataSource;
 
 /**
@@ -29,11 +26,6 @@ import at.gv.egiz.pdfas.api.io.DataSource;
  */
 public class ByteArrayPDFASDataSource implements DataSource {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(ByteArrayPDFASDataSource.class);
-	
 	/**
 	 * Internal data byte array
 	 */

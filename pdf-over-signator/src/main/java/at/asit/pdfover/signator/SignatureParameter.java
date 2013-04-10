@@ -16,19 +16,12 @@
 package at.asit.pdfover.signator;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Signature Parameter
  */
 public abstract class SignatureParameter {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static Logger log = LoggerFactory.getLogger(SignatureParameter.class);
-	
 	/**
 	 * The Signature Position
 	 * @uml.property  name="signaturePosition"

@@ -16,8 +16,6 @@
 package at.asit.pdfover.signer.pdfas;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SigningState;
@@ -29,11 +27,6 @@ import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
  */
 public class PDFASSigningState implements SigningState {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PDFASSigningState.class);
-	
 	/**
 	 * The Signature Layer request
 	 */

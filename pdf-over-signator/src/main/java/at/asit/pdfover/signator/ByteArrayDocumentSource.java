@@ -16,9 +16,6 @@
 package at.asit.pdfover.signator;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -27,11 +24,6 @@ import java.io.InputStream;
  */
 public class ByteArrayDocumentSource implements DocumentSource {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(ByteArrayDocumentSource.class);
-	
 	/**
 	 * Document content
 	 */

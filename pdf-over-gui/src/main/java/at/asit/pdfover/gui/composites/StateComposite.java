@@ -17,8 +17,6 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
 

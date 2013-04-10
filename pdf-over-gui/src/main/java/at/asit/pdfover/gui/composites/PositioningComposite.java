@@ -22,8 +22,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -59,17 +57,11 @@ public class PositioningComposite extends StateComposite {
 		}
 	}
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(PositioningComposite.class);
-	
 	private SignaturePosition position = null;
 	
 	/**
-	 * Gets the Position
-	 * @return
+	 * Gets the position of the signature
+	 * @return the SignaturePosition
 	 */
 	public SignaturePosition getPosition() {
 		return this.position;
@@ -87,6 +79,7 @@ public class PositioningComposite extends StateComposite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
+	 * @param state 
 	 */
 	public PositioningComposite(Composite parent, int style, State state) {
 		super(parent, style, state);

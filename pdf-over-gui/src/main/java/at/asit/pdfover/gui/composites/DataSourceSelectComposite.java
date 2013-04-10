@@ -18,13 +18,15 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.io.File;
 
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -32,12 +34,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.*;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -60,7 +64,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] {"*.pdf"});
+			dialog.setFilterExtensions(new String[] {"*.pdf"}); //$NON-NLS-1$
 			dialog.setFilterNames(new String[] {"PDF Dateien"});
 			String fileName = dialog.open();
 	        File file = null;
@@ -81,7 +85,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(DataSourceSelectComposite.class);
 
 	/**
@@ -155,7 +159,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						File file = new File(files[0]);
 						if(!file.exists())
 						{
-							log.error("File: " + files[0] + " doesnot exists!");
+							log.error("File: " + files[0] + " does not exist!");
 							return;
 						}
 						DataSourceSelectComposite.this.setSelected(file);

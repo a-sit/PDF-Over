@@ -25,8 +25,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -37,6 +36,12 @@ public class ErrorComposite extends StateComposite {
 	 * 
 	 */
 	private final class OkSelectionListener implements SelectionListener {
+		/**
+		 * 
+		 */
+		public OkSelectionListener() {
+		}
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			ErrorComposite.this.userOk = true;
@@ -49,20 +54,14 @@ public class ErrorComposite extends StateComposite {
 		}
 	}
 
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(ErrorComposite.class);
-
 	boolean userOk = false;
 	
 	/**
 	 * Checks if the user has clicked OK
-	 * @return
+	 * @return whether the user has clicked OK
 	 */
 	public boolean isUserOk() {
-		return userOk;
+		return this.userOk;
 	}
 
 	private Exception exception;
@@ -80,6 +79,7 @@ public class ErrorComposite extends StateComposite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
+	 * @param state 
 	 */
 	public ErrorComposite(Composite parent, int style, State state) {
 		super(parent, style, state);

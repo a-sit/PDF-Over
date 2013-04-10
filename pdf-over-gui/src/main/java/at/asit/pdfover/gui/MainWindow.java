@@ -230,7 +230,7 @@ public class MainWindow {
 		fd_config.bottom = new FormAttachment(100, 0);
 		this.btn_config.setLayoutData(fd_config);
 		this.btn_config.setText("Config ...");
-		buttonMap.put(Buttons.CONFIG, btn_config);
+		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 
 		this.btn_open = new Button(composite, SWT.NONE);
 		FormData fd_open = new FormData();
@@ -241,7 +241,7 @@ public class MainWindow {
 		this.btn_open.setLayoutData(fd_open);
 		this.btn_open.setText("Open ...");
 		this.btn_open.addSelectionListener(new DataSourceSelectionListener());
-		buttonMap.put(Buttons.OPEN, btn_open);
+		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
 		this.btn_position = new Button(composite, SWT.NONE);
 		FormData fd_position = new FormData();
@@ -252,7 +252,7 @@ public class MainWindow {
 		this.btn_position.setLayoutData(fd_position);
 		this.btn_position.setText("Positon ...");
 		this.btn_position.addSelectionListener(new PositionSelectionListener());
-		buttonMap.put(Buttons.POSITION, btn_position);
+		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
 		this.btn_sign = new Button(composite, SWT.NONE);
 		FormData fd_sign = new FormData();
@@ -262,7 +262,7 @@ public class MainWindow {
 		fd_sign.bottom = new FormAttachment(100, 0);
 		this.btn_sign.setLayoutData(fd_sign);
 		this.btn_sign.setText("Sign ...");
-		buttonMap.put(Buttons.SIGN, btn_sign);
+		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
 		this.container = new Composite(getShell(), SWT.BORDER | SWT.RESIZE);
 		FormData fd_composite_1 = new FormData();
@@ -299,7 +299,7 @@ public class MainWindow {
 			boolean active = behavior.getActive(button);
 			boolean enabled = behavior.getEnabled(button);
 
-			Button theButton = buttonMap.get(button);
+			Button theButton = this.buttonMap.get(button);
 			if (theButton != null)
 			{
 				theButton.setEnabled(enabled);

@@ -16,19 +16,12 @@
 package at.asit.pdfover.signator;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Base class for signature exceptions
  */
 public class SignatureException extends Exception {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static Logger log = LoggerFactory.getLogger(SignatureException.class);
-	
 	/**
 	 * 
 	 */

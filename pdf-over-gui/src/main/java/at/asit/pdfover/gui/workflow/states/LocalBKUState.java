@@ -16,15 +16,15 @@
 package at.asit.pdfover.gui.workflow.states;
 
 // Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
-import at.asit.pdfover.gui.MainWindowBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SLRequest;

@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
-import at.asit.pdfover.signator.DocumentSource;
 import at.asit.pdfover.signator.SLRequest;
 
 /**

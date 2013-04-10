@@ -16,28 +16,19 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
-import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ProgressBar;
 
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
  * 
  */
 public class WaitingComposite extends StateComposite {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(WaitingComposite.class);
-
 	/**
 	 * Create the composite.
 	 * @param parent

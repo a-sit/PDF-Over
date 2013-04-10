@@ -17,7 +17,6 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.awt.Desktop;
-import org.eclipse.swt.widgets.FileDialog;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -29,6 +28,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +39,15 @@ import at.asit.pdfover.signator.DocumentSource;
  * GUI component for Output State
  */
 public class OutputComposite extends StateComposite {
-	
+
 	/**
-	 * Selection Listner for save button
+	 * SLF4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory
+			.getLogger(OutputComposite.class);
+
+	/**
+	 * SelectionListener for save button
 	 */
 	private final class SaveSelectionListener implements SelectionListener {
 		
@@ -56,7 +62,7 @@ public class OutputComposite extends StateComposite {
 		public void widgetSelected(SelectionEvent e) {
 			try {
 				FileDialog save = new FileDialog(OutputComposite.this.getShell(), SWT.SAVE | SWT.NATIVE);
-				save.setFilterExtensions(new String[] {"*.pdf"});
+				save.setFilterExtensions(new String[] {"*.pdf"}); //$NON-NLS-1$
 				save.setFilterNames(new String[] {"PDF Dateien"});
 				
 				String target = save.open();
@@ -131,12 +137,6 @@ public class OutputComposite extends StateComposite {
 			// Nothing todo
 		}
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(OutputComposite.class);
 
 	File savedFile = null;
 

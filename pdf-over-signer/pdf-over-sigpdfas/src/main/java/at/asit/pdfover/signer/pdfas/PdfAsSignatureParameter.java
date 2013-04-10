@@ -16,23 +16,16 @@
 package at.asit.pdfover.signer.pdfas;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureParameter;
-import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
 import at.gv.egiz.pdfas.api.io.DataSource;
+import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
 
 /**
  * Implementation of SignatureParameter specific for PDF - AS Library
  */
 public class PdfAsSignatureParameter extends SignatureParameter {
 
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PdfAsSignatureParameter.class);
-	
 	@Override
 	public SignatureDimension getPlaceholderDimension() {
 		// TODO Auto-generated method stub

@@ -16,18 +16,11 @@
 package at.asit.pdfover.signator;
 
 //Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The dimensions of the visible signature block
  */
 public class SignatureDimension {
-
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static Logger log = LoggerFactory.getLogger(SignatureDimension.class);
 
 	/**
 	 * The visible Signature block width
