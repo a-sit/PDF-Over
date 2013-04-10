@@ -178,7 +178,7 @@ public class PositioningComposite extends StateComposite {
 
 	void showPage(int page) {
 		this.currentPage = page;
-		Display.getDefault().syncExec(new Runnable() {
+		this.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				PositioningComposite.this.scrollbar.setSelection(PositioningComposite.this.currentPage);
