@@ -22,100 +22,112 @@ public interface MobileBKUStatus {
 	/**
 	 * @return the identification_url
 	 */
-	public abstract String getSessionID();
+	public String getSessionID();
 
 	/**
 	 * @param sessionID the identification_url to set
 	 */
-	public abstract void setSessionID(String sessionID);
+	public void setSessionID(String sessionID);
 
 	/**
 	 * @return the phoneNumber
 	 */
-	public abstract String getPhoneNumber();
+	public String getPhoneNumber();
 
 	/**
 	 * @param phoneNumber the phoneNumber to set
 	 */
-	public abstract void setPhoneNumber(String phoneNumber);
+	public void setPhoneNumber(String phoneNumber);
 
 	/**
 	 * @return the mobilePassword
 	 */
-	public abstract String getMobilePassword();
+	public String getMobilePassword();
 
 	/**
 	 * @param mobilePassword the mobilePassword to set
 	 */
-	public abstract void setMobilePassword(String mobilePassword);
+	public void setMobilePassword(String mobilePassword);
 
 	/**
 	 * @return the reference value
 	 */
-	public abstract String getRefVal();
+	public String getRefVal();
 
 	/**
 	 * @param refVal the reference value to set
 	 */
-	public abstract void setRefVal(String refVal);
+	public void setRefVal(String refVal);
 
 	/**
 	 * @return the tan
 	 */
-	public abstract String getTan();
+	public String getTan();
 
 	/**
 	 * @param tan the tan to set
 	 */
-	public abstract void setTan(String tan);
+	public void setTan(String tan);
 
 	/**
 	 * Get maximum number of TAN tries
 	 * @return the maximum number of TAN tries
 	 */
-	public abstract int getMaxTanTries();
+	public int getMaxTanTries();
 
 	/**
 	 * Get number of TAN tries left
 	 * @return the number of TAN tries left
 	 */
-	public abstract int getTanTries();
+	public int getTanTries();
 
 	/**
 	 * Set number of TAN tries left
 	 * @param tries the number of TAN tries left
 	 */
-	public abstract void setTanTries(int tries);
+	public void setTanTries(int tries);
 
 	/**
 	 * @return the errorMessage
 	 */
-	public abstract String getErrorMessage();
+	public String getErrorMessage();
 
 	/**
 	 * @param errorMessage the errorMessage to set
 	 */
-	public abstract void setErrorMessage(String errorMessage);
+	public void setErrorMessage(String errorMessage);
 
 	/**
 	 * @return the baseURL
 	 */
-	public abstract String getBaseURL();
+	public String getBaseURL();
 
 	/**
 	 * @param baseURL 
 	 */
-	public abstract void setBaseURL(String baseURL);
+	public void setBaseURL(String baseURL);
 
 	/**
 	 * Return the SL request server
 	 * @return the SL request server
 	 */
-	public abstract String getServer();
+	public String getServer();
 
 	/**
 	 * Set the SL request server
 	 * @param server the SL request server
 	 */
-	public abstract void setServer(String server);
+	public void setServer(String server);
+
+	/**
+	 * Get the signature data URL
+	 * @return the signature data URL
+	 */
+	public String getSignatureDataURL();
+
+	/**
+	 * Set the signature data URL
+	 * @param signatureDataURL the signature data URL
+	 */
+	public void setSignatureDataURL(String signatureDataURL);
 }

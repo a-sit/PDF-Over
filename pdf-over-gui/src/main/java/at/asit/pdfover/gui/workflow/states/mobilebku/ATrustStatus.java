@@ -32,20 +32,19 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private static final Logger log = LoggerFactory
 			.getLogger(ATrustStatus.class);
 
-	/**
-	 * Maximum number of TAN tries!
-	 */
+	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
 
 	private String viewstate;
 	private String eventvalidation;
+
 	/**
 	 * Constructor
-	 * @param provider 
+	 * @param provider the ConfigProvider
 	 */
 	public ATrustStatus(ConfigProvider provider) {
-		this.setPhoneNumber(provider.getDefaultMobileNumber());
-		this.setMobilePassword(provider.getDefaultMobilePassword());
+		setPhoneNumber(provider.getDefaultMobileNumber());
+		setMobilePassword(provider.getDefaultMobilePassword());
 	}
 
 	/* (non-Javadoc)

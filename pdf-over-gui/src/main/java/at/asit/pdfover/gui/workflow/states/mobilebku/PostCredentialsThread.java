@@ -54,7 +54,7 @@ public class PostCredentialsThread implements Runnable {
 			String responseData = this.handler.postCredentials();
 
 			// Now we have received some data lets check it:
-			log.debug("Response from A-Trust: " + responseData); //$NON-NLS-1$
+			log.debug("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 
 			this.handler.handleCredentialsResponse(responseData);
 		} catch (Exception ex) {

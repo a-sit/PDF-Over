@@ -28,6 +28,7 @@ public abstract class AbstractMobileBKUStatusImpl implements MobileBKUStatus {
 	private String errorMessage;
 	private String tan;
 	private String server;
+	private String signatureDataURL;
 	private int tanTries = getMaxTanTries();
 
 	@Override
@@ -118,5 +119,15 @@ public abstract class AbstractMobileBKUStatusImpl implements MobileBKUStatus {
 	@Override
 	public void setServer(String server) {
 		this.server = server;
+	}
+
+	@Override
+	public String getSignatureDataURL() {
+		return this.signatureDataURL;
+	}
+
+	@Override
+	public void setSignatureDataURL(String signatureDataURL) {
+		this.signatureDataURL = signatureDataURL;
 	}
 }

@@ -108,8 +108,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		String eventValidation = status.getEventvalidation();
 		String sessionID = status.getSessionID();
 		String refVal = null;
+		String signatureDataURL = null;
 
-		status.setRefVal(null);
 		status.setErrorMessage(null);
 
 		if(responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
@@ -118,8 +118,9 @@ public class ATrustHandler extends MobileBKUHandler {
 			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 			eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 			refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");  //$NON-NLS-1$//$NON-NLS-2$
+			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" +  //$NON-NLS-1$
+					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'");  //$NON-NLS-1$//$NON-NLS-2$
 
-			status.setRefVal(refVal);
 			getState().setCommunicationState(MobileBKUCommunicationState.POST_TAN);
 		} else {
 			// error page
@@ -136,10 +137,13 @@ public class ATrustHandler extends MobileBKUHandler {
 		log.info("Vergleichswert: " + refVal); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
 		log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
+		log.info("signatureDataURL: " + signatureDataURL); //$NON-NLS-1$
 
 		status.setSessionID(sessionID);
+		status.setRefVal(refVal);
 		status.setViewstate(viewState);
 		status.setEventvalidation(eventValidation);
+		status.setSignatureDataURL(signatureDataURL);
 	}
 
 	/* (non-Javadoc)
