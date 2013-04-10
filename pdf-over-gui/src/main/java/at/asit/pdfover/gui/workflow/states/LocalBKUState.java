@@ -71,14 +71,7 @@ public class LocalBKUState extends State {
 				SLRequest request = this.state.signingState
 						.getSignatureRequest();
 
-				String b64_data = new String(Base64.encodeBase64(request
-						.getSignatureData().getByteArray()));
-
-				String sl_request = request.getRequest()
-						.replace(
-								SLRequest.DATAOBJECT_STRING,
-								"<sl:Base64Content>" + b64_data //$NON-NLS-1$
-										+ "</sl:Base64Content>"); //$NON-NLS-1$
+				String sl_request = request.getBase64Request();
 
 				HttpClient client = new HttpClient();
 				client.getParams().setParameter("http.useragent", //$NON-NLS-1$

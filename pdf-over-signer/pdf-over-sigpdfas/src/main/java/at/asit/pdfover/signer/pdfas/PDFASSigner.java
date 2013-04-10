@@ -12,7 +12,6 @@ import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.api.PdfAs;
 import at.gv.egiz.pdfas.api.sign.SignParameters;
 import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
-import at.gv.egiz.pdfas.framework.input.DataSource;
 import at.gv.egiz.pdfas.io.ByteArrayDataSink;
 import at.gv.egiz.pdfas.api.commons.Constants;
 import at.gv.egiz.pdfas.api.exceptions.PdfAsException;

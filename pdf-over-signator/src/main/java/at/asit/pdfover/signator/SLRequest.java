@@ -15,28 +15,90 @@
  */
 package at.asit.pdfover.signator;
 
+import org.apache.commons.codec.binary.Base64;
+
 /**
  * Security Layer Request
  */
-public interface SLRequest {
-	
+public class SLRequest {
+
 	/**
-	 * The String Konstant to replace the SL DATAOBJECT
+	 * The String constant to replace the SL DATAOBJECT
 	 */
 	public static final String DATAOBJECT_STRING = "##DATAOBJECT##";
-	
+
 	/**
-	 * The SL Request String
-	 * 
-	 * In this string the DATAOBJECT_STRING has to be replaced by the reference of the Signature Data
-	 * Examples are sl:Base64Content, sl:LocRefContent
-	 * @return
+	 * The security layer request
 	 */
-	public String getRequest();
-	
+	private String request;
+
+	/**
+	 * The document to be signed
+	 */
+	private DocumentSource signatureData;
+
+	/**
+	 * Set the SL request
+	 * @param request the request to set
+	 */
+	protected void setRequest(String request) {
+		this.request = request;
+	}
+
+	/**
+	 * The SL request String with the document encoded in base64
+	 * 
+	 * This SL Request is always a detached signature request which contains a
+	 * reference to the data object in base64 encoding.
+	 * 
+	 * @return SL request String
+	 */
+	public String getBase64Request() {
+		byte[] b64content = Base64.encodeBase64(getSignatureData().getByteArray());
+
+		String b64request = this.request.replace(
+						DATAOBJECT_STRING,
+						"<sl:Base64Content>" + b64content //$NON-NLS-1$
+								+ "</sl:Base64Content>"); //$NON-NLS-1$
+
+		return b64request;
+	}
+
+	/**
+	 * The SL request String with the document referenced as an URI
+	 *
+	 * This SL Request is always a detached signature request which contains a
+	 * reference to the data object as an URI
+	 * The URI has to be provided and should be a valid reference to
+	 * the document provided by getSignatureData().
+	 *
+	 * @param uri The URI pointing to the signature data 
+	 * @return SL request String
+	 */
+	public String getURIRequest(String uri) {
+		String urirequest = this.request.replace(
+				DATAOBJECT_STRING,
+				"<sl:LocRefContent>" + uri //$NON-NLS-1$
+						+ "</sl:LocRefContent>"); //$NON-NLS-1$
+
+		return urirequest;
+	}
+
+	/**
+	 * Set the signature data (document to be signed)
+	 * @param signatureData the signatureData to set
+	 */
+	protected void setSignatureData(DocumentSource signatureData) {
+		this.signatureData = signatureData;
+	}
+
 	/**
 	 * Gets the signature data for this request
+	 * 
 	 * @return The document source
 	 */
-	public DocumentSource getSignatureData();
+	public DocumentSource getSignatureData()
+	{
+		return this.signatureData;
+	}
 }

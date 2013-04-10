@@ -140,8 +140,6 @@ public class PrepareSigningState extends State {
 		// We got the Request set it into status and move on to next state ...
 		status.setSigningState(this.signingState);
 		
-		log.debug("SL REQUEST: " + this.signingState.getSignatureRequest().getRequest()); //$NON-NLS-1$
-		
 		if(this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
 			this.setNextState(new LocalBKUState(this.stateMachine));
 		} else if(this.stateMachine.getStatus().getBKU() == BKUs.MOBILE) {

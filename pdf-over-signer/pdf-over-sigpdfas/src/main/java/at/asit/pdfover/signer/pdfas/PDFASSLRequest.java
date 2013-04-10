@@ -26,45 +26,28 @@ import at.asit.pdfover.signator.SLRequest;
 /**
  * PDF - AS Security Layer Request implementation
  */
-public class PDFASSLRequest implements SLRequest {
+public class PDFASSLRequest extends SLRequest {
 
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(PDFASSLRequest.class);
-	
-	private String request;
-	
-	private ByteArrayDocumentSource source;
-	
+
 	/**
 	 * Default constructor
 	 * @param slRequest
 	 * @param signData 
 	 */
 	public PDFASSLRequest(String slRequest, byte[] signData) {
-		// Modifing SL Request ...
-		this.request = slRequest.replace(PDFASSigner.LOC_REF, SLRequest.DATAOBJECT_STRING);
-		
-		if(!this.request.contains(DATAOBJECT_STRING)) {
+		if(!slRequest.contains(PDFASSigner.LOC_REF)) {
 			// TODO: throw Exception (Failed to prepare SL Request)
+			log.error("PDF-AS SL request doesn't contain " + PDFASSigner.LOC_REF);
+			log.debug("Request: " + slRequest);
 		}
-		
-		this.source = new ByteArrayDocumentSource(signData);
-	}
-	
-	@Override
-	public DocumentSource getSignatureData() {
-		return this.source;
-	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SLRequest#getRequest()
-	 */
-	@Override
-	public String getRequest() {
-		return this.request;
-	}
+		// Modifing SL Request ...
+		setRequest(slRequest.replace(PDFASSigner.LOC_REF, SLRequest.DATAOBJECT_STRING));
 
+		setSignatureData(new ByteArrayDocumentSource(signData));
+	}
 }
