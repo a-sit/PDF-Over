@@ -182,7 +182,7 @@ public class PositioningComposite extends StateComposite {
 	 */
 	void setFinalPosition() {
 		// TODO: check if this is the real position
-		this.position = new SignaturePosition(this.viewer.getSignaturePositionX(), this.viewer.getSignaturePositionY(), this.viewer.getCurrentPage());
+		this.position = new SignaturePosition(this.viewer.getSignaturePositionX(), this.viewer.getSignaturePositionY(), this.currentPage);
 		PositioningComposite.this.state.updateStateMachine();
 	}
 

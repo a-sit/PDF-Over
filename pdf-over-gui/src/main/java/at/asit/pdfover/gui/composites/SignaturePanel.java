@@ -56,8 +56,6 @@ public class SignaturePanel extends JPanel {
 	private PDFPage currentPage;
 	/** The current transform from screen to page space */
 	AffineTransform currentXform;
-	/** The current page number */
-	private int currentPageNr;
 	/** The horizontal offset of the image from the left edge of the panel */
 	int offx;
 	/** The vertical offset of the image from the top of the panel */
@@ -100,7 +98,6 @@ public class SignaturePanel extends JPanel {
 	 */
 	public void showPage(int page) {
 		//sigPagePos = null;
-		this.currentPageNr = page;
 		showPage(this.pdf.getPage(page));
 	}
 
@@ -118,14 +115,6 @@ public class SignaturePanel extends JPanel {
 	 */
 	public float getSignaturePositionY() {
 		return (float) this.sigPagePos.getY();
-	}
-
-	/**
-	 * return the currently displayed page
-	 * @return current page number
-	 */
-	public int getCurrentPage() {
-		return this.currentPageNr;
 	}
 
 	/**
