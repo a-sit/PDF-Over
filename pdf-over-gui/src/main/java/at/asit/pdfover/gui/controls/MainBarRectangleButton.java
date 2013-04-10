@@ -46,27 +46,21 @@ public class MainBarRectangleButton extends MainBarButton {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt.events.PaintEvent)
 	 */
-	/*@Override
+	@Override
 	protected void paintButton(PaintEvent e) {
 		Point size = this.getSize();
 
 		int height = size.y - 2;
 
 		int width = size.x;
-
-		int textlen = 0;
-		if(getText() != null) {
-			textlen = getText().length();
-		}
 		
 		e.gc.drawLine(0, 0, width, 0);
 		e.gc.drawLine(width, 0, width, height);
 		e.gc.drawLine(width, height, 0, height);
 		e.gc.drawLine(0, height, 0, 0);
-		int texty = (height - e.gc.getFontMetrics().getHeight()) / 2;
-		int textx = (width - e.gc.getFontMetrics().getAverageCharWidth() * textlen) / 2;
-		e.gc.drawText(getText(), textx, texty);
-	}*/
+		
+		super.paintButton(e);
+	}
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()

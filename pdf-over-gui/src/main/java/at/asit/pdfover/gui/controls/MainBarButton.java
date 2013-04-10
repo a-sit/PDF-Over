@@ -17,9 +17,14 @@ package at.asit.pdfover.gui.controls;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
@@ -48,6 +53,8 @@ public abstract class MainBarButton extends Canvas {
 			}
 		});
 
+		final Cursor hand = new Cursor(this.getDisplay(), SWT.CURSOR_HAND);
+		
 		this.addListener(SWT.Resize, new Listener() {
 
 			@Override
@@ -57,6 +64,8 @@ public abstract class MainBarButton extends Canvas {
 				MainBarButton.this.redraw();
 			}
 		});
+
+		this.setCursor(hand);
 
 		this.inactiveBackground = new Color(getDisplay(), 0x4B, 0x95, 0x00);
 		this.activeBackground = new Color(getDisplay(), 0x98, 0xF2, 0x3D);
@@ -171,7 +180,8 @@ public abstract class MainBarButton extends Canvas {
 			e.gc.drawText(this.getText(), textx, texty);
 		} else {
 			int imgx = (width - height) / 2;
-			Image tmp = new Image(getDisplay(), this.image.getImageData().scaledTo(height, height));
+			Image tmp = new Image(getDisplay(), this.image.getImageData()
+					.scaledTo(height, height));
 			e.gc.drawImage(tmp, imgx, 0);
 		}
 	}
