@@ -1,5 +1,6 @@
 package at.asit.pdfover.pdfsigner;
 
-public class CollimatingMark {
-
+public interface CollimatingMark {
+	
+	public String GetFileName();
 }

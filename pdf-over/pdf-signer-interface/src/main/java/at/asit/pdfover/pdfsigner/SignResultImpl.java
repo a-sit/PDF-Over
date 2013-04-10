@@ -7,7 +7,7 @@ public class SignResultImpl implements SignResult {
 	private SignaturePosition position;
 	private DocumentSource source;
 	private X509Certificate certificate;
-	
+
 	@Override
 	public SignaturePosition GetSignaturePosition() {
 		return position;

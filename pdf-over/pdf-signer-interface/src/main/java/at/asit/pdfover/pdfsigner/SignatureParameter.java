@@ -1,5 +1,7 @@
 package at.asit.pdfover.pdfsigner;
 
+import java.util.HashMap;
+
 /**
  * The Signature Parameter
  * @author  afitzek
@@ -102,5 +104,23 @@ public abstract class SignatureParameter {
 		this.collimark = value;
 	}
 	
+	protected HashMap<String, String> _properties = new HashMap<String, String>();
 	
+	/**
+	 * Sets generic properties
+	 * @param key
+	 * @param value
+	 */
+	public void SetProperty(String key, String value) {
+		this._properties.put(key, value);
+	}
+	
+	/**
+	 * Gets generic properties
+	 * @param key 
+	 * @return
+	 */
+	public String GetProperty(String key) {
+		return this._properties.get(key);
+	}
 }

@@ -8,7 +8,6 @@
   </parent>
   <artifactId>pdf-signer-interface</artifactId>
   <name>PDFSignator Interface</name>
-  <version>0.1-SNAPSHOT</version>
   <inceptionYear>2012</inceptionYear>
   <url>http://www.buergerkarte.at/</url>
 </project>

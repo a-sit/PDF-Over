@@ -1,7 +1,7 @@
 /**
  * 
  */
-package at.asit.pdfover.pdfsignator;
+package at.asit.pdfover.pdfsigner;
 
 /**
  * Available PDF Signer libraries
@@ -12,5 +12,9 @@ public enum PDFSigner {
 	 * @uml.property  name="pDFAS"
 	 * @uml.associationEnd  
 	 */
-	PDFAS
+	PDFAS {
+	    public String toString() {
+	        return "PDFAS";
+	    }
+	}
 }

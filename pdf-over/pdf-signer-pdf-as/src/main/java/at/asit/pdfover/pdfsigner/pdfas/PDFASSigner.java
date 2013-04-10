@@ -18,15 +18,15 @@ import at.gv.egiz.pdfas.api.internal.LocalBKUParams;
 import at.gv.egiz.pdfas.api.internal.PdfAsInternal;
 
 /**
- * PDF AS Signer Implemtation
+ * PDF AS Signer Implementation
  * 
  * @author afitzek
  */
 public class PDFASSigner implements PDFSignerInterface {
 
-	protected static final String PROFILE_ID = "";
+	protected static final String PROFILE_ID = "SIGNATURBLOCK_DE";
 
-	protected static final String URL_TEMPLATE = "";
+	protected static final String URL_TEMPLATE = "http://pdfover.4.gv.at/template";
 
 	@Override
 	public SigningState Prepare(SignatureParameter parameter)
@@ -53,15 +53,12 @@ public class PDFASSigner implements PDFSignerInterface {
 			params.setSignatureProfileId(PROFILE_ID);
 			
 			if(parameter.GetCollimatingMark() != null) {
-				// TODO: Define CollimatingMark and use 
-				params.setProfileOverrideValue("SIG_LABEL", "./images/signatur-logo_en.png");   
+				params.setProfileOverrideValue("SIG_LABEL", parameter.GetCollimatingMark().GetFileName());   
 			}
-			
 			
 			params.setDocument(sign_para.GetPDFASDataSource());
 
 			state.setSignParameters(params);
-
 			
 			PdfAsInternal pdfasInternal = PDFASHelper.GetPdfAsInternal();
 
@@ -114,7 +111,6 @@ public class PDFASSigner implements PDFSignerInterface {
 			LocalBKUParams bkuParams = new LocalBKUParams(null, null, null);
 
 			// Perform signature
-			// TODO: NEED TO check GetSLSignatureResponse() Interface to retrieve SL Response ...
 			at.gv.egiz.pdfas.api.sign.SignResult signResult = pdfasInternal
 					.finishLocalSign(pdfas, params, sdi, bkuParams, false,
 							sstate.GetSLSignatureResponse().GetSLRespone());
