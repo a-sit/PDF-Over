@@ -277,16 +277,51 @@ public class PrepareConfigurationState extends State {
 			}
 
 			// Read cli arguments for config file first
-			this.initializeFromArguments(this.stateMachine.getCmdArgs(),
-					this.configFileHandler);
+			try {
+				this.initializeFromArguments(this.stateMachine.getCmdArgs(),
+						this.configFileHandler);
+			} catch (InitializationException e) {
+				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
+				ErrorDialog error = new ErrorDialog(this.stateMachine
+						.getGUIProvider().getMainShell(),
+						Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
+						BUTTONS.OK);
+				// error.setException(e);
+				// this.setNextState(error);
+				error.open();
+				this.stateMachine.exit();
+			}
 
 			// initialize from config file
 			this.initializeFromConfigurationFile(this.stateMachine
 					.getConfigProvider().getConfigurationFile());
 
 			// Read cli arguments
-			this.initializeFromArguments(this.stateMachine.getCmdArgs(),
-					this.handler);
+			try {
+				this.initializeFromArguments(this.stateMachine.getCmdArgs(),
+						this.handler);
+			} catch (InitializationException e) {
+				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
+				ErrorDialog error;
+				
+				if (e.getCause() instanceof FileNotFoundException) {
+					error = new ErrorDialog(this.stateMachine
+						.getGUIProvider().getMainShell(),
+						String.format(
+								Messages.getString("error.FileNotExist"), //$NON-NLS-1$
+								e.getCause().getMessage()),
+						BUTTONS.OK);
+				} else {
+					error = new ErrorDialog(this.stateMachine
+							.getGUIProvider().getMainShell(),
+							Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
+							BUTTONS.OK);
+				}
+				// error.setException(e);
+				// this.setNextState(error);
+				error.open();
+				this.stateMachine.exit();
+			}
 
 			// Set usedSignerLib ...
 			this.stateMachine.getPDFSigner().setUsedPDFSignerLibrary(
