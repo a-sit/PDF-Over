@@ -284,7 +284,8 @@ public class PrepareConfigurationState extends State {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
 				ErrorDialog error = new ErrorDialog(this.stateMachine
 						.getGUIProvider().getMainShell(),
-						Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
+						Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+						e.getMessage(),
 						BUTTONS.OK);
 				error.open();
 				this.stateMachine.exit();
@@ -312,7 +313,8 @@ public class PrepareConfigurationState extends State {
 				} else {
 					error = new ErrorDialog(this.stateMachine
 							.getGUIProvider().getMainShell(),
-							Messages.getString("error.CmdLineArgs"), //$NON-NLS-1$
+							Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+							e.getMessage(),
 							BUTTONS.OK);
 				}
 				error.open();
