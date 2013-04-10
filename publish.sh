@@ -5,6 +5,7 @@ PUBLISH_DIR="pub"
 LOG_DIR="log"
 VERSION="4.0.0-SNAPSHOT"
 CODEBASE_URL="http:\/\/10.27.152.123\/pdfover\/"
+CONTEXT_URL="http:\/\/10.27.152.123\/pdfover\/"
 HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
 
 
@@ -29,7 +30,7 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
  	RETVAL=$?
  	[ $RETVAL -eq 0 ] && echo "[OK]"
  	[ $RETVAL -ne 0 ] && echo "[!FAILED!]" && continue
- 	
+
  	echo -n "Moving Installer ...  "
   	mv ./pdf-over-gui/target/$TARGET_FILE $PUBLISH_DIR/$INSTALLER
   	RETVAL=$?
@@ -46,7 +47,7 @@ if [ $RETVAL -ne 0 ]; then
 else
 	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" $PUBLISH_DIR/pdfover.jnlp
 	RETVAL=$?
-	if [ $RETVAL -ne 0 ]; then 
+	if [ $RETVAL -ne 0 ]; then
 		echo "[!FAILED!]"
 	else
 		sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" $PUBLISH_DIR/pdfover.jnlp
@@ -58,8 +59,3 @@ else
 		fi
 	fi
 fi
-
-
-
-
-
