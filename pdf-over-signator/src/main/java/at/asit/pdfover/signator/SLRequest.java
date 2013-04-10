@@ -39,6 +39,7 @@ public class SLRequest {
 
 	/**
 	 * Set the SL request
+	 * The data object should contain the placeholder DATAOBJECT_STRING
 	 * @param request the request to set
 	 */
 	protected void setRequest(String request) {
