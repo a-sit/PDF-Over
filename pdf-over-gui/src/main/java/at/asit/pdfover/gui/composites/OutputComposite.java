@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -40,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Messages;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
 
@@ -57,7 +57,24 @@ public class OutputComposite extends StateComposite {
 	private File inputFile;
 
 	File outputFile = null;
-	
+
+	String outputDir = null;
+
+	/**
+	 * @return the outputDir
+	 */
+	public String getOutputDir() {
+		return this.outputDir;
+	}
+
+	/**
+	 * @param outputDir
+	 *            the outputDir to set
+	 */
+	public void setOutputDir(String outputDir) {
+		this.outputDir = outputDir;
+	}
+
 	/**
 	 * Sets the input file
 	 * 
@@ -91,37 +108,71 @@ public class OutputComposite extends StateComposite {
 
 		String proposed = OutputComposite.this.getInputFile().getAbsolutePath();
 
+		String path = this.getOutputDir();
+
+		if (path == null || path.equals("")) { //$NON-NLS-1$
+			path = FilenameUtils.getFullPath(proposed);
+		}
+
+		if(!path.endsWith(File.separator)) {
+			path += File.separator;
+		}
+		
+		String name = FilenameUtils.getName(proposed);
+
 		String extension = FilenameUtils.getExtension(proposed);
 
-		proposed = FilenameUtils.removeExtension(proposed);
+		name = FilenameUtils.removeExtension(name);
 
-		proposed = proposed + "_signed." + extension; //$NON-NLS-1$
+		proposed = path + name + "_signed." + extension; //$NON-NLS-1$
 
-		save.setFileName(proposed);
-
-		String target = save.open();
-
-		if (target != null) {
-			File targetFile = new File(target);
-
-			DocumentSource source = OutputComposite.this.getSignedDocument();
-
-			FileOutputStream outstream = new FileOutputStream(targetFile);
-			outstream.write(source.getByteArray(), 0,
-					source.getByteArray().length);
-			outstream.close();
-
-			OutputComposite.this.savedFile = targetFile;
+		if (this.getOutputDir() != null && !this.getOutputDir().equals("")) //$NON-NLS-1$
+		{
+			// Output directory is set save there without asking user...
 			
-			this.outputFile = targetFile;
-			// Show open message ...
-			this.lnk_saved_file.setText(Messages.getString("output.link_open_message")); //$NON-NLS-1$
-			this.btn_save.setVisible(false);
+			saveResultAsFile(proposed);
 		} else {
-			// Show save message ...
-			this.lnk_saved_file.setText(Messages.getString("output.link_save_message")); //$NON-NLS-1$
-			this.btn_save.setVisible(true);
+
+			save.setFileName(proposed);
+
+			String target = save.open();
+
+			if (target != null) {
+				saveResultAsFile(target);
+			} else {
+				// Show save message ...
+				this.lnk_saved_file.setText(Messages
+						.getString("output.link_save_message")); //$NON-NLS-1$
+				this.btn_save.setVisible(true);
+			}
 		}
+	}
+
+	/**
+	 * @param target
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	private void saveResultAsFile(String target) throws FileNotFoundException,
+			IOException {
+		File targetFile = new File(target);
+
+		DocumentSource source = OutputComposite.this
+				.getSignedDocument();
+
+		FileOutputStream outstream = new FileOutputStream(targetFile);
+		outstream.write(source.getByteArray(), 0,
+				source.getByteArray().length);
+		outstream.close();
+
+		OutputComposite.this.savedFile = targetFile;
+
+		this.outputFile = targetFile;
+		// Show open message ...
+		this.lnk_saved_file.setText(Messages
+				.getString("output.link_open_message")); //$NON-NLS-1$
+		this.layout(true);
+		this.btn_save.setVisible(false);
 	}
 
 	/**
@@ -162,7 +213,12 @@ public class OutputComposite extends StateComposite {
 
 					if (OutputComposite.this.outputFile.exists()) {
 						// Desktop supported check allready done in constructor
-						Desktop.getDesktop().open(OutputComposite.this.outputFile);
+						if (Desktop.isDesktopSupported()) {
+							Desktop.getDesktop().open(
+									OutputComposite.this.outputFile);
+						} else {
+							log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
+						}
 						return;
 					}
 				}
@@ -198,60 +254,45 @@ public class OutputComposite extends StateComposite {
 		fd_lbl_success_message.right = new FormAttachment(100);
 		lbl_success_message.setLayoutData(fd_lbl_success_message);
 		lbl_success_message.setAlignment(SWT.CENTER);
-		lbl_success_message.setText(Messages.getString("output.success_message")); //$NON-NLS-1$
-		
+		lbl_success_message.setText(Messages
+				.getString("output.success_message")); //$NON-NLS-1$
+
 		FontData[] fD1 = lbl_success_message.getFont().getFontData();
-		fD1[0].setHeight(12);
+		fD1[0].setHeight(TEXT_SIZE_BIG);
 		lbl_success_message.setFont(new Font(Display.getCurrent(), fD1[0]));
-		
-		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);		
-		this.lnk_saved_file.setText(Messages.getString("output.link_save_message")); //$NON-NLS-1$
+
+		this.lnk_saved_file = new Link(this, SWT.NATIVE | SWT.RESIZE);
+		this.lnk_saved_file.setText(Messages
+				.getString("output.link_save_message")); //$NON-NLS-1$
 		FormData fd_lnk_saved_file = new FormData();
 		fd_lnk_saved_file.top = new FormAttachment(lbl_success_message, 10);
-		fd_lnk_saved_file.left = new FormAttachment(lbl_success_message, 0, SWT.CENTER);
-		//fd_lnk_saved_file.right = new FormAttachment(100);
+		fd_lnk_saved_file.left = new FormAttachment(lbl_success_message, 0,
+				SWT.CENTER);
+		// fd_lnk_saved_file.right = new FormAttachment(100);
 		this.lnk_saved_file.setLayoutData(fd_lnk_saved_file);
-		
+
 		this.lnk_saved_file.addSelectionListener(new OpenSelectionListener());
-		
+
+		FontData[] fD2 = this.lnk_saved_file.getFont().getFontData();
+		fD2[0].setHeight(TEXT_SIZE_NORMAL);
+		this.lnk_saved_file.setFont(new Font(Display.getCurrent(), fD2[0]));
+
 		this.btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
-		
+
+		FontData[] fD_btn_save = this.btn_save.getFont().getFontData();
+		fD_btn_save[0].setHeight(TEXT_SIZE_BUTTON);
+		this.btn_save.setFont(new Font(Display.getCurrent(), fD_btn_save[0]));
+
 		FormData fd_btn_save = new FormData();
 		fd_btn_save.top = new FormAttachment(this.lnk_saved_file, 10);
-		fd_btn_save.left = new FormAttachment(this.lnk_saved_file, 0, SWT.CENTER);
+		fd_btn_save.left = new FormAttachment(this.lnk_saved_file, 0,
+				SWT.CENTER);
 		this.btn_save.setLayoutData(fd_btn_save);
-		
+
 		this.btn_save.setVisible(false);
 		this.btn_save.addSelectionListener(new SaveSelectionListener());
-		/*
-		Button btn_open = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
-		// Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		FormData fd_btn_open = new FormData();
-		// fd_btn_open.left = new FormAttachment(40, 0);
-		fd_btn_open.right = new FormAttachment(50, -5);
-		fd_btn_open.top = new FormAttachment(40, 0);
-		// fd_btn_open.bottom = new FormAttachment(55, 0);
-		btn_open.setLayoutData(fd_btn_open);
-		btn_open.addSelectionListener(new OpenSelectionListener());
 
-		if (!Desktop.isDesktopSupported()) {
-			btn_open.setEnabled(false);
-		}
-
-		Button btn_save = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
-		// Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		FormData fd_btn_save = new FormData();
-		fd_btn_save.left = new FormAttachment(50, 5);
-		// fd_btn_save.right = new FormAttachment(60, 0);
-		fd_btn_save.top = new FormAttachment(40, 0);
-		// fd_btn_save.bottom = new FormAttachment(55, 0);
-		btn_save.setLayoutData(fd_btn_save);
-		btn_save.addSelectionListener(new SaveSelectionListener());
-		 */
-		//this.pack();
 	}
 
 	String tempDirectory;
@@ -301,6 +342,7 @@ public class OutputComposite extends StateComposite {
 	@Override
 	public void doLayout() {
 		// Nothing to do
+		this.layout(true);
 		try {
 			if (!this.save_showed) {
 				OutputComposite.this.saveFile();

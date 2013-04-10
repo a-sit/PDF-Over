@@ -25,7 +25,7 @@ import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument to set the configuration file
  */
 public class ConfigFileArgument extends CLIArgument {
 	/**

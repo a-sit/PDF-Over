@@ -22,7 +22,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.signator.BKUs;
 
 /**
- * 
+ * CLI Argument to set the BKU to use
  */
 public class BKUArgument extends CLIArgument {
 	/**

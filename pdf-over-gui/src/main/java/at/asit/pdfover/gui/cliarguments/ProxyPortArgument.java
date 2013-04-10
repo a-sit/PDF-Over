@@ -26,7 +26,7 @@ import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument to provide the proxy port
  */
 public class ProxyPortArgument extends CLIArgument {
 	/**

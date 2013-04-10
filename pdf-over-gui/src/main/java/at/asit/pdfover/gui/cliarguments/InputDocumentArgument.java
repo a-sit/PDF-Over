@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 
 /**
- * 
+ * CLI Argument to set the input document to sign
  */
 public class InputDocumentArgument extends CLIArgument {
 	/**

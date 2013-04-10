@@ -32,6 +32,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -42,6 +44,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -352,12 +355,20 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		grpHandySignatur.setText(Messages.getString("simple_config.MobileBKU_Title")); //$NON-NLS-1$
 		grpHandySignatur.setLayout(new GridLayout(2, false));
 
+		FontData[] fD_grpHandySignatur = grpHandySignatur.getFont().getFontData();
+		fD_grpHandySignatur[0].setHeight(TEXT_SIZE_NORMAL);
+		grpHandySignatur.setFont(new Font(Display.getCurrent(), fD_grpHandySignatur[0]));
+		
 		Label lblMobileNumber = new Label(grpHandySignatur, SWT.NONE
 				| SWT.RESIZE);
 		lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		lblMobileNumber.setText(Messages.getString("simple_config.PhoneNumber")); //$NON-NLS-1$
 
+		FontData[] fD_lblMobileNumber = lblMobileNumber.getFont().getFontData();
+		fD_lblMobileNumber[0].setHeight(TEXT_SIZE_NORMAL);
+		lblMobileNumber.setFont(new Font(Display.getCurrent(), fD_lblMobileNumber[0]));
+		
 		Composite composite_2 = new Composite(grpHandySignatur, SWT.NONE);
 		composite_2.setLayout(new FormLayout());
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
@@ -382,6 +393,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtMobileNumberErrorMarker
 				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
 
+		FontData[] fD_txtMobileNumber = this.txtMobileNumber.getFont().getFontData();
+		fD_txtMobileNumber[0].setHeight(TEXT_SIZE_NORMAL);
+		this.txtMobileNumber.setFont(new Font(Display.getCurrent(), fD_txtMobileNumber[0]));
+		
 		this.txtMobileNumber.addTraverseListener(new TraverseListener() {
 
 			@Override
@@ -415,6 +430,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpBildmarke.top = new FormAttachment(20, 5);
 		grpBildmarke.setLayoutData(fd_grpBildmarke);
 		grpBildmarke.setLayout(new GridLayout(5, false));
+		
+		FontData[] fD_grpBildmarke = grpBildmarke.getFont().getFontData();
+		fD_grpBildmarke[0].setHeight(TEXT_SIZE_NORMAL);
+		grpBildmarke.setFont(new Font(Display.getCurrent(), fD_grpBildmarke[0]));
+		
 		grpBildmarke.setText(Messages.getString("simple_config.Emblem_Title")); //$NON-NLS-1$
 		new Label(grpBildmarke, SWT.NONE);
 		new Label(grpBildmarke, SWT.NONE);
@@ -433,6 +453,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
+		FontData[] fD_lblEmblem = this.lblEmblem.getFont().getFontData();
+		fD_lblEmblem[0].setHeight(TEXT_SIZE_NORMAL);
+		this.lblEmblem.setFont(new Font(Display.getCurrent(), fD_lblEmblem[0]));
+		
 		DropTarget dnd_target = new DropTarget(this.lblEmblem, DND.DROP_DEFAULT
 				| DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
@@ -525,22 +549,36 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		});
 		new Label(grpBildmarke, SWT.NONE);
 
+		
+
+		FontData[] fD_btnUseImage = this.btnUseImage.getFont().getFontData();
+		fD_btnUseImage[0].setHeight(TEXT_SIZE_BUTTON);
+		this.btnUseImage.setFont(new Font(Display.getCurrent(), fD_btnUseImage[0]));
+		
 		Button btnBrowseEmblem = new Button(grpBildmarke, SWT.NONE);
 		btnBrowseEmblem.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
 		btnBrowseEmblem.addSelectionListener(new ImageFileBrowser());
 		btnBrowseEmblem.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
+		FontData[] fD_btnBrowseEmblem = btnBrowseEmblem.getFont().getFontData();
+		fD_btnBrowseEmblem[0].setHeight(TEXT_SIZE_BUTTON);
+		btnBrowseEmblem.setFont(new Font(Display.getCurrent(), fD_btnBrowseEmblem[0]));
+		
 		Group grpProxy = new Group(this, SWT.NONE);
 		FormData fd_grpProxy = new FormData();
 		fd_grpProxy.right = new FormAttachment(100, -5);
 		fd_grpProxy.top = new FormAttachment(65, 5);
 		fd_grpProxy.left = new FormAttachment(0, 5);
-		fd_grpProxy.bottom = new FormAttachment(90, -5);
+		fd_grpProxy.bottom = new FormAttachment(100, -5);
 		grpProxy.setLayoutData(fd_grpProxy);
 		grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 		grpProxy.setLayout(new GridLayout(2, false));
 
+		FontData[] fD_grpProxy = grpProxy.getFont().getFontData();
+		fD_grpProxy[0].setHeight(TEXT_SIZE_NORMAL);
+		grpProxy.setFont(new Font(Display.getCurrent(), fD_grpProxy[0]));
+		
 		Label lblNewLabel = new Label(grpProxy, SWT.NONE);
 		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
@@ -549,6 +587,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		lblNewLabel.setBounds(0, 0, 57, 15);
 		lblNewLabel.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
 
+		FontData[] fD_lblNewLabel = lblNewLabel.getFont().getFontData();
+		fD_lblNewLabel[0].setHeight(TEXT_SIZE_NORMAL);
+		lblNewLabel.setFont(new Font(Display.getCurrent(), fD_lblNewLabel[0]));
+		
 		Composite composite = new Composite(grpProxy, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
@@ -560,6 +602,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_txtProxyHost.top = new FormAttachment(0);
 		fd_txtProxyHost.left = new FormAttachment(0, 5);
 
+		FontData[] fD_txtProxyHost = this.txtProxyHost.getFont().getFontData();
+		fD_txtProxyHost[0].setHeight(TEXT_SIZE_NORMAL);
+		this.txtProxyHost.setFont(new Font(Display.getCurrent(), fD_txtProxyHost[0]));
+		
 		this.proxyHostErrorMarker = new ErrorMarker(composite, SWT.NONE, null,
 				"", this.txtProxyHost); //$NON-NLS-1$
 
@@ -601,6 +647,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		lblNewLabel_1.setBounds(0, 0, 57, 15);
 		lblNewLabel_1.setText(Messages.getString("simple_config.ProxyPort")); //$NON-NLS-1$
 
+		FontData[] fD_lblNewLabel_1 = lblNewLabel_1.getFont().getFontData();
+		fD_lblNewLabel_1[0].setHeight(TEXT_SIZE_NORMAL);
+		lblNewLabel_1.setFont(new Font(Display.getCurrent(), fD_lblNewLabel_1[0]));
+		
 		Composite composite_1 = new Composite(grpProxy, SWT.NONE);
 		composite_1.setLayout(new FormLayout());
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
@@ -613,6 +663,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
 		this.fd_txtProxyPort.bottom = new FormAttachment(100);
 		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
+		
+		FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
+		fD_txtProxyPort[0].setHeight(TEXT_SIZE_NORMAL);
+		this.txtProxyPort.setFont(new Font(Display.getCurrent(), fD_txtProxyPort[0]));
+		
 		this.txtProxyPort.addTraverseListener(new TraverseListener() {
 
 			@Override

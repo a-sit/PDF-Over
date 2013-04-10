@@ -22,7 +22,7 @@ import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- * 
+ * Base class for configuration composites
  */
 public abstract class BaseConfigurationComposite extends StateComposite {
 	

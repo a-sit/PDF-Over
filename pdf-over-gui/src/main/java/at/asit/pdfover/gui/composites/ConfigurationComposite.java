@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +42,17 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 
 /**
- * 
+ * Composite for hosting configuration composites
  */
 public class ConfigurationComposite extends StateComposite {
-
+	
 	/**
 	 * Configuration Mode selection listener
 	 */
@@ -250,6 +253,10 @@ public class ConfigurationComposite extends StateComposite {
 		});
 		btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 
+		FontData[] fD_btnSpeichern = btnSpeichern.getFont().getFontData();
+		fD_btnSpeichern[0].setHeight(TEXT_SIZE_BUTTON);
+		btnSpeichern.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
+		
 		Button btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
 		fd_btnAbrechen.left = new FormAttachment(btnSpeichern, 10);
@@ -264,6 +271,10 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 
+		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
+		fD_btnAbbrechen[0].setHeight(TEXT_SIZE_BUTTON);
+		btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
+		
 		this.btnAdvanced = new Button(this, SWT.NONE);
 		FormData fd_btnAdvanced = new FormData();
 		fd_btnAdvanced.right = new FormAttachment(100, -5);
@@ -272,7 +283,10 @@ public class ConfigurationComposite extends StateComposite {
 		this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 		this.btnAdvanced
 				.addSelectionListener(new ConfigurationModeSelectionListener());
-
+		
+		FontData[] fD_btnAdvanced = this.btnAdvanced.getFont().getFontData();
+		fD_btnAdvanced[0].setHeight(TEXT_SIZE_BUTTON);
+		this.btnAdvanced.setFont(new Font(Display.getCurrent(), fD_btnAdvanced[0]));
 	}
 
 	boolean storeConfiguration() {

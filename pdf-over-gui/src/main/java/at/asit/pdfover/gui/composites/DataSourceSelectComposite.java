@@ -49,13 +49,12 @@ import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- * 
- *
+ * Composite for input document selection
  */
 public class DataSourceSelectComposite extends StateComposite {
 
 	/**
-	 * 
+	 * Selection adapter for file browsing
 	 */
 	private final class FileBrowseDialogListener extends SelectionAdapter {
 		/**
@@ -227,7 +226,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.fd_lbl_drag.bottom = new FormAttachment(lbl_drag2, -10);
 		lbl_drag.setLayoutData(this.fd_lbl_drag);
 		FontData[] fD = lbl_drag.getFont().getFontData();
-		fD[0].setHeight(20);
+		fD[0].setHeight(TEXT_SIZE_BIG);
 		lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
 		lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
 		lbl_drag.setAlignment(SWT.CENTER);
@@ -240,7 +239,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
 		lbl_drag2.setLayoutData(this.fd_lbl_drag2);
 		FontData[] fD2 = lbl_drag2.getFont().getFontData();
-		fD2[0].setHeight(12);
+		fD2[0].setHeight(TEXT_SIZE_NORMAL);
 		lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
 		lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //$NON-NLS-1$
 		lbl_drag2.setAlignment(SWT.CENTER);
@@ -249,7 +248,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		btn_open.setText(Messages.getString("dataSourceSelection.browse")); //$NON-NLS-1$
 		
 		FontData[] fD_open = btn_open.getFont().getFontData();
-		fD_open[0].setHeight(14);
+		fD_open[0].setHeight(TEXT_SIZE_BUTTON);
 		btn_open.setFont(new Font(Display.getCurrent(), fD_open[0]));
 		
 		/*

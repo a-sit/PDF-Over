@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument to set the emblem file to use for signature
  */
 public class EmblemArgument extends CLIArgument {
 	/**

@@ -24,7 +24,7 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument to show the useage message
  */
 public class HelpArgument extends CLIArgument {
 	

@@ -26,6 +26,26 @@ import at.asit.pdfover.gui.workflow.states.State;
 public abstract class StateComposite extends Composite {
 	
 	/**
+	 * Normal Text size
+	 */
+	public static final int TEXT_SIZE_NORMAL = 12;
+	
+	/**
+	 * 
+	 */
+	public static final int TEXT_SIZE_BIG = 14;
+	
+	/**
+	 * 
+	 */
+	public static final int TEXT_SIZE_SMALL = 10;
+	
+	/**
+	 * 
+	 */
+	public static final int TEXT_SIZE_BUTTON = 12;
+	
+	/**
 	 * Current State
 	 */
 	protected State state;

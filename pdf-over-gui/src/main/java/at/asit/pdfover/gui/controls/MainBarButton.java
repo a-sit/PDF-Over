@@ -32,12 +32,23 @@ import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.composites.StateComposite;
+
 /**
  * Main Bar Button implementation
  */
 public abstract class MainBarButton extends Canvas {
 	
+	/**
+	 * If borders are drawn with a gradient effect this sets the size
+	 */
 	public static final int GradientFactor = 4;
+	
+	/**
+	 * Number of pixel of the altitude of the triangle representing the arrow within the button shapes
+	 * 
+	 * This should be a multiple of 2!
+	 */
 	public static final int SplitFactor = 10;
 	
 	/**
@@ -73,7 +84,7 @@ public abstract class MainBarButton extends Canvas {
 		this.textColor = this.getForeground();
 		this.borderColor = new Color(getDisplay(), 0x7E, 0x9F, 0xA5);
 		this.inactiveText = new Color(getDisplay(), 0x6E, 0x6C, 0x6E);
-		this.textsize = 12;
+		this.textsize = StateComposite.TEXT_SIZE_BUTTON;
 
 	}
 
@@ -98,7 +109,7 @@ public abstract class MainBarButton extends Canvas {
 	/**
 	 * the text size
 	 */
-	protected int textsize = 12;
+	protected int textsize = StateComposite.TEXT_SIZE_BUTTON;
 
 	/**
 	 * @return the textsize
@@ -236,8 +247,8 @@ public abstract class MainBarButton extends Canvas {
 
 		int width = size.x;
 		
-		e.gc.setForeground(activeBackground);
-		e.gc.setBackground(inactiveBackground);
+		e.gc.setForeground(this.activeBackground);
+		e.gc.setBackground(this.inactiveBackground);
 		
 		e.gc.fillGradientRectangle(0, height, width, -1 * height, true);
 		

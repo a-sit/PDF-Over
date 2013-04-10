@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * Handler to process CLI Arguments
  */
 public class ArgumentHandler {
 	/**

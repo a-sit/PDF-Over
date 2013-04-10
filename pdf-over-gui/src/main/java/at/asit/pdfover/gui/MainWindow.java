@@ -186,7 +186,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(500, 800);
+		getShell().setSize(1024, 768);
 		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 
 		getShell().setLayout(new FormLayout());

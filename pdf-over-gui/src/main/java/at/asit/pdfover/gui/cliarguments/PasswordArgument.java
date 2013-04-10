@@ -26,7 +26,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
 
 /**
- * 
+ * CLI Argument to provide Mobile BKU password
  */
 public class PasswordArgument extends CLIArgument {
 	/**

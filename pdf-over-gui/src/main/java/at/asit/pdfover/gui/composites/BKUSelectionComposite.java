@@ -19,6 +19,8 @@ package at.asit.pdfover.gui.composites;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -26,6 +28,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +37,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 
 /**
- * 
+ * Composite for BKU selection
  */
 public class BKUSelectionComposite extends StateComposite {
 	
@@ -125,6 +128,10 @@ public class BKUSelectionComposite extends StateComposite {
 		
 		btn_mobile.setImage(mobile);
 		
+		FontData[] fD_btn_mobile = btn_mobile.getFont().getFontData();
+		fD_btn_mobile[0].setHeight(TEXT_SIZE_BUTTON);
+		btn_mobile.setFont(new Font(Display.getCurrent(), fD_btn_mobile[0]));
+		
 		Button btn_card = new Button(this, SWT.NATIVE | SWT.RESIZE);
 		btn_card.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
 		//Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -135,6 +142,10 @@ public class BKUSelectionComposite extends StateComposite {
 		//fd_btn_card.bottom = new FormAttachment(55, 0);
 		btn_card.setLayoutData(fd_btn_card);
 		btn_card.addSelectionListener(new LocalSelectionListener());
+		
+		FontData[] fD_btn_card = btn_card.getFont().getFontData();
+		fD_btn_card[0].setHeight(TEXT_SIZE_BUTTON);
+		btn_card.setFont(new Font(Display.getCurrent(), fD_btn_card[0]));
 		
 		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif"))); //$NON-NLS-1$
 		

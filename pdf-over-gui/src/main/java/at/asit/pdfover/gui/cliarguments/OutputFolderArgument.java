@@ -29,7 +29,7 @@ import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument to show the usage message
  */
 public class OutputFolderArgument extends CLIArgument {
 	/**

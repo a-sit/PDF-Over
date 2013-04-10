@@ -19,7 +19,7 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * 
+ * CLI Argument base class
  */
 public abstract class CLIArgument {
 	

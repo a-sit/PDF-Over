@@ -35,9 +35,10 @@ import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- * 
+ * Composite for entering the TAN for the mobile BKU
  */
 public class MobileBKUEnterTANComposite extends StateComposite {
+	
 	/**
 	 * 
 	 */

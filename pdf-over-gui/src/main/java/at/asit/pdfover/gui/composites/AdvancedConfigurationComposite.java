@@ -34,17 +34,20 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * 
+ * Composite for advanced configuration
  */
 public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	/**
@@ -69,6 +72,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		TabItem simpleTabItem = new TabItem(tabFolder, SWT.NULL);
 		simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
+		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
+		fD_tabFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
+		
 		this.simpleComposite = new SimpleConfigurationComposite(tabFolder,
 				SWT.NONE, state, container);
 
@@ -92,6 +99,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpSignaturPosition.left = new FormAttachment(0, 5);
 		grpSignaturPosition.setLayoutData(fd_grpSignaturPosition);
 
+		FontData[] fD_grpSignaturPosition = grpSignaturPosition.getFont().getFontData();
+		fD_grpSignaturPosition[0].setHeight(TEXT_SIZE_NORMAL);
+		grpSignaturPosition.setFont(new Font(Display.getCurrent(), fD_grpSignaturPosition[0]));
+		
 		this.btnAutomatischePositionierung = new Button(grpSignaturPosition,
 				SWT.CHECK);
 		FormData fd_btnAutomatischePositionierung = new FormData();
@@ -101,6 +112,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnAutomatischePositionierung
 				.setLayoutData(fd_btnAutomatischePositionierung);
 		this.btnAutomatischePositionierung.setText(Messages.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
+		
+		FontData[] fD_btnAutomatischePositionierung = this.btnAutomatischePositionierung.getFont().getFontData();
+		fD_btnAutomatischePositionierung[0].setHeight(TEXT_SIZE_BUTTON);
+		this.btnAutomatischePositionierung.setFont(new Font(Display.getCurrent(), fD_btnAutomatischePositionierung[0]));
 		
 		this.btnAutomatischePositionierung.addSelectionListener(new SelectionListener() {
 			
@@ -126,12 +141,20 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpBkuAuswahl.bottom = new FormAttachment(66, -5);
 		grpBkuAuswahl.setLayoutData(fd_grpBkuAuswahl);
 
+		FontData[] fD_grpBkuAuswahl = grpBkuAuswahl.getFont().getFontData();
+		fD_grpBkuAuswahl[0].setHeight(TEXT_SIZE_NORMAL);
+		grpBkuAuswahl.setFont(new Font(Display.getCurrent(), fD_grpBkuAuswahl[0]));
+		
 		this.cmbBKUAuswahl = new Combo(grpBkuAuswahl, SWT.NONE);
 		FormData fd_cmbBKUAuswahl = new FormData();
 		fd_cmbBKUAuswahl.right = new FormAttachment(100, -5);
 		fd_cmbBKUAuswahl.top = new FormAttachment(0, 5);
 		fd_cmbBKUAuswahl.left = new FormAttachment(0, 5);
 
+		FontData[] fD_cmbBKUAuswahl = this.cmbBKUAuswahl.getFont().getFontData();
+		fD_cmbBKUAuswahl[0].setHeight(TEXT_SIZE_NORMAL);
+		this.cmbBKUAuswahl.setFont(new Font(Display.getCurrent(), fD_cmbBKUAuswahl[0]));
+		
 		int blen = BKUs.values().length;
 
 		this.bkuStrings = new String[blen];
@@ -172,6 +195,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpSpeicherort.bottom = new FormAttachment(100, -5);
 		grpSpeicherort.setLayoutData(fd_grpSpeicherort);
 
+		FontData[] fD_grpSpeicherort = grpSpeicherort.getFont().getFontData();
+		fD_grpSpeicherort[0].setHeight(TEXT_SIZE_NORMAL);
+		grpSpeicherort.setFont(new Font(Display.getCurrent(), fD_grpSpeicherort[0]));
+		
 		Label lblDefaultOutputFolder = new Label(grpSpeicherort, SWT.NONE);
 		FormData fd_lblDefaultOutputFolder = new FormData();
 		fd_lblDefaultOutputFolder.top = new FormAttachment(0, 5);
@@ -179,12 +206,20 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		lblDefaultOutputFolder.setLayoutData(fd_lblDefaultOutputFolder);
 		lblDefaultOutputFolder.setText(Messages.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
 
+		FontData[] fD_lblDefaultOutputFolder = lblDefaultOutputFolder.getFont().getFontData();
+		fD_lblDefaultOutputFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		lblDefaultOutputFolder.setFont(new Font(Display.getCurrent(), fD_lblDefaultOutputFolder[0]));
+		
 		this.txtOutputFolder = new Text(grpSpeicherort, SWT.BORDER);
 		FormData fd_text = new FormData();
 		fd_text.top = new FormAttachment(lblDefaultOutputFolder, 5);
 		fd_text.left = new FormAttachment(0, 5);
 		this.txtOutputFolder.setLayoutData(fd_text);
 
+		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont().getFontData();
+		fD_txtOutputFolder[0].setHeight(TEXT_SIZE_NORMAL);
+		this.txtOutputFolder.setFont(new Font(Display.getCurrent(), fD_txtOutputFolder[0]));
+		
 		this.txtOutputFolder.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -201,6 +236,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		Button btnBrowse = new Button(grpSpeicherort, SWT.NONE);
 		fd_text.right = new FormAttachment(btnBrowse, -5);
 
+		FontData[] fD_btnBrowse = btnBrowse.getFont().getFontData();
+		fD_btnBrowse[0].setHeight(TEXT_SIZE_BUTTON);
+		btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
+		
 		FormData fd_btnBrowse = new FormData();
 		fd_btnBrowse.top = new FormAttachment(lblDefaultOutputFolder, 5);
 		fd_btnBrowse.right = new FormAttachment(100, -5);

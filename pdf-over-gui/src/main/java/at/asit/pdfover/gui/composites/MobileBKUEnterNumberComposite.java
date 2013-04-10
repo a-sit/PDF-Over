@@ -36,7 +36,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
 
 /**
- * 
+ * Composite for entering the phone number for the mobile BKU
  */
 public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
