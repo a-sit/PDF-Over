@@ -17,13 +17,11 @@ package at.asit.pdfover.gui.workflow.states;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
-import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;

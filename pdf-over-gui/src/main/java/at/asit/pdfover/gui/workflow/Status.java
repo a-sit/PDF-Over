@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.workflow;
 import java.io.File;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignResult;

@@ -18,12 +18,9 @@ package at.asit.pdfover.gui.workflow.states.mobilebku;
 // Imports
 import java.io.IOException;
 
-import javax.xml.ws.http.HTTPException;
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
