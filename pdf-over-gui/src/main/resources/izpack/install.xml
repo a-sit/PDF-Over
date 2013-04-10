@@ -31,11 +31,14 @@
 
 	<locale>
 		<langpack iso3="eng" />
+		<langpack iso3="deu" />
 	</locale>
 	<resources>
 		<res src="./unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
 		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
+		<res src="./win_shortcutSpec_deu.xml" id="Win_shortcutSpec.xml_deu" />
 		<res src="./win_shortcutSpec.xml" id="shortcutSpec.xml" />
+		<res src="./win_shortcutSpec_deu.xml" id="shortcutSpec.xml_deu" />
 		<res src="defaultInstallDir.txt" id="TargetPanel.dir.windows" />
 		<res id="JFrameIcon.png" src="icon16x16.png"/>
 		<res src="./customicons.xml" id="customicons.xml" />
