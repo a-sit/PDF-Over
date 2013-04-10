@@ -37,8 +37,10 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,9 +64,10 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileDialog dialog = new FileDialog(DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] {"*.pdf", "*"}); //$NON-NLS-1$ //$NON-NLS-2$
-			dialog.setFilterNames(new String[] {"PDF documents", "All files"});
+			FileDialog dialog = new FileDialog(
+					DataSourceSelectComposite.this.getShell(), SWT.OPEN);
+			dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
+			dialog.setFilterNames(new String[] { "PDF documents", "All files" });
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -89,6 +92,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	/**
 	 * Sets the selected file and calls update to the workflow
+	 * 
 	 * @param selected
 	 */
 	protected void setSelected(File selected) {
@@ -115,10 +119,9 @@ public class DataSourceSelectComposite extends StateComposite {
 	public DataSourceSelectComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 
-
 		this.setLayout(new FormLayout());
 
-		//Color back = new Color(Display.getCurrent(), 77, 190, 250);
+		// Color back = new Color(Display.getCurrent(), 77, 190, 250);
 
 		this.drop_area = new Composite(this, SWT.RESIZE | SWT.BORDER);
 		FormData fd_drop_area = new FormData();
@@ -128,7 +131,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		fd_drop_area.bottom = new FormAttachment(100, 0);
 		this.drop_area.setLayoutData(fd_drop_area);
 		this.drop_area.setLayout(new FormLayout());
-		//this.drop_area.setBackground(back);
+		// this.drop_area.setBackground(back);
 
 		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_DEFAULT
 				| DND.DROP_COPY);
@@ -139,13 +142,12 @@ public class DataSourceSelectComposite extends StateComposite {
 		dnd_target.addDropListener(new DropTargetAdapter() {
 			@Override
 			public void drop(DropTargetEvent event) {
-				if (fileTransfer.isSupportedType(event.currentDataType)){
-					String[] files = (String[])event.data;
-					if(files.length > 0) {
+				if (fileTransfer.isSupportedType(event.currentDataType)) {
+					String[] files = (String[]) event.data;
+					if (files.length > 0) {
 						// Only taking first file ...
 						File file = new File(files[0]);
-						if(!file.exists())
-						{
+						if (!file.exists()) {
 							log.error("File: " + files[0] + " does not exist!");
 							return;
 						}
@@ -175,7 +177,7 @@ public class DataSourceSelectComposite extends StateComposite {
 					}
 				}
 				// Only drop one item!
-				if(event.dataTypes.length > 1) {
+				if (event.dataTypes.length > 1) {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
@@ -194,29 +196,68 @@ public class DataSourceSelectComposite extends StateComposite {
 		});
 
 		final Label lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE);
-		FormData fd_lbl_drag = new FormData();
-		fd_lbl_drag.left = new FormAttachment(0, 10);
-		fd_lbl_drag.right = new FormAttachment(100, -10);
-		fd_lbl_drag.top = new FormAttachment(0, 10);
-		//fd_lbl_drag.bottom = new FormAttachment(100, -10);
+		this.fd_lbl_drag = new FormData();
+		this.fd_lbl_drag.left = new FormAttachment(0, 10);
+		this.fd_lbl_drag.right = new FormAttachment(100, -10);
+		this.fd_lbl_drag.top = new FormAttachment(0, 10);
+		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
 		lbl_drag.setLayoutData(fd_lbl_drag);
 		FontData[] fD = lbl_drag.getFont().getFontData();
 		fD[0].setHeight(18);
 		lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
 		lbl_drag.setText("To sign a document\ndrag and drop it here\nor use the button below");
 		lbl_drag.setAlignment(SWT.CENTER);
-		//lbl_drag.setBackground(back);
-
-		Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
+		
+		final Button btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
 		btn_open.setText("Choose file ...");
+		
+		lbl_drag.addListener(SWT.Resize, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				DataSourceSelectComposite.this.fd_lbl_drag.top = new FormAttachment(
+						50, -1 * (lbl_drag.getSize().y / 2));
+				DataSourceSelectComposite.this.fd_lbl_drag.left = new FormAttachment(
+						50, -1 * (lbl_drag.getSize().x / 2));
+				
+				Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				DataSourceSelectComposite.this.fd_btn_open.top = new FormAttachment(
+						50, (lbl_drag.getSize().y / 2) + 10);
+				DataSourceSelectComposite.this.fd_btn_open.left = new FormAttachment(
+						50, -1 * (size.x / 2));
+				DataSourceSelectComposite.this.fd_btn_open.right = new FormAttachment(
+						50, (size.x / 2));
+				DataSourceSelectComposite.this.fd_btn_open.bottom = new FormAttachment(
+						50, (lbl_drag.getSize().y / 2) + 10 + size.y);
+			}
+		});
+		// lbl_drag.setBackground(back);
+
 		Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		FormData fd_btn_open = new FormData();
-		fd_btn_open.left = new FormAttachment(100, size.x * -1 - 10);
-		fd_btn_open.right = new FormAttachment(100, -5);
-		fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
-		fd_btn_open.bottom = new FormAttachment(100, -5);
-		btn_open.setLayoutData(fd_btn_open);
-		//btn_open.setBackground(back);
+		this.fd_btn_open = new FormData();
+		this.fd_btn_open.left = new FormAttachment(100, size.x * -1 - 10);
+		this.fd_btn_open.right = new FormAttachment(100, -5);
+		this.fd_btn_open.top = new FormAttachment(100, size.y * -1 - 10);
+		this.fd_btn_open.bottom = new FormAttachment(100, -5);
+		btn_open.setLayoutData(this.fd_btn_open);
+
+		lbl_drag.addListener(SWT.Resize, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				/*Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				DataSourceSelectComposite.this.fd_btn_open.top = new FormAttachment(
+						50, (lbl_drag.getSize().x / 2) + 10);
+				DataSourceSelectComposite.this.fd_btn_open.left = new FormAttachment(
+						50, -1 * (size.x / 2));
+				DataSourceSelectComposite.this.fd_btn_open.right = new FormAttachment(
+						50, (size.x / 2));
+				DataSourceSelectComposite.this.fd_btn_open.bottom = new FormAttachment(
+						50, (size.y / 2) + (lbl_drag.getSize().x) + 10);*/
+			}
+		});
+
+		// btn_open.setBackground(back);
 		btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();
 	}
@@ -224,6 +265,10 @@ public class DataSourceSelectComposite extends StateComposite {
 	private boolean press = false;
 
 	private Composite drop_area;
+
+	FormData fd_lbl_drag;
+
+	FormData fd_btn_open;
 
 	@Override
 	protected void checkSubclass() {

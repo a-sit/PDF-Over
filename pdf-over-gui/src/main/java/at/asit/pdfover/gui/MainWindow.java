@@ -300,7 +300,7 @@ public class MainWindow {
 		end.setText("Done");
 		this.buttonMap.put(Buttons.FINAL, end);
 		
-		this.container = new Composite(getShell(), SWT.BORDER | SWT.RESIZE);
+		this.container = new Composite(getShell(), SWT.RESIZE);
 		FormData fd_composite_1 = new FormData();
 		fd_composite_1.bottom = new FormAttachment(100, -25);
 		fd_composite_1.right = new FormAttachment(100, -5);
