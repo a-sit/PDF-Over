@@ -53,7 +53,18 @@ import at.asit.pdfover.signator.Signator;
  */
 public class PrepareConfigurationState extends State {
 
-	
+	/** SFL4J Logger instance **/
+	private static final Logger log = LoggerFactory
+			.getLogger(PrepareConfigurationState.class);
+
+	private static String RES_SEPARATOR = "/"; //$NON-NLS-1$
+
+	private static String FILE_SEPARATOR = File.separator;
+
+	private ArgumentHandler handler;
+
+	private ArgumentHandler configFilehandler;
+
 	/**
 	 * @param stateMachine
 	 */
@@ -76,16 +87,6 @@ public class PrepareConfigurationState extends State {
 		this.configFilehandler.addCLIArgument(new ConfigFileArgument());
 	}
 
-	private ArgumentHandler handler;
-
-	private ArgumentHandler configFilehandler;
-
-	/**
-	 * SFL4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(PrepareConfigurationState.class);
-
 	private void initializeFromConfigurationFile(String filename)
 			throws InitializationException {
 		try {
@@ -93,7 +94,7 @@ public class PrepareConfigurationState extends State {
 			try {
 				this.stateMachine.getConfigProvider().loadConfiguration(
 						new FileInputStream(
-								this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/" + filename)); //$NON-NLS-1$
+								this.stateMachine.getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
 
@@ -103,7 +104,7 @@ public class PrepareConfigurationState extends State {
 					// default value!
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
-								"/" + filename); //$NON-NLS-1$
+								RES_SEPARATOR + filename);
 						this.stateMachine.getConfigProvider()
 								.loadConfiguration(is);
 
@@ -137,8 +138,8 @@ public class PrepareConfigurationState extends State {
 		try {
 
 			File configDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory());
-			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/" //$NON-NLS-1$
-					+ Constants.DEFAULT_CONFIG_FILENAME);
+			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory()
+					+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
 				boolean allOK = false;
 
@@ -158,9 +159,9 @@ public class PrepareConfigurationState extends State {
 					FileOutputStream pdfOverConfig = null;
 					try {
 						inputStream = this.getClass().getResourceAsStream(
-								"/" + Constants.DEFAULT_CONFIG_FILENAME); //$NON-NLS-1$
+								RES_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ "/" + Constants.DEFAULT_CONFIG_FILENAME); //$NON-NLS-1$
+								+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 
 						while ((byteCount = inputStream.read(buffer)) >= 0) {
 							pdfOverConfig.write(buffer, 0, byteCount);
@@ -195,9 +196,9 @@ public class PrepareConfigurationState extends State {
 					pdfOverConfig = null;
 					try {
 						inputStream = this.getClass().getResourceAsStream(
-								"/" + Constants.DEFAULT_LOG4J_FILENAME); //$NON-NLS-1$
+								RES_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
 						pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-								+ "/" + Constants.DEFAULT_LOG4J_FILENAME); //$NON-NLS-1$
+								+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
 
 						while ((byteCount = inputStream.read(buffer)) >= 0) {
 							pdfOverConfig.write(buffer, 0, byteCount);

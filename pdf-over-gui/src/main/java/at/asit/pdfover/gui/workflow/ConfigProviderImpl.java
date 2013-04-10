@@ -342,7 +342,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		String filename = this.getConfigurationFile();
 
 		File configFile = new File(this.getConfigurationDirectory()
-				+ "/" + filename); //$NON-NLS-1$
+				+ File.separator + filename);
 
 		Properties props = new Properties();
 		props.clear();

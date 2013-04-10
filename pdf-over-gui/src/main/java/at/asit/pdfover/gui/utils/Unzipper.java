@@ -54,7 +54,7 @@ public class Unzipper {
 			if (entry.isDirectory()) {
 				log.debug("Extracting directory: " + entry.getName()); //$NON-NLS-1$
 				
-				File nDir =new File(targetPath + "/" + entry.getName()); //$NON-NLS-1$
+				File nDir = new File(targetPath + File.separator + entry.getName());
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
 						throw new IOException("Failed to create dir: " + entry.getName()); //$NON-NLS-1$
@@ -65,7 +65,7 @@ public class Unzipper {
 			byte[] buffer = new byte[1024];
 			int len;
 			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(targetPath + "/" + entry.getName())); //$NON-NLS-1$
+					new FileOutputStream(targetPath + File.separator + entry.getName()));
 			while ((len = zis.read(buffer)) >= 0)
 				out.write(buffer, 0, len);
 			

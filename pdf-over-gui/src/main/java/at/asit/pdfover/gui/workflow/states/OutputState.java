@@ -52,7 +52,7 @@ public class OutputState extends State {
 			ConfigProvider config = this.stateMachine.getConfigProvider();
 			Status status = this.stateMachine.getStatus();
 			
-			File tmpDir = new File(config.getConfigurationDirectory() + "/tmp"); //$NON-NLS-1$
+			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp"); //$NON-NLS-1$
 			
 			if(!tmpDir.exists()) {
 				tmpDir.mkdir();

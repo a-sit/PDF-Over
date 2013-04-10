@@ -383,7 +383,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //						} else {
 //							image = ImageIO.read(new File(PDFASHelper
 //									.getWorkDir()
-//									+ "/"
+//									+ File.separator
 //									+ entry.getValue().toString()));
 //						}
 //						int imgWidth = 30 * PLACEHOLDER_SCALE;
