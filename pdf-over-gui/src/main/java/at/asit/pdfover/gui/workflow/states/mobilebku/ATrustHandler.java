@@ -190,6 +190,7 @@ public class ATrustHandler extends MobileBKUHandler {
 						responseData, "Sie haben noch", "Versuch"); //$NON-NLS-1$ //$NON-NLS-2$
 				getStatus().setTanTries(Integer.parseInt(tries.trim()));
 			} catch (Exception e) {
+				getStatus().setTanTries(getStatus().getTanTries() - 1);
 				log.debug("Error parsing TAN response", e); //$NON-NLS-1$
 			}
 
