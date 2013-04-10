@@ -198,7 +198,7 @@ public class SignaturePanel extends JPanel {
 	 * @return signature x coordinate
 	 */
 	public float getSignaturePositionX() {
-		return (float) this.sigPagePos.getX();
+		return Math.max((float) this.sigPagePos.getX(), 0);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class SignaturePanel extends JPanel {
 	 * @return signature y coordinate
 	 */
 	public float getSignaturePositionY() {
-		return (float) this.sigPagePos.getY();
+		return Math.max((float) this.sigPagePos.getY(), 0);
 	}
 
 	/**
