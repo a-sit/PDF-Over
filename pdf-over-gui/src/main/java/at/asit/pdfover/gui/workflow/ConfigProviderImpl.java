@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -294,7 +295,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			props.setProperty(SIGNATURE_POSITION_CONFIG, "auto"); //$NON-NLS-1$
 		} else {
 			props.setProperty(SIGNATURE_POSITION_CONFIG,
-					String.format("x=%f;y=%f;p=%d", //$NON-NLS-1$
+					String.format((Locale) null, "x=%f;y=%f;p=%d", //$NON-NLS-1$
 							pos.getX(), pos.getY(), pos.getPage()));
 		}
 

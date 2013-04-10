@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -78,10 +79,12 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		if (!position.useAutoPositioning()) {
 			if (position.getPage() < 1) {
 				positioning = new SignaturePositioning(String.format(
+						(Locale) null,
 						"p:new;x:%f;y:%f;w:262",  position.getX(),
 						position.getY()));
 			} else {
 				positioning = new SignaturePositioning(String.format(
+						(Locale) null,
 						"p:%d;x:%f;y:%f;w:262", position.getPage(), position.getX(),
 						position.getY()));
 			}
@@ -231,7 +234,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			style = table.getStyle();
 		}
 
-		log.debug(String.format("Table@ %dx%d", xoff, yoff));
+		log.debug(String.format((Locale) null, "Table@ %dx%d", xoff, yoff));
 
 		Font oldFont = g.getFont();
 		Font font = PdfAsSignatureParameter.getFont(style);
