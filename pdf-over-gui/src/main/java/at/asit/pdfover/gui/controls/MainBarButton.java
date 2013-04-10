@@ -346,8 +346,7 @@ public abstract class MainBarButton extends Canvas {
 			e.gc.setForeground(current);
 		} else {
 			int imgx = (width - height) / 2;
-			Image tmp = new Image(getDisplay(), this.image.getImageData()
-					.scaledTo(height, height));
+			Image tmp = new Image(getDisplay(), this.image.getImageData());
 			e.gc.drawImage(tmp, imgx, 0);
 		}
 
