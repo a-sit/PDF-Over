@@ -186,10 +186,9 @@ public class MainWindow {
 
 		ImageData data = new ImageData(this.getClass().getResourceAsStream("/icons/icon.png"));//$NON-NLS-1$
 		Image shellicon = new Image(this.shell.getDisplay(), data);
-		
+
 		this.shell.setImage(shellicon);
-		
-		
+
 		getShell().setLayout(new FormLayout());
 
 		this.mainbar = new Composite(getShell(), SWT.NONE);
@@ -227,12 +226,21 @@ public class MainWindow {
 		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(
 				is)));
 
-		this.btn_open = new MainBarStartButton(this.mainbar, SWT.NONE);
+		Composite mainbarContainer = new Composite(this.mainbar, SWT.NONE);
+		mainbarContainer.setLayout(new FormLayout());
+		FormData fd_mainbarContainer = new FormData();
+		fd_mainbarContainer.left = new FormAttachment(this.btn_config);
+		fd_mainbarContainer.right = new FormAttachment(100);
+		fd_mainbarContainer.top = new FormAttachment(0);
+		fd_mainbarContainer.bottom = new FormAttachment(100);
+		mainbarContainer.setLayoutData(fd_mainbarContainer);
+
+		this.btn_open = new MainBarStartButton(mainbarContainer, SWT.NONE);
 		FormData fd_btn_open = new FormData();
-		fd_btn_open.bottom = new FormAttachment(100);
-		fd_btn_open.right = new FormAttachment(35, (MainBarButton.SplitFactor / 2));
+		fd_btn_open.left = new FormAttachment(0);
+		fd_btn_open.right = new FormAttachment(27, (MainBarButton.SplitFactor / 2));
 		fd_btn_open.top = new FormAttachment(0);
-		fd_btn_open.left = new FormAttachment(0, 57);
+		fd_btn_open.bottom = new FormAttachment(100);
 		this.btn_open.setLayoutData(fd_btn_open);
 		this.btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
 		this.btn_open.setToolTipText(Messages.getString("common.open")); //$NON-NLS-1$
@@ -246,12 +254,12 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
-		this.btn_position = new MainBarMiddleButton(this.mainbar, SWT.NONE);
+		this.btn_position = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
 		FormData fd_btn_position = new FormData();
-		fd_btn_position.bottom = new FormAttachment(100);
-		fd_btn_position.right = new FormAttachment(60, (MainBarButton.SplitFactor / 2));
+		fd_btn_position.left = new FormAttachment(27, -1 * (MainBarButton.SplitFactor / 2));
+		fd_btn_position.right = new FormAttachment(54, (MainBarButton.SplitFactor / 2));
 		fd_btn_position.top = new FormAttachment(0);
-		fd_btn_position.left = new FormAttachment(35, -1 * (MainBarButton.SplitFactor / 2));
+		fd_btn_position.bottom = new FormAttachment(100);
 		this.btn_position.setLayoutData(fd_btn_position);
 		this.btn_position.setText(Messages.getString("main.position")); //$NON-NLS-1$
 		this.btn_position.setToolTipText(Messages.getString("main.position")); //$NON-NLS-1$
@@ -265,12 +273,12 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
-		this.btn_sign = new MainBarMiddleButton(this.mainbar, SWT.NONE);
+		this.btn_sign = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
 		FormData fd_btn_sign = new FormData();
-		fd_btn_sign.bottom = new FormAttachment(100);
-		fd_btn_sign.right = new FormAttachment(85, (MainBarButton.SplitFactor / 2));
+		fd_btn_sign.left = new FormAttachment(54, -1 * (MainBarButton.SplitFactor / 2));
+		fd_btn_sign.right = new FormAttachment(81, (MainBarButton.SplitFactor / 2));
 		fd_btn_sign.top = new FormAttachment(0);
-		fd_btn_sign.left = new FormAttachment(60, -1 * (MainBarButton.SplitFactor / 2));
+		fd_btn_sign.bottom = new FormAttachment(100);
 		this.btn_sign.setLayoutData(fd_btn_sign);
 		this.btn_sign.setText(Messages.getString("main.signature")); //$NON-NLS-1$
 		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //$NON-NLS-1$
@@ -284,12 +292,12 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
-		MainBarEndButton end = new MainBarEndButton(this.mainbar, SWT.NONE);
+		MainBarEndButton end = new MainBarEndButton(mainbarContainer, SWT.NONE);
 		FormData fd_btn_end = new FormData();
-		fd_btn_end.bottom = new FormAttachment(100);
+		fd_btn_end.left = new FormAttachment(81, -1 * (MainBarButton.SplitFactor / 2));
 		fd_btn_end.right = new FormAttachment(100);
 		fd_btn_end.top = new FormAttachment(0);
-		fd_btn_end.left = new FormAttachment(85, -1 * (MainBarButton.SplitFactor / 2));
+		fd_btn_end.bottom = new FormAttachment(100);
 		end.setLayoutData(fd_btn_end);
 		end.setText(Messages.getString("main.done")); //$NON-NLS-1$
 		end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
