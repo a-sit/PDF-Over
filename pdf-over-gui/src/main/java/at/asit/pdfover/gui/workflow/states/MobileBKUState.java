@@ -283,6 +283,7 @@ public class MobileBKUState extends State {
 
 			} else {
 				tan.setRefVal(mobileStatus.getRefVal());
+				tan.setSignatureData(mobileStatus.getSignatureDataURL());
 
 				if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
 						&& mobileStatus.getTanTries() > 0) {
