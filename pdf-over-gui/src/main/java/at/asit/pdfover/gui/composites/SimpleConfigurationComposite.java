@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -235,14 +236,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 			@Override
 			public void paintControl(PaintEvent e) {
-				//Workaround for paint event being called twice initially
-				if (e.x > 0)
-					return;
-				// e.gc.setForeground();
 				e.gc.setForeground(Constants.DROP_BORDER_COLOR);
 				e.gc.setLineWidth(3);
 				e.gc.setLineStyle(SWT.LINE_DASH);
-				e.gc.drawRoundRectangle(e.x, e.y, e.width - 2, e.height - 2,
+				Point size = controlComposite.getSize();
+				e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
 						10, 10);
 			}
 		});
