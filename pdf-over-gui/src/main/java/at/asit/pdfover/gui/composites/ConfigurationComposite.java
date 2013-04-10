@@ -33,7 +33,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog.ERROR_BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
-import at.asit.pdfover.gui.exceptions.ResumeableException;
+import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.ConfigurationContainer;
@@ -321,7 +321,7 @@ public class ConfigurationComposite extends StateComposite {
 
 					redo = false;
 					status = true;
-				} catch (ResumeableException e) {
+				} catch (ResumableException e) {
 					log.error("Settings validation failed!", e); //$NON-NLS-1$
 					ErrorDialog dialog = new ErrorDialog(getShell(),
 							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);
@@ -350,7 +350,7 @@ public class ConfigurationComposite extends StateComposite {
 
 					redo = false;
 					status = true;
-				} catch (ResumeableException e) {
+				} catch (ResumableException e) {
 					log.error("Settings validation failed!", e); //$NON-NLS-1$
 					ErrorDialog dialog = new ErrorDialog(getShell(),
 							e.getMessage(), ERROR_BUTTONS.ABORT_RETRY_IGNORE);

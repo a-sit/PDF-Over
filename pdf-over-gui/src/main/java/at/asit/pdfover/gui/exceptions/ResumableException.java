@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 /**
  * 
  */
-public class ResumeableException extends Exception {
+public class ResumableException extends Exception {
 
 	/**
 	 * 
@@ -32,7 +32,7 @@ public class ResumeableException extends Exception {
 	 * @param msg Error message
 	 * @param resumeIndex Validator index to resume from
 	 */
-	public ResumeableException(String msg, int resumeIndex) {
+	public ResumableException(String msg, int resumeIndex) {
 		super(msg);
 		this.resumeIndex = resumeIndex;
 	}
@@ -43,12 +43,13 @@ public class ResumeableException extends Exception {
 	 * @param cause Exception causing this one
 	 * @param resumeIndex Validator index to resume from
 	 */
-	public ResumeableException(String msg, Throwable cause, int resumeIndex) {
+	public ResumableException(String msg, Throwable cause, int resumeIndex) {
 		super(msg, cause);
 		this.resumeIndex = resumeIndex;
 	}
 
 	/**
+	 * Return the validator index to resume from
 	 * @return the resumeIndex
 	 */
 	public int getResumeIndex() {

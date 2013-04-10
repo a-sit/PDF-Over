@@ -22,7 +22,7 @@ import at.asit.pdfover.gui.Messages;
 /**
  * 
  */
-public class OutputfolderDontExistException extends ResumeableException {
+public class OutputfolderDontExistException extends ResumableException {
 	/**
 	 * 
 	 */
