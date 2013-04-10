@@ -57,8 +57,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
+	// The persistent configuration read from the config file
 	private ConfigurationContainer configuration;
 
+	// The configuration overlay built from the cmd line args
 	private ConfigurationContainer configurationOverlay;
 
 	/**
