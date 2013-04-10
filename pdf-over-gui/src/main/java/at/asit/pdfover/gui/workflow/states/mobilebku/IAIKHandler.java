@@ -31,11 +31,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
 
@@ -103,7 +103,7 @@ public class IAIKHandler extends MobileBKUHandler {
 	
 		HttpClient client = new HttpClient();
 		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
+				Constants.USER_AGENT_STRING);
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -151,7 +151,7 @@ public class IAIKHandler extends MobileBKUHandler {
 
 		HttpClient client = new HttpClient();
 		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
+				Constants.USER_AGENT_STRING);
 
 		String redirectURL = status.getBaseURL().substring(0,
 				status.getBaseURL().lastIndexOf('/',
@@ -247,7 +247,7 @@ public class IAIKHandler extends MobileBKUHandler {
 	
 		HttpClient client = new HttpClient();
 		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
+				Constants.USER_AGENT_STRING);
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$

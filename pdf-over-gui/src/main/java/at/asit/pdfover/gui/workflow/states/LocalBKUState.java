@@ -60,11 +60,6 @@ public class LocalBKUState extends State {
 	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
 	/**
-	 * PDF Over User Agent string
-	 */
-	public static final String PDF_OVER_USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
-
-	/**
 	 * Whether to use Base64 or FileUpload Request
 	 */
 	public static final boolean USE_BASE64_REQUEST = true;

@@ -60,6 +60,9 @@ public class Constants {
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
+	/** PDF-Over User Agent string */
+	public static final String USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
+
 
 	/* Configuration parameters */
 
