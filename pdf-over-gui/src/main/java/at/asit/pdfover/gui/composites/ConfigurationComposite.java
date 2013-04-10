@@ -276,10 +276,10 @@ public class ConfigurationComposite extends StateComposite {
 		if (this.configProvider != null) {
 
 			// Initialize Configuration Container
-			if (this.configProvider.getDefaultSignaturePosition() != null) {
+			if (this.configProvider.getDefaultSignaturePositionPersistent() != null) {
 				this.configurationContainer
 						.setAutomaticPositioning(this.configProvider
-								.getDefaultSignaturePosition()
+								.getDefaultSignaturePositionPersistent()
 								.useAutoPositioning());
 			}
 

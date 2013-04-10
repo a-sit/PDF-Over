@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow.config;
 
 import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * An interface for setting the configuration overlay
@@ -64,6 +65,12 @@ public interface ConfigOverlayManipulator {
 	 * @param outputFolder the default output folder
 	 */
 	public void setDefaultOutputFolderOverlay(String outputFolder);
+
+	/**
+	 * Sets the signature position
+	 * @param position the signature position
+	 */
+	public void setDefaultSignaturePositionOverlay(SignaturePosition position);
 
 	/**
 	 * Sets the configuration file

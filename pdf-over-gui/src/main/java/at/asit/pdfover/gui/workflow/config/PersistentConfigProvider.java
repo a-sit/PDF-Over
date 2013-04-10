@@ -71,13 +71,13 @@ public interface PersistentConfigProvider {
 	 */
 	public String getDefaultOutputFolderPersistent();
 
-	// Declare the other configuration getters for convenience
-
 	/**
 	 * Get the default configured SignaturePosition
 	 * @return the default configured SignaturePosition or null if not configured
 	 */
-	public SignaturePosition getDefaultSignaturePosition();
+	public SignaturePosition getDefaultSignaturePositionPersistent();
+
+	// Declare the other configuration getters for convenience
 
 	/**
 	 * Get the transparency of the signature placeholder

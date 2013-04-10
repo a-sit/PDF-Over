@@ -38,7 +38,7 @@ import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ * Implementation of the configuration container for the configuration dialog
  */
 public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/**

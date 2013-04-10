@@ -253,9 +253,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			} else {
 				log.error("Signature Position read from config failed: not matching string"); //$NON-NLS-1$
 			}
-
 		}
-
 		this.setDefaultSignaturePosition(position);
 	}
 
@@ -299,7 +297,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_SIGN_LOCALE, LocaleSerializer.getParsableString(signLocale));
 		}
 
-		SignaturePosition pos = getDefaultSignaturePosition();
+		SignaturePosition pos = getDefaultSignaturePositionPersistent();
 
 		if (pos == null) {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //$NON-NLS-1$
@@ -415,6 +413,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configuration.setDefaultSignaturePosition(signaturePosition);
 	}
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setDefaultSignaturePositionOverlay(at.asit.pdfover.signator.SignaturePosition)
+	 */
+	@Override
+	public void setDefaultSignaturePositionOverlay(SignaturePosition signaturePosition) {
+		this.configurationOverlay.setDefaultSignaturePosition(signaturePosition);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -423,6 +430,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public SignaturePosition getDefaultSignaturePosition() {
+		SignaturePosition position = this.configurationOverlay.getDefaultSignaturePosition();
+		if (position == null)
+			position = getDefaultSignaturePositionPersistent();
+		return position;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getDefaultSignaturePositionPersistent()
+	 */
+	@Override
+	public SignaturePosition getDefaultSignaturePositionPersistent() {
 		return this.configuration.getDefaultSignaturePosition();
 	}
 
