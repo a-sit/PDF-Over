@@ -122,8 +122,10 @@ public class PositioningComposite extends StateComposite {
 
 		this.frame = SWT_AWT.new_Frame(this.mainArea);
 		this.mainArea.addKeyListener(this.keyListener);
-		this.frame.addMouseWheelListener(this.mouseListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
+		// Workaround for Windows: Scrollbar always gets the event
+		if (!System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
+			this.frame.addMouseWheelListener(this.mouseListener);
 		requestFocus();
 	}
 
@@ -241,10 +243,6 @@ public class PositioningComposite extends StateComposite {
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			// Workaround for Windows: Scrollbar always gets the event
-			if (System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
-				return;
-
 			// Workaround for Linux: Events fire twice
 			if (e.getWhen() == this.lastEventTime)
 				return;
