@@ -17,16 +17,9 @@
 		<!-- <run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7" />  -->
 	</info>
 
-	<guiprefs resizable="yes" width="480" height="360">
-		<laf name="substance">
-			<os family="windows" />
-			<os family="unix" />
-			<param name="variant" value="mist-silver" />
-		</laf>
-		<laf name="substance">
-			<os family="mac" />
-			<param name="variant" value="mist-aqua" />
-		</laf>
+	<guiprefs resizable="yes" width="500" height="360">
+		<modifier key="useFlags" value="yes" />
+		<modifier key="langDisplayType" value="native" />
 	</guiprefs>
 
 	<locale>

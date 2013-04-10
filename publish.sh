@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #### CONFIGURE: ######
-PUBLISH_DIR="pub"
+PUBLISH_DIR="/srv/apache2/www/pdfover"
 LOG_DIR="log"
 VERSION="4.0.0-SNAPSHOT"
 CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdfover\/"
