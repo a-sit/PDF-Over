@@ -45,7 +45,6 @@ public class PositioningState extends State {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(PositioningState.class);
 
@@ -55,7 +54,7 @@ public class PositioningState extends State {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  stateMachine.getStatus().getDocument());
+			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument());
 			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
 		}
 
