@@ -146,7 +146,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			float[] heights = this.getTableHeights(table, table.getStyle(),
 					height);
 
-			log.info("Width: " + width + " Height: " + height);
+			float mheigh = 0;
+			
+			for(int i = 0; i < heights.length; i++) {
+				mheigh += heights[i];
+			}
+			
+			log.info("Width: " + width + " Height: " + height + " HShould: " + mheigh);
 			BufferedImage image = new BufferedImage((int) width, (int) height,
 					BufferedImage.TYPE_INT_RGB);
 			Graphics g = image.getGraphics();
@@ -263,7 +269,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 		float perUnit = width / sum;
 
-		int padding = (int) (style.getPadding() * this.perUnitHeight);
+		int padding = (int) (style.getPadding() * this.perUnitHeight * PLACEHOLDER_SCALE);
 
 		ArrayList rows = table.getRows();
 		float roffset = 0;
@@ -283,7 +289,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 							(int) (colWidths[j] * perUnit), rsize);
 
 					g.drawString(entry.getValue().toString(), (int) (xoff
-							+ offset + padding), (int) (yoff + padding
+							+ offset + padding / PLACEHOLDER_SCALE), (int) (yoff + padding
 							+ roffset + font.getSize() * this.perUnitHeight));
 				} else if (entry.getType() == 2) {
 					// Image ...
@@ -308,8 +314,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 						g.drawImage(
 								img,
-								(int) (xoff + offset + padding + (((colWidths[j] * perUnit) - imgWidth - padding)) / 2),
-								(int) (yoff + roffset + padding + ((rsize - imgHeight - padding) / 2)),
+								(int) (xoff + offset + padding + (((colWidths[j] * perUnit) - imgWidth - 2* padding)) / 2),
+								(int) (yoff + roffset + padding + ((rsize - imgHeight - 2* padding) / 2)),
 								null);
 					} catch (IOException e) {
 						log.warn("Failed to paint emblem to placeholder image");
@@ -375,8 +381,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 						fontSize = Integer.parseInt(font_arr[1]) * PLACEHOLDER_SCALE;
 					}
 
-					if (rsize < ((style.getPadding() * 2) + fontSize)) {
-						rsize = ((style.getPadding() * 2) + fontSize);
+					if (rsize < ((style.getPadding()  * PLACEHOLDER_SCALE * 2) + fontSize)) {
+						rsize = ((style.getPadding()  * PLACEHOLDER_SCALE * 2) + fontSize);
 					}
 				} else if (entry.getType() == 3) {
 					tsize = this
@@ -416,8 +422,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 						fontSize = Integer.parseInt(font_arr[1]) * PLACEHOLDER_SCALE;
 					}
 
-					if (rsize < ((style.getPadding() * 2) + fontSize)) {
-						rsize = ((style.getPadding() * 2) + fontSize);
+					if (rsize < ((style.getPadding() * PLACEHOLDER_SCALE * 2) + fontSize)) {
+						rsize = ((style.getPadding() * PLACEHOLDER_SCALE * 2) + fontSize);
 					}
 				} else if (entry.getType() == 3) {
 					tsize = this
