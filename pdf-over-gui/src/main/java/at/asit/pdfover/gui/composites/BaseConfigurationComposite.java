@@ -55,10 +55,8 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 	/**
 	 * Called when the signer is changed!
 	 */
-	protected void signerChanged() {
-		// overwrite 
-	}
-	
+	protected abstract void signerChanged();
+
 	/**
 	 * @param parent
 	 * @param style
