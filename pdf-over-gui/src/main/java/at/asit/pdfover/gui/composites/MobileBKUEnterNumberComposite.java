@@ -267,7 +267,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		FormData fd_lbl_error = new FormData();
 		//fd_lbl_error.top = new FormAttachment(70, -15);
 		fd_lbl_error.bottom = new FormAttachment(100, -20);
-		//fd_lbl_error.left = new FormAttachment(15, 0);
+		fd_lbl_error.left = new FormAttachment(15, 0);
 		fd_lbl_error.right = new FormAttachment(this.btn_ok, -10);
 		this.lbl_error.setLayoutData(fd_lbl_error);
 
