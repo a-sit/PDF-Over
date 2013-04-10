@@ -35,6 +35,10 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.slf4j.Logger;
@@ -77,11 +81,34 @@ public class PositioningComposite extends StateComposite {
 	 * @param state
 	 */
 	public PositioningComposite(Composite parent, int style, State state) {
-		super(parent, style | SWT.EMBEDDED | SWT.V_SCROLL, state);
-		//this.setLayout(null);
-		this.setBounds(0, 0, 10, 10);
-		this.scrollbar = this.getVerticalBar();
-		this.frame = SWT_AWT.new_Frame(this);
+		super(parent, style, state);
+		this.setLayout(new FormLayout());
+
+		Composite bottomBar = new Composite(this, SWT.NONE);
+		FormData fd_bottomBar = new FormData();
+		fd_bottomBar.left = new FormAttachment(0);
+		fd_bottomBar.right = new FormAttachment(100);
+		fd_bottomBar.bottom = new FormAttachment(100);
+		bottomBar.setLayoutData(fd_bottomBar);
+		bottomBar.setLayout(new FormLayout());
+
+		Button btnSign = new Button(bottomBar, SWT.NONE);
+		btnSign.setText("Sign");
+		FormData fd_btnSign = new FormData();
+		fd_btnSign.right = new FormAttachment(100);
+		fd_btnSign.bottom = new FormAttachment(100);
+		btnSign.setLayoutData(fd_btnSign);
+
+		Composite mainArea = new Composite(this, SWT.BORDER | SWT.EMBEDDED | SWT.V_SCROLL);
+		FormData fd_mainArea = new FormData();
+		fd_mainArea.left = new FormAttachment(0);
+		fd_mainArea.right = new FormAttachment(100);
+		fd_mainArea.top = new FormAttachment(0);
+		fd_mainArea.bottom = new FormAttachment(bottomBar, -5);
+		mainArea.setLayoutData(fd_mainArea);
+		this.scrollbar = mainArea.getVerticalBar();
+
+		this.frame = SWT_AWT.new_Frame(mainArea);
 		this.addKeyListener(this.keyListener);
 		this.frame.addMouseWheelListener(this.mouseListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
