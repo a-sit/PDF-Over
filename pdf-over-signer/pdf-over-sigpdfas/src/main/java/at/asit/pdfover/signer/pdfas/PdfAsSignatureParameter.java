@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.ImageCapabilities;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +35,6 @@ import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
-import at.asit.pdfover.signer.pdfas.exceptions.PDFASSLRequestException;
 import at.gv.egiz.pdfas.api.io.DataSource;
 import at.gv.egiz.pdfas.api.sign.pos.SignaturePositioning;
 import at.gv.egiz.pdfas.impl.signator.binary.BinarySignator_1_1_0;
@@ -174,7 +172,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		}
 	}
 
-	private Font getFont(Style style) {
+	private static Font getFont(Style style) {
 		String def = "COURIER-NORMAL-8";
 		String fontString = style.getFont();
 		String[] font_arr = fontString.split(",");
@@ -186,7 +184,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	}
 
-	private Font getValueFont(Style style) {
+	/**
+	 * extracts the value font
+	 * @param style the table style
+	 * @return the value font
+	 */
+	@SuppressWarnings("unused")
+	private static Font getValueFont(Style style) {
 		String def = "COURIER-NORMAL-8";
 		String fontString = style.getValueFont();
 		String[] font_arr = fontString.split(",");
@@ -197,6 +201,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 				font_arr[1]));
 	}
 
+	@SuppressWarnings("rawtypes")
 	private int drawTable(int xoff, int yoff, int width, int height,
 			Table table, Style parentstyle, Graphics graphic, float[] heights) {
 		Style style = parentstyle;
@@ -207,8 +212,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		log.debug(String.format("Table@ %dx%d", xoff, yoff));
 
 		Font oldFont = graphic.getFont();
-		Font font = this.getFont(style);
-		Font valuefont = this.getValueFont(style);
+		Font font = PdfAsSignatureParameter.getFont(style);
 
 		// draw background
 		// graphic.setColor(style.getBgColor());
@@ -285,7 +289,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 					float[] cheights = this.getTableHeights(
 							(Table) entry.getValue(), style, rsize);
 
-					int tsize = this.drawTable(
+					this.drawTable(
 							(int) (xoff + offset),
 							(int) (yoff + roffset),
 							(int) (colWidths[j] * perUnit),
@@ -308,6 +312,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	private float perUnitHeight = 0;
 
+	@SuppressWarnings("rawtypes")
 	private float[] getTableHeights(Table table, Style parentstyle, float height) {
 		ArrayList rows = table.getRows();
 		float[] sizes = new float[rows.size()];
@@ -356,6 +361,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		return sizes;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private float getTableHeight(Table table, Style parentstyle) {
 		ArrayList rows = table.getRows();
 		Style style = parentstyle;

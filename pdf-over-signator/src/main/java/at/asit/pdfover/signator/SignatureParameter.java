@@ -126,6 +126,7 @@ public abstract class SignatureParameter {
 	/**
 	 * Gets the Dimension to display the Placeholder
 	 * @return the placeholder dimensions
+	 * @throws SignatureException thrown if the creation of the placeholdes fails
 	 */
 	public abstract Image getPlaceholder() throws SignatureException;
 	

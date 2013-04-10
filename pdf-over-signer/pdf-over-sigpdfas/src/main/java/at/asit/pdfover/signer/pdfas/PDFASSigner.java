@@ -1,31 +1,27 @@
 package at.asit.pdfover.signer.pdfas;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SLResponse;
-import at.asit.pdfover.signator.SignatureException;
-import at.asit.pdfover.signator.Signer;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignResultImpl;
+import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signator.Signer;
 import at.asit.pdfover.signator.SigningState;
 import at.asit.pdfover.signer.pdfas.exceptions.PDFASSLRequestException;
 import at.gv.egiz.pdfas.api.PdfAs;
-import at.gv.egiz.pdfas.api.sign.SignParameters;
-import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
-import at.gv.egiz.pdfas.io.ByteArrayDataSink;
 import at.gv.egiz.pdfas.api.commons.Constants;
 import at.gv.egiz.pdfas.api.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.api.internal.LocalBKUParams;
 import at.gv.egiz.pdfas.api.internal.PdfAsInternal;
-import at.knowcenter.wag.egov.egiz.cfg.SettingsReader;
+import at.gv.egiz.pdfas.api.sign.SignParameters;
+import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
+import at.gv.egiz.pdfas.io.ByteArrayDataSink;
 
 /**
  * PDF AS Signer Implementation

@@ -170,7 +170,7 @@ public class PrepareConfigurationState extends State {
 						log.error(
 								"Failed to write PDF Over config file to config directory", e); //$NON-NLS-1$
 						throw new InitializationException(
-								"Failed to write PDF Over config file to config directory",
+								"Failed to write PDF Over config file to config directory", //$NON-NLS-1$
 								e);
 					} finally {
 						if (pdfOverConfig != null) {
@@ -201,7 +201,7 @@ public class PrepareConfigurationState extends State {
 						log.error(
 								"Failed to create local configuration directory!", e); //$NON-NLS-1$
 						throw new InitializationException(
-								"Failed to create local configuration directory!",
+								"Failed to create local configuration directory!", //$NON-NLS-1$
 								e);
 					}
 					allOK = true;
