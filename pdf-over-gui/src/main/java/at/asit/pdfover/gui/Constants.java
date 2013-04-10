@@ -48,22 +48,40 @@ public class Constants {
 	public static final int MAINBAR_HEIGHT = 60;
 
 	/** Main bar active background - light start of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_LIGHT =
-			theme == Themes.DEFAULT ?
-					new Color(display, 0xB4, 0xCD, 0xEC) :
-					new Color(display, 0xEC, 0xAD, 0xE7);
+	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = getMainbarActiveBackLight();
+	private static Color getMainbarActiveBackLight() {
+		switch (theme) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0xB4, 0xCD, 0xEC);
+			case GEMPLUSH:
+				return new Color(display, 0xEC, 0xAD, 0xE7);
+		}
+	}
 
 	/** Main bar active background - dark end of gradient */
-	public static final Color MAINBAR_ACTIVE_BACK_DARK =
-			theme == Themes.DEFAULT ?
-					new Color(display, 0x6B, 0xA5, 0xD9) :
-					new Color(display, 0xD9, 0x53, 0x9C);
+	public static final Color MAINBAR_ACTIVE_BACK_DARK = getMainbarActiveBackDark();
+	private static Color getMainbarActiveBackDark() {
+		switch (theme) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0x6B, 0xA5, 0xD9);
+			case GEMPLUSH:
+				return new Color(display, 0xD9, 0x53, 0x9C);
+		}
+	}
 
 	/** Main bar inactive background */
-	public static final Color MAINBAR_INACTIVE_BACK =
-			theme == Themes.DEFAULT ?
-					new Color(display, 0xD4, 0xE7, 0xF1) :
-					new Color(display, 0xF1, 0xD1, 0xE8);
+	public static final Color MAINBAR_INACTIVE_BACK = getMainbarInactiveBack();
+	private static Color getMainbarInactiveBack() {
+		switch (theme) {
+			default:
+			case DEFAULT:
+				return new Color(display, 0xD4, 0xE7, 0xF1);
+			case GEMPLUSH:
+				return new Color(display, 0xF1, 0xD1, 0xE8);
+		}
+	}
 
 	/** Main bar active text color */
 	public static final Color MAINBAR_ACTIVE_TEXTCOLOR = new Color(display, 0x00, 0x00, 0x00);
@@ -93,10 +111,16 @@ public class Constants {
 	public static final String RES_ICON = "/icons/icon.png"; //$NON-NLS-1$
 
 	/** Config image resource */
-	public static final String RES_IMG_CONFIG =
-			theme == Themes.DEFAULT ?
-					"/img/config.png" : //$NON-NLS-1$
-					"/img/config_p.png"; //$NON-NLS-1$
+	public static final String RES_IMG_CONFIG = getResImgConfig();
+	private static String getResImgConfig() {
+		switch (theme) {
+			default:
+			case DEFAULT:
+				return "/img/config.png"; //$NON-NLS-1$
+			case GEMPLUSH:
+				return "/img/config_p.png"; //$NON-NLS-1$
+		}
+	}
 
 	/** Config inactive image resource */
 	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png"; //$NON-NLS-1$
