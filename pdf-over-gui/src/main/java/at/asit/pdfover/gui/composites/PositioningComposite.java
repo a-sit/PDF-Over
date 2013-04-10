@@ -17,8 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -35,13 +35,11 @@ public class PositioningComposite extends StateComposite {
 	/**
 	 * Selection listener when position was fixed
 	 */
-	private final class PositionSelectedListener implements SelectionListener {
-		
+	private final class PositionSelectedListener extends SelectionAdapter {
 		/**
-		 * Default constructor
+		 * Empty constructor
 		 */
 		public PositionSelectedListener() {
-			// Nothing to do
 		}
 
 		@Override
@@ -49,11 +47,6 @@ public class PositioningComposite extends StateComposite {
 			// TODO: FIX to get real position
 			PositioningComposite.this.setPosition(new SignaturePosition()); // Setting auto position for testing
 			PositioningComposite.this.state.updateStateMachine();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do
 		}
 	}
 

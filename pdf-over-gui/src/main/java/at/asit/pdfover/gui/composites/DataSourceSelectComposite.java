@@ -21,8 +21,8 @@ import java.io.File;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -54,6 +54,12 @@ public class DataSourceSelectComposite extends StateComposite {
 	 * 
 	 */
 	private final class FileBrowseDialogListener extends SelectionAdapter {
+		/**
+		 * Empty constructor
+		 */
+		public FileBrowseDialogListener() {
+		}
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(DataSourceSelectComposite.this.getShell(), SWT.OPEN);
@@ -130,14 +136,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		Transfer[] types = new Transfer[] { fileTransfer };
 		dnd_target.setTransfer(types);
 
-		dnd_target.addDropListener(new DropTargetListener() {
-
-			@Override
-			public void dropAccept(DropTargetEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
+		dnd_target.addDropListener(new DropTargetAdapter() {
 			@Override
 			public void drop(DropTargetEvent event) {
 				if (fileTransfer.isSupportedType(event.currentDataType)){
@@ -156,12 +155,6 @@ public class DataSourceSelectComposite extends StateComposite {
 			}
 
 			@Override
-			public void dragOver(DropTargetEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
 			public void dragOperationChanged(DropTargetEvent event) {
 				if (event.detail == DND.DROP_DEFAULT) {
 					if ((event.operations & DND.DROP_COPY) != 0) {
@@ -170,11 +163,6 @@ public class DataSourceSelectComposite extends StateComposite {
 						event.detail = DND.DROP_NONE;
 					}
 				}
-			}
-
-			@Override
-			public void dragLeave(DropTargetEvent event) {
-				// No need to do anything here...
 			}
 
 			@Override

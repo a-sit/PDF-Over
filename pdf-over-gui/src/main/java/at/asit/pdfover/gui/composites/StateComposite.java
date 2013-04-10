@@ -25,14 +25,17 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public abstract class StateComposite extends Composite {
 	
+	/**
+	 * Current State
+	 */
 	protected State state;
 	
 	/**
 	 * The base class for state composites
 	 * 
-	 * @param parent
-	 * @param style
-	 * @param state
+	 * @param parent The parent Composite
+	 * @param style The Composite style
+	 * @param state The current State
 	 */
 	public StateComposite(Composite parent, int style, State state) {
 		super(parent, style);

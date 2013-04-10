@@ -17,8 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -39,13 +39,11 @@ public class BKUSelectionComposite extends StateComposite {
 	/**
 	 * Listener for local bku selection 
 	 */
-	private final class LocalSelectionListener implements SelectionListener {
-		
+	private final class LocalSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor 
+		 * Empty constructor
 		 */
 		public LocalSelectionListener() {
-			// Nothing here
 		}
 
 		@Override
@@ -53,34 +51,22 @@ public class BKUSelectionComposite extends StateComposite {
 			log.debug("Setting BKU to LOCAL"); //$NON-NLS-1$
 			setSelected(BKUs.LOCAL);
 		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing here
-		}
 	}
 	
 	/**
 	 * Listener for mobile bku selection 
 	 */
-	private final class MobileSelectionListener implements SelectionListener {
-		
+	private final class MobileSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor
+		 * Empty constructor
 		 */
 		public MobileSelectionListener() {
-			// Nothing here
 		}
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			log.debug("Setting BKU to MOBILE"); //$NON-NLS-1$
 			setSelected(BKUs.MOBILE);
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing here
 		}
 	}
 

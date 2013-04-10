@@ -20,6 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -28,12 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 
 /**
  * 
@@ -42,8 +41,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class OkSelectionListener implements SelectionListener {
-		
+	private final class OkSelectionListener extends SelectionAdapter {
 		/**
 		 * Regular expression for mobile phone numbers:
 		 * this allows the entrance of mobile numbers in the following formats:
@@ -56,15 +54,13 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		private static final String NUMBER_REGEX = "^((\\+[\\d]{2})|(00[\\d]{2})|(0)|(10301))([1-9][\\d]+)$"; //$NON-NLS-1$
 
 		/**
-		 * 
+		 * Empty constructor
 		 */
 		public OkSelectionListener() {
-			// Nothing to do here
 		}
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-
 			try {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
@@ -133,11 +129,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				return;
 			}
 			MobileBKUEnterNumberComposite.this.state.updateStateMachine();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do!
 		}
 	}
 

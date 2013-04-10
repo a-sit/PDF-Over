@@ -21,8 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -49,13 +49,11 @@ public class OutputComposite extends StateComposite {
 	/**
 	 * SelectionListener for save button
 	 */
-	private final class SaveSelectionListener implements SelectionListener {
-		
+	private final class SaveSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor 
+		 * Empty constructor
 		 */
 		public SaveSelectionListener() {
-			// Nothing to do
 		}
 
 		@Override
@@ -83,23 +81,16 @@ public class OutputComposite extends StateComposite {
 				log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
 			}
 		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing todo
-		}
 	}
 
 	/**
-	 * Selection Listner for open button
+	 * Selection Listener for open button
 	 */
-	private final class OpenSelectionListener implements SelectionListener {
-		
+	private final class OpenSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor
+		 * Empty constructor
 		 */
 		public OpenSelectionListener() {
-			// Nothing to do
 		}
 
 		@Override
@@ -130,11 +121,6 @@ public class OutputComposite extends StateComposite {
 			} catch (Exception ex) {
 				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
 			}
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing todo
 		}
 	}
 

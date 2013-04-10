@@ -22,8 +22,8 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -48,12 +48,11 @@ public class MainWindow {
 	/**
 	 * Selection Listener for Position Button
 	 */
-	private final class PositionSelectionListener implements SelectionListener {
+	private final class PositionSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor
+		 * Empty constructor
 		 */
 		public PositionSelectionListener() {
-			// Nothing to do here
 		}
 
 		@Override
@@ -61,23 +60,16 @@ public class MainWindow {
 			MainWindow.this.stateMachine.jumpToState(new PositioningState(
 					MainWindow.this.stateMachine));
 		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do here
-		}
 	}
 
 	/**
 	 * Selection Listener for Open Button
 	 */
-	private final class DataSourceSelectionListener implements
-			SelectionListener {
+	private final class DataSourceSelectionListener extends SelectionAdapter {
 		/**
-		 * Default constructor
+		 * Empty constructor
 		 */
 		public DataSourceSelectionListener() {
-			// Nothing to do here
 		}
 
 		@Override
@@ -85,11 +77,6 @@ public class MainWindow {
 			MainWindow.this.stateMachine
 					.jumpToState(new OpenState(
 							MainWindow.this.stateMachine));
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do here
 		}
 	}
 
@@ -108,6 +95,9 @@ public class MainWindow {
 	private Button btn_open;
 	private Button btn_config;
 
+	/**
+	 * Main bar Buttons
+	 */
 	public enum Buttons {
 		CONFIG, OPEN, POSITION, SIGN, FINAL
 	}

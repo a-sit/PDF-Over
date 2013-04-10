@@ -17,8 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -35,9 +35,9 @@ public class ErrorComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class OkSelectionListener implements SelectionListener {
+	private final class OkSelectionListener extends SelectionAdapter {
 		/**
-		 * 
+		 * Empty constructor
 		 */
 		public OkSelectionListener() {
 		}
@@ -46,11 +46,6 @@ public class ErrorComposite extends StateComposite {
 		public void widgetSelected(SelectionEvent e) {
 			ErrorComposite.this.userOk = true;
 			ErrorComposite.this.state.updateStateMachine();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do
 		}
 	}
 

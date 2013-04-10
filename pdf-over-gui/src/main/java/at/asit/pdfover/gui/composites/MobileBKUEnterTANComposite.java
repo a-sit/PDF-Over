@@ -16,23 +16,20 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.states.State;
-
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
 
 /**
  * 
@@ -41,12 +38,11 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class OkSelectionListener implements SelectionListener {
+	private final class OkSelectionListener extends SelectionAdapter {
 		/**
-		 * 
+		 * Empty constructor
 		 */
 		public OkSelectionListener() {
-			// Nothing to do
 		}
 
 		@Override
@@ -70,11 +66,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			MobileBKUEnterTANComposite.this.tan = tan;
 			MobileBKUEnterTANComposite.this.setUserAck(true);
 			MobileBKUEnterTANComposite.this.state.updateStateMachine();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do			
 		}
 	}
 
