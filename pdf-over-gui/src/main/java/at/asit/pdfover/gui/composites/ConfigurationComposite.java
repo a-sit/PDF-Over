@@ -475,6 +475,7 @@ public class ConfigurationComposite extends StateComposite {
 		if (ctrl instanceof StateComposite) {
 			((StateComposite) ctrl).doLayout();
 		}
+		this.setFocus();
 	}
 
 	/* (non-Javadoc)
