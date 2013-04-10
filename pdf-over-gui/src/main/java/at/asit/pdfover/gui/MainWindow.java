@@ -173,7 +173,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(1024, 768);
+		getShell().setSize(550, 768);
 		try {
 			Display display = new Display();
 			Monitor primary = display.getPrimaryMonitor();
