@@ -22,11 +22,6 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -52,7 +47,6 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
 import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 
 /**
  * Composite which allows to position the signature on a preview of the document
@@ -65,8 +59,6 @@ public class PositioningComposite extends StateComposite {
 			.getLogger(PositioningComposite.class);
 
 	private SignaturePanel viewer = null;
-
-	private PDFFile pdf = null;
 
 	private Frame frame = null;
 
@@ -167,39 +159,18 @@ public class PositioningComposite extends StateComposite {
 	 * 
 	 * @param document
 	 *            document to display
-	 * @throws IOException
-	 *             I/O Error
 	 */
-	public void displayDocument(File document) throws IOException {
-		RandomAccessFile rafile = new RandomAccessFile(document, "r"); //$NON-NLS-1$
-		FileChannel chan = rafile.getChannel();
-		ByteBuffer buf = chan
-				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
-		chan.close();
-		rafile.close();
-		try
-		{
-			this.pdf = new PDFFile(buf);
-		}
-		catch (PDFAuthenticationFailureException e) {
-			throw new IOException(Messages.getString("error.PDFPwdProtected"), e); //$NON-NLS-1$
-		}
-		catch (IOException e) {
-			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
-		}
-		if (this.pdf.getDefaultDecrypter().isEncryptionPresent())
-			throw new IOException(Messages.getString("error.PDFProtected")); //$NON-NLS-1$
-
+	public void displayDocument(PDFFile document) {
 		if (this.viewer == null) {
-			this.viewer = new SignaturePanel(this.pdf);
+			this.viewer = new SignaturePanel(document);
 			this.frame.add(this.viewer, BorderLayout.CENTER);
 			this.viewer.setSignaturePlaceholderBorderColor(new Color(
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
 					Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
 		} else
-			this.viewer.setDocument(this.pdf);
-		this.numPages = this.pdf.getNumPages();
+			this.viewer.setDocument(document);
+		this.numPages = document.getNumPages();
 		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 		showPage(this.numPages);
 	}

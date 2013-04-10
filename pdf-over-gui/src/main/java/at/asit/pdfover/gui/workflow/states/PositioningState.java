@@ -16,7 +16,11 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
@@ -25,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.PositioningComposite;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -34,6 +38,9 @@ import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
+
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 
 /**
  * Decides where to position the signature block
@@ -57,12 +64,39 @@ public class PositioningState extends State {
 
 	private SignaturePosition previousPosition = null;
 
-	private PositioningComposite getPositioningComposite() throws IOException {
+	private File previousDocument = null;
+
+	private PDFFile document = null;
+
+	private PDFFile getPDFDocument() throws IOException {
+		PDFFile pdf = null;
+		RandomAccessFile rafile = new RandomAccessFile(this.stateMachine.getStatus().getDocument(), "r"); //$NON-NLS-1$
+		FileChannel chan = rafile.getChannel();
+		ByteBuffer buf = chan
+				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
+		chan.close();
+		rafile.close();
+		try
+		{
+			pdf = new PDFFile(buf);
+		}
+		catch (PDFAuthenticationFailureException e) {
+			throw new IOException(Messages.getString("error.PDFPwdProtected"), e); //$NON-NLS-1$
+		}
+		catch (IOException e) {
+			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
+		}
+		if (pdf.getDefaultDecrypter().isEncryptionPresent())
+			throw new IOException(Messages.getString("error.PDFProtected")); //$NON-NLS-1$
+		return pdf;
+	}
+
+	private PositioningComposite getPositioningComposite(PDFFile document) {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
 			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument()); //$NON-NLS-1$
-			this.positionComposite.displayDocument(this.stateMachine.getStatus().getDocument());
+			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
 		SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
@@ -98,10 +132,13 @@ public class PositioningState extends State {
 			status.setSignaturePosition(null);
 		}
 
-		if(status.getSignaturePosition() == null) {
-			PositioningComposite position = null;
+		if ((this.document == null) ||
+				(this.previousDocument != this.stateMachine.getStatus().getDocument())) {
+			this.document = null;
+			log.debug("Checking PDF document for encryption"); //$NON-NLS-1$
 			try {
-				position = this.getPositioningComposite();
+				this.document = getPDFDocument();
+				this.previousDocument = this.stateMachine.getStatus().getDocument();
 			} catch (IOException e) { 
 				this.positionComposite = null;
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
@@ -112,9 +149,9 @@ public class PositioningState extends State {
 						this.stateMachine.getGUIProvider().getMainShell(), 
 						message, BUTTONS.RETRY_CANCEL);
 				if(dialog.open() == SWT.RETRY) {
-					this.stateMachine.update();
+					run();
 				} else {
-					this.setNextState(new OpenState(this.stateMachine));
+					setNextState(new OpenState(this.stateMachine));
 				}
 				return;
 			} catch(Exception ex) {
@@ -123,14 +160,15 @@ public class PositioningState extends State {
 						this.stateMachine.getGUIProvider().getMainShell(), 
 						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK); //$NON-NLS-1$
 				dialog.open();
-				
 				status.setSignaturePosition(new SignaturePosition());
-				
 				this.setNextState(new BKUSelectionState(this.stateMachine));
-				
 				return;
 			}
-			
+		}
+
+		if (status.getSignaturePosition() == null) {
+			PositioningComposite position = this.getPositioningComposite(this.document);
+
 			this.stateMachine.getGUIProvider().display(position);
 			
 			status.setSignaturePosition(position.getPosition());
@@ -168,7 +206,7 @@ public class PositioningState extends State {
 	}
 
 	@Override
-	public String toString()  {
+	public String toString() {
 		return this.getClass().getName();
 	}
 }
