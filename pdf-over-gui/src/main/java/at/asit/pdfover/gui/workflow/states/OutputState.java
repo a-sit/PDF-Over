@@ -99,8 +99,8 @@ public class OutputState extends State {
 						output.close();
 					} catch (IOException e) {
 						log.error("Failed to save signed document to configured output folder.", e); //$NON-NLS-1$
-						ErrorDialog dialog = new ErrorDialog(outputComposite.getShell(), SWT.NONE, 
-								Messages.getString("error.SaveOutputFolder"), e, false); //$NON-NLS-1$
+						ErrorDialog dialog = new ErrorDialog(outputComposite.getShell(), 
+								Messages.getString("error.SaveOutputFolder"), false); //$NON-NLS-1$
 						dialog.open();
 					}
 				}

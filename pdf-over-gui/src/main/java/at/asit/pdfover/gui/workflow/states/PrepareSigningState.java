@@ -154,7 +154,7 @@ public class PrepareSigningState extends State {
 		
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE, Messages.getString("error.PrepareDocument"), this.threadException, //$NON-NLS-1$
+					Messages.getString("error.PrepareDocument"),  //$NON-NLS-1$
 					true);
 			this.threadException = null;
 			if(error.open()) {

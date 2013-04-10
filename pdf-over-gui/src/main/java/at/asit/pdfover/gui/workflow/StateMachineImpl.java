@@ -88,7 +88,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			} catch (Exception e) {
 				log.error("StateMachine update: ", e); //$NON-NLS-1$
 				ErrorDialog errorState = new ErrorDialog(this.getMainShell(), 
-						SWT.NONE, Messages.getString("error.Unexpected"), e, false); //$NON-NLS-1$
+						Messages.getString("error.Unexpected"), false); //$NON-NLS-1$
 				//errorState.setException(e);
 				//jumpToState(errorState);
 				errorState.open();

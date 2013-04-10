@@ -88,7 +88,7 @@ public class SigningState extends State {
 		
 		if(this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE, Messages.getString("error.Signatur"), this.threadException, true);  //$NON-NLS-1$
+					Messages.getString("error.Signatur"), true);  //$NON-NLS-1$
 			this.threadException = null;
 			if(error.open()) {
 				this.setNextState(new BKUSelectionState(this.stateMachine));

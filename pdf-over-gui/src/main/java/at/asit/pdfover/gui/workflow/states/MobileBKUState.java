@@ -152,8 +152,7 @@ public class MobileBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(
 					this.stateMachine.getGUIProvider().getMainShell(),
-					SWT.NONE,
-					Messages.getString("error.Unexpected"), this.threadException, false); //$NON-NLS-1$
+					Messages.getString("error.Unexpected"), false); //$NON-NLS-1$
 			// error.setException(this.threadException);
 			// this.setNextState(error);
 			error.open();

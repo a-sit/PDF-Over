@@ -711,8 +711,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			setEmblemFile(filename);
 		} catch (Exception ex) {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), SWT.NONE,
-					Messages.getString("error.FailedToLoadEmblem"), ex, false); //$NON-NLS-1$
+			ErrorDialog dialog = new ErrorDialog(getShell(),
+					Messages.getString("error.FailedToLoadEmblem"), false); //$NON-NLS-1$
 			dialog.open();
 		}
 	}
@@ -866,8 +866,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						SWT.NONE,
-						Messages.getString("error.FailedToLoadEmblem"), e1, false); //$NON-NLS-1$
+						Messages.getString("error.FailedToLoadEmblem"), false); //$NON-NLS-1$
 				dialog.open();
 			}
 		}

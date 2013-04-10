@@ -170,9 +170,9 @@ public class LocalBKUState extends State {
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
-					this.stateMachine.getGUIProvider().getMainShell(), SWT.NONE,
+					this.stateMachine.getGUIProvider().getMainShell(), 
 					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
-					this.threadException, true);
+					true);
 			if (!dialog.open()) {
 				this.stateMachine.exit();
 				return;

@@ -243,9 +243,9 @@ public class PrepareConfigurationState extends State {
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
 			ErrorDialog error = new ErrorDialog(this.stateMachine
-					.getGUIProvider().getMainShell(), SWT.NONE,
+					.getGUIProvider().getMainShell(), 
 					Messages.getString("error.Initialization"), //$NON-NLS-1$
-					e, false);
+					false);
 			// error.setException(e);
 			// this.setNextState(error);
 			error.open();
