@@ -20,16 +20,18 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DragDetectEvent;
+import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.icepdf.core.exceptions.PDFException;
@@ -53,9 +55,14 @@ public class PositioningComposite extends StateComposite {
 
 	PDFViewerComposite viewer = null;
 
-	private Canvas signature = null;
+	Canvas signature = null;
 
 	private SignaturePosition position = null;
+
+	boolean doDrag = false;
+
+	Point origMousePos = null;
+	Rectangle origSigPos = null;
 
 	/**
 	 * Gets the position of the signature
@@ -93,10 +100,8 @@ public class PositioningComposite extends StateComposite {
 	void resizeViewer()
 	{
 		Rectangle clientArea = this.getClientArea();
-		log.debug("Resizing to 0,0," + clientArea.width + "," + clientArea.height);
+		log.debug("Resizing to " + clientArea.width + "x" + clientArea.height);
 		this.viewer.setBounds(0, 0, clientArea.width, clientArea.height);
-
-		this.signature.setBounds(clientArea.width - 250, clientArea.height -200, 150, 40);
 	}
 
 	/**
@@ -111,27 +116,52 @@ public class PositioningComposite extends StateComposite {
 
 		this.addListener(SWT.Resize, new Listener() {
 			@Override
-			public void handleEvent(Event arg0) {
+			public void handleEvent(Event e) {
 				if (PositioningComposite.this.viewer != null)
 					resizeViewer();
 			}
 		});
 
 		this.signature = new Canvas(this, SWT.NO_BACKGROUND);
+		this.signature.setBounds(200, 200, 150, 40);
 		this.signature.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				PositioningComposite.this.viewer.redraw();
+//				PositioningComposite.this.viewer.redraw();
 				Rectangle r = ((Canvas) e.widget).getBounds();
-				e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_RED));
-//				e.gc.setB
+				e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_BLUE));
 				e.gc.drawFocus(5, 5, r.width - 10, r.height - 10);
 				e.gc.drawText("Position Signature", 10, 10);
 			}
 		});
+		this.signature.addDragDetectListener(new DragDetectListener() {
+			@Override
+			public void dragDetected(DragDetectEvent e) {
+				PositioningComposite.this.doDrag = true;
+				origMousePos = Display.getCurrent().getCursorLocation();
+				origSigPos = ((Canvas) e.widget).getBounds();
+			}
+		});
+		this.signature.addMouseMoveListener(new MouseMoveListener() {
+			@Override
+			public void mouseMove(MouseEvent e) {
+				if (PositioningComposite.this.doDrag)
+				{
+					Point newMousePos = Display.getCurrent().getCursorLocation();
+					int x = origSigPos.x + (newMousePos.x - origMousePos.x);
+					int y = origSigPos.y + (newMousePos.y - origMousePos.y);
+					PositioningComposite.this.signature.setBounds(x, y, origSigPos.width, origSigPos.height);
+				}
+			}
+		});
 		this.signature.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
+				if (PositioningComposite.this.doDrag)
+				{
+					PositioningComposite.this.doDrag = false;
+					return;
+				}
 				// TODO: FIX to get real position
 				PositioningComposite.this.setPosition(new SignaturePosition()); // Setting auto position for testing
 				PositioningComposite.this.state.updateStateMachine();
@@ -149,7 +179,6 @@ public class PositioningComposite extends StateComposite {
 	 */
 	@Override
 	public void doLayout() {
-		
 		this.layout(true, true);
 	}
 }
