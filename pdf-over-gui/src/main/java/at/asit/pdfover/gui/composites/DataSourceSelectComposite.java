@@ -209,8 +209,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error(Messages.getString("common.file") + " " + files[0] + //$NON-NLS-1$ //$NON-NLS-2$
-									Messages.getString("common.file_not_exists")); //$NON-NLS-1$
+							log.error(String.format(Messages.getString("error.FileNotExist"), files[0])); //$NON-NLS-1$
 							return;
 						}
 						DataSourceSelectComposite.this.setSelected(file);
