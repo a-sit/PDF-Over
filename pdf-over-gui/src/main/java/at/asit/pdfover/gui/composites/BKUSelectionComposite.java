@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.Messages;
+import at.asit.pdfover.gui.controls.ClickableCanvas;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 
@@ -121,61 +123,81 @@ public class BKUSelectionComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 		
+		ClickableCanvas cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
+		FormData fd_cc_mobile = new FormData();
+		fd_cc_mobile.right = new FormAttachment(50, -5);
+		fd_cc_mobile.top = new FormAttachment(40, -20);
+		cc_mobile.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
+				setSelected(BKUs.MOBILE);
+			}
+			
+			@Override
+			public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
+				// Nothing to do here
+			}
+		});
+		cc_mobile.setLayoutData(fd_cc_mobile);
 		
-		Button btn_mobile = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		//btn_mobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
-		//Point mobile_size = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		FormData fd_btn_mobile = new FormData();
-		//fd_btn_mobile.left = new FormAttachment(40, 0);
-		fd_btn_mobile.right = new FormAttachment(50, -5);
-		fd_btn_mobile.top = new FormAttachment(40, -20);
-		//fd_btn_mobile.bottom = new FormAttachment(55, 0);
-		btn_mobile.setLayoutData(fd_btn_mobile);
-		btn_mobile.addSelectionListener(new MobileSelectionListener());
-
 		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/handy.gif"))); //$NON-NLS-1$
+		cc_mobile.setImage(mobile);
+		FontData[] fD_cc_mobile = cc_mobile.getFont().getFontData();
+		fD_cc_mobile[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		cc_mobile.setFont(new Font(Display.getCurrent(), fD_cc_mobile[0]));
 		
-		btn_mobile.setImage(mobile);
-		
-		FontData[] fD_btn_mobile = btn_mobile.getFont().getFontData();
-		fD_btn_mobile[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btn_mobile.setFont(new Font(Display.getCurrent(), fD_btn_mobile[0]));
-		
-		Button btn_card = new Button(this, SWT.NATIVE | SWT.RESIZE);
-		//btn_card.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
-		//Point card_size = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		FormData fd_btn_card = new FormData();
-		fd_btn_card.left = new FormAttachment(50, 5);
-		//fd_btn_card.right = new FormAttachment(60, 0);
-		fd_btn_card.top = new FormAttachment(40, -20);
-		//fd_btn_card.bottom = new FormAttachment(55, 0);
-		btn_card.setLayoutData(fd_btn_card);
-		btn_card.addSelectionListener(new LocalSelectionListener());
-		
-		FontData[] fD_btn_card = btn_card.getFont().getFontData();
-		fD_btn_card[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		btn_card.setFont(new Font(Display.getCurrent(), fD_btn_card[0]));
+		ClickableCanvas cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
+		FormData fd_cc_karte = new FormData();
+		fd_cc_karte.left = new FormAttachment(50, 5);
+		fd_cc_karte.top = new FormAttachment(40, -20);
+		cc_karte.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
+				setSelected(BKUs.LOCAL);
+			}
+			
+			@Override
+			public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
+				// Nothing to do here
+			}
+		});
+		cc_karte.setLayoutData(fd_cc_karte);
 		
 		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream("/img/karte.gif"))); //$NON-NLS-1$
 		
-		btn_card.setImage(karte);
+		cc_karte.setImage(karte);
+		FontData[] fD_cc_karte = cc_mobile.getFont().getFontData();
+		fD_cc_karte[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		cc_mobile.setFont(new Font(Display.getCurrent(), fD_cc_karte[0]));
 		
 		this.btnMobile = new Button(this, SWT.NONE);
 		FormData fd_btnMobile = new FormData();
-		fd_btnMobile.top = new FormAttachment(btn_mobile, 10);
+		fd_btnMobile.top = new FormAttachment(cc_mobile, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnMobile.right = new FormAttachment(50, -5);
-		fd_btnMobile.width = btn_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		fd_btnMobile.width = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		this.btnMobile.setLayoutData(fd_btnMobile);
 		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
 		this.btnMobile.addSelectionListener(new MobileSelectionListener());
 		
 		this.btnCard = new Button(this, SWT.NONE);
 		FormData fd_btnCard = new FormData();
-		fd_btnCard.top = new FormAttachment(btn_card, 10);
+		fd_btnCard.top = new FormAttachment(cc_karte, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnCard.left = new FormAttachment(50, 5);
-		fd_btnCard.width = btn_card.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		fd_btnCard.width = cc_karte.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		this.btnCard.setLayoutData(fd_btnCard);
 		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
 		this.btnCard.addSelectionListener(new LocalSelectionListener());

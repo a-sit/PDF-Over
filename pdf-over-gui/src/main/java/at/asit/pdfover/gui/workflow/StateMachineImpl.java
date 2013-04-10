@@ -135,7 +135,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	public void invokeUpdate() {
 		if (this.display != null) {
 			this.display.asyncExec(new Runnable() {
-
 				@Override
 				public void run() {
 					StateMachineImpl.this.update();
