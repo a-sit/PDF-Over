@@ -191,7 +191,7 @@ public class MainWindow {
 		getShell().setSize(1024, 768);
 		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 
-		ImageData data = new ImageData(this.getClass().getResourceAsStream("/img/icon.png"));//$NON-NLS-1$
+		ImageData data = new ImageData(this.getClass().getResourceAsStream("/icons/icon.png"));//$NON-NLS-1$
 		Image shellicon = new Image(this.shell.getDisplay(), data);
 		
 		this.shell.setImage(shellicon);
