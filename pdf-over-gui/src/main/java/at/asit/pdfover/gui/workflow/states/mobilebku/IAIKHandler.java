@@ -25,9 +25,15 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.controls.Dialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
@@ -43,12 +49,16 @@ public class IAIKHandler extends MobileBKUHandler {
 	private static final Logger log = LoggerFactory
 			.getLogger(IAIKHandler.class);
 
+	Shell shell;
+
 	/**
 	 * Constructor
 	 * @param state the MobileBKUState
+	 * @param shell the Shell
 	 */
-	public IAIKHandler(MobileBKUState state) {
+	public IAIKHandler(MobileBKUState state, Shell shell) {
 		super(state);
+		this.shell = shell;
 	}
 
 	/* (non-Javadoc)
@@ -261,21 +271,28 @@ public class IAIKHandler extends MobileBKUHandler {
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 			getState().setCommunicationState(MobileBKUCommunicationState.FINAL);
 		} else {
-			String errorMessage;
 			try {
-				errorMessage = MobileBKUHelper.extractTag(responseData,
+				String errorMessage = MobileBKUHelper.extractTag(responseData,
 						":errorMessage\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
+				getStatus().setErrorMessage(errorMessage);
 			} catch (Exception e) {
-				errorMessage = Messages.getString("error.Unexpected"); //$NON-NLS-1$
-				// move to POST_REQUEST
-				getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+				// Assume that wrong TAN was entered too many times
+				Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog dialog = new Dialog(IAIKHandler.this.shell, Messages.getString("common.warning"), //$NON-NLS-1$
+								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
+								BUTTONS.OK_CANCEL, ICON.QUESTION);
+						if (dialog.open() == SWT.CANCEL) {
+							// Cancel
+							getState().setCommunicationState(MobileBKUCommunicationState.CANCEL);
+						} else {
+							// move to POST_REQUEST again
+							getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+						}
+					}
+				});
 			}
-			getStatus().setErrorMessage(errorMessage);
-
-//			if (getStatus().getTanTries() <= 0) {
-//				// move to POST_REQUEST
-//				getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
-//			}
 		}
 	}
 
