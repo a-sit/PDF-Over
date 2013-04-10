@@ -241,6 +241,11 @@ public class PositioningComposite extends StateComposite {
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
+			// Workaround for Windows: Scrollbar always gets the event
+			if (System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
+				return;
+
+			// Workaround for Linux: Events fire twice
 			if (e.getWhen() == this.lastEventTime)
 				return;
 			this.lastEventTime = e.getWhen();
