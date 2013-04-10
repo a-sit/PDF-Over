@@ -1,1 +1,1 @@
-..\Uninstaller\uninstaller.jar
+Uninstaller\uninstaller.jar
