@@ -117,6 +117,8 @@ public class PDFASSigner implements Signer {
 			throw new SignatureException(e);
 		} catch (PdfAsException e) {
 			throw new SignatureException(e);
+		} catch (Throwable t) {
+			throw new SignatureException(t);
 		}
 	}
 
