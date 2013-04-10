@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui;
+package at.asit.pdfover.utils;
 
 // Imports
 import java.awt.image.BufferedImage;

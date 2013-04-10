@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Messages;
-import at.asit.pdfover.gui.Unzipper;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
 import at.asit.pdfover.gui.cliarguments.ConfigFileArgument;
@@ -45,6 +44,7 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.signator.Signator;
+import at.asit.pdfover.utils.Unzipper;
 
 /**
  * Starting state of workflow proccess

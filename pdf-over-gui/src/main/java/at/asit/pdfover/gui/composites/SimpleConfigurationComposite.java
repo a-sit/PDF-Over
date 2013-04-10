@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.ImageConverter;
 import at.asit.pdfover.gui.Messages;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
@@ -67,6 +66,7 @@ import at.asit.pdfover.gui.workflow.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.utils.ImageConverter;
 
 /**
  * 
