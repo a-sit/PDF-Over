@@ -28,7 +28,7 @@ public class SLResponse {
 	 * SFL4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(Signator.class);
+	private static Logger log = LoggerFactory.getLogger(SLResponse.class);
 	
 	private String response;
 	private String server;
