@@ -25,8 +25,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -53,14 +53,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class FileBrowseDialog implements SelectionListener {
-		/**
-		 * 
-		 */
-		public FileBrowseDialog() {
-			// Nothing to do here
-		}
-
+	private final class FileBrowseDialogListener extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(DataSourceSelectComposite.this.getShell(), SWT.OPEN);
@@ -74,11 +67,6 @@ public class DataSourceSelectComposite extends StateComposite {
 					DataSourceSelectComposite.this.setSelected(file);
 				}
 			}
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do here
 		}
 	}
 
@@ -241,7 +229,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		fd_btn_open.bottom = new FormAttachment(100, -5);
 		btn_open.setLayoutData(fd_btn_open);
 		btn_open.setBackground(back);
-		btn_open.addSelectionListener(new FileBrowseDialog());
+		btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();
 
 		/*
