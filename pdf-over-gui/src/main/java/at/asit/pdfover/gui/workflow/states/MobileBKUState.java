@@ -15,57 +15,39 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
-//Imports
-import org.eclipse.swt.SWT;
+// Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.components.PositioningComposite;
 import at.asit.pdfover.gui.workflow.Workflow;
 import at.asit.pdfover.gui.workflow.WorkflowState;
 
 /**
- * Decides where to position the signature block
+ * Logical state for performing the BKU Request to the A-Trust Mobile BKU
  */
-public class PositioningState extends WorkflowState {
-
+public class MobileBKUState extends WorkflowState {
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
-			.getLogger(PositioningState.class);
+			.getLogger(MobileBKUState.class);
 
-	private PositioningComposite positionComposite = null;
-
-	private PositioningComposite getPositioningComosite(Workflow workflow) {
-		if (this.positionComposite == null) {
-			this.positionComposite = new PositioningComposite(
-					workflow.getComposite(), SWT.NONE, workflow);
-		}
-
-		return this.positionComposite;
-	}
-
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui.workflow.Workflow)
+	 */
 	@Override
 	public void update(Workflow workflow) {
 		// TODO Auto-generated method stub
-		PositioningComposite position = this.getPositioningComosite(workflow);
 		
-		workflow.setTopControl(position);
-		
-		this.setNextState(new BKUSelectionState());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.WorkflowState#hideGUI()
 	 */
 	@Override
 	public void hideGUI() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }
