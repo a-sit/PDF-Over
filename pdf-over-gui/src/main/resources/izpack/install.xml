@@ -9,7 +9,7 @@
 		<javaversion>1.6</javaversion>
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)"
-				email="office@a-sit.at" />
+				email="" />
 		</authors>
 		<uninstaller />
 		<url>http://www.a-sit.at/</url>
