@@ -62,7 +62,6 @@ public class PostSLRequestThread implements Runnable {
 
 		@Override
 		public long getLength() {
-			// TODO Auto-generated method stub
 			return this.source.getLength();
 		}
 

@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signator.SignatureDimension;
-import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.api.io.DataSource;
@@ -113,53 +112,62 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	 * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholder()
 	 */
 	@Override
-	public Image getPlaceholder() throws SignatureException {
+	public Image getPlaceholder() {
 
-		try
-		{
+		try {
 			PDFASHelper.getPdfAs();
-	
+
 			SignatureObject sign_obj = at.knowcenter.wag.egov.egiz.PdfAS
 					.createSignatureObjectFromType(PDFASSigner.PROFILE_ID);
-	
+
 			sign_obj.fillValues(' ', true, false);
 			sign_obj.setKZ(BinarySignator_1_1_0.MY_ID);
-	
+
 			float width = getPlaceholderDimension().getWidth();
 			float height = getPlaceholderDimension().getHeight();
-	
+
 			Table table = sign_obj.getAbstractTable();
-	
+
 			table.getStyle().getBgColor();
-	
+
 			log.info(table.toString());
-	
-			float[] heights = this.getTableHeights(table, table.getStyle(), height);
-	
+
+			float[] heights = this.getTableHeights(table, table.getStyle(),
+					height);
+
 			log.info("Width: " + width + " Height: " + height);
 			BufferedImage image = new BufferedImage((int) width, (int) height,
 					BufferedImage.TYPE_INT_RGB);
 			Graphics graphic = image.getGraphics();
-	
+
 			graphic.setColor(table.getStyle().getBgColor());
 			graphic.fillRect(0, 0, (int) width, (int) height);
-	
+
 			graphic.setColor(Color.black);
 			graphic.drawRect(0, 0, (int) width, (int) height);
-	
+
 			this.drawTable(0, 0, (int) width, (int) height, table,
 					table.getStyle(), graphic, heights);
-	
-			save(image, "jpg");
-	
+
+			//save(image, "png");
+
 			return image;
-		}
-			catch (Exception ex) {
-				log.error("Failed to create Placeholder!", ex);
-				throw new SignatureException(ex.getMessage());
+		} catch (Exception ex) {
+			try {
+				return ImageIO.read(PdfAsSignatureParameter.class
+						.getResourceAsStream("/img/fallbackPlaceholder.png"));
+			} catch (IOException e) {
+				return new BufferedImage(getPlaceholderDimension().getWidth(), getPlaceholderDimension().getHeight(), BufferedImage.TYPE_INT_RGB);
+			}
 		}
 	}
 
+	/**
+	 * used for debugging ..
+	 * @param image
+	 * @param ext
+	 */
+	@SuppressWarnings("unused")
 	private static void save(BufferedImage image, String ext) {
 		String fileName = "savingAnImage";
 		File file = new File(fileName + "." + ext);
@@ -186,7 +194,9 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	/**
 	 * extracts the value font
-	 * @param style the table style
+	 * 
+	 * @param style
+	 *            the table style
 	 * @return the value font
 	 */
 	@SuppressWarnings("unused")
