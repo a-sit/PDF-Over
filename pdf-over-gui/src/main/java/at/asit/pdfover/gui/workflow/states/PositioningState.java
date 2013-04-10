@@ -154,8 +154,15 @@ public class PositioningState extends State {
 					setNextState(new OpenState(this.stateMachine));
 				}
 				return;
+			}
+		}
+
+		if (status.getSignaturePosition() == null) {
+			PositioningComposite position = null;
+			try {
+				position = this.getPositioningComposite(this.document);
 			} catch(Exception ex) {
-				log.error("Failed to create composite (seems like a mac ...)", ex); //$NON-NLS-1$
+				log.error("Failed to create composite (probably a mac...)", ex); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
 						this.stateMachine.getGUIProvider().getMainShell(), 
 						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK); //$NON-NLS-1$
@@ -164,10 +171,6 @@ public class PositioningState extends State {
 				this.setNextState(new BKUSelectionState(this.stateMachine));
 				return;
 			}
-		}
-
-		if (status.getSignaturePosition() == null) {
-			PositioningComposite position = this.getPositioningComposite(this.document);
 
 			this.stateMachine.getGUIProvider().display(position);
 			
