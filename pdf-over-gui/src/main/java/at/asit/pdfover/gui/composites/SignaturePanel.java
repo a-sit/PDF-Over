@@ -138,6 +138,7 @@ public class SignaturePanel extends JPanel {
 	public void setSignaturePlaceholderBorderColor(Color color) {
 		this.sigPlaceholderBorderColor = color;
 	}
+
 	/**
 	 * Change the currently displayed page
 	 * @param page the number of the page to display
@@ -154,6 +155,17 @@ public class SignaturePanel extends JPanel {
 	 */
 	public void translateSignaturePosition(int sigXOffset, int sigYOffset) {
 		updateSigPos((int) this.sigScreenPos.getX() + sigXOffset, (int) this.sigScreenPos.getY() + sigYOffset);
+	}
+
+	/**
+	 * Set the signature placeholder position
+	 * Call showPage afterwards to update actual position
+	 * @param x the horizontal signature position
+	 * @param y the vertical signature position
+	 */
+	public void setSignaturePosition(float x, float y)
+	{
+		this.sigPagePos = new Point2D.Double(x, y);
 	}
 
 	/**

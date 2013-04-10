@@ -70,15 +70,16 @@ public class PositioningComposite extends StateComposite {
 
 	private Composite mainArea = null;
 
-	private Label lblPage = null;
+	Label lblPage = null;
+
+	ScrollBar scrollbar = null;
+
+	private SignaturePosition position = null;
 
 	int currentPage = 0;
 
 	int numPages = 0;
 
-	private SignaturePosition position = null;
-
-	ScrollBar scrollbar = null;
 
 	/**
 	 * Create the composite.
@@ -282,7 +283,7 @@ public class PositioningComposite extends StateComposite {
 				PositioningComposite.this.scrollbar.setSelection(
 						PositioningComposite.this.currentPage);
 				PositioningComposite.this.lblPage.setText(String.format(
-						"Page %d of %d",
+						"Page %d of %d", //$NON-NLS-1$
 						PositioningComposite.this.currentPage,
 						PositioningComposite.this.numPages));
 			}
@@ -323,6 +324,17 @@ public class PositioningComposite extends StateComposite {
 				this.viewer.getSignaturePositionY(),
 				this.currentPage);
 		PositioningComposite.this.state.updateStateMachine();
+	}
+
+	/**
+	 * Set the signature position
+	 * @param x the horizontal signature position
+	 * @param y the vertical signature position
+	 * @param page the page the signature is on
+	 */
+	public void setPosition(float x, float y, int page) {
+		showPage(page);
+		this.viewer.setSignaturePosition(x, y);
 	}
 
 	/**

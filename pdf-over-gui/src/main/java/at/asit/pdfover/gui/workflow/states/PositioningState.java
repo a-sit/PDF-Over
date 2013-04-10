@@ -30,6 +30,7 @@ import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Decides where to position the signature block
@@ -51,6 +52,8 @@ public class PositioningState extends State {
 
 	private PositioningComposite positionComposite = null;
 
+	private SignaturePosition previousPosition = null;
+
 	private PositioningComposite getPositioningComposite() throws IOException {
 		if (this.positionComposite == null) {
 			this.positionComposite =
@@ -67,6 +70,11 @@ public class PositioningState extends State {
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
 				this.stateMachine.getConfigProvider().getPlaceholderTransparency());
+		if (this.previousPosition != null)
+			this.positionComposite.setPosition(
+					this.previousPosition.getX(),
+					this.previousPosition.getY(),
+					this.previousPosition.getPage());
 
 		return this.positionComposite;
 	}
@@ -77,6 +85,7 @@ public class PositioningState extends State {
 		if (!(status.getPreviousState() instanceof PositioningState) &&
 			!(status.getPreviousState() instanceof OpenState))
 		{
+			this.previousPosition = status.getSignaturePosition();
 			status.setSignaturePosition(null);
 		}
 
