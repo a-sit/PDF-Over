@@ -17,9 +17,11 @@ package at.asit.pdfover.gui.utils;
 
 // Imports
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +82,15 @@ public class SWTLoader {
 	}
 
 	private static String getSwtJarPath() {
-		String path = SWTLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		int idx = path.lastIndexOf('/');
-		idx = path.lastIndexOf('/', idx - 1);
-		path = path.substring(0, idx + 1);
+		String path = "";
+		try {
+			path = URLDecoder.decode(SWTLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
+			int idx = path.lastIndexOf('/');
+			idx = path.lastIndexOf('/', idx - 1);
+			path = path.substring(0, idx + 1);
+		} catch (UnsupportedEncodingException e) {
+			// Ignore
+		}
 		return path + "lib-swt/";
 	}
 
