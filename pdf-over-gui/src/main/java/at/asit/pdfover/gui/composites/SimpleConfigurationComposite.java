@@ -232,7 +232,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_controlComposite.bottom = new FormAttachment(100, -20);
 		controlComposite.setLayoutData(fd_controlComposite);
 		controlComposite.addPaintListener(new PaintListener() {
-
 			@Override
 			public void paintControl(PaintEvent e) {
 				e.gc.setForeground(Constants.DROP_BORDER_COLOR);
@@ -248,7 +247,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.btnBrowseLogo = new Button(controlComposite, SWT.NONE);
 
-		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE);
+		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE | SWT.CENTER);
 
 		this.lblLogo = new Label(controlComposite, SWT.NATIVE);
 		this.lblLogo.setAlignment(SWT.CENTER);
@@ -257,7 +256,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_lbl_logo.right = new FormAttachment(100, -20);
 		fd_lbl_logo.top = new FormAttachment(0, 20);
 		fd_lbl_logo.bottom = new FormAttachment(this.lblDropLogo, -20);
-
+		fd_lbl_logo.height = 40;
+		fd_lbl_logo.width = 40;
 		this.lblLogo.setLayoutData(fd_lbl_logo);
 
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
