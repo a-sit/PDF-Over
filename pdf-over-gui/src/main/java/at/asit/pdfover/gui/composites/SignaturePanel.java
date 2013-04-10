@@ -340,7 +340,6 @@ public class SignaturePanel extends JPanel {
 						String overlay = Messages.getString("positioning.signature"); //$NON-NLS-1$
 						// Voodoo to get overlay font scale
 						float scale = (((float) this.sigScreenWidth) / this.sigPlaceholder.getWidth(null)) * 150;
-						log.debug(Float.toString(scale));
 						g_phs.setFont(getFont().deriveFont(scale));
 						g_phs.setColor(this.sigPlaceholderBorderColor);
 						Rectangle2D overlay_size = g_phs.getFontMetrics().getStringBounds(overlay, g_phs);
