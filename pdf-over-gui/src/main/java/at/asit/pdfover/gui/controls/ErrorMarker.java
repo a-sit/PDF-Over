@@ -18,11 +18,12 @@ package at.asit.pdfover.gui.controls;
 // Imports
 import java.io.InputStream;
 
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  */
-public class ErrorMarker {
+public class ErrorMarker extends Label {
 
 	/**
 	 * SLF4J Logger instance
@@ -39,89 +40,42 @@ public class ErrorMarker {
 	private static final Logger log = LoggerFactory
 			.getLogger(ErrorMarker.class);
 
-	private Label lbl;
-	
-	/**
-	 * @param parent
-	 * @param style
-	 * @param exception
-	 * @param message
-	 * @param control 
-	 */
-	public ErrorMarker(Composite parent, int style, Throwable exception,
-			String message, Control control) {
-		//super(parent, style);
+	private static final String IMG_PATH = "/img/error.png"; //$NON-NLS-1$
 
-		this.lbl = new Label(parent, style);
-		
-		String imgPath = "/img/error.png"; //$NON-NLS-1$
-
-		InputStream stream = this.getClass().getResourceAsStream(imgPath);
-
-		Point size = control.getSize();
-
-		int width = size.x == 0 ? 32 : size.x;
-		int height = size.y == 0 ? 32 : size.y;
-		
-		this.lbl.setSize(new Point(width, height));
-		
-		this.orig = new Image(this.lbl.getDisplay(), new ImageData(stream).scaledTo(width, height));
-
-		this.lbl.setToolTipText(message);
-		
-		this.lbl.setImage(this.orig);
-	}
-	
-	/**
-	 * Sets the layout data
-	 * @param object the layout data
-	 */
-	public void setLayoutData(Object object) {
-		this.lbl.setLayoutData(object);
-	}
-	
-	/**
-	 * Sets the visibilty
-	 * @param visible the visibilty
-	 */
-	public void setVisible(boolean visible) {
-		this.lbl.setVisible(visible);
-	}
+	Image errorImg;
 
 	/**
-	 * Sets the tooltip text
-	 * @param msg the tooltip text
+	 * Draw an error marker for a faulty entry
+	 * @param parent the parent composite
+	 * @param style the SWT style
+	 * @param message a message describing the error (can be set later through setToolTipText)
 	 */
-	public void setToolTipText(String msg) {
-		this.lbl.setToolTipText(msg);
-	}
-	
-	
-	/**
-	 * Scales the image to the new size
-	 * @param size
-	 */
-	public void resize(Point size) {
-		String imgPath = "/img/error.png"; //$NON-NLS-1$
-
-		InputStream stream = this.getClass().getResourceAsStream(imgPath);
+	public ErrorMarker(Composite parent, int style,
+			String message) {
+		super(parent, style);
 		
-		int width = size.x == 0 ? 32 : size.x;
-		int height = size.y == 0 ? 32 : size.y;
+		InputStream stream = this.getClass().getResourceAsStream(IMG_PATH);
+
+		this.errorImg = new Image(getDisplay(), new ImageData(stream));
+		this.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				Image img = ErrorMarker.this.errorImg;
+				Rectangle imgSize = img.getBounds();
+				Rectangle dstSize = ErrorMarker.this.getBounds();
+				e.gc.fillRectangle(0, 0, dstSize.width, dstSize.height);
+				e.gc.drawImage(img, 0, 0, imgSize.width, imgSize.height,
+						0, 0, dstSize.width, dstSize.height);
+			}
+		});
+
+		setToolTipText(message);
 		
-		this.orig = new Image(this.lbl.getDisplay(), new ImageData(stream).scaledTo(width, height));
-
-		this.lbl.setSize(size);
-		this.lbl.setImage(this.orig);
+		setImage(this.errorImg);
 	}
 
-	/**
-	 * Gets the size of the underlying label
-	 * @return the size
-	 */
-	public Point getSize() {
-		return this.lbl.getSize();
+	@Override
+	protected void checkSubclass() {
+		// Allow subclassing
 	}
-	
-	private Image orig;
 }

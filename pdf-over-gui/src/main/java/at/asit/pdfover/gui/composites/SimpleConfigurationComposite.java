@@ -164,18 +164,18 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtMobileNumber = new Text(compMobileNumerContainer, SWT.BORDER | SWT.RESIZE);
 		this.fd_txtMobileNumber = new FormData();
-		this.fd_txtMobileNumber.top = new FormAttachment(0);
 		this.fd_txtMobileNumber.left = new FormAttachment(0, 5);
 		this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
+		this.fd_txtMobileNumber.top = new FormAttachment(0);
 		this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
 
+
 		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer,
-				SWT.NATIVE, null, "", this.txtMobileNumber); //$NON-NLS-1$
+				SWT.NONE, ""); //$NON-NLS-1$
 		this.txtMobileNumberErrorMarker.setVisible(false);
 		this.fd_txtMobileNumberErrorMarker = new FormData();
-		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
-		this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(100, -32);
 		this.fd_txtMobileNumberErrorMarker.right = new FormAttachment(100);
+		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
 		this.txtMobileNumberErrorMarker
 				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
 
@@ -410,6 +410,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbSignatureLang.left = new FormAttachment(0, 10);
 		fd_cmbSignatureLang.right = new FormAttachment(100, -10);
 		fd_cmbSignatureLang.top = new FormAttachment(0, 10);
+		fd_cmbSignatureLang.bottom = new FormAttachment(100, -10);
 		this.cmbSignatureLang.setLayoutData(fd_cmbSignatureLang);
 
 		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
@@ -563,14 +564,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtProxyHost.setFont(new Font(Display.getCurrent(),
 				fD_txtProxyHost[0]));
 
-		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, null,
-				"", this.txtProxyHost); //$NON-NLS-1$
+		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //$NON-NLS-1$
 
-		FormData fd_marker = new FormData();
-		fd_marker.right = new FormAttachment(100, -32);
-		fd_marker.top = new FormAttachment(0);
+		FormData fd_proxyHostErrorMarker = new FormData();
+		fd_proxyHostErrorMarker.right = new FormAttachment(100);
+		fd_proxyHostErrorMarker.top = new FormAttachment(0);
 
-		this.proxyHostErrorMarker.setLayoutData(fd_marker);
+		this.proxyHostErrorMarker.setLayoutData(fd_proxyHostErrorMarker);
 		this.proxyHostErrorMarker.setVisible(false);
 		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
 
@@ -628,11 +628,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NATIVE,
-				null, "", this.txtProxyPort); //$NON-NLS-1$
+		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //$NON-NLS-1$
 		this.fd_txtProxyPortErrorMarker = new FormData();
+		this.fd_txtProxyPortErrorMarker.right = new FormAttachment(100);
 		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
-		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
 		this.txtProxyPortErrorMarker
 				.setLayoutData(this.fd_txtProxyPortErrorMarker);
 		this.txtProxyPortErrorMarker.setVisible(false);
@@ -647,38 +646,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		// Load localized strings
 		reloadResources();
-
-		this.addListener(SWT.Resize, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-
-				// Number resize with error Marker
-
-				Point numberSize = new Point(
-						SimpleConfigurationComposite.this.txtMobileNumber
-								.getSize().y,
-						SimpleConfigurationComposite.this.txtMobileNumber
-								.getSize().y);
-				SimpleConfigurationComposite.this.txtMobileNumberErrorMarker
-						.resize(numberSize);
-				SimpleConfigurationComposite.this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(
-						100, -1 * numberSize.y);
-				SimpleConfigurationComposite.this.fd_txtMobileNumber.right = new FormAttachment(
-						100, -1 * (numberSize.y + 10));
-
-				Point portSize = new Point(
-						SimpleConfigurationComposite.this.txtProxyPort
-								.getSize().y,
-						SimpleConfigurationComposite.this.txtProxyPort
-								.getSize().y);
-				SimpleConfigurationComposite.this.txtProxyPortErrorMarker
-						.resize(numberSize);
-				SimpleConfigurationComposite.this.fd_txtProxyPortErrorMarker.left = new FormAttachment(
-						100, -1 * portSize.y);
-				SimpleConfigurationComposite.this.fd_txtProxyPort.right = new FormAttachment(
-						100, -1 * (portSize.y + 10));
-			}
-		});
 	}
 
 	/**
