@@ -205,7 +205,7 @@ public class MainWindow {
 		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_config = new FormData();
 		fd_btn_config.bottom = new FormAttachment(100);
-		fd_btn_config.right = new FormAttachment(0, 57);
+		fd_btn_config.right = new FormAttachment(0, 50);
 		fd_btn_config.top = new FormAttachment(0);
 		fd_btn_config.left = new FormAttachment(0);
 		this.btn_config.setLayoutData(fd_btn_config);
@@ -374,6 +374,8 @@ public class MainWindow {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
 		}
 		
+		this.getShell().getDisplay().update();
+		this.mainbar.layout(true, true);
 		this.mainbar.redraw();
 	}
 
