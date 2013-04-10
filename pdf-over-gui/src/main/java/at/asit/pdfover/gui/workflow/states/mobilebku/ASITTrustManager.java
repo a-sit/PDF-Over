@@ -20,13 +20,13 @@ import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -215,9 +215,11 @@ public class ASITTrustManager implements X509TrustManager {
 
 		X509Certificate[] default_certs = this.sunJSSEX509TrustManager.getAcceptedIssuers();
 
-		X509Certificate[] atrust_cerst = this.atrustTrustManager.getAcceptedIssuers();
-		
-		return (X509Certificate[]) ArrayUtils.addAll(default_certs, atrust_cerst);
+		X509Certificate[] atrust_certs = this.atrustTrustManager.getAcceptedIssuers();
+
+		X509Certificate[] all_certs = Arrays.copyOf(default_certs, default_certs.length + atrust_certs.length);
+		System.arraycopy(atrust_certs, 0, all_certs, default_certs.length, atrust_certs.length);
+		return all_certs;
 	}
 
 }
