@@ -57,7 +57,7 @@ public class PrepareConfigurationState extends State {
 	private static final Logger log = LoggerFactory
 			.getLogger(PrepareConfigurationState.class);
 
-	private static String RES_SEPARATOR = "/"; //$NON-NLS-1$
+	private static String RES_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
 
 	private static String FILE_SEPARATOR = File.separator;
 
@@ -104,7 +104,7 @@ public class PrepareConfigurationState extends State {
 					// default value!
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
-								RES_SEPARATOR + filename);
+								RES_PATH + filename);
 						this.stateMachine.getConfigProvider()
 								.loadConfiguration(is);
 
@@ -150,10 +150,11 @@ public class PrepareConfigurationState extends State {
 			InputStream inputStream = null;
 			FileOutputStream pdfOverConfig = null;
 			try {
-				inputStream = this.getClass().getResourceAsStream(
-						RES_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
-				pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
-						+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
+				inputStream = this.getClass().getResourceAsStream(RES_PATH +
+						Constants.DEFAULT_CONFIG_FILENAME);
+				pdfOverConfig = new FileOutputStream(
+						this.stateMachine.getConfigProvider().getConfigurationDirectory() +
+						FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 
 				while ((byteCount = inputStream.read(buffer)) >= 0) {
 					pdfOverConfig.write(buffer, 0, byteCount);
@@ -188,7 +189,7 @@ public class PrepareConfigurationState extends State {
 			pdfOverConfig = null;
 			try {
 				inputStream = this.getClass().getResourceAsStream(
-						RES_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
+						RES_PATH + Constants.DEFAULT_LOG4J_FILENAME);
 				pdfOverConfig = new FileOutputStream(this.stateMachine.getConfigProvider().getConfigurationDirectory()
 						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME);
 
