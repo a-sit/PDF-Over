@@ -70,6 +70,24 @@ public class PositioningComposite extends StateComposite {
 	ScrollBar scrollbar = null;
 
 	/**
+	 * Create the composite.
+	 * @param parent
+	 * @param style
+	 * @param state
+	 */
+	public PositioningComposite(Composite parent, int style, State state) {
+		super(parent, style | SWT.EMBEDDED | SWT.V_SCROLL, state);
+		//this.setLayout(null);
+		this.setBounds(0, 0, 10, 10);
+		this.scrollbar = this.getVerticalBar();
+		this.frame = SWT_AWT.new_Frame(this);
+		this.addKeyListener(this.keyListener);
+		this.frame.addMouseWheelListener(this.mouseListener);
+		this.scrollbar.addSelectionListener(this.selectionListener);
+		requestFocus();
+	}
+
+	/**
 	 * Set the PDF Document to display
 	 * @param document document to display
 	 * @throws IOException I/O Error
@@ -115,23 +133,6 @@ public class PositioningComposite extends StateComposite {
 		if (this.viewer == null)
 			return;
 		this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
-	}
-
-	/**
-	 * Create the composite.
-	 * @param parent
-	 * @param style
-	 * @param state 
-	 */
-	public PositioningComposite(Composite parent, int style, State state) {
-		super(parent, style | SWT.EMBEDDED | SWT.V_SCROLL, state);
-		//this.setLayout(null);
-		this.setBounds(0, 0, 10, 10);
-		this.scrollbar = this.getVerticalBar();
-		this.frame = SWT_AWT.new_Frame(this);
-		this.addKeyListener(this.keyListener);
-		this.frame.addMouseWheelListener(this.mouseListener);
-		this.scrollbar.addSelectionListener(this.selectionListener);
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
