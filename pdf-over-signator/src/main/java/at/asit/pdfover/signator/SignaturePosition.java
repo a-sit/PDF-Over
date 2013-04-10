@@ -1,0 +1,107 @@
+package at.asit.pdfover.signator;
+
+
+/**
+ * Represents the position of a visible signature block
+ */
+public class SignaturePosition {
+	/**
+	 * The x value of the position
+	 */
+	protected float x = 0;
+	
+	/**
+	 * The y value of the position
+	 */
+	protected float y = 0;
+	
+	/**
+	 * The page value of the position
+	 */
+	protected int page = 0;
+	
+	/**
+	 * Whether automatic positioning is used
+	 */
+	protected boolean autoPositioning;
+	
+	/**
+	 * Default constructor
+	 * No position given, hence automatic positioning will be used
+	 */
+	public SignaturePosition() {
+		this.autoPositioning = true;
+	}
+	
+	/**
+	 * X - Y Constructor (Page = 0)
+	 * @param x The x value of the position
+	 * @param y The y value of the position
+	 */
+	public SignaturePosition(float x, float y) {
+		this.autoPositioning = false;
+		setPosition(x, y);
+	}
+	
+	/**
+	 * Constructor
+	 * @param x The x value of the signature position
+	 * @param y The y value of the signature position
+	 * @param page The page value of the signature position
+	 */
+	public SignaturePosition(float x, float y, int page) {
+		this.autoPositioning = false;
+		setPosition(x, y);
+		setPage(page);
+	}
+	
+	/**
+	 * Sets new position
+	 * @param x the new x value
+	 * @param y the new y value
+	 */
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	/**
+	 * Gets the X value of the position
+	 * @return float the x value of the position
+	 */
+	public float getX() {
+		return this.x;
+	}
+
+	/**
+	 * Gets the Y value of the position
+	 * @return float the y value of the position
+	 */
+	public float getY() {
+		return this.y;
+	}
+
+	/**
+	 * Sets Page value of position
+	 * @param page the new page value
+	 */
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	/**
+	 * Gets the Page value of the position
+	 * @return int the page value of the position
+	 */
+	public int getPage() {
+		return this.page;
+	}
+
+	/**
+	 * Gets whether automatic positioning is used
+	 * @return true if the signature position is determined automatically
+	 */
+	public boolean useAutoPositioning() {
+		return this.autoPositioning;
+	}
+}

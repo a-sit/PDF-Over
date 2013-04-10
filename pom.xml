@@ -1,0 +1,145 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>a-sit.at</groupId>
+	<artifactId>pdf-over</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>PDF-Over</name>
+	<description>A tool to sign pdf documents</description>
+	<url>http://www.buergerkarte.at/</url>
+	<inceptionYear>2012</inceptionYear>
+
+	<organization>
+		<name>A-SIT</name>
+		<url>http://a-sit.at/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>tkellner</id>
+			<name>Tobias Kellner</name>
+			<email>tobias.kellner@egiz.gv.at</email>
+			<organization>EGIZ</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>vkrnjic</id>
+			<name>Vesna Krnjic</name>
+			<email>vesna.krnjic@egiz.gv.at</email>
+			<organization>EGIZ</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>afitzek</id>
+			<name>Andreas Fitzek</name>
+			<email>andreas.fitzek@egiz.gv.at</email>
+			<organization>EGIZ</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>EUPL v1.1</name>
+			<url>http://joinup.ec.europa.eu/software/page/eupl/licence-eupl</url>
+			<distribution>manually</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git@abyss.iaik.tugraz.at/home/git/12PDF-OVER-4.0.git/trunk/pdf-over</developerConnection>
+		<connection>scm:svn:https://svn.iaik.tugraz.at/svn/egiz/prj/current/12PDF-OVER-4.0/trunk/pdf-over</connection>
+		<url>https://svn.iaik.tugraz.at/svn/egiz/prj/current/12PDF-OVER-4.0/trunk/pdf-over</url>
+	</scm>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.egovlabs.gv.at/browse/POF</url>
+	</issueManagement>
+
+	<modules>
+		<module>pdf-over-gui</module>
+		<module>pdf-over-signator</module>
+		<module>pdf-over-signer</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.1.2</version>
+				<configuration>
+					<dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>summary</report>
+							<report>license</report>
+							<report>dependencies</report>
+							<report>dependency-management</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>2.5.1</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<verbose>true</verbose>
+						<showWarnings>true</showWarnings>
+						<showDeprecation>true</showDeprecation>
+						<encoding>UTF-8</encoding>
+						<debug>false</debug>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.6.6</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
