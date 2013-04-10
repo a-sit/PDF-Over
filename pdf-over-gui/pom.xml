@@ -134,14 +134,14 @@
 							<outputDirectory>${staging.dir}</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main</directory>
+									<directory>src/main/resources</directory>
 									<includes>
 										<include>scripts/*</include>
 										<include>icons/*</include>
 									</includes>
 								</resource>
 								<resource>
-									<directory>src/main/izpack</directory>
+									<directory>src/main/resources/izpack</directory>
 								</resource>
 							</resources>
 						</configuration>
