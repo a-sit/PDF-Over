@@ -30,10 +30,10 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH/Uninstaller/PDF-Over-Un.exe"
+     target="$INSTALL_PATH/Uninstaller/Uninstaller.exe"
      commandLine=""
      workingDirectory="$INSTALL_PATH/Uninstaller"
-     description="PDF-Over 4.0 Uninstall"
+     description="PDF-Over 4.0 Uninstaller"
      type="Application"
      encoding="UTF-8"
      initialState="minimized">

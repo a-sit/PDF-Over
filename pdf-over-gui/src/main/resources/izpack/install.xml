@@ -60,9 +60,8 @@
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
 			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
-			<file src="PDF-Over.ini" targetdir="$INSTALL_PATH" os="windows"/>
-			<file src="PDF-Over-Un.ini" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
-			<singlefile src="PDF-Over.exe" target="$INSTALL_PATH/Uninstaller/PDF-Over-Un.exe" os="windows"/>
+			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/>
+			<file src="Uninstaller.exe" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
