@@ -18,6 +18,8 @@ package at.asit.pdfover.gui;
 //Imports
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +45,11 @@ public class Main {
 		try {
 			SWTLoader.loadSWT();
 		} catch (InitializationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Could not load SWT libraries", e); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null,
+					Messages.getString("error.SWTLib"), //$NON-NLS-1$
+					Messages.getString("error.TitleFatal"), //$NON-NLS-1$
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$

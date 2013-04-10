@@ -72,7 +72,7 @@ public class ErrorDialog {
 		
 		this.box = new MessageBox(parent, boxstyle);
 		this.box.setMessage(message);
-		this.box.setText(Messages.getString("error.title")); //$NON-NLS-1$
+		this.box.setText(Messages.getString("error.Title")); //$NON-NLS-1$
 	}
 
 	/**
