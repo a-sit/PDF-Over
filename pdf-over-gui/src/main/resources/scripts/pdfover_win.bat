@@ -1,1 +1,1 @@
-@start /b java -cp "lib/*" at.asit.pdfover.gui.Main %*
+@start /b java -jar ..\lib\pdf-over-gui-4.0.0-SNAPSHOT.jar %*
