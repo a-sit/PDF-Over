@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<certificates>
+	<certificate>A-Trust-nQual-01a.crt</certificate>
+	<certificate>A-Trust-nQual-03.crt</certificate>
+	<certificate>mccDemoAuxRoot.crt</certificate>
+	<certificate>mccDemoTLS.crt</certificate>
+</certificates>

@@ -36,12 +36,15 @@ import org.w3c.dom.NodeList;
 /**
  * 
  */
-public class ASITTrustManager implements X509TrustManager {
+public class SimpleXMLTrustManager implements X509TrustManager {
 	/**
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
-			.getLogger(ASITTrustManager.class);
+			.getLogger(SimpleXMLTrustManager.class);
+
+	private static final String certificateList = "/certificates/certificates.xml"; //$NON-NLS-1$
+
 
 	/*
 	 * The default X509TrustManager returned by SunX509. We'll delegate
@@ -60,7 +63,7 @@ public class ASITTrustManager implements X509TrustManager {
 	 * 
 	 * @throws Exception
 	 */
-	public ASITTrustManager() throws Exception {
+	public SimpleXMLTrustManager() throws Exception {
 		// create a "default" JSSE X509TrustManager.
 
 		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509"); //$NON-NLS-1$
@@ -83,16 +86,14 @@ public class ASITTrustManager implements X509TrustManager {
 		 * A-Trust Certificates
 		 */
 
-		KeyStore atrustKeyStore = KeyStore.getInstance(KeyStore
+		KeyStore myKeyStore = KeyStore.getInstance(KeyStore
 				.getDefaultType());
 
-		atrustKeyStore.load(null);
-
-		String usedCertificates = "/certificates/used_certificates.xml"; //$NON-NLS-1$
+		myKeyStore.load(null);
 
 		Document doc = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder()
-				.parse(this.getClass().getResourceAsStream(usedCertificates));
+				.parse(this.getClass().getResourceAsStream(certificateList));
 
 		Node certificates = doc.getFirstChild();
 
@@ -117,7 +118,7 @@ public class ASITTrustManager implements X509TrustManager {
 					continue;
 				}
 
-				String certResource = "/certificates/" + certificateNode.getTextContent() + ".crt"; //$NON-NLS-1$ //$NON-NLS-2$
+				String certResource = "/certificates/" + certificateNode.getTextContent(); //$NON-NLS-1$
 
 				X509Certificate cert = (X509Certificate) CertificateFactory
 						.getInstance("X509"). //$NON-NLS-1$
@@ -125,7 +126,7 @@ public class ASITTrustManager implements X509TrustManager {
 								this.getClass().getResourceAsStream(
 										certResource));
 
-				atrustKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
+				myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
 
 				log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
 
@@ -134,7 +135,7 @@ public class ASITTrustManager implements X509TrustManager {
 			}
 		}
 
-		tmf.init(atrustKeyStore);
+		tmf.init(myKeyStore);
 
 		tms = tmf.getTrustManagers();
 

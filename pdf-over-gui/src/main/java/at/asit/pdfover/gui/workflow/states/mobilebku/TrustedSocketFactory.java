@@ -51,7 +51,7 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 	private static SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
 			KeyManagementException, Exception {
 		SSLContext sslContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
-		sslContext.init(null, new TrustManager[] { new ASITTrustManager() },
+		sslContext.init(null, new TrustManager[] { new SimpleXMLTrustManager() },
 				new java.security.SecureRandom());
 
 		return sslContext.getSocketFactory();
