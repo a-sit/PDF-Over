@@ -17,9 +17,7 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.io.File;
-import java.io.FileNotFoundException;
 
-import org.apache.fontbox.afm.Composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
