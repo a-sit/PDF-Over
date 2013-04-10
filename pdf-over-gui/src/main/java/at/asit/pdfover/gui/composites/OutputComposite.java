@@ -218,10 +218,15 @@ public class OutputComposite extends StateComposite {
 		if (!this.saveFailed && outputFolder != null && !outputFolder.trim().isEmpty()) {
 			// Output folder configured, try to save there
 
-			if(!outputFolder.endsWith(File.separator)) {
-				outputFolder += File.separator;
+			File f = new File(outputFolder);
+			if (f.isDirectory()) {
+				if (!outputFolder.endsWith(File.separator)) {
+					outputFolder += File.separator;
+				}
+				outputFileName = outputFolder + proposedName;
+			} else {
+				outputFileName = outputFolder;
 			}
-			outputFileName = outputFolder + proposedName;
 		} else {
 			// Ask user where to save
 
