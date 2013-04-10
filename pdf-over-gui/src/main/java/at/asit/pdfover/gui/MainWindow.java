@@ -101,6 +101,8 @@ public class MainWindow {
 
 	private FormData mainBarFormData;
 
+	private Composite mainbar;
+
 	/**
 	 * Default constructor
 	 * 
@@ -191,16 +193,16 @@ public class MainWindow {
 
 		getShell().setLayout(new FormLayout());
 
-		Composite composite = new Composite(getShell(), SWT.NONE);
-		composite.setLayout(new FormLayout());
+		this.mainbar = new Composite(getShell(), SWT.NONE);
+		this.mainbar.setLayout(new FormLayout());
 		this.mainBarFormData = new FormData();
 		this.mainBarFormData.left = new FormAttachment(0, 10);
 		this.mainBarFormData.right = new FormAttachment(100, -10);
 		this.mainBarFormData.top = new FormAttachment(0, 10);
 		this.mainBarFormData.bottom = new FormAttachment(0, 67);
-		composite.setLayoutData(this.mainBarFormData);
+		this.mainbar.setLayoutData(this.mainBarFormData);
 
-		this.btn_config = new MainBarRectangleButton(composite, SWT.NONE);
+		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_config = new FormData();
 		fd_btn_config.bottom = new FormAttachment(100);
 		fd_btn_config.right = new FormAttachment(0, 57);
@@ -236,7 +238,7 @@ public class MainWindow {
 		this.btn_config.setImage(new Image(Display.getDefault(), new ImageData(
 				is)));
 
-		this.btn_open = new MainBarStartButton(composite, SWT.NONE);
+		this.btn_open = new MainBarStartButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_open = new FormData();
 		fd_btn_open.bottom = new FormAttachment(100);
 		fd_btn_open.right = new FormAttachment(35, (MainBarButton.SplitFactor / 2));
@@ -265,7 +267,7 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
-		this.btn_position = new MainBarMiddleButton(composite, SWT.NONE);
+		this.btn_position = new MainBarMiddleButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_position = new FormData();
 		fd_btn_position.bottom = new FormAttachment(100);
 		fd_btn_position.right = new FormAttachment(60, (MainBarButton.SplitFactor / 2));
@@ -294,7 +296,7 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
-		this.btn_sign = new MainBarMiddleButton(composite, SWT.NONE);
+		this.btn_sign = new MainBarMiddleButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_sign = new FormData();
 		fd_btn_sign.bottom = new FormAttachment(100);
 		fd_btn_sign.right = new FormAttachment(85, (MainBarButton.SplitFactor / 2));
@@ -323,7 +325,7 @@ public class MainWindow {
 		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
-		MainBarEndButton end = new MainBarEndButton(composite, SWT.NONE);
+		MainBarEndButton end = new MainBarEndButton(this.mainbar, SWT.NONE);
 		FormData fd_btn_end = new FormData();
 		fd_btn_end.bottom = new FormAttachment(100);
 		fd_btn_end.right = new FormAttachment(100);
@@ -371,6 +373,8 @@ public class MainWindow {
 		} else {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
 		}
+		
+		this.mainbar.redraw();
 	}
 
 	/**
