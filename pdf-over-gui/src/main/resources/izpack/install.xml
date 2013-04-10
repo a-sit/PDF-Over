@@ -13,7 +13,7 @@
 		<uninstaller />
 		<url>http://www.a-sit.at/</url>
 		<pack200 />
-		<!-- <run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall|izpack.windowsinstall.7" />  -->
+		<run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" />
 	</info>
 
 	<guiprefs resizable="yes" width="500" height="360">
@@ -25,17 +25,19 @@
 		<langpack iso3="eng" />
 		<langpack iso3="deu" />
 	</locale>
+
 	<resources>
-		<res src="./unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
-		<res src="./win_shortcutSpec.xml" id="Win_shortcutSpec.xml" />
-		<res src="./win_shortcutSpec_deu.xml" id="Win_shortcutSpec.xml_deu" />
-		<res src="./win_shortcutSpec.xml" id="shortcutSpec.xml" />
-		<res src="./win_shortcutSpec_deu.xml" id="shortcutSpec.xml_deu" />
-		<res src="defaultInstallDir.txt" id="TargetPanel.dir.windows" />
+		<res id="Unix_shortcutSpec.xml" src="./unix_shortcutSpec.xml" />
+		<res id="Win_shortcutSpec.xml" src="./win_shortcutSpec.xml" />
+		<res id="Win_shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
+		<res id="shortcutSpec.xml" src="./win_shortcutSpec.xml" />
+		<res id="shortcutSpec.xml_deu" src="./win_shortcutSpec_deu.xml" />
+		<res id="TargetPanel.dir.windows" src="defaultInstallDirWin.txt" />
+		<res id="TargetPanel.dir.windows_xp" src="defaultInstallDirWinXP.txt" />
 		<res id="JFrameIcon.png" src="icon16x16.png"/>
-		<res src="./customicons.xml" id="customicons.xml" />
+		<res id="customicons.xml" src="./customicons.xml" />
 		<res id="Installer.image" src="logo.gif" />
-		<res src="logo.gif" id="Installer.image.0"/>
+		<res id="Installer.image.0" src="logo.gif" />
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
