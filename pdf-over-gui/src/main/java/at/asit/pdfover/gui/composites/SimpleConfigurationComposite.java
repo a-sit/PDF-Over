@@ -99,6 +99,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	private Group grpSignatureNote;
 	private Label lblSignatureNote;
 	Text txtSignatureNote;
+	private Button btnSignatureNoteDefault;
 
 	private Group grpProxy;
 	private Label lblProxyHost;
@@ -446,6 +447,24 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
 					processSignatureNoteChanged();
 				}
+			}
+		});
+
+		Composite compSignatureNoteButtonContainer = new Composite(this.grpSignatureNote, SWT.NONE);
+		compSignatureNoteButtonContainer.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 2, 1));
+		compSignatureNoteButtonContainer.setLayout(new FormLayout());
+
+		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
+		FormData fd_btnSignatureNoteDefault = new FormData();
+		fd_btnSignatureNoteDefault.top = new FormAttachment(0, 0);
+		fd_btnSignatureNoteDefault.right = new FormAttachment(100, -42);
+		this.btnSignatureNoteDefault.setLayoutData(fd_btnSignatureNoteDefault);
+		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SimpleConfigurationComposite.this.txtSignatureNote.setText(
+						Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
 			}
 		});
 
@@ -1025,6 +1044,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
 		this.txtSignatureNote.setToolTipText(Messages
 				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
+		this.btnSignatureNoteDefault.setText(Messages
+				.getString("simple_config.Note_SetDefault")); //$NON-NLS-1$
 
 		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
 		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
