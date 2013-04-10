@@ -95,20 +95,24 @@ public class LocalBKUState extends State {
 				if (returnCode == HttpStatus.SC_OK) {
 					String server = ""; //$NON-NLS-1$
 					String userAgent = ""; //$NON-NLS-1$
-					String signatureLayout = ""; //$NON-NLS-1$
+					String signatureLayout = null; //$NON-NLS-1$
 
-					if (method.getResponseHeader(BKU_REPSONE_HEADER_SERVER) != null) {
+					if (method.getResponseHeader(BKU_REPSONE_HEADER_SERVER) != null&& 
+						!method.getResponseHeader(BKU_REPSONE_HEADER_SERVER).equals("")) { //$NON-NLS-1$
 						server = method.getResponseHeader(
 								BKU_REPSONE_HEADER_SERVER).getValue();
 					}
 
-					if (method.getResponseHeader(BKU_REPSONE_HEADER_USERAGENT) != null) {
+					if (method.getResponseHeader(BKU_REPSONE_HEADER_USERAGENT) != null &&
+						!method.getResponseHeader(BKU_REPSONE_HEADER_USERAGENT).equals("")) { //$NON-NLS-1$
 						userAgent = method.getResponseHeader(
 								BKU_REPSONE_HEADER_USERAGENT).getValue();
 					}
 
 					if (method
-							.getResponseHeader(BKU_REPSONE_HEADER_SIGNATURE_LAYOUT) != null) {
+							.getResponseHeader(BKU_REPSONE_HEADER_SIGNATURE_LAYOUT) != null &&
+						!method
+							.getResponseHeader(BKU_REPSONE_HEADER_SIGNATURE_LAYOUT).equals("")) { //$NON-NLS-1$
 						signatureLayout = method.getResponseHeader(
 								BKU_REPSONE_HEADER_SIGNATURE_LAYOUT).getValue();
 					}
