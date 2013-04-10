@@ -237,16 +237,22 @@ public class PositioningComposite extends StateComposite {
 	};
 
 	private MouseWheelListener mouseListener = new MouseWheelListener() {
+		private long lastEventTime = 0;
+
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
+			if (e.getWhen() == this.lastEventTime)
+				return;
+			this.lastEventTime = e.getWhen();
+
 			int newPage = PositioningComposite.this.currentPage;
 
-			if (e.getUnitsToScroll() < 0)
+			if (e.getWheelRotation() < 0)
 			{
 				if (PositioningComposite.this.currentPage > 1)
 					newPage--;
 			}
-			else if (e.getUnitsToScroll() > 0)
+			else if (e.getWheelRotation() > 0)
 			{
 				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
 					newPage++;
