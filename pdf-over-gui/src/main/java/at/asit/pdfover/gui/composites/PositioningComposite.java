@@ -19,8 +19,6 @@ package at.asit.pdfover.gui.composites;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Image;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
