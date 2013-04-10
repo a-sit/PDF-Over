@@ -58,8 +58,11 @@ public class Main {
 		File configDir = new File(System.getProperty("user.home")+"/.pdfover");  //$NON-NLS-1$//$NON-NLS-2$
 		if(!configDir.exists()) {
 			configDir.mkdir();
-		} else {	
-			PropertyConfigurator.configure(configDir.getAbsolutePath() + "/" + ConfigManipulator.DEFAULT_LOG4J_FILE); //$NON-NLS-1$
+		} 
+		
+		File log4j = new File(configDir.getAbsolutePath() + "/" + ConfigManipulator.DEFAULT_LOG4J_FILE);  //$NON-NLS-1$
+		if(log4j.exists()) {
+			PropertyConfigurator.configure(log4j.getAbsolutePath());
 		}
 		
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
