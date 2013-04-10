@@ -34,17 +34,6 @@ public class PDFASSigner implements Signer {
 	static final Logger log = LoggerFactory.getLogger(PDFASSigner.class);
 
 	/**
-	 * The profile ID
-	 */
-	protected static final String PROFILE_ID = "SIGNATURBLOCK_SMALL_DE";
-	
-	/**
-	 * The profile ID
-	 * if a signature note is set
-	 */
-	protected static final String PROFILE_NOTE_ID = "SIGNATURBLOCK_SMALL_DE_NOTE";
-
-	/**
 	 * The template URL
 	 */
 	protected static final String URL_TEMPLATE = "http://pdfover.4.gv.at/template";
@@ -83,7 +72,8 @@ public class PDFASSigner implements Signer {
 				// params.setSignatureDevice(Constants.SIGNATURE_DEVICE_MOBILETEST);
 			}
 			params.setSignatureType(Constants.SIGNATURE_TYPE_BINARY);
-			params.setSignatureProfileId(PROFILE_ID);
+
+			params.setSignatureProfileId(sign_para.getSignatureProfileID());
 
 			params.setOutput(new ByteArrayDataSink());
 			if (parameter.getEmblem() != null) {
@@ -93,7 +83,6 @@ public class PDFASSigner implements Signer {
 			
 			if(parameter.getProperty("SIG_NOTE") != null) {
 				params.setProfileOverrideValue("SIG_NOTE", parameter.getProperty("SIG_NOTE"));
-				params.setSignatureProfileId(PROFILE_NOTE_ID);
 			}
 
 			// Prepare Output sink

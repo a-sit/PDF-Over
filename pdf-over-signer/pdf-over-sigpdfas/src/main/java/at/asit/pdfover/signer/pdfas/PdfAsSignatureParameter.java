@@ -55,6 +55,15 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAsSignatureParameter.class);
 
+	/** The profile ID for the german signature block */
+	private static final String PROFILE_ID_DE = "SIGNATURBLOCK_SMALL_DE";
+	/** The profile ID for the german signature block if a signature note is set */
+	private static final String PROFILE_ID_DE_NOTE = "SIGNATURBLOCK_SMALL_DE_NOTE";
+	/** The profile ID for the english signature block */
+	private static final String PROFILE_ID_EN = "SIGNATURBLOCK_SMALL_EN";
+	/** The profile ID for the english signature block if a signature note is set */
+	private static final String PROFILE_ID_EN_NOTE = "SIGNATURBLOCK_SMALL_EN_NOTE";
+
 	private static final int PLACEHOLDER_SCALE = 4;
 
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
@@ -117,6 +126,20 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		return new SignatureDimension(276, 95);
 	}
 
+	/**
+	 * Get the Signature Profile ID for this set of parameters
+	 * @return the Signature Profile ID
+	 */
+	public String getSignatureProfileID() {
+		String lang = getSignatureLanguage();
+		boolean useNote = (getProperty("SIG_NOTE") != null);
+
+		if (lang != null && lang.equals("en"))
+			return useNote ? PROFILE_ID_EN_NOTE : PROFILE_ID_EN;
+
+		return useNote ? PROFILE_ID_DE_NOTE : PROFILE_ID_DE;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -129,7 +152,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 			PDFASHelper.getPdfAs();
 
 			SignatureObject sign_obj = at.knowcenter.wag.egov.egiz.PdfAS
-					.createSignatureObjectFromType(PDFASSigner.PROFILE_ID);
+					.createSignatureObjectFromType(getSignatureProfileID());
 
 			sign_obj.fillValues(' ', true, false);
 			sign_obj.setKZ(BinarySignator_1_1_0.MY_ID);
