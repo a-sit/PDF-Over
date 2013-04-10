@@ -29,7 +29,6 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.FileNameEmblem;
-import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignatureParameter;
 
 /**
