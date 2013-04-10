@@ -160,6 +160,11 @@
 				<artifactId>icepdf-core</artifactId>
 				<version>4.3.3</version>
 			</dependency>
+			<dependency>
+				<groupId>com.sun</groupId>
+				<artifactId>pdfview</artifactId>
+				<version>0.9.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -178,6 +183,10 @@
 			<id>icepdf</id>
 			<name>ICEpdf repository</name>
 			<url>http://anonsvn.icesoft.org/repo/maven2/releases/</url>
+		</repository>
+		<repository>
+			<id>local-repo</id>
+			<url>file://${project.basedir}/repo</url>
 		</repository>
 	</repositories>
 </project>
