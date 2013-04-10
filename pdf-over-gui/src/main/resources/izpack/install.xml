@@ -68,6 +68,8 @@
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdfover_win.bat"
 				os="windows" stage="never"></executable>
+				<executable targetfile="$INSTALL_PATH/scripts/uninstall_win.bat"
+				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdfover_mac.sh"
 				os="mac" stage="never"></executable>
 		</pack>
