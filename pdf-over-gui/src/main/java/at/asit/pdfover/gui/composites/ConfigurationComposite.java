@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormLayout;
@@ -73,54 +72,6 @@ public class ConfigurationComposite extends StateComposite {
 		this.signer = signer;
 		if(this.configComposite != null) {
 			this.configComposite.setSigner(getSigner());
-		}
-	}
-	
-	/**
-	 * Configuration Mode selection listener
-	 */
-	private final class ConfigurationModeSelectionListener implements
-			SelectionListener {
-
-		/**
-		 * Constructor
-		 */
-		public ConfigurationModeSelectionListener() {
-			// Nothing to do
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if (ConfigurationComposite.this.configComposite instanceof SimpleConfigurationComposite) {
-				// switch to advanced
-				ConfigurationComposite.this.configComposite.dispose();
-				ConfigurationComposite.this.configComposite = new AdvancedConfigurationComposite(
-						ConfigurationComposite.this.containerComposite,
-						ConfigurationComposite.this.style,
-						ConfigurationComposite.this.state,
-						ConfigurationComposite.this.configurationContainer);
-				ConfigurationComposite.this.configComposite.setSigner(getSigner());
-				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
-			} else {
-				// switch to simple
-				ConfigurationComposite.this.configComposite.dispose();
-				ConfigurationComposite.this.configComposite = new SimpleConfigurationComposite(
-						ConfigurationComposite.this.containerComposite,
-						ConfigurationComposite.this.style,
-						ConfigurationComposite.this.state,
-						ConfigurationComposite.this.configurationContainer);
-				ConfigurationComposite.this.configComposite.setSigner(getSigner());
-				ConfigurationComposite.this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
-			}
-
-			ConfigurationComposite.this.configComposite.loadConfiguration();
-			ConfigurationComposite.this.compositeStack.topControl = ConfigurationComposite.this.configComposite;
-			ConfigurationComposite.this.doLayout();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do
 		}
 	}
 
@@ -166,14 +117,9 @@ public class ConfigurationComposite extends StateComposite {
 	Composite containerComposite;
 
 	/**
-	 * checks wether the user is done
+	 * checks whether the user is done
 	 */
 	boolean userDone = false;
-
-	/**
-	 * Button advanced
-	 */
-	Button btnAdvanced;
 
 	/**
 	 * Sets the configuration manipulator
@@ -250,7 +196,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
-		this.configComposite = new SimpleConfigurationComposite(
+		this.configComposite = new AdvancedConfigurationComposite(
 				this.containerComposite, SWT.FILL | style, state,
 				this.configurationContainer);
 		
@@ -302,19 +248,6 @@ public class ConfigurationComposite extends StateComposite {
 		FontData[] fD_btnAbbrechen = btnAbbrechen.getFont().getFontData();
 		fD_btnAbbrechen[0].setHeight(TEXT_SIZE_BUTTON);
 		btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
-		
-		this.btnAdvanced = new Button(this, SWT.NONE);
-		FormData fd_btnAdvanced = new FormData();
-		fd_btnAdvanced.right = new FormAttachment(100, -5);
-		fd_btnAdvanced.bottom = new FormAttachment(100, -5);
-		this.btnAdvanced.setLayoutData(fd_btnAdvanced);
-		this.btnAdvanced.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
-		this.btnAdvanced
-				.addSelectionListener(new ConfigurationModeSelectionListener());
-		
-		FontData[] fD_btnAdvanced = this.btnAdvanced.getFont().getFontData();
-		fD_btnAdvanced[0].setHeight(TEXT_SIZE_BUTTON);
-		this.btnAdvanced.setFont(new Font(Display.getCurrent(), fD_btnAdvanced[0]));
 	}
 
 	boolean storeConfiguration() {

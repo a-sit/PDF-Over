@@ -48,6 +48,8 @@ import at.asit.pdfover.signator.BKUs;
 
 /**
  * Composite for advanced configuration
+ * 
+ * Contains the simple configuration composite
  */
 public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
@@ -74,6 +76,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
 		
+		// TODO: Move this tab folder to the ConfigurationComposite
 		TabFolder tabFolder = new TabFolder(this, SWT.NONE);
 		FormData fd_tabFolder = new FormData();
 		fd_tabFolder.bottom = new FormAttachment(100, -5);
@@ -291,7 +294,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 		
-		tabFolder.setSelection(advancedTabItem);
+		tabFolder.setSelection(simpleTabItem);
 	}
 
 	/* (non-Javadoc)
