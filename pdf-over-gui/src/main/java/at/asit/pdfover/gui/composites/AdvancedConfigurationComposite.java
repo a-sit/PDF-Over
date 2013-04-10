@@ -95,8 +95,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		setLayout(new FormLayout());
 
 		this.grpSignatur = new Group(this, SWT.NONE);
-		this.grpSignatur.setText(Messages
-				.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 10;
 		layout.marginWidth = 5;
@@ -119,8 +117,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnAutomatischePositionierung.left = new FormAttachment(0, 5);
 		this.btnAutomatischePositionierung
 				.setLayoutData(fd_btnAutomatischePositionierung);
-		this.btnAutomatischePositionierung.setText(Messages
-				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
 
 		FontData[] fD_btnAutomatischePositionierung = this.btnAutomatischePositionierung
 				.getFont().getFontData();
@@ -128,9 +124,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btnAutomatischePositionierung.setFont(new Font(Display
 				.getCurrent(), fD_btnAutomatischePositionierung[0]));
-
-		this.btnAutomatischePositionierung.setToolTipText(Messages
-				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
 
 		this.btnAutomatischePositionierung
 				.addSelectionListener(new SelectionAdapter() {
@@ -150,8 +143,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				this.btnAutomatischePositionierung, 5);
 		fd_lblTransparenz.left = new FormAttachment(0, 5);
 		this.lblTransparenz.setLayoutData(fd_lblTransparenz);
-		this.lblTransparenz.setText(Messages
-				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
 
 		FontData[] fD_lblTransparenz = this.lblTransparenz.getFont().getFontData();
 		fD_lblTransparenz[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -163,8 +154,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_lblTransparenzLinks.top = new FormAttachment(this.lblTransparenz, 5);
 		fd_lblTransparenzLinks.left = new FormAttachment(0, 15);
 		this.lblTransparenzLinks.setLayoutData(fd_lblTransparenzLinks);
-		this.lblTransparenzLinks.setText(Messages
-				.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
 
 		FontData[] fD_lblTransparenzLinks = this.lblTransparenzLinks.getFont()
 				.getFontData();
@@ -177,8 +166,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_lblTransparenzRechts.top = new FormAttachment(this.lblTransparenz, 5);
 		fd_lblTransparenzRechts.right = new FormAttachment(100, -5);
 		this.lblTransparenzRechts.setLayoutData(fd_lblTransparenzRechts);
-		this.lblTransparenzRechts.setText(Messages
-				.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
 
 		FontData[] fD_lblTransparenzRechts = this.lblTransparenzRechts.getFont()
 				.getFontData();
@@ -222,8 +209,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.lblSigningLanguage.setFont(new Font(Display.getCurrent(),
 				fD_lblSigningLanguage[0]));
 		
-		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
-		
 		this.cmbSigningLangAuswahl = new Combo(compSigningLanguageContainer, SWT.READ_ONLY);
 		this.cmbSigningLangAuswahl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
@@ -238,7 +223,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
 			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
 		}
-		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
 		this.cmbSigningLangAuswahl.setItems(localeSignStrings);
 		this.cmbSigningLangAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -255,8 +239,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
-		this.grpBkuAuswahl.setText(Messages
-				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
 		layout = new FormLayout();
 		layout.marginHeight = 10;
 		layout.marginWidth = 5;
@@ -277,6 +259,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbBKUAuswahl.right = new FormAttachment(100, -5);
 		fd_cmbBKUAuswahl.top = new FormAttachment(0);
 		fd_cmbBKUAuswahl.left = new FormAttachment(0, 5);
+		this.cmbBKUAuswahl.setLayoutData(fd_cmbBKUAuswahl);
 
 		FontData[] fD_cmbBKUAuswahl = this.cmbBKUAuswahl.getFont()
 				.getFontData();
@@ -285,21 +268,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbBKUAuswahl[0]));
 
 		int blen = BKUs.values().length;
-
 		this.bkuStrings = new String[blen];
-
 		for (int i = 0; i < blen; i++) {
 			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
 			this.bkuStrings[i] = Messages.getString(lookup);
 		}
-
 		this.cmbBKUAuswahl.setItems(this.bkuStrings);
-
-		this.cmbBKUAuswahl.setLayoutData(fd_cmbBKUAuswahl);
-
-		this.cmbBKUAuswahl.setToolTipText(Messages
-				.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
-
 		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -317,8 +291,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
-		this.grpSpeicherort.setText(Messages
-				.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
 		layout = new FormLayout();
 		layout.marginHeight = 10;
 		layout.marginWidth = 5;
@@ -339,8 +311,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_lblDefaultOutputFolder.top = new FormAttachment(0);
 		fd_lblDefaultOutputFolder.left = new FormAttachment(0, 5);
 		this.lblDefaultOutputFolder.setLayoutData(fd_lblDefaultOutputFolder);
-		this.lblDefaultOutputFolder.setText(Messages
-				.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
 
 		FontData[] fD_lblDefaultOutputFolder = this.lblDefaultOutputFolder.getFont()
 				.getFontData();
@@ -369,9 +339,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtOutputFolder.setToolTipText(Messages
-				.getString("advanced_config.OutputFolder_ToolTip")); //$NON-NLS-1$
-
 		this.btnBrowse = new Button(this.grpSpeicherort, SWT.NONE);
 		fd_text.right = new FormAttachment(this.btnBrowse, -5);
 
@@ -383,7 +350,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnBrowse.top = new FormAttachment(this.lblDefaultOutputFolder, 5);
 		fd_btnBrowse.right = new FormAttachment(100, -5);
 		this.btnBrowse.setLayoutData(fd_btnBrowse);
-		this.btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
 		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
 
@@ -417,8 +383,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 		
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
-		this.grpLocaleAuswahl.setText(Messages
-				.getString("advanced_config.LocaleSelection_Title")); //$NON-NLS-1$
 		FormLayout layout_grpLocaleAuswahl = new FormLayout();
 		layout_grpLocaleAuswahl.marginHeight = 10;
 		layout_grpLocaleAuswahl.marginWidth = 5;
@@ -439,6 +403,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbLocaleAuswahl.right = new FormAttachment(100, -5);
 		fd_cmbLocaleAuswahl.top = new FormAttachment(0);
 		fd_cmbLocaleAuswahl.left = new FormAttachment(0, 5);
+		this.cmbLocaleAuswahl.setLayoutData(fd_cmbLocaleAuswahl);
 
 		FontData[] fD_cmbLocaleAuswahl = this.cmbLocaleAuswahl.getFont()
 				.getFontData();
@@ -447,20 +412,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbLocaleAuswahl[0]));
 
 		String[] localeStrings = new String[Constants.SUPPORTED_LOCALES.length];
-
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
 			localeStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage(Constants.SUPPORTED_LOCALES[i]);
 		}
-
 		this.cmbLocaleAuswahl.setItems(localeStrings);
-
-		this.cmbLocaleAuswahl.setLayoutData(fd_cmbLocaleAuswahl);
-		
-		this.cmbLocaleAuswahl.setToolTipText(Messages
-				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
-
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer
@@ -473,6 +429,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			}
 		});
+
+		reloadResources();
 	}
 
 	/*
@@ -655,35 +613,33 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setText(Messages
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
-		this.cmbLocaleAuswahl.setToolTipText(Messages
-				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
+		this.btnAutomatischePositionierung.setToolTipText(Messages
+				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
+		this.lblTransparenzLinks.setText(Messages
+				.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
+		this.lblTransparenzRechts.setText(Messages
+				.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
+		this.lblTransparenz.setText(Messages
+				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
+		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
+		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
+
+		this.grpBkuAuswahl.setText(Messages
+				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
+		this.cmbBKUAuswahl.setToolTipText(Messages
+				.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
+
+		this.grpSpeicherort.setText(Messages
+				.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
+		this.lblDefaultOutputFolder.setText(Messages
+				.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
+		this.txtOutputFolder.setToolTipText(Messages
+				.getString("advanced_config.OutputFolder_ToolTip")); //$NON-NLS-1$
+		this.btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
 
 		this.grpLocaleAuswahl.setText(Messages
 				.getString("advanced_config.LocaleSelection_Title")); //$NON-NLS-1$
-		this.btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
-		this.txtOutputFolder.setToolTipText(Messages
-				.getString("advanced_config.OutputFolder_ToolTip")); //$NON-NLS-1$
-		this.lblDefaultOutputFolder.setText(Messages
-				.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
-		this.grpSpeicherort.setText(Messages
-				.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
-		
-		this.cmbBKUAuswahl.setToolTipText(Messages
-				.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
-		
-		this.grpBkuAuswahl.setText(Messages
-				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
-		
-		this.lblTransparenzRechts.setText(Messages
-				.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
-		
-		this.lblTransparenzLinks.setText(Messages
-				.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
-		
-		this.lblTransparenz.setText(Messages
-				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
-		
-		this.lblSigningLanguage.setText(Messages.getString("advanced_config.SigBlockLang")); //$NON-NLS-1$
-		this.cmbSigningLangAuswahl.setToolTipText(Messages.getString("advanced_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
+		this.cmbLocaleAuswahl.setToolTipText(Messages
+				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
 	}
 }
