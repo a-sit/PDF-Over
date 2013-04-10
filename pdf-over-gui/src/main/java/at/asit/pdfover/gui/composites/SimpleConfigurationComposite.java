@@ -512,6 +512,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_btnSignatureNoteDefault.top = new FormAttachment(0, 0);
 		fd_btnSignatureNoteDefault.right = new FormAttachment(100, -42);
 		this.btnSignatureNoteDefault.setLayoutData(fd_btnSignatureNoteDefault);
+		FontData[] fD_btnSignatureNoteDefault = this.btnSignatureNoteDefault.getFont()
+				.getFontData();
+		fD_btnSignatureNoteDefault[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnSignatureNoteDefault.setFont(new Font(Display.getCurrent(),
+				fD_btnSignatureNoteDefault[0]));
 		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
