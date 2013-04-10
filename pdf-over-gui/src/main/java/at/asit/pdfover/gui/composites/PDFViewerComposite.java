@@ -34,11 +34,20 @@ import org.icepdf.core.exceptions.PDFSecurityException;
 import org.icepdf.core.pobjects.Document;
 import org.icepdf.core.pobjects.Page;
 import org.icepdf.core.util.GraphicsRenderingHints;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import at.asit.pdfover.gui.workflow.states.PositioningState;
 
 /**
  * Displays a PDF document
  */
 public class PDFViewerComposite extends Composite {
+	/**
+	 * SFL4J Logger instance
+	 **/
+	private static final Logger log = LoggerFactory
+			.getLogger(PDFViewerComposite.class);
 
 	/**
 	 * PDF document
@@ -125,16 +134,17 @@ public class PDFViewerComposite extends Composite {
 					return;
 				int page = getPage();
 				// Make page always fit to window
-				Rectangle2D clip = g.getClip().getBounds2D();
-				double h_zoom = clip.getWidth() / PDFViewerComposite.this.base_dimensions[page].width;
-				double v_zoom = clip.getHeight() / PDFViewerComposite.this.base_dimensions[page].height;
+				Dimension d = getSize();
+				double h_zoom = d.getWidth() / PDFViewerComposite.this.base_dimensions[page].width;
+				double v_zoom = d.getHeight() / PDFViewerComposite.this.base_dimensions[page].height;
 				float zoom = (float) (h_zoom < v_zoom ? h_zoom : v_zoom);
 				if (v_zoom < h_zoom)
 				{
 					// Page is narrower than window, center it
-					g.translate((int) ((clip.getWidth() - (PDFViewerComposite.this.base_dimensions[page].width * zoom)) / 2), 0);
+					g.translate((int) ((d.width - (PDFViewerComposite.this.base_dimensions[page].width * zoom)) / 2), 0);
 				}
 
+				log.debug("Repainting " + g.getClipBounds().width + "x" + g.getClipBounds().height + " - " + d.width + "x" + d.height);
 				PDFViewerComposite.this.document.paintPage(page, g, GraphicsRenderingHints.SCREEN, Page.BOUNDARY_CROPBOX, 0f, zoom);
 			}
 		};
