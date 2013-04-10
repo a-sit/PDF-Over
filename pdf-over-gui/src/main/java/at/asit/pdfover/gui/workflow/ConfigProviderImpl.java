@@ -275,7 +275,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		Point size = this.configuration.getMainWindowSize();
 		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //$NON-NLS-1$
 
-		Locale configLocale = this.getConfigLocale();
+		Locale configLocale = this.getLocale();
 		if(configLocale != null) {
 			props.setProperty(Constants.CFG_LOCALE, LocaleSerializer.getParsableString(configLocale));
 		}
@@ -822,8 +822,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigLocale()
 	 */
 	@Override
-	public Locale getConfigLocale() {
-		return this.configuration.getLocale();
+	public Locale getLocale() {
+		Locale locale = this.configuration.getLocale();
+		if (locale == null)
+			locale = Messages.getDefaultLocale();
+		return locale;
 	}
 
 	/* (non-Javadoc)
@@ -843,7 +846,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Locale getSignLocale() {
-		return this.configuration.getSignLocale();
+		Locale locale = this.configuration.getSignLocale();
+		if (locale == null)
+			locale = Messages.getDefaultLocale();
+		return locale;
 	}
 
 	/* (non-Javadoc)

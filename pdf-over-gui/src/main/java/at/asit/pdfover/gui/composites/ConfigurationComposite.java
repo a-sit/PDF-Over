@@ -290,7 +290,7 @@ public class ConfigurationComposite extends StateComposite {
 			this.configurationContainer.setSignatureNote(
 					this.configProvider.getSignatureNote());
 			
-			this.configurationContainer.setLocale(this.configProvider.getConfigLocale());
+			this.configurationContainer.setLocale(this.configProvider.getLocale());
 			
 			this.configurationContainer.setSignLocale(this.configProvider.getSignLocale());
 			

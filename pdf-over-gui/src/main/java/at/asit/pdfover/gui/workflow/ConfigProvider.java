@@ -116,7 +116,7 @@ public interface ConfigProvider {
 	 * Gets the configured locale
 	 * @return the configured locale
 	 */
-	public Locale getConfigLocale();
+	public Locale getLocale();
 
 	/**
 	 * Gets the configured locale
