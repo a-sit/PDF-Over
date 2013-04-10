@@ -182,25 +182,36 @@ public class BKUSelectionComposite extends StateComposite {
 		fD_cc_karte[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		cc_mobile.setFont(new Font(Display.getCurrent(), fD_cc_karte[0]));
 		
+		int mobilesize = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		
 		this.btnMobile = new Button(this, SWT.NONE);
 		FormData fd_btnMobile = new FormData();
 		fd_btnMobile.top = new FormAttachment(cc_mobile, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnMobile.right = new FormAttachment(50, -5);
-		fd_btnMobile.width = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		//fd_btnMobile.width = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		this.btnMobile.setLayoutData(fd_btnMobile);
 		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
 		this.btnMobile.addSelectionListener(new MobileSelectionListener());
+		
+		int btnmsize = this.btnMobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		
+		fd_btnMobile.width = (btnmsize > mobilesize) ? btnmsize : mobilesize;
 		
 		this.btnCard = new Button(this, SWT.NONE);
 		FormData fd_btnCard = new FormData();
 		fd_btnCard.top = new FormAttachment(cc_karte, 10);
 		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnCard.left = new FormAttachment(50, 5);
-		fd_btnCard.width = cc_karte.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		int cardsize = cc_karte.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		
 		this.btnCard.setLayoutData(fd_btnCard);
 		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
 		this.btnCard.addSelectionListener(new LocalSelectionListener());
+		
+		int btncsize = this.btnCard.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		
+		fd_btnCard.width = (btncsize > cardsize) ? btncsize : cardsize;
 		//this.pack();
 	}
 

@@ -137,7 +137,8 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	@Override
 	public SignatureDimension getPlaceholderDimension() {
 		// return new SignatureDimension(487, 206);
-		return new SignatureDimension(getWidth(), getHeight());
+		return new SignatureDimension(276, 126);
+		//return new SignatureDimension(getWidth(), getHeight());
 	}
 
 	private static int getWidth() {
@@ -186,6 +187,52 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	@Override
 	public Image getPlaceholder() {
 
+		try {
+			Image logo = null; 
+			try {
+			if (this.getEmblem() != null
+					&& this.getEmblem().getFileName() != null
+					&& new File(this.getEmblem().getFileName())
+							.exists()) {
+				logo = ImageIO.read(new File(this.getEmblem()
+						.getFileName()));
+				
+			} 
+			}
+			catch(Exception e) {
+				log.error("Failed to get emblem ...", e);
+			}
+			
+			Image img = null;
+			String lang = getSignatureLanguage();
+			if (lang != null && lang.equals("en")) {
+				img = ImageIO.read(PdfAsSignatureParameter.class
+						.getResourceAsStream("/img/sign_prev_en.png"));
+				
+				if(logo != null) {
+					logo = logo.getScaledInstance(141, 140,
+							Image.SCALE_SMOOTH);
+					img.getGraphics().drawImage(logo, 6, 115, null);
+				}
+				
+			} else {
+				img = ImageIO.read(PdfAsSignatureParameter.class
+						.getResourceAsStream("/img/sign_prev_de.png"));
+				
+				if(logo != null) {
+					logo = logo.getScaledInstance(141, 140,
+							Image.SCALE_SMOOTH);
+					img.getGraphics().drawImage(logo, 6, 115, null);
+				}
+			}
+			return img;
+		} catch (IOException e) {
+			return new BufferedImage(getPlaceholderDimension().getWidth(),
+					getPlaceholderDimension().getHeight(),
+					BufferedImage.TYPE_INT_RGB);
+		}
+		
+		/*
 		try {
 			PDFASHelper.getPdfAs();
 
@@ -238,7 +285,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 						getPlaceholderDimension().getHeight(),
 						BufferedImage.TYPE_INT_RGB);
 			}
-		}
+		}*/
 	}
 
 	private Table getSignatureTable() throws SignatureException, SignatureTypesException {
@@ -461,7 +508,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		float[] sizes = new float[rows.size()];
 		Style style = parentstyle;
 		if (table.getStyle() != null) {
-			style = table.getStyle();
+			style = table.getStyle(); 
 		}
 		Font font = PdfAsSignatureParameter.getFont(style);
 		g.setFont(font);
