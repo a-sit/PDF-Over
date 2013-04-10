@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <shortcuts>
-	<!-- <skipIfNotSupported/>  -->
-  <programGroup defaultName="PDF-Over"
-  location="applications"/>
+  <!-- <skipIfNotSupported/>  -->
+  <programGroup defaultName="PDF-Over" location="applications"/>
 
   <shortcut
      name="PDF-Over"
@@ -12,7 +11,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH/scripts/pdfover_win.bat"
+     target="$INSTALL_PATH/PDF-Over.exe"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
      description="PDF-Over 4.0"
@@ -20,10 +19,10 @@
      iconIndex="0"
      type="Application"
      encoding="UTF-8"
-     initialState="minimized">
+     initialState="normal">
      <createForPack name="main"/>
    </shortcut>
-   
+
    <shortcut
      name="PDF-Over deinstallieren"
      programGroup="yes"
@@ -40,5 +39,4 @@
      initialState="minimized">
      <createForPack name="main"/>
    </shortcut>
-
 </shortcuts>

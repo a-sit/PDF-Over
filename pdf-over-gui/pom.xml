@@ -170,6 +170,8 @@
 										<include>icons/*</include>
 										<include>lib-swt/swt-${target.name}-*</include>
 										<include>scripts/*</include>
+										<include>PDF-Over.exe</include>
+										<include>PDF-Over.ini</include>
 									</includes>
 								</resource>
 								<resource>
@@ -215,6 +217,8 @@
 					<exclude>lib-swt/*</exclude>
 					<exclude>scripts/*</exclude>
 					<exclude>keystore.jks</exclude>
+					<exclude>PDF-Over.exe</exclude>
+					<exclude>PDF-Over.ini</exclude>
 				</excludes>
 			</resource>
 		</resources>

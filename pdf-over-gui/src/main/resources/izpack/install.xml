@@ -60,6 +60,8 @@
 			<file src="lib-swt" targetdir="$INSTALL_PATH" />
 			<file src="scripts" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
+			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
+			<file src="PDF-Over.ini" targetdir="$INSTALL_PATH" os="windows"/>
 			<executable targetfile="$INSTALL_PATH/scripts/pdfover_linux.sh"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdfover_win.bat"
