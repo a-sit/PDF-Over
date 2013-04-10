@@ -147,29 +147,9 @@ public abstract class MobileBKUHandler {
 	/**
 	 * Post the credentials
 	 * @return the response
-	 * @throws IOException IO error
-	 * @throws HttpException HTTP error
+	 * @throws Exception Error during posting
 	 */
-	public String postCredentials() throws HttpException, IOException {
-		MobileBKUStatus status = getStatus();
-
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
-
-		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
-		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
-		post.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter("handynummer", status.getPhoneNumber()); //$NON-NLS-1$
-		post.addParameter("signaturpasswort", status.getMobilePassword()); //$NON-NLS-1$
-		post.addParameter("Button_Identification", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		return executePost(client, post);
-	}
+	public abstract String postCredentials() throws Exception;
 
 	/**
 	 * Handle the response to credentials post
@@ -181,31 +161,9 @@ public abstract class MobileBKUHandler {
 	/**
 	 * Post the TAN
 	 * @return the response
-	 * @throws IOException IO error
-	 * @throws HttpException HTTP error
+	 * @throws Exception Error during posting
 	 */
-	public String postTAN() throws HttpException, IOException {
-		MobileBKUStatus status = this.state.getStatus();
-
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
-
-		PostMethod post = new PostMethod(status.getBaseURL()
-				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
-		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
-		post.addParameter(
-				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter("input_tan", status.getTan()); //$NON-NLS-1$
-		post.addParameter("SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
-		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		return executePost(client, post);
-	}
+	public abstract String postTAN() throws Exception;
 
 	/**
 	 * Handle the response to TAN post
@@ -253,7 +211,7 @@ public abstract class MobileBKUHandler {
 	 * @return the response
 	 * @throws IOException IO error
 	 */
-	private String executePost(HttpClient client, PostMethod post) throws IOException {
+	protected String executePost(HttpClient client, PostMethod post) throws IOException {
 		int returnCode = client.executeMethod(post);
 
 		String redirectLocation = null;

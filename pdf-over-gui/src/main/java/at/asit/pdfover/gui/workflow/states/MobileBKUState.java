@@ -32,6 +32,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHandler;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler;
+import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustStatus;
 import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus;
 import at.asit.pdfover.gui.workflow.states.mobilebku.PostCredentialsThread;
 import at.asit.pdfover.gui.workflow.states.mobilebku.PostSLRequestThread;
@@ -46,9 +47,9 @@ public class MobileBKUState extends State {
 	 */
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		this.status = new MobileBKUStatus(this.stateMachine.getConfigProvider());
 		switch(this.stateMachine.getConfigProvider().getMobileBKUType()) {
 			case A_TRUST:
+				this.status = new ATrustStatus(this.stateMachine.getConfigProvider());
 				this.handler = new ATrustHandler(this);
 				break;
 
@@ -283,7 +284,7 @@ public class MobileBKUState extends State {
 			} else {
 				tan.setRefVal(mobileStatus.getRefVal());
 
-				if (mobileStatus.getTanTries() < MobileBKUStatus.MOBILE_MAX_TAN_TRIES
+				if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
 						&& mobileStatus.getTanTries() > 0) {
 					// show warning message x tries left!
 

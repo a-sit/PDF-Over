@@ -16,9 +16,15 @@
 package at.asit.pdfover.gui.workflow.states.mobilebku;
 
 // Imports
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
 
@@ -44,6 +50,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleSLRequestResponse(String responseData) throws Exception {
+		ATrustStatus status = (ATrustStatus) getStatus();
+
 		// Extract infos:
 
 		String sessionID = MobileBKUHelper.extractTag(responseData,
@@ -59,11 +67,36 @@ public class ATrustHandler extends MobileBKUHandler {
 		log.info("viewState: " + viewState); //$NON-NLS-1$
 		log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
 
-		getStatus().setSessionID(sessionID);
+		status.setSessionID(sessionID);
 
-		getStatus().setViewstate(viewState);
+		status.setViewstate(viewState);
 
-		getStatus().setEventvalidation(eventValidation);
+		status.setEventvalidation(eventValidation);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#postCredentials()
+	 */
+	@Override
+	public String postCredentials() throws Exception {
+		ATrustStatus status = (ATrustStatus) getStatus();
+	
+		Protocol.registerProtocol("https", //$NON-NLS-1$
+				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
+	
+		HttpClient client = new HttpClient();
+		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
+				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
+	
+		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
+		post.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
+		post.addParameter("handynummer", status.getPhoneNumber()); //$NON-NLS-1$
+		post.addParameter("signaturpasswort", status.getMobilePassword()); //$NON-NLS-1$
+		post.addParameter("Button_Identification", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
+	
+		return executePost(client, post);
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +104,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleCredentialsResponse(String responseData) throws Exception {
-		MobileBKUStatus status = getStatus();
+		ATrustStatus status = (ATrustStatus) getStatus();
 		String viewState = status.getViewstate();
 		String eventValidation = status.getEventvalidation();
 		String sessionID = status.getSessionID();
@@ -111,6 +144,33 @@ public class ATrustHandler extends MobileBKUHandler {
 	}
 
 	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#postTAN()
+	 */
+	@Override
+	public String postTAN() throws IOException {
+		ATrustStatus status = (ATrustStatus) getStatus();
+	
+		Protocol.registerProtocol("https", //$NON-NLS-1$
+				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
+	
+		HttpClient client = new HttpClient();
+		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
+				LocalBKUState.PDF_OVER_USER_AGENT_STRING);
+	
+		PostMethod post = new PostMethod(status.getBaseURL()
+				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
+		post.addParameter(
+				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
+		post.addParameter("input_tan", status.getTan()); //$NON-NLS-1$
+		post.addParameter("SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
+	
+		return executePost(client, post);
+	}
+
+	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleTANResponse(java.lang.String)
 	 */
 	@Override
@@ -136,5 +196,4 @@ public class ATrustHandler extends MobileBKUHandler {
 			}
 		}
 	}
-
 }

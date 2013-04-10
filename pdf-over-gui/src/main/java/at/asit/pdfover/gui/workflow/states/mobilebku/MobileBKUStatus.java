@@ -15,205 +15,107 @@
  */
 package at.asit.pdfover.gui.workflow.states.mobilebku;
 
-// Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import at.asit.pdfover.gui.workflow.ConfigProvider;
-
 /**
  * 
  */
-public class MobileBKUStatus {
+public interface MobileBKUStatus {
 	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MobileBKUStatus.class);
-
-	/**
-	 * Maximum number of TAN tries!
+	 * @return the identification_url
 	 */
-	public static final int MOBILE_MAX_TAN_TRIES = 3;
-
-	private String viewstate;
-	private String eventvalidation;
-	private String sessionID;
-	private String phoneNumber;
-	private String mobilePassword;
-	private String baseURL;
-	private String refVal;
-	private String errorMessage;
-	private String tan;
-	private String server;
-	private int tanTries = MOBILE_MAX_TAN_TRIES;
+	public abstract String getSessionID();
 
 	/**
-	 * Constructor
-	 * @param provider 
+	 * @param sessionID the identification_url to set
 	 */
-	public MobileBKUStatus(ConfigProvider provider) {
-		this.setPhoneNumber(provider.getDefaultMobileNumber());
-		this.setMobilePassword(provider.getDefaultMobilePassword());
-	}
+	public abstract void setSessionID(String sessionID);
+
+	/**
+	 * @return the phoneNumber
+	 */
+	public abstract String getPhoneNumber();
+
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public abstract void setPhoneNumber(String phoneNumber);
+
+	/**
+	 * @return the mobilePassword
+	 */
+	public abstract String getMobilePassword();
+
+	/**
+	 * @param mobilePassword the mobilePassword to set
+	 */
+	public abstract void setMobilePassword(String mobilePassword);
+
+	/**
+	 * @return the reference value
+	 */
+	public abstract String getRefVal();
+
+	/**
+	 * @param refVal the reference value to set
+	 */
+	public abstract void setRefVal(String refVal);
+
+	/**
+	 * @return the tan
+	 */
+	public abstract String getTan();
+
+	/**
+	 * @param tan the tan to set
+	 */
+	public abstract void setTan(String tan);
+
+	/**
+	 * Get maximum number of TAN tries
+	 * @return the maximum number of TAN tries
+	 */
+	public abstract int getMaxTanTries();
 
 	/**
 	 * Get number of TAN tries left
 	 * @return the number of TAN tries left
 	 */
-	public int getTanTries() {
-		return this.tanTries;
-	}
+	public abstract int getTanTries();
 
 	/**
 	 * Set number of TAN tries left
 	 * @param tries the number of TAN tries left
 	 */
-	public void setTanTries(int tries) {
-		this.tanTries = tries;
-	}
-
-	/**
-	 * @return the tan
-	 */
-	public String getTan() {
-		return this.tan;
-	}
-
-	/**
-	 * @param tan the tan to set
-	 */
-	public void setTan(String tan) {
-		this.tan = tan;
-	}
+	public abstract void setTanTries(int tries);
 
 	/**
 	 * @return the errorMessage
 	 */
-	public String getErrorMessage() {
-		return this.errorMessage;
-	}
+	public abstract String getErrorMessage();
 
 	/**
 	 * @param errorMessage the errorMessage to set
 	 */
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
+	public abstract void setErrorMessage(String errorMessage);
 
 	/**
-	 * @return the reference value
+	 * @return the baseURL
 	 */
-	public String getRefVal() {
-		return this.refVal;
-	}
-
-	/**
-	 * @param refVal the reference value to set
-	 */
-	public void setRefVal(String refVal) {
-		this.refVal = refVal;
-	}
-
-	/**
-	 * @return the credentialsFormAction
-	 */
-	public String getBaseURL() {
-		return this.baseURL;
-	}
+	public abstract String getBaseURL();
 
 	/**
 	 * @param baseURL 
 	 */
-	public void setBaseURL(String baseURL) {
-		this.baseURL = baseURL;
-	}
-
-	/**
-	 * @return the viewstate
-	 */
-	public String getViewstate() {
-		return this.viewstate;
-	}
-
-	/**
-	 * @param viewstate
-	 *            the viewstate to set
-	 */
-	public void setViewstate(String viewstate) {
-		this.viewstate = viewstate;
-	}
-	
-	/**
-	 * @return the eventvalidation
-	 */
-	public String getEventvalidation() {
-		return this.eventvalidation;
-	}
-
-	/**
-	 * @param eventvalidation the eventvalidation to set
-	 */
-	public void setEventvalidation(String eventvalidation) {
-		this.eventvalidation = eventvalidation;
-	}
-	
-	/**
-	 * @return the phoneNumber
-	 */
-	public String getPhoneNumber() {
-		return this.phoneNumber;
-	}
-
-	/**
-	 * @param phoneNumber the phoneNumber to set
-	 */
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	/**
-	 * @return the mobilePassword
-	 */
-	public String getMobilePassword() {
-		return this.mobilePassword;
-	}
-
-	/**
-	 * @param mobilePassword the mobilePassword to set
-	 */
-	public void setMobilePassword(String mobilePassword) {
-		this.mobilePassword = mobilePassword;
-	}
-	
-	/**
-	 * @return the identification_url
-	 */
-	public String getSessionID() {
-		return this.sessionID;
-	}
-
-	/**
-	 * @param sessionID the identification_url to set
-	 */
-	public void setSessionID(String sessionID) {
-		this.sessionID = sessionID;
-	}
+	public abstract void setBaseURL(String baseURL);
 
 	/**
 	 * Return the SL request server
 	 * @return the SL request server
 	 */
-	public String getServer() {
-		return this.server;
-	}
+	public abstract String getServer();
 
 	/**
 	 * Set the SL request server
 	 * @param server the SL request server
 	 */
-	public void setServer(String server) {
-		this.server = server;
-	}
+	public abstract void setServer(String server);
 }
