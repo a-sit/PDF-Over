@@ -834,15 +834,27 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 			if (image == null || image.trim().equals("")) { //$NON-NLS-1$
 				if (this.signer != null) {
+					SignatureParameter param = this.signer.getPDFSigner()
+							.newParameter();
+					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().equals("")) { //$NON-NLS-1$
+						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
+					}
+					
+					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
+					
 					img = ImageConverter
-							.convertToSWT((BufferedImage) this.signer
-									.getPDFSigner().newParameter()
+							.convertToSWT((BufferedImage) param
 									.getPlaceholder());
 				}
 			} else {
 				if (this.signer != null) {
 					SignatureParameter param = this.signer.getPDFSigner()
 							.newParameter();
+					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().equals("")) { //$NON-NLS-1$
+						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
+					}
+					
+					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
 					param.setEmblem(new FileNameEmblem(image));
 					img = ImageConverter.convertToSWT((BufferedImage) param
 							.getPlaceholder());
