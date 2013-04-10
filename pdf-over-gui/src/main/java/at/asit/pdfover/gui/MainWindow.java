@@ -63,7 +63,10 @@ public class MainWindow {
 	
 
 	private Shell shell;
+	private Composite mainbar;
+	private FormData mainBarFormData;
 	private Composite container;
+	private FormData containerFormData;
 	private StackLayout stack;
 	StateMachine stateMachine;
 	private MainBarButton btn_sign;
@@ -102,10 +105,6 @@ public class MainWindow {
 	}
 
 	private Map<Buttons, MainBarButton> buttonMap;
-
-	private FormData mainBarFormData;
-
-	private Composite mainbar;
 
 	/**
 	 * Default constructor
@@ -155,27 +154,6 @@ public class MainWindow {
 	 */
 	public Composite getContainer() {
 		return this.container;
-	}
-
-	/**
-	 * Entrance point for swt designer
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Display display = Display.getDefault();
-
-		MainWindow window = new MainWindow(null);
-
-		window.open();
-
-		window.getShell().open();
-		window.getShell().layout();
-		while (!window.getShell().isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
 	}
 
 	/**
@@ -307,12 +285,12 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.FINAL, end);
 
 		this.container = new Composite(getShell(), SWT.RESIZE);
-		FormData fd_composite_1 = new FormData();
-		fd_composite_1.bottom = new FormAttachment(100, -10);
-		fd_composite_1.right = new FormAttachment(100, -10);
-		fd_composite_1.top = new FormAttachment(0, 70);
-		fd_composite_1.left = new FormAttachment(0, 10);
-		this.container.setLayoutData(fd_composite_1);
+		this.containerFormData = new FormData();
+		this.containerFormData.bottom = new FormAttachment(100, -10);
+		this.containerFormData.right = new FormAttachment(100, -10);
+		this.containerFormData.top = new FormAttachment(0, MAINBAR_HEIGHT + 10);
+		this.containerFormData.left = new FormAttachment(0, 10);
+		this.container.setLayoutData(this.containerFormData);
 		this.stack = new StackLayout();
 		this.container.setLayout(this.stack);
 	}
@@ -340,8 +318,10 @@ public class MainWindow {
 
 		if (behavior.getMainBarVisible()) {
 			this.mainBarFormData.bottom = new FormAttachment(0, MAINBAR_HEIGHT);
+			this.containerFormData.top = new FormAttachment(0, MAINBAR_HEIGHT + 10);
 		} else {
 			this.mainBarFormData.bottom = new FormAttachment(0, 0);
+			this.containerFormData.top = new FormAttachment(0, 10);
 		}
 		
 		this.getShell().getDisplay().update();
