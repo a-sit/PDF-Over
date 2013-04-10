@@ -110,9 +110,9 @@ public class PostTanThread implements Runnable {
 						responseData = gmethod.getResponseBodyAsString();
 
 						if (gmethod
-								.getResponseHeader(LocalBKUState.BKU_REPSONE_HEADER_SERVER) != null) {
+								.getResponseHeader(LocalBKUState.BKU_RESPONSE_HEADER_SERVER) != null) {
 							server = gmethod.getResponseHeader(
-									LocalBKUState.BKU_REPSONE_HEADER_SERVER)
+									LocalBKUState.BKU_RESPONSE_HEADER_SERVER)
 									.getValue();
 						}
 
@@ -120,9 +120,9 @@ public class PostTanThread implements Runnable {
 						responseData = method.getResponseBodyAsString();
 
 						if (method
-								.getResponseHeader(LocalBKUState.BKU_REPSONE_HEADER_SERVER) != null) {
+								.getResponseHeader(LocalBKUState.BKU_RESPONSE_HEADER_SERVER) != null) {
 							server = method.getResponseHeader(
-									LocalBKUState.BKU_REPSONE_HEADER_SERVER)
+									LocalBKUState.BKU_RESPONSE_HEADER_SERVER)
 									.getValue();
 						}
 

@@ -42,17 +42,17 @@ public class LocalBKUState extends State {
 	/**
 	 * HTTP Response server HEADER
 	 */
-	public final static String BKU_REPSONE_HEADER_SERVER = "server"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //$NON-NLS-1$
 
 	/**
 	 * HTTP Response user-agent HEADER
 	 */
-	public final static String BKU_REPSONE_HEADER_USERAGENT = "user-agent"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //$NON-NLS-1$
 
 	/**
 	 * HTTP Response SignatureLayout HEADER
 	 */
-	public final static String BKU_REPSONE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
 	/**
 	 * PDF Over User Agent string
@@ -96,24 +96,24 @@ public class LocalBKUState extends State {
 					String server = ""; //$NON-NLS-1$
 					String userAgent = ""; //$NON-NLS-1$
 					String signatureLayout = null; 
-					if (method.getResponseHeader(BKU_REPSONE_HEADER_SERVER) != null&& 
-						!method.getResponseHeader(BKU_REPSONE_HEADER_SERVER).equals("")) { //$NON-NLS-1$
+					if (method.getResponseHeader(BKU_RESPONSE_HEADER_SERVER) != null&& 
+						!method.getResponseHeader(BKU_RESPONSE_HEADER_SERVER).equals("")) { //$NON-NLS-1$
 						server = method.getResponseHeader(
-								BKU_REPSONE_HEADER_SERVER).getValue();
+								BKU_RESPONSE_HEADER_SERVER).getValue();
 					}
 
-					if (method.getResponseHeader(BKU_REPSONE_HEADER_USERAGENT) != null &&
-						!method.getResponseHeader(BKU_REPSONE_HEADER_USERAGENT).equals("")) { //$NON-NLS-1$
+					if (method.getResponseHeader(BKU_RESPONSE_HEADER_USERAGENT) != null &&
+						!method.getResponseHeader(BKU_RESPONSE_HEADER_USERAGENT).equals("")) { //$NON-NLS-1$
 						userAgent = method.getResponseHeader(
-								BKU_REPSONE_HEADER_USERAGENT).getValue();
+								BKU_RESPONSE_HEADER_USERAGENT).getValue();
 					}
 
 					if (method
-							.getResponseHeader(BKU_REPSONE_HEADER_SIGNATURE_LAYOUT) != null &&
+							.getResponseHeader(BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT) != null &&
 						!method
-							.getResponseHeader(BKU_REPSONE_HEADER_SIGNATURE_LAYOUT).equals("")) { //$NON-NLS-1$
+							.getResponseHeader(BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT).equals("")) { //$NON-NLS-1$
 						signatureLayout = method.getResponseHeader(
-								BKU_REPSONE_HEADER_SIGNATURE_LAYOUT).getValue();
+								BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT).getValue();
 					}
 
 					String response = method.getResponseBodyAsString();
