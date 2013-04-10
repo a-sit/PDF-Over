@@ -3,10 +3,11 @@
  */
 package at.asit.pdfover.pdfsignator;
 
+import java.security.SignatureException;
+
+import at.asit.pdfover.pdfsigner.PDFSignatureException;
 import at.asit.pdfover.pdfsigner.SignResult;
 import at.asit.pdfover.pdfsigner.SignatureParameter;
-import at.asit.pdfover.pdfsigner.SLRequest;
-import at.asit.pdfover.pdfsigner.SLResponse;
 import at.asit.pdfover.pdfsigner.SigningState;
 
 /**
@@ -28,12 +29,12 @@ public interface PDFSignatorInterface {
 	 * @param parameter The signature parameter
 	 * @return A Signature State for the signing library
 	 */
-	public SigningState SignPrepare(SignatureParameter parameter);
+	public SigningState SignPrepare(SignatureParameter parameter) throws PDFSignatureException;
 	
 	/**
 	 * Performs the signature
 	 * @param response The signing state
 	 * @return The signed document
 	 */
-	public SignResult SignPerform(SigningState state);
+	public SignResult SignPerform(SigningState state) throws PDFSignatureException;
 }
