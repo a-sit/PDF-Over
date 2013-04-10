@@ -54,6 +54,8 @@ public class OutputComposite extends StateComposite {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(OutputComposite.class);
 
+	private final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
+
 	private File inputFile;
 
 	File outputFile = null;
@@ -102,9 +104,10 @@ public class OutputComposite extends StateComposite {
 	void saveFile() throws IOException {
 		FileDialog save = new FileDialog(OutputComposite.this.getShell(),
 				SWT.SAVE | SWT.NATIVE);
-		save.setFilterExtensions(new String[] { "*.pdf" }); //$NON-NLS-1$
-		save.setFilterNames(new String[] { Messages
-				.getString("common.PDFExtension_Description") }); //$NON-NLS-1$
+		save.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
+		save.setFilterNames(new String[] { 
+				Messages.getString("common.PDFExtension_Description"), //$NON-NLS-1$
+				Messages.getString("common.ALLExtension_Description")}); //$NON-NLS-1$
 
 		String proposed = OutputComposite.this.getInputFile().getAbsolutePath();
 
@@ -124,7 +127,7 @@ public class OutputComposite extends StateComposite {
 
 		name = FilenameUtils.removeExtension(name);
 
-		proposed = path + name + "_signed." + extension; //$NON-NLS-1$
+		proposed = path + name + SIGNED_SUFFIX + "." + extension; //$NON-NLS-1$
 
 		if (this.getOutputDir() != null && !this.getOutputDir().equals("")) //$NON-NLS-1$
 		{
