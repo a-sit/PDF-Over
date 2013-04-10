@@ -21,8 +21,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
@@ -56,14 +54,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final class OkSelectionListener implements SelectionListener {
-		
-		/**
-		 * Empty constructor
-		 */
-		public OkSelectionListener() {
-		}
-
+	private final SelectionListener okListener = new SelectionListener() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			try {
@@ -88,15 +79,18 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
 				.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
+				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 			} catch(InvalidPasswordException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
 				.setErrorMessage(ex.getMessage());
+				MobileBKUEnterNumberComposite.this.txt_password.setFocus();
 			}
 			catch (Exception ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
 						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
+				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
 			
@@ -110,7 +104,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		public void widgetDefaultSelected(SelectionEvent e) {
 			// Nothing to do here
 		}
-	}
+	};
 
 	String mobileNumber;
 
@@ -248,15 +242,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		fd_password.right = new FormAttachment(100, -20);
 		this.txt_password.setLayoutData(fd_password);
 		this.txt_password.setEditable(true);
-		this.txt_password.addTraverseListener(new TraverseListener() {
-			
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					(new OkSelectionListener()).widgetSelected(null);
-				}
-			}
-		});
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_password.setAlignment(SWT.RIGHT);
@@ -276,7 +261,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		fd_btn_ok.right = new FormAttachment(100, -20);
 		fd_btn_ok.left = new FormAttachment(100, -70);
 		this.btn_ok.setLayoutData(fd_btn_ok);
-		this.btn_ok.addSelectionListener(new OkSelectionListener());
+		this.btn_ok.addSelectionListener(this.okListener);
 		
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_error = new FormData();
@@ -300,7 +285,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	@Override
 	public void doLayout() {
-		// Nothing to do here till now
+		getShell().setDefaultButton(this.btn_ok);
 	}
 
 	/**
