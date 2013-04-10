@@ -145,8 +145,8 @@ public class MainWindow {
 		// Note: SWT only layouts children! No grandchildren!
 		if (ctrl instanceof StateComposite) {
 			if (!ctrl.isDisposed()) {
-				((StateComposite) ctrl).doLayout();
 				((StateComposite) ctrl).reloadResources();
+				((StateComposite) ctrl).doLayout();
 			}
 		}
 	}
@@ -193,6 +193,7 @@ public class MainWindow {
 		if (ctrl instanceof StateComposite) {
 			if (!ctrl.isDisposed()) {
 				((StateComposite) ctrl).reloadResources();
+				((StateComposite) ctrl).doLayout();
 			}
 		}
 	}
