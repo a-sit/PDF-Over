@@ -305,6 +305,20 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<arch>i386</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
+				<target.name>mac</target.name>
+			</properties>
+		</profile>
+				<profile>
 			<id>mac-64</id>
 			<activation>
 				<os>
@@ -318,6 +332,21 @@
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
+		<profile>
+			<id>mac-64</id>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<arch>x86_64</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+				<staging.dir>${project.build.directory}/staging/mac</staging.dir>
+				<target.name>mac</target.name>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>dummy-sign</id>
 			<!-- Standard profile - sign using a dummy cert -->
