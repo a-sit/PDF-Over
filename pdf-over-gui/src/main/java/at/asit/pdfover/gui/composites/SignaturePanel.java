@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -97,6 +98,16 @@ public class SignaturePanel extends JPanel {
 	int page = 0;
 	/** Number of pages in the document */
 	int numPages = 0;
+	/** Cursor types */
+	static enum Cursors {DEFAULT, HAND, MOVE};
+	/** Default arrow cursor */
+	final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+	/** Hand cursor */
+	final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	/** Move cursor */
+	final Cursor moveCursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+	/** Current cursor */
+	Cursors currentCursor = Cursors.DEFAULT;
 
 	/**
 	 * Create a new PagePanel.
@@ -403,6 +414,13 @@ public class SignaturePanel extends JPanel {
 					sigy - SignaturePanel.this.offY);
 		}
 
+		/** Handles a mouseMoved event */
+		@Override
+		public void mouseMoved(MouseEvent evt) {
+			boolean onSig = isOnSignature(evt.getX(), evt.getY());
+			setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
+		}
+
 		/** Handles a mousePressed event */
 		@Override
 		public void mousePressed(MouseEvent evt) {
@@ -422,6 +440,7 @@ public class SignaturePanel extends JPanel {
 					this.dragYOffset = 0;
 				}
 				updateSigPos(evt.getX() + this.dragXOffset, evt.getY() + this.dragYOffset);
+				setCursor(Cursors.MOVE);
 			}
 		}
 
@@ -429,6 +448,8 @@ public class SignaturePanel extends JPanel {
 		@Override
 		public void mouseReleased(MouseEvent evt) {
 			this.doDrag = false;
+			boolean onSig = isOnSignature(evt.getX(), evt.getY());
+			setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
 		}
 
 		/**
@@ -440,6 +461,30 @@ public class SignaturePanel extends JPanel {
 				updateSigPos(evt.getX() + this.dragXOffset, evt.getY() + this.dragYOffset);
 		}
 	};
+
+	/**
+	 * Sets the mouse cursor
+	 * @param cursor cursor to set
+	 */
+	void setCursor(Cursors cursor)
+	{
+		if (this.currentCursor == cursor)
+			return;
+		this.currentCursor = cursor;
+		Cursor cur = null;
+		switch (cursor) {
+			case DEFAULT:
+				cur = this.defaultCursor;
+				break;
+			case HAND:
+				cur = this.handCursor;
+				break;
+			case MOVE:
+				cur = this.moveCursor;
+				break;
+		}
+		this.getParent().setCursor(cur);
+	}
 
 	/**
 	 * Check whether given point is on signature placeholder
