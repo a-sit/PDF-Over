@@ -65,6 +65,11 @@ public class LocalBKUState extends State {
 	public static final String PDF_OVER_USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
 
 	/**
+	 * Whether to use Base64 or FileUpload Request
+	 */
+	public static final boolean USE_BASE64_REQUEST = true;
+
+	/**
 	 * 
 	 */
 	private final class SignLocalBKUThread implements Runnable {
@@ -84,28 +89,30 @@ public class LocalBKUState extends State {
 				SLRequest request = this.state.signingState
 						.getSignatureRequest();
 
-				String sl_request = request.getBase64Request();
-				//String sl_request = request.getFileUploadRequest();
-
 				HttpClient client = new HttpClient();
 
 				PostMethod method = new PostMethod(
 						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
 
-				StringPart xmlpart = new StringPart(
-						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+				String sl_request = null;
+				if (USE_BASE64_REQUEST)
+				{
+					sl_request = request.getBase64Request();
+					method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				} else {
+					sl_request = request.getFileUploadRequest();
+					StringPart xmlpart = new StringPart(
+							"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				/*FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
-						new FileUploadSource(request.getSignatureData()));
+					FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+							new FileUploadSource(request.getSignatureData()));
 
-				Part[] parts = { xmlpart, filepart };
-				
-				method.setRequestEntity(new MultipartRequestEntity(parts, method
-						.getParams()));*/
-				
+					Part[] parts = { xmlpart, filepart };
+
+					method.setRequestEntity(new MultipartRequestEntity(parts, method
+							.getParams()));
+				}
 				//log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
-
-				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 
 				int returnCode = client.executeMethod(method);
 
