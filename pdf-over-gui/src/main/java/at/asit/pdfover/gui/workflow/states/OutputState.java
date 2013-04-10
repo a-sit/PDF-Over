@@ -26,9 +26,9 @@ import at.asit.pdfover.gui.composites.OutputComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 
 /**
  * Produces the output of the signature process. (save file, open file)

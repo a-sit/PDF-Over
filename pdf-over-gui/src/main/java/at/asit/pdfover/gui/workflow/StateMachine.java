@@ -15,6 +15,10 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**

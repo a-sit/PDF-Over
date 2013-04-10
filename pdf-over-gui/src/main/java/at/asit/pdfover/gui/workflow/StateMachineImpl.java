@@ -28,6 +28,11 @@ import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 

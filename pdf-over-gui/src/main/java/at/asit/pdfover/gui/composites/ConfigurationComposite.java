@@ -34,11 +34,11 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.PDFSigner;
-import at.asit.pdfover.gui.workflow.PersistentConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationContainerImpl;
+import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 

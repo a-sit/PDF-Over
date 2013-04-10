@@ -19,7 +19,7 @@ package at.asit.pdfover.gui.workflow.states.mobilebku;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 
 /**
  * A-Trust MobileBKUStatus implementation
