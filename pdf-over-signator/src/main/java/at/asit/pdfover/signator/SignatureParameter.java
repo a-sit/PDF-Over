@@ -24,31 +24,24 @@ import java.awt.Image;
  */
 public abstract class SignatureParameter {
 
-	/**
-	 * The Signature Position
-	 */
+	/** The Signature Position */
 	protected SignaturePosition signaturePosition = null;
 
-	/**
-	 * The signature Device
-	 */
+	/** The Signature language */
+	protected String signatureLanguage = null;
+
+	/** The key identifier */
 	protected String keyIdentifier = null;
 
-	/**
-	 * The input document
-	 */
+	/** The input document */
 	protected DocumentSource documentSource = null;
 
-	/**
-	 * holds the emblem
-	 */
+	/** holds the emblem */
 	protected Emblem emblem;
 
-	/**
-	 * The signature device
-	 */
+	/** The signature device */
 	protected BKUs signatureDevice;
-	
+
 	/**
 	 * @return the signatureDevice
 	 */
@@ -57,39 +50,65 @@ public abstract class SignatureParameter {
 	}
 
 	/**
-	 * @param signatureDevice the signatureDevice to set
+	 * @param signatureDevice
+	 *            the signatureDevice to set
 	 */
 	public void setSignatureDevice(BKUs signatureDevice) {
 		this.signatureDevice = signatureDevice;
 	}
 
-	/** 
+	/**
 	 * Getter of the property <tt>signaturePosition</tt>
-	 * @return  Returns the signaturePosition.
+	 * 
+	 * @return Returns the signaturePosition.
 	 */
 	public SignaturePosition getSignaturePosition() {
 		return this.signaturePosition;
 	}
-	
-	/** 
+
+	/**
 	 * Setter of the property <tt>signaturePosition</tt>
-	 * @param signaturePosition  The signaturePosition to set.
+	 * 
+	 * @param signaturePosition
+	 *            The signaturePosition to set.
 	 */
 	public void setSignaturePosition(SignaturePosition signaturePosition) {
 		this.signaturePosition = signaturePosition;
 	}
-	
+
+	/**
+	 * Getter of the property <tt>signatureLanguage</tt>
+	 * 
+	 * @return Returns the signatureLanguage.
+	 */
+	public String getSignatureLanguage() {
+		return this.signatureLanguage;
+	}
+
+	/**
+	 * Setter of the property <tt>signatureLanguage</tt>
+	 * 
+	 * @param signatureLanguage
+	 *            The signatureLanguage to set.
+	 */
+	public void setSignatureLanguage(String signatureLanguage) {
+		this.signatureLanguage = signatureLanguage;
+	}
+
 	/**
 	 * Getter of the property <tt>keyIdentifier</tt>
-	 * @return  Returns the keyIdentifier.
+	 * 
+	 * @return Returns the keyIdentifier.
 	 */
 	public String getKeyIdentifier() {
 		return this.keyIdentifier;
 	}
-	
+
 	/**
 	 * Setter of the property <tt>keyIdentifier</tt>
-	 * @param keyIdentifier  The keyIdentifier to set.
+	 * 
+	 * @param keyIdentifier
+	 *            The keyIdentifier to set.
 	 */
 	public void setKeyIdentifier(String keyIdentifier) {
 		this.keyIdentifier = keyIdentifier;
@@ -97,34 +116,40 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>documentSource</tt>
-	 * @return  Returns the documentSource.
+	 * 
+	 * @return Returns the documentSource.
 	 */
 	public DocumentSource getInputDocument() {
 		return this.documentSource;
 	}
-	
+
 	/**
 	 * Setter of the property <tt>documentSource</tt>
-	 * @param inputDocument  The documentSource to set.
+	 * 
+	 * @param inputDocument
+	 *            The documentSource to set.
 	 */
 	public void setInputDocument(DocumentSource inputDocument) {
 		this.documentSource = inputDocument;
 	}
-	
+
 	/**
 	 * Gets the Dimension to display the Placeholder
+	 * 
 	 * @return the placeholder dimensions
 	 */
 	public abstract SignatureDimension getPlaceholderDimension();
-	
+
 	/**
 	 * Gets the Dimension to display the Placeholder
+	 * 
 	 * @return the placeholder dimensions
 	 */
 	public abstract Image getPlaceholder();
-	
+
 	/**
 	 * Gets the Emblem
+	 * 
 	 * @return the Emblem
 	 */
 	public Emblem getEmblem() {
@@ -133,22 +158,26 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Sets the Emblem
-	 * @param emblem The new Emblem
+	 * 
+	 * @param emblem
+	 *            The new Emblem
 	 */
 	public void setEmblem(Emblem emblem) {
 		this.emblem = emblem;
 	}
-	
+
 	/**
 	 * Sets generic properties
+	 * 
 	 * @param key
 	 * @param value
 	 */
 	public abstract void setProperty(String key, String value);
-	
+
 	/**
 	 * Gets generic properties
-	 * @param key 
+	 * 
+	 * @param key
 	 * @return associated value
 	 */
 	public abstract String getProperty(String key);
