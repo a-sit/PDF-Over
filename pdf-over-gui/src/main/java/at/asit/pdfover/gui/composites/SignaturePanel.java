@@ -74,9 +74,9 @@ public class SignaturePanel extends JPanel {
 	/** Height of the signature placeholder in page space */
 	private int sigPageHeight = 0;
 	/** Width of the signature placeholder in screen space */
-	private int sigScreenWidth = 0;
+	int sigScreenWidth = 0;
 	/** Height of the signature placeholder in screen space */
-	private int sigScreenHeight = 0;
+	int sigScreenHeight = 0;
 
 	/**
 	 * Create a new PagePanel, with a default size of 800 by 600 pixels.
@@ -282,9 +282,9 @@ public class SignaturePanel extends JPanel {
 			if (SignaturePanel.this.currentImage == null)
 				return;
 			sigx -= SignaturePanel.this.offX;
-			sigx = clamp(sigx, 0, SignaturePanel.this.currentImage.getWidth(null));
+			sigx = clamp(sigx, 0, SignaturePanel.this.currentImage.getWidth(null) - SignaturePanel.this.sigScreenWidth);
 			sigy -= SignaturePanel.this.offY;
-			sigy = clamp(sigy, 0, SignaturePanel.this.currentImage.getHeight(null));
+			sigy = clamp(sigy, 0, SignaturePanel.this.currentImage.getHeight(null) - SignaturePanel.this.sigScreenHeight);
 			SignaturePanel.this.sigScreenPos = new Point2D.Double(sigx, sigy);
 			SignaturePanel.this.sigPagePos = SignaturePanel.this.currentXform.transform(SignaturePanel.this.sigScreenPos, SignaturePanel.this.sigPagePos);
 			repaint();
