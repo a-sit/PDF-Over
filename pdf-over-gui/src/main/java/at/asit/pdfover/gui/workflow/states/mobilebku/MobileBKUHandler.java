@@ -228,7 +228,6 @@ public abstract class MobileBKUHandler {
 				req = post.getRequestEntity().getContentLength() + " bytes"; //$NON-NLS-1$
 			}
 			log.debug("Posting to " + post.getURI() + ": " + req); //$NON-NLS-1$ //$NON-NLS-2$
-			//TODO: Remove me (sensitive data)
 		}
 		int returnCode = client.executeMethod(post);
 
