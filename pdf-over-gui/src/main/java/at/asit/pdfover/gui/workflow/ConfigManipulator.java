@@ -57,7 +57,7 @@ public interface ConfigManipulator {
 	 * Sets the default password
 	 * @param password the default password
 	 */
-	public void setDefaultPassword(String password);
+	public void setDefaultMobilePassword(String password);
 
 	/**
 	 * Sets the default emblem

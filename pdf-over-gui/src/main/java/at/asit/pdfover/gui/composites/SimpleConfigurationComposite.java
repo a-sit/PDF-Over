@@ -908,8 +908,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	private void plainMobileNumberSetter() throws InvalidNumberException {
 		String number = this.txtMobileNumber.getText();
-		this.configurationContainer.setNumber(number);
-		number = this.configurationContainer.getNumber();
+		this.configurationContainer.setMobileNumber(number);
+		number = this.configurationContainer.getMobileNumber();
 		if (number == null) {
 			this.txtMobileNumber.setText(""); //$NON-NLS-1$
 			return;
@@ -1006,7 +1006,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
-		String number = this.configurationContainer.getNumber();
+		String number = this.configurationContainer.getMobileNumber();
 		if (number != null) {
 			this.txtMobileNumber.setText(number);
 		}

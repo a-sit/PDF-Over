@@ -22,16 +22,19 @@ import java.util.Locale;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
 import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * 
@@ -45,60 +48,50 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 			.getLogger(ConfigurationContainerImpl.class);
 
 
-	/**
-	 * the emblem File
-	 */
+	/** the emblem File */
 	protected String emblemFile = null;
 
-	/**
-	 * The mobile phone number 
-	 */
+	/** The mobile phone number */
 	protected String mobileNumber = null;
 	
-	/**
-	 * Holds the proxy Host 
-	 */
+	/** The mobile phone password */
+	protected String mobilePassword = null;
+	
+	/** Holds the proxy Host */
 	protected String proxyHost = null;
 	
-	/**
-	 * Holds the signatureNote
-	 */
+	/** Holds the signatureNote */
 	protected String signatureNote = null;
 	
-	/**
-	 * Holds the proxy port number
-	 */
+	/** Holds the proxy port number */
 	protected int proxyPort = -1;
 	
-	/**
-	 * Holds the locale
-	 */
+	/** Holds the locale */
 	protected Locale locale = null;
 	
-	/**
-	 * Holds the locale
-	 */
+	/** Holds the signature locale */
 	protected Locale signLocale = null;
 	
-	/**
-	 * Holds the output folder
-	 */
+	/** Holds the output folder */
 	protected String folder = null;
 	
-	/**
-	 * Holds the default BKU to use
-	 */
-	protected BKUs defaulBKU = BKUs.NONE;
+	/** Holds the default BKU to use */
+	protected BKUs defaultBKU = BKUs.NONE;
 	
-	/**
-	 * Holds the automatic positioning value
-	 */
+	/** Holds the automatic positioning value */
 	protected boolean automaticPositioning = false;
 
-	/**
-	 * Holds the transparency of the signature placeholder
-	 */
-	protected int placeholderTransparency = 170;
+	/** Holds the transparency of the signature placeholder */
+	protected int placeholderTransparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
+
+	/** Holds the mobile BKU URL */
+	protected String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
+
+	/** Holds the main window size */
+	protected Point mainWindowSize = null;
+
+	/** Holds the default signature position */
+	protected SignaturePosition defaultSignaturePosition = null;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -107,7 +100,6 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	public String getEmblem() {
 		return this.emblemFile;
 	}
-
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setEmblem(java.lang.String)
@@ -141,7 +133,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getNumber()
 	 */
 	@Override
-	public String getNumber() {
+	public String getMobileNumber() {
 		return this.mobileNumber;
 	}
 
@@ -150,7 +142,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setNumber(java.lang.String)
 	 */
 	@Override
-	public void setNumber(String number) throws InvalidNumberException {
+	public void setMobileNumber(String number) throws InvalidNumberException {
 		if(number == null || number.trim().isEmpty()) {
 			this.mobileNumber = null;
 			return;
@@ -160,6 +152,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		} catch (InvalidNumberException e) {
 			throw new InvalidNumberException(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getDefaultMobilePassword()
+	 */
+	@Override
+	public String getMobilePassword() {
+		return this.mobilePassword;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setDefaultMobilePassword(java.lang.String)
+	 */
+	@Override
+	public void setMobilePassword(String password) {
+		this.mobilePassword = password;
 	}
 
 
@@ -247,8 +257,8 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getBKUSelection()
 	 */
 	@Override
-	public BKUs getBKUSelection() {
-		return this.defaulBKU;
+	public BKUs getDefaultBKU() {
+		return this.defaultBKU;
 	}
 
 
@@ -256,8 +266,8 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setBKUSelection(at.asit.pdfover.signator.BKUs)
 	 */
 	@Override
-	public void setBKUSelection(BKUs bkuSelection) {
-		this.defaulBKU = bkuSelection;
+	public void setDefaultBKU(BKUs bkuSelection) {
+		this.defaultBKU = bkuSelection;
 	}
 
 
@@ -298,6 +308,15 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 
 	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getLocale()
+	 */
+	@Override
+	public Locale getLocale() {
+		return this.locale;
+	}
+
+
+	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setLocale(java.util.Locale)
 	 */
 	@Override
@@ -307,11 +326,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getLocale()
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignLocale()
 	 */
 	@Override
-	public Locale getLocale() {
-		return this.locale;
+	public Locale getSignLocale() {
+		return this.signLocale;
 	}
 
 
@@ -325,11 +344,55 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignLocale()
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getMobileBkURL()
 	 */
 	@Override
-	public Locale getSignLocale() {
-		return this.signLocale;
+	public String getMobileBKUURL() {
+		return this.mobileBKUURL;
 	}
-	
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setMobileBkURL(java.lang.String)
+	 */
+	@Override
+	public void setMobileBKUURL(String bkuUrl) {
+		this.mobileBKUURL = bkuUrl;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignaturePosition()
+	 */
+	@Override
+	public SignaturePosition getDefaultSignaturePosition() {
+		return this.defaultSignaturePosition;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setSignaturePosition(at.asit.pdfover.signator.SignaturePosition)
+	 */
+	@Override
+	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
+		this.defaultSignaturePosition = signaturePosition;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getMainWindowSize()
+	 */
+	@Override
+	public Point getMainWindowSize() {
+		return this.mainWindowSize;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setMainWindowSize(org.eclipse.swt.graphics.Point)
+	 */
+	@Override
+	public void setMainWindowSize(Point size) {
+		this.mainWindowSize = size;
+	}
 }

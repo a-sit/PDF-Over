@@ -17,66 +17,80 @@ package at.asit.pdfover.gui.workflow;
 
 import java.util.Locale;
 
+import org.eclipse.swt.graphics.Point;
+
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * 
  */
 public interface ConfigurationContainer {
-	
 	/**
 	 * Gets the configured emblem
 	 * @return the configured emblem
 	 */
 	public String getEmblem();
-	
+
 	/**
 	 * Sets the emblem
 	 * @param emblem the emblem
 	 * @throws InvalidEmblemFile
 	 */
 	public void setEmblem(String emblem) throws InvalidEmblemFile;
-	
+
 	/**
 	 * Gets the mobile phone number
 	 * @return the mobile phone number
 	 */
-	public String getNumber();
-	
+	public String getMobileNumber();
+
 	/**
 	 * Sets the mobile phone number 
 	 * @param number the mobile phone number
 	 * @throws InvalidNumberException
 	 */
-	public void setNumber(String number) throws InvalidNumberException;
-	
+	public void setMobileNumber(String number) throws InvalidNumberException;
+
+	/**
+	 * Gets the mobile phone number
+	 * @return the mobile phone number
+	 */
+	public String getMobilePassword();
+
+	/**
+	 * Sets the mobile phone password 
+	 * @param password the mobile phone password
+	 */
+	public void setMobilePassword(String password);
+
 	/**
 	 * Gets the proxy host
 	 * @return the proxy host
 	 */
 	public String getProxyHost();
-	
+
 	/**
 	 * Sets the proxy host
 	 * @param host the proxy host
 	 */
 	public void setProxyHost(String host);
-	
+
 	/**
 	 * Gets the signature note
 	 * @return the signature note
 	 */
 	public String getSignatureNote();
-	
+
 	/**
 	 * Sets the signature note
 	 * @param note the signature note
 	 */
 	public void setSignatureNote(String note);
-	
+
 	/**
 	 * Gets the proxy port
 	 * 
@@ -85,7 +99,7 @@ public interface ConfigurationContainer {
 	 * @return the proxy port
 	 */
 	public int getProxyPort();
-	
+
 	/**
 	 * Sets the proxy port
 	 * 
@@ -95,25 +109,25 @@ public interface ConfigurationContainer {
 	 * @throws InvalidPortException
 	 */
 	public void setProxyPort(int port) throws InvalidPortException;
-	
+
 	/**
 	 * Gets the automatic position
 	 * @return the automatic position
 	 */
 	public boolean getAutomaticPosition();
-	
+
 	/**
 	 * Sets the automatic position
 	 * @param automatic the automatic position
 	 */
 	public void setAutomaticPosition(boolean automatic);
-	
+
 	/**
 	 * Gets the transparency of the placeholder
 	 * @return transparency of the placeholder (0-255)
 	 */
 	public int getPlaceholderTransparency();
-	
+
 	/**
 	 * Sets the transparency of the placeholder
 	 * @param transparency transparency of the placeholder (0-255)
@@ -124,47 +138,83 @@ public interface ConfigurationContainer {
 	 * Gets the default BKU
 	 * @return the default BKU
 	 */
-	public BKUs getBKUSelection();
-	
+	public BKUs getDefaultBKU();
+
 	/**
 	 * Sets the default BKU 
-	 * @param bkuSelection the default BKU
+	 * @param defaultBKU the default BKU
 	 */
-	public void setBKUSelection(BKUs bkuSelection);
-	
+	public void setDefaultBKU(BKUs defaultBKU);
+
 	/**
 	 * Gets the default output folder
 	 * @return the default output folder
 	 */
 	public String getOutputFolder();
-	
+
 	/**
 	 * Sets the default output folder
 	 * @param folder the default output folder
 	 */
 	public void setOutputFolder(String folder);
-	
-	/**
-	 * Sets the locale
-	 * @param locale the locale
-	 */
-	public void setLocale(Locale locale);
-	
+
 	/**
 	 * Gets the locale
 	 * @return the locale
 	 */
 	public Locale getLocale();
-	
+
 	/**
 	 * Sets the locale
 	 * @param locale the locale
 	 */
-	public void setSignLocale(Locale locale);
-	
+	public void setLocale(Locale locale);
+
 	/**
-	 * Gets the locale
-	 * @return the locale
+	 * Gets the signature locale
+	 * @return the signature locale
 	 */
 	public Locale getSignLocale();
+
+	/**
+	 * Sets the signature locale
+	 * @param locale the signature locale
+	 */
+	public void setSignLocale(Locale locale);
+
+	/**
+	 * Gets the mobile BKU URL
+	 * @return the mobile BKU URL
+	 */
+	public String getMobileBKUURL();
+
+	/**
+	 * Sets the mobile BKU URL
+	 * @param bkuUrl the mobile BKU URL
+	 */
+	public void setMobileBKUURL(String bkuUrl);
+
+	/**
+	 * Gets the default signature position
+	 * @return the default signature position
+	 */
+	public SignaturePosition getDefaultSignaturePosition();
+
+	/**
+	 * Gets the default signature position
+	 * @param signaturePosition the default signature position
+	 */
+	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
+
+	/**
+	 * Gets the main window size
+	 * @return the main window size
+	 */
+	public Point getMainWindowSize();
+
+	/**
+	 * Sets the main window size
+	 * @param size the main window size
+	 */
+	public void setMainWindowSize(Point size);
 }

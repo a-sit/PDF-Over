@@ -77,6 +77,9 @@ public class Constants {
 	/** Big text size */
 	public static final int TEXT_SIZE_BIG = 14;
 
+	/** Default signature placeholder transparency */
+	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
+
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 

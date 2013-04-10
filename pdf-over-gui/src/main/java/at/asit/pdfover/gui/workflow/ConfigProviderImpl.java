@@ -30,6 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
+import at.asit.pdfover.gui.exceptions.InvalidNumberException;
+import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.signator.BKUs;
@@ -45,39 +48,48 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	private static final Logger log = LoggerFactory
 			.getLogger(ConfigProviderImpl.class);
 
-	private BKUs defaultBKU = BKUs.NONE;
-
-	private SignaturePosition defaultSignaturePosition = null;
-
 	/**
-	 * An Emtpy property entry
+	 * An empty property entry
 	 */
 	public static final String STRING_EMPTY = ""; //$NON-NLS-1$
 
-	private String defaultMobileNumber = STRING_EMPTY;
-
-	private String defaultPassword = STRING_EMPTY;
-
-	private Locale locale = Messages.getDefaultLocale();
-	private Locale signLocale = this.locale;
-	
-	private String emblem = STRING_EMPTY;
-
-	private String proxyHost = STRING_EMPTY;
-
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
-	private int proxyPort = -1;
+	private ConfigurationContainer configuration;
 
-	private String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
+//	private BKUs defaultBKU = BKUs.NONE;
+//
+//	private SignaturePosition defaultSignaturePosition = null;
+//
+//	private String defaultMobileNumber = STRING_EMPTY;
+//
+//	private String defaultPassword = STRING_EMPTY;
+//
+//	private Locale locale = Messages.getDefaultLocale();
+//	private Locale signLocale = this.locale;
+//	
+//	private String emblem = STRING_EMPTY;
+//
+//	private String proxyHost = STRING_EMPTY;
+//
+//	private int proxyPort = -1;
+//
+//	private String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
+//
+//	private String outputFolder = STRING_EMPTY;
+//
+//	private String signatureNote = STRING_EMPTY;
+//
+//	private int placeholderTransparency = 170;
+//
+//	private Point mainWindowSize;
 
-	private String outputFolder = STRING_EMPTY;
-
-	private String signatureNote = STRING_EMPTY;
-
-	private int placeholderTransparency = 170;
-
-	private Point mainWindowSize;
+	/**
+	 * Constructor
+	 */
+	public ConfigProviderImpl() {
+		this.configuration = new ConfigurationContainerImpl();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -127,11 +139,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 			this.setSignLocale(signtargetLocale);
 		}
  		
-		String bku = config
+		String bkuUrl = config
 				.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		
-		if (bku != null && !bku.isEmpty()) {
-			this.mobileBKUURL = bku;
+		if (bkuUrl != null && !bkuUrl.isEmpty()) {
+			this.configuration.setMobileBKUURL(bkuUrl);
 		}
 
 		// Set Proxy Port
@@ -166,7 +178,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		this.setDefaultBKU(defaultBKU);
 
 		// Set Signature placeholder transparency
-		int transparency = 170;
+		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
 		try {
 			transparency = Integer
 					.parseInt(config
@@ -196,7 +208,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 				// ignore parsing exception
 			}
 		}
-		this.mainWindowSize = new Point(width, height);
+		this.configuration.setMainWindowSize(new Point(width, height));
 
 		// Set Signature Position
 		String signaturePosition = config
@@ -283,8 +295,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(this.getPlaceholderTransparency()));
 
-		props.setProperty(Constants.CFG_MAINWINDOW_SIZE,
-				this.mainWindowSize.x + "," + this.mainWindowSize.y); //$NON-NLS-1$
+		Point size = this.configuration.getMainWindowSize();
+		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //$NON-NLS-1$
 
 		Locale configLocale = this.getConfigLocale();
 		if(configLocale != null) {
@@ -357,7 +369,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultBKU(BKUs bku) {
-		this.defaultBKU = bku;
+		this.configuration.setDefaultBKU(bku);
 	}
 
 	/*
@@ -367,7 +379,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public BKUs getDefaultBKU() {
-		return this.defaultBKU;
+		return this.configuration.getDefaultBKU();
 	}
 
 	/**
@@ -378,7 +390,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
-		this.defaultSignaturePosition = signaturePosition;
+		this.configuration.setDefaultSignaturePosition(signaturePosition);
 	}
 
 	/*
@@ -389,7 +401,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public SignaturePosition getDefaultSignaturePosition() {
-		return this.defaultSignaturePosition;
+		return this.configuration.getDefaultSignaturePosition();
 	}
 
 	/**
@@ -400,7 +412,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setPlaceholderTransparency(int transparency) {
-		this.placeholderTransparency = transparency;
+		this.configuration.setPlaceholderTransparency(transparency);
 	}
 
 	/*
@@ -411,7 +423,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public int getPlaceholderTransparency() {
-		return this.placeholderTransparency;
+		return this.configuration.getPlaceholderTransparency();
 	}
 
 	/**
@@ -422,10 +434,19 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultMobileNumber(String number) {
-		if (number == null || number.trim().isEmpty()) {
-			this.defaultMobileNumber = STRING_EMPTY;
-		} else {
-			this.defaultMobileNumber = number;
+		try {
+			if (number == null || number.trim().isEmpty()) {
+				this.configuration.setMobileNumber(STRING_EMPTY);
+			} else {
+				this.configuration.setMobileNumber(number);
+			}
+		} catch (InvalidNumberException e) {
+			log.error("Error setting mobile number", e); //$NON-NLS-1$
+			try {
+				this.configuration.setMobileNumber(STRING_EMPTY);
+			} catch (InvalidNumberException e1) {
+				// Ignore
+			}
 		}
 	}
 
@@ -436,21 +457,21 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultMobileNumber() {
-		return this.defaultMobileNumber;
+		return this.configuration.getMobileNumber();
 	}
 
 	/**
-	 * Sets the default password
+	 * Sets the default mobile password
 	 * 
 	 * @param password
 	 *            the default password
 	 */
 	@Override
-	public void setDefaultPassword(String password) {
+	public void setDefaultMobilePassword(String password) {
 		if (password == null || password.trim().isEmpty()) {
-			this.defaultPassword = STRING_EMPTY;
+			this.configuration.setMobilePassword(STRING_EMPTY);
 		} else {
-			this.defaultPassword = password;
+			this.configuration.setMobilePassword(password);
 		}
 	}
 
@@ -460,8 +481,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultPassword()
 	 */
 	@Override
-	public String getDefaultPassword() {
-		return this.defaultPassword;
+	public String getDefaultMobilePassword() {
+		return this.configuration.getMobilePassword();
 	}
 
 	/**
@@ -472,10 +493,19 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setDefaultEmblem(String emblem) {
-		if (emblem == null || emblem.trim().isEmpty()) {
-			this.emblem = STRING_EMPTY;
-		} else {
-			this.emblem = emblem;
+		try {
+			if (emblem == null || emblem.trim().isEmpty()) {
+				this.configuration.setEmblem(STRING_EMPTY);
+			} else {
+				this.configuration.setEmblem(emblem);
+			}
+		} catch (InvalidEmblemFile e) {
+			log.error("Error setting emblem file", e); //$NON-NLS-1$
+			try {
+				this.configuration.setEmblem(STRING_EMPTY);
+			} catch (InvalidEmblemFile e1) {
+				// Ignore
+			}
 		}
 	}
 
@@ -486,7 +516,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultEmblem() {
-		return this.emblem;
+		return this.configuration.getEmblem();
 	}
 
 	/**
@@ -498,9 +528,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setProxyHost(String host) {
 		if (host == null || host.trim().isEmpty()) {
-			this.proxyHost = STRING_EMPTY;
+			this.configuration.setProxyHost(STRING_EMPTY);
 		} else {
-			this.proxyHost = host;
+			this.configuration.setProxyHost(host);
 		}
 	}
 
@@ -511,7 +541,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getProxyHost() {
-		return this.proxyHost;
+		return this.configuration.getProxyHost();
 	}
 
 	/**
@@ -522,7 +552,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setProxyPort(int port) {
-		this.proxyPort = port;
+		try {
+			this.configuration.setProxyPort(port);
+		} catch (InvalidPortException e) {
+			log.error("Error setting proxy port" , e); //$NON-NLS-1$
+			// ignore
+		}
 	}
 
 	/*
@@ -532,7 +567,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public int getProxyPort() {
-		return this.proxyPort;
+		return this.configuration.getProxyPort();
 	}
 
 	/*
@@ -545,9 +580,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setDefaultOutputFolder(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
-			this.outputFolder = STRING_EMPTY;
+			this.configuration.setOutputFolder(STRING_EMPTY);
 		} else {
-			this.outputFolder = outputFolder;
+			this.configuration.setOutputFolder(outputFolder);
 		}
 	}
 
@@ -558,7 +593,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getDefaultOutputFolder() {
-		return this.outputFolder;
+		return this.configuration.getOutputFolder();
 	}
 
 	/*
@@ -568,17 +603,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public String getMobileBKUURL() {
-		return this.mobileBKUURL;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureNote()
-	 */
-	@Override
-	public String getSignatureNote() {
-		return this.signatureNote;
+		return this.configuration.getMobileBKUURL();
 	}
 
 	/*
@@ -591,18 +616,20 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setSignatureNote(String note) {
 		if (note == null || note.trim().isEmpty()) {
-			this.signatureNote = STRING_EMPTY;
+			this.configuration.setSignatureNote(STRING_EMPTY);
 		} else {
-			this.signatureNote = note;
+			this.configuration.setSignatureNote(note);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigLocale()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureNote()
 	 */
 	@Override
-	public Locale getConfigLocale() {
-		return this.locale;
+	public String getSignatureNote() {
+		return this.configuration.getSignatureNote();
 	}
 
 	/* (non-Javadoc)
@@ -611,12 +638,20 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setLocale(Locale locale) {
 		if(locale == null) {
-			this.locale = Messages.getDefaultLocale();
+			this.configuration.setLocale(Messages.getDefaultLocale());
 		} else {
-			this.locale = locale;
+			this.configuration.setLocale(locale);
 			Locale.setDefault(locale);
 			Messages.setLocale(locale);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigLocale()
+	 */
+	@Override
+	public Locale getConfigLocale() {
+		return this.configuration.getLocale();
 	}
 
 	/* (non-Javadoc)
@@ -625,9 +660,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	@Override
 	public void setSignLocale(Locale locale) {
 		if(locale == null) {
-			this.signLocale = Messages.getDefaultLocale();
+			this.configuration.setSignLocale(Messages.getDefaultLocale());
 		} else {
-			this.signLocale = locale;
+			this.configuration.setSignLocale(locale);
 		}
 	}
 
@@ -636,7 +671,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public Locale getSignLocale() {
-		return this.signLocale;
+		return this.configuration.getSignLocale();
 	}
 
 	/* (non-Javadoc)
@@ -644,7 +679,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public void setMainWindowSize(Point size) {
-		this.mainWindowSize = size;
+		this.configuration.setMainWindowSize(size);
 	}
 
 	/* (non-Javadoc)
@@ -652,7 +687,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator {
 	 */
 	@Override
 	public Point getMainWindowSize() {
-		return this.mainWindowSize;
+		return this.configuration.getMainWindowSize();
 	}
 
 }

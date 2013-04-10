@@ -43,7 +43,7 @@ public class MobileBKUStatus {
 	 */
 	public MobileBKUStatus(ConfigProvider provider) {
 		this.setPhoneNumber(provider.getDefaultMobileNumber());
-		this.setMobilePassword(provider.getDefaultPassword());
+		this.setMobilePassword(provider.getDefaultMobilePassword());
 	}
 	
 	String viewstate;

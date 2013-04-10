@@ -228,7 +228,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int selectionIndex = getBKUElementIndex(AdvancedConfigurationComposite.this.configurationContainer
-						.getBKUSelection());
+						.getDefaultBKU());
 				if (AdvancedConfigurationComposite.this.cmbBKUAuswahl
 						.getSelectionIndex() != selectionIndex) {
 					selectionIndex = AdvancedConfigurationComposite.this.cmbBKUAuswahl
@@ -416,7 +416,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performBKUSelectionChanged(BKUs selected) {
 		log.debug("Selected BKU: " + selected.toString()); //$NON-NLS-1$
-		this.configurationContainer.setBKUSelection(selected);
+		this.configurationContainer.setDefaultBKU(selected);
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
 	}
 
@@ -494,7 +494,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	public void loadConfiguration() {
 		// load advanced settings
 		this.performBKUSelectionChanged(this.configurationContainer
-				.getBKUSelection());
+				.getDefaultBKU());
 		String outputFolder = this.configurationContainer.getOutputFolder();
 		if (outputFolder != null) {
 			this.performOutputFolderChanged(outputFolder);

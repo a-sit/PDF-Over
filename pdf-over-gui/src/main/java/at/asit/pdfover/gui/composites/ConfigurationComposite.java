@@ -294,7 +294,7 @@ public class ConfigurationComposite extends StateComposite {
 			
 			this.configurationContainer.setSignLocale(this.configProvider.getSignLocale());
 			
-			this.configurationContainer.setBKUSelection(this.configProvider
+			this.configurationContainer.setDefaultBKU(this.configProvider
 					.getDefaultBKU());
 			try {
 				this.configurationContainer.setEmblem(this.configProvider
@@ -303,7 +303,7 @@ public class ConfigurationComposite extends StateComposite {
 				log.error("Failed to set emblem!", e); //$NON-NLS-1$
 			}
 			try {
-				this.configurationContainer.setNumber(this.configProvider
+				this.configurationContainer.setMobileNumber(this.configProvider
 						.getDefaultMobileNumber());
 			} catch (InvalidNumberException e) {
 				log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
@@ -397,9 +397,9 @@ public class ConfigurationComposite extends StateComposite {
 
 		// Write current Configuration
 		this.configManipulator.setDefaultBKU(this.configurationContainer
-				.getBKUSelection());
+				.getDefaultBKU());
 		this.configManipulator
-				.setDefaultMobileNumber(this.configurationContainer.getNumber());
+				.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
 		if (this.configurationContainer.getAutomaticPosition()) {
 			this.configManipulator
 					.setDefaultSignaturePosition(new SignaturePosition());

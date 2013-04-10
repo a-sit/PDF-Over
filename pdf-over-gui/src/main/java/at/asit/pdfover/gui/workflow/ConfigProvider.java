@@ -56,7 +56,7 @@ public interface ConfigProvider {
 	 * Gets the password to use for Mobile BKU
 	 * @return the password
 	 */
-	public String getDefaultPassword();
+	public String getDefaultMobilePassword();
 
 	/**
 	 * Gets the filename of the default emblem
@@ -131,8 +131,8 @@ public interface ConfigProvider {
 	public Point getMainWindowSize();
 
 	/**
-	 * Loads the current configuration to the current configuration file
-	 * @param configSource 
+	 * Loads the configuration from a configuration file
+	 * @param configSource the configuration file
 	 * @throws IOException 
 	 */
 	public void loadConfiguration(InputStream configSource) throws IOException;

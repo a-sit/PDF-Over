@@ -76,7 +76,7 @@ public class SignaturePanel extends JPanel {
 	/** Current scaled signature placeholder image */
 	BufferedImage sigPlaceholderScaled = null;
 	/** Transparency of the signature placeholder (0-255) */
-	private int sigPlaceholderTransparency = 170;
+	private int sigPlaceholderTransparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
 	/** Previous Transparency of the signature placeholder */
 	private int prevSigPlaceholderTransparency = 0;
 	/** Width of the signature placeholder in page space */

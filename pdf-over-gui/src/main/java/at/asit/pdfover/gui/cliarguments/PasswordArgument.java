@@ -58,7 +58,7 @@ public class PasswordArgument extends CLIArgument {
 				
 				ConfigManipulator configManipulator = stateMachine.getConfigManipulator();
 				
-				configManipulator.setDefaultPassword(password);
+				configManipulator.setDefaultMobilePassword(password);
 				
 				return argOffset + 1;
 			}
