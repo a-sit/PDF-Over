@@ -80,7 +80,14 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		State next = null;
 		while (this.status.getCurrentState() != null) {
 			State current = this.status.getCurrentState();
-			current.run();
+			try
+			{
+				current.run();
+			}
+			catch(Exception e) {
+				log.error("StateMachine update: ", e); //$NON-NLS-1$
+				// TODO: GOTO generic error state!
+			}
 			if (this.mainWindow != null
 					&& !this.mainWindow.getShell().isDisposed()) {
 				log.debug("Allowing MainWindow to update its state for " //$NON-NLS-1$
@@ -98,11 +105,13 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 					+ next.toString());
 			this.status.setCurrentState(next);
 		}
+		
+		// TODO: Remove following line when releasing ...
 		if (this.status.getCurrentState() != null) {
 			this.setCurrentStateMessage(this.status.getCurrentState()
 					.toString());
 		} else {
-			this.setCurrentStateMessage("");
+			this.setCurrentStateMessage(""); //$NON-NLS-1$
 		}
 	}
 
@@ -197,7 +206,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			composite = constructor.newInstance(getComposite(), style, state);
 		} catch (Exception e) {
 			log.error(
-					"Could not create Composite for Class "
+					"Could not create Composite for Class " //$NON-NLS-1$
 							+ compositeClass.getName(), e);
 		}
 		return composite;

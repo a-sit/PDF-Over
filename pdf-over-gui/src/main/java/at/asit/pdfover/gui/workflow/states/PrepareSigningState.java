@@ -24,7 +24,9 @@ import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
 
@@ -38,33 +40,6 @@ public class PrepareSigningState extends State {
 	 */
 	public PrepareSigningState(StateMachine stateMachine) {
 		super(stateMachine);
-	}
-
-	/**
-	 * Debug background thread
-	 */
-	private final class DebugSleeperThread implements Runnable {
-		
-		private StateMachine workflow;
-		
-		/**
-		 * Default constructor
-		 * @param work
-		 */
-		public DebugSleeperThread(final StateMachine work) {
-			this.workflow = work;
-		}
-		
-		@Override
-		public void run() {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.workflow.invokeUpdate();
-		}
 	}
 
 	private final class PrepareDocumentThread implements Runnable {
@@ -82,10 +57,26 @@ public class PrepareSigningState extends State {
 		@Override
 		public void run() {
 			try {
+				if(this.state.signer == null) {
+					this.state.signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
+				}
 				
+				if(this.state.signatureParameter == null) {
+					this.state.signatureParameter = this.state.signer.newParameter();
+				}
+				
+				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(this.state.stateMachine.getStatus().getDocument()));
+				
+				this.state.signatureParameter.setSignaturePosition(this.state.stateMachine.getStatus().getSignaturePosition());
+				
+				// TODO: Fill library specific signature Parameters ...
+				// TODO: setEmblem etc.
+				
+				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
 				
 			} catch (Exception e) {
-				log.error("PrepareDocumentThread: ", e);
+				log.error("PrepareDocumentThread: ", e); //$NON-NLS-1$
+				this.state.threadException = e;
 			}
 			finally {
 				this.state.stateMachine.invokeUpdate();
@@ -96,9 +87,9 @@ public class PrepareSigningState extends State {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
+	static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
 	
-	private SignatureParameter signatureParameter;
+	SignatureParameter signatureParameter;
 	
 	private WaitingComposite waitingComposite = null;
 
@@ -111,29 +102,45 @@ public class PrepareSigningState extends State {
 		return this.waitingComposite;
 	}
 	
-	private boolean run = false;
+	at.asit.pdfover.signator.SigningState signingState  = null;
+
+	Signer signer;
+	
+	Exception threadException = null;
 	
 	@Override
 	public void run() {
-		// TODO SHOW BACKGROUND ACTIVITY ....
 		WaitingComposite waiting = this.getSelectionComposite();
 
 		this.stateMachine.getGUIProvider().display(waiting);
 		
-		Signer signer = this.stateMachine.getPDFSigner().getPDFSigner();
+		this.signer = this.stateMachine.getPDFSigner().getPDFSigner();
 		
-		if(signatureParameter == null) {
-//			signatureParameter = 
+		Status status = this.stateMachine.getStatus();
+		
+		if(this.signatureParameter == null) {
+			this.signatureParameter = this.signer.newParameter(); 
 		}
 		
-		if(!this.run) {
+		if(this.signingState == null && this.threadException == null) {
 			Thread t = new Thread(new PrepareDocumentThread(this));
-			this.run = true;
 			t.start();
 			return;
+		} 
+		
+		if(this.threadException != null) {
+			// TODO: Jump to error state!
 		}
 		
-		// WAIT FOR SLREQUEST and dispatch according to BKU selection
+		if(this.signingState == null || this.signingState.getSignatureRequest() == null) {
+			// This shouldnot happen!! PrepareDocumentThread allready performed, either we have a valid signingState or an exception!!
+			// TODO: Jump to error state!
+		}
+		
+		// We got the Request set it into status and move on to next state ...
+		status.setSigningState(this.signingState);
+		
+		log.debug("SL REQUEST: " + this.signingState.getSignatureRequest().getRequest()); //$NON-NLS-1$
 		
 		if(this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
 			this.setNextState(new LocalBKUState(this.stateMachine));

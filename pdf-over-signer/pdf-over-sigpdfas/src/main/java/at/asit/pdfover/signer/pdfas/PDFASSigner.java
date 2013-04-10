@@ -1,6 +1,7 @@
 package at.asit.pdfover.signer.pdfas;
 
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
+import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.Signer;
 import at.asit.pdfover.signator.SignResult;
@@ -11,6 +12,7 @@ import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.api.PdfAs;
 import at.gv.egiz.pdfas.api.sign.SignParameters;
 import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
+import at.gv.egiz.pdfas.framework.input.DataSource;
 import at.gv.egiz.pdfas.io.ByteArrayDataSink;
 import at.gv.egiz.pdfas.api.commons.Constants;
 import at.gv.egiz.pdfas.api.exceptions.PdfAsException;
@@ -32,6 +34,11 @@ public class PDFASSigner implements Signer {
 	 */
 	protected static final String URL_TEMPLATE = "http://pdfover.4.gv.at/template";
 
+	/**
+	 * Location reference string
+	 */
+	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE + "</sl:LocRefContent>";
+	
 	@Override
 	public SigningState prepare(SignatureParameter parameter)
 			throws SignatureException {
@@ -56,10 +63,15 @@ public class PDFASSigner implements Signer {
 			params.setSignatureType(Constants.SIGNATURE_TYPE_BINARY);
 			params.setSignatureProfileId(PROFILE_ID);
 
+			params.setOutput(new ByteArrayDataSink());
 			if (parameter.getEmblem() != null) {
 				params.setProfileOverrideValue("SIG_LABEL", parameter
 						.getEmblem().getFileName());
 			}
+			
+			// Prepare Output sink
+			state.setOutput(new ByteArrayDataSink());
+			params.setOutput(state.getOutput());
 
 			params.setDocument(sign_para.getPDFASDataSource());
 
@@ -76,9 +88,9 @@ public class PDFASSigner implements Signer {
 			String slRequest = pdfasInternal.prepareLocalSignRequest(params,
 					false, URL_TEMPLATE, sdi);
 
-			//DataSource sig_data = sdi.getSignatureData();
+			at.gv.egiz.pdfas.api.io.DataSource sig_data = sdi.getSignatureData();
 			
-			PDFASSLRequest request = new PDFASSLRequest(slRequest);
+			PDFASSLRequest request = new PDFASSLRequest(slRequest, sig_data.getAsByteArray());
 
 			state.setSignatureRequest(request);
 
@@ -108,19 +120,18 @@ public class PDFASSigner implements Signer {
 
 			SignParameters params = sstate.getSignParameters();
 
-			// Prepare Output sink
-			ByteArrayDataSink data = new ByteArrayDataSink();
-			params.setOutput(data);
-
+			
 			SignatureDetailInformation sdi = sstate
 					.getSignatureDetailInformation();
 
-			LocalBKUParams bkuParams = new LocalBKUParams(null, null, null);
+			SLResponse slResponse = sstate.getSignatureResponse();
+			
+			LocalBKUParams bkuParams = new LocalBKUParams(slResponse.getServer(), slResponse.getUserAgent(), slResponse.getSignaturLayout());
 
 			// Perform signature
 			at.gv.egiz.pdfas.api.sign.SignResult signResult = pdfasInternal
 					.finishLocalSign(pdfas, params, sdi, bkuParams, false,
-							sstate.getSignatureResponse().getSLRespone());
+							slResponse.getSLRespone());
 
 			// Preparing Result Response
 			SignResultImpl result = new SignResultImpl();
@@ -138,7 +149,7 @@ public class PDFASSigner implements Signer {
 			result.setSignaturePosition(pos);
 
 			// Set signed Document
-			result.setSignedDocument(new ByteArrayDocumentSource(data.getData()));
+			result.setSignedDocument(new ByteArrayDocumentSource(((ByteArrayDataSink)sstate.getOutput()).getData()));
 
 			return result;
 		} catch (PdfAsException e) {

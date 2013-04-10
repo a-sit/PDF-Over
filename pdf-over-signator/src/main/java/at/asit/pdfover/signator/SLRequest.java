@@ -19,6 +19,21 @@ package at.asit.pdfover.signator;
  * Security Layer Request
  */
 public interface SLRequest {
+	
+	/**
+	 * The String Konstant to replace the SL DATAOBJECT
+	 */
+	public static final String DATAOBJECT_STRING = "##DATAOBJECT##";
+	
+	/**
+	 * The SL Request String
+	 * 
+	 * In this string the DATAOBJECT_STRING has to be replaced by the reference of the Signature Data
+	 * Examples are sl:Base64Content, sl:LocRefContent
+	 * @return
+	 */
+	public String getRequest();
+	
 	/**
 	 * Gets the signature data for this request
 	 * @return The document source

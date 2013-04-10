@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
+import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signator.SigningState;
 
 /**
  * 
@@ -33,7 +35,6 @@ public class StatusImpl implements Status {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(StatusImpl.class);
 
 	private File document = null;
@@ -46,6 +47,10 @@ public class StatusImpl implements Status {
 
 	private State previousState = null;
 
+	private SigningState signingState = null;
+	
+	private SignResult signResult = null;
+	
 	private MainWindowBehavior behavior;
 
 
@@ -67,12 +72,12 @@ public class StatusImpl implements Status {
 	 */
 	public void setCurrentState(State currentState) {
 		if (this.previousState == this.currentState)
-			log.error("Changing to same state? " + this.currentState);
+			log.error("Changing to same state? " + this.currentState); //$NON-NLS-1$
 
 		if (this.previousState != null && this.previousState != currentState)
 		{
 			//Reference to previous state will be lost - perform cleanup
-			log.debug("Cleaning up " + this.previousState);
+			log.debug("Cleaning up " + this.previousState); //$NON-NLS-1$
 			this.previousState.cleanUp();
 		}
 			
@@ -142,5 +147,37 @@ public class StatusImpl implements Status {
 	@Override
 	public MainWindowBehavior getBehavior() {
 		return this.behavior;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.Status#getSigningState()
+	 */
+	@Override
+	public SigningState getSigningState() {
+		return this.signingState;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.Status#setSigningState(at.asit.pdfover.signator.SigningState)
+	 */
+	@Override
+	public void setSigningState(SigningState state) {
+		this.signingState = state;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.Status#setSignResult(at.asit.pdfover.signator.SignResult)
+	 */
+	@Override
+	public void setSignResult(SignResult signResult) {
+		this.signResult = signResult;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.Status#getSignResult()
+	 */
+	@Override
+	public SignResult getSignResult() {
+		return this.signResult;
 	}
 }

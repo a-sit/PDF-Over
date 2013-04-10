@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.signator;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -25,8 +26,9 @@ public interface DocumentSource {
 	/**
 	 * Gets Document as Input Stream
 	 * @return InputStream of the document
+	 * @throws IOException 
 	 */
-	public InputStream getInputStream();
+	public InputStream getInputStream() throws IOException;
 
 	/**
 	 * Get Length of document

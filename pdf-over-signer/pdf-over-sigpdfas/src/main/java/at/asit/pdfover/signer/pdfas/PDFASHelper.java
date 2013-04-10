@@ -16,6 +16,8 @@
 package at.asit.pdfover.signer.pdfas;
 
 //Imports
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.SignatureException;
@@ -49,6 +51,8 @@ public class PDFASHelper {
 	 * @throws PdfAsException
 	 */
 	private static PdfAs createPdfAs() throws PdfAsException {
+		File directory = new File (".");
+		System.setProperty("log4j.configuration", directory.getAbsolutePath()+"/log4j.properties");
 		return new at.gv.egiz.pdfas.impl.api.PdfAsObject();
 	}
 	

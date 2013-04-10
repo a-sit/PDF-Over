@@ -20,7 +20,9 @@ import java.io.File;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signator.SigningState;
 
 /**
  * Interface for persistent status of state machine
@@ -79,4 +81,28 @@ public interface Status {
 	 * @return the previous State
 	 */
 	public State getPreviousState();
+	
+	/**
+	 * Gets the signing state
+	 * @return the signing state
+	 */
+	public SigningState getSigningState();
+	
+	/**
+	 * Sets the signing state
+	 * @param state the signing state
+	 */
+	public void setSigningState(SigningState state);
+	
+	/**
+	 * Sets the sign result
+	 * @param signResult
+	 */
+	public void setSignResult(SignResult signResult);
+	
+	/**
+	 * Gets the sign Result
+	 * @return the sign result
+	 */
+	public SignResult getSignResult();
 }

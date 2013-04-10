@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SigningState;
+import at.gv.egiz.pdfas.api.io.DataSink;
 import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
 
 /**
@@ -38,6 +39,27 @@ public class PDFASSigningState implements SigningState {
 	 */
 	protected SLRequest slrequest;
 	
+	/**
+	 * The PDF AS DataSink
+	 */
+	protected DataSink output;
+	
+	/**
+	 * Gets the DataSink
+	 * @return the datasink
+	 */
+	public DataSink getOutput() {
+		return this.output;
+	}
+
+	/**
+	 * Sets the datasing
+	 * @param output the pdf as datasink
+	 */
+	public void setOutput(DataSink output) {
+		this.output = output;
+	}
+
 	/**
 	 * The Signature Layer response
 	 */
@@ -69,6 +91,13 @@ public class PDFASSigningState implements SigningState {
 		return this.slresponse;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#hasSignatureResponse()
+	 */
+	@Override
+	public boolean hasSignatureResponse() {
+		return this.getSignatureResponse() != null;
+	}
 	
 	// ----------------------------------------
 	// PDF AS Specific stuff

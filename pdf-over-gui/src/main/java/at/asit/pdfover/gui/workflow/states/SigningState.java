@@ -20,11 +20,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.signator.Signer;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
  */
 public class SigningState extends State {
+
+	/**
+	 * 
+	 */
+	private final class FinishSignThread implements Runnable {
+		
+		private SigningState state;
+		
+		/**
+		 * @param signingState
+		 */
+		public FinishSignThread(SigningState signingState) {
+			this.state = signingState;
+		}
+
+		@Override
+		public void run() {
+			try {
+				Signer signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
+				Status status = this.state.stateMachine.getStatus();
+				
+				status.setSignResult(signer.sign(status.getSigningState()));
+			} catch(Exception e) {
+				log.error("FinishSignThread: ", e); //$NON-NLS-1$
+				this.state.threadException = e;
+			} finally {
+				this.state.stateMachine.invokeUpdate();
+			}
+		}
+	}
 
 	/**
 	 * @param stateMachine
@@ -36,12 +68,29 @@ public class SigningState extends State {
 	/**
 	 * SFL4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(SigningState.class);
+	static final Logger log = LoggerFactory.getLogger(SigningState.class);
+	
+	Exception threadException = null;
 	
 	@Override
 	public void run() {
-		// TODO Wait until output ready and set output
+		Status status = this.stateMachine.getStatus();
+		
+		if(status.getSignResult() == null && 
+			this.threadException == null) {
+			Thread t = new Thread(new FinishSignThread(this));
+			t.start();
+			return;
+		}
+		
+		if(this.threadException != null) {
+			// TODO: Jump to error state
+		}
+		
+		if(status.getSignResult() == null) {
+			// The thread should set the threadException or create a valid signResult
+			// TODO: Jump to error state
+		}
 		
 		this.setNextState(new OutputState(this.stateMachine));
 	}

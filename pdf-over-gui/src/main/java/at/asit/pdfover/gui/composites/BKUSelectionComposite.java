@@ -27,8 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState.BKUs;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -52,7 +50,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to LOCAL");
+			log.debug("Setting BKU to LOCAL"); //$NON-NLS-1$
 			setSelected(BKUs.LOCAL);
 		}
 
@@ -76,7 +74,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to MOBILE");
+			log.debug("Setting BKU to MOBILE"); //$NON-NLS-1$
 			setSelected(BKUs.MOBILE);
 		}
 
@@ -89,7 +87,7 @@ public class BKUSelectionComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(BKUSelectionComposite.class);
 
 	private BKUs selected = BKUs.NONE;

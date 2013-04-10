@@ -54,7 +54,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 	 */
 	public DataSource getPDFASDataSource() {
 		// TODO: implement Signature creation
-		return new ByteArrayPDFASDataSource(null);
+		return new ByteArrayPDFASDataSource(this.getInputDocument().getByteArray());
 	}
 
 	@Override

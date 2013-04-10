@@ -19,6 +19,7 @@ package at.asit.pdfover.signer.pdfas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.DocumentSource;
 import at.asit.pdfover.signator.SLRequest;
 
@@ -30,22 +31,40 @@ public class PDFASSLRequest implements SLRequest {
 	/**
 	 * SFL4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(PDFASSLRequest.class);
 	
 	private String request;
 	
+	private ByteArrayDocumentSource source;
+	
 	/**
 	 * Default constructor
 	 * @param slRequest
+	 * @param signData 
 	 */
-	public PDFASSLRequest(String slRequest) {
-		this.request = slRequest;
+	public PDFASSLRequest(String slRequest, byte[] signData) {
+		// Modifing SL Request ...
+		this.request = slRequest.replace(PDFASSigner.LOC_REF, SLRequest.DATAOBJECT_STRING);
+		
+		if(!this.request.contains(DATAOBJECT_STRING)) {
+			// TODO: throw Exception (Failed to prepare SL Request)
+		}
+		
+		this.source = new ByteArrayDocumentSource(signData);
 	}
 	
 	@Override
 	public DocumentSource getSignatureData() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.source;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SLRequest#getRequest()
+	 */
+	@Override
+	public String getRequest() {
+		return this.request;
 	}
 
 }
