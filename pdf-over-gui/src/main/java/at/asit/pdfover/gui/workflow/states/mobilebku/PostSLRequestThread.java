@@ -146,7 +146,7 @@ public class PostSLRequestThread implements Runnable {
 			String responseData = null;
 
 			this.state.getStatus().setBaseURL(
-					ATrustHelper.stripQueryString(url));
+					MobileBKUHelper.stripQueryString(url));
 
 			// Follow redirects
 			do {
@@ -188,13 +188,13 @@ public class PostSLRequestThread implements Runnable {
 
 			// Extract infos:
 
-			String sessionID = ATrustHelper.extractTag(responseData,
+			String sessionID = MobileBKUHelper.extractTag(responseData,
 					"identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 
-			String viewState = ATrustHelper.extractTag(responseData,
+			String viewState = MobileBKUHelper.extractTag(responseData,
 					"id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 
-			String eventValidation = ATrustHelper.extractTag(responseData,
+			String eventValidation = MobileBKUHelper.extractTag(responseData,
 					"id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 
 			log.info("sessionID: " + sessionID); //$NON-NLS-1$

@@ -32,7 +32,7 @@ import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -148,7 +148,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 			return;
 		}
 		try {
-			this.mobileNumber = ATrustHelper.normalizeMobileNumber(number);
+			this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
 		} catch (InvalidNumberException e) {
 			throw new InvalidNumberException(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
 		}

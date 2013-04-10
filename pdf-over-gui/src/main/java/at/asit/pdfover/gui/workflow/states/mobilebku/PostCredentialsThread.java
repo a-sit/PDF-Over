@@ -129,28 +129,28 @@ public class PostCredentialsThread implements Runnable {
 			String eventValidation = status.getEventvalidation();
 			String sessionID = status.getSessionID();
 			
-			String vergleichswert = null;
+			String refVal = null;
 			
-			status.setVergleichswert(null);
+			status.setRefVal(null);
 			status.setErrorMessage(null);
 			
 			if(responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
 				// credentials ok! TAN eingabe
-				sessionID = ATrustHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-				viewState = ATrustHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+				sessionID = MobileBKUHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+				viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 				
-				eventValidation = ATrustHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+				eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 				
-				vergleichswert = ATrustHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");  //$NON-NLS-1$//$NON-NLS-2$
+				refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");  //$NON-NLS-1$//$NON-NLS-2$
 				
-				status.setVergleichswert(vergleichswert);
+				status.setRefVal(refVal);
 				
 				this.state.setCommunicationState(MobileBKUCommunicationState.POST_TAN);
 			} else {
 				// error seite
 				// extract error text!
 				
-				String errorMessage = ATrustHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
+				String errorMessage = MobileBKUHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
 				
 				this.state.getStatus().setErrorMessage(errorMessage);
 				
@@ -159,7 +159,7 @@ public class PostCredentialsThread implements Runnable {
 			}
 			
 			log.info("sessionID: " + sessionID); //$NON-NLS-1$
-			log.info("Vergleichswert: " + vergleichswert); //$NON-NLS-1$
+			log.info("Vergleichswert: " + refVal); //$NON-NLS-1$
 			log.info("viewState: " + viewState); //$NON-NLS-1$
 			log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
 			

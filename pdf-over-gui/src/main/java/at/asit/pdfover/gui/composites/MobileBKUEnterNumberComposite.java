@@ -39,7 +39,7 @@ import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 
 /**
  * Composite for entering the phone number for the mobile BKU
@@ -62,7 +62,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 						.getText();
 
 				
-				number = ATrustHelper.normalizeMobileNumber(number);
+				number = MobileBKUHelper.normalizeMobileNumber(number);
 				
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
@@ -71,7 +71,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				String password = MobileBKUEnterNumberComposite.this.txt_password
 						.getText();
 
-				ATrustHelper.validatePassword(password);
+				MobileBKUHelper.validatePassword(password);
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
 				MobileBKUEnterNumberComposite.this.setUserAck(true);

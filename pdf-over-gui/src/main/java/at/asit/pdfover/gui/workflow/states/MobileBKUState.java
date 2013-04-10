@@ -251,7 +251,7 @@ public class MobileBKUState extends State {
 				postTanThread.start();
 
 			} else {
-				tan.setVergleichswert(mobileStatus.getVergleichswert());
+				tan.setRefVal(mobileStatus.getRefVal());
 
 				if (mobileStatus.getTanTries() < MobileBKUStatus.MOBILE_MAX_TAN_TRIES
 						&& mobileStatus.getTanTries() > 0) {

@@ -58,7 +58,7 @@ public class MobileBKUStatus {
 
 	String baseURL;
 	
-	String vergleichswert;
+	String refVal;
 	
 	String errorMessage;
 	
@@ -109,17 +109,17 @@ public class MobileBKUStatus {
 	}
 
 	/**
-	 * @return the vergleichswert
+	 * @return the reference value
 	 */
-	public String getVergleichswert() {
-		return this.vergleichswert;
+	public String getRefVal() {
+		return this.refVal;
 	}
 
 	/**
-	 * @param vergleichswert the vergleichswert to set
+	 * @param refVal the reference value to set
 	 */
-	public void setVergleichswert(String vergleichswert) {
-		this.vergleichswert = vergleichswert;
+	public void setRefVal(String refVal) {
+		this.refVal = refVal;
 	}
 
 	/**

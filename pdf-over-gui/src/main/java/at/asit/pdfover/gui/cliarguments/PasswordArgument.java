@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHelper;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 
 /**
  * CLI Argument to provide Mobile BKU password
@@ -52,7 +52,7 @@ public class PasswordArgument extends CLIArgument {
 
 				String password = args[argOffset + 1];
 
-				ATrustHelper.validatePassword(password);
+				MobileBKUHelper.validatePassword(password);
 				
 				getConfiguration().setDefaultMobilePasswordOverlay(password);
 				

@@ -63,7 +63,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			
 			tan = tan.trim();
 			
-			if(MobileBKUEnterTANComposite.this.vergleichswert.startsWith(tan)) {
+			if(MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
 				MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
 				return;
 			}
@@ -89,6 +89,19 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	
 	boolean userAck = false;
 
+
+	private Label lblRefVal;
+
+	String refVal;
+	
+	String tan;
+
+	private Label lblTries;
+
+	private Label lblRefValLabel;
+
+	private Label lblTan;
+
 	/**
 	 * @return the userAck
 	 */
@@ -101,7 +114,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 * @param tries
 	 */
 	public void setTries(int tries) {
-		this.lbl_tries.setText(
+		this.lblTries.setText(
 				tries == 1 ? Messages.getString("tanEnter.try") : //$NON-NLS-1$
 				String.format(Messages.getString("tanEnter.tries"), tries)); //$NON-NLS-1$
 	}
@@ -111,9 +124,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 * @param msg
 	 */
 	public void setMessage(String msg) {
-		this.lbl_tries.setText(msg);
-		this.lbl_tries.redraw();
-		this.lbl_tries.getParent().layout(true, true);
+		this.lblTries.setText(msg);
+		this.lblTries.redraw();
+		this.lblTries.getParent().layout(true, true);
 	}
 	
 	/**
@@ -123,35 +136,23 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.userAck = userAck;
 	}
 
-	private Label lblvergleich;
-
-	String vergleichswert;
-	
-	String tan;
-
-	private Label lbl_tries;
-
-	private Label lblVergleichswert;
-
-	private Label lblTan;
-	
 	/**
-	 * @return the vergleichswert
+	 * @return the reference value
 	 */
-	public String getVergleichswert() {
-		return this.vergleichswert;
+	public String getRefVal() {
+		return this.refVal;
 	}
 
 	/**
-	 * @param vergleichswert the vergleichswert to set
+	 * @param refVal the reference value to set
 	 */
-	public void setVergleichswert(String vergleichswert) {
-		this.vergleichswert = vergleichswert.trim();
+	public void setRefVal(String refVal) {
+		this.refVal = refVal.trim();
 		
-		if(this.vergleichswert != null) {
-			this.lblvergleich.setText(this.vergleichswert);
+		if(this.refVal != null) {
+			this.lblRefVal.setText(this.refVal);
 		} else {
-			this.lblvergleich.setText(""); //$NON-NLS-1$
+			this.lblRefVal.setText(""); //$NON-NLS-1$
 		}
 		
 	}
@@ -211,15 +212,15 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		containerComposite.setLayoutData(fd_containerComposite);
 		
 		
-		this.lblVergleichswert = new Label(containerComposite, SWT.NATIVE);
-		this.lblVergleichswert.setAlignment(SWT.RIGHT);
-		FormData fd_lblVergleichswert = new FormData();
-		//fd_lblVergleichswert.left = new FormAttachment(0, 20);
-		fd_lblVergleichswert.right = new FormAttachment(50, -10);
-		//fd_lblVergleichswert.top = new FormAttachment(30, -15);
-		fd_lblVergleichswert.bottom = new FormAttachment(50, -10);
-		this.lblVergleichswert.setLayoutData(fd_lblVergleichswert);
-		this.lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
+		this.lblRefValLabel.setAlignment(SWT.RIGHT);
+		FormData fd_lblRefValLabel = new FormData();
+		//fd_lblRefValLabel.left = new FormAttachment(0, 20);
+		fd_lblRefValLabel.right = new FormAttachment(50, -10);
+		//fd_lblRefValLabel.top = new FormAttachment(30, -15);
+		fd_lblRefValLabel.bottom = new FormAttachment(50, -10);
+		this.lblRefValLabel.setLayoutData(fd_lblRefValLabel);
+		this.lblRefValLabel.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 		
@@ -234,14 +235,14 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		lbl_image.setLayoutData(fd_lbl_image);
 		lbl_image.setImage(mobile);
 		
-		this.lblvergleich = new Label(containerComposite, SWT.NATIVE);
-		FormData fd_lblvergleich = new FormData();
-		fd_lblvergleich.left = new FormAttachment(50, 10);
-		fd_lblvergleich.right = new FormAttachment(100, -20);
-		//fd_lblvergleich.top = new FormAttachment(30, -15);
-		fd_lblvergleich.bottom = new FormAttachment(50, -10);
-		this.lblvergleich.setLayoutData(fd_lblvergleich);
-		this.lblvergleich.setText(""); //$NON-NLS-1$
+		this.lblRefVal = new Label(containerComposite, SWT.NATIVE);
+		FormData fd_lblRefVal = new FormData();
+		fd_lblRefVal.left = new FormAttachment(50, 10);
+		fd_lblRefVal.right = new FormAttachment(100, -20);
+		//fd_lblRefVal.top = new FormAttachment(30, -15);
+		fd_lblRefVal.bottom = new FormAttachment(50, -10);
+		this.lblRefVal.setLayoutData(fd_lblRefVal);
+		this.lblRefVal.setText(""); //$NON-NLS-1$
 		
 		this.lblTan = new Label(containerComposite, SWT.NATIVE);
 		this.lblTan.setAlignment(SWT.RIGHT);
@@ -278,7 +279,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 				
 				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
 				//log.debug("Current TAN: " + text); //$NON-NLS-1$
-				if(text.length() > 3 && MobileBKUEnterTANComposite.this.getVergleichswert().startsWith(text.trim())) {
+				if(text.length() > 3 && MobileBKUEnterTANComposite.this.getRefVal().startsWith(text.trim())) {
 					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
 				} 
 			}
@@ -286,13 +287,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		
 		Button btn_ok = new Button(containerComposite, SWT.NATIVE);
 		
-		this.lbl_tries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_tries = new FormData();
 		//fd_lbl_tries.left = new FormAttachment(15, 5);
 		fd_lbl_tries.right = new FormAttachment(btn_ok, -10);
 		//fd_lbl_tries.top = new FormAttachment(70, -15);
 		fd_lbl_tries.bottom = new FormAttachment(100, -20);
-		this.lbl_tries.setLayoutData(fd_lbl_tries);
+		this.lblTries.setLayoutData(fd_lbl_tries);
 		
 		
 		FormData fd_btn_ok = new FormData();
@@ -325,7 +326,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lblVergleichswert.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+		this.lblRefValLabel.setText(Messages.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
 		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
 	}
 
