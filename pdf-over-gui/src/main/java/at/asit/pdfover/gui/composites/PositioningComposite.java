@@ -31,7 +31,12 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,11 +62,13 @@ public class PositioningComposite extends StateComposite {
 
 	private Frame frame = null;
 
-	int currentPage;
+	int currentPage = 0;
 
-	int numPages;
+	int numPages = 0;
 
 	private SignaturePosition position = null;
+
+	ScrollBar scrollbar = null;
 
 	/**
 	 * Set the PDF Document to display
@@ -84,6 +91,7 @@ public class PositioningComposite extends StateComposite {
 		else
 			this.viewer.setDocument(this.pdf);
 		this.numPages = this.pdf.getNumPages();
+		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 		showPage(this.numPages);
 	}
 
@@ -94,11 +102,14 @@ public class PositioningComposite extends StateComposite {
 	 * @param state 
 	 */
 	public PositioningComposite(Composite parent, int style, State state) {
-		super(parent, style | SWT.EMBEDDED, state);
+		super(parent, style | SWT.EMBEDDED | SWT.V_SCROLL, state);
 		//this.setLayout(null);
+		this.setBounds(0, 0, 10, 10);
+		this.scrollbar = this.getVerticalBar();
 		this.frame = SWT_AWT.new_Frame(this);
 		this.addKeyListener(this.keyListener);
 		this.frame.addMouseWheelListener(this.mouseListener);
+		this.scrollbar.addSelectionListener(this.selectionListener);
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
@@ -158,8 +169,21 @@ public class PositioningComposite extends StateComposite {
 		}		
 	};
 
+	private SelectionListener selectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			PositioningComposite.this.showPage(PositioningComposite.this.scrollbar.getSelection());
+		}
+	};
+
 	void showPage(int page) {
 		this.currentPage = page;
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				PositioningComposite.this.scrollbar.setSelection(PositioningComposite.this.currentPage);
+			}
+		});
 		this.viewer.showPage(page);
 	}
 
