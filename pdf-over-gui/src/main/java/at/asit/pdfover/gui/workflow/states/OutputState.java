@@ -26,6 +26,7 @@ import at.asit.pdfover.gui.composites.OutputComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.workflow.ConfigProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 
@@ -48,15 +49,24 @@ public class OutputState extends State {
 			this.outputComposite = this.stateMachine.getGUIProvider()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
 			
-			File tmpDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory() + "/tmp"); //$NON-NLS-1$
+			ConfigProvider config = this.stateMachine.getConfigProvider();
+			Status status = this.stateMachine.getStatus();
+			
+			File tmpDir = new File(config.getConfigurationDirectory() + "/tmp"); //$NON-NLS-1$
 			
 			if(!tmpDir.exists()) {
 				tmpDir.mkdir();
 			}
 			
-			this.outputComposite.setOutputDir(this.stateMachine.getConfigProvider().getDefaultOutputFolder());
+			this.outputComposite.setOutputDir(config.getDefaultOutputFolder());
 			this.outputComposite.setTempDir(tmpDir.getAbsolutePath());
-			this.outputComposite.setInputFile(this.stateMachine.getStatus().getDocument());
+			this.outputComposite.setInputFile(status.getDocument());
+
+			this.outputComposite.setSignedDocument(status.getSignResult()
+					.getSignedDocument());
+
+			// Save signed document
+			this.outputComposite.saveDocument();
 		}
 
 		return this.outputComposite;
@@ -78,11 +88,6 @@ public class OutputState extends State {
 		}
 
 		OutputComposite outputComposite = this.getOutputComposite();
-		outputComposite.setSignedDocument(status.getSignResult()
-				.getSignedDocument());
-
-		// Save signed document
-		outputComposite.saveDocument();
 
 		// Display dialog
 		this.stateMachine.getGUIProvider().display(outputComposite);
