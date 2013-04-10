@@ -164,6 +164,7 @@
 										<include>icons/*</include>
 										<include>lib-swt/swt-${target.name}-*</include>
 										<include>scripts/*</include>
+										<include>ReadMe.txt</include>
 										<include>PDF-Over.exe</include>
 										<include>PDF-Over.ini</include>
 										<include>PDF-Over-Un.ini</include>
@@ -211,6 +212,7 @@
 					<exclude>izpack/*</exclude>
 					<exclude>lib-swt/*</exclude>
 					<exclude>scripts/*</exclude>
+					<exclude>ReadMe.txt</exclude>
 					<exclude>keystore.jks</exclude>
 					<exclude>PDF-Over.exe</exclude>
 					<exclude>PDF-Over.ini</exclude>
