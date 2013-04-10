@@ -48,6 +48,13 @@ mkdir -p $LOG_DIR
 
 profiles=( linux windows mac )
 names=( linux windows mac )
+if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
+	profiles=( $2 )
+	names=( $2 )
+	shift
+	shift
+	MVN_PARAMS="$@"
+fi
 
 for (( i = 0 ; i < ${#names[@]} ; i++ )) do
  	PROFILE=${profiles[$i]}
