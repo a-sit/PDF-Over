@@ -27,7 +27,7 @@ import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * Configuration container for the configuration dialog
+ * Configuration container
  */
 public interface ConfigurationContainer {
 	/**
@@ -110,18 +110,6 @@ public interface ConfigurationContainer {
 	 * @throws InvalidPortException
 	 */
 	public void setProxyPort(int port) throws InvalidPortException;
-
-	/**
-	 * Gets the automatic positioning
-	 * @return whether automatic positioning is enabled
-	 */
-	public boolean getAutomaticPositioning();
-
-	/**
-	 * Sets the automatic positioning
-	 * @param automatic whether to enable automatic positioning
-	 */
-	public void setAutomaticPositioning(boolean automatic);
 
 	/**
 	 * Gets the transparency of the placeholder

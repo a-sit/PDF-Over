@@ -40,7 +40,6 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.SignaturePosition;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -276,12 +275,9 @@ public class ConfigurationComposite extends StateComposite {
 		if (this.configProvider != null) {
 
 			// Initialize Configuration Container
-			if (this.configProvider.getDefaultSignaturePositionPersistent() != null) {
-				this.configurationContainer
-						.setAutomaticPositioning(this.configProvider
-								.getDefaultSignaturePositionPersistent()
-								.useAutoPositioning());
-			}
+			this.configurationContainer
+						.setDefaultSignaturePosition(this.configProvider
+								.getDefaultSignaturePositionPersistent());
 
 			this.configurationContainer
 					.setPlaceholderTransparency(this.configProvider
@@ -400,12 +396,8 @@ public class ConfigurationComposite extends StateComposite {
 				.getDefaultBKU());
 		this.configManipulator
 				.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
-		if (this.configurationContainer.getAutomaticPositioning()) {
-			this.configManipulator
-					.setDefaultSignaturePosition(new SignaturePosition());
-		} else {
-			this.configManipulator.setDefaultSignaturePosition(null);
-		}
+		this.configManipulator
+				.setDefaultSignaturePosition(this.configurationContainer.getDefaultSignaturePosition());
 
 		this.configManipulator.setLocale(this.configurationContainer.getLocale());
 		this.configManipulator.setSignLocale(this.configurationContainer.getSignLocale());

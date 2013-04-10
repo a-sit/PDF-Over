@@ -38,7 +38,7 @@ import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * Implementation of the configuration container for the configuration dialog
+ * Implementation of the configuration container
  */
 public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/**
@@ -218,24 +218,6 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 			return;
 		}
 		throw new InvalidPortException(port);
-	}
-
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getAutomaticPosition()
-	 */
-	@Override
-	public boolean getAutomaticPositioning() {
-		return this.automaticPositioning;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setAutomaticPosition(boolean)
-	 */
-	@Override
-	public void setAutomaticPositioning(boolean automatic) {
-		this.automaticPositioning = automatic;
 	}
 
 

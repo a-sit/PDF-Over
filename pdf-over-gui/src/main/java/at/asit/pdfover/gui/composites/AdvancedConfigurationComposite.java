@@ -50,6 +50,7 @@ import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Composite for advanced configuration
@@ -465,7 +466,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performPositionSelection(boolean automatic) {
 		log.debug("Selected Position: " + automatic); //$NON-NLS-1$
-		this.configurationContainer.setAutomaticPositioning(automatic);
+		SignaturePosition pos = automatic ? new SignaturePosition() : null;
+		this.configurationContainer.setDefaultSignaturePosition(pos);
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
@@ -499,8 +501,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		if (outputFolder != null) {
 			this.performOutputFolderChanged(outputFolder);
 		}
-		this.performPositionSelection(this.configurationContainer
-				.getAutomaticPositioning());
+		SignaturePosition pos = this.configurationContainer
+				.getDefaultSignaturePosition();
+		this.performPositionSelection(pos != null && pos.useAutoPositioning());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
