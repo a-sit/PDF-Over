@@ -317,8 +317,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 
-		if (this.mobileNumber != null) {
+		if (this.mobileNumber != null && !this.mobileNumber.isEmpty()) {
 			this.txt_number.setText(this.mobileNumber);
+			this.txt_password.setFocus();
 		} else {
 			this.txt_number.setText(""); //$NON-NLS-1$
 		}
