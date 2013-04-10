@@ -79,7 +79,7 @@ public class PositioningState extends State {
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
 				this.stateMachine.getConfigProvider().getPlaceholderTransparency());
-		if (this.previousPosition != null)
+		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
 			this.positionComposite.setPosition(
 					this.previousPosition.getX(),
 					this.previousPosition.getY(),
