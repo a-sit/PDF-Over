@@ -130,4 +130,9 @@ public abstract class AbstractMobileBKUStatusImpl implements MobileBKUStatus {
 	public void setSignatureDataURL(String signatureDataURL) {
 		this.signatureDataURL = signatureDataURL;
 	}
+
+	@Override
+	public String ensureSessionID(String url) {
+		return url;
+	}
 }

@@ -258,6 +258,8 @@ public abstract class MobileBKUHandler {
 			}
 
 			if (redirectLocation != null) {
+				redirectLocation = getStatus().ensureSessionID(redirectLocation);
+				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
 				get = new GetMethod(redirectLocation);
 				get.setFollowRedirects(true);
 				returnCode = client.executeMethod(get);

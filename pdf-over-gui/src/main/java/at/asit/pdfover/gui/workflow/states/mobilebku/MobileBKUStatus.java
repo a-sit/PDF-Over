@@ -130,4 +130,11 @@ public interface MobileBKUStatus {
 	 * @param signatureDataURL the signature data URL
 	 */
 	public void setSignatureDataURL(String signatureDataURL);
+
+	/**
+	 * Ensure that given URL contains a session ID (if necessary)
+	 * @param url URL to check for session ID
+	 * @return resulting URL
+	 */
+	public String ensureSessionID(String url);
 }
