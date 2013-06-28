@@ -137,7 +137,7 @@ public class MainWindow {
 	public void doLayout() {
 		Control ctrl = this.stack.topControl;
 		this.container.layout(true, true);
-		this.shell.layout(true, true);
+		getShell().layout(true, true);
 		// Note: SWT only layouts children! No grandchildren!
 		if (ctrl instanceof StateComposite) {
 			if (!ctrl.isDisposed()) {
@@ -197,12 +197,12 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		this.shell.setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
+		getShell().setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) { //$NON-NLS-1$ //$NON-NLS-2$
 			// Workaround for SWT bug on Mac: disable full screen mode
 			try {
 				Field field = Control.class.getDeclaredField("view"); //$NON-NLS-1$
-				Object /*NSView*/ view = field.get(this.shell);
+				Object /*NSView*/ view = field.get(getShell());
 				if (view != null)
 				{
 					Class<?> c = Class.forName("org.eclipse.swt.internal.cocoa.NSView"); //$NON-NLS-1$
@@ -221,17 +221,17 @@ public class MainWindow {
 			Display display = Display.getCurrent();
 			Monitor primary = display.getPrimaryMonitor();
 			Rectangle bounds = primary.getBounds();
-			Rectangle main = this.shell.getBounds();
-			this.shell.setLocation(
+			Rectangle main = getShell().getBounds();
+			getShell().setLocation(
 					bounds.x + (bounds.width - main.width) / 2,
 					bounds.y + (bounds.height - main.height) / 2);
 		}
 		catch (SWTError e) {
 			log.debug("Cannot get display", e); //$NON-NLS-1$
 		}
-		this.shell.setText(Messages.getString("main.title")); //$NON-NLS-1$
+		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 
-		this.shell.addShellListener(new ShellAdapter() {
+		getShell().addShellListener(new ShellAdapter() {
 			@Override
 			public void shellClosed(ShellEvent e) {
 				log.debug("Closing main window"); //$NON-NLS-1$
@@ -245,13 +245,13 @@ public class MainWindow {
 		});
 
 		ImageData data = new ImageData(this.getClass().getResourceAsStream(Constants.RES_ICON));
-		Image shellicon = new Image(this.shell.getDisplay(), data);
+		Image shellicon = new Image(getShell().getDisplay(), data);
 
-		this.shell.setImage(shellicon);
+		getShell().setImage(shellicon);
 
-		this.shell.setLayout(new FormLayout());
+		getShell().setLayout(new FormLayout());
 
-		this.mainbar = new Composite(this.shell, SWT.NONE);
+		this.mainbar = new Composite(getShell(), SWT.NONE);
 		this.mainbar.setLayout(new FormLayout());
 		this.mainBarFormData = new FormData();
 		this.mainBarFormData.left = new FormAttachment(0, 10);
@@ -364,7 +364,7 @@ public class MainWindow {
 		this.btn_end.setToolTipText(Messages.getString("main.done")); //$NON-NLS-1$
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);
 
-		this.container = new Composite(this.shell, SWT.RESIZE);
+		this.container = new Composite(getShell(), SWT.RESIZE);
 		this.containerFormData = new FormData();
 		this.containerFormData.bottom = new FormAttachment(100, -10);
 		this.containerFormData.right = new FormAttachment(100, -10);
@@ -404,7 +404,7 @@ public class MainWindow {
 			this.containerFormData.top = new FormAttachment(0, 10);
 		}
 
-		this.getShell().getDisplay().update();
+		getShell().getDisplay().update();
 		this.mainbar.layout(true, true);
 		this.mainbar.redraw();
 	}

@@ -144,7 +144,7 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 		this.btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
-		this.getShell().setDefaultButton(this.btnSpeichern);
+		getShell().setDefaultButton(this.btnSpeichern);
 
 		FontData[] fD_btnSpeichern = this.btnSpeichern.getFont().getFontData();
 		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
@@ -464,12 +464,12 @@ public class ConfigurationComposite extends StateComposite {
 	public void doLayout() {
 		Control ctrl = this.compositeStack.topControl;
 		this.containerComposite.layout(true, true);
-		this.getShell().layout(true, true);
+		getShell().layout(true, true);
 		// Note: SWT only layouts children! No grandchildren!
 		if (ctrl instanceof StateComposite) {
 			((StateComposite) ctrl).doLayout();
 		}
-		this.setFocus();
+		setFocus();
 	}
 
 	/* (non-Javadoc)
