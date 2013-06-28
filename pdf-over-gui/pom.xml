@@ -96,6 +96,8 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							<classpathPrefix />
 							<mainClass>at.asit.pdfover.gui.Main</mainClass>
 						</manifest>
