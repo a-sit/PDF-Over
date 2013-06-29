@@ -1,3 +1,14 @@
-pub/
+# SVN repo files
+.svn/
+
+# Eclipse project files
+#.project
+#.classpath
+#.settings/
+.euml2
+.umlproject
+
+# Other
+target/
 log/
-*.log
+*~
