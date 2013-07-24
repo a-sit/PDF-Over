@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -101,9 +100,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		Protocol.registerProtocol("https", //$NON-NLS-1$
 				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
 	
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				Constants.USER_AGENT_STRING);
+		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -149,9 +146,7 @@ public class IAIKHandler extends MobileBKUHandler {
 			return;
 		}
 
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				Constants.USER_AGENT_STRING);
+		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		String redirectURL = status.getBaseURL().substring(0,
 				status.getBaseURL().lastIndexOf('/',
@@ -245,9 +240,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		Protocol.registerProtocol("https", //$NON-NLS-1$
 				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
 	
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				Constants.USER_AGENT_STRING);
+		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$

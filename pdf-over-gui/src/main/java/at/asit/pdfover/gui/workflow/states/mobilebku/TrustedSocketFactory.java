@@ -32,7 +32,7 @@ import javax.net.ssl.TrustManager;
 
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ import at.asit.pdfover.gui.utils.Messages;
 /**
  * 
  */
-public class TrustedSocketFactory implements ProtocolSocketFactory {
+public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -145,6 +145,29 @@ public class TrustedSocketFactory implements ProtocolSocketFactory {
 				socket.connect(remoteaddr, timeout);
 			}
 			return socket;
+		} catch (Exception ex) {
+			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
+			if (ex instanceof IOException) {
+				throw (IOException) ex;
+			} else if (ex instanceof UnknownHostException) {
+				throw (UnknownHostException) ex;
+			} else {
+				throw new IOException(
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //$NON-NLS-1$
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory#createSocket(java.net.Socket, java.lang.String, int, boolean)
+	 */
+	@Override
+	public Socket createSocket(Socket socket, String host, int port,
+			boolean autoClose) throws IOException, UnknownHostException {
+		try {
+			SSLSocket sslSocket = (SSLSocket) getFactory().createSocket(socket, host, port, autoClose);
+
+			return sslSocket;
 		} catch (Exception ex) {
 			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
 			if (ex instanceof IOException) {

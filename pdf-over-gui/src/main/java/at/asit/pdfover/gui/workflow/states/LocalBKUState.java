@@ -37,6 +37,7 @@ import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 
@@ -107,7 +108,7 @@ public class LocalBKUState extends State {
 				SLRequest request = this.state.signingState
 						.getSignatureRequest();
 
-				HttpClient client = new HttpClient();
+				HttpClient client = MobileBKUHelper.getHttpClient();
 
 				PostMethod method = new PostMethod(
 						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
