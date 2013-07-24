@@ -20,19 +20,19 @@ import java.io.File;
 import at.asit.pdfover.gui.utils.Messages;
 
 /**
- * 
+ *
  */
-public class OutputfolderDontExistException extends ResumableException {
+public class OutputfolderDoesntExistException extends ResumableException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1005495921021280599L;
-	
+
 	/**
 	 * @param folder The file
 	 * @param resumeIndex The resume Index
 	 */
-	public OutputfolderDontExistException(final File folder, int resumeIndex) {
+	public OutputfolderDoesntExistException(final File folder, int resumeIndex) {
 		super(String.format(Messages.getString("exception.PathNotExist"), folder.getAbsolutePath()), resumeIndex); //$NON-NLS-1$
 	}
 

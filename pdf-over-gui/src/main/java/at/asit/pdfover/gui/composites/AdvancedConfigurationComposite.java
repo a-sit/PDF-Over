@@ -24,11 +24,15 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -43,8 +47,10 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
-import at.asit.pdfover.gui.exceptions.OutputfolderDontExistException;
+import at.asit.pdfover.gui.exceptions.InvalidPortException;
+import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
@@ -79,6 +85,17 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private Label lblTransparenzRechts;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenz;
+
+	private Group grpProxy;
+	private Label lblProxyHost;
+	private Text txtProxyHost;
+	private ErrorMarker proxyHostErrorMarker;
+	private Label lblProxyPort;
+	Text txtProxyPort;
+	FormData fd_txtProxyPort;
+	ErrorMarker txtProxyPortErrorMarker;
+	FormData fd_txtProxyPortErrorMarker;
+
 
 	/**
 	 * @param parent
@@ -347,7 +364,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fD_grpLocaleAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.grpLocaleAuswahl.setFont(new Font(Display.getCurrent(),
 				fD_grpLocaleAuswahl[0]));
-		
+
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
 		FormData fd_cmbLocaleAuswahl = new FormData();
 		fd_cmbLocaleAuswahl.right = new FormAttachment(100, -5);
@@ -377,6 +394,129 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				if (!currentLocale.equals(selectedLocale)) {
 					performLocaleSelectionChanged(selectedLocale);
 				}
+			}
+		});
+
+		this.grpProxy = new Group(this, SWT.NONE);
+		FormData fd_grpProxy = new FormData();
+		fd_grpProxy.right = new FormAttachment(100, -5);
+		fd_grpProxy.top = new FormAttachment(this.grpLocaleAuswahl, 5);
+		fd_grpProxy.left = new FormAttachment(0, 5);
+		this.grpProxy.setLayoutData(fd_grpProxy);
+		this.grpProxy.setLayout(new GridLayout(2, false));
+
+		FontData[] fD_grpProxy = this.grpProxy.getFont().getFontData();
+		fD_grpProxy[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpProxy.setFont(new Font(Display.getCurrent(), fD_grpProxy[0]));
+
+		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
+		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
+		gd_lblNewLabel.widthHint = 66;
+		this.lblProxyHost.setLayoutData(gd_lblNewLabel);
+		this.lblProxyHost.setBounds(0, 0, 57, 15);
+
+		FontData[] fD_lblNewLabel = this.lblProxyHost.getFont().getFontData();
+		fD_lblNewLabel[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblProxyHost.setFont(new Font(Display.getCurrent(),
+				fD_lblNewLabel[0]));
+
+		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyHostContainer.setLayout(new FormLayout());
+		compProxyHostContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
+		FormData fd_txtProxyHost = new FormData();
+		fd_txtProxyHost.right = new FormAttachment(100, -42);
+		fd_txtProxyHost.top = new FormAttachment(0);
+		fd_txtProxyHost.left = new FormAttachment(0, 5);
+
+		FontData[] fD_txtProxyHost = this.txtProxyHost.getFont().getFontData();
+		fD_txtProxyHost[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtProxyHost.setFont(new Font(Display.getCurrent(),
+				fD_txtProxyHost[0]));
+
+		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //$NON-NLS-1$
+
+		FormData fd_proxyHostErrorMarker = new FormData();
+		fd_proxyHostErrorMarker.left = new FormAttachment(100, -32);
+		fd_proxyHostErrorMarker.right = new FormAttachment(100);
+		fd_proxyHostErrorMarker.top = new FormAttachment(0);
+		fd_proxyHostErrorMarker.bottom = new FormAttachment(0, 32);
+
+		this.proxyHostErrorMarker.setLayoutData(fd_proxyHostErrorMarker);
+		this.proxyHostErrorMarker.setVisible(false);
+		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
+
+		this.txtProxyHost.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyHostChanged();
+			}
+		});
+
+		this.txtProxyHost.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyHostChanged();
+				}
+			}
+		});
+
+		this.lblProxyPort = new Label(this.grpProxy, SWT.NONE);
+		this.lblProxyPort.setBounds(0, 0, 57, 15);
+
+		FontData[] fD_lblProxyPort = this.lblProxyPort.getFont()
+				.getFontData();
+		fD_lblProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblProxyPort.setFont(new Font(Display.getCurrent(),
+				fD_lblProxyPort[0]));
+
+		Composite compProxyPortContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyPortContainer.setLayout(new FormLayout());
+		compProxyPortContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+
+		this.txtProxyPort = new Text(compProxyPortContainer, SWT.BORDER);
+		this.fd_txtProxyPort = new FormData();
+		this.fd_txtProxyPort.top = new FormAttachment(0, 0);
+		this.fd_txtProxyPort.left = new FormAttachment(0, 5);
+		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
+		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
+
+		FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
+		fD_txtProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtProxyPort.setFont(new Font(Display.getCurrent(),
+				fD_txtProxyPort[0]));
+
+		this.txtProxyPort.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyPortChanged();
+				}
+			}
+		});
+
+		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //$NON-NLS-1$
+		this.fd_txtProxyPortErrorMarker = new FormData();
+		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
+		this.fd_txtProxyPortErrorMarker.right = new FormAttachment(100);
+		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
+		this.fd_txtProxyPortErrorMarker.bottom = new FormAttachment(0, 32);
+		this.txtProxyPortErrorMarker
+				.setLayoutData(this.fd_txtProxyPortErrorMarker);
+		this.txtProxyPortErrorMarker.setVisible(false);
+
+		this.txtProxyPort.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyPortChanged();
 			}
 		});
 
@@ -475,6 +615,54 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setPlaceholderTransparency(transparency);
 	}
 
+	void processProxyHostChanged() {
+		try {
+			this.proxyHostErrorMarker.setVisible(false);
+			plainProxyHostSetter();
+		} catch (Exception ex) {
+			this.proxyHostErrorMarker.setVisible(true);
+			this.proxyHostErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyHost: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void plainProxyHostSetter() {
+		String host = this.txtProxyHost.getText();
+		this.configurationContainer.setProxyHost(host);
+	}
+
+	void processProxyPortChanged() {
+		try {
+			this.txtProxyPortErrorMarker.setVisible(false);
+			plainProxyPortSetter();
+		} catch (Exception ex) {
+			this.txtProxyPortErrorMarker.setVisible(true);
+			this.txtProxyPortErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyPort: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * @throws InvalidPortException
+	 */
+	private void plainProxyPortSetter() throws InvalidPortException {
+		String portString = this.txtProxyPort.getText();
+		int port = -1;
+		if (portString == null || portString.trim().isEmpty()) {
+			port = -1;
+		} else {
+			try {
+				port = Integer.parseInt(portString);
+			} catch (NumberFormatException e) {
+				throw new InvalidPortException(portString, e);
+			}
+		}
+		this.configurationContainer.setProxyPort(port);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -507,6 +695,16 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
+
+		int port = this.configurationContainer.getProxyPort();
+		if (port > 0) {
+			this.txtProxyPort.setText(Integer.toString(port));
+		}
+
+		String host = this.configurationContainer.getProxyHost();
+		if (host != null) {
+			this.txtProxyHost.setText(host);
+		}
 	}
 
 	/*
@@ -526,7 +724,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				if (foldername != null && !foldername.isEmpty()) {
 					File outputFolder = new File(foldername);
 					if (!outputFolder.exists()) {
-						throw new OutputfolderDontExistException(outputFolder, 1); 
+						throw new OutputfolderDoesntExistException(outputFolder, 1);
 					}
 					if (!outputFolder.isDirectory()) {
 						throw new OutputfolderNotADirectoryException(outputFolder);
@@ -534,6 +732,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 				// Fall through
 			case 1:
+				this.plainProxyHostSetter();
+				// Fall through
+			case 2:
+				this.plainProxyPortSetter();
+				// Fall through
 		}
 	}
 
@@ -574,5 +777,18 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.LocaleSelection_Title")); //$NON-NLS-1$
 		this.cmbLocaleAuswahl.setToolTipText(Messages
 				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
+
+		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
+		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
+		this.txtProxyHost.setToolTipText(Messages
+				.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
+		this.txtProxyHost.setMessage(Messages
+				.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
+		this.lblProxyPort.setText(Messages
+				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
+		this.txtProxyPort.setToolTipText(Messages
+				.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
+		this.txtProxyPort.setMessage(Messages
+				.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
 	}
 }
