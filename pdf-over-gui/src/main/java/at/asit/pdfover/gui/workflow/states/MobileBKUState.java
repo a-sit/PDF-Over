@@ -186,9 +186,13 @@ public class MobileBKUState extends State {
 		MobileBKUStatus mobileStatus = this.getStatus();
 
 		if (this.threadException != null) {
+			String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+			String errormsg = this.threadException.getLocalizedMessage();
+			if (errormsg != null && !errormsg.isEmpty())
+				message += ": " + errormsg; //$NON-NLS-1$
 			ErrorDialog error = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.Unexpected"), BUTTONS.OK); //$NON-NLS-1$
+					message, BUTTONS.OK);
 			// error.setException(this.threadException);
 			// this.setNextState(error);
 			error.open();
