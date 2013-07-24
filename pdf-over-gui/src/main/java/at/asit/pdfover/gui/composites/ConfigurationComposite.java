@@ -420,15 +420,46 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.configManipulator.setSignatureNote(this.configurationContainer
 				.getSignatureNote());
-		
-		this.configManipulator.setProxyHost(this.configurationContainer
-				.getProxyHost());
-		this.configManipulator.setProxyPort(this.configurationContainer
-				.getProxyPort());
-		this.configManipulator.setProxyUser(this.configurationContainer
-				.getProxyUser());
-		this.configManipulator.setProxyPass(this.configurationContainer
-				.getProxyPass());
+
+		String hostOld = this.configProvider.getProxyHostPersistent();
+		String hostNew = this.configurationContainer.getProxyHost();
+		if (hostOld != null && !hostOld.isEmpty() &&
+				(hostNew == null || hostNew.isEmpty())) {
+			// Proxy has been removed, let's clear the system properties
+			// Otherwise, the proxy settings wouldn't get removed
+			System.clearProperty("http.proxyHost"); //$NON-NLS-1$
+			System.clearProperty("https.proxyHost"); //$NON-NLS-1$
+		}
+		this.configManipulator.setProxyHost(hostNew);
+
+		int portOld = this.configProvider.getProxyPortPersistent();
+		int portNew = this.configurationContainer.getProxyPort();
+		if (portOld != -1 && portNew == -1) {
+			// cf. above
+			System.clearProperty("http.proxyPort"); //$NON-NLS-1$
+			System.clearProperty("https.proxyPort"); //$NON-NLS-1$
+		}
+		this.configManipulator.setProxyPort(portNew);
+
+		String userOld = this.configProvider.getProxyUserPersistent();
+		String userNew = this.configurationContainer.getProxyUser();
+		if (userOld != null && !userOld.isEmpty() &&
+				(userNew == null || userNew.isEmpty())) {
+			// cf. above
+			System.clearProperty("http.proxyUser"); //$NON-NLS-1$
+			System.clearProperty("https.proxyUser"); //$NON-NLS-1$
+		}
+		this.configManipulator.setProxyUser(userNew);
+
+		String passOld = this.configProvider.getProxyPassPersistent();
+		String passNew = this.configurationContainer.getProxyPass();
+		if (passOld != null && passNew == null) {
+			// cf. above
+			System.clearProperty("http.proxyPassword"); //$NON-NLS-1$
+			System.clearProperty("https.proxyPassword"); //$NON-NLS-1$
+		}
+		this.configManipulator.setProxyPass(passNew);
+
 		this.configManipulator.setDefaultEmblem(this.configurationContainer
 				.getEmblem());
 
