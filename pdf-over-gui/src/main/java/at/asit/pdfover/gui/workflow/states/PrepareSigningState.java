@@ -98,7 +98,7 @@ public class PrepareSigningState extends State {
 					System.setProperty("https.proxyUser", proxyUser); //$NON-NLS-1$
 				}
 
-				if (proxyPass != null && !proxyPass.isEmpty()) {
+				if (proxyPass != null) {
 					log.debug("Setting proxy password"); //$NON-NLS-1$
 					System.setProperty("http.proxyPassword", proxyPass); //$NON-NLS-1$
 					System.setProperty("https.proxyPassword", proxyPass); //$NON-NLS-1$
