@@ -43,10 +43,10 @@ public class ConfigurationUIState extends State {
 	private ConfigurationComposite getConfigurationComposite() {
 		if (this.configurationComposite == null) {
 			this.configurationComposite =
-					this.stateMachine.getGUIProvider().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
-			this.configurationComposite.setConfigManipulator(this.stateMachine.getConfigManipulator());
-			this.configurationComposite.setConfigProvider(this.stateMachine.getPersistentConfigProvider());
-			this.configurationComposite.setSigner(this.stateMachine.getPDFSigner());
+					getStateMachine().getGUIProvider().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
+			this.configurationComposite.setConfigManipulator(getStateMachine().getConfigManipulator());
+			this.configurationComposite.setConfigProvider(getStateMachine().getPersistentConfigProvider());
+			this.configurationComposite.setSigner(getStateMachine().getPDFSigner());
 		}
 
 		return this.configurationComposite;
@@ -65,11 +65,11 @@ public class ConfigurationUIState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 
 		ConfigurationComposite config = this.getConfigurationComposite();
 		
-		this.stateMachine.getGUIProvider().display(config);
+		getStateMachine().getGUIProvider().display(config);
 
 		if(config.isUserDone())
 		{
@@ -95,7 +95,7 @@ public class ConfigurationUIState extends State {
 	@Override
 	public void updateMainWindowBehavior() {
 		// Leave the state as it is
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
 		behavior.setMainBarVisible(false);
 	}
 
@@ -103,6 +103,6 @@ public class ConfigurationUIState extends State {
 	 * Triggers to reload the resources
 	 */
 	public void reloadResources() {
-		this.stateMachine.getGUIProvider().reloadResources();
+		getStateMachine().getGUIProvider().reloadResources();
 	}
 }

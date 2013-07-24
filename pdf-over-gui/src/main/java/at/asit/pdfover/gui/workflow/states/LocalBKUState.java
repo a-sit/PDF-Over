@@ -169,7 +169,7 @@ public class LocalBKUState extends State {
 				//
 				this.state.threadException = e;
 			} finally {
-				this.state.stateMachine.invokeUpdate();
+				this.state.getStateMachine().invokeUpdate();
 			}
 		}
 
@@ -195,7 +195,7 @@ public class LocalBKUState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 
 		this.signingState = status.getSigningState();
 
@@ -208,12 +208,12 @@ public class LocalBKUState extends State {
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
-					this.stateMachine.getGUIProvider().getMainShell(), 
+					getStateMachine().getGUIProvider().getMainShell(),
 					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
-				//this.stateMachine.exit();
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				//getStateMachine().exit();
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
 			}
 			this.threadException = null;
@@ -222,7 +222,7 @@ public class LocalBKUState extends State {
 		}
 
 		// OK
-		this.setNextState(new SigningState(this.stateMachine));
+		this.setNextState(new SigningState(getStateMachine()));
 	}
 
 	/*
@@ -242,7 +242,7 @@ public class LocalBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus()
+		MainWindowBehavior behavior = getStateMachine().getStatus()
 				.getBehavior();
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);

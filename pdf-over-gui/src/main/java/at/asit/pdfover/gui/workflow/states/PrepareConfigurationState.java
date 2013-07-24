@@ -73,7 +73,7 @@ public class PrepareConfigurationState extends State {
 	 */
 	public PrepareConfigurationState(StateMachine stateMachine) {
 		super(stateMachine);
-		this.handler = new ArgumentHandler(this.stateMachine);
+		this.handler = new ArgumentHandler(getStateMachine());
 		this.handler.addCLIArgument(HelpArgument.class);
 		this.handler.addCLIArgument(InputDocumentArgument.class);
 		this.handler.addCLIArgument(OutputFolderArgument.class);
@@ -90,7 +90,7 @@ public class PrepareConfigurationState extends State {
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(ConfigFileArgument.class);
 
-		this.configFileHandler = new ArgumentHandler(this.stateMachine);
+		this.configFileHandler = new ArgumentHandler(getStateMachine());
 		this.configFileHandler.addCLIArgument(ConfigFileArgument.class);
 	}
 
@@ -99,9 +99,9 @@ public class PrepareConfigurationState extends State {
 		try {
 
 			try {
-				this.stateMachine.getConfigProvider().loadConfiguration(
+				getStateMachine().getConfigProvider().loadConfiguration(
 						new FileInputStream(
-								this.stateMachine.getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
+								getStateMachine().getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
 
@@ -112,7 +112,7 @@ public class PrepareConfigurationState extends State {
 					try {
 						InputStream is = this.getClass().getResourceAsStream(
 								Constants.RES_PKG_PATH + filename);
-						this.stateMachine.getConfigProvider()
+						getStateMachine().getConfigProvider()
 								.loadConfiguration(is);
 
 						log.info("Loaded config from resource : " + filename); //$NON-NLS-1$
@@ -135,7 +135,7 @@ public class PrepareConfigurationState extends State {
 		handler.handleArguments(args);
 
 		if (handler.doesRequireExit()) {
-			this.stateMachine.exit();
+			getStateMachine().exit();
 		}
 	}
 
@@ -160,7 +160,7 @@ public class PrepareConfigurationState extends State {
 				inputStream = this.getClass().getResourceAsStream(
 						Constants.RES_PKG_PATH + Constants.DEFAULT_CONFIG_FILENAME);
 				pdfOverConfig = new FileOutputStream(
-						this.stateMachine.getConfigProvider().getConfigurationDirectory() +
+						getStateMachine().getConfigProvider().getConfigurationDirectory() +
 						FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 
 				while ((byteCount = inputStream.read(buffer)) >= 0) {
@@ -197,7 +197,7 @@ public class PrepareConfigurationState extends State {
 			try {
 				inputStream = this.getClass().getResourceAsStream(
 						Constants.RES_PKG_PATH + Constants.DEFAULT_LOG4J_FILENAME);
-				String filename = this.stateMachine.getConfigProvider().getConfigurationDirectory()
+				String filename = getStateMachine().getConfigProvider().getConfigurationDirectory()
 						+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
 				pdfOverConfig = new FileOutputStream(filename);
 
@@ -246,13 +246,13 @@ public class PrepareConfigurationState extends State {
 			}
 			
 			// initialize from config file
-			this.initializeFromConfigurationFile(this.stateMachine
+			this.initializeFromConfigurationFile(getStateMachine()
 					.getConfigProvider().getConfigurationFile());
 			
-			this.stateMachine.getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
+			getStateMachine().getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
 			
 			try {
-				this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
+				getStateMachine().getConfigManipulator().saveCurrentConfiguration();
 			} catch (IOException e) {
 				log.error(
 						"Failed to set local configuration signature note!", e); //$NON-NLS-1$
@@ -274,8 +274,8 @@ public class PrepareConfigurationState extends State {
 		// Read config file
 		try {
 
-			File configDir = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory());
-			File configFile = new File(this.stateMachine.getConfigProvider().getConfigurationDirectory()
+			File configDir = new File(getStateMachine().getConfigProvider().getConfigurationDirectory());
+			File configFile = new File(getStateMachine().getConfigProvider().getConfigurationDirectory()
 					+ FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
 				log.debug("Creating configuration file"); //$NON-NLS-1$
@@ -286,73 +286,73 @@ public class PrepareConfigurationState extends State {
 
 			// Read cli arguments for config file first
 			try {
-				this.initializeFromArguments(this.stateMachine.getCmdArgs(),
+				this.initializeFromArguments(getStateMachine().getCmdArgs(),
 						this.configFileHandler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
-				ErrorDialog error = new ErrorDialog(this.stateMachine
+				ErrorDialog error = new ErrorDialog(getStateMachine()
 						.getGUIProvider().getMainShell(),
 						Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
 						e.getMessage(),
 						BUTTONS.OK);
 				error.open();
-				this.stateMachine.exit();
+				getStateMachine().exit();
 			}
 
 			// initialize from config file
-			this.initializeFromConfigurationFile(this.stateMachine
+			this.initializeFromConfigurationFile(getStateMachine()
 					.getConfigProvider().getConfigurationFile());
 
 			// Read cli arguments
 			try {
-				this.initializeFromArguments(this.stateMachine.getCmdArgs(),
+				this.initializeFromArguments(getStateMachine().getCmdArgs(),
 						this.handler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
 				ErrorDialog error;
 				
 				if (e.getCause() instanceof FileNotFoundException) {
-					error = new ErrorDialog(this.stateMachine
+					error = new ErrorDialog(getStateMachine()
 						.getGUIProvider().getMainShell(),
 						String.format(
 								Messages.getString("error.FileNotExist"), //$NON-NLS-1$
 								e.getCause().getMessage()),
 						BUTTONS.OK);
 				} else {
-					error = new ErrorDialog(this.stateMachine
+					error = new ErrorDialog(getStateMachine()
 							.getGUIProvider().getMainShell(),
 							Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
 							e.getMessage(),
 							BUTTONS.OK);
 				}
 				error.open();
-				this.stateMachine.exit();
+				getStateMachine().exit();
 			}
 
 			// Set usedSignerLib ...
-			this.stateMachine.getPDFSigner().setUsedPDFSignerLibrary(
+			getStateMachine().getPDFSigner().setUsedPDFSignerLibrary(
 					Signator.Signers.PDFAS);
 
 			// Create PDF Signer
-			this.stateMachine.getStatus().setBKU(
-					this.stateMachine.getConfigProvider().getDefaultBKU());
+			getStateMachine().getStatus().setBKU(
+					getStateMachine().getConfigProvider().getDefaultBKU());
 
-			this.stateMachine.getStatus().setSignaturePosition(
-					this.stateMachine.getConfigProvider()
+			getStateMachine().getStatus().setSignaturePosition(
+					getStateMachine().getConfigProvider()
 							.getDefaultSignaturePosition());
 
-			this.setNextState(new OpenState(this.stateMachine));
+			this.setNextState(new OpenState(getStateMachine()));
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
-			ErrorDialog error = new ErrorDialog(this.stateMachine
+			ErrorDialog error = new ErrorDialog(getStateMachine()
 					.getGUIProvider().getMainShell(), 
 					Messages.getString("error.Initialization"), //$NON-NLS-1$
 					BUTTONS.OK);
 			// error.setException(e);
 			// this.setNextState(error);
 			error.open();
-			this.stateMachine.exit();
+			getStateMachine().exit();
 		}
 	}
 

@@ -68,9 +68,9 @@ public class PrepareSigningState extends State {
 		public void run() {
 			try {
 
-				Status status = this.state.stateMachine.getStatus();
+				Status status = this.state.getStateMachine().getStatus();
 
-				ConfigProvider configuration = this.state.stateMachine
+				ConfigProvider configuration = this.state.getStateMachine()
 						.getConfigProvider();
 
 				// SET PROXY HOST and PORT settings
@@ -121,7 +121,7 @@ public class PrepareSigningState extends State {
 					});
 				}
 				if (this.state.signer == null) {
-					this.state.signer = this.state.stateMachine.getPDFSigner()
+					this.state.signer = this.state.getStateMachine().getPDFSigner()
 							.getPDFSigner();
 				}
 
@@ -161,7 +161,7 @@ public class PrepareSigningState extends State {
 				log.error("PrepareDocumentThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
 			} finally {
-				this.state.stateMachine.invokeUpdate();
+				this.state.getStateMachine().invokeUpdate();
 			}
 		}
 	}
@@ -178,7 +178,7 @@ public class PrepareSigningState extends State {
 
 	private WaitingComposite getSelectionComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite = this.stateMachine.getGUIProvider()
+			this.waitingComposite = getStateMachine().getGUIProvider()
 					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
@@ -195,11 +195,11 @@ public class PrepareSigningState extends State {
 	public void run() {
 		WaitingComposite waiting = this.getSelectionComposite();
 
-		this.stateMachine.getGUIProvider().display(waiting);
+		getStateMachine().getGUIProvider().display(waiting);
 
-		this.signer = this.stateMachine.getPDFSigner().getPDFSigner();
+		this.signer = getStateMachine().getPDFSigner().getPDFSigner();
 
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 
 		if (this.signatureParameter == null) {
 			this.signatureParameter = this.signer.newParameter();
@@ -212,7 +212,7 @@ public class PrepareSigningState extends State {
 		}
 
 		if (this.threadException != null) {
-			ErrorDialog error = new ErrorDialog(this.stateMachine
+			ErrorDialog error = new ErrorDialog(getStateMachine()
 					.getGUIProvider().getMainShell(),
 					Messages.getString("error.PrepareDocument"), //$NON-NLS-1$
 					BUTTONS.RETRY_CANCEL);
@@ -220,7 +220,7 @@ public class PrepareSigningState extends State {
 			if (error.open() == SWT.RETRY) {
 				run();
 			} else {
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 			}
 			return;
 		}
@@ -228,13 +228,13 @@ public class PrepareSigningState extends State {
 		// We got the Request set it into status and move on to next state ...
 		status.setSigningState(this.signingState);
 
-		if (this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
-			this.setNextState(new LocalBKUState(this.stateMachine));
-		} else if (this.stateMachine.getStatus().getBKU() == BKUs.MOBILE) {
-			this.setNextState(new MobileBKUState(this.stateMachine));
+		if (getStateMachine().getStatus().getBKU() == BKUs.LOCAL) {
+			this.setNextState(new LocalBKUState(getStateMachine()));
+		} else if (getStateMachine().getStatus().getBKU() == BKUs.MOBILE) {
+			this.setNextState(new MobileBKUState(getStateMachine()));
 		} else {
 			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!"); //$NON-NLS-1$
-			this.setNextState(new BKUSelectionState(this.stateMachine));
+			this.setNextState(new BKUSelectionState(getStateMachine()));
 		}
 	}
 
@@ -254,7 +254,7 @@ public class PrepareSigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus()
+		MainWindowBehavior behavior = getStateMachine().getStatus()
 				.getBehavior();
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);

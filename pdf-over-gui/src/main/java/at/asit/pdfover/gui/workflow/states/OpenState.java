@@ -50,7 +50,7 @@ public class OpenState extends State {
 	private DataSourceSelectComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
-					this.stateMachine.getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
+					getStateMachine().getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
 		}
 		return this.selectionComposite;
 	}
@@ -60,11 +60,11 @@ public class OpenState extends State {
 		
 		
 		
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState) &&
 			!(status.getPreviousState() instanceof OpenState))
 		{
-			ConfigProvider config = this.stateMachine.getConfigProvider();
+			ConfigProvider config = getStateMachine().getConfigProvider();
 			status.setBKU(config.getDefaultBKU());
 			status.setDocument(null);
 			status.setSignaturePosition(config.getDefaultSignaturePosition());
@@ -74,7 +74,7 @@ public class OpenState extends State {
 			DataSourceSelectComposite selection = this
 					.getSelectionComposite();
 
-			this.stateMachine.getGUIProvider().display(selection);
+			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
 
 			status.setDocument(selection.getSelected());
@@ -84,8 +84,8 @@ public class OpenState extends State {
 				return;
 			} 
 		}
-		log.debug("Got Datasource: " + this.stateMachine.getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
-		this.setNextState(new PositioningState(this.stateMachine));
+		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
+		this.setNextState(new PositioningState(getStateMachine()));
 	}
 	
 	/* (non-Javadoc)
@@ -102,7 +102,7 @@ public class OpenState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setActive(Buttons.OPEN, true);

@@ -70,7 +70,7 @@ public class PositioningState extends State {
 
 	private PDFFile getPDFDocument() throws IOException {
 		PDFFile pdf = null;
-		RandomAccessFile rafile = new RandomAccessFile(this.stateMachine.getStatus().getDocument(), "r"); //$NON-NLS-1$
+		RandomAccessFile rafile = new RandomAccessFile(getStateMachine().getStatus().getDocument(), "r"); //$NON-NLS-1$
 		FileChannel chan = rafile.getChannel();
 		ByteBuffer buf = chan
 				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
@@ -94,25 +94,25 @@ public class PositioningState extends State {
 	private PositioningComposite getPositioningComposite(PDFFile document) {
 		if (this.positionComposite == null) {
 			this.positionComposite =
-					this.stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  this.stateMachine.getStatus().getDocument()); //$NON-NLS-1$
+					getStateMachine().getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
+			log.debug("Displaying " +  getStateMachine().getStatus().getDocument()); //$NON-NLS-1$
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
-		SignatureParameter param = this.stateMachine.getPDFSigner().getPDFSigner().newParameter();
-		Emblem emblem = new FileNameEmblem(this.stateMachine.getConfigProvider().getDefaultEmblem());
+		SignatureParameter param = getStateMachine().getPDFSigner().getPDFSigner().newParameter();
+		Emblem emblem = new FileNameEmblem(getStateMachine().getConfigProvider().getDefaultEmblem());
 		param.setEmblem(emblem);
-		if(this.stateMachine.getConfigProvider().getSignatureNote() != null && !this.stateMachine.getConfigProvider().getSignatureNote().isEmpty()) {
-			param.setProperty("SIG_NOTE", this.stateMachine.getConfigProvider().getSignatureNote()); //$NON-NLS-1$
+		if(getStateMachine().getConfigProvider().getSignatureNote() != null && !getStateMachine().getConfigProvider().getSignatureNote().isEmpty()) {
+			param.setProperty("SIG_NOTE", getStateMachine().getConfigProvider().getSignatureNote()); //$NON-NLS-1$
 		}
 		
-		param.setSignatureLanguage(this.stateMachine.getConfigProvider().getSignLocale().getLanguage());
+		param.setSignatureLanguage(getStateMachine().getConfigProvider().getSignLocale().getLanguage());
 		
 		this.positionComposite.setPlaceholder(
 				param.getPlaceholder(),
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
-				this.stateMachine.getConfigProvider().getPlaceholderTransparency());
+				getStateMachine().getConfigProvider().getPlaceholderTransparency());
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
 			this.positionComposite.setPosition(
 					this.previousPosition.getX(),
@@ -124,7 +124,7 @@ public class PositioningState extends State {
 
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof PositioningState) &&
 			!(status.getPreviousState() instanceof OpenState))
 		{
@@ -133,12 +133,12 @@ public class PositioningState extends State {
 		}
 
 		if ((this.document == null) ||
-				(this.previousDocument != this.stateMachine.getStatus().getDocument())) {
+				(this.previousDocument != getStateMachine().getStatus().getDocument())) {
 			this.document = null;
 			log.debug("Checking PDF document for encryption"); //$NON-NLS-1$
 			try {
 				this.document = getPDFDocument();
-				this.previousDocument = this.stateMachine.getStatus().getDocument();
+				this.previousDocument = getStateMachine().getStatus().getDocument();
 			} catch (IOException e) { 
 				this.positionComposite = null;
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
@@ -146,12 +146,12 @@ public class PositioningState extends State {
 				if (message == null)
 					message = Messages.getString("error.IOError"); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
-						this.stateMachine.getGUIProvider().getMainShell(), 
+						getStateMachine().getGUIProvider().getMainShell(),
 						message, BUTTONS.RETRY_CANCEL);
 				if(dialog.open() == SWT.RETRY) {
 					run();
 				} else {
-					setNextState(new OpenState(this.stateMachine));
+					setNextState(new OpenState(getStateMachine()));
 				}
 				return;
 			}
@@ -164,25 +164,25 @@ public class PositioningState extends State {
 			} catch(Exception ex) {
 				log.error("Failed to create composite (probably a mac...)", ex); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(
-						this.stateMachine.getGUIProvider().getMainShell(), 
+						getStateMachine().getGUIProvider().getMainShell(),
 						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK); //$NON-NLS-1$
 				dialog.open();
 				status.setSignaturePosition(new SignaturePosition());
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
 			}
 
-			this.stateMachine.getGUIProvider().display(position);
+			getStateMachine().getGUIProvider().display(position);
 			
 			status.setSignaturePosition(position.getPosition());
 			
 			if(status.getSignaturePosition() != null) {
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 			}
 			
 			this.positionComposite.requestFocus();
 		} else {
-			this.setNextState(new BKUSelectionState(this.stateMachine));
+			this.setNextState(new BKUSelectionState(getStateMachine()));
 		}
 	}
 
@@ -200,7 +200,7 @@ public class PositioningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

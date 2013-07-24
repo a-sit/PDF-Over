@@ -51,15 +51,15 @@ public class SigningState extends State {
 		@Override
 		public void run() {
 			try {
-				Signer signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
-				Status status = this.state.stateMachine.getStatus();
+				Signer signer = this.state.getStateMachine().getPDFSigner().getPDFSigner();
+				Status status = this.state.getStateMachine().getStatus();
 				
 				status.setSignResult(signer.sign(status.getSigningState()));
 			} catch(Exception e) {
 				log.error("FinishSignThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
 			} finally {
-				this.state.stateMachine.invokeUpdate();
+				this.state.getStateMachine().invokeUpdate();
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class SigningState extends State {
 	
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 		
 		if(status.getSignResult() == null && 
 			this.threadException == null) {
@@ -96,18 +96,18 @@ public class SigningState extends State {
 				if (cause instanceof ConnectorException)
 					message += ": " + cause.getMessage(); //$NON-NLS-1$
 			}
-			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
 					message, BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
-				this.setNextState(new PrepareSigningState(this.stateMachine));
+				this.setNextState(new PrepareSigningState(getStateMachine()));
 			} else {
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 			}
 			return;
 		}
 
-		this.setNextState(new OutputState(this.stateMachine));
+		this.setNextState(new OutputState(getStateMachine()));
 	}
 
 	/* (non-Javadoc)

@@ -26,7 +26,7 @@ public abstract class State {
 	/**
 	 * The StateMachine
 	 */
-	protected StateMachine stateMachine;
+	private StateMachine stateMachine;
 
 	private State nextState = null;
 
@@ -71,6 +71,15 @@ public abstract class State {
 	public void updateStateMachine()
 	{
 		this.stateMachine.update();
+	}
+
+	/**
+	 * Get the state machine
+	 * @return the StateMachine
+	 */
+	protected StateMachine getStateMachine()
+	{
+		return this.stateMachine;
 	}
 
 	/**

@@ -46,11 +46,11 @@ public class OutputState extends State {
 
 	private OutputComposite getOutputComposite() {
 		if (this.outputComposite == null) {
-			this.outputComposite = this.stateMachine.getGUIProvider()
+			this.outputComposite = getStateMachine().getGUIProvider()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
 			
-			ConfigProvider config = this.stateMachine.getConfigProvider();
-			Status status = this.stateMachine.getStatus();
+			ConfigProvider config = getStateMachine().getConfigProvider();
+			Status status = getStateMachine().getStatus();
 			
 			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp"); //$NON-NLS-1$
 			
@@ -69,7 +69,7 @@ public class OutputState extends State {
 			this.outputComposite.saveDocument();
 
 			if (config.getSkipFinish() && this.outputComposite.getSaveSuccessful()) {
-				this.stateMachine.exit();
+				getStateMachine().exit();
 			}
 		}
 
@@ -78,15 +78,15 @@ public class OutputState extends State {
 
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 
 		if (status.getSignResult() == null) {
-			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
+			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
 					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
 			if(error.open() == SWT.RETRY) {
-				this.setNextState(new PrepareSigningState(this.stateMachine));
+				this.setNextState(new PrepareSigningState(getStateMachine()));
 			} else {
-				this.setNextState(new BKUSelectionState(this.stateMachine));
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 			}
 			return;
 		}
@@ -94,7 +94,7 @@ public class OutputState extends State {
 		OutputComposite outputComposite = this.getOutputComposite();
 
 		// Display dialog
-		this.stateMachine.getGUIProvider().display(outputComposite);
+		getStateMachine().getGUIProvider().display(outputComposite);
 	}
 
 	/*
@@ -105,7 +105,7 @@ public class OutputState extends State {
 	@Override
 	public void cleanUp() {
 		
-		this.stateMachine.getStatus().setSignResult(null);
+		getStateMachine().getStatus().setSignResult(null);
 		
 		if (this.outputComposite != null)
 			this.outputComposite.dispose();
@@ -118,7 +118,7 @@ public class OutputState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus()
+		MainWindowBehavior behavior = getStateMachine().getStatus()
 				.getBehavior();
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);

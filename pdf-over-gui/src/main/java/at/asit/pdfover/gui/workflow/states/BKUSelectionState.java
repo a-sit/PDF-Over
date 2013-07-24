@@ -51,7 +51,7 @@ public class BKUSelectionState extends State {
 	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
-					this.stateMachine.getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
+					getStateMachine().getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.selectionComposite;
@@ -59,12 +59,12 @@ public class BKUSelectionState extends State {
 	
 	@Override
 	public void run() {
-		Status status = this.stateMachine.getStatus();
+		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof BKUSelectionState) && 
 			!(status.getPreviousState() instanceof PositioningState)) {
 			status.setBKU(BKUs.NONE);
 		} else if((status.getPreviousState() instanceof PositioningState)) {
-			ConfigProvider config = this.stateMachine.getConfigProvider();
+			ConfigProvider config = getStateMachine().getConfigProvider();
 			status.setBKU(config.getDefaultBKU());
 		}
 
@@ -72,7 +72,7 @@ public class BKUSelectionState extends State {
 			BKUSelectionComposite selection = this
 					.getSelectionComposite();
 
-			this.stateMachine.getGUIProvider().display(selection);
+			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
 			
 			status.setBKU(selection.getSelected());
@@ -81,7 +81,7 @@ public class BKUSelectionState extends State {
 				return;
 			}
 		} 
-		this.setNextState(new PrepareSigningState(this.stateMachine));
+		this.setNextState(new PrepareSigningState(getStateMachine()));
 	}
 
 	/* (non-Javadoc)
@@ -98,7 +98,7 @@ public class BKUSelectionState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

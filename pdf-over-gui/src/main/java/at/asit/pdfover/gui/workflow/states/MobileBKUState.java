@@ -49,15 +49,15 @@ public class MobileBKUState extends State {
 	 */
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		switch(this.stateMachine.getConfigProvider().getMobileBKUType()) {
+		switch(getStateMachine().getConfigProvider().getMobileBKUType()) {
 			case A_TRUST:
-				this.status = new ATrustStatus(this.stateMachine.getConfigProvider());
-				this.handler = new ATrustHandler(this, this.stateMachine.getGUIProvider().getMainShell());
+				this.status = new ATrustStatus(getStateMachine().getConfigProvider());
+				this.handler = new ATrustHandler(this, getStateMachine().getGUIProvider().getMainShell());
 				break;
 
 			case IAIK:
-				this.status = new IAIKStatus(this.stateMachine.getConfigProvider());
-				this.handler = new IAIKHandler(this, this.stateMachine.getGUIProvider().getMainShell());
+				this.status = new IAIKStatus(getStateMachine().getConfigProvider());
+				this.handler = new IAIKHandler(this, getStateMachine().getGUIProvider().getMainShell());
 				break;
 		}
 
@@ -88,7 +88,7 @@ public class MobileBKUState extends State {
 
 	private WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite = this.stateMachine.getGUIProvider()
+			this.waitingComposite = getStateMachine().getGUIProvider()
 					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
@@ -97,7 +97,7 @@ public class MobileBKUState extends State {
 
 	private MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
 		if (this.mobileBKUEnterTANComposite == null) {
-			this.mobileBKUEnterTANComposite = this.stateMachine
+			this.mobileBKUEnterTANComposite = getStateMachine()
 					.getGUIProvider().createComposite(
 							MobileBKUEnterTANComposite.class, SWT.RESIZE, this);
 		}
@@ -107,7 +107,7 @@ public class MobileBKUState extends State {
 
 	private MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
 		if (this.mobileBKUEnterNumberComposite == null) {
-			this.mobileBKUEnterNumberComposite = this.stateMachine
+			this.mobileBKUEnterNumberComposite = getStateMachine()
 					.getGUIProvider().createComposite(
 							MobileBKUEnterNumberComposite.class, SWT.RESIZE,
 							this);
@@ -137,7 +137,7 @@ public class MobileBKUState extends State {
 	 * @return the mobile BKU URL
 	 */
 	public String getURL() {
-		return this.stateMachine.getConfigProvider().getMobileBKUURL();
+		return getStateMachine().getConfigProvider().getMobileBKUURL();
 	}
 
 	/**
@@ -181,24 +181,24 @@ public class MobileBKUState extends State {
 	@Override
 	public void run() {
 
-		this.signingState = this.stateMachine.getStatus().getSigningState();
+		this.signingState = getStateMachine().getStatus().getSigningState();
 
 		MobileBKUStatus mobileStatus = this.getStatus();
 
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(
-					this.stateMachine.getGUIProvider().getMainShell(),
+					getStateMachine().getGUIProvider().getMainShell(),
 					Messages.getString("error.Unexpected"), BUTTONS.OK); //$NON-NLS-1$
 			// error.setException(this.threadException);
 			// this.setNextState(error);
 			error.open();
-			this.stateMachine.exit();
+			getStateMachine().exit();
 			return;
 		}
 
 		switch (this.communicationState) {
 		case POST_REQUEST:
-			this.stateMachine.getGUIProvider().display(
+			getStateMachine().getGUIProvider().display(
 					this.getWaitingComposite());
 			Thread postSLRequestThread = new Thread(
 					new PostSLRequestThread(this));
@@ -235,7 +235,7 @@ public class MobileBKUState extends State {
 					mobileStatus.setMobilePassword(ui.getMobilePassword());
 
 					// show waiting composite
-					this.stateMachine.getGUIProvider().display(
+					getStateMachine().getGUIProvider().display(
 							this.getWaitingComposite());
 
 					// post to BKU
@@ -266,7 +266,7 @@ public class MobileBKUState extends State {
 						ui.setMobilePassword(mobileStatus.getMobilePassword());
 					}
 					ui.enableButton();
-					this.stateMachine.getGUIProvider().display(ui);
+					getStateMachine().getGUIProvider().display(ui);
 				}
 			}
 			break;
@@ -284,7 +284,7 @@ public class MobileBKUState extends State {
 				mobileStatus.setTan(tan.getTan());
 
 				// show waiting composite
-				this.stateMachine.getGUIProvider().display(
+				getStateMachine().getGUIProvider().display(
 						this.getWaitingComposite());
 				
 				// post to BKU!
@@ -303,16 +303,16 @@ public class MobileBKUState extends State {
 					tan.setTries(mobileStatus.getTanTries());
 				}
 				tan.enableButton();
-				this.stateMachine.getGUIProvider().display(tan);
+				getStateMachine().getGUIProvider().display(tan);
 			}
 			break;
 
 		case FINAL:
-			this.setNextState(new SigningState(this.stateMachine));
+			this.setNextState(new SigningState(getStateMachine()));
 			break;
 
 		case CANCEL:
-			this.setNextState(new BKUSelectionState(this.stateMachine));
+			this.setNextState(new BKUSelectionState(getStateMachine()));
 			break;
 		}
 	}
@@ -339,7 +339,7 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus()
+		MainWindowBehavior behavior = getStateMachine().getStatus()
 				.getBehavior();
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
@@ -359,6 +359,6 @@ public class MobileBKUState extends State {
 	 * invoke state machine update in main thread
 	 */
 	public void invokeUpdate() {
-		this.stateMachine.invokeUpdate();
+		getStateMachine().invokeUpdate();
 	}
 }
