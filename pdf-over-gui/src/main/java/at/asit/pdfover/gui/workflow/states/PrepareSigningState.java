@@ -79,30 +79,34 @@ public class PrepareSigningState extends State {
 				final String proxyUser = configuration.getProxyUser();
 				final String proxyPass = configuration.getProxyPass();
 
-				if (proxyPort > 0 && proxyPort <= 0xFFFF) {
-					System.setProperty(
-							"http.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
-					System.setProperty(
-							"https.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
-				}
-
 				if (proxyHost != null && !proxyHost.isEmpty()) {
+					log.debug("Setting proxy host to " + proxyHost); //$NON-NLS-1$
 					System.setProperty("http.proxyHost", proxyHost); //$NON-NLS-1$
 					System.setProperty("https.proxyHost", proxyHost); //$NON-NLS-1$
 				}
 
+				if (proxyPort > 0 && proxyPort <= 0xFFFF) {
+					String port = Integer.toString(proxyPort);
+					log.debug("Setting proxy port to " + port); //$NON-NLS-1$
+					System.setProperty("http.proxyPort", port); //$NON-NLS-1$
+					System.setProperty("https.proxyPort", port); //$NON-NLS-1$
+				}
+
 				if (proxyUser != null && !proxyUser.isEmpty()) {
+					log.debug("Setting proxy username to " + proxyUser); //$NON-NLS-1$
 					System.setProperty("http.proxyUser", proxyUser); //$NON-NLS-1$
 					System.setProperty("https.proxyUser", proxyUser); //$NON-NLS-1$
 				}
 
 				if (proxyPass != null && !proxyPass.isEmpty()) {
+					log.debug("Setting proxy password"); //$NON-NLS-1$
 					System.setProperty("http.proxyPassword", proxyPass); //$NON-NLS-1$
 					System.setProperty("https.proxyPassword", proxyPass); //$NON-NLS-1$
 				}
 
 				if (proxyUser != null && !proxyUser.isEmpty() &&
 					proxyPass != null && !proxyPass.isEmpty()) {
+					log.debug("Enabling proxy authentication"); //$NON-NLS-1$
 					Authenticator.setDefault(new Authenticator() {
 						/* (non-Javadoc)
 						 * @see java.net.Authenticator#getPasswordAuthentication()
