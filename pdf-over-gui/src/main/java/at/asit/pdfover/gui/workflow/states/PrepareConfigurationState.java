@@ -39,7 +39,9 @@ import at.asit.pdfover.gui.cliarguments.OutputFolderArgument;
 import at.asit.pdfover.gui.cliarguments.PasswordArgument;
 import at.asit.pdfover.gui.cliarguments.PhoneNumberArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyHostArgument;
+import at.asit.pdfover.gui.cliarguments.ProxyPassArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
+import at.asit.pdfover.gui.cliarguments.ProxyUserArgument;
 import at.asit.pdfover.gui.cliarguments.SkipFinishArgument;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
@@ -80,6 +82,8 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(PasswordArgument.class);
 		this.handler.addCLIArgument(ProxyHostArgument.class);
 		this.handler.addCLIArgument(ProxyPortArgument.class);
+		this.handler.addCLIArgument(ProxyUserArgument.class);
+		this.handler.addCLIArgument(ProxyPassArgument.class);
 		this.handler.addCLIArgument(EmblemArgument.class);
 		this.handler.addCLIArgument(AutomaticPositioningArgument.class);
 		this.handler.addCLIArgument(SkipFinishArgument.class);
