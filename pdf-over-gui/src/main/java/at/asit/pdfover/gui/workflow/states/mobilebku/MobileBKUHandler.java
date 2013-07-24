@@ -28,7 +28,6 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
-import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,9 +73,7 @@ public abstract class MobileBKUHandler {
 
 		log.debug("SL Request: " + sl_request); //$NON-NLS-1$
 
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-
+		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(mobileBKUUrl);

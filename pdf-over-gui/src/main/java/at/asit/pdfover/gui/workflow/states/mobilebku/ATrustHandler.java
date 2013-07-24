@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.protocol.Protocol;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -89,10 +88,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	@Override
 	public String postCredentials() throws Exception {
 		ATrustStatus status = getStatus();
-	
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-	
+
+		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient();
 	
 		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
@@ -161,9 +158,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	public String postTAN() throws IOException {
 		ATrustStatus status = getStatus();
 	
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-	
+		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient();
 	
 		PostMethod post = new PostMethod(status.getBaseURL()

@@ -24,7 +24,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.protocol.Protocol;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -96,10 +95,8 @@ public class IAIKHandler extends MobileBKUHandler {
 	@Override
 	public String postCredentials() throws Exception {
 		IAIKStatus status = getStatus();
-		
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-	
+
+		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());
@@ -236,10 +233,8 @@ public class IAIKHandler extends MobileBKUHandler {
 	@Override
 	public String postTAN() throws Exception {
 		IAIKStatus status = getStatus();
-		
-		Protocol.registerProtocol("https", //$NON-NLS-1$
-				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
-	
+
+		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());

@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,5 +175,14 @@ public class MobileBKUHelper {
 		}
 
 		return client;
+	}
+
+	/**
+	 * Register our TrustedSocketFactory for https connections
+	 */
+	@SuppressWarnings("deprecation")
+	public static void registerTrustedSocketFactory() {
+		Protocol.registerProtocol("https", //$NON-NLS-1$
+				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
 	}
 }
