@@ -76,6 +76,18 @@ public interface ConfigManipulator {
 	public void setProxyPort(int port);
 
 	/**
+	 * Sets the proxy username
+	 * @param user the proxy username
+	 */
+	public void setProxyUser(String user);
+
+	/**
+	 * Sets the proxy password
+	 * @param pass the proxy password
+	 */
+	public void setProxyPass(String pass);
+
+	/**
 	 * Sets the default output folder
 	 * @param outputFolder the default output folder
 	 */

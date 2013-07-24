@@ -110,6 +110,12 @@ public class Constants {
 	/** The proxy port config parameter */
 	public static final String CFG_PROXY_PORT = "PROXY_PORT"; //$NON-NLS-1$
 
+	/** The proxy username config parameter */
+	public static final String CFG_PROXY_USER = "PROXY_USER"; //$NON-NLS-1$
+
+	/** The proxy password config parameter */
+	public static final String CFG_PROXY_PASS = "PROXY_PASS"; //$NON-NLS-1$
+
 	/** The output folder config parameter */
 	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 

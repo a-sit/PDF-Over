@@ -320,6 +320,10 @@ public class ConfigurationComposite extends StateComposite {
 			} catch (InvalidPortException e) {
 				log.error("Failed to set proxy port!", e); //$NON-NLS-1$
 			}
+			this.configurationContainer.setProxyUser(this.configProvider
+					.getProxyUserPersistent());
+			this.configurationContainer.setProxyPass(this.configProvider
+					.getProxyPassPersistent());
 
 			this.simpleConfigComposite.loadConfiguration();
 			this.advancedConfigComposite.loadConfiguration();
@@ -421,6 +425,10 @@ public class ConfigurationComposite extends StateComposite {
 				.getProxyHost());
 		this.configManipulator.setProxyPort(this.configurationContainer
 				.getProxyPort());
+		this.configManipulator.setProxyUser(this.configurationContainer
+				.getProxyUser());
+		this.configManipulator.setProxyPass(this.configurationContainer
+				.getProxyPass());
 		this.configManipulator.setDefaultEmblem(this.configurationContainer
 				.getEmblem());
 

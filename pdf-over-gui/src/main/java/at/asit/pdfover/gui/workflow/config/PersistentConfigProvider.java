@@ -52,7 +52,7 @@ public interface PersistentConfigProvider {
 	 * @return the emblem
 	 */
 	public String getDefaultEmblemPersistent();
-	
+
 	/**
 	 * Gets the proxy host
 	 * @return the proxy hostname or ip address
@@ -64,6 +64,18 @@ public interface PersistentConfigProvider {
 	 * @return the proxy port
 	 */
 	public int getProxyPortPersistent();
+
+	/**
+	 * Gets the proxy username
+	 * @return the proxy username
+	 */
+	public String getProxyUserPersistent();
+
+	/**
+	 * Gets the proxy password
+	 * @return the proxy password
+	 */
+	public String getProxyPassPersistent();
 
 	/**
 	 * Gets the default output folder for signed documents

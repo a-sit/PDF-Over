@@ -54,31 +54,37 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** The mobile phone number */
 	protected String mobileNumber = null;
-	
+
 	/** The mobile phone password */
 	protected String mobilePassword = null;
-	
-	/** Holds the proxy Host */
+
+	/** Holds the proxy host */
 	protected String proxyHost = null;
-	
-	/** Holds the signatureNote */
-	protected String signatureNote = null;
-	
+
 	/** Holds the proxy port number */
 	protected int proxyPort = -1;
-	
+
+	/** Holds the proxy username */
+	protected String proxyUser = null;
+
+	/** Holds the proxy password */
+	protected String proxyPass = null;
+
+	/** Holds the signatureNote */
+	protected String signatureNote = null;
+
 	/** Holds the locale */
 	protected Locale locale = null;
-	
+
 	/** Holds the signature locale */
 	protected Locale signLocale = null;
-	
+
 	/** Holds the output folder */
 	protected String folder = null;
-	
+
 	/** Holds the default BKU to use */
 	protected BKUs defaultBKU = BKUs.NONE;
-	
+
 	/** Holds the automatic positioning value */
 	protected boolean automaticPositioning = false;
 
@@ -221,6 +227,42 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 			return;
 		}
 		throw new InvalidPortException(port);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getProxyUser()
+	 */
+	@Override
+	public String getProxyUser() {
+		return this.proxyUser;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setProxyUser(java.lang.String)
+	 */
+	@Override
+	public void setProxyUser(String user) {
+		this.proxyUser = user;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getProxyPass()
+	 */
+	@Override
+	public String getProxyPass() {
+		return this.proxyPass;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setProxyPass(java.lang.String)
+	 */
+	@Override
+	public void setProxyPass(String pass) {
+		this.proxyPass = pass;
 	}
 
 

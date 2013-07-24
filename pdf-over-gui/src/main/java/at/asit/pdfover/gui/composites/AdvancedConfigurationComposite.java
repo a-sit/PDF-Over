@@ -91,9 +91,15 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private Text txtProxyHost;
 	private ErrorMarker proxyHostErrorMarker;
 	private Label lblProxyPort;
-	Text txtProxyPort;
+	private Text txtProxyPort;
+	private ErrorMarker txtProxyPortErrorMarker;
+	private Label lblProxyUser;
+	private Text txtProxyUser;
+	private ErrorMarker proxyUserErrorMarker;
+	private Label lblProxyPass;
+	private Text txtProxyPass;
+	private ErrorMarker proxyPassErrorMarker;
 	FormData fd_txtProxyPort;
-	ErrorMarker txtProxyPortErrorMarker;
 	FormData fd_txtProxyPortErrorMarker;
 
 
@@ -410,16 +416,16 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.grpProxy.setFont(new Font(Display.getCurrent(), fD_grpProxy[0]));
 
 		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
-		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false,
+		GridData gd_lblProxyHost = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_lblNewLabel.widthHint = 66;
-		this.lblProxyHost.setLayoutData(gd_lblNewLabel);
+		gd_lblProxyHost.widthHint = 66;
+		this.lblProxyHost.setLayoutData(gd_lblProxyHost);
 		this.lblProxyHost.setBounds(0, 0, 57, 15);
 
-		FontData[] fD_lblNewLabel = this.lblProxyHost.getFont().getFontData();
-		fD_lblNewLabel[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		FontData[] fD_lblProxyHost = this.lblProxyHost.getFont().getFontData();
+		fD_lblProxyHost[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lblProxyHost.setFont(new Font(Display.getCurrent(),
-				fD_lblNewLabel[0]));
+				fD_lblProxyHost[0]));
 
 		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
 		compProxyHostContainer.setLayout(new FormLayout());
@@ -517,6 +523,118 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void focusLost(FocusEvent e) {
 				processProxyPortChanged();
+			}
+		});
+
+		this.lblProxyUser = new Label(this.grpProxy, SWT.NONE);
+		GridData gd_lblProxyUser = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
+		gd_lblProxyUser.widthHint = 80;
+		this.lblProxyUser.setLayoutData(gd_lblProxyUser);
+		this.lblProxyUser.setBounds(0, 0, 57, 15);
+
+		FontData[] fD_lblProxyUser = this.lblProxyUser.getFont().getFontData();
+		fD_lblProxyUser[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblProxyUser.setFont(new Font(Display.getCurrent(),
+				fD_lblProxyUser[0]));
+
+		Composite compProxyUserContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyUserContainer.setLayout(new FormLayout());
+		compProxyUserContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+		this.txtProxyUser = new Text(compProxyUserContainer, SWT.BORDER);
+		FormData fd_txtProxyUser = new FormData();
+		fd_txtProxyUser.right = new FormAttachment(100, -42);
+		fd_txtProxyUser.top = new FormAttachment(0);
+		fd_txtProxyUser.left = new FormAttachment(0, 5);
+
+		FontData[] fD_txtProxyUser = this.txtProxyUser.getFont().getFontData();
+		fD_txtProxyUser[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtProxyUser.setFont(new Font(Display.getCurrent(),
+				fD_txtProxyUser[0]));
+
+		this.proxyUserErrorMarker = new ErrorMarker(compProxyUserContainer, SWT.NONE, ""); //$NON-NLS-1$
+
+		FormData fd_proxyUserErrorMarker = new FormData();
+		fd_proxyUserErrorMarker.left = new FormAttachment(100, -32);
+		fd_proxyUserErrorMarker.right = new FormAttachment(100);
+		fd_proxyUserErrorMarker.top = new FormAttachment(0);
+		fd_proxyUserErrorMarker.bottom = new FormAttachment(0, 32);
+
+		this.proxyUserErrorMarker.setLayoutData(fd_proxyUserErrorMarker);
+		this.proxyUserErrorMarker.setVisible(false);
+		this.txtProxyUser.setLayoutData(fd_txtProxyUser);
+
+		this.txtProxyUser.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyUserChanged();
+			}
+		});
+
+		this.txtProxyUser.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyUserChanged();
+				}
+			}
+		});
+
+		this.lblProxyPass = new Label(this.grpProxy, SWT.NONE);
+		this.lblProxyPass.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1));
+		this.lblProxyPass.setBounds(0, 0, 57, 15);
+
+		FontData[] fD_lblProxyPass = this.lblProxyPass.getFont().getFontData();
+		fD_lblProxyPass[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblProxyPass.setFont(new Font(Display.getCurrent(),
+				fD_lblProxyPass[0]));
+
+		Composite compProxyPassContainer = new Composite(this.grpProxy, SWT.NONE);
+		compProxyPassContainer.setLayout(new FormLayout());
+		compProxyPassContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
+				1, 1));
+		this.txtProxyPass = new Text(compProxyPassContainer, SWT.PASSWORD | SWT.BORDER);
+		FormData fd_txtProxyPass = new FormData();
+		fd_txtProxyPass.right = new FormAttachment(100, -42);
+		fd_txtProxyPass.top = new FormAttachment(0);
+		fd_txtProxyPass.left = new FormAttachment(0, 5);
+
+		FontData[] fD_txtProxyPass = this.txtProxyPass.getFont().getFontData();
+		fD_txtProxyPass[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtProxyPass.setFont(new Font(Display.getCurrent(),
+				fD_txtProxyPass[0]));
+
+		this.proxyPassErrorMarker = new ErrorMarker(compProxyPassContainer, SWT.NONE, ""); //$NON-NLS-1$
+
+		FormData fd_proxyPassErrorMarker = new FormData();
+		fd_proxyPassErrorMarker.left = new FormAttachment(100, -32);
+		fd_proxyPassErrorMarker.right = new FormAttachment(100);
+		fd_proxyPassErrorMarker.top = new FormAttachment(0);
+		fd_proxyPassErrorMarker.bottom = new FormAttachment(0, 32);
+
+		this.proxyPassErrorMarker.setLayoutData(fd_proxyPassErrorMarker);
+		this.proxyPassErrorMarker.setVisible(false);
+		this.txtProxyPass.setLayoutData(fd_txtProxyPass);
+
+		this.txtProxyPass.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				processProxyPassChanged();
+			}
+		});
+
+		this.txtProxyPass.addTraverseListener(new TraverseListener() {
+
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN) {
+					processProxyPassChanged();
+				}
 			}
 		});
 
@@ -634,6 +752,44 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setProxyHost(host);
 	}
 
+	void processProxyUserChanged() {
+		try {
+			this.proxyUserErrorMarker.setVisible(false);
+			plainProxyUserSetter();
+		} catch (Exception ex) {
+			this.proxyUserErrorMarker.setVisible(true);
+			this.proxyUserErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyUser: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void plainProxyUserSetter() {
+		String user = this.txtProxyUser.getText();
+		this.configurationContainer.setProxyUser(user);
+	}
+
+	void processProxyPassChanged() {
+		try {
+			this.proxyPassErrorMarker.setVisible(false);
+			plainProxyPassSetter();
+		} catch (Exception ex) {
+			this.proxyPassErrorMarker.setVisible(true);
+			this.proxyPassErrorMarker.setToolTipText(ex.getMessage());
+			log.error("processProxyPass: ", ex); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void plainProxyPassSetter() {
+		String pass = this.txtProxyPass.getText();
+		this.configurationContainer.setProxyPass(pass);
+	}
+
 	void processProxyPortChanged() {
 		try {
 			this.txtProxyPortErrorMarker.setVisible(false);
@@ -705,7 +861,17 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		if (host != null) {
 			this.txtProxyHost.setText(host);
 		}
-	}
+
+		String user = this.configurationContainer.getProxyUser();
+		if (user != null) {
+			this.txtProxyUser.setText(user);
+		}
+
+		String pass = this.configurationContainer.getProxyPass();
+		if (pass != null) {
+			this.txtProxyPass.setText(pass);
+		}
+}
 
 	/*
 	 * (non-Javadoc)
@@ -737,6 +903,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			case 2:
 				this.plainProxyPortSetter();
 				// Fall through
+			case 3:
+				this.plainProxyUserSetter();
+				// Fall through
+			case 4:
+				this.plainProxyPassSetter();
 		}
 	}
 
@@ -778,17 +949,27 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.cmbLocaleAuswahl.setToolTipText(Messages
 				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
 
-		this.grpProxy.setText(Messages.getString("simple_config.Proxy_Title")); //$NON-NLS-1$
-		this.lblProxyHost.setText(Messages.getString("simple_config.ProxyHost")); //$NON-NLS-1$
+		this.grpProxy.setText(Messages.getString("advanced_config.Proxy_Title")); //$NON-NLS-1$
+		this.lblProxyHost.setText(Messages.getString("advanced_config.ProxyHost")); //$NON-NLS-1$
 		this.txtProxyHost.setToolTipText(Messages
-				.getString("simple_config.ProxyHost_ToolTip")); //$NON-NLS-1$
+				.getString("advanced_config.ProxyHost_ToolTip")); //$NON-NLS-1$
 		this.txtProxyHost.setMessage(Messages
-				.getString("simple_config.ProxyHostTemplate")); //$NON-NLS-1$
+				.getString("advanced_config.ProxyHost_Template")); //$NON-NLS-1$
 		this.lblProxyPort.setText(Messages
-				.getString("simple_config.ProxyPort")); //$NON-NLS-1$
+				.getString("advanced_config.ProxyPort")); //$NON-NLS-1$
 		this.txtProxyPort.setToolTipText(Messages
-				.getString("simple_config.ProxyPort_ToolTip")); //$NON-NLS-1$
+				.getString("advanced_config.ProxyPort_ToolTip")); //$NON-NLS-1$
 		this.txtProxyPort.setMessage(Messages
-				.getString("simple_config.ProxyPortTemplate")); //$NON-NLS-1$
+				.getString("advanced_config.ProxyPort_Template")); //$NON-NLS-1$
+		this.lblProxyUser.setText(Messages.getString("advanced_config.ProxyUser")); //$NON-NLS-1$
+		this.txtProxyUser.setToolTipText(Messages
+				.getString("advanced_config.ProxyUser_ToolTip")); //$NON-NLS-1$
+		this.txtProxyUser.setMessage(Messages
+				.getString("advanced_config.ProxyUser_Template")); //$NON-NLS-1$
+		this.lblProxyPass.setText(Messages.getString("advanced_config.ProxyPass")); //$NON-NLS-1$
+		this.txtProxyPass.setToolTipText(Messages
+				.getString("advanced_config.ProxyPass_ToolTip")); //$NON-NLS-1$
+		this.txtProxyPass.setMessage(Messages
+				.getString("advanced_config.ProxyPass_Template")); //$NON-NLS-1$
 	}
 }

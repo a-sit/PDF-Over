@@ -101,6 +101,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.setProxyHost(config
 				.getProperty(Constants.CFG_PROXY_HOST));
 
+		// Set Proxy User
+		this.setProxyUser(config
+				.getProperty(Constants.CFG_PROXY_USER));
+
+		// Set Proxy Password
+		this.setProxyPass(config
+				.getProperty(Constants.CFG_PROXY_PASS));
+
 		// Set Output Folder
 		this.setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
@@ -279,6 +287,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHostPersistent());
 		props.setProperty(Constants.CFG_PROXY_PORT,
 				Integer.toString(getProxyPortPersistent()));
+		props.setProperty(Constants.CFG_PROXY_USER, this.getProxyUserPersistent());
+		props.setProperty(Constants.CFG_PROXY_PASS, this.getProxyPassPersistent());
 		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblemPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, this.getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumberPersistent());
@@ -756,6 +766,104 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public int getProxyPortPersistent() {
 		return this.configuration.getProxyPort();
+	}
+
+	/**
+	 * Sets the proxy username
+	 * 
+	 * @param user
+	 *            the proxy username
+	 */
+	@Override
+	public void setProxyUser(String user) {
+		if (user == null || user.trim().isEmpty()) {
+			this.configuration.setProxyUser(STRING_EMPTY);
+		} else {
+			this.configuration.setProxyUser(user);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setProxyUserOverlay(java.lang.String)
+	 */
+	@Override
+	public void setProxyUserOverlay(String user) {
+		if (user == null || user.trim().isEmpty()) {
+			this.configurationOverlay.setProxyUser(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setProxyUser(user);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getProxyUser()
+	 */
+	@Override
+	public String getProxyUser() {
+		String user = this.configurationOverlay.getProxyUser();
+		if (user == null)
+			user = getProxyUserPersistent();
+		return user;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getProxyUserPersistent()
+	 */
+	@Override
+	public String getProxyUserPersistent() {
+		String user = this.configuration.getProxyUser();
+		if (user == null)
+			user = STRING_EMPTY;
+		return user;
+	}
+
+	/**
+	 * Sets the proxy password
+	 * 
+	 * @param pass
+	 *            the proxy password
+	 */
+	@Override
+	public void setProxyPass(String pass) {
+		if (pass == null || pass.trim().isEmpty()) {
+			this.configuration.setProxyPass(STRING_EMPTY);
+		} else {
+			this.configuration.setProxyPass(pass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setProxyPassOverlay(java.lang.String)
+	 */
+	@Override
+	public void setProxyPassOverlay(String pass) {
+		if (pass == null || pass.trim().isEmpty()) {
+			this.configurationOverlay.setProxyPass(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setProxyPass(pass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getProxyPass()
+	 */
+	@Override
+	public String getProxyPass() {
+		String pass = this.configurationOverlay.getProxyPass();
+		if (pass == null)
+			pass = getProxyPassPersistent();
+		return pass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getProxyPassPersistent()
+	 */
+	@Override
+	public String getProxyPassPersistent() {
+		String pass = this.configuration.getProxyPass();
+		if (pass == null)
+			pass = STRING_EMPTY;
+		return pass;
 	}
 
 	/*

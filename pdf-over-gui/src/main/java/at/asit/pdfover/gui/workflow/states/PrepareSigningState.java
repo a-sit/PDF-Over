@@ -16,6 +16,9 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +39,8 @@ import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
 
 /**
- * User waiting state, wait for PDF Signator library to prepare document for signing.
+ * User waiting state, wait for PDF Signator library to prepare document for
+ * signing.
  */
 public class PrepareSigningState extends State {
 
@@ -48,97 +52,145 @@ public class PrepareSigningState extends State {
 	}
 
 	private final class PrepareDocumentThread implements Runnable {
-		
+
 		private PrepareSigningState state;
-		
+
 		/**
 		 * Default constructor
+		 *
 		 * @param state
 		 */
 		public PrepareDocumentThread(PrepareSigningState state) {
 			this.state = state;
 		}
-		
+
 		@Override
 		public void run() {
 			try {
-				
+
 				Status status = this.state.stateMachine.getStatus();
-				
-				ConfigProvider configuration = this.state.stateMachine.getConfigProvider();
-				
+
+				ConfigProvider configuration = this.state.stateMachine
+						.getConfigProvider();
+
 				// SET PROXY HOST and PORT settings
-				String proxyHost = configuration.getProxyHost();
-				int proxyPort = configuration.getProxyPort();
-				
-				if(proxyPort > 0 && proxyPort <= 0xFFFF) {
-					System.setProperty("http.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
-					System.setProperty("https.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
-				} 
-				
-				if(proxyHost != null && !proxyHost.isEmpty()) {
+				final String proxyHost = configuration.getProxyHost();
+				final int proxyPort = configuration.getProxyPort();
+				final String proxyUser = configuration.getProxyUser();
+				final String proxyPass = configuration.getProxyPass();
+
+				if (proxyPort > 0 && proxyPort <= 0xFFFF) {
+					System.setProperty(
+							"http.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
+					System.setProperty(
+							"https.proxyPort", Integer.toString(proxyPort)); //$NON-NLS-1$
+				}
+
+				if (proxyHost != null && !proxyHost.isEmpty()) {
 					System.setProperty("http.proxyHost", proxyHost); //$NON-NLS-1$
 					System.setProperty("https.proxyHost", proxyHost); //$NON-NLS-1$
-				} 
-				
-				if(this.state.signer == null) {
-					this.state.signer = this.state.stateMachine.getPDFSigner().getPDFSigner();
 				}
-				
-				if(this.state.signatureParameter == null) {
-					this.state.signatureParameter = this.state.signer.newParameter();
+
+				if (proxyUser != null && !proxyUser.isEmpty()) {
+					System.setProperty("http.proxyUser", proxyUser); //$NON-NLS-1$
+					System.setProperty("https.proxyUser", proxyUser); //$NON-NLS-1$
 				}
-				
-				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.getDocument()));
-				this.state.signatureParameter.setSignatureDevice(status.getBKU());
-				this.state.signatureParameter.setSignaturePosition(status.getSignaturePosition());
-				
-				if(configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().isEmpty()) {
-					this.state.signatureParameter.setEmblem(new FileNameEmblem(configuration.getDefaultEmblem()));
+
+				if (proxyPass != null && !proxyPass.isEmpty()) {
+					System.setProperty("http.proxyPassword", proxyPass); //$NON-NLS-1$
+					System.setProperty("https.proxyPassword", proxyPass); //$NON-NLS-1$
 				}
-				
-				if(configuration.getSignatureNote() != null && !configuration.getSignatureNote().isEmpty()) {
-					this.state.signatureParameter.setProperty("SIG_NOTE", configuration.getSignatureNote()); //$NON-NLS-1$
+
+				if (proxyUser != null && !proxyUser.isEmpty() &&
+					proxyPass != null && !proxyPass.isEmpty()) {
+					Authenticator.setDefault(new Authenticator() {
+						/* (non-Javadoc)
+						 * @see java.net.Authenticator#getPasswordAuthentication()
+						 */
+						@Override
+						protected PasswordAuthentication getPasswordAuthentication() {
+							if (getRequestorType() == RequestorType.PROXY) {
+								if (getRequestingHost().equalsIgnoreCase(proxyHost) &&
+									(getRequestingPort() == proxyPort)) {
+									return new PasswordAuthentication(proxyUser, 
+											proxyPass.toCharArray());
+								}
+							}
+							return super.getPasswordAuthentication();
+						}
+					});
 				}
-				
-				this.state.signatureParameter.setSignatureLanguage(configuration.getSignLocale().getLanguage());
-				
-				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
-				
+				if (this.state.signer == null) {
+					this.state.signer = this.state.stateMachine.getPDFSigner()
+							.getPDFSigner();
+				}
+
+				if (this.state.signatureParameter == null) {
+					this.state.signatureParameter = this.state.signer
+							.newParameter();
+				}
+
+				this.state.signatureParameter
+						.setInputDocument(new PDFFileDocumentSource(status
+								.getDocument()));
+				this.state.signatureParameter.setSignatureDevice(status
+						.getBKU());
+				this.state.signatureParameter.setSignaturePosition(status
+						.getSignaturePosition());
+
+				if (configuration.getDefaultEmblem() != null
+						&& !configuration.getDefaultEmblem().isEmpty()) {
+					this.state.signatureParameter.setEmblem(new FileNameEmblem(
+							configuration.getDefaultEmblem()));
+				}
+
+				if (configuration.getSignatureNote() != null
+						&& !configuration.getSignatureNote().isEmpty()) {
+					this.state.signatureParameter.setProperty(
+							"SIG_NOTE", configuration.getSignatureNote()); //$NON-NLS-1$
+				}
+
+				this.state.signatureParameter
+						.setSignatureLanguage(configuration.getSignLocale()
+								.getLanguage());
+
+				this.state.signingState = this.state.signer
+						.prepare(this.state.signatureParameter);
+
 			} catch (Exception e) {
 				log.error("PrepareDocumentThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
-			}
-			finally {
+			} finally {
 				this.state.stateMachine.invokeUpdate();
 			}
 		}
 	}
-	
+
 	/**
 	 * SFL4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
-	
+	static final Logger log = LoggerFactory
+			.getLogger(PrepareSigningState.class);
+
 	SignatureParameter signatureParameter;
-	
+
 	private WaitingComposite waitingComposite = null;
 
 	private WaitingComposite getSelectionComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite =
-					this.stateMachine.getGUIProvider().createComposite(WaitingComposite.class, SWT.RESIZE, this);
+			this.waitingComposite = this.stateMachine.getGUIProvider()
+					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.waitingComposite;
 	}
-	
-	at.asit.pdfover.signator.SigningState signingState  = null;
+
+	at.asit.pdfover.signator.SigningState signingState = null;
 
 	Signer signer;
-	
+
 	Exception threadException = null;
-	
+
 	@Override
 	public void run() {
 		WaitingComposite waiting = this.getSelectionComposite();
@@ -149,22 +201,23 @@ public class PrepareSigningState extends State {
 
 		Status status = this.stateMachine.getStatus();
 
-		if(this.signatureParameter == null) {
-			this.signatureParameter = this.signer.newParameter(); 
+		if (this.signatureParameter == null) {
+			this.signatureParameter = this.signer.newParameter();
 		}
 
-		if(this.signingState == null && this.threadException == null) {
+		if (this.signingState == null && this.threadException == null) {
 			Thread t = new Thread(new PrepareDocumentThread(this));
 			t.start();
 			return;
 		}
 
-		if(this.threadException != null) {
-			ErrorDialog error = new ErrorDialog(this.stateMachine.getGUIProvider().getMainShell(),
-					Messages.getString("error.PrepareDocument"),  //$NON-NLS-1$
+		if (this.threadException != null) {
+			ErrorDialog error = new ErrorDialog(this.stateMachine
+					.getGUIProvider().getMainShell(),
+					Messages.getString("error.PrepareDocument"), //$NON-NLS-1$
 					BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
-			if(error.open() == SWT.RETRY) {
+			if (error.open() == SWT.RETRY) {
 				run();
 			} else {
 				this.setNextState(new BKUSelectionState(this.stateMachine));
@@ -174,10 +227,10 @@ public class PrepareSigningState extends State {
 
 		// We got the Request set it into status and move on to next state ...
 		status.setSigningState(this.signingState);
-		
-		if(this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
+
+		if (this.stateMachine.getStatus().getBKU() == BKUs.LOCAL) {
 			this.setNextState(new LocalBKUState(this.stateMachine));
-		} else if(this.stateMachine.getStatus().getBKU() == BKUs.MOBILE) {
+		} else if (this.stateMachine.getStatus().getBKU() == BKUs.MOBILE) {
 			this.setNextState(new MobileBKUState(this.stateMachine));
 		} else {
 			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!"); //$NON-NLS-1$
@@ -185,7 +238,8 @@ public class PrepareSigningState extends State {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
@@ -194,12 +248,14 @@ public class PrepareSigningState extends State {
 			this.waitingComposite.dispose();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().getBehavior();
+		MainWindowBehavior behavior = this.stateMachine.getStatus()
+				.getBehavior();
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

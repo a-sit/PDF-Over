@@ -85,6 +85,18 @@ public interface ConfigProvider {
 	public int getProxyPort();
 
 	/**
+	 * Gets the proxy username
+	 * @return the proxy username
+	 */
+	public String getProxyUser();
+
+	/**
+	 * Gets the proxy password
+	 * @return the proxy password
+	 */
+	public String getProxyPass();
+
+	/**
 	 * Get the default configured BKU
 	 * @return the default configured BKU
 	 */

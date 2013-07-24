@@ -61,6 +61,18 @@ public interface ConfigOverlayManipulator {
 	public void setProxyPortOverlay(int port);
 
 	/**
+	 * Sets the proxy username
+	 * @param user the proxy username
+	 */
+	public void setProxyUserOverlay(String user);
+
+	/**
+	 * Sets the proxy password
+	 * @param pass the proxy password
+	 */
+	public void setProxyPassOverlay(String pass);
+
+	/**
 	 * Sets the default output folder
 	 * @param outputFolder the default output folder
 	 */

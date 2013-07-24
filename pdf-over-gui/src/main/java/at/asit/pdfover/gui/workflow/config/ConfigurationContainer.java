@@ -81,18 +81,6 @@ public interface ConfigurationContainer {
 	public void setProxyHost(String host);
 
 	/**
-	 * Gets the signature note
-	 * @return the signature note
-	 */
-	public String getSignatureNote();
-
-	/**
-	 * Sets the signature note
-	 * @param note the signature note
-	 */
-	public void setSignatureNote(String note);
-
-	/**
 	 * Gets the proxy port
 	 * 
 	 * if port is -1 no port is selected
@@ -110,6 +98,42 @@ public interface ConfigurationContainer {
 	 * @throws InvalidPortException
 	 */
 	public void setProxyPort(int port) throws InvalidPortException;
+
+	/**
+	 * Gets the proxy username
+	 * @return the proxy username
+	 */
+	public String getProxyUser();
+
+	/**
+	 * Sets the proxy username
+	 * @param user the proxy username
+	 */
+	public void setProxyUser(String user);
+
+	/**
+	 * Gets the proxy password
+	 * @return the proxy password
+	 */
+	public String getProxyPass();
+
+	/**
+	 * Sets the proxy password
+	 * @param pass the proxy password
+	 */
+	public void setProxyPass(String pass);
+
+	/**
+	 * Gets the signature note
+	 * @return the signature note
+	 */
+	public String getSignatureNote();
+
+	/**
+	 * Sets the signature note
+	 * @param note the signature note
+	 */
+	public void setSignatureNote(String note);
 
 	/**
 	 * Gets the transparency of the placeholder
