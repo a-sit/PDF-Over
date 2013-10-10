@@ -1,4 +1,2 @@
 @echo off
-pushd %~dp0\..
-start /b javaw -jar lib\pdf-over-gui-4.0.1.jar %*
-popd
+start /b javaw -cp "%~dp0\..\lib\*" at.asit.pdfover.gui.Main %*
