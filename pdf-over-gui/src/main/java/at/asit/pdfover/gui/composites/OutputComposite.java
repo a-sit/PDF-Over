@@ -217,7 +217,7 @@ public class OutputComposite extends StateComposite {
 	 * If not (or if directory unavailable), ask user for location.
 	 */
 	public void saveDocument() {
-		File inputFolder = getInputFile().getParentFile();
+		File inputFolder = getInputFile().getAbsoluteFile().getParentFile();
 		String fileName = getInputFile().getName();
 		String proposedName = getSignedFileName(fileName);
 		String outputFileName;
