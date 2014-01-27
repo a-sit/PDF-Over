@@ -39,17 +39,23 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.composites.StateComposite;
+import at.asit.pdfover.gui.controls.Dialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.MainBarButton;
 import at.asit.pdfover.gui.controls.MainBarEndButton;
 import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
+import at.asit.pdfover.gui.osx.CocoaUIEnhancer;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -198,6 +204,9 @@ public class MainWindow {
 		this.shell = new Shell();
 		getShell().setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) { //$NON-NLS-1$ //$NON-NLS-2$
+			if (System.getProperty("os.name").contains("OS X")) { //$NON-NLS-1$ //$NON-NLS-2$
+				hookupOSXMenu();
+			}
 			// Workaround for SWT bug on Mac: disable full screen mode
 			try {
 				Field field = Control.class.getDeclaredField("view"); //$NON-NLS-1$
@@ -373,6 +382,37 @@ public class MainWindow {
 		this.container.setLayoutData(this.containerFormData);
 		this.stack = new StackLayout();
 		this.container.setLayout(this.stack);
+	}
+
+	/**
+	 * Hook up SWT menu under OS X
+	 */
+	private void hookupOSXMenu() {
+		log.debug("Hooking up OS X menu"); //$NON-NLS-1$
+		CocoaUIEnhancer.hookApplicationMenu(getShell().getDisplay(), new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				MainWindow.this.stateMachine.exit();
+			}
+		}, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				String version = getClass().getPackage()
+						.getImplementationVersion();
+				version = (version == null ? "" : " v" + version); //$NON-NLS-1$ //$NON-NLS-2$
+				String about = Constants.APP_NAME + version;
+				Dialog dialog = new Dialog(getShell(),
+						String.format(Messages.getString("main.about"), Constants.APP_NAME), //$NON-NLS-1$
+						about, BUTTONS.OK, ICON.INFORMATION);
+				dialog.open();
+			}
+		}, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				if (MainWindow.this.stateMachine.getStatus().getBehavior().getEnabled(Buttons.CONFIG))
+					MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(MainWindow.this.stateMachine));
+			}
+		});
 	}
 
 	/**

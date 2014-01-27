@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.ConfigurationComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -96,6 +97,7 @@ public class ConfigurationUIState extends State {
 	public void updateMainWindowBehavior() {
 		// Leave the state as it is
 		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
+		behavior.setEnabled(Buttons.CONFIG, false);
 		behavior.setMainBarVisible(false);
 	}
 
