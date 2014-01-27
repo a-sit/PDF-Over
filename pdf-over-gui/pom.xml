@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>${swt.artifactId}</artifactId>
-			<version>4.2.1</version>
+			<version>4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.izpack</groupId>
