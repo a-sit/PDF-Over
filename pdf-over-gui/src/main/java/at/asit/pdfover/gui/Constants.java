@@ -30,6 +30,13 @@ import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
  */
 public class Constants {
 
+	/** Application name */
+	public static final String APP_NAME = "PDF-Over"; //$NON-NLS-1$
+
+	static {
+		// Has to be set before (implicitly) initializing Display
+		Display.setAppName(APP_NAME);
+	}
 	/** Current display - used for Colors */
 	private static Display display = Display.getCurrent();
 

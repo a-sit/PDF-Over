@@ -168,7 +168,6 @@ public class MainWindow {
 	 * Reload the localization
 	 */
 	public void reloadLocalization() {
-		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
 		this.btn_config.setText(Messages.getString("main.configuration")); //$NON-NLS-1$
 		this.btn_config.setToolTipText(Messages.getString("main.configuration")); //$NON-NLS-1$
 		this.btn_open.setText(Messages.getString("common.open")); //$NON-NLS-1$
@@ -229,7 +228,8 @@ public class MainWindow {
 		catch (SWTError e) {
 			log.debug("Cannot get display", e); //$NON-NLS-1$
 		}
-		getShell().setText(Messages.getString("main.title")); //$NON-NLS-1$
+		Display.setAppVersion(this.getClass().getPackage().getImplementationVersion());
+		getShell().setText(Constants.APP_NAME);
 
 		getShell().addShellListener(new ShellAdapter() {
 			@Override

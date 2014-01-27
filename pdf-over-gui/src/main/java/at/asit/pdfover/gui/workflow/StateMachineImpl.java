@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
@@ -172,7 +172,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		this.display = Display.getDefault();
 
 		this.mainWindow = new MainWindow(this);
-
 		this.mainWindow.open();
 
 		this.shell = this.mainWindow.getShell();

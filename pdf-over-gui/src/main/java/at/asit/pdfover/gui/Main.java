@@ -57,13 +57,13 @@ public class Main {
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
 		if(!configDir.exists()) {
 			configDir.mkdir();
-		} 
-		
+		}
+
 		File log4j = new File(configDir.getAbsolutePath() + File.separator + Constants.DEFAULT_LOG4J_FILENAME);
 		if(log4j.exists()) {
 			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
-		
+
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$

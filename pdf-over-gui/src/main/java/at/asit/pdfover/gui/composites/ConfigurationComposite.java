@@ -181,7 +181,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		String version = getClass().getPackage().getImplementationVersion();
 		version = (version == null ? "" : " v" + version); //$NON-NLS-1$ //$NON-NLS-2$
-		getShell().setText(Messages.getString("main.title") + version); //$NON-NLS-1$
+		getShell().setText(Constants.APP_NAME + version);
 
 		this.doLayout();
 	}
