@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>${swt.artifactId}</artifactId>
-			<version>4.3</version>
+			<version>${swt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.izpack</groupId>
@@ -126,6 +126,35 @@
 							<excludeGroupIds>org.codehaus.izpack,org.eclipse.swt</excludeGroupIds>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.eclipse.swt</groupId>
+									<artifactId>${swt.artifactId.32}</artifactId>
+									<version>${swt.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${staging.dir}/lib-swt</outputDirectory>
+									<destFileName>swt-${target.name}-32.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.eclipse.swt</groupId>
+									<artifactId>${swt.artifactId.64}</artifactId>
+									<version>${swt.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${staging.dir}/lib-swt</outputDirectory>
+									<destFileName>swt-${target.name}-64.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -167,7 +196,6 @@
 									<directory>src/main/resources</directory>
 									<includes>
 										<include>icons/*</include>
-										<include>lib-swt/swt-${target.name}-*</include>
 										<include>scripts/*</include>
 										<include>ReadMe.txt</include>
 									</includes>
@@ -343,7 +371,6 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>izpack/*</exclude>
-					<exclude>lib-swt/*</exclude>
 					<exclude>scripts/*</exclude>
 					<exclude>ReadMe.txt</exclude>
 					<exclude>keystore.jks</exclude>
@@ -357,6 +384,7 @@
 		<project.maindir>${project.basedir}/..</project.maindir>
 		<target.name>linux</target.name>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
+		<swt.version>4.3</swt.version>
 	</properties>
 
 	<profiles>
@@ -373,7 +401,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
@@ -386,7 +416,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.gtk.linux.x86</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
@@ -400,7 +432,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.win32.win32.x86</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
@@ -413,7 +447,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
@@ -427,7 +463,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -440,7 +478,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -453,7 +493,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -466,7 +508,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
