@@ -171,12 +171,30 @@
 					</execution>
 				</executions>
 				<configuration>
-					<archiveDirectory>target</archiveDirectory>
+					<archiveDirectory>${staging.dir}</archiveDirectory>
 					<includes>
 						<include>*.jar</include>
 					</includes>
 					<verify>true</verify>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.groovy.maven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<source>
+								project.properties["version.exe"] = project.version.split("-")[0] + ".0";
+							</source>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -208,26 +226,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<source>
-								project.properties["version.exe"] = project.version.split("-")[0] + ".0";
-							</source>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
@@ -338,7 +336,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.izpack</groupId>
 				<artifactId>izpack-maven-plugin</artifactId>
@@ -352,7 +349,7 @@
 				</dependencies>
 				<configuration>
 					<izpackBasedir>${staging.dir}</izpackBasedir>
-					<izpackOutput>${staging.dir}/setup.jar</izpackOutput>
+					<installerFile>${staging.dir}/setup.jar</installerFile>
 				</configuration>
 				<executions>
 					<execution>

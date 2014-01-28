@@ -11,8 +11,7 @@ HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
 #### DON'T CONFIGURE ####
 BASEDIR="`dirname $0`"
 
-VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
-TARGET_FILE="pdf-over-gui-$VERSION-standard.jar"
+#VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
 
 TBOLDGRAY="\033[1;30m"
 TGREEN="\033[0;32m"
@@ -73,8 +72,8 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 		continue
 	fi
 
-	begin_phase "Moving Installer..."
-	mv "./pdf-over-gui/target/$TARGET_FILE" "$PUBLISH_DIR/$INSTALLER"
+	begin_phase "Copying Installer..."
+	cp "./pdf-over-gui/target/staging/$PROFILE/setup.jar" "$PUBLISH_DIR/$INSTALLER"
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		end_phase "OK"
