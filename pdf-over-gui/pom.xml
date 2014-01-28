@@ -374,6 +374,7 @@
 				<configuration>
 					<izpackBasedir>${staging.dir}</izpackBasedir>
 					<installerFile>${staging.dir}/setup.jar</installerFile>
+					<attach>false</attach>
 				</configuration>
 				<executions>
 					<execution>
