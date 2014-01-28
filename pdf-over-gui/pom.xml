@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>pdf-over</artifactId>
-		<groupId>a-sit.at</groupId>
+		<groupId>at.a-sit</groupId>
 		<version>4.0.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -26,14 +26,14 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>a-sit.at</groupId>
+			<groupId>at.a-sit</groupId>
 			<artifactId>pdf-over-signator</artifactId>
-			<version>4.0.2-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>a-sit.at</groupId>
+			<groupId>at.a-sit</groupId>
 			<artifactId>pdf-over-sigpdfas</artifactId>
-			<version>4.0.2-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>

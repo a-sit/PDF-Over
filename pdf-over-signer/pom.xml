@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>pdf-over</artifactId>
-		<groupId>a-sit.at</groupId>
+		<groupId>at.a-sit</groupId>
 		<version>4.0.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
