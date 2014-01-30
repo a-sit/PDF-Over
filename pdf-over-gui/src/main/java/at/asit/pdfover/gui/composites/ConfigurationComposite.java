@@ -137,6 +137,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				getShell().setText(Constants.APP_NAME);
 				if (ConfigurationComposite.this.storeConfiguration()) {
 					ConfigurationComposite.this.userDone = true;
 					ConfigurationComposite.this.state.updateStateMachine();
@@ -160,6 +161,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				getShell().setText(Constants.APP_NAME);
 				ConfigurationComposite.this.userDone = true;
 				ConfigurationComposite.this.state.updateStateMachine();
 			}
