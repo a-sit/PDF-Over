@@ -34,6 +34,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -251,7 +252,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(new URI(signatureData));
 					} else {
-						log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
+						log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						Program.launch(signatureData);
 					}
 				}
 			} catch (Exception ex) {
