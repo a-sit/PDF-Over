@@ -13,7 +13,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>a-sit.at</groupId>
+			<groupId>at.a-sit</groupId>
 			<artifactId>pdf-over-signator</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
