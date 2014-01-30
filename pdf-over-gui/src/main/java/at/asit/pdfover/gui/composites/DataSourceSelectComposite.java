@@ -83,7 +83,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	}
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(DataSourceSelectComposite.class);

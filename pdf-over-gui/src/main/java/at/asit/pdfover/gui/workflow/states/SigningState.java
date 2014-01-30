@@ -72,7 +72,7 @@ public class SigningState extends State {
 	}
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(SigningState.class);
 	

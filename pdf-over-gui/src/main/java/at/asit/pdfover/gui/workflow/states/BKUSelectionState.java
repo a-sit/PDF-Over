@@ -41,7 +41,7 @@ public class BKUSelectionState extends State {
 	}
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(BKUSelectionState.class);

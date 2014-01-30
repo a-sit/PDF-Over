@@ -70,7 +70,7 @@ import at.asit.pdfover.gui.workflow.states.PositioningState;
 public class MainWindow {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 

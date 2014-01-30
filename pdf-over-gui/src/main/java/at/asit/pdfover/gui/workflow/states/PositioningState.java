@@ -55,7 +55,7 @@ public class PositioningState extends State {
 	}
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(PositioningState.class);

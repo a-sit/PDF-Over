@@ -29,7 +29,7 @@ import at.asit.pdfover.signer.pdfas.exceptions.PDFASSLRequestException;
 public class PDFASSLRequest extends SLRequest {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(PDFASSLRequest.class);
 

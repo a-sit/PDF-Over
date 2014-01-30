@@ -41,7 +41,7 @@ import at.knowcenter.wag.egov.egiz.exceptions.PDFDocumentException;
 public class PdfAsSignatureParameter extends SignatureParameter {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAsSignatureParameter.class);

@@ -30,7 +30,7 @@ import at.asit.pdfover.gui.workflow.StateMachineImpl;
 public class DeveloperMain {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(DeveloperMain.class);
 	

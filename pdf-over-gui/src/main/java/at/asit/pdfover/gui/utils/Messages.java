@@ -32,7 +32,7 @@ import at.asit.pdfover.gui.Constants;
 public class Messages {
 	
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(Messages.class);
 	

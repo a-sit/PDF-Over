@@ -43,7 +43,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(StateMachineImpl.class);

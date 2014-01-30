@@ -58,7 +58,7 @@ import at.asit.pdfover.signator.Signator;
  */
 public class PrepareConfigurationState extends State {
 
-	/** SFL4J Logger instance **/
+	/** SLF4J Logger instance **/
 	private static final Logger log = LoggerFactory
 			.getLogger(PrepareConfigurationState.class);
 

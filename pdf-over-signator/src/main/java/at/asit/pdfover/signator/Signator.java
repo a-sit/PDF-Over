@@ -27,7 +27,7 @@ import java.util.Map;
 public class Signator {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	private static Logger log = LoggerFactory.getLogger(Signator.class);
 

@@ -29,7 +29,7 @@ import at.gv.egiz.pdfas.io.ByteArrayDataSink;
 public class PDFASSigner implements Signer {
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(PDFASSigner.class);
 

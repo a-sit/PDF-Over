@@ -171,7 +171,7 @@ public class PrepareSigningState extends State {
 	}
 
 	/**
-	 * SFL4J Logger instance
+	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PrepareSigningState.class);
