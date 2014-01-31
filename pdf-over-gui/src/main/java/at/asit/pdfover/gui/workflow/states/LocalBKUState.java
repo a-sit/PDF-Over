@@ -170,7 +170,7 @@ public class LocalBKUState extends State {
 				//
 				this.state.threadException = e;
 			} finally {
-				this.state.getStateMachine().invokeUpdate();
+				this.state.updateStateMachine();
 			}
 		}
 

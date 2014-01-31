@@ -68,7 +68,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	}
 
 	/**
-	 * Sets the workflow state this method should be used to let the user jump
+	 * Sets the workflow state
+	 * This method should be used to let the user jump
 	 * around between states. This Method also resets certain properties defined
 	 * by later states then state
 	 * 
@@ -77,14 +78,14 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	@Override
 	public void jumpToState(State state) {
 		this.status.setCurrentState(state);
-		this.update();
+		this.invokeUpdate();
 	}
 
 	/**
-	 * Update Workflow logic and let state machine do its job...
+	 * Update workflow logic and let state machine do its job...
 	 */
 	@Override
-	public void update() {
+	public synchronized void update() {
 		State next = null;
 		while (this.status.getCurrentState() != null) {
 			State current = this.status.getCurrentState();
@@ -248,7 +249,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 */
 	public void start() {
 		// Call update to start processing ...
-		this.update();
+		update();
 
 		// if a user interaction is required we have a shell ...
 		Shell shell = this.nonCreatingGetShell();

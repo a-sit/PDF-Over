@@ -64,13 +64,13 @@ public abstract class State {
 	 * Perform status cleanup
 	 */
 	public abstract void cleanUp();
-	
+
 	/**
 	 * Update the state machine
 	 */
 	public void updateStateMachine()
 	{
-		this.stateMachine.update();
+		this.stateMachine.invokeUpdate();
 	}
 
 	/**

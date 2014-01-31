@@ -202,6 +202,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		dnd_target.addDropListener(new DropTargetAdapter() {
 			@Override
 			public void drop(DropTargetEvent event) {
+				log.debug("Drop received: " + event); //$NON-NLS-1$
 				if (fileTransfer.isSupportedType(event.currentDataType)) {
 					if (event.data == null) {
 						log.error("Dropped file name was null"); //$NON-NLS-1$

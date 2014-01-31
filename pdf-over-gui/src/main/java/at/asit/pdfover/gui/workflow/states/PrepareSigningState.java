@@ -165,7 +165,7 @@ public class PrepareSigningState extends State {
 				log.error("PrepareDocumentThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
 			} finally {
-				this.state.getStateMachine().invokeUpdate();
+				this.state.updateStateMachine();
 			}
 		}
 	}

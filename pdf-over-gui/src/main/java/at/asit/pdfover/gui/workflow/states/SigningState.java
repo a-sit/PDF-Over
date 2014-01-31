@@ -59,7 +59,7 @@ public class SigningState extends State {
 				log.error("FinishSignThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
 			} finally {
-				this.state.getStateMachine().invokeUpdate();
+				this.state.updateStateMachine();
 			}
 		}
 	}
