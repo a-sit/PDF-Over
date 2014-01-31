@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="9.5" version="9.5" Modules="professional" RootPath="." Language="en" Id="{5F3751A5-1A33-4D3E-B8FB-9F3FB48C9300}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="9.5" version="9.6.1" Modules="professional" RootPath="." Language="en" Id="{5F3751A5-1A33-4D3E-B8FB-9F3FB48C9300}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="UpdaterComponent;SerValComponent;PreReqComponent;MsiExtComponent;MsiAssemblyComponent;MsiServInstComponent;MsiOrgComponent;ActSyncAppComponent;MsiThemeComponent;BackgroundImagesComponent;CPLAppletComponent;MsiClassComponent;WebApplicationsComponent;MsiOdbcDataSrcComponent;MsiAppSearchComponent;MsiInstExSeqComponent"/>
   </COMPONENT>
@@ -15,10 +15,10 @@
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="icon.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="A-SIT (Secure Information Technology Center - Austria)"/>
-    <ROW Property="ProductCode" Value="1033:{71D4D964-AC6A-4875-A593-A0F844419C24} 1031:{A3C937B3-A672-4934-9EB2-AEA6E7C22819} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{DF2807F0-45B9-4E8C-A3E6-D1373C9C3837} 1031:{1A08CCCC-5F44-4F11-AB48-E5ECDA86E315} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="PDF-Over"/>
-    <ROW Property="ProductVersion" Value="4.0.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="4.0.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{4F146EA4-79F9-4873-9A4C-A66A525AF62F}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -41,7 +41,7 @@
     <ROW Component="ProductInformation" ComponentId="{8126D538-2928-475F-8DBB-9BFB1EB29D9F}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
     <ROW Component="ReadMe.txt" ComponentId="{6B219988-85AA-46D3-B6A6-9BF7FBC7C381}" Directory_="APPDIR" Attributes="0" KeyPath="ReadMe.txt" Type="0"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{064E7424-083A-428F-A6BE-309C263AE208}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="axis1.0.jar" ComponentId="{63244BC9-60AF-4240-A956-05F9BA5ED884}" Directory_="lib_Dir" Attributes="0" KeyPath="axis1.0.jar" Type="0"/>
+    <ROW Component="axis1.0.jar" ComponentId="{6E2F5E04-A7E7-401C-B22D-504B6BC92501}" Directory_="lib_Dir" Attributes="0" KeyPath="axis1.0.jar" Type="0"/>
     <ROW Component="icon.ico" ComponentId="{D8E8BCE8-7FC0-4C55-9DAA-5BC40E88CBA4}" Directory_="icons_Dir" Attributes="0" KeyPath="icon.ico" Type="0"/>
     <ROW Component="swtwindows32.jar" ComponentId="{3DBC73A4-AC6C-4DB9-B66A-20845DFABF72}" Directory_="libswt_Dir" Attributes="0" KeyPath="swtwindows32.jar" Type="0"/>
   </COMPONENT>
@@ -84,13 +84,13 @@
     <ROW File="log4j1.2.17.jar" Component_="axis1.0.jar" FileName="log4j-~1.jar|log4j-1.2.17.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\log4j-1.2.17.jar" SelfReg="false" NextFile="lucene1.4.3.jar"/>
     <ROW File="lucene1.4.3.jar" Component_="axis1.0.jar" FileName="lucene~1.jar|lucene-1.4.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\lucene-1.4.3.jar" SelfReg="false" NextFile="lucenedemos1.4.3.jar"/>
     <ROW File="lucenedemos1.4.3.jar" Component_="axis1.0.jar" FileName="lucene~2.jar|lucene-demos-1.4.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\lucene-demos-1.4.3.jar" SelfReg="false" NextFile="ognl2.6.9.jar"/>
-    <ROW File="ognl2.6.9.jar" Component_="axis1.0.jar" FileName="ognl-2~1.jar|ognl-2.6.9.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\ognl-2.6.9.jar" SelfReg="false" NextFile="pdfaslib3.3.jar"/>
-    <ROW File="pdfaslib3.3.jar" Component_="axis1.0.jar" FileName="pdf-as~1.jar|pdf-as-lib-3.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-as-lib-3.3.jar" SelfReg="false" NextFile="pdfbox0.7.2pdfas1.1.jar"/>
+    <ROW File="ognl2.6.9.jar" Component_="axis1.0.jar" FileName="ognl-2~1.jar|ognl-2.6.9.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\ognl-2.6.9.jar" SelfReg="false" NextFile="pdfaslib3.5.jar"/>
+    <ROW File="pdfaslib3.5.jar" Component_="axis1.0.jar" FileName="pdf-as~1.jar|pdf-as-lib-3.5.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-as-lib-3.5.jar" SelfReg="false" NextFile="pdfbox0.7.2pdfas1.1.jar"/>
     <ROW File="pdfbox0.7.2pdfas1.1.jar" Component_="axis1.0.jar" FileName="pdfbox~1.jar|pdfbox-0.7.2-pdfas-1.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfbox-0.7.2-pdfas-1.1.jar" SelfReg="false" NextFile="pdfbox0.8.0incubating.jar"/>
-    <ROW File="pdfbox0.8.0incubating.jar" Component_="axis1.0.jar" FileName="pdfbox~2.jar|pdfbox-0.8.0-incubating.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfbox-0.8.0-incubating.jar" SelfReg="false" NextFile="pdfovergui4.0.1.jar"/>
-    <ROW File="pdfovergui4.0.1.jar" Component_="axis1.0.jar" FileName="pdf-ov~1.jar|pdf-over-gui-4.0.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-gui-4.0.1.jar" SelfReg="false" NextFile="pdfoversignator4.0.1.jar"/>
-    <ROW File="pdfoversignator4.0.1.jar" Component_="axis1.0.jar" FileName="pdf-ov~2.jar|pdf-over-signator-4.0.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-signator-4.0.1.jar" SelfReg="false" NextFile="pdfoversigpdfas4.0.1.jar"/>
-    <ROW File="pdfoversigpdfas4.0.1.jar" Component_="axis1.0.jar" FileName="pdf-ov~3.jar|pdf-over-sigpdfas-4.0.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-sigpdfas-4.0.1.jar" SelfReg="false" NextFile="pdfview0.9.2Borisvl.jar"/>
+    <ROW File="pdfbox0.8.0incubating.jar" Component_="axis1.0.jar" FileName="pdfbox~2.jar|pdfbox-0.8.0-incubating.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfbox-0.8.0-incubating.jar" SelfReg="false" NextFile="pdfovergui4.0.2.jar"/>
+    <ROW File="pdfovergui4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~1.jar|pdf-over-gui-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-gui-4.0.2.jar" SelfReg="false" NextFile="pdfoversignator4.0.2.jar"/>
+    <ROW File="pdfoversignator4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~2.jar|pdf-over-signator-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-signator-4.0.2.jar" SelfReg="false" NextFile="pdfoversigpdfas4.0.2.jar"/>
+    <ROW File="pdfoversigpdfas4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~3.jar|pdf-over-sigpdfas-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-sigpdfas-4.0.2.jar" SelfReg="false" NextFile="pdfview0.9.2Borisvl.jar"/>
     <ROW File="pdfview0.9.2Borisvl.jar" Component_="axis1.0.jar" FileName="pdfvie~1.jar|pdfview-0.9.2-Borisvl.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfview-0.9.2-Borisvl.jar" SelfReg="false" NextFile="slf4japi1.6.6.jar"/>
     <ROW File="slf4japi1.6.6.jar" Component_="axis1.0.jar" FileName="slf4j-~1.jar|slf4j-api-1.6.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\slf4j-api-1.6.6.jar" SelfReg="false" NextFile="slf4jlog4j121.6.6.jar"/>
     <ROW File="slf4jlog4j121.6.6.jar" Component_="axis1.0.jar" FileName="slf4j-~2.jar|slf4j-log4j12-1.6.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\slf4j-log4j12-1.6.6.jar" SelfReg="false" NextFile="xercesImpl2.7.1.jar"/>
