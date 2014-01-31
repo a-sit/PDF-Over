@@ -60,9 +60,9 @@ public class PositioningComposite extends StateComposite {
 
 	private SignaturePanel viewer = null;
 
-	private Frame frame = null;
+	Frame frame = null;
 
-	private Composite mainArea = null;
+	Composite mainArea = null;
 
 	Composite bottomBar = null;
 
@@ -179,10 +179,15 @@ public class PositioningComposite extends StateComposite {
 	 * Request focus (to enable keyboard input)
 	 */
 	public void requestFocus() {
-		this.mainArea.setFocus();
-		if(!this.frame.hasFocus()) {
-			this.frame.requestFocusInWindow();
-		}
+		this.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				PositioningComposite.this.mainArea.setFocus();
+				if(!PositioningComposite.this.frame.hasFocus()) {
+					PositioningComposite.this.frame.requestFocus();
+				}
+			}
+		});
 	}
 
 	/**
