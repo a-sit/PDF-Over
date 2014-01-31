@@ -21,14 +21,14 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -144,6 +144,7 @@ public class PositioningComposite extends StateComposite {
 					@Override
 					public void run() {
 						PositioningComposite.this.frame = SWT_AWT.new_Frame(PositioningComposite.this.mainArea);
+						PositioningComposite.this.frame.addKeyListener(PositioningComposite.this.keyListener);
 					}
 				});
 				// Workaround for Windows: Scrollbar always gets the event
@@ -152,7 +153,6 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
-		this.mainArea.addKeyListener(this.keyListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
 		requestFocus();
 	}
@@ -233,50 +233,53 @@ public class PositioningComposite extends StateComposite {
 		});
 	}
 
-	private KeyListener keyListener = new KeyAdapter() {
+	KeyListener keyListener = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int newPage = PositioningComposite.this.currentPage;
 			int sigXOffset = 0;
 			int sigYOffset = 0;
 
-			switch (e.keyCode) {
-			case SWT.PAGE_DOWN:
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_PAGE_DOWN:
 				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
 					++newPage;
 				break;
 
-			case SWT.PAGE_UP:
+			case KeyEvent.VK_PAGE_UP:
 				if (PositioningComposite.this.currentPage > 1)
 					--newPage;
 				break;
 
-			case SWT.END:
+			case KeyEvent.VK_END:
 				newPage = PositioningComposite.this.numPages;
 				break;
 
-			case SWT.HOME:
+			case KeyEvent.VK_HOME:
 				newPage = 1;
 				break;
 
-			case SWT.CR:
-			case SWT.KEYPAD_CR:
+			case KeyEvent.VK_ENTER:
 				setFinalPosition();
 				break;
 
-			case SWT.ARROW_LEFT:
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_KP_LEFT:
 				sigXOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 
-			case SWT.ARROW_RIGHT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_KP_RIGHT:
 				sigXOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 
-			case SWT.ARROW_UP:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_KP_UP:
 				sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 
-			case SWT.ARROW_DOWN:
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_KP_DOWN:
 				sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 			}
