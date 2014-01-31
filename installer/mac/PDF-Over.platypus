@@ -34,6 +34,7 @@
 	<string>/usr/local/share/platypus/ScriptExec</string>
 	<key>FileTypes</key>
 	<array>
+		<string>fold</string>
 		<string>PDF </string>
 	</array>
 	<key>IconPath</key>
@@ -59,7 +60,7 @@
 	<key>ScriptArgs</key>
 	<array/>
 	<key>ScriptPath</key>
-	<string>/Users/TestMac/Documents/pdf-over_mac.sh</string>
+	<string>/Users/TestMac/Documents/Contents/scripts/pdf-over_mac.sh</string>
 	<key>Secure</key>
 	<false/>
 	<key>ShowInDock</key>
@@ -88,6 +89,6 @@
 	<key>UseXMLPlistFormat</key>
 	<true/>
 	<key>Version</key>
-	<string>4.0.1</string>
+	<string>4.0.2</string>
 </dict>
 </plist>

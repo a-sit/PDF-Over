@@ -14,7 +14,7 @@ Windows-Installer:
 Mac-DMG-Paket:
 	* Per webstart installieren, Paketinhalt entpacken
 	* pdf-over_mac.sh script bearbeiten:
-		* 'cd "$BASEDIR/.."' in 'cd "$BASEDIR"' ändern
+		* "$BASEDIR/../lib/*" in "$BASEDIR/lib/*" ändern
 	* App erstellen mit Platypus: Screenshots platypus (drop settings).png
 		* Beispiel-Profil inkludiert
 	* DMG-Image erzeugen mit DmgPress: Screenshot DmgPress.png
