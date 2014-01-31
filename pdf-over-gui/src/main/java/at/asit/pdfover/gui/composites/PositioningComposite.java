@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.MouseWheelEvent;
@@ -58,24 +59,16 @@ public class PositioningComposite extends StateComposite {
 	static final Logger log = LoggerFactory
 			.getLogger(PositioningComposite.class);
 
-	private SignaturePanel viewer = null;
-
+	SignaturePanel viewer = null;
 	Frame frame = null;
-
 	Composite mainArea = null;
-
 	Composite bottomBar = null;
-
 	Button btnNewPage = null;
-
 	Label lblPage = null;
-
 	ScrollBar scrollbar = null;
 
 	private SignaturePosition position = null;
-
 	int currentPage = 0;
-
 	int numPages = 0;
 
 	/**
@@ -107,7 +100,7 @@ public class PositioningComposite extends StateComposite {
 		this.btnSign.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PositioningComposite.this.setFinalPosition();
+				setFinalPosition();
 			}
 		});
 
@@ -124,8 +117,7 @@ public class PositioningComposite extends StateComposite {
 					showPage(PositioningComposite.this.numPages);
 				else
 					showPage(PositioningComposite.this.numPages + 1);
-				
-				PositioningComposite.this.requestFocus();
+				requestFocus();
 			}
 		});
 
@@ -145,12 +137,23 @@ public class PositioningComposite extends StateComposite {
 		this.mainArea.setLayoutData(fd_mainArea);
 		this.scrollbar = this.mainArea.getVerticalBar();
 
-		this.frame = SWT_AWT.new_Frame(this.mainArea);
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				getDisplay().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						PositioningComposite.this.frame = SWT_AWT.new_Frame(PositioningComposite.this.mainArea);
+					}
+				});
+				// Workaround for Windows: Scrollbar always gets the event
+				if (!System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
+					PositioningComposite.this.frame.addMouseWheelListener(PositioningComposite.this.mouseListener);
+			}
+		});
+
 		this.mainArea.addKeyListener(this.keyListener);
 		this.scrollbar.addSelectionListener(this.selectionListener);
-		// Workaround for Windows: Scrollbar always gets the event
-		if (!System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
-			this.frame.addMouseWheelListener(this.mouseListener);
 		requestFocus();
 	}
 
@@ -160,16 +163,26 @@ public class PositioningComposite extends StateComposite {
 	 * @param document
 	 *            document to display
 	 */
-	public void displayDocument(PDFFile document) {
+	public void displayDocument(final PDFFile document) {
 		if (this.viewer == null) {
-			this.viewer = new SignaturePanel(document);
-			this.frame.add(this.viewer, BorderLayout.CENTER);
-			this.viewer.setSignaturePlaceholderBorderColor(new Color(
-					Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
-					Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
-					Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
+			EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					PositioningComposite.this.viewer = new SignaturePanel(document);
+					PositioningComposite.this.viewer.setSignaturePlaceholderBorderColor(new Color(
+							Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
+							Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
+							Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
+					PositioningComposite.this.frame.add(PositioningComposite.this.viewer, BorderLayout.CENTER);
+				}
+			});
 		} else
-			this.viewer.setDocument(document);
+			EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					PositioningComposite.this.viewer.setDocument(document);
+				}
+			});
 		this.numPages = document.getNumPages();
 		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 		showPage(this.numPages);
@@ -179,13 +192,18 @@ public class PositioningComposite extends StateComposite {
 	 * Request focus (to enable keyboard input)
 	 */
 	public void requestFocus() {
-		this.getDisplay().asyncExec(new Runnable() {
+		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				PositioningComposite.this.mainArea.setFocus();
-				if(!PositioningComposite.this.frame.hasFocus()) {
-					PositioningComposite.this.frame.requestFocus();
-				}
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						if(!PositioningComposite.this.frame.hasFocus()) {
+							PositioningComposite.this.frame.requestFocus();
+						}
+					}
+				});
 			}
 		});
 	}
@@ -203,12 +221,16 @@ public class PositioningComposite extends StateComposite {
 	 * @param transparency
 	 *            transparency of the signature placeholder (0 - 255)
 	 */
-	public void setPlaceholder(Image placeholder, int width, int height,
-			int transparency) {
-		if (this.viewer == null)
-			return;
-		this.viewer.setSignaturePlaceholder(placeholder, width, height,
-				transparency);
+	public void setPlaceholder(final Image placeholder, final int width, final int height,
+			final int transparency) {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (PositioningComposite.this.viewer == null)
+					return;
+				PositioningComposite.this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
+			}
+		});
 	}
 
 	private KeyListener keyListener = new KeyAdapter() {
@@ -239,7 +261,7 @@ public class PositioningComposite extends StateComposite {
 
 			case SWT.CR:
 			case SWT.KEYPAD_CR:
-				PositioningComposite.this.setFinalPosition();
+				setFinalPosition();
 				break;
 
 			case SWT.ARROW_LEFT:
@@ -263,12 +285,11 @@ public class PositioningComposite extends StateComposite {
 				showPage(newPage);
 
 			if (sigXOffset != 0 || sigYOffset != 0)
-				PositioningComposite.this.translateSignaturePosition(
-						sigXOffset, sigYOffset);
+				translateSignaturePosition(sigXOffset, sigYOffset);
 		}
 	};
 
-	private MouseWheelListener mouseListener = new MouseWheelListener() {
+	MouseWheelListener mouseListener = new MouseWheelListener() {
 		private long lastEventTime = 0;
 
 		@Override
@@ -304,10 +325,10 @@ public class PositioningComposite extends StateComposite {
 
 	private Button btnSign;
 
-	void showPage(int page) {
+	void showPage(final int page) {
 		final int previousPage = this.currentPage;
 		this.currentPage = page;
-		this.getDisplay().syncExec(new Runnable() {
+		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				int currentPage = PositioningComposite.this.currentPage;
@@ -332,7 +353,12 @@ public class PositioningComposite extends StateComposite {
 						Messages.getString("positioning.page"), currentPage, numPages)); //$NON-NLS-1$
 			}
 		});
-		this.viewer.showPage(page);
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				PositioningComposite.this.viewer.showPage(page);
+			}
+		});
 	}
 
 	@Override
@@ -359,9 +385,14 @@ public class PositioningComposite extends StateComposite {
 	 * @param sigYOffset
 	 *            signature placeholder vertical position offset
 	 */
-	public void translateSignaturePosition(int sigXOffset, int sigYOffset) {
-		PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset,
-				sigYOffset);
+	public void translateSignaturePosition(final int sigXOffset, final int sigYOffset) {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset,
+						sigYOffset);
+			}
+		});
 	}
 
 	/**
