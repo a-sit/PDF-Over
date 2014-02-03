@@ -31,6 +31,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -386,10 +387,16 @@ public class OutputComposite extends StateComposite {
 				if (Desktop.isDesktopSupported()) {
 					Desktop.getDesktop().open(f);
 				} else {
-					log.error("SWT Desktop is not supported on this platform!"); //$NON-NLS-1$
+					log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+					Program.launch(f.getAbsolutePath());
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+				ErrorDialog error = new ErrorDialog(getShell(),
+						String.format(Messages.getString("error.FailedToOpenDocument"), //$NON-NLS-1$
+								ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
+				if (error.open() == SWT.RETRY)
+					widgetSelected(e);
 			}
 		}
 	}
