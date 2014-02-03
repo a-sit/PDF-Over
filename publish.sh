@@ -6,12 +6,12 @@ LOG_DIR="log"
 CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
-
+RELEASE_FILE="Release.txt"
 
 #### DON'T CONFIGURE ####
 BASEDIR="`dirname $0`"
 
-#VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
+VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
 
 TBOLDGRAY="\033[1;30m"
 TGREEN="\033[0;32m"
@@ -107,6 +107,15 @@ else
 			fi
 		fi
 	fi
+fi
+
+begin_phase "Creating Release.txt..."
+echo $VERSION > "$PUBLISH_DIR/$RELEASE_FILE"
+RETVAL=$?
+if [ $RETVAL -ne 0 ]; then
+	end_phase "FAILED"
+else
+	end_phase "OK"
 fi
 
 begin_phase "Copying images..."
