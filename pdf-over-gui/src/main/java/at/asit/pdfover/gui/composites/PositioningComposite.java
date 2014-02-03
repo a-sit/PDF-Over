@@ -423,7 +423,8 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public void setPosition(float x, float y, int page) {
 		showPage(page);
-		this.viewer.setSignaturePosition(x, y);
+		if (this.viewer != null)
+			this.viewer.setSignaturePosition(x, y);
 	}
 
 	/**

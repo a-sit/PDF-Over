@@ -335,9 +335,10 @@ public class SignaturePanel extends JPanel {
 				}
 				else {
 					if (
-							(this.sigScreenWidth != this.prevSigScreenWidth) ||
+							((this.sigScreenWidth != this.prevSigScreenWidth) ||
 							(this.sigScreenHeight != this.prevSigScreenHeight) ||
-							(this.sigPlaceholderTransparency != this.prevSigPlaceholderTransparency))
+							(this.sigPlaceholderTransparency != this.prevSigPlaceholderTransparency)) &&
+							((this.sigScreenWidth != 0) && (this.sigScreenHeight != 0)))
 					{
 						// redraw scaled transparent placeholder
 						this.prevSigScreenWidth = this.sigScreenWidth;
