@@ -237,7 +237,7 @@ public class MainWindow {
 		catch (SWTError e) {
 			log.debug("Cannot get display", e); //$NON-NLS-1$
 		}
-		Display.setAppVersion(this.getClass().getPackage().getImplementationVersion());
+		Display.setAppVersion(Constants.APP_VERSION);
 		getShell().setText(Constants.APP_NAME);
 
 		getShell().addShellListener(new ShellAdapter() {
@@ -397,13 +397,9 @@ public class MainWindow {
 		}, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
-				String version = getClass().getPackage()
-						.getImplementationVersion();
-				version = (version == null ? "" : " v" + version); //$NON-NLS-1$ //$NON-NLS-2$
-				String about = Constants.APP_NAME + version;
 				Dialog dialog = new Dialog(getShell(),
 						String.format(Messages.getString("main.about"), Constants.APP_NAME), //$NON-NLS-1$
-						about, BUTTONS.OK, ICON.INFORMATION);
+						Constants.APP_NAME_VERSION, BUTTONS.OK, ICON.INFORMATION);
 				dialog.open();
 			}
 		}, new Listener() {

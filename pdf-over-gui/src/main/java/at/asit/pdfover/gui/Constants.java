@@ -33,10 +33,17 @@ public class Constants {
 	/** Application name */
 	public static final String APP_NAME = "PDF-Over"; //$NON-NLS-1$
 
+	/** Application version */
+	public static final String APP_VERSION = Constants.class.getPackage().getImplementationVersion();
+
+	/** Application name + version */
+	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //$NON-NLS-1$
+
 	static {
 		// Has to be set before (implicitly) initializing Display
 		Display.setAppName(APP_NAME);
 	}
+
 	/** Current display - used for Colors */
 	private static Display display = Display.getCurrent();
 
@@ -68,7 +75,7 @@ public class Constants {
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	/** PDF-Over User Agent string */
-	public static final String USER_AGENT_STRING = "PDF-Over 4.0"; //$NON-NLS-1$
+	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.0" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
 
 
 	/* Configuration parameters */

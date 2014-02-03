@@ -181,9 +181,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite.setLayout(this.compositeStack);
 		this.compositeStack.topControl = tabFolder;
 
-		String version = getClass().getPackage().getImplementationVersion();
-		version = (version == null ? "" : " v" + version); //$NON-NLS-1$ //$NON-NLS-2$
-		getShell().setText(Constants.APP_NAME + version);
+		getShell().setText(Constants.APP_NAME_VERSION);
 
 		this.doLayout();
 	}
