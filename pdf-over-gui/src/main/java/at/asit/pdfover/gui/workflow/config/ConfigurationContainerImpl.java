@@ -103,6 +103,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Holds the default signature position */
 	protected SignaturePosition defaultSignaturePosition = null;
 
+	/** Whether to automatically check for updates */
+	protected boolean updateCheck = true;
+
 	/** Whether to skip the output state */
 	protected boolean skipFinish = false;
 
@@ -425,6 +428,23 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
 		this.defaultSignaturePosition = signaturePosition;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getUpdateCheck()
+	 */
+	@Override
+	public boolean getUpdateCheck() {
+		return this.updateCheck;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setUpdateCheck(boolean)
+	 */
+	@Override
+	public void setUpdateCheck(boolean checkUpdate) {
+		this.updateCheck = checkUpdate;
 	}
 
 

@@ -277,7 +277,6 @@ public class ConfigurationComposite extends StateComposite {
 	public void setConfigProvider(PersistentConfigProvider provider) {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
-
 			// Initialize Configuration Container
 			this.configurationContainer
 						.setDefaultSignaturePosition(this.configProvider
@@ -311,6 +310,9 @@ public class ConfigurationComposite extends StateComposite {
 
 			this.configurationContainer.setOutputFolder(this.configProvider
 					.getDefaultOutputFolderPersistent());
+
+			this.configurationContainer.setUpdateCheck(this.configProvider.
+					getUpdateCheck());
 
 			this.configurationContainer.setProxyHost(this.configProvider
 					.getProxyHostPersistent());
@@ -420,6 +422,9 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.configManipulator.setSignatureNote(this.configurationContainer
 				.getSignatureNote());
+
+		this.configManipulator.setUpdateCheck(this.configurationContainer
+				.getUpdateCheck());
 
 		String hostOld = this.configProvider.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.getProxyHost();

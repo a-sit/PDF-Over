@@ -70,21 +70,28 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(AdvancedConfigurationComposite.class);
-	Text txtOutputFolder;
-	Combo cmbBKUAuswahl;
-	Combo cmbLocaleAuswahl;
-	String[] bkuStrings;
-	Button btnAutomatischePositionierung;
-	Scale sclTransparenz;
+
 	private Group grpSignatur;
-	private Group grpLocaleAuswahl;
-	private Button btnBrowse;
-	private Label lblDefaultOutputFolder;
-	private Group grpSpeicherort;
-	private Group grpBkuAuswahl;
-	private Label lblTransparenzRechts;
-	private Label lblTransparenzLinks;
+	Button btnAutomatischePositionierung;
 	private Label lblTransparenz;
+	private Label lblTransparenzLinks;
+	private Label lblTransparenzRechts;
+	Scale sclTransparenz;
+
+	private Group grpBkuAuswahl;
+	Combo cmbBKUAuswahl;
+	String[] bkuStrings;
+
+	private Group grpSpeicherort;
+	private Label lblDefaultOutputFolder;
+	Text txtOutputFolder;
+	private Button btnBrowse;
+
+	private Group grpLocaleAuswahl;
+	Combo cmbLocaleAuswahl;
+
+	private Group grpUpdateCheck;
+	Button btnUpdateCheck;
 
 	private Group grpProxy;
 	private Label lblProxyHost;
@@ -147,7 +154,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.btnAutomatischePositionierung
 				.addSelectionListener(new SelectionAdapter() {
-
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						AdvancedConfigurationComposite.this
@@ -155,7 +161,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 										.getSelection());
 					}
 				});
-		log.debug(this.btnAutomatischePositionierung.getBounds().toString());
 
 		this.lblTransparenz = new Label(this.grpSignatur, SWT.HORIZONTAL);
 		FormData fd_lblTransparenz = new FormData();
@@ -403,10 +408,51 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
+		this.grpUpdateCheck = new Group(this, SWT.NONE);
+		FormLayout layout_grpUpdateCheck = new FormLayout();
+		layout_grpUpdateCheck.marginHeight = 10;
+		layout_grpUpdateCheck.marginWidth = 5;
+		this.grpUpdateCheck.setLayout(layout_grpUpdateCheck);
+		FormData fd_grpUpdateCheck = new FormData();
+		fd_grpUpdateCheck.top = new FormAttachment(this.grpLocaleAuswahl, 5);
+		fd_grpUpdateCheck.left = new FormAttachment(0, 5);
+		fd_grpUpdateCheck.right = new FormAttachment(100, -5);
+		this.grpUpdateCheck.setLayoutData(fd_grpUpdateCheck);
+
+		FontData[] fD_grpUpdateCheck = this.grpUpdateCheck.getFont().getFontData();
+		fD_grpUpdateCheck[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpUpdateCheck.setFont(new Font(Display.getCurrent(),
+				fD_grpUpdateCheck[0]));
+
+		this.btnUpdateCheck = new Button(this.grpUpdateCheck, SWT.CHECK);
+		FormData fd_btnUpdateCheck = new FormData();
+		fd_btnUpdateCheck.right = new FormAttachment(100, -5);
+		fd_btnUpdateCheck.top = new FormAttachment(0);
+		fd_btnUpdateCheck.left = new FormAttachment(0, 5);
+		this.btnUpdateCheck
+				.setLayoutData(fd_btnUpdateCheck);
+
+		FontData[] fD_btnUpdateCheck = this.btnUpdateCheck
+				.getFont().getFontData();
+		fD_btnUpdateCheck[0]
+				.setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnUpdateCheck.setFont(new Font(Display
+				.getCurrent(), fD_btnUpdateCheck[0]));
+
+		this.btnUpdateCheck
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						AdvancedConfigurationComposite.this
+								.performUpdateCheckSelection(AdvancedConfigurationComposite.this.btnUpdateCheck
+										.getSelection());
+					}
+				});
+
 		this.grpProxy = new Group(this, SWT.NONE);
 		FormData fd_grpProxy = new FormData();
 		fd_grpProxy.right = new FormAttachment(100, -5);
-		fd_grpProxy.top = new FormAttachment(this.grpLocaleAuswahl, 5);
+		fd_grpProxy.top = new FormAttachment(this.grpUpdateCheck, 5);
 		fd_grpProxy.left = new FormAttachment(0, 5);
 		this.grpProxy.setLayoutData(fd_grpProxy);
 		this.grpProxy.setLayout(new GridLayout(2, false));
@@ -733,6 +779,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setPlaceholderTransparency(transparency);
 	}
 
+	void performUpdateCheckSelection(boolean checkUpdate) {
+		this.configurationContainer.setUpdateCheck(checkUpdate);
+		this.btnUpdateCheck.setSelection(checkUpdate);
+	}
+
 	void processProxyHostChanged() {
 		try {
 			this.proxyHostErrorMarker.setVisible(false);
@@ -851,6 +902,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
+		this.performUpdateCheckSelection(this.configurationContainer.getUpdateCheck());
 
 		int port = this.configurationContainer.getProxyPort();
 		if (port > 0) {
@@ -948,6 +1000,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.LocaleSelection_Title")); //$NON-NLS-1$
 		this.cmbLocaleAuswahl.setToolTipText(Messages
 				.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
+
+		this.grpUpdateCheck.setText(Messages
+				.getString("advanced_config.UpdateCheck_Title")); //$NON-NLS-1$
+		this.btnUpdateCheck.setText(Messages
+				.getString("advanced_config.UpdateCheck")); //$NON-NLS-1$
+		this.btnUpdateCheck.setToolTipText(Messages
+				.getString("advanced_config.UpdateCheck_ToolTip")); //$NON-NLS-1$
 
 		this.grpProxy.setText(Messages.getString("advanced_config.Proxy_Title")); //$NON-NLS-1$
 		this.lblProxyHost.setText(Messages.getString("advanced_config.ProxyHost")); //$NON-NLS-1$

@@ -232,6 +232,18 @@ public interface ConfigurationContainer {
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
 
 	/**
+	 * Gets whether to automatically check for application updates
+	 * @return whether to automatically check for application updates
+	 */
+	public boolean getUpdateCheck();
+
+	/**
+	 * Sets whether to automatically check for application updates
+	 * @param checkUpdate whether to automatically check for application updates
+	 */
+	public void setUpdateCheck(boolean checkUpdate);
+
+	/**
 	 * Gets the main window size
 	 * @return the main window size
 	 */

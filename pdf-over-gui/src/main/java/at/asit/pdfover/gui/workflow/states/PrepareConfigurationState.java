@@ -16,14 +16,20 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.program.Program;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +49,16 @@ import at.asit.pdfover.gui.cliarguments.ProxyPassArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyPortArgument;
 import at.asit.pdfover.gui.cliarguments.ProxyUserArgument;
 import at.asit.pdfover.gui.cliarguments.SkipFinishArgument;
-import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.Unzipper;
+import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 import at.asit.pdfover.signator.Signator;
 
 /**
@@ -104,7 +114,6 @@ public class PrepareConfigurationState extends State {
 								getStateMachine().getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
 				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
-
 			} catch (FileNotFoundException ex) {
 				if (filename.equals(Constants.DEFAULT_CONFIG_FILENAME)) {
 					// we only check for resource config file if it is the
@@ -327,6 +336,36 @@ public class PrepareConfigurationState extends State {
 				}
 				error.open();
 				getStateMachine().exit();
+			}
+
+			// Check for updates
+			if (getStateMachine().getConfigProvider().getUpdateCheck() && Constants.APP_VERSION != null) {
+				HttpClient client = MobileBKUHelper.getHttpClient();
+				GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
+				try {
+					client.executeMethod(method);
+					String version = method.getResponseBodyAsString().trim();
+
+					if (VersionComparator.before(Constants.APP_VERSION, version)) {
+						Dialog info = new Dialog(getStateMachine()
+							.getGUIProvider().getMainShell(),
+							Messages.getString("version_check.UpdateTitle"), //$NON-NLS-1$
+							String.format(Messages.getString("version_check.UpdateText"), //$NON-NLS-1$
+									version),
+							BUTTONS.OK_CANCEL, ICON.INFORMATION);
+						if (info.open() == SWT.OK)
+						{
+							if (Desktop.isDesktopSupported()) {
+								Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
+							} else {
+								log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+								Program.launch(Constants.UPDATE_URL);
+							}
+						}
+					}
+				} catch (Exception e) {
+					log.error("Error downloading update information: ", e); //$NON-NLS-1$
+				}
 			}
 
 			// Set usedSignerLib ...

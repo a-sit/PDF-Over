@@ -128,6 +128,12 @@ public interface PersistentConfigProvider {
 	public Locale getSignLocale();
 
 	/**
+	 * Gets whether to automatically check for application updates
+	 * @return whether to automatically check for application updates
+	 */
+	public boolean getUpdateCheck();
+
+	/**
 	 * Gets the configured MainWindow size
 	 * @return the configured MainWindow size
 	 */

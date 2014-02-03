@@ -86,45 +86,45 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		config.load(configSource);
 
 		// Set Emblem
-		this.setDefaultEmblem(config
+		setDefaultEmblem(config
 				.getProperty(Constants.CFG_EMBLEM));
 
 		// Set Mobile Phone Number
-		this.setDefaultMobileNumber(config
+		setDefaultMobileNumber(config
 				.getProperty(Constants.CFG_MOBILE_NUMBER));
 
 		// Set signature note
-		this.setSignatureNote(config
+		setSignatureNote(config
 				.getProperty(Constants.CFG_SIGNATURE_NOTE));
 
 		// Set Proxy Host
-		this.setProxyHost(config
+		setProxyHost(config
 				.getProperty(Constants.CFG_PROXY_HOST));
 
 		// Set Proxy User
-		this.setProxyUser(config
+		setProxyUser(config
 				.getProperty(Constants.CFG_PROXY_USER));
 
 		// Set Proxy Password
-		this.setProxyPass(config
+		setProxyPass(config
 				.getProperty(Constants.CFG_PROXY_PASS));
 
 		// Set Output Folder
-		this.setDefaultOutputFolder(config
+		setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
 		if (targetLocale != null) {
-			this.setLocale(targetLocale);
+			setLocale(targetLocale);
 		}
 		
 		String signlocalString = config.getProperty(Constants.CFG_SIGN_LOCALE);
 		
 		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
 		if (signtargetLocale != null) {
-			this.setSignLocale(signtargetLocale);
+			setSignLocale(signtargetLocale);
 		}
  		
 		String bkuUrl = config
@@ -155,7 +155,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			int port = Integer.parseInt(proxyPortString);
 
 			if (port > 0 && port <= 0xFFFF) {
-				this.setProxyPort(port);
+				setProxyPort(port);
 			} else {
 				log.warn("Proxy port is out of range!: " + port); //$NON-NLS-1$
 			}
@@ -175,7 +175,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				defaultBKU = BKUs.NONE;
 			}
 		}
-		this.setDefaultBKU(defaultBKU);
+		setDefaultBKU(defaultBKU);
 
 		// Set Signature placeholder transparency
 		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
@@ -188,7 +188,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				// ignore parsing exception
 			}
 		}
-		this.setPlaceholderTransparency(transparency);
+		setPlaceholderTransparency(transparency);
 
 		// Set MainWindow size
 		int width = Constants.DEFAULT_MAINWINDOW_WIDTH;
@@ -264,7 +264,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				log.error("Signature Position read from config failed: not matching string"); //$NON-NLS-1$
 			}
 		}
-		this.setDefaultSignaturePosition(position);
+		setDefaultSignaturePosition(position);
+
+		// Set update check
+		String updateCheck = config.getProperty(Constants.CFG_UPDATE_CHECK);
+		if (updateCheck != null)
+			setUpdateCheck(!updateCheck.equalsIgnoreCase(Constants.FALSE));
 	}
 
 	/*
@@ -331,6 +336,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (Constants.THEME != Constants.Themes.DEFAULT)
 			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());
+
+		if (!getUpdateCheck())
+			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
 
@@ -1011,6 +1019,22 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
 		return locale;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setUpdateCheck(boolean)
+	 */
+	@Override
+	public void setUpdateCheck(boolean checkUpdate) {
+		this.configuration.setUpdateCheck(checkUpdate);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getUpdateCheck()
+	 */
+	@Override
+	public boolean getUpdateCheck() {
+		return this.configuration.getUpdateCheck();
 	}
 
 	/* (non-Javadoc)

@@ -112,6 +112,12 @@ public interface ConfigManipulator {
 	public void setSignLocale(Locale locale);
 
 	/**
+	 * Sets whether to automatically check for application updates
+	 * @param checkUpdate whether to automatically check for application updates
+	 */
+	public void setUpdateCheck(boolean checkUpdate);
+
+	/**
 	 * Sets the default main window size
 	 * @param size a Point describing the size
 	 */

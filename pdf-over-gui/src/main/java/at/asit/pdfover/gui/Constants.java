@@ -77,6 +77,15 @@ public class Constants {
 	/** PDF-Over User Agent string */
 	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.0" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
 
+	/** Current release file */
+	public static final String CURRENT_RELEASE_URL = "http://webstart.buergerkarte.at/PDF-Over/Release.txt"; //$NON-NLS-1$
+
+	/** Update URL */
+	public static final String UPDATE_URL = "http://webstart.buergerkarte.at/PDF-Over/"; //$NON-NLS-1$
+
+	/** False */
+	public static final String FALSE = "false"; //$NON-NLS-1$
+
 
 	/* Configuration parameters */
 
@@ -117,6 +126,9 @@ public class Constants {
 
 	/** The signature locale config parameter */
 	public static final String CFG_SIGN_LOCALE = "SIGNLOCALE"; //$NON-NLS-1$
+
+	/** The update check config parameter */
+	public static final String CFG_UPDATE_CHECK = "UPDATE_CHECK"; //$NON-NLS-1$
 
 	/** The proxy host config parameter */
 	public static final String CFG_PROXY_HOST = "PROXY_HOST"; //$NON-NLS-1$

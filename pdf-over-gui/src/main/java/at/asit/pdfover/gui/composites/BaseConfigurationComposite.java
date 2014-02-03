@@ -67,12 +67,12 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 		super(parent, style, state);
 		this.configurationContainer = configuration;
 	}
-	
+
 	/**
 	 * Load configuration from ConfigurationContainer
 	 */
 	public abstract void loadConfiguration();
-	
+
 	/**
 	 * Called before exit.
 	 * The method validates every setting in the configuration before exit
