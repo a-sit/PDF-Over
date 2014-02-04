@@ -195,15 +195,19 @@ public class PositioningComposite extends StateComposite {
 		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				PositioningComposite.this.mainArea.setFocus();
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						if(!PositioningComposite.this.frame.hasFocus()) {
-							PositioningComposite.this.frame.requestFocus();
+				if (!PositioningComposite.this.isDisposed() && !PositioningComposite.this.mainArea.isDisposed()) {
+					PositioningComposite.this.mainArea.setFocus();
+					EventQueue.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							if (!PositioningComposite.this.isDisposed()) {
+								if(!PositioningComposite.this.frame.hasFocus()) {
+									PositioningComposite.this.frame.requestFocus();
+								}
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		});
 	}

@@ -59,7 +59,7 @@
 	</licenses>
 
 	<scm>
-		<developerConnection>scm:git:ssh://git@abyss.iaik.tugraz.at/home/git/pdf-over.git</developerConnection>
+		<developerConnection>scm:git:ssh://git@abyss.iaik.tugraz.at/srv/git/pdf-over.git</developerConnection>
 		<connection>scm:svn:https://joinup.ec.europa.eu/svn/pdf-over/trunk/</connection>
 		<url>https://joinup.ec.europa.eu/svn/pdf-over/trunk/</url>
 	</scm>
