@@ -190,11 +190,7 @@ public class DataSourceSelectComposite extends StateComposite {
 			}
 		});
 		
-		//this.drop_area.
-		// this.drop_area.setBackground(back);
-
-		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_DEFAULT
-				| DND.DROP_COPY);
+		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
 		Transfer[] types = new Transfer[] { fileTransfer };
 		dnd_target.setTransfer(types);
@@ -202,7 +198,6 @@ public class DataSourceSelectComposite extends StateComposite {
 		dnd_target.addDropListener(new DropTargetAdapter() {
 			@Override
 			public void drop(DropTargetEvent event) {
-				log.debug("Drop received: " + event); //$NON-NLS-1$
 				if (fileTransfer.isSupportedType(event.currentDataType)) {
 					if (event.data == null) {
 						log.error("Dropped file name was null"); //$NON-NLS-1$
@@ -223,43 +218,23 @@ public class DataSourceSelectComposite extends StateComposite {
 
 			@Override
 			public void dragOperationChanged(DropTargetEvent event) {
-				if (event.detail == DND.DROP_DEFAULT) {
-					if ((event.operations & DND.DROP_COPY) != 0) {
-						event.detail = DND.DROP_COPY;
-					} else {
-						event.detail = DND.DROP_NONE;
-					}
-				}
+				event.detail = DND.DROP_COPY;
 			}
 
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if (event.detail == DND.DROP_DEFAULT) {
-					if ((event.operations & DND.DROP_COPY) != 0) {
-						event.detail = DND.DROP_COPY;
-						MarkDragEnter();
-					} else {
-						event.detail = DND.DROP_NONE;
-					}
-				}
-				// Only drop one item!
-				if (event.dataTypes.length > 1) {
-					event.detail = DND.DROP_NONE;
-					return;
-				}
-				// will accept text but prefer to have files dropped
+				// only accept transferable files
 				for (int i = 0; i < event.dataTypes.length; i++) {
 					if (fileTransfer.isSupportedType(event.dataTypes[i])) {
 						event.currentDataType = event.dataTypes[i];
-						// files should only be copied
-						if (event.detail != DND.DROP_COPY) {
-							event.detail = DND.DROP_NONE;
-						}
-						break;
+						event.detail = DND.DROP_COPY;
+						MarkDragEnter();
+						return;
 					}
 				}
+				event.detail = DND.DROP_NONE;
 			}
-			
+
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.dnd.DropTargetAdapter#dragLeave(org.eclipse.swt.dnd.DropTargetEvent)
 			 */
