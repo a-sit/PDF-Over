@@ -252,8 +252,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		update();
 
 		// if a user interaction is required we have a shell ...
-		Shell shell = this.nonCreatingGetShell();
-		Display display = this.nonCreatingGetDisplay();
+		Shell shell = nonCreatingGetShell();
+		Display display = nonCreatingGetDisplay();
 
 		if (this.status.getCurrentState() == null) {
 			if (shell != null) {
