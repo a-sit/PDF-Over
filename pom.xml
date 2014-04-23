@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.0.3</version>
+	<version>4.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
@@ -60,8 +60,8 @@
 
 	<scm>
 		<!--developerConnection>scm:git:ssh://git@abyss.iaik.tugraz.at/srv/git/pdf-over.git</developerConnection-->
-		<connection>scm:svn:https://joinup.ec.europa.eu/svn/pdf-over/tags/pdf-over-4.0.3</connection>
-		<url>https://joinup.ec.europa.eu/svn/pdf-over/tags/pdf-over-4.0.3</url>
+		<connection>scm:svn:https://joinup.ec.europa.eu/svn/pdf-over/trunk/</connection>
+		<url>https://joinup.ec.europa.eu/svn/pdf-over/trunk/</url>
 	</scm>
 
 	<issueManagement>
