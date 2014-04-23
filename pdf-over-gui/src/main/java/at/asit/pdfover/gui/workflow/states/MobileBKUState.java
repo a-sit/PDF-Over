@@ -187,6 +187,7 @@ public class MobileBKUState extends State {
 
 		if (this.threadException != null) {
 			String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+			log.error(message, this.threadException);
 			String errormsg = this.threadException.getLocalizedMessage();
 			if (errormsg != null && !errormsg.isEmpty())
 				message += ": " + errormsg; //$NON-NLS-1$
