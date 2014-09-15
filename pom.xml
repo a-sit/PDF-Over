@@ -59,9 +59,9 @@
 	</licenses>
 
 	<scm>
-		<!--developerConnection>scm:git:ssh://git@abyss.iaik.tugraz.at/srv/git/pdf-over.git</developerConnection-->
-		<connection>scm:svn:https://joinup.ec.europa.eu/svn/pdf-over/trunk/</connection>
-		<url>https://joinup.ec.europa.eu/svn/pdf-over/trunk/</url>
+		<connection>scm:git:http://git.egiz.gv.at/git/pdf-over</connection>
+		<developerConnection>scm:git:git://gitlab@gitlab.iaik.tugraz.at:tobias.kellner/pdf-over.git</developerConnection>
+		<url>http://git.egiz.gv.at/pdf-over</url>
 	</scm>
 
 	<issueManagement>
