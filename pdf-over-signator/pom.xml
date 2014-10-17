@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>pdf-over</artifactId>
 		<groupId>at.a-sit</groupId>
-		<version>4.0.4-SNAPSHOT</version>
+		<version>4.0.4</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>pdf-over-signator</artifactId>

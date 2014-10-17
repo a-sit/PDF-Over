@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.0.4-SNAPSHOT</version>
+	<version>4.0.4</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
@@ -60,7 +60,7 @@
 
 	<scm>
 		<connection>scm:git:http://git.egiz.gv.at/git/pdf-over</connection>
-		<developerConnection>scm:git:git://gitlab@gitlab.iaik.tugraz.at:tobias.kellner/pdf-over.git</developerConnection>
+		<developerConnection>scm:git:https://gitlab.iaik.tugraz.at/tobias.kellner/mocca.git</developerConnection>
 		<url>http://git.egiz.gv.at/pdf-over</url>
 	</scm>
 
