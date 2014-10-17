@@ -48,6 +48,13 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 	private static final Logger log = LoggerFactory
 			.getLogger(TrustedSocketFactory.class);
 
+	private static final String ENABLED_CS[] = {
+		"TLS_RSA_WITH_AES_128_CBC_SHA",  //$NON-NLS-1$
+		"SSL_RSA_WITH_RC4_128_SHA",      //$NON-NLS-1$
+		"SSL_RSA_WITH_3DES_EDE_CBC_SHA", //$NON-NLS-1$
+		"SSL_RSA_WITH_RC4_128_MD5"       //$NON-NLS-1$
+	};
+
 	private static SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
 			KeyManagementException, Exception {
 		SSLContext sslContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
@@ -70,7 +77,7 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 		try {
 			SSLSocket sslSocket = (SSLSocket) getFactory().createSocket(host,
 					port);
-
+			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
 			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
@@ -98,7 +105,7 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 		try {
 			SSLSocket sslSocket = (SSLSocket) getFactory().createSocket(host,
 					port, clientHost, clientPort);
-
+			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
 			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
@@ -130,21 +137,22 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 				throw new IllegalArgumentException("Parameters may not be null"); //$NON-NLS-1$
 			}
 			int timeout = params.getConnectionTimeout();
-			Socket socket = null;
+			SSLSocket sslSocket = null;
 
 			SSLSocketFactory socketfactory = getFactory();
 			if (timeout == 0) {
-				socket = socketfactory.createSocket(host, port, clientHost,
+				sslSocket = (SSLSocket) socketfactory.createSocket(host, port, clientHost,
 						clientPort);
 			} else {
-				socket = socketfactory.createSocket();
+				sslSocket = (SSLSocket) socketfactory.createSocket();
 				SocketAddress localaddr = new InetSocketAddress(clientHost,
 						clientPort);
 				SocketAddress remoteaddr = new InetSocketAddress(host, port);
-				socket.bind(localaddr);
-				socket.connect(remoteaddr, timeout);
+				sslSocket.bind(localaddr);
+				sslSocket.connect(remoteaddr, timeout);
 			}
-			return socket;
+			sslSocket.setEnabledCipherSuites(ENABLED_CS);
+			return sslSocket;
 		} catch (Exception ex) {
 			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
 			if (ex instanceof IOException) {
@@ -166,7 +174,7 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			boolean autoClose) throws IOException, UnknownHostException {
 		try {
 			SSLSocket sslSocket = (SSLSocket) getFactory().createSocket(socket, host, port, autoClose);
-
+			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
 			log.error("TrustedSocketFactory: ", ex); //$NON-NLS-1$
