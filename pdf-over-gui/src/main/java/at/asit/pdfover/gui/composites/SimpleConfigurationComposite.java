@@ -65,6 +65,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.FileNameEmblem;
@@ -673,9 +674,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 					
 					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
 					
-					img = ImageConverter
-							.convertToSWT((BufferedImage) param
-									.getPlaceholder());
+					img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 				}
 			} else {
 				if (this.signer != null) {
@@ -687,8 +686,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 					
 					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
 					param.setEmblem(new FileNameEmblem(image));
-					img = ImageConverter.convertToSWT((BufferedImage) param
-							.getPlaceholder());
+					img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 				} else {
 					img = new ImageData(image);
 				}

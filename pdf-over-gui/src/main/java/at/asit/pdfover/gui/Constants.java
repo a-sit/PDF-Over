@@ -62,6 +62,12 @@ public class Constants {
 	/** The configuration version file name */
 	public static final String CONFIG_VERSION_FILENAME = ".version"; //$NON-NLS-1$
 
+	/** The signature placeholder cache file name */
+	public static final String PLACEHOLDER_CACHE_FILENAME = ".placeholder"; //$NON-NLS-1$
+
+	/** The signature placeholder cache properties file name */
+	public static final String PLACEHOLDER_CACHE_PROPS_FILENAME = ".placeholder.properties"; //$NON-NLS-1$
+
 	/** The minimum PDF-AS configuration version (older ones will be backed up and updated */
 	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.0"; //$NON-NLS-1$
 

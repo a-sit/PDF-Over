@@ -32,6 +32,7 @@ import at.asit.pdfover.gui.composites.PositioningComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.Emblem;
@@ -109,7 +110,7 @@ public class PositioningState extends State {
 		param.setSignatureLanguage(getStateMachine().getConfigProvider().getSignLocale().getLanguage());
 		
 		this.positionComposite.setPlaceholder(
-				param.getPlaceholder(),
+				SignaturePlaceholderCache.getPlaceholder(param),
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
 				getStateMachine().getConfigProvider().getPlaceholderTransparency());
