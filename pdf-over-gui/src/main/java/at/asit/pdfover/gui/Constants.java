@@ -59,6 +59,15 @@ public class Constants {
 	/** The default log4j file name */
 	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
 
+	/** The configuration version file name */
+	public static final String CONFIG_VERSION_FILENAME = ".version"; //$NON-NLS-1$
+
+	/** The minimum PDF-AS configuration version (older ones will be backed up and updated */
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.0"; //$NON-NLS-1$
+
+	/** The configuration backup filename */
+	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup"; //$NON-NLS-1$
+
 	/** File suffix for the signed document */
 	public final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
 
