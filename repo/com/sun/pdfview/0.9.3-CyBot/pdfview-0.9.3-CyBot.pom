@@ -4,6 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun</groupId>
   <artifactId>pdfview</artifactId>
-  <version>0.9.2-Borisvl</version>
+  <version>0.9.3-CyBot</version>
   <description>POM was created from install:install-file</description>
 </project>
