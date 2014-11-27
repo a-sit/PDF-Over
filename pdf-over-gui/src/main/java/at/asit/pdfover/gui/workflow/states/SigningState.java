@@ -134,7 +134,15 @@ public class SigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		//no change of behavior necessary
+		MainWindowBehavior behavior = getStateMachine().getStatus()
+				.getBehavior();
+		behavior.reset();
+		behavior.setActive(Buttons.OPEN, true);
+		behavior.setActive(Buttons.POSITION, true);
+		behavior.setActive(Buttons.SIGN, true);
+		//behavior.setEnabled(Buttons.OPEN, true);
+		//behavior.setEnabled(Buttons.POSITION, true);
+		//behavior.setEnabled(Buttons.SIGN, true);
 	}
 
 	@Override
