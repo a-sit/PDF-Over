@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>at.gv.egiz.pdfas</groupId>
   <artifactId>sigs-pades</artifactId>
-  <version>4.0.5-SNAPSHOT</version>
+  <version>4.0.4</version>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -27,13 +27,13 @@
     <dependency>
       <groupId>at.gv.egiz.pdfas</groupId>
       <artifactId>pdf-as-common</artifactId>
-      <version>4.0.5-SNAPSHOT</version>
+      <version>4.0.4</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>at.gv.egiz.pdfas</groupId>
       <artifactId>pdf-as-lib</artifactId>
-      <version>4.0.5-SNAPSHOT</version>
+      <version>4.0.4</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
