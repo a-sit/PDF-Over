@@ -13,10 +13,12 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states.mobilebku;
+package at.asit.pdfover.gui.bku.mobile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -31,6 +33,7 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
@@ -61,35 +64,39 @@ public abstract class MobileBKUHandler {
 	/**
 	 * Post the SL request
 	 * @param mobileBKUUrl mobile BKU URL
+	 * @param request SLRequest
 	 * @return the response
 	 * @throws IOException IO error
 	 */
-	public String postSLRequest(String mobileBKUUrl) throws IOException {
-		/*
-		 * String sl_request = this.state.getSigningState()
-		 * .getSignatureRequest().getBase64Request();
-		 */
-		String sl_request = getSignatureRequest().getFileUploadRequest();
-
-		log.debug("SL Request: " + sl_request); //$NON-NLS-1$
-
+	public String postSLRequest(String mobileBKUUrl, SLRequest request) throws IOException {
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(mobileBKUUrl);
+		String sl_request;
+		if (request.getSignatureData() != null) {
+			if (useBase64Request())
+			{
+				sl_request = request.getBase64Request();
+				post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+			} else {
+				sl_request = request.getFileUploadRequest();
+				StringPart xmlpart = new StringPart(
+						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		//method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+						new FileUploadSource(request.getSignatureData()));
 
-		StringPart xmlpart = new StringPart(
-				"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+				Part[] parts = { xmlpart, filepart };
 
-		FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
-				new FileUploadSource(getSignatureRequest().getSignatureData()));
-
-		Part[] parts = { xmlpart, filepart };
-
-		post.setRequestEntity(new MultipartRequestEntity(parts, post
-				.getParams()));
+				post.setRequestEntity(new MultipartRequestEntity(parts, post
+						.getParams()));
+			}
+		} else {
+			sl_request = request.getRequest();
+			post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+		}
+		log.debug("SL Request: " + sl_request); //$NON-NLS-1$
 
 		getState().getStatus().setBaseURL(
 				MobileBKUHelper.stripQueryString(mobileBKUUrl));
@@ -158,12 +165,10 @@ public abstract class MobileBKUHandler {
 	}
 
 	/**
-	 * Get the SLRequest
-	 * @return the SLRequest
+	 * Whether to use a Base64 request
+	 * @return true if base64 request shall be used
 	 */
-	private SLRequest getSignatureRequest() {
-		return getSigningState().getSignatureRequest();
-	}
+	protected abstract boolean useBase64Request();
 
 	/**
 	 * Execute a post to the mobile BKU, following redirects
@@ -215,7 +220,6 @@ public abstract class MobileBKUHandler {
 			} else if (returnCode == HttpStatus.SC_OK) {
 				if (get != null) {
 					responseData = get.getResponseBodyAsString();
-
 					Header serverHeader = get.getResponseHeader(
 							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
 					if (serverHeader != null)
@@ -229,6 +233,14 @@ public abstract class MobileBKUHandler {
 						server = serverHeader.getValue();
 				}
 				redirectLocation = null;
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //$NON-NLS-1$
+				Pattern pat = Pattern.compile(p);
+				Matcher m = pat.matcher(responseData);
+				if (m.find()) {
+					String content = m.group(1);
+					int start = content.indexOf("URL=") +9; //$NON-NLS-1$
+					redirectLocation  = content.substring(start, content.length() - 5);
+				}
 			} else {
 				throw new HttpException(
 						HttpStatus.getStatusText(returnCode));

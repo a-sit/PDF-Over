@@ -30,12 +30,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -120,7 +120,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setLocale(targetLocale);
 		}
 		
-		String signlocalString = config.getProperty(Constants.CFG_SIGN_LOCALE);
+		String signlocalString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
 		
 		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
 		if (signtargetLocale != null) {
@@ -311,7 +311,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		Locale signLocale = this.getSignLocale();
 		if(signLocale != null) {
-			props.setProperty(Constants.CFG_SIGN_LOCALE, LocaleSerializer.getParsableString(signLocale));
+			props.setProperty(Constants.CFG_SIGNATURE_LOCALE, LocaleSerializer.getParsableString(signLocale));
 		}
 
 		SignaturePosition pos = getDefaultSignaturePositionPersistent();

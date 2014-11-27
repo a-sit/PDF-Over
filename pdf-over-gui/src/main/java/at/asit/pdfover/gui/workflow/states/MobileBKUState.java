@@ -17,28 +17,26 @@ package at.asit.pdfover.gui.workflow.states;
 
 // Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.bku.MobileBKUConnector;
+import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
+import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
+import at.asit.pdfover.gui.bku.mobile.IAIKHandler;
+import at.asit.pdfover.gui.bku.mobile.IAIKStatus;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustHandler;
-import at.asit.pdfover.gui.workflow.states.mobilebku.IAIKHandler;
-import at.asit.pdfover.gui.workflow.states.mobilebku.IAIKStatus;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUCommunicationState;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler;
-import at.asit.pdfover.gui.workflow.states.mobilebku.ATrustStatus;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus;
-import at.asit.pdfover.gui.workflow.states.mobilebku.PostCredentialsThread;
-import at.asit.pdfover.gui.workflow.states.mobilebku.PostSLRequestThread;
-import at.asit.pdfover.gui.workflow.states.mobilebku.PostTanThread;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -73,8 +71,6 @@ public class MobileBKUState extends State {
 
 	Exception threadException = null;
 
-	MobileBKUCommunicationState communicationState = MobileBKUCommunicationState.POST_REQUEST;
-
 	MobileBKUStatus status = null;
 
 	MobileBKUHandler handler = null;
@@ -85,7 +81,7 @@ public class MobileBKUState extends State {
 
 	WaitingComposite waitingComposite = null;
 
-	private WaitingComposite getWaitingComposite() {
+	WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
 			this.waitingComposite = getStateMachine().getGUIProvider()
 					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
@@ -94,7 +90,7 @@ public class MobileBKUState extends State {
 		return this.waitingComposite;
 	}
 
-	private MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
+	MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
 		if (this.mobileBKUEnterTANComposite == null) {
 			this.mobileBKUEnterTANComposite = getStateMachine()
 					.getGUIProvider().createComposite(
@@ -104,7 +100,7 @@ public class MobileBKUState extends State {
 		return this.mobileBKUEnterTANComposite;
 	}
 
-	private MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
+	MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
 		if (this.mobileBKUEnterNumberComposite == null) {
 			this.mobileBKUEnterNumberComposite = getStateMachine()
 					.getGUIProvider().createComposite(
@@ -140,22 +136,6 @@ public class MobileBKUState extends State {
 	}
 
 	/**
-	 * @return the communicationState
-	 */
-	public MobileBKUCommunicationState getCommunicationState() {
-		return this.communicationState;
-	}
-
-	/**
-	 * @param communicationState
-	 *            the communicationState to set
-	 */
-	public void setCommunicationState(
-			MobileBKUCommunicationState communicationState) {
-		this.communicationState = communicationState;
-	}
-
-	/**
 	 * @return the signingState
 	 */
 	public at.asit.pdfover.signator.SigningState getSigningState() {
@@ -170,6 +150,147 @@ public class MobileBKUState extends State {
 		this.threadException = threadException;
 	}
 
+	/**
+	 * Display an error message
+	 * 
+	 * @param e
+	 *            the exception
+	 */
+	public void displayError(Exception e) {
+		String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+		log.error(message, e);
+		String errormsg = e.getLocalizedMessage();
+		if (errormsg != null && !errormsg.isEmpty())
+			message += ": " + errormsg; //$NON-NLS-1$
+		displayError(message);
+	}
+
+	/**
+	 * Display an error message
+	 * 
+	 * @param message
+	 *            the error message
+	 */
+	public void displayError(final String message) {
+		log.error(message);
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider()
+						.getMainShell(), message, BUTTONS.OK);
+				error.open();
+			}
+		});
+	}
+
+	/**
+	 * Make sure phone number and password are set in the MobileBKUStatus
+	 */
+	public void checkCredentials() {
+		final MobileBKUStatus mobileStatus = this.getStatus();
+		// check if we have everything we need!
+		if (mobileStatus.getPhoneNumber() != null && !mobileStatus.getPhoneNumber().isEmpty() &&
+		    mobileStatus.getMobilePassword() != null && !mobileStatus.getMobilePassword().isEmpty())
+			return;
+
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				MobileBKUEnterNumberComposite ui = MobileBKUState.this
+						.getMobileBKUEnterNumberComposite();
+	
+				if (!ui.isUserAck()) {
+					// We need number and password => show UI!
+					if (mobileStatus.getErrorMessage() != null
+							&& !mobileStatus.getErrorMessage().isEmpty()) {
+						// set possible error message
+						ui.setErrorMessage(mobileStatus.getErrorMessage());
+						mobileStatus.setErrorMessage(null);
+					}
+
+					if (ui.getMobileNumber() == null
+							|| ui.getMobileNumber().isEmpty()) {
+						// set possible phone number
+						ui.setMobileNumber(mobileStatus.getPhoneNumber());
+					}
+
+					if (ui.getMobilePassword() == null
+							|| ui.getMobilePassword().isEmpty()) {
+						// set possible password
+						ui.setMobilePassword(mobileStatus.getMobilePassword());
+					}
+					ui.enableButton();
+					getStateMachine().getGUIProvider().display(ui);
+
+					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+					while (!ui.isUserAck()) {
+						if (!display.readAndDispatch()) {
+							display.sleep();
+						}
+					}
+				}
+
+				// user hit ok
+				ui.setUserAck(false);
+
+				// get number and password from UI
+				mobileStatus.setPhoneNumber(ui.getMobileNumber());
+				mobileStatus.setMobilePassword(ui.getMobilePassword());
+
+				// show waiting composite
+				getStateMachine().getGUIProvider().display(
+						MobileBKUState.this.getWaitingComposite());
+			}
+		});
+	}
+
+	/**
+	 * Make sure TAN is set in the MobileBKUStatus
+	 */
+	public void checkTAN() {
+		final MobileBKUStatus mobileStatus = this.getStatus();
+
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				MobileBKUEnterTANComposite tan = MobileBKUState.this
+						.getMobileBKUEnterTANComposite();
+		
+				if (!tan.isUserAck()) {
+					// we need the TAN
+					tan.setRefVal(mobileStatus.getRefVal());
+					tan.setSignatureData(mobileStatus.getSignatureDataURL());
+					tan.setErrorMessage(mobileStatus.getErrorMessage());
+					if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
+							&& mobileStatus.getTanTries() > 0) {
+						// show warning message x tries left!
+						// overrides error message
+		
+						tan.setTries(mobileStatus.getTanTries());
+					}
+					tan.enableButton();
+					getStateMachine().getGUIProvider().display(tan);
+
+					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+					while (!tan.isUserAck()) {
+						if (!display.readAndDispatch()) {
+							display.sleep();
+						}
+					}
+				}
+
+				// user hit ok!
+				tan.setUserAck(false);
+
+				mobileStatus.setTan(tan.getTan());
+
+				// show waiting composite
+				getStateMachine().getGUIProvider().display(
+						MobileBKUState.this.getWaitingComposite());
+			}
+		});
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -179,10 +300,9 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void run() {
-
 		this.signingState = getStateMachine().getStatus().getSigningState();
 
-		MobileBKUStatus mobileStatus = this.getStatus();
+		this.signingState.setBKUConnector(new MobileBKUConnector(this));
 
 		if (this.threadException != null) {
 			String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
@@ -200,125 +320,10 @@ public class MobileBKUState extends State {
 			return;
 		}
 
-		switch (this.communicationState) {
-		case POST_REQUEST:
-			getStateMachine().getGUIProvider().display(
-					this.getWaitingComposite());
-			Thread postSLRequestThread = new Thread(
-					new PostSLRequestThread(this));
-			postSLRequestThread.start();
-			break;
+		getStateMachine().getGUIProvider().display(
+				this.getWaitingComposite());
 
-		case POST_NUMBER:
-			// Check if number and password is set ...
-			// if not show UI
-			// else start thread
-
-			// check if we have everything we need!
-			if (mobileStatus.getPhoneNumber() != null
-					&& !mobileStatus.getPhoneNumber().isEmpty()
-					&& mobileStatus.getMobilePassword() != null
-					&& !mobileStatus.getMobilePassword().isEmpty()) {
-				// post to bku
-				Thread postCredentialsThread = new Thread(
-						new PostCredentialsThread(this));
-				postCredentialsThread.start();
-				// resets password if incorrect to null
-			} else {
-
-				MobileBKUEnterNumberComposite ui = this
-						.getMobileBKUEnterNumberComposite();
-
-				if (ui.isUserAck()) {
-					// user hit ok
-
-					ui.setUserAck(false);
-
-					// get number and password from UI
-					mobileStatus.setPhoneNumber(ui.getMobileNumber());
-					mobileStatus.setMobilePassword(ui.getMobilePassword());
-
-					// show waiting composite
-					getStateMachine().getGUIProvider().display(
-							this.getWaitingComposite());
-
-					// post to BKU
-					Thread postCredentialsThread = new Thread(
-							new PostCredentialsThread(this));
-					postCredentialsThread.start();
-
-				} else {
-					// We need number and password => show UI!
-
-					if (mobileStatus.getErrorMessage() != null
-							&& !mobileStatus.getErrorMessage().isEmpty()) {
-						// set possible error message
-						ui.setErrorMessage(mobileStatus.getErrorMessage());
-						mobileStatus.setErrorMessage(null);
-					}
-					
-
-					if (ui.getMobileNumber() == null
-							|| ui.getMobileNumber().isEmpty()) {
-						// set possible phone number
-						ui.setMobileNumber(mobileStatus.getPhoneNumber());
-					}
-
-					if (ui.getMobilePassword() == null
-							|| ui.getMobilePassword().isEmpty()) {
-						// set possible password
-						ui.setMobilePassword(mobileStatus.getMobilePassword());
-					}
-					ui.enableButton();
-					getStateMachine().getGUIProvider().display(ui);
-				}
-			}
-			break;
-
-		case POST_TAN:
-			// Get TAN from UI
-
-			MobileBKUEnterTANComposite tan = this
-					.getMobileBKUEnterTANComposite();
-
-			if (tan.isUserAck()) {
-				// user hit ok!
-				tan.setUserAck(false);
-
-				mobileStatus.setTan(tan.getTan());
-
-				// show waiting composite
-				getStateMachine().getGUIProvider().display(
-						this.getWaitingComposite());
-				
-				// post to BKU!
-				Thread postTanThread = new Thread(new PostTanThread(this));
-				postTanThread.start();
-
-			} else {
-				tan.setRefVal(mobileStatus.getRefVal());
-				tan.setSignatureData(mobileStatus.getSignatureDataURL());
-				tan.setErrorMessage(mobileStatus.getErrorMessage());
-				if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
-						&& mobileStatus.getTanTries() > 0) {
-					// show warning message x tries left!
-					// overrides error message
-
-					tan.setTries(mobileStatus.getTanTries());
-				}
-				tan.enableButton();
-				getStateMachine().getGUIProvider().display(tan);
-			}
-			break;
-
-		case FINAL:
-			this.setNextState(new SigningState(getStateMachine()));
-			break;
-
-		case CANCEL:
-			this.setNextState(new BKUSelectionState(getStateMachine()));
-			break;
-		}
+		this.setNextState(new SigningState(getStateMachine()));
 	}
 
 	/*

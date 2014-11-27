@@ -37,4 +37,10 @@ public interface SigningState {
 	 * @return true if a SLResponse is set
 	 */
 	public boolean hasSignatureResponse();
+
+	/**
+	 * Set the BKU connector
+	 * @param connector the BKU connector
+	 */
+	public void setBKUConnector(BkuSlConnector connector);
 }

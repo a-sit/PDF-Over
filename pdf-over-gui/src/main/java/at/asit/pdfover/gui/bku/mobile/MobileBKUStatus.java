@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states.mobilebku;
+package at.asit.pdfover.gui.bku.mobile;
 
 /**
  * 

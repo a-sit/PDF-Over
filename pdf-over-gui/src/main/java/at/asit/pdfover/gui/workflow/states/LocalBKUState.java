@@ -21,24 +21,20 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.bku.BKUHelper;
+import at.asit.pdfover.gui.bku.LocalBKUConnector;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
-import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 
 /**
@@ -91,9 +87,6 @@ public class LocalBKUState extends State {
 
 		private LocalBKUState state;
 
-		/** Whether to use Base64 or FileUpload Request */
-		private boolean useBase64Request = false;
-
 		
 		/**
 		 * @param localBKUState
@@ -105,13 +98,10 @@ public class LocalBKUState extends State {
 		@Override
 		public void run() {
 			try {
-				SLRequest request = this.state.signingState
-						.getSignatureRequest();
 
-				HttpClient client = MobileBKUHelper.getHttpClient();
+				HttpClient client = BKUHelper.getHttpClient();
 
-				PostMethod method = new PostMethod(
-						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
+				PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
 				String sl_request = NULL_OPERATION_REQUEST;
 				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
@@ -119,34 +109,11 @@ public class LocalBKUState extends State {
 
 				String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 				String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
-				if (server != null && server.contains("trustDeskbasic")) //$NON-NLS-1$
-					this.useBase64Request = true; // TDB doesn't support MultiPart requests
 
-				method = new PostMethod(
-						"http://127.0.0.1:3495/http-security-layer-request"); //$NON-NLS-1$
-
-				if (this.useBase64Request)
-				{
-					sl_request = request.getBase64Request();
-					method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				if (returnCode != HttpStatus.SC_OK) {
+					this.state.threadException = new HttpException(
+							method.getResponseBodyAsString());
 				} else {
-					sl_request = request.getFileUploadRequest();
-					StringPart xmlpart = new StringPart(
-							"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
-
-					FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
-							new FileUploadSource(request.getSignatureData()));
-
-					Part[] parts = { xmlpart, filepart };
-
-					method.setRequestEntity(new MultipartRequestEntity(parts, method
-							.getParams()));
-				}
-				//log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
-
-				returnCode = client.executeMethod(method);
-
-				if (returnCode == HttpStatus.SC_OK) {
 					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 					if (server == null)
 						server = ""; //$NON-NLS-1$
@@ -160,14 +127,10 @@ public class LocalBKUState extends State {
 					SLResponse slResponse = new SLResponse(response, server,
 							userAgent, signatureLayout);
 					this.state.signingState.setSignatureResponse(slResponse);
-				} else {
-					this.state.threadException = new HttpException(
-							method.getResponseBodyAsString());
 				}
-
 			} catch (Exception e) {
 				log.error("SignLocalBKUThread: ", e); //$NON-NLS-1$
-				//
+
 				this.state.threadException = e;
 			} finally {
 				this.state.updateStateMachine();
@@ -206,6 +169,7 @@ public class LocalBKUState extends State {
 			t.start();
 			return;
 		}
+		this.signingState.setBKUConnector(new LocalBKUConnector());
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(

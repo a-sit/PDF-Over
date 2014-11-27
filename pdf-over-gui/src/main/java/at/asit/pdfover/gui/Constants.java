@@ -23,7 +23,7 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
 /**
  * Various constants
@@ -51,7 +51,7 @@ public class Constants {
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 
 	/** Configuration directory */
-	public static String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
+	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The default configuration file name */
 	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //$NON-NLS-1$
@@ -61,6 +61,9 @@ public class Constants {
 
 	/** File suffix for the signed document */
 	public final static String SIGNED_SUFFIX = "_signed"; //$NON-NLS-1$
+
+	/** Local BKU URL */
+	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request"; //$NON-NLS-1$
 
 	/** Default Mobile BKU URL */
 	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
@@ -112,6 +115,9 @@ public class Constants {
 	/** The signature note config parameter */
 	public static final String CFG_SIGNATURE_NOTE = "SIGNATURE_NOTE"; //$NON-NLS-1$
 
+	/** The signature locale config parameter */
+	public static final String CFG_SIGNATURE_LOCALE = "SIGNLOCALE"; //$NON-NLS-1$
+
 	/** Mobile bku url config parameter */
 	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL"; //$NON-NLS-1$
 
@@ -123,9 +129,6 @@ public class Constants {
 
 	/** The locale config parameter */
 	public static final String CFG_LOCALE = "LOCALE"; //$NON-NLS-1$
-
-	/** The signature locale config parameter */
-	public static final String CFG_SIGN_LOCALE = "SIGNLOCALE"; //$NON-NLS-1$
 
 	/** The update check config parameter */
 	public static final String CFG_UPDATE_CHECK = "UPDATE_CHECK"; //$NON-NLS-1$

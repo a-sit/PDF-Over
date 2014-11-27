@@ -34,7 +34,7 @@ public class PDFSignerImpl implements PDFSigner {
 	private static final Logger log = LoggerFactory
 			.getLogger(PDFSignerImpl.class);
 
-	private Signers signer = Signator.Signers.PDFAS;
+	private Signers signer = Signator.Signers.PDFAS4;
 	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.PDFSigner#getPDFSignerType()

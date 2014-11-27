@@ -16,18 +16,21 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.net.ConnectException;
+
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.Signer;
-import at.knowcenter.wag.egov.egiz.exceptions.ConnectorException;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
@@ -92,9 +95,17 @@ public class SigningState extends State {
 		if(this.threadException != null) {
 			String message = Messages.getString("error.Signatur"); //$NON-NLS-1$
 			if (this.threadException instanceof SignatureException) {
-				Throwable cause = this.threadException.getCause();
-				if (cause instanceof ConnectorException)
+				Throwable cause = this.threadException;
+				while (cause.getCause() != null)
+					cause = cause.getCause();
+				if (cause instanceof ConnectException)
 					message += ": " + cause.getMessage(); //$NON-NLS-1$
+				if (cause instanceof IllegalStateException) {
+					// Dummy exception - don't display error, go back to BKU Selection
+					this.setNextState(new BKUSelectionState(getStateMachine()));
+					return;
+				}
+					
 			}
 			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
 					message, BUTTONS.RETRY_CANCEL);

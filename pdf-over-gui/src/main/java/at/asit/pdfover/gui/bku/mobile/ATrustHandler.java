@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states.mobilebku;
+package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
 import java.io.IOException;
@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -90,7 +91,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 	
 		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -117,7 +118,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		status.setErrorMessage(null);
 
-		if(responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
+		if (responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
 			// credentials ok! TAN entry
 			sessionID = MobileBKUHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
@@ -125,9 +126,13 @@ public class ATrustHandler extends MobileBKUHandler {
 			refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");  //$NON-NLS-1$//$NON-NLS-2$
 			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" +  //$NON-NLS-1$
 					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'");  //$NON-NLS-1$//$NON-NLS-2$
-
-			getState().setCommunicationState(MobileBKUCommunicationState.POST_TAN);
+		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
+			// credentials ok! InfoboxReadResponse
+			getSigningState().setSignatureResponse(
+					new SLResponse(responseData, getStatus().getServer(), null, null));
+			return;
 		} else {
+			
 			// error page
 			// extract error text!
 			String errorMessage = MobileBKUHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -159,7 +164,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 	
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 	
 		PostMethod post = new PostMethod(status.getBaseURL()
 				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
@@ -180,23 +185,25 @@ public class ATrustHandler extends MobileBKUHandler {
 	@Override
 	public void handleTANResponse(String responseData) {
 		getStatus().setErrorMessage(null);
-		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl")) { //$NON-NLS-1$
+		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //$NON-NLS-1$
+		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 			// success !!
 			
 			getSigningState().setSignatureResponse(
 					new SLResponse(responseData, getStatus().getServer(), null, null));
-			getState().setCommunicationState(MobileBKUCommunicationState.FINAL);
 		} else {
 			try {
 				String tries = MobileBKUHelper.extractTag(
 						responseData, "Sie haben noch", "Versuch"); //$NON-NLS-1$ //$NON-NLS-2$
 				getStatus().setTanTries(Integer.parseInt(tries.trim()));
+				getStatus().setErrorMessage("mobileBKU.wrong_tan"); //$NON-NLS-1$
 			} catch (Exception e) {
 				getStatus().setTanTries(getStatus().getTanTries() - 1);
 				log.debug("Error parsing TAN response", e); //$NON-NLS-1$
 			}
 
 			if (getStatus().getTanTries() <= 0) {
+				getStatus().setErrorMessage(null);
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -204,11 +211,11 @@ public class ATrustHandler extends MobileBKUHandler {
 								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
 								BUTTONS.OK_CANCEL, ICON.QUESTION);
 						if (dialog.open() == SWT.CANCEL) {
-							// Cancel
-							getState().setCommunicationState(MobileBKUCommunicationState.CANCEL);
+							// Go back to BKU Selection
+							getStatus().setTanTries(-1);
 						} else {
-							// move to POST_REQUEST again
-							getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+							// Start signature process over
+							getStatus().setTanTries(-2);
 						}
 					}
 				});
@@ -219,5 +226,13 @@ public class ATrustHandler extends MobileBKUHandler {
 	@Override
 	public ATrustStatus getStatus() {
 		return (ATrustStatus) getState().getStatus();
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUHandler#useBase64Request()
+	 */
+	@Override
+	protected boolean useBase64Request() {
+		return false;
 	}
 }

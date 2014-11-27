@@ -36,9 +36,13 @@ public class Signator {
 	 */
 	public enum Signers {
 		/**
-		 * PDF-AS
+		 * PDF-AS 3
 		 */
-		PDFAS
+		PDFAS,
+		/**
+		 * PDF-AS 4
+		 */
+		PDFAS4
 	};
 
 	private static Map<Signers, SignerFactory> factoryMap;
@@ -47,9 +51,12 @@ public class Signator {
 		factoryMap = new EnumMap<Signers, SignerFactory>(Signers.class);
 
 		try {
-			Class<?> pdfAsClass = Class.forName("at.asit.pdfover.signer.pdfas.PDFASSignerFactory");
-			SignerFactory factory = (SignerFactory)pdfAsClass.newInstance();
-			registerSigner(Signers.PDFAS, factory);
+//			Class<?> pdfAsClass = Class.forName("at.asit.pdfover.signer.pdfas.PDFASSignerFactory");
+//			SignerFactory factory = (SignerFactory)pdfAsClass.newInstance();
+//			registerSigner(Signers.PDFAS, factory);
+			Class<?> pdfAs4Class = Class.forName("at.asit.pdfover.signer.pdfas.PdfAs4SignerFactory");
+			SignerFactory factory = (SignerFactory)pdfAs4Class.newInstance();
+			registerSigner(Signers.PDFAS4, factory);
 		} catch (ClassNotFoundException e) {
 			log.error("PDF Signer Factory not found", e);
 			throw new RuntimeException("PDF Signer Factory not found", e);

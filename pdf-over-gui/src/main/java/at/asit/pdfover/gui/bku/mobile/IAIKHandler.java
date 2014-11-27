@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states.mobilebku;
+package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
 import java.io.IOException;
@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -97,7 +98,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		IAIKStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -143,7 +144,7 @@ public class IAIKHandler extends MobileBKUHandler {
 			return;
 		}
 
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 
 		String redirectURL = status.getBaseURL().substring(0,
 				status.getBaseURL().lastIndexOf('/',
@@ -224,7 +225,6 @@ public class IAIKHandler extends MobileBKUHandler {
 		status.setRefVal(refVal);
 		status.setSignatureDataURL(signatureDataURL);
 		status.setBaseURL(tanURL);
-		getState().setCommunicationState(MobileBKUCommunicationState.POST_TAN);
 	}
 
 	/* (non-Javadoc)
@@ -235,7 +235,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		IAIKStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient();
+		HttpClient client = BKUHelper.getHttpClient();
 
 		PostMethod post = new PostMethod(status.getBaseURL());
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -257,7 +257,6 @@ public class IAIKHandler extends MobileBKUHandler {
 			// success
 			getSigningState().setSignatureResponse(
 					new SLResponse(responseData, getStatus().getServer(), null, null));
-			getState().setCommunicationState(MobileBKUCommunicationState.FINAL);
 		} else {
 			try {
 				String errorMessage = MobileBKUHelper.extractTag(responseData,
@@ -272,11 +271,11 @@ public class IAIKHandler extends MobileBKUHandler {
 								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
 								BUTTONS.OK_CANCEL, ICON.QUESTION);
 						if (dialog.open() == SWT.CANCEL) {
-							// Cancel
-							getState().setCommunicationState(MobileBKUCommunicationState.CANCEL);
+							// Go back to BKU Selection
+							getStatus().setTanTries(-1);
 						} else {
-							// move to POST_REQUEST again
-							getState().setCommunicationState(MobileBKUCommunicationState.POST_REQUEST);
+							// Start signature process over
+							getStatus().setTanTries(-2);
 						}
 					}
 				});
@@ -301,5 +300,13 @@ public class IAIKHandler extends MobileBKUHandler {
 		String responseData = get.getResponseBodyAsString();
 		log.debug("Response: " + responseData); //$NON-NLS-1$
 		return responseData;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUHandler#useBase64Request()
+	 */
+	@Override
+	protected boolean useBase64Request() {
+		return false;
 	}
 }

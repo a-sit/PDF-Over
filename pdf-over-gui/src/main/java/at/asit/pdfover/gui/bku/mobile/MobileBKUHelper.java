@@ -13,20 +13,16 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.workflow.states.mobilebku;
+package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.exceptions.PasswordTooLongException;
@@ -149,32 +145,6 @@ public class MobileBKUHelper {
 			return query.substring(0, pathidx);
 		}
 		return query;
-	}
-
-	/**
-	 * Get a HTTP Client instance
-	 * @return the HttpClient
-	 */
-	public static HttpClient getHttpClient() {
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
-				Constants.USER_AGENT_STRING);
-
-		String host = System.getProperty("http.proxyHost"); //$NON-NLS-1$
-		String port = System.getProperty("http.proxyPort"); //$NON-NLS-1$
-		if (host != null && !host.isEmpty() &&
-				port != null && !port.isEmpty()) {
-			int p = Integer.parseInt(port);
-			client.getHostConfiguration().setProxy(host, p);
-			String user = System.getProperty("http.proxyUser"); //$NON-NLS-1$
-			String pass = System.getProperty("http.proxyPassword"); //$NON-NLS-1$
-			if (user != null && !user.isEmpty() && pass != null) {
-				client.getState().setProxyCredentials(new AuthScope(host, p),
-						new UsernamePasswordCredentials(user, pass));
-			}
-		}
-
-		return client;
 	}
 
 	/**

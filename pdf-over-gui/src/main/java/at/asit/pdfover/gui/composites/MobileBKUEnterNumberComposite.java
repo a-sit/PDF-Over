@@ -35,11 +35,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 
 /**
  * Composite for entering the phone number for the mobile BKU
@@ -101,7 +101,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				return;
 			}
 			
-			MobileBKUEnterNumberComposite.this.state.updateStateMachine();
+			//MobileBKUEnterNumberComposite.this.state.updateStateMachine();
 		}
 
 		/* (non-Javadoc)

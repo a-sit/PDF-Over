@@ -114,4 +114,13 @@ public class SLRequest {
 	{
 		return this.signatureData;
 	}
+
+	/**
+	 * Gets the request String
+	 * 
+	 * @return the request
+	 */
+	public String getRequest() {
+		return this.request;
+	}
 }

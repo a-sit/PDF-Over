@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.cliarguments.ArgumentHandler;
 import at.asit.pdfover.gui.cliarguments.AutomaticPositioningArgument;
 import at.asit.pdfover.gui.cliarguments.BKUArgument;
@@ -58,7 +59,6 @@ import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.Unzipper;
 import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHelper;
 import at.asit.pdfover.signator.Signator;
 
 /**
@@ -340,7 +340,7 @@ public class PrepareConfigurationState extends State {
 
 			// Check for updates
 			if (getStateMachine().getConfigProvider().getUpdateCheck() && Constants.APP_VERSION != null) {
-				HttpClient client = MobileBKUHelper.getHttpClient();
+				HttpClient client = BKUHelper.getHttpClient();
 				GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
 				try {
 					client.executeMethod(method);
@@ -370,7 +370,7 @@ public class PrepareConfigurationState extends State {
 
 			// Set usedSignerLib ...
 			getStateMachine().getPDFSigner().setUsedPDFSignerLibrary(
-					Signator.Signers.PDFAS);
+					Signator.Signers.PDFAS4);
 
 			// Create PDF Signer
 			getStateMachine().getStatus().setBKU(

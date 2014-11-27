@@ -87,7 +87,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			MobileBKUEnterTANComposite.this.tan = tan;
 			MobileBKUEnterTANComposite.this.setUserAck(true);
 			MobileBKUEnterTANComposite.this.btn_ok.setEnabled(false);
-			MobileBKUEnterTANComposite.this.state.updateStateMachine();
+			//MobileBKUEnterTANComposite.this.state.updateStateMachine();
 			//MobileBKUEnterTANComposite.this.btn_ok.setEnabled(true);
 		}
 	}

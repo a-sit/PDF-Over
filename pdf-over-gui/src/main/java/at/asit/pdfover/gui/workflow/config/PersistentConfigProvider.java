@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import org.eclipse.swt.graphics.Point;
 
-import at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUs;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
