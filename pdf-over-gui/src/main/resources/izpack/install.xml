@@ -54,6 +54,10 @@
 	<packs>
 		<pack name="main" required="yes">
 			<description>Main Installation</description>
+			<updatecheck>
+				<include name="lib/**" />
+				<include name="lib-swt/**" />
+			</updatecheck>
 			<file src="lib" targetdir="$INSTALL_PATH" />
 			<file src="lib-swt" targetdir="$INSTALL_PATH" />
 			<file src="scripts" targetdir="$INSTALL_PATH" />
