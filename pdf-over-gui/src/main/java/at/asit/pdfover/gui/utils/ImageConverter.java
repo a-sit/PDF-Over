@@ -160,7 +160,7 @@ public class ImageConverter {
 		    data.transparentPixel = -1;
 
 		    WritableRaster raster = bufferedImage.getRaster();
-		    int[] pixelArray = new int[3];
+		    int[] pixelArray = new int[bufferedImage.getColorModel().getNumComponents()];
 		    for (int y = 0; y < data.height; y++) {
 		        for (int x = 0; x < data.width; x++) {
 		            raster.getPixel(x, y, pixelArray);
