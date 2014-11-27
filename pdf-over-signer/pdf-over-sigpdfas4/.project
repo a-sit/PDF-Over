@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>pdf-over-gui</name>
+	<name>pdf-over-sigpdfas</name>
 	<comment></comment>
 	<projects>
+		<project>pdf-as-common</project>
 		<project>pdf-as-lib</project>
+		<project>sigs-pades</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
