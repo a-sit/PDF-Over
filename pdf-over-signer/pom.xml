@@ -9,6 +9,9 @@
 	<artifactId>pdf-over-signer</artifactId>
 	<name>PDF-Over PDF-Signer libraries</name>
 	<packaging>pom</packaging>
+	<properties>
+		<project.maindir>${project.basedir}/..</project.maindir>
+	</properties>
 	<modules>
 		<module>pdf-over-sigpdfas</module>
 	</modules>

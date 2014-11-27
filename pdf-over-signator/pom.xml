@@ -8,6 +8,9 @@
 	</parent>
 	<artifactId>pdf-over-signator</artifactId>
 	<name>PDF-Over Signator</name>
+	<properties>
+		<project.maindir>${project.basedir}/..</project.maindir>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
