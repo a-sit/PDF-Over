@@ -44,6 +44,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 	/**
 	 * SLF4J Logger instance
 	 **/
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(PdfAs4BKUSLConnector.class);
 
@@ -68,7 +69,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		JAXBElement<?> element = null;
 		try {
 			String slRequestString = SLMarschaller.marshalToString(this.of.createInfoboxReadRequest(request));
-			log.trace(slRequestString);
+			//log.trace(slRequestString);
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, null);
 			String slResponse = this.connector.handleSLRequest(slRequest).getSLRespone();
@@ -109,7 +110,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		JAXBElement<?> element = null;
 		try {
 			String slRequestString = SLMarschaller.marshalToString(this.of.createCreateCMSSignatureRequest(pack.getRequestType()));
-			log.debug(slRequestString);
+			//log.trace(slRequestString);
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, pack.getSignatureData());
 			String slResponse = this.connector.handleSLRequest(slRequest).getSLRespone();
@@ -131,7 +132,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		if (element.getValue() instanceof CreateCMSSignatureResponseType) {
 			CreateCMSSignatureResponseType createCMSSignatureResponseType = (CreateCMSSignatureResponseType) element
 					.getValue();
-			log.debug(createCMSSignatureResponseType.toString());
+			//log.trace(createCMSSignatureResponseType.toString());
 			return createCMSSignatureResponseType;
 		} else if (element.getValue() instanceof ErrorResponseType) {
 			ErrorResponseType errorResponseType = (ErrorResponseType) element

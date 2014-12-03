@@ -96,7 +96,7 @@ public abstract class MobileBKUHandler {
 			sl_request = request.getRequest();
 			post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 		}
-		log.debug("SL Request: " + sl_request); //$NON-NLS-1$
+		//log.debug("SL Request: " + sl_request); //$NON-NLS-1$
 
 		getState().getStatus().setBaseURL(
 				MobileBKUHelper.stripQueryString(mobileBKUUrl));
