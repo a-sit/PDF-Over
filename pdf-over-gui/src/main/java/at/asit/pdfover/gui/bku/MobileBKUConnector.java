@@ -76,11 +76,15 @@ public class MobileBKUConnector implements BkuSlConnector {
 			do {
 				// Check if credentials are available, get them from user if not
 				this.state.checkCredentials();
-		
+
+				if (this.state.getStatus().getErrorMessage() != null &&
+						this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+					throw new SignatureException(new IllegalStateException());
+
 				// Post credentials
 				try {
 					String responseData = handler.postCredentials();
-		
+
 					// Now we have received some data lets check it:
 					log.debug("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		
@@ -103,7 +107,11 @@ public class MobileBKUConnector implements BkuSlConnector {
 			do {
 				// Get TAN
 				this.state.checkTAN();
-		
+
+				if (this.state.getStatus().getErrorMessage() != null &&
+						this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+					throw new SignatureException(new IllegalStateException());
+
 				// Post TAN
 				try {
 					String responseData = handler.postTAN();

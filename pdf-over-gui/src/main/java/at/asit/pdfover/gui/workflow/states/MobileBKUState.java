@@ -223,11 +223,17 @@ public class MobileBKUState extends State {
 					getStateMachine().getGUIProvider().display(ui);
 
 					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-					while (!ui.isUserAck()) {
+					while (!ui.isUserAck() && !ui.isUserCancel()) {
 						if (!display.readAndDispatch()) {
 							display.sleep();
 						}
 					}
+				}
+
+				if (ui.isUserCancel()) {
+					ui.setUserCancel(false);
+					mobileStatus.setErrorMessage("cancel"); //$NON-NLS-1$
+					return;
 				}
 
 				// user hit ok
@@ -272,11 +278,17 @@ public class MobileBKUState extends State {
 					getStateMachine().getGUIProvider().display(tan);
 
 					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-					while (!tan.isUserAck()) {
+					while (!tan.isUserAck() && !tan.isUserCancel()) {
 						if (!display.readAndDispatch()) {
 							display.sleep();
 						}
 					}
+				}
+
+				if (tan.isUserCancel()) {
+					tan.setUserCancel(false);
+					mobileStatus.setErrorMessage("cancel"); //$NON-NLS-1$
+					return;
 				}
 
 				// user hit ok!

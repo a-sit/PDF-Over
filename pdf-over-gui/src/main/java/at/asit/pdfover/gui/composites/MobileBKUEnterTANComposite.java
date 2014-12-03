@@ -93,6 +93,22 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	}
 
 	/**
+	 * 
+	 */
+	private final class CancelSelectionListener extends SelectionAdapter {
+		/**
+		 * Empty constructor
+		 */
+		public CancelSelectionListener() {
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MobileBKUEnterTANComposite.this.setUserCancel(true);
+		}
+	}
+
+	/**
 	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory
@@ -101,6 +117,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	Text txt_tan;
 
 	boolean userAck = false;
+	boolean userCancel = false;
 
 	private Label lblRefVal;
 
@@ -126,18 +143,24 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	String tan;
 
 	private Label lblTries;
-
 	private Label lblRefValLabel;
-
 	private Label lblTan;
 
 	Button btn_ok;
+	Button btn_cancel;
 
 	/**
 	 * @return the userAck
 	 */
 	public boolean isUserAck() {
 		return this.userAck;
+	}
+
+	/**
+	 * @return the userCancel
+	 */
+	public boolean isUserCancel() {
+		return this.userCancel;
 	}
 
 	/**
@@ -180,6 +203,14 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	public void setUserAck(boolean userAck) {
 		this.userAck = userAck;
+	}
+
+	/**
+	 * @param userCancel
+	 *            the userCancel to set
+	 */
+	public void setUserCancel(boolean userCancel) {
+		this.userCancel = userCancel;
 	}
 
 	/**
@@ -375,8 +406,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			}
 		});
 
-		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-
 		Link lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 
 		FormData fd_lnk_data = new FormData();
@@ -387,11 +416,14 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 		lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //$NON-NLS-1$
 		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //$NON-NLS-1$
-		
+
+		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
+		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
+
 		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_tries = new FormData();
 		// fd_lbl_tries.left = new FormAttachment(15, 5);
-		fd_lbl_tries.right = new FormAttachment(this.btn_ok, -10);
+		fd_lbl_tries.right = new FormAttachment(this.btn_cancel, -10);
 		// fd_lbl_tries.top = new FormAttachment(70, -15);
 		fd_lbl_tries.bottom = new FormAttachment(100, -20);
 		this.lblTries.setLayoutData(fd_lbl_tries);
@@ -406,6 +438,15 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
 
+		FormData fd_btn_cancel = new FormData();
+		// fd_btn_cancel.left = new FormAttachment(95, 0);
+		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -20);
+		//fd_btn_cancel.left = new FormAttachment(100, -70);
+		fd_btn_cancel.bottom = new FormAttachment(100, -20);
+
+		this.btn_cancel.setLayoutData(fd_btn_cancel);
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 	}
 
 	@Override

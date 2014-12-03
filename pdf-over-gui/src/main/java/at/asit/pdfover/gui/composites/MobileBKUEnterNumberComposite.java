@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.composites;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -54,7 +55,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
 	 * 
 	 */
-	private final SelectionListener okListener = new SelectionListener() {
+	private final SelectionListener okListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(!MobileBKUEnterNumberComposite.this.btn_ok.isEnabled()) {
@@ -79,7 +80,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
 				MobileBKUEnterNumberComposite.this.setUserAck(true);
-				
+
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
 				
 			} catch(InvalidNumberException ex) {
@@ -100,18 +101,21 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
-			
+
 			//MobileBKUEnterNumberComposite.this.state.updateStateMachine();
 		}
+	};
 
-		/* (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
+	/**
+	 * 
+	 */
+	private final SelectionListener cancelListener = new SelectionAdapter() {
 		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// Nothing to do here
+		public void widgetSelected(SelectionEvent e) {
+			MobileBKUEnterNumberComposite.this.setUserCancel(true);
 		}
 	};
+
 
 	String mobileNumber;
 
@@ -124,6 +128,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	String errorMessage = null;
 
 	boolean userAck = false;
+	boolean userCancel = false;
 
 	/**
 	 * @return the userAck
@@ -140,13 +145,28 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.userAck = userAck;
 	}
 
+	/**
+	 * @return the userCancel
+	 */
+	public boolean isUserCancel() {
+		return this.userCancel;
+	}
+
+	/**
+	 * @param userCancel
+	 *            the userCancel to set
+	 */
+	public void setUserCancel(boolean userCancel) {
+		this.userCancel = userCancel;
+	}
+
+
 	private Label lbl_error;
-
 	private Label lbl_password;
-
 	private Label lbl_number;
 
 	Button btn_ok;
+	Button btn_cancel;
 
 	/**
 	 * @return the errorMessage
@@ -266,16 +286,26 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		//fd_btn_ok.top = new FormAttachment(87, 0);
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 		fd_btn_ok.right = new FormAttachment(100, -20);
-		fd_btn_ok.left = new FormAttachment(100, -70);
+		//fd_btn_ok.left = new FormAttachment(100, -70);
 		this.btn_ok.setLayoutData(fd_btn_ok);
 		this.btn_ok.addSelectionListener(this.okListener);
-		
+
+		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		FormData fd_btn_cancel = new FormData();
+		//fd_btn_cancel.top = new FormAttachment(87, 0);
+		fd_btn_cancel.bottom = new FormAttachment(100, -20);
+		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -10);
+		//fd_btn_cancel.left = new FormAttachment(100, -70);
+		this.btn_cancel.setLayoutData(fd_btn_cancel);
+		this.btn_cancel.addSelectionListener(this.cancelListener);
+
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		FormData fd_lbl_error = new FormData();
 		//fd_lbl_error.top = new FormAttachment(70, -15);
 		fd_lbl_error.bottom = new FormAttachment(100, -20);
 		fd_lbl_error.left = new FormAttachment(15, 0);
-		fd_lbl_error.right = new FormAttachment(this.btn_ok, -10);
+		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10);
 		this.lbl_error.setLayoutData(fd_lbl_error);
 
 	}
