@@ -72,6 +72,12 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 			tan = tan.trim();
 
+			if (tan.isEmpty()) {
+				MobileBKUEnterTANComposite.this.setMessage(Messages
+						.getString("error.NoTan")); //$NON-NLS-1$
+				return;
+			}
+
 			if (MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
 				MobileBKUEnterTANComposite.this.setMessage(Messages
 						.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
