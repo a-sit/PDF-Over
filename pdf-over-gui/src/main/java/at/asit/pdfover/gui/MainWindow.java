@@ -65,7 +65,7 @@ import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
 
 /**
- * The Main Window of PDF-Over 4.0
+ * The Main Window of PDF-Over 4
  */
 public class MainWindow {
 
