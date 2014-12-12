@@ -63,7 +63,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 				String responseData = handler.postSLRequest(this.state.getURL(), request);
 	
 				// Now we have received some data lets check it:
-				log.debug("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+				log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 	
 				handler.handleSLRequestResponse(responseData);
 			} catch (Exception ex) {
@@ -86,7 +86,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					String responseData = handler.postCredentials();
 
 					// Now we have received some data lets check it:
-					log.debug("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		
 					handler.handleCredentialsResponse(responseData);
 				} catch (Exception ex) {
@@ -117,7 +117,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					String responseData = handler.postTAN();
 		
 					// Now we have received some data lets check it:
-					log.debug("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		
 					handler.handleTANResponse(responseData);
 				} catch (Exception ex) {

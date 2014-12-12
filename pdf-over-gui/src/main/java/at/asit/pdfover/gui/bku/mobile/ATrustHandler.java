@@ -120,6 +120,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		if (responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
 			// credentials ok! TAN entry
+			log.debug("Credentials accepted - TAN required"); //$NON-NLS-1$
 			sessionID = MobileBKUHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
 			eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
@@ -128,6 +129,7 @@ public class ATrustHandler extends MobileBKUHandler {
 					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'");  //$NON-NLS-1$//$NON-NLS-2$
 		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
+			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
 			getSigningState().setSignatureResponse(
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 			return;

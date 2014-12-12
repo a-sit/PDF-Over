@@ -44,7 +44,6 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(PdfAs4BKUSLConnector.class);
 
@@ -132,7 +131,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		if (element.getValue() instanceof CreateCMSSignatureResponseType) {
 			CreateCMSSignatureResponseType createCMSSignatureResponseType = (CreateCMSSignatureResponseType) element
 					.getValue();
-			//log.trace(createCMSSignatureResponseType.toString());
+			log.trace(createCMSSignatureResponseType.toString());
 			return createCMSSignatureResponseType;
 		} else if (element.getValue() instanceof ErrorResponseType) {
 			ErrorResponseType errorResponseType = (ErrorResponseType) element
