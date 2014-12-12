@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.0.4</pdf-as.version>
+		<pdf-as.version>4.0.6</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,12 +54,12 @@
 			<version>2.15</version>
 		</dependency>
 	</dependencies>
-	<!--repositories>
+	<repositories>
 		<repository>
 			<id>pdf-as-4</id>
 			<name>PDF-AS 4 Repository</name>
 			<url>https://joinup.ec.europa.eu/site/pdf-as/maven/</url>
-			<url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url>
+			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
-	</repositories-->
+	</repositories>
 </project>
