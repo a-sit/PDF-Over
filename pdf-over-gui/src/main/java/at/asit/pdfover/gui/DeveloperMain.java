@@ -39,7 +39,6 @@ public class DeveloperMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
 		//BasicConfigurator.configure();
 		
 		// Set PDF-AS log4j configuration:

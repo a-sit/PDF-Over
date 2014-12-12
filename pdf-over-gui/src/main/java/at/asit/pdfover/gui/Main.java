@@ -53,6 +53,7 @@ public class Main {
 					Messages.getString("error.TitleFatal"), //$NON-NLS-1$
 					JOptionPane.ERROR_MESSAGE);
 		}
+		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
 
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
 		if(!configDir.exists()) {
