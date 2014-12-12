@@ -187,13 +187,25 @@ public interface ConfigurationContainer {
 	 * Gets the signature locale
 	 * @return the signature locale
 	 */
-	public Locale getSignLocale();
+	public Locale getSignatureLocale();
 
 	/**
 	 * Sets the signature locale
 	 * @param locale the signature locale
 	 */
-	public void setSignLocale(Locale locale);
+	public void setSignatureLocale(Locale locale);
+
+	/**
+	 * Gets the signature PDF/A compatibility setting
+	 * @return the signature PDF/A compatibility setting
+	 */
+	public boolean getSignaturePdfACompat();
+
+	/**
+	 * Sets the signature PDF/A compatibility setting
+	 * @param compat the signature PDF/A compatibility setting
+	 */
+	public void setSignaturePdfACompat(boolean compat);
 
 	/**
 	 * Gets the mobile BKU URL

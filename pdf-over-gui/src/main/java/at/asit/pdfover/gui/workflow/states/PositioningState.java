@@ -35,6 +35,7 @@ import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -93,27 +94,30 @@ public class PositioningState extends State {
 	}
 
 	private PositioningComposite getPositioningComposite(PDFFile document) {
+		StateMachine stateMachine = getStateMachine();
 		if (this.positionComposite == null) {
 			this.positionComposite =
-					getStateMachine().getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  getStateMachine().getStatus().getDocument()); //$NON-NLS-1$
+					stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
+			log.debug("Displaying " +  stateMachine.getStatus().getDocument()); //$NON-NLS-1$
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
-		SignatureParameter param = getStateMachine().getPDFSigner().getPDFSigner().newParameter();
-		Emblem emblem = new FileNameEmblem(getStateMachine().getConfigProvider().getDefaultEmblem());
+		ConfigProvider config = stateMachine.getConfigProvider();
+		SignatureParameter param = stateMachine.getPDFSigner().getPDFSigner().newParameter();
+		Emblem emblem = new FileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);
-		if(getStateMachine().getConfigProvider().getSignatureNote() != null && !getStateMachine().getConfigProvider().getSignatureNote().isEmpty()) {
-			param.setProperty("SIG_NOTE", getStateMachine().getConfigProvider().getSignatureNote()); //$NON-NLS-1$
+		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
+			param.setProperty("SIG_NOTE", config.getSignatureNote()); //$NON-NLS-1$
 		}
-		
-		param.setSignatureLanguage(getStateMachine().getConfigProvider().getSignLocale().getLanguage());
-		
+
+		param.setSignatureLanguage(config.getSignatureLocale().getLanguage());
+		param.setSignaturePdfACompat(config.getSignaturePdfACompat());
+
 		this.positionComposite.setPlaceholder(
 				SignaturePlaceholderCache.getPlaceholder(param),
 				param.getPlaceholderDimension().getWidth(),
 				param.getPlaceholderDimension().getHeight(),
-				getStateMachine().getConfigProvider().getPlaceholderTransparency());
+				config.getPlaceholderTransparency());
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
 			this.positionComposite.setPosition(
 					this.previousPosition.getX(),

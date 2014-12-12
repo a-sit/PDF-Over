@@ -73,6 +73,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	private Group grpSignatur;
 	Button btnAutomatischePositionierung;
+	Button btnPdfACompat;
 	private Label lblTransparenz;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenzRechts;
@@ -162,10 +163,36 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 					}
 				});
 
+		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
+		FormData fd_btnPdfACompat = new FormData();
+		fd_btnPdfACompat.right = new FormAttachment(100, -5);
+		fd_btnPdfACompat.top = new FormAttachment(
+				this.btnAutomatischePositionierung, 5);
+		fd_btnPdfACompat.left = new FormAttachment(0, 5);
+		this.btnPdfACompat
+				.setLayoutData(fd_btnPdfACompat);
+
+		FontData[] fD_btnPdfACompat = this.btnPdfACompat
+				.getFont().getFontData();
+		fD_btnPdfACompat[0]
+				.setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnPdfACompat.setFont(new Font(Display
+				.getCurrent(), fD_btnPdfACompat[0]));
+
+		this.btnPdfACompat
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						AdvancedConfigurationComposite.this
+								.performPdfACompatSelection(AdvancedConfigurationComposite.this.btnPdfACompat
+										.getSelection());
+					}
+				});
+
 		this.lblTransparenz = new Label(this.grpSignatur, SWT.HORIZONTAL);
 		FormData fd_lblTransparenz = new FormData();
 		fd_lblTransparenz.top = new FormAttachment(
-				this.btnAutomatischePositionierung, 5);
+				this.btnPdfACompat, 5);
 		fd_lblTransparenz.left = new FormAttachment(0, 5);
 		this.lblTransparenz.setLayoutData(fd_lblTransparenz);
 
@@ -775,6 +802,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
+	void performPdfACompatSelection(boolean compat) {
+		this.configurationContainer.setSignaturePdfACompat(compat);
+		this.btnPdfACompat.setSelection(compat);
+	}
+
 	void performPlaceholderTransparency(int transparency) {
 		this.configurationContainer.setPlaceholderTransparency(transparency);
 	}
@@ -890,19 +922,20 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void loadConfiguration() {
 		// load advanced settings
-		this.performBKUSelectionChanged(this.configurationContainer
+		performBKUSelectionChanged(this.configurationContainer
 				.getDefaultBKU());
 		String outputFolder = this.configurationContainer.getOutputFolder();
 		if (outputFolder != null) {
-			this.performOutputFolderChanged(outputFolder);
+			performOutputFolderChanged(outputFolder);
 		}
 		SignaturePosition pos = this.configurationContainer
 				.getDefaultSignaturePosition();
-		this.performPositionSelection(pos != null && pos.useAutoPositioning());
+		performPositionSelection(pos != null && pos.useAutoPositioning());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
-		this.performLocaleSelectionChanged(this.configurationContainer.getLocale());
-		this.performUpdateCheckSelection(this.configurationContainer.getUpdateCheck());
+		performLocaleSelectionChanged(this.configurationContainer.getLocale());
+		performPdfACompatSelection(this.configurationContainer.getSignaturePdfACompat());
+		performUpdateCheckSelection(this.configurationContainer.getUpdateCheck());
 
 		int port = this.configurationContainer.getProxyPort();
 		if (port > 0) {
@@ -972,6 +1005,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setText(Messages
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
+		this.btnPdfACompat.setText(Messages
+				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setToolTipText(Messages
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
 		this.lblTransparenz.setText(Messages

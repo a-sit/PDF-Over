@@ -77,7 +77,10 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected Locale locale = null;
 
 	/** Holds the signature locale */
-	protected Locale signLocale = null;
+	protected Locale signatureLocale = null;
+
+	/** Holds the PDF/A compatibility setting */
+	protected boolean pdfACompat = true;
 
 	/** Holds the output folder */
 	protected String folder = null;
@@ -360,20 +363,38 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignLocale()
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#getSignatureLocale()
 	 */
 	@Override
-	public Locale getSignLocale() {
-		return this.signLocale;
+	public Locale getSignatureLocale() {
+		return this.signatureLocale;
 	}
 
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setSignLocale(java.util.Locale)
+	 * @see at.asit.pdfover.gui.workflow.ConfigurationContainer#setSignatureLocale(java.util.Locale)
 	 */
 	@Override
-	public void setSignLocale(Locale locale) {
-		this.signLocale = locale;
+	public void setSignatureLocale(Locale locale) {
+		this.signatureLocale = locale;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getSignaturePdfACompat()
+	 */
+	@Override
+	public boolean getSignaturePdfACompat() {
+		return this.pdfACompat;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setSignaturePdfACompat(boolean)
+	 */
+	@Override
+	public void setSignaturePdfACompat(boolean compat) {
+		this.pdfACompat = compat;
 	}
 
 

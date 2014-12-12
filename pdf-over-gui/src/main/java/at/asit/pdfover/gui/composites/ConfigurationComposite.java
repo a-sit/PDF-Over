@@ -288,11 +288,13 @@ public class ConfigurationComposite extends StateComposite {
 
 			this.configurationContainer.setSignatureNote(
 					this.configProvider.getSignatureNote());
-			
+
 			this.configurationContainer.setLocale(this.configProvider.getLocale());
-			
-			this.configurationContainer.setSignLocale(this.configProvider.getSignLocale());
-			
+
+			this.configurationContainer.setSignatureLocale(this.configProvider.getSignatureLocale());
+
+			this.configurationContainer.setSignaturePdfACompat(this.configProvider.getSignaturePdfACompat());
+
 			this.configurationContainer.setDefaultBKU(this.configProvider
 					.getDefaultBKUPersistent());
 			try {
@@ -410,8 +412,11 @@ public class ConfigurationComposite extends StateComposite {
 				.setDefaultSignaturePosition(this.configurationContainer.getDefaultSignaturePosition());
 
 		this.configManipulator.setLocale(this.configurationContainer.getLocale());
-		this.configManipulator.setSignLocale(this.configurationContainer.getSignLocale());
-		
+
+		this.configManipulator.setSignatureLocale(this.configurationContainer.getSignatureLocale());
+
+		this.configManipulator.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
+
 		this.configManipulator
 				.setPlaceholderTransparency(this.configurationContainer
 						.getPlaceholderTransparency());

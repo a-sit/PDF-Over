@@ -109,7 +109,13 @@ public interface ConfigManipulator {
 	 * Sets the signature locale to be used
 	 * @param locale the signature locale
 	 */
-	public void setSignLocale(Locale locale);
+	public void setSignatureLocale(Locale locale);
+
+	/**
+	 * Set the signature PDF/A compatibility setting
+	 * @param compat whether to use PDF/A compatibility
+	 */
+	public void setSignaturePdfACompat(boolean compat);
 
 	/**
 	 * Sets whether to automatically check for application updates

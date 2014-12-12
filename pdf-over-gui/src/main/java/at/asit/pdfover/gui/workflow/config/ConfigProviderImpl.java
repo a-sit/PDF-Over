@@ -119,14 +119,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (targetLocale != null) {
 			setLocale(targetLocale);
 		}
+
+		String signatureLocaleString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
 		
-		String signlocalString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
-		
-		Locale signtargetLocale = LocaleSerializer.parseFromString(signlocalString);
-		if (signtargetLocale != null) {
-			setSignLocale(signtargetLocale);
+		Locale signatureTargetLocale = LocaleSerializer.parseFromString(signatureLocaleString);
+		if (signatureTargetLocale != null) {
+			setSignatureLocale(signatureTargetLocale);
 		}
- 		
+
+		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
+		if (compat != null)
+			setSignaturePdfACompat(!compat.equalsIgnoreCase(Constants.FALSE));
+
 		String bkuUrl = config
 				.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		
@@ -288,16 +292,16 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		Properties props = new Properties();
 		props.clear();
 
-		props.setProperty(Constants.CFG_BKU, this.getDefaultBKUPersistent().toString());
-		props.setProperty(Constants.CFG_PROXY_HOST, this.getProxyHostPersistent());
+		props.setProperty(Constants.CFG_BKU, getDefaultBKUPersistent().toString());
+		props.setProperty(Constants.CFG_PROXY_HOST, getProxyHostPersistent());
 		props.setProperty(Constants.CFG_PROXY_PORT,
 				Integer.toString(getProxyPortPersistent()));
-		props.setProperty(Constants.CFG_PROXY_USER, this.getProxyUserPersistent());
-		props.setProperty(Constants.CFG_PROXY_PASS, this.getProxyPassPersistent());
-		props.setProperty(Constants.CFG_EMBLEM, this.getDefaultEmblemPersistent());
-		props.setProperty(Constants.CFG_SIGNATURE_NOTE, this.getSignatureNote());
-		props.setProperty(Constants.CFG_MOBILE_NUMBER, this.getDefaultMobileNumberPersistent());
-		props.setProperty(Constants.CFG_OUTPUT_FOLDER, this.getDefaultOutputFolderPersistent());
+		props.setProperty(Constants.CFG_PROXY_USER, getProxyUserPersistent());
+		props.setProperty(Constants.CFG_PROXY_PASS, getProxyPassPersistent());
+		props.setProperty(Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
+		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
+		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
+		props.setProperty(Constants.CFG_OUTPUT_FOLDER, getDefaultOutputFolderPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(getPlaceholderTransparency()));
 
@@ -309,13 +313,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_LOCALE, LocaleSerializer.getParsableString(configLocale));
 		}
 
-		Locale signLocale = this.getSignLocale();
-		if(signLocale != null) {
-			props.setProperty(Constants.CFG_SIGNATURE_LOCALE, LocaleSerializer.getParsableString(signLocale));
+		Locale signatureLocale = this.getSignatureLocale();
+		if(signatureLocale != null) {
+			props.setProperty(Constants.CFG_SIGNATURE_LOCALE, LocaleSerializer.getParsableString(signatureLocale));
 		}
 
-		SignaturePosition pos = getDefaultSignaturePositionPersistent();
+		if (!getSignaturePdfACompat())
+			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.FALSE);
 
+		SignaturePosition pos = getDefaultSignaturePositionPersistent();
 		if (pos == null) {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //$NON-NLS-1$
 		} else if (pos.useAutoPositioning()) {
@@ -999,26 +1005,42 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	}
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setSignLocale(java.util.Locale)
+	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setSignatureLocale(java.util.Locale)
 	 */
 	@Override
-	public void setSignLocale(Locale locale) {
+	public void setSignatureLocale(Locale locale) {
 		if(locale == null) {
-			this.configuration.setSignLocale(Messages.getDefaultLocale());
+			this.configuration.setSignatureLocale(Messages.getDefaultLocale());
 		} else {
-			this.configuration.setSignLocale(locale);
+			this.configuration.setSignatureLocale(locale);
 		}
 	}
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignLocale()
+	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureLocale()
 	 */
 	@Override
-	public Locale getSignLocale() {
-		Locale locale = this.configuration.getSignLocale();
+	public Locale getSignatureLocale() {
+		Locale locale = this.configuration.getSignatureLocale();
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
 		return locale;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setSignaturePdfACompat(boolean)
+	 */
+	@Override
+	public void setSignaturePdfACompat(boolean compat) {
+		this.configuration.setSignaturePdfACompat(compat);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getSignaturePdfACompat()
+	 */
+	@Override
+	public boolean getSignaturePdfACompat() {
+		return this.configuration.getSignaturePdfACompat();
 	}
 
 	/* (non-Javadoc)

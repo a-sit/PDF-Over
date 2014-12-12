@@ -125,7 +125,13 @@ public interface PersistentConfigProvider {
 	 * Gets the configured locale
 	 * @return the configured locale
 	 */
-	public Locale getSignLocale();
+	public Locale getSignatureLocale();
+
+	/**
+	 * Get the signature PDF/A compatibility setting
+	 * @return the signature PDF/A compatibility setting
+	 */
+	public boolean getSignaturePdfACompat();
 
 	/**
 	 * Gets whether to automatically check for application updates

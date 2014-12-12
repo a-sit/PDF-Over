@@ -68,19 +68,30 @@ public class SignaturePlaceholderCache {
 		final String sigLangProp = "LANG"; //$NON-NLS-1$
 		final String sigEmblProp = "EMBL"; //$NON-NLS-1$
 		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
+		final String sigPdfAProp = "PDFA"; //$NON-NLS-1$
+
 		String sigLang = param.getSignatureLanguage();
 		String sigEmbl = (param.getEmblem() == null ? "" : param.getEmblem().getFileName()); //$NON-NLS-1$
 		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
+		String sigPdfA = param.getSignaturePdfACompat() ? Constants.TRUE : Constants.FALSE;
 
 		Properties sigProps = new Properties();
 		// compare cache, try to load if match
 		try {
 			InputStream in = new FileInputStream(new File(fileDir, propFileName));
 			sigProps.load(in);
-			if (sigProps.getProperty(sigLangProp).equals(sigLang) &&
-			    sigProps.getProperty(sigEmblProp).equals(sigEmbl) &&
-			    sigProps.getProperty(sigNoteProp).equals(sigNote))
+			if (sigLang.equals(sigProps.getProperty(sigLangProp)) &&
+			    sigEmbl.equals(sigProps.getProperty(sigEmblProp)) &&
+			    sigNote.equals(sigProps.getProperty(sigNoteProp)) &&
+			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp))) {
+				log.debug("Placeholder cache hit"); //$NON-NLS-1$
 				return loadImage(fileDir, imgFileName, imgFileExt);
+			}
+			log.debug("Placeholder cache miss (" + //$NON-NLS-1$
+					sigLang + "|" + sigProps.getProperty(sigLangProp) + " - " +//$NON-NLS-1$ //$NON-NLS-2$
+					sigEmbl + "|" + sigProps.getProperty(sigEmblProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
+					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
+					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (Exception e) {
 			log.debug("Can't load signature Placeholder", e); //$NON-NLS-1$
 		}
@@ -90,6 +101,7 @@ public class SignaturePlaceholderCache {
 			sigProps.setProperty(sigLangProp, sigLang);
 			sigProps.setProperty(sigEmblProp, sigEmbl);
 			sigProps.setProperty(sigNoteProp, sigNote);
+			sigProps.setProperty(sigPdfAProp, sigPdfA);
 			OutputStream out = new FileOutputStream(new File(fileDir, propFileName));
 			sigProps.store(out, null);
 			Image img = param.getPlaceholder();

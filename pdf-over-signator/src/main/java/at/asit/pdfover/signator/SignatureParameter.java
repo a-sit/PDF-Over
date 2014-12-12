@@ -36,12 +36,14 @@ public abstract class SignatureParameter {
 	/** The input document */
 	protected DocumentSource documentSource = null;
 
-	/** holds the emblem */
+	/** Holds the emblem */
 	protected Emblem emblem;
+
+	/** Whether to use PDF/A compatibility */
+	protected boolean pdfACompat;
 
 	/** The signature device */
 	protected BKUs signatureDevice;
-
 	/**
 	 * @return the signatureDevice
 	 */
@@ -93,6 +95,25 @@ public abstract class SignatureParameter {
 	 */
 	public void setSignatureLanguage(String signatureLanguage) {
 		this.signatureLanguage = signatureLanguage;
+	}
+
+	/**
+	 * Getter of the property <tt>signaturePdfACompat</tt>
+	 * 
+	 * @return Returns the PDF/A compatibility setting.
+	 */
+	public boolean getSignaturePdfACompat() {
+		return this.pdfACompat;
+	}
+
+	/**
+	 * Setter of the property <tt>signaturePdfACompat</tt>
+	 * 
+	 * @param compat
+	 *            The the PDF/A compatibility setting to set.
+	 */
+	public void setSignaturePdfACompat(boolean compat) {
+		this.pdfACompat = compat;
 	}
 
 	/**

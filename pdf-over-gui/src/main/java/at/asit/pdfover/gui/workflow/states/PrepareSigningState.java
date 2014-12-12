@@ -155,8 +155,11 @@ public class PrepareSigningState extends State {
 				}
 
 				this.state.signatureParameter
-						.setSignatureLanguage(configuration.getSignLocale()
+						.setSignatureLanguage(configuration.getSignatureLocale()
 								.getLanguage());
+
+				this.state.signatureParameter
+						.setSignaturePdfACompat(configuration.getSignaturePdfACompat());
 
 				this.state.signingState = this.state.signer
 						.prepare(this.state.signatureParameter);

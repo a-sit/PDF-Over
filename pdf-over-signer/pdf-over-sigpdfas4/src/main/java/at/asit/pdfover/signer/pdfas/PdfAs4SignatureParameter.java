@@ -38,14 +38,16 @@ import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 public class PdfAs4SignatureParameter extends SignatureParameter {
-	/** The profile ID for the German signature block */
-	private static final String PROFILE_ID_DE = "SIGNATURBLOCK_SMALL_DE_PDFA";
-	/** The profile ID for the German signature block if a signature note is set */
-	private static final String PROFILE_ID_DE_NOTE = "SIGNATURBLOCK_SMALL_DE_NOTE_PDFA";
-	/** The profile ID for the English signature block */
-	private static final String PROFILE_ID_EN = "SIGNATURBLOCK_SMALL_EN_PDFA";
-	/** The profile ID for the English signature block if a signature note is set */
-	private static final String PROFILE_ID_EN_NOTE = "SIGNATURBLOCK_SMALL_EN_NOTE_PDFA";
+	/** The base profile ID */
+	private static final String PROFILE_ID_BASE = "SIGNATURBLOCK_SMALL";
+	/** The profile ID extension for the German signature block */
+	private static final String PROFILE_ID_LANG_DE = "_DE";
+	/** The profile ID extension for the English signature block */
+	private static final String PROFILE_ID_LANG_EN = "_EN";
+	/** The profile ID extension for the signature note */
+	private static final String PROFILE_ID_NOTE = "_NOTE";
+	/** The profile ID extension for PDF/A compatibility */
+	private static final String PROFILE_ID_PDFA = "_PDFA";
 
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
@@ -152,10 +154,19 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	public String getPdfAsSignatureProfileId() {
 		String lang = getSignatureLanguage();
 		boolean useNote = (getProperty("SIG_NOTE") != null);
+		boolean usePdfACompat = (getSignaturePdfACompat());
 
-		if (lang != null && lang.equals("en"))
-			return useNote ? PROFILE_ID_EN_NOTE : PROFILE_ID_EN;
+		String profileId = PROFILE_ID_BASE;
+		profileId += (lang != null && lang.equals("en")) ?
+				PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
 
-		return useNote ? PROFILE_ID_DE_NOTE : PROFILE_ID_DE;
+		if (useNote)
+			profileId += PROFILE_ID_NOTE;
+
+		if (usePdfACompat)
+			profileId += PROFILE_ID_PDFA;
+
+		log.debug("Profile ID: " + profileId);
+		return profileId;
 	}
 }

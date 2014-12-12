@@ -101,6 +101,9 @@ public class Constants {
 	/** Update URL */
 	public static final String UPDATE_URL = "http://webstart.buergerkarte.at/PDF-Over/"; //$NON-NLS-1$
 
+	/** True */
+	public static final String TRUE = "true"; //$NON-NLS-1$
+
 	/** False */
 	public static final String FALSE = "false"; //$NON-NLS-1$
 
@@ -121,7 +124,7 @@ public class Constants {
 	 */
 	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION"; //$NON-NLS-1$
 
-	/** This signature placeholder transparency config parameter (0-255) */
+	/** The signature placeholder transparency config parameter (0-255) */
 	public static final String  CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
 
 	/** The mobile number config parameter */
@@ -132,6 +135,9 @@ public class Constants {
 
 	/** The signature locale config parameter */
 	public static final String CFG_SIGNATURE_LOCALE = "SIGNLOCALE"; //$NON-NLS-1$
+
+	/** The PDF/A-compatibility config parameter */
+	public static final String CFG_SIGNATURE_PDFA_COMPAT = "SIGNATURE_PDFA_COMPAT"; //$NON-NLS-1$
 
 	/** Mobile bku url config parameter */
 	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL"; //$NON-NLS-1$

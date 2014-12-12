@@ -420,7 +420,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer
-						.getSignLocale();
+						.getSignatureLocale();
 				Locale selectedLocale = Constants.
 						SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang
 						                  .getSelectionIndex()];
@@ -512,7 +512,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			public void widgetSelected(SelectionEvent e) {
 				SimpleConfigurationComposite.this.txtSignatureNote.setText(
 						Messages.getString("simple_config.Note_Default", //$NON-NLS-1$
-						SimpleConfigurationComposite.this.configurationContainer.getSignLocale())); 
+						SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()));
 			}
 		});
 
@@ -663,34 +663,21 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		ImageData logo = null;
 
 		try {
-
-			if (image == null || image.trim().isEmpty()) {
-				if (this.signer != null) {
-					SignatureParameter param = this.signer.getPDFSigner()
-							.newParameter();
-					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
-						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
-					}
-					
-					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
-					
-					img = SignaturePlaceholderCache.getSWTPlaceholder(param);
+			if (this.signer != null) {
+				SignatureParameter param = this.signer.getPDFSigner()
+						.newParameter();
+				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
+					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
 				}
-			} else {
-				if (this.signer != null) {
-					SignatureParameter param = this.signer.getPDFSigner()
-							.newParameter();
-					if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
-						param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
-					}
-					
-					param.setSignatureLanguage(this.configurationContainer.getSignLocale().getLanguage());
+	
+				param.setSignatureLanguage(this.configurationContainer.getSignatureLocale().getLanguage());
+				param.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
+				if (image != null && !image.trim().isEmpty()) {
+					logo = new ImageData(image);
 					param.setEmblem(new FileNameEmblem(image));
-					img = SignaturePlaceholderCache.getSWTPlaceholder(param);
-				} else {
-					img = new ImageData(image);
 				}
-				logo = new ImageData(image);
+	
+				img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 			}
 		} catch (Exception e) {
 			log.error("Failed to load image for display...", e); //$NON-NLS-1$
@@ -751,7 +738,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	void performSignatureLangSelectionChanged(Locale selected) {
 		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
-		this.configurationContainer.setSignLocale(selected);
+		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 	}
 
@@ -850,7 +837,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.setVisibleImage();
 
-		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignLocale());
+		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale());
 	}
 
 	/*
