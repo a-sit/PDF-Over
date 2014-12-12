@@ -33,6 +33,7 @@ import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
+import at.asit.pdfover.signator.SignatureException;
 
 /**
  * A-Trust mobile BKU handler
@@ -137,9 +138,13 @@ public class ATrustHandler extends MobileBKUHandler {
 			
 			// error page
 			// extract error text!
-			String errorMessage = MobileBKUHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
-
-			status.setErrorMessage(errorMessage);
+			try {
+				String errorMessage = MobileBKUHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
+				status.setErrorMessage(errorMessage);
+			} catch (Exception e) {
+				throw new SignatureException(MobileBKUHelper.extractTag(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MobileBKUHelper.extractTag(responseData, "<sl:Info>", "</sl:Info>")); //$NON-NLS-1$ //$NON-NLS-2$
+			}
 
 			// force UI again!
 			status.setMobilePassword(null);
