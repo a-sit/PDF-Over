@@ -16,11 +16,15 @@
 package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -55,8 +59,12 @@ public class ATrustHandler extends MobileBKUHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(ATrustHandler.class);
+
+	private static boolean expiryNoticeDisplayed = false;
+
+	private static final String ACTIVATION_URL = "https://www.handy-signatur.at/"; //$NON-NLS-1$
 
 	private boolean useBase64 = false;
 
@@ -123,6 +131,54 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		status.setErrorMessage(null);
 
+		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
+			// Certification expiration interstitial - skip
+			String notice = Messages.getString("mobileBKU.notice") + " " + //$NON-NLS-1$ //$NON-NLS-2$
+					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractTag(responseData, "<span id=\"Label2\">", "</span>")) //$NON-NLS-1$ //$NON-NLS-2$
+					.replaceAll("\\<.*?\\>", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			log.info(notice);
+
+			if (!expiryNoticeDisplayed) {
+				Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING); //$NON-NLS-1$ //$NON-NLS-2$
+						if (d.open() == SWT.YES) {
+							log.debug("Trying to open " + ACTIVATION_URL); //$NON-NLS-1$
+							if (Desktop.isDesktopSupported()) {
+								try {
+									Desktop.getDesktop().browse(new URI(ACTIVATION_URL));
+									return;
+								} catch (Exception e) {
+									log.debug("Error opening URL", e); //$NON-NLS-1$
+								}
+							}
+							log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+							Program.launch(ACTIVATION_URL);
+						}
+					}
+				});
+				expiryNoticeDisplayed = true;
+			}
+
+			String t_sessionID = MobileBKUHelper.extractTag(responseData, "ExpiresInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			String t_viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+			String t_eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+
+			// Post again to skip
+			MobileBKUHelper.registerTrustedSocketFactory();
+			HttpClient client = BKUHelper.getHttpClient();
+
+			PostMethod post = new PostMethod(status.getBaseURL() + "/ExpiresInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
+			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
+			post.addParameter("__VIEWSTATE", t_viewState); //$NON-NLS-1$
+			post.addParameter("__EVENTVALIDATION", t_eventValidation); //$NON-NLS-1$
+			post.addParameter("Button_Next", "Weiter"); //$NON-NLS-1$ //$NON-NLS-2$
+
+			responseData = executePost(client, post);
+			log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+		}
+
 		if (responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
 			// credentials ok! TAN entry
 			log.debug("Credentials accepted - TAN required"); //$NON-NLS-1$
@@ -139,7 +195,6 @@ public class ATrustHandler extends MobileBKUHandler {
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 			return;
 		} else {
-			
 			// error page
 			// extract error text!
 			try {

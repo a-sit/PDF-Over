@@ -38,7 +38,9 @@ public class Dialog {
 		/** Display retry and cancel buttons */
 		RETRY_CANCEL,
 		/** Display abort, retry and ignore buttons */
-		ABORT_RETRY_IGNORE
+		ABORT_RETRY_IGNORE,
+		/** Display yes and no buttons */
+		YES_NO
 	};
 	
 	/**
@@ -101,6 +103,8 @@ public class Dialog {
 			case ABORT_RETRY_IGNORE:
 				boxstyle |= SWT.RETRY | SWT.ABORT | SWT.IGNORE;
 				break;
+			case YES_NO:
+				boxstyle |= SWT.YES | SWT.NO;
 		}
 
 		this.box = new MessageBox(parent, boxstyle);
