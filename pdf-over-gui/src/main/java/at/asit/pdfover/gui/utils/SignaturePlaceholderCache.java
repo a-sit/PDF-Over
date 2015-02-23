@@ -67,13 +67,15 @@ public class SignaturePlaceholderCache {
 
 		final String sigLangProp = "LANG"; //$NON-NLS-1$
 		final String sigEmblProp = "EMBL"; //$NON-NLS-1$
-		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
 		final String sigPdfAProp = "PDFA"; //$NON-NLS-1$
+		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
 
 		String sigLang = param.getSignatureLanguage();
 		String sigEmbl = (param.getEmblem() == null ? "" : param.getEmblem().getFileName()); //$NON-NLS-1$
-		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
 		String sigPdfA = param.getSignaturePdfACompat() ? Constants.TRUE : Constants.FALSE;
+		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
+		if (sigNote == null)
+			sigNote = ""; //$NON-NLS-1$
 
 		Properties sigProps = new Properties();
 		// compare cache, try to load if match
@@ -93,7 +95,7 @@ public class SignaturePlaceholderCache {
 					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
 					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (Exception e) {
-			log.debug("Can't load signature Placeholder", e); //$NON-NLS-1$
+			log.warn("Can't load signature Placeholder", e); //$NON-NLS-1$
 		}
 
 		// create new cache
