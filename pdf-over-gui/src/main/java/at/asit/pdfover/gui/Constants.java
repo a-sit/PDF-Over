@@ -125,7 +125,7 @@ public class Constants {
 	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION"; //$NON-NLS-1$
 
 	/** The signature placeholder transparency config parameter (0-255) */
-	public static final String  CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
+	public static final String CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
 
 	/** The mobile number config parameter */
 	public static final String CFG_MOBILE_NUMBER = "MOBILE_NUMBER"; //$NON-NLS-1$
@@ -144,6 +144,9 @@ public class Constants {
 
 	/** Mobile bku type config parameter */
 	public static final String CFG_MOBILE_BKU_TYPE = "MOBILE_BKU_TYPE"; //$NON-NLS-1$
+
+	/** Mobile bku BASE64 config parameter */
+	public static final String CFG_MOBILE_BKU_BASE64 = "MOBILE_BKU_BASE64"; //$NON-NLS-1$
 
 	/** The emblem config parameter */
 	public static final String CFG_EMBLEM = "EMBLEM"; //$NON-NLS-1$

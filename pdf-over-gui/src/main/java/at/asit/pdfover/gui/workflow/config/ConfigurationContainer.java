@@ -232,6 +232,18 @@ public interface ConfigurationContainer {
 	public void setMobileBKUType(MobileBKUs bkuType);
 
 	/**
+	 * Gets the mobile BKU BASE64 setting
+	 * @return the mobile BKU BASE64 setting
+	 */
+	public boolean getMobileBKUBase64();
+
+	/**
+	 * Sets the mobile BKU BASE64 setting
+	 * @param useBase64 the mobile BKU BASE64 setting
+	 */
+	public void setMobileBKUBase64(boolean useBase64);
+
+	/**
 	 * Gets the default signature position
 	 * @return the default signature position
 	 */

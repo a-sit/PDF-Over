@@ -44,10 +44,12 @@ public class ATrustHandler extends MobileBKUHandler {
 	/**
 	 * @param state
 	 * @param shell
+	 * @param useBase64
 	 */
-	public ATrustHandler(MobileBKUState state, Shell shell) {
+	public ATrustHandler(MobileBKUState state, Shell shell, boolean useBase64) {
 		super(state);
 		this.shell = shell;
+		this.useBase64 = useBase64;
 	}
 
 	/**
@@ -55,6 +57,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(ATrustHandler.class);
+
+	private boolean useBase64 = false;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleSLRequestResponse(java.lang.String)
@@ -240,6 +244,6 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public boolean useBase64Request() {
-		return false;
+		return this.useBase64;
 	}
 }

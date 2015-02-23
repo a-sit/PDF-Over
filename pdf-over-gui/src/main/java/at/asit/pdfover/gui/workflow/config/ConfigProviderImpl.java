@@ -151,6 +151,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			}
 		}
 
+		String useBase64 = config.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
+		if (useBase64 != null)
+			this.configuration.setMobileBKUBase64(useBase64.equalsIgnoreCase(Constants.TRUE));
+
 		// Set Proxy Port
 		String proxyPortString = config
 				.getProperty(Constants.CFG_PROXY_PORT);
@@ -948,6 +952,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public MobileBKUs getMobileBKUType() {
 		return this.configuration.getMobileBKUType();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getMobileBKUBase64()
+	 */
+	@Override
+	public boolean getMobileBKUBase64() {
+		return this.configuration.getMobileBKUBase64();
 	}
 
 	/*

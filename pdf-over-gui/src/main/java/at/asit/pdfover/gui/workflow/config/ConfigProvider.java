@@ -133,6 +133,12 @@ public interface ConfigProvider {
 	public MobileBKUs getMobileBKUType();
 
 	/**
+	 * Gets the mobile BKU BASE64 setting
+	 * @return the mobile BKU BASE64 setting
+	 */
+	public boolean getMobileBKUBase64();
+
+	/**
 	 * Get the signature note text to use
 	 * @return the signature note text
 	 */

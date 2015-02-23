@@ -100,6 +100,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Holds the mobile BKU type */
 	protected MobileBKUs mobileBKUType = Constants.DEFAULT_MOBILE_BKU_TYPE;
 
+	/** Holds the mobile BKU BASE64 setting */
+	protected boolean mobileBKUBase64 = false;
+
 	/** Holds the main window size */
 	protected Point mainWindowSize = null;
 
@@ -431,6 +434,24 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setMobileBKUType(MobileBKUs bkuType) {
 		this.mobileBKUType = bkuType;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getMobileBKUBase64()
+	 */
+	@Override
+	public boolean getMobileBKUBase64() {
+		return this.mobileBKUBase64;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getMobileBKUBase64(boolean)
+	 */
+	@Override
+	public void setMobileBKUBase64(boolean useBase64) {
+		this.mobileBKUBase64 = useBase64;
 	}
 
 

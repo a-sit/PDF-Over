@@ -49,10 +49,13 @@ public class MobileBKUState extends State {
 	 */
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		switch(getStateMachine().getConfigProvider().getMobileBKUType()) {
+		ConfigProvider provider = stateMachine.getConfigProvider();
+		switch(provider.getMobileBKUType()) {
 			case A_TRUST:
-				this.status = new ATrustStatus(getStateMachine().getConfigProvider());
-				this.handler = new ATrustHandler(this, getStateMachine().getGUIProvider().getMainShell());
+				this.status = new ATrustStatus(provider);
+				this.handler = new ATrustHandler(this,
+						stateMachine.getGUIProvider().getMainShell(),
+						provider.getMobileBKUBase64());
 				break;
 
 			case IAIK:
