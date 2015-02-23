@@ -239,7 +239,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUHandler#useBase64Request()
 	 */
 	@Override
-	protected boolean useBase64Request() {
+	public boolean useBase64Request() {
 		return false;
 	}
 }

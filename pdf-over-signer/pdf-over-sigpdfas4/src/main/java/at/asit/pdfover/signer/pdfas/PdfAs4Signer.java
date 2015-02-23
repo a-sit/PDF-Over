@@ -20,6 +20,7 @@ import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.lib.api.ByteArrayDataSource;
 import at.gv.egiz.pdfas.lib.api.Configuration;
+import at.gv.egiz.pdfas.lib.api.IConfigurationConstants;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
@@ -71,7 +72,7 @@ public class PdfAs4Signer implements Signer {
 		if (sigEmblem != null && !sigEmblem.trim().isEmpty()) {
 			config.setValue("sig_obj." + sigProfile + ".value.SIG_LABEL", sigEmblem);
 		}
-		
+
 		if(sigNote != null) {
 			config.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
 		}
@@ -106,6 +107,13 @@ public class PdfAs4Signer implements Signer {
 			PdfAs pdfas = PdfAs4Helper.getPdfAs();
 
 			SignParameter param = sstate.getSignParameter();
+
+			Configuration config = param.getConfiguration();
+			log.debug("Use base64 request? " + sstate.getUseBase64Request());
+			config.setValue(IConfigurationConstants.SL_REQUEST_TYPE,
+					sstate.getUseBase64Request() ?
+							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
+								IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD);
 
 			ISLConnector connector = new PdfAs4BKUSLConnector(sstate.getBKUConnector());
 			param.setPlainSigner(new PAdESSigner(connector));

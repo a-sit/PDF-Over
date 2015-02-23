@@ -25,8 +25,8 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.bku.LocalBKUConnector;
@@ -36,6 +36,7 @@ import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SLResponse;
+import at.asit.pdfover.signator.SigningState;
 
 /**
  * Logical state for performing the BKU Request to a local BKU
@@ -62,9 +63,10 @@ public class LocalBKUState extends State {
 	 */
 	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
-	at.asit.pdfover.signator.SigningState signingState;
-
 	Exception threadException = null;
+
+	/** Whether to use Base64 or FileUpload Request */
+	boolean useBase64Request = false;
 
 	/**
 	 * Null-Operation SL-Request
@@ -86,13 +88,16 @@ public class LocalBKUState extends State {
 	private final class SignLocalBKUThread implements Runnable {
 
 		private LocalBKUState state;
+		private SigningState signingState;
 
 		
 		/**
 		 * @param localBKUState
+		 * @param signingState
 		 */
-		public SignLocalBKUThread(LocalBKUState localBKUState) {
+		public SignLocalBKUThread(LocalBKUState localBKUState, SigningState signingState) {
 			this.state = localBKUState;
+			this.signingState = signingState;
 		}
 
 		@Override
@@ -117,6 +122,10 @@ public class LocalBKUState extends State {
 					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 					if (server == null)
 						server = ""; //$NON-NLS-1$
+					else
+						if (server.contains("trustDeskbasic")) //$NON-NLS-1$
+							LocalBKUState.this.useBase64Request = true;
+
 					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 					if (userAgent == null)
 						userAgent = ""; //$NON-NLS-1$
@@ -126,7 +135,8 @@ public class LocalBKUState extends State {
 					log.debug("SL Response: " + response); //$NON-NLS-1$
 					SLResponse slResponse = new SLResponse(response, server,
 							userAgent, signatureLayout);
-					this.state.signingState.setSignatureResponse(slResponse);
+					this.signingState.setSignatureResponse(slResponse);
+					this.signingState.setUseBase64Request(LocalBKUState.this.useBase64Request);
 				}
 			} catch (Exception e) {
 				log.error("SignLocalBKUThread: ", e); //$NON-NLS-1$
@@ -161,15 +171,15 @@ public class LocalBKUState extends State {
 	public void run() {
 		Status status = getStateMachine().getStatus();
 
-		this.signingState = status.getSigningState();
+		SigningState signingState = status.getSigningState();
 
-		if (!this.signingState.hasSignatureResponse()
+		if (!signingState.hasSignatureResponse()
 				&& this.threadException == null) {
-			Thread t = new Thread(new SignLocalBKUThread(this));
+			Thread t = new Thread(new SignLocalBKUThread(this, signingState));
 			t.start();
 			return;
 		}
-		this.signingState.setBKUConnector(new LocalBKUConnector());
+		signingState.setBKUConnector(new LocalBKUConnector());
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
@@ -187,7 +197,7 @@ public class LocalBKUState extends State {
 		}
 
 		// OK
-		this.setNextState(new SigningState(getStateMachine()));
+		this.setNextState(new at.asit.pdfover.gui.workflow.states.SigningState(getStateMachine()));
 	}
 
 	/*

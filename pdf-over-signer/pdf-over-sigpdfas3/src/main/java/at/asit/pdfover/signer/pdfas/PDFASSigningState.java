@@ -170,4 +170,12 @@ public class PDFASSigningState implements SigningState {
 	public void setBKUConnector(BkuSlConnector connector) {
 		// Nothing to do here
 	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#setUseBase64Request(boolean)
+	 */
+	@Override
+	public void setUseBase64Request(boolean useBase64Request) {
+		// Nothing to do here
+	}
 }

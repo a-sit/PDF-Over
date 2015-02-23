@@ -27,11 +27,17 @@ public interface SigningState {
 	public SLRequest getSignatureRequest();
 
 	/**
+	 * Sets whether to use base64 (or FileUpload) for request data
+	 * @param useBase64Request whether to use base64 for request data
+	 */
+	public void setUseBase64Request(boolean useBase64Request);
+
+	/**
 	 * Sets the Security Layer Response to the Signature Request
 	 * @param value The Signature Response
 	 */
 	public void setSignatureResponse(SLResponse value);
-	
+
 	/**
 	 * Has the state a SignatureResponse set ?
 	 * @return true if a SLResponse is set

@@ -28,6 +28,8 @@ import at.asit.pdfover.signer.pdfas.exceptions.PdfAs4SLRequestException;
 import at.gv.egiz.pdfas.common.exceptions.PDFIOException;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
+import at.gv.egiz.pdfas.common.utils.PDFUtils;
+import at.gv.egiz.pdfas.lib.api.IConfigurationConstants;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
 import at.gv.egiz.sl.schema.CreateCMSSignatureResponseType;
 import at.gv.egiz.sl.schema.ErrorResponseType;
@@ -111,7 +113,11 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 			String slRequestString = SLMarschaller.marshalToString(this.of.createCreateCMSSignatureRequest(pack.getRequestType()));
 			//log.trace(slRequestString);
 
-			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, pack.getSignatureData());
+			byte[] signatureData = pack.getSignatureData();
+			if (IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD.equals(parameter.getConfiguration().getValue(IConfigurationConstants.SL_REQUEST_TYPE)))
+				signatureData = PDFUtils.blackOutSignature(signatureData, pack.getByteRange());
+
+			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, signatureData);
 			String slResponse = this.connector.handleSLRequest(slRequest).getSLRespone();
 
 			element = (JAXBElement<?>) SLMarschaller

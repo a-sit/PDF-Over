@@ -75,17 +75,17 @@ public abstract class MobileBKUHandler {
 		PostMethod post = new PostMethod(mobileBKUUrl);
 		String sl_request;
 		if (request.getSignatureData() != null) {
+			sl_request = request.getRequest();
 			if (useBase64Request())
 			{
-				sl_request = request.getBase64Request();
 				post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 			} else {
-				sl_request = request.getFileUploadRequest();
 				StringPart xmlpart = new StringPart(
 						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
-						new FileUploadSource(request.getSignatureData()));
+				FilePart filepart = new FilePart("fileupload", //$NON-NLS-1$
+						new FileUploadSource(request.getSignatureData()),
+						"application/pdf", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				Part[] parts = { xmlpart, filepart };
 
@@ -168,7 +168,7 @@ public abstract class MobileBKUHandler {
 	 * Whether to use a Base64 request
 	 * @return true if base64 request shall be used
 	 */
-	protected abstract boolean useBase64Request();
+	public abstract boolean useBase64Request();
 
 	/**
 	 * Execute a post to the mobile BKU, following redirects

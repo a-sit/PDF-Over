@@ -37,6 +37,8 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.signator.SigningState;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -67,7 +69,7 @@ public class MobileBKUState extends State {
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileBKUState.class);
 
-	at.asit.pdfover.signator.SigningState signingState;
+	SigningState signingState;
 
 	Exception threadException = null;
 
@@ -138,7 +140,7 @@ public class MobileBKUState extends State {
 	/**
 	 * @return the signingState
 	 */
-	public at.asit.pdfover.signator.SigningState getSigningState() {
+	public SigningState getSigningState() {
 		return this.signingState;
 	}
 
@@ -315,6 +317,8 @@ public class MobileBKUState extends State {
 		this.signingState = getStateMachine().getStatus().getSigningState();
 
 		this.signingState.setBKUConnector(new MobileBKUConnector(this));
+		log.debug("Setting base64 request to " + this.handler.useBase64Request()); //$NON-NLS-1$
+		this.signingState.setUseBase64Request(this.handler.useBase64Request());
 
 		if (this.threadException != null) {
 			String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
@@ -335,7 +339,7 @@ public class MobileBKUState extends State {
 		getStateMachine().getGUIProvider().display(
 				this.getWaitingComposite());
 
-		this.setNextState(new SigningState(getStateMachine()));
+		this.setNextState(new at.asit.pdfover.gui.workflow.states.SigningState(getStateMachine()));
 	}
 
 	/*

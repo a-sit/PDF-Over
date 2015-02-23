@@ -47,9 +47,6 @@ public class LocalBKUConnector implements BkuSlConnector {
 	private static final Logger log = LoggerFactory
 			.getLogger(LocalBKUConnector.class);
 
-	/** Whether to use Base64 or FileUpload Request */
-	private boolean useBase64Request = false;
-
 	/**
 	 * HTTP Response server HEADER
 	 */
@@ -65,12 +62,6 @@ public class LocalBKUConnector implements BkuSlConnector {
 	 */
 	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
 
-	/**
-	 * Null-Operation SL-Request
-	 */
-	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + //$NON-NLS-1$
-			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>"; //$NON-NLS-1$
-
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
@@ -78,54 +69,36 @@ public class LocalBKUConnector implements BkuSlConnector {
 	public SLResponse handleSLRequest(SLRequest request) throws SignatureException {
 		try {
 			HttpClient client = BKUHelper.getHttpClient();
-
 			PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
-			String sl_request = NULL_OPERATION_REQUEST;
-			method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
-			int returnCode = client.executeMethod(method);
-
-			String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
-			String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
-			if (server != null && server.contains("trustDeskbasic")) //$NON-NLS-1$
-				this.useBase64Request = true; // TDB doesn't support MultiPart requests
-
-			method = new PostMethod(Constants.LOCAL_BKU_URL);
-
-			if (request.getSignatureData() != null) {
-				if (this.useBase64Request)
-				{
-					sl_request = request.getBase64Request();
-					method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
-				} else {
-					sl_request = request.getFileUploadRequest();
-					StringPart xmlpart = new StringPart(
-							"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
-	
-					FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
-							new FileUploadSource(request.getSignatureData()));
-	
-					Part[] parts = { xmlpart, filepart };
-	
-					method.setRequestEntity(new MultipartRequestEntity(parts, method
-							.getParams()));
-				}
+			String sl_request = request.getRequest();
+			if (request.getSignatureData() == null) {
+				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
 			} else {
-				method.addParameter("XMLRequest", request.getRequest()); //$NON-NLS-1$
-			}
-			log.debug("SL REQUEST: " + sl_request); //$NON-NLS-1$
+				StringPart xmlpart = new StringPart(
+						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 
-			returnCode = client.executeMethod(method);
+				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+						new FileUploadSource(request.getSignatureData()));
+
+				Part[] parts = { xmlpart, filepart };
+
+				method.setRequestEntity(new MultipartRequestEntity(parts, method
+						.getParams()));
+			}
+			log.trace("SL REQUEST: " + sl_request); //$NON-NLS-1$
+
+			int returnCode = client.executeMethod(method);
 
 			if (returnCode != HttpStatus.SC_OK) {
 				throw new HttpException(
 						method.getResponseBodyAsString());
 			}
 				
-			server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
+			String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 			if (server == null)
 				server = ""; //$NON-NLS-1$
-			userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
+			String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 			if (userAgent == null)
 				userAgent = ""; //$NON-NLS-1$
 			String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);

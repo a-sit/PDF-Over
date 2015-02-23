@@ -41,15 +41,6 @@ public class PdfAs4SLRequest extends SLRequest {
 	 * @throws PdfAs4SLRequestException 
 	 */
 	public PdfAs4SLRequest(String slRequest, byte[] signData) throws PdfAs4SLRequestException {
-//		if(!slRequest.contains(PdfAs4Signer.LOC_REF)) {
-//			log.error("PDF-AS SL request doesn't contain " + PdfAs4Signer.LOC_REF);
-//			log.debug("Request: " + slRequest);
-//			throw new PdfAs4SLRequestException("PDF-AS SL request doesn't contain " + PdfAs4Signer.LOC_REF);
-//		}
-//
-//		// Modifing SL Request ...
-//		setRequest(slRequest.replace(PdfAs4Signer.LOC_REF, SLRequest.DATAOBJECT_STRING));
-
 		setRequest(slRequest);
 		setSignatureData(signData == null ? null : new ByteArrayDocumentSource(signData));
 	}

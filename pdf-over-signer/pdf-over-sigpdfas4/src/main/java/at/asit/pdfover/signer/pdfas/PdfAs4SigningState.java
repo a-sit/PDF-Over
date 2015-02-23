@@ -48,20 +48,14 @@ public class PdfAs4SigningState implements SigningState {
 
 	private BkuSlConnector connector;
 
+	private boolean useBase64Request;
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#getSignatureRequest()
 	 */
 	@Override
 	public SLRequest getSignatureRequest() {
 		return this.slrequest;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#setSignatureResponse(at.asit.pdfover.signator.SLResponse)
-	 */
-	@Override
-	public void setSignatureResponse(SLResponse response) {
-		this.slresponse = response;
 	}
 
 	/**
@@ -72,12 +66,36 @@ public class PdfAs4SigningState implements SigningState {
 		this.slrequest = request;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#setUseBase64Request(boolean)
+	 */
+	@Override
+	public void setUseBase64Request(boolean useBase64Request) {
+		this.useBase64Request = useBase64Request;
+	}
+
+	/**
+	 * Gets whether to use base64 (or FileUpload) for request data
+	 * @return whether to use base64 for request data
+	 */
+	public boolean getUseBase64Request() {
+		return this.useBase64Request;
+	}
+
 	/**
 	 * Gets the SL Response
 	 * @return The SL Response object
 	 */
 	public SLResponse getSignatureResponse() {
 		return this.slresponse;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#setSignatureResponse(at.asit.pdfover.signator.SLResponse)
+	 */
+	@Override
+	public void setSignatureResponse(SLResponse response) {
+		this.slresponse = response;
 	}
 
 	/* (non-Javadoc)

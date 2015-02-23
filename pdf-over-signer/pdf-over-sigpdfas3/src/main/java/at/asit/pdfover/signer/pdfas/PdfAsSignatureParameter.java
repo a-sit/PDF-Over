@@ -114,15 +114,6 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 		return this.genericProperties.get(key);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SignatureParameter#setSignatureLanguage(java.lang.String)
-	 */
-	@Override
-	public void setSignatureLanguage(String signatureLanguage) {
-		super.setSignatureLanguage(signatureLanguage);
-//		this.height = -1;
-	}
-
 	@Override
 	public SignatureDimension getPlaceholderDimension() {
 		// return new SignatureDimension(487, 206);

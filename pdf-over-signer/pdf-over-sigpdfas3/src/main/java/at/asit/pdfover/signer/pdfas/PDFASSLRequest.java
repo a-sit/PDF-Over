@@ -47,7 +47,7 @@ public class PDFASSLRequest extends SLRequest {
 		}
 
 		// Modifing SL Request ...
-		setRequest(slRequest.replace(PDFASSigner.LOC_REF, SLRequest.DATAOBJECT_STRING));
+		setRequest(slRequest.replace(PDFASSigner.LOC_REF, /*SLRequest.DATAOBJECT_STRING*/""));
 
 		setSignatureData(new ByteArrayDocumentSource(signData));
 	}
