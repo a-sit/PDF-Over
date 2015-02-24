@@ -344,6 +344,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (mobileBKUType != Constants.DEFAULT_MOBILE_BKU_TYPE)
 			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
 
+		if (getMobileBKUBase64())
+			props.setProperty(Constants.CFG_MOBILE_BKU_BASE64, Constants.TRUE);
+
 		if (Constants.THEME != Constants.Themes.DEFAULT)
 			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());
 
