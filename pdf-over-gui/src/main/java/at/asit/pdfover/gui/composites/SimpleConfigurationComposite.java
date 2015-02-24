@@ -16,7 +16,6 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Locale;
 
@@ -40,30 +39,30 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
-import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
-import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
@@ -92,11 +91,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	FormData fd_txtMobileNumberErrorMarker;
 
 	private Group grpLogo;
-	private Label lblLogo;
+	private Canvas cLogo;
 	private Label lblDropLogo;
 	Button btnClearImage;
 	private Button btnBrowseLogo;
-	Label lblEmblem;
+	Canvas cSigPreview;
 
 	private Group grpSignatureNote;
 	private Label lblSignatureNote;
@@ -107,8 +106,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	Combo cmbSignatureLang;
 
 	String logoFile;
-	private Image origEmblem = null;
-	private Image origlogo = null;
+	Image sigPreview = null;
+	Image logo = null;
 
 	/**
 	 * @param parent
@@ -238,22 +237,27 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.lblEmblem = new Label(containerComposite, SWT.RESIZE);
+		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
 
 		this.btnBrowseLogo = new Button(controlComposite, SWT.NONE);
 
 		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE | SWT.CENTER);
 
-		this.lblLogo = new Label(controlComposite, SWT.NATIVE);
-		this.lblLogo.setAlignment(SWT.CENTER);
-		FormData fd_lbl_logo = new FormData();
-		fd_lbl_logo.left = new FormAttachment(0, 20);
-		fd_lbl_logo.right = new FormAttachment(100, -20);
-		fd_lbl_logo.top = new FormAttachment(0, 20);
-		fd_lbl_logo.bottom = new FormAttachment(this.lblDropLogo, -20);
-		fd_lbl_logo.height = 40;
-		fd_lbl_logo.width = 40;
-		this.lblLogo.setLayoutData(fd_lbl_logo);
+		this.cLogo = new Canvas(controlComposite, SWT.NONE);
+		FormData fd_cLogo = new FormData();
+		fd_cLogo.left = new FormAttachment(0, 20);
+		fd_cLogo.right = new FormAttachment(100, -20);
+		fd_cLogo.top = new FormAttachment(0, 20);
+		fd_cLogo.bottom = new FormAttachment(this.lblDropLogo, -20);
+		fd_cLogo.height = 40;
+		fd_cLogo.width = 40;
+		this.cLogo.setLayoutData(fd_cLogo);
+		this.cLogo.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				imagePaintControl(e, SimpleConfigurationComposite.this.logo);
+			}
+		});
 
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
 
@@ -265,26 +269,23 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.lblDropLogo.setLayoutData(fd_lbl_drop);
 
-		FormData fd_lblEmblem = new FormData();
-		fd_lblEmblem.left = new FormAttachment(controlComposite, 20);
-		fd_lblEmblem.right = new FormAttachment(100, -20);
-		fd_lblEmblem.top = new FormAttachment(0, 20);
-		fd_lblEmblem.bottom = new FormAttachment(100, -20);
+		FormData fd_cSigPreview = new FormData();
+		fd_cSigPreview.left = new FormAttachment(controlComposite, 20);
+		fd_cSigPreview.right = new FormAttachment(100, -20);
+		fd_cSigPreview.top = new FormAttachment(0, 20);
+		fd_cSigPreview.bottom = new FormAttachment(100, -20);
 
-		this.lblEmblem.setLayoutData(fd_lblEmblem);
-		this.lblEmblem.setAlignment(SWT.CENTER);
-
-		this.lblEmblem.addListener(SWT.Resize, new Listener() {
-
+		this.cSigPreview.setLayoutData(fd_cSigPreview);
+		this.cSigPreview.addPaintListener(new PaintListener() {
 			@Override
-			public void handleEvent(Event event) {
-				SimpleConfigurationComposite.this.recalculateEmblemSize();
+			public void paintControl(PaintEvent e) {
+				imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview);
 			}
 		});
 
-		FontData[] fD_lblEmblem = this.lblEmblem.getFont().getFontData();
-		fD_lblEmblem[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblEmblem.setFont(new Font(Display.getCurrent(), fD_lblEmblem[0]));
+		FontData[] fD_cSigPreview = this.cSigPreview.getFont().getFontData();
+		fD_cSigPreview[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.cSigPreview.setFont(new Font(Display.getCurrent(), fD_cSigPreview[0]));
 
 		DropTarget dnd_target = new DropTarget(controlComposite,
 				DND.DROP_DEFAULT | DND.DROP_COPY);
@@ -368,19 +369,19 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.btnClearImage.setLayoutData(fd_btnUseImage);
 
-		FormData fd_btnBrowseEmblem = new FormData();
+		FormData fd_btnBrowseLogo = new FormData();
 
-		fd_btnBrowseEmblem.bottom = new FormAttachment(100, -20);
-		fd_btnBrowseEmblem.right = new FormAttachment(100, -20);
+		fd_btnBrowseLogo.bottom = new FormAttachment(100, -20);
+		fd_btnBrowseLogo.right = new FormAttachment(100, -20);
 
-		this.btnBrowseLogo.setLayoutData(fd_btnBrowseEmblem);
+		this.btnBrowseLogo.setLayoutData(fd_btnBrowseLogo);
 		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
 
-		FontData[] fD_btnBrowseEmblem = this.btnBrowseLogo.getFont()
+		FontData[] fD_btnBrowseLogo = this.btnBrowseLogo.getFont()
 				.getFontData();
-		fD_btnBrowseEmblem[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		fD_btnBrowseLogo[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btnBrowseLogo.setFont(new Font(Display.getCurrent(),
-				fD_btnBrowseEmblem[0]));
+				fD_btnBrowseLogo[0]));
 
 
 		this.grpSignatureLang = new Group(this, SWT.NONE);
@@ -520,6 +521,29 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		reloadResources();
 	}
 
+	static void imagePaintControl(PaintEvent e, Image i) {
+		if (i == null)
+			return;
+
+		Rectangle r = i.getBounds();
+		int srcW = r.width;
+		int srcH = r.height;
+		Point p = ((Control) e.widget).getSize();
+		float dstW = p.x;
+		float dstH = p.y;
+
+		float scale = dstW / srcW;
+		if (srcH * scale > dstH)
+			scale = dstH / srcH;
+
+		float w = srcW * scale;
+		float h = srcH * scale;
+
+		int x = (int) ((dstW / 2) - (w / 2));
+		int y = (int) ((dstH / 2) - (h / 2));
+		e.gc.drawImage(i, 0, 0, srcW, srcH, x, y, (int) w, (int) h);
+	}
+
 	/**
 	 * 
 	 */
@@ -555,86 +579,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 					processEmblemChanged(fileName);
 				}
 			}
-		}
-	}
-
-	void recalculateEmblemSize() {
-		this.recalculateEmblemSize(this.origEmblem, this.lblEmblem);
-		this.recalculateEmblemSize(this.origlogo, this.lblLogo);
-	}
-
-	void recalculateEmblemSize(Image image, Label parent) {
-		if (image != null) {
-
-			int width = image.getBounds().width;
-			int height = image.getBounds().height;
-
-			int scaledWidth = parent.getSize().x;
-			int scaledHeight = parent.getSize().y;
-
-			float scaleFactorWidth = (float) scaledWidth / (float) width;
-			float scaleFactorHeight = (float) scaledHeight / (float) height;
-
-			float betterFactor = 1;
-
-			int testHeight = (int) (height * scaleFactorWidth);
-			int testWidth = (int) (width * scaleFactorHeight);
-
-			// check for better scale factor ...
-
-			if (testHeight > scaledHeight) {
-				// width scaling fails!! use Height scaling
-				betterFactor = scaleFactorHeight;
-			} else if (testWidth > scaledWidth) {
-				// height scaling fails!! use Width scaling
-				betterFactor = scaleFactorWidth;
-			} else {
-				// Both are ok test* < scaled*
-
-				int heightDiff = scaledHeight - testHeight;
-
-				int widthDiff = scaledWidth - testWidth;
-
-				if (widthDiff < heightDiff) {
-					// width diff better use scaleFactorHeight
-					betterFactor = scaleFactorHeight;
-				} else {
-					// height diff better or equal so use scaleFactorWidth
-					betterFactor = scaleFactorWidth;
-				}
-			}
-
-			log.debug("Scaling factor: " + betterFactor); //$NON-NLS-1$
-
-			if (betterFactor == 0.0) {
-				betterFactor = 1.0f;
-			}
-
-			BufferedImage awt_image = ImageConverter.convertToAWT(image
-					.getImageData());
-
-			java.awt.Image scaled_awt = awt_image.getScaledInstance(
-					(int) (width * betterFactor),
-					(int) (height * betterFactor), java.awt.Image.SCALE_SMOOTH);
-
-			BufferedImage scaled_buffered = new BufferedImage(
-					(int) (width * betterFactor),
-					(int) (height * betterFactor), BufferedImage.TYPE_INT_RGB);
-			scaled_buffered.getGraphics().drawImage(scaled_awt, 0, 0, null);
-
-			Image emblem = new Image(this.getDisplay(),
-					ImageConverter.convertToSWT(scaled_buffered));
-
-			Image old = parent.getImage();
-
-			if (old != null) {
-				old.dispose();
-			}
-
-			parent.setText(""); //$NON-NLS-1$
-			parent.setImage(emblem);
-		} else {
-			parent.setImage(null);
 		}
 	}
 
@@ -684,18 +628,19 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 
 		if (img != null) {
-			this.origEmblem = new Image(this.getDisplay(), img);
+			this.sigPreview = new Image(this.getDisplay(), img);
 		} else {
-			this.origEmblem = null;
+			this.sigPreview = null;
 		}
 
 		if (logo != null) {
-			this.origlogo = new Image(this.getDisplay(), logo);
+			this.logo = new Image(this.getDisplay(), logo);
 		} else {
-			this.origlogo = null;
+			this.logo = null;
 		}
 
-		this.recalculateEmblemSize();
+		this.cSigPreview.redraw();
+		this.cLogo.redraw();
 	}
 
 	void processEmblemChanged(String filename) {
