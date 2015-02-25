@@ -59,8 +59,9 @@ public class MobileBKUState extends State {
 				break;
 
 			case IAIK:
-				this.status = new IAIKStatus(getStateMachine().getConfigProvider());
-				this.handler = new IAIKHandler(this, getStateMachine().getGUIProvider().getMainShell());
+				this.status = new IAIKStatus(provider);
+				this.handler = new IAIKHandler(this,
+						stateMachine.getGUIProvider().getMainShell());
 				break;
 		}
 

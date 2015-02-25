@@ -153,7 +153,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		String useBase64 = config.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
 		if (useBase64 != null)
-			this.configuration.setMobileBKUBase64(useBase64.equalsIgnoreCase(Constants.TRUE));
+			this.configuration.setMobileBKUBase64(!useBase64.equalsIgnoreCase(Constants.FALSE));
 
 		// Set Proxy Port
 		String proxyPortString = config
@@ -344,8 +344,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (mobileBKUType != Constants.DEFAULT_MOBILE_BKU_TYPE)
 			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
 
-		if (getMobileBKUBase64())
-			props.setProperty(Constants.CFG_MOBILE_BKU_BASE64, Constants.TRUE);
+		if (!getMobileBKUBase64())
+			props.setProperty(Constants.CFG_MOBILE_BKU_BASE64, Constants.FALSE);
 
 		if (Constants.THEME != Constants.Themes.DEFAULT)
 			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());

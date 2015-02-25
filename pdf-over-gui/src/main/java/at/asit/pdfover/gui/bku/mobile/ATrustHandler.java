@@ -66,7 +66,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 	private static final String ACTIVATION_URL = "https://www.handy-signatur.at/"; //$NON-NLS-1$
 
-	private boolean useBase64 = false;
+	private boolean useBase64 = true;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleSLRequestResponse(java.lang.String)
