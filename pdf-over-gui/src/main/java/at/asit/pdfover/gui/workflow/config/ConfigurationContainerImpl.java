@@ -101,7 +101,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected MobileBKUs mobileBKUType = Constants.DEFAULT_MOBILE_BKU_TYPE;
 
 	/** Holds the mobile BKU BASE64 setting */
-	protected boolean mobileBKUBase64 = true;
+	protected boolean mobileBKUBase64 = false;
 
 	/** Holds the main window size */
 	protected Point mainWindowSize = null;
