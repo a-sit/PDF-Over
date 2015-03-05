@@ -123,13 +123,15 @@ public class LocalBKUState extends State {
 					if (server == null)
 						server = ""; //$NON-NLS-1$
 					else
-						if (server.contains("trustDeskbasic")) //$NON-NLS-1$
+						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")) //$NON-NLS-1$ //$NON-NLS-2$
 							LocalBKUState.this.useBase64Request = true;
 
 					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 					if (userAgent == null)
 						userAgent = ""; //$NON-NLS-1$
 					String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
+
+					log.debug("Server - UA: " + server + " - " + userAgent); //$NON-NLS-1$ //$NON-NLS-2$
 
 					String response = method.getResponseBodyAsString();
 					log.debug("SL Response: " + response); //$NON-NLS-1$
