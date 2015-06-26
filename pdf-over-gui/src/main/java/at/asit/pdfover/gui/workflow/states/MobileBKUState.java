@@ -212,6 +212,8 @@ public class MobileBKUState extends State {
 						// set possible error message
 						ui.setErrorMessage(mobileStatus.getErrorMessage());
 						mobileStatus.setErrorMessage(null);
+					} else if (mobileStatus instanceof ATrustStatus) {
+						ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //$NON-NLS-1$
 					}
 
 					if (ui.getMobileNumber() == null
