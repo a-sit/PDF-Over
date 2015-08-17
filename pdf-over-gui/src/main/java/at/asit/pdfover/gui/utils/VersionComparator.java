@@ -62,7 +62,7 @@ public class VersionComparator implements Comparator<String> {
 	 * Compare two version strings (static version)
 	 * @param v1 version 1
 	 * @param v2 version 2
-	 * @return -1 if v1 < v2, 0 if v1 = v2, 1 if v1 > v2
+	 * @return -1 if v1 &lt; v2, 0 if v1 = v2, 1 if v1 &gt; v2
 	 */
 	public static int compare_s(String v1, String v2) {
 		VersionComparator vc = new VersionComparator();
@@ -83,7 +83,7 @@ public class VersionComparator implements Comparator<String> {
 	 * Check two version strings for order
 	 * @param v1 version 1
 	 * @param v2 version 2
-	 * @return v1 < v2
+	 * @return v1 &lt; v2
 	 */
 	public static boolean before(String v1, String v2) {
 		return compare_s(v1, v2) < 0;
@@ -93,7 +93,7 @@ public class VersionComparator implements Comparator<String> {
 	 * Check two version strings for order
 	 * @param v1 version 1
 	 * @param v2 version 2
-	 * @return v1 > v2
+	 * @return v1 &gt; v2
 	 */
 	public static boolean after(String v1, String v2) {
 		return compare_s(v1, v2) > 0;
