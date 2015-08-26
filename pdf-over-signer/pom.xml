@@ -13,7 +13,7 @@
 		<project.maindir>${project.basedir}/..</project.maindir>
 	</properties>
 	<modules>
-		<module>pdf-over-sigpdfas3</module>
+		<!--module>pdf-over-sigpdfas3</module-->
 		<module>pdf-over-sigpdfas4</module>
 	</modules>
 </project>
