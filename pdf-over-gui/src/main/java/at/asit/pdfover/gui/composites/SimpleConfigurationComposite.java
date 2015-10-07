@@ -740,7 +740,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void doLayout() {
-		this.layout(true, true);
+		layout(true, true);
 	}
 
 	/*
