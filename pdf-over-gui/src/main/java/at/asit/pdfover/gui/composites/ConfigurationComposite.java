@@ -16,19 +16,35 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
@@ -40,18 +56,6 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
 
 /**
  * Composite for hosting configuration composites
@@ -125,6 +129,20 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setExpandHorizontal(true);
 		advancedCompositeScr.setExpandVertical(true);
 		advancedCompositeScr.setMinSize(this.advancedConfigComposite
+				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+		this.aboutTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //$NON-NLS-1$
+
+		ScrolledComposite aboutCompositeScr = new ScrolledComposite(
+				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		this.aboutTabItem.setControl(aboutCompositeScr);
+		AboutComposite aboutConfigComposite = new AboutComposite(
+				aboutCompositeScr, SWT.NONE);
+		aboutCompositeScr.setContent(aboutConfigComposite);
+		aboutCompositeScr.setExpandHorizontal(true);
+		aboutCompositeScr.setExpandVertical(true);
+		aboutCompositeScr.setMinSize(aboutConfigComposite
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		tabFolder.setSelection(this.simpleTabItem);
@@ -204,7 +222,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(ConfigurationComposite.class);
 
 	/**
@@ -256,9 +274,89 @@ public class ConfigurationComposite extends StateComposite {
 
 	private TabItem advancedTabItem;
 
+	private TabItem aboutTabItem;
+
 	private Button btnSpeichern;
 
 	private Button btnAbbrechen;
+
+	private class AboutComposite extends StateComposite {
+		private Link lnkAbout;
+		/**
+	 * @param parent
+	 * @param style
+		 */
+		public AboutComposite(Composite parent, int style) {
+			super(parent, style, null);
+
+			setLayout(new FormLayout());
+
+			/*Group grpAbout = new Group(this, SWT.NONE | SWT.RESIZE);
+			FormData fd_grpAbout = new FormData();
+			fd_grpAbout.right = new FormAttachment(100, -5);
+			fd_grpAbout.left = new FormAttachment(0, 5);
+			fd_grpAbout.top = new FormAttachment(0, 5);
+			grpAbout.setLayoutData(fd_grpAbout);
+			grpAbout.setLayout(new FillLayout());
+
+			FontData[] fD_grpAbout = grpAbout.getFont()
+					.getFontData();
+			fD_grpAbout[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+			grpAbout.setFont(new Font(Display.getCurrent(),
+					fD_grpAbout[0]));*/
+
+			this.lnkAbout = new Link(this, SWT.NONE);
+
+			FormData fd_lnkAbout = new FormData();
+			fd_lnkAbout.right = new FormAttachment(100, -5);
+			fd_lnkAbout.left = new FormAttachment(0, 5);
+			fd_lnkAbout.top = new FormAttachment(0, 5);
+			this.lnkAbout.setLayoutData(fd_lnkAbout);
+
+			FontData[] fD_lnkAbout = this.lnkAbout.getFont().getFontData();
+			fD_lnkAbout[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+			this.lnkAbout.setFont(new Font(Display.getCurrent(),
+					fD_lnkAbout[0]));
+
+			this.lnkAbout.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						URI url = new URI("http://demo.a-sit.at/lizenzbedingungen/"); //$NON-NLS-1$
+						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
+						if (Desktop.isDesktopSupported()) {
+							Desktop.getDesktop().browse(url);
+						} else {
+							log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+							Program.launch(url.toString());
+						}
+					} catch (IOException ex) {
+						log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					} catch (URISyntaxException ex) {
+						log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					}
+				}
+			});
+			// Load localized strings
+			reloadResources();
+		}
+
+		/* (non-Javadoc)
+		 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
+		 */
+		@Override
+		public void doLayout() {
+			// Nothing to do here
+		}
+
+		/* (non-Javadoc)
+		 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
+		 */
+		@Override
+		public void reloadResources() {
+			this.lnkAbout.setText(Messages.getString("config.AboutText")); //$NON-NLS-1$
+		}
+	}
 
 	/**
 	 * Sets the configuration manipulator
@@ -532,6 +630,7 @@ public class ConfigurationComposite extends StateComposite {
 	public void reloadResources() {
 		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //$NON-NLS-1$
 		this.btnSpeichern.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 		this.btnAbbrechen.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 	}
