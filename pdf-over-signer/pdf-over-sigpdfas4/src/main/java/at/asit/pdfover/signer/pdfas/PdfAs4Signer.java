@@ -23,6 +23,7 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.IConfigurationConstants;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
+import at.gv.egiz.pdfas.lib.api.sign.IPlainSigner;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
 import at.gv.egiz.pdfas.sigs.pades.PAdESSigner;
 import at.gv.egiz.sl.util.ISLConnector;
@@ -115,8 +116,16 @@ public class PdfAs4Signer implements Signer {
 							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
 								IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD);
 
-			ISLConnector connector = new PdfAs4BKUSLConnector(sstate.getBKUConnector());
-			param.setPlainSigner(new PAdESSigner(connector));
+			IPlainSigner signer;
+			if (sstate.hasBKUConnector()) {
+				ISLConnector connector = new PdfAs4BKUSLConnector(sstate.getBKUConnector());
+				signer = new PAdESSigner(connector);
+			} else if (sstate.hasKSSigner()) {
+				signer = sstate.getKSSigner();
+			} else {
+				throw new SignatureException("SigningState doesn't have a signer");
+			}
+			param.setPlainSigner(signer);
 
 			pdfas.sign(param);
 

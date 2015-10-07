@@ -49,4 +49,16 @@ public interface SigningState {
 	 * @param connector the BKU connector
 	 */
 	public void setBKUConnector(BkuSlConnector connector);
+
+	/**
+	 * Set the KeyStore signer
+	 * @param file KeyStore filename
+	 * @param alias KeyStore alias
+	 * @param kspassword KeyStore password
+	 * @param keypassword KeyStore private key password
+	 * @param type KeyStore type
+	 * @throws SignatureException
+	 */
+	public void setKSSigner(String file, String alias, String kspassword,
+			String keypassword, String type) throws SignatureException;
 }

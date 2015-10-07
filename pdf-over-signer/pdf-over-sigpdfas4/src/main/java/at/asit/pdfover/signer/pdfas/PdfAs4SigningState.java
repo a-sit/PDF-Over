@@ -21,8 +21,12 @@ import java.io.ByteArrayOutputStream;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
+import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SigningState;
+import at.gv.egiz.pdfas.common.exceptions.PDFASError;
+import at.gv.egiz.pdfas.lib.api.sign.IPlainSigner;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
+import at.gv.egiz.pdfas.sigs.pades.PAdESSignerKeystore;
 
 /**
  * Signing State for PDFAS Wrapper
@@ -46,7 +50,9 @@ public class PdfAs4SigningState implements SigningState {
 
 	private ByteArrayOutputStream output;
 
-	private BkuSlConnector connector;
+	private BkuSlConnector bkuconnector = null;
+
+	private IPlainSigner kssigner = null;
 
 	private boolean useBase64Request;
 
@@ -139,13 +145,47 @@ public class PdfAs4SigningState implements SigningState {
 	 */
 	@Override
 	public void setBKUConnector(BkuSlConnector connector) {
-		this.connector = connector;
+		this.bkuconnector = connector;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#setKSSigner(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setKSSigner(String file, String alias, String kspassword,
+			String keypassword, String type) throws SignatureException {
+		try {
+			this.kssigner = new PAdESSignerKeystore(file, alias, kspassword, keypassword, type);
+		} catch (PDFASError e) {
+			throw new SignatureException(e);
+		}
 	}
 
 	/**
-	 * @return the connector
+	 * @return whether a BKU connector was set
+	 */
+	public boolean hasBKUConnector() {
+		return this.bkuconnector != null;
+	}
+
+	/**
+	 * @return the BKU connector
 	 */
 	public BkuSlConnector getBKUConnector() {
-		return this.connector;
+		return this.bkuconnector;
+	}
+
+	/**
+	 * @return whether a KS signer was set
+	 */
+	public boolean hasKSSigner() {
+		return this.kssigner != null;
+	}
+
+	/**
+	 * @return the KS signer
+	 */
+	public IPlainSigner getKSSigner() {
+		return this.kssigner;
 	}
 }

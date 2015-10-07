@@ -26,6 +26,9 @@ public enum BKUs {
 	/** Mobile BKU */
 	MOBILE,
 
+	/** KeyStore */
+	KS,
+
 	/** No BKU */
 	NONE
 }

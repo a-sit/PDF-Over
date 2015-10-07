@@ -235,10 +235,12 @@ public class PrepareSigningState extends State {
 		// We got the Request set it into status and move on to next state ...
 		status.setSigningState(this.signingState);
 
-		if (getStateMachine().getStatus().getBKU() == BKUs.LOCAL) {
+		if (status.getBKU() == BKUs.LOCAL) {
 			this.setNextState(new LocalBKUState(getStateMachine()));
-		} else if (getStateMachine().getStatus().getBKU() == BKUs.MOBILE) {
+		} else if (status.getBKU() == BKUs.MOBILE) {
 			this.setNextState(new MobileBKUState(getStateMachine()));
+		} else if (status.getBKU() == BKUs.KS) {
+			this.setNextState(new KSState(getStateMachine()));
 		} else {
 			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!"); //$NON-NLS-1$
 			this.setNextState(new BKUSelectionState(getStateMachine()));
