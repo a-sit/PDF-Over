@@ -305,12 +305,13 @@ public class ConfigurationComposite extends StateComposite {
 			grpAbout.setFont(new Font(Display.getCurrent(),
 					fD_grpAbout[0]));*/
 
-			this.lnkAbout = new Link(this, SWT.NONE);
+			this.lnkAbout = new Link(this, SWT.WRAP);
 
 			FormData fd_lnkAbout = new FormData();
 			fd_lnkAbout.right = new FormAttachment(100, -5);
 			fd_lnkAbout.left = new FormAttachment(0, 5);
 			fd_lnkAbout.top = new FormAttachment(0, 5);
+			fd_lnkAbout.width = 100;
 			this.lnkAbout.setLayoutData(fd_lnkAbout);
 
 			FontData[] fD_lnkAbout = this.lnkAbout.getFont().getFontData();
@@ -337,6 +338,7 @@ public class ConfigurationComposite extends StateComposite {
 					}
 				}
 			});
+
 			// Load localized strings
 			reloadResources();
 		}
