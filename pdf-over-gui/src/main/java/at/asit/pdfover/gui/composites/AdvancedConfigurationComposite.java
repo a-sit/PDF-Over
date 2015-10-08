@@ -84,6 +84,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private Group grpBkuAuswahl;
 	Combo cmbBKUAuswahl;
 	String[] bkuStrings;
+	Button btnKeystoreEnabled;
 
 	private Group grpSpeicherort;
 	private Label lblDefaultOutputFolder;
@@ -296,6 +297,31 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			}
 		});
+
+		this.btnKeystoreEnabled = new Button(this.grpBkuAuswahl, SWT.CHECK);
+		FormData fd_btnKeystoreEnabled = new FormData();
+		fd_btnKeystoreEnabled.right = new FormAttachment(100, -5);
+		fd_btnKeystoreEnabled.top = new FormAttachment(
+				this.cmbBKUAuswahl, 5);
+		fd_btnKeystoreEnabled.left = new FormAttachment(0, 5);
+		this.btnKeystoreEnabled
+				.setLayoutData(fd_btnKeystoreEnabled);
+
+		FontData[] fD_btnKeystoreEnabled = this.btnKeystoreEnabled
+				.getFont().getFontData();
+		fD_btnKeystoreEnabled[0]
+				.setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnKeystoreEnabled.setFont(new Font(Display
+				.getCurrent(), fD_btnKeystoreEnabled[0]));
+
+		this.btnKeystoreEnabled
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						AdvancedConfigurationComposite.this.performKeystoreEnabledSelection(
+								AdvancedConfigurationComposite.this.btnKeystoreEnabled.getSelection());
+					}
+				});
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
 		layout = new FormLayout();
@@ -809,6 +835,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnPdfACompat.setSelection(compat);
 	}
 
+	void performKeystoreEnabledSelection(boolean enabled) {
+		this.configurationContainer.setKeyStoreEnabled(enabled);
+		this.btnKeystoreEnabled.setSelection(enabled);
+	}
+
 	void performPlaceholderTransparency(int transparency) {
 		this.configurationContainer.setPlaceholderTransparency(transparency);
 	}
@@ -928,6 +959,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.configurationContainer.setDefaultBKU(
 				provider.getDefaultBKUPersistent());
+		this.configurationContainer.setKeyStoreEnabled(
+				provider.getKeyStoreEnabledPersistent());
 
 		this.configurationContainer.setOutputFolder(
 				provider.getDefaultOutputFolderPersistent());
@@ -971,6 +1004,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getPlaceholderTransparency());
 		performLocaleSelectionChanged(this.configurationContainer.getLocale());
 		performPdfACompatSelection(this.configurationContainer.getSignaturePdfACompat());
+		performKeystoreEnabledSelection(this.configurationContainer.getKeyStoreEnabled());
 		performUpdateCheckSelection(this.configurationContainer.getUpdateCheck());
 
 		int port = this.configurationContainer.getProxyPort();
@@ -1009,6 +1043,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				this.configurationContainer.getPlaceholderTransparency());
 
 		store.setDefaultBKU(this.configurationContainer.getDefaultBKU());
+		store.setKeyStoreEnabled(this.configurationContainer.getKeyStoreEnabled());
 
 		store.setDefaultOutputFolder(this.configurationContainer.getOutputFolder());
 
@@ -1116,6 +1151,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
 		this.cmbBKUAuswahl.setToolTipText(Messages
 				.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
+		this.btnKeystoreEnabled.setText(Messages
+				.getString("advanced_config.KeystoreEnabled")); //$NON-NLS-1$
+		this.btnKeystoreEnabled.setToolTipText(Messages
+				.getString("advanced_config.KeystoreEnabled_ToolTip")); //$NON-NLS-1$
 
 		this.grpSpeicherort.setText(Messages
 				.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$

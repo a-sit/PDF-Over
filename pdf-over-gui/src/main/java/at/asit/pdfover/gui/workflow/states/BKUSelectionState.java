@@ -54,6 +54,9 @@ public class BKUSelectionState extends State {
 					getStateMachine().getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
+		this.selectionComposite.setKeystoreEnabled(
+				getStateMachine().getConfigProvider().getKeyStoreEnabled());
+
 		return this.selectionComposite;
 	}
 	

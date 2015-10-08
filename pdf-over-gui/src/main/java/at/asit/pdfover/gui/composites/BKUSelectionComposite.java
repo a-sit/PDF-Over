@@ -112,7 +112,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 	private Button btnCard;
 
-	private Button btnKS;
+	private Button btnKS = null;
 
 	/**
 	 * Gets selected BKU type
@@ -129,6 +129,28 @@ public class BKUSelectionComposite extends StateComposite {
 	public void setSelected(final BKUs selected) {
 		this.selected = selected;
 		this.state.updateStateMachine();
+	}
+
+	/**
+	 * Sets whether keystore option is enabled
+	 * @param enabled
+	 */
+	public void setKeystoreEnabled(boolean enabled) {
+		if (enabled) {
+			this.btnKS = new Button(this, SWT.NONE);
+			FormData fd_btnKS = new FormData();
+			fd_btnKS.top = new FormAttachment(this.btnCard, 10);
+			fd_btnKS.left = new FormAttachment(this.btnMobile, 0, SWT.LEFT);
+			fd_btnKS.right = new FormAttachment(this.btnCard, 0, SWT.RIGHT);
+
+			this.btnKS.setLayoutData(fd_btnKS);
+			this.btnKS.addSelectionListener(new KSSelectionListener());
+
+			reloadResources();
+		} else if (this.btnKS != null) {
+			this.btnKS.dispose();
+			this.btnKS = null;
+		}
 	}
 
 	/**
@@ -208,15 +230,6 @@ public class BKUSelectionComposite extends StateComposite {
 
 		fd_btnCard.width = (btncsize > cardsize) ? btncsize : cardsize;
 
-		this.btnKS = new Button(this, SWT.NONE);
-		FormData fd_btnKS = new FormData();
-		fd_btnKS.top = new FormAttachment(this.btnCard, 10);
-		fd_btnKS.left = new FormAttachment(this.btnMobile, 0, SWT.LEFT);
-		fd_btnKS.right = new FormAttachment(this.btnCard, 0, SWT.RIGHT);
-
-		this.btnKS.setLayoutData(fd_btnKS);
-		this.btnKS.addSelectionListener(new KSSelectionListener());
-
 		reloadResources();
 		//this.pack();
 	}
@@ -241,6 +254,7 @@ public class BKUSelectionComposite extends StateComposite {
 	public void reloadResources() {
 		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
 		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
-		this.btnKS.setText(Messages.getString("bku_selection.ks")); //$NON-NLS-1$
+		if (this.btnKS != null)
+			this.btnKS.setText(Messages.getString("bku_selection.ks")); //$NON-NLS-1$
 	}
 }
