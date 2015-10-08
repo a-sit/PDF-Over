@@ -297,11 +297,20 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		props.clear();
 
 		props.setProperty(Constants.CFG_BKU, getDefaultBKUPersistent().toString());
-		props.setProperty(Constants.CFG_PROXY_HOST, getProxyHostPersistent());
-		props.setProperty(Constants.CFG_PROXY_PORT,
-				Integer.toString(getProxyPortPersistent()));
-		props.setProperty(Constants.CFG_PROXY_USER, getProxyUserPersistent());
-		props.setProperty(Constants.CFG_PROXY_PASS, getProxyPassPersistent());
+
+		String proxyHost = getProxyHostPersistent();
+		if (proxyHost != STRING_EMPTY)
+			props.setProperty(Constants.CFG_PROXY_HOST, proxyHost);
+		int proxyPort = getProxyPortPersistent();
+		if (proxyPort != -1)
+			props.setProperty(Constants.CFG_PROXY_PORT,Integer.toString(proxyPort));
+		String proxyUser = getProxyUserPersistent();
+		if (proxyUser != STRING_EMPTY)
+			props.setProperty(Constants.CFG_PROXY_USER, proxyUser);
+		String proxyPass = getProxyPassPersistent();
+		if (proxyPass != STRING_EMPTY)
+			props.setProperty(Constants.CFG_PROXY_PASS, proxyPass);
+
 		props.setProperty(Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
