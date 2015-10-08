@@ -387,7 +387,7 @@ public class OutputComposite extends StateComposite {
 				if (Desktop.isDesktopSupported()) {
 					Desktop.getDesktop().open(f);
 				} else {
-					log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+					log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
 					Program.launch(f.getAbsolutePath());
 				}
 			} catch (IOException ex) {

@@ -328,7 +328,7 @@ public class ConfigurationComposite extends StateComposite {
 						if (Desktop.isDesktopSupported()) {
 							Desktop.getDesktop().browse(url);
 						} else {
-							log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+							log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
 							Program.launch(url.toString());
 						}
 					} catch (IOException ex) {
