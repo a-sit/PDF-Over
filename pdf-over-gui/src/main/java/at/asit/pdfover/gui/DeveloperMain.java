@@ -19,6 +19,7 @@ package at.asit.pdfover.gui;
 import java.io.File;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,8 @@ public class DeveloperMain {
 		if(log4j.exists()) {
 			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
+		
+		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
 		
 		StringBuilder sb = new StringBuilder();
 		

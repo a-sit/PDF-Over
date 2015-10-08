@@ -21,6 +21,7 @@ import java.io.File;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +65,8 @@ public class Main {
 		if(log4j.exists()) {
 			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
+
+		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
 
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 
