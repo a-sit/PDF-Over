@@ -163,6 +163,36 @@ public interface ConfigProvider {
 	public boolean getSignaturePdfACompat();
 
 	/**
+	 * Gets whether keystore signing is enabled
+	 * @return whether keystore signing is enabled
+	 */
+	public Boolean getKeyStoreEnabled();
+
+	/**
+	 * Gets the keystore file
+	 * @return the keystore file
+	 */
+	public String getKeyStoreFile();
+
+	/**
+	 * Gets the keystore type
+	 * @return the keystore type
+	 */
+	public String getKeyStoreType();
+
+	/**
+	 * Gets the keystore store password
+	 * @return the keystore store password
+	 */
+	public String getKeyStoreStorePass();
+
+	/**
+	 * Gets the keystore key password
+	 * @return the keystore key password
+	 */
+	public String getKeyStoreKeyPass();
+
+	/**
 	 * Gets whether to automatically check for application updates
 	 * @return whether to automatically check for application updates
 	 */

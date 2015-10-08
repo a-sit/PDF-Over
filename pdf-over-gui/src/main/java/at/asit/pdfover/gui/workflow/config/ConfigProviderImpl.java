@@ -274,6 +274,19 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 		setDefaultSignaturePosition(position);
 
+		//Set keystore stuff
+		String keystoreEnabled = config.getProperty(Constants.CFG_KEYSTORE_ENABLED);
+		if (keystoreEnabled != null)
+			setKeyStoreEnabled(keystoreEnabled.equalsIgnoreCase(Constants.TRUE));
+		String keystoreFile = config.getProperty(Constants.CFG_KEYSTORE_FILE);
+		setKeyStoreFile(keystoreFile);
+		String keystoreType = config.getProperty(Constants.CFG_KEYSTORE_TYPE);
+		setKeyStoreType(keystoreType);
+		String keystoreStorePass = config.getProperty(Constants.CFG_KEYSTORE_STOREPASS);
+		setKeyStoreStorePass(keystoreStorePass);
+		String keystoreKeyPass = config.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
+		setKeyStoreKeyPass(keystoreKeyPass);
+
 		// Set update check
 		String updateCheck = config.getProperty(Constants.CFG_UPDATE_CHECK);
 		if (updateCheck != null)
@@ -358,6 +371,21 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (Constants.THEME != Constants.Themes.DEFAULT)
 			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());
+
+		if (getKeyStoreEnabledPersistent())
+			props.setProperty(Constants.CFG_KEYSTORE_ENABLED, Constants.TRUE);
+		String keystoreFile = getKeyStoreFilePersistent();
+		if (keystoreFile != STRING_EMPTY)
+			props.setProperty(Constants.CFG_KEYSTORE_FILE, keystoreFile);
+		String keystoreType = getKeyStoreTypePersistent();
+		if (keystoreType != STRING_EMPTY)
+			props.setProperty(Constants.CFG_KEYSTORE_TYPE, keystoreType);
+		String keystoreStorePass = getKeyStoreStorePassPersistent();
+		if (keystoreStorePass != STRING_EMPTY)
+			props.setProperty(Constants.CFG_KEYSTORE_STOREPASS, keystoreStorePass);
+		String keystoreKeyPass = getKeyStoreKeyPassPersistent();
+		if (keystoreKeyPass != STRING_EMPTY)
+			props.setProperty(Constants.CFG_KEYSTORE_KEYPASS, keystoreKeyPass);
 
 		if (!getUpdateCheck())
 			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
@@ -1066,6 +1094,228 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public boolean getSignaturePdfACompat() {
 		return this.configuration.getSignaturePdfACompat();
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreEnabled(boolean)
+	 */
+	@Override
+	public void setKeyStoreEnabled(Boolean enabled) {
+		this.configuration.setKeyStoreEnabled(enabled);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreEnabledOverlay(boolean)
+	 */
+	@Override
+	public void setKeyStoreEnabledOverlay(Boolean enabled) {
+		this.configurationOverlay.setKeyStoreEnabled(enabled);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreEnabled()
+	 */
+	@Override
+	public Boolean getKeyStoreEnabled() {
+		Boolean enabled = this.configurationOverlay.getKeyStoreEnabled();
+		if (enabled == null)
+			enabled = getKeyStoreEnabledPersistent();
+		return enabled;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreEnabledPersistent()
+	 */
+	@Override
+	public Boolean getKeyStoreEnabledPersistent() {
+		Boolean enabled = this.configuration.getKeyStoreEnabled();
+		if (enabled == null)
+			enabled = false;
+		return enabled;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreFile(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreFile(String file) {
+		if (file == null || file.trim().isEmpty()) {
+			this.configuration.setKeyStoreFile(STRING_EMPTY);
+		} else {
+			this.configuration.setKeyStoreFile(file);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreFileOverlay(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreFileOverlay(String file) {
+		if (file == null || file.trim().isEmpty()) {
+			this.configurationOverlay.setKeyStoreFile(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setKeyStoreFile(file);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreFile()
+	 */
+	@Override
+	public String getKeyStoreFile() {
+		String file = this.configurationOverlay.getKeyStoreFile();
+		if (file == null)
+			file = getKeyStoreFilePersistent();
+		return file;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreFilePersistent()
+	 */
+	@Override
+	public String getKeyStoreFilePersistent() {
+		String file = this.configuration.getKeyStoreFile();
+		if (file == null)
+			file = STRING_EMPTY;
+		return file;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreType(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreType(String type) {
+		if (type == null || type.trim().isEmpty()) {
+			this.configuration.setKeyStoreType(STRING_EMPTY);
+		} else {
+			this.configuration.setKeyStoreType(type);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreTypeOverlay(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreTypeOverlay(String type) {
+		if (type == null || type.trim().isEmpty()) {
+			this.configurationOverlay.setKeyStoreType(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setKeyStoreType(type);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreType()
+	 */
+	@Override
+	public String getKeyStoreType() {
+		String type = this.configurationOverlay.getKeyStoreType();
+		if (type == null)
+			type = getKeyStoreTypePersistent();
+		return type;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreTypePersistent()
+	 */
+	@Override
+	public String getKeyStoreTypePersistent() {
+		String type = this.configuration.getKeyStoreType();
+		if (type == null)
+			type = STRING_EMPTY;
+		return type;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreStorePass(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreStorePass(String storePass) {
+		if (storePass == null || storePass.trim().isEmpty()) {
+			this.configuration.setKeyStoreStorePass(STRING_EMPTY);
+		} else {
+			this.configuration.setKeyStoreStorePass(storePass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreStorePassOverlay(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreStorePassOverlay(String storePass) {
+		if (storePass == null || storePass.trim().isEmpty()) {
+			this.configurationOverlay.setKeyStoreStorePass(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setKeyStoreStorePass(storePass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreStorePass()
+	 */
+	@Override
+	public String getKeyStoreStorePass() {
+		String storePass = this.configurationOverlay.getKeyStoreStorePass();
+		if (storePass == null)
+			storePass = getKeyStoreStorePassPersistent();
+		return storePass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreStorePassPersistent()
+	 */
+	@Override
+	public String getKeyStoreStorePassPersistent() {
+		String storePass = this.configuration.getKeyStoreStorePass();
+		if (storePass == null)
+			storePass = STRING_EMPTY;
+		return storePass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreKeyPass(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreKeyPass(String keyPass) {
+		if (keyPass == null || keyPass.trim().isEmpty()) {
+			this.configuration.setKeyStoreKeyPass(STRING_EMPTY);
+		} else {
+			this.configuration.setKeyStoreKeyPass(keyPass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreKeyPassOverlay(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreKeyPassOverlay(String keyPass) {
+		if (keyPass == null || keyPass.trim().isEmpty()) {
+			this.configurationOverlay.setKeyStoreKeyPass(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setKeyStoreKeyPass(keyPass);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreKeyPass()
+	 */
+	@Override
+	public String getKeyStoreKeyPass() {
+		String keyPass = this.configurationOverlay.getKeyStoreKeyPass();
+		if (keyPass == null)
+			keyPass = getKeyStoreKeyPassPersistent();
+		return keyPass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreKeyPassPersistent()
+	 */
+	@Override
+	public String getKeyStoreKeyPassPersistent() {
+		String keyPass = this.configuration.getKeyStoreKeyPass();
+		if (keyPass == null)
+			keyPass = STRING_EMPTY;
+		return keyPass;
 	}
 
 	/* (non-Javadoc)

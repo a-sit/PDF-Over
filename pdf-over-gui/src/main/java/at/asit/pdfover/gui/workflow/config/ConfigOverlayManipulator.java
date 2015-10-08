@@ -91,6 +91,36 @@ public interface ConfigOverlayManipulator {
 	public void setSkipFinishOverlay(boolean skipFinish);
 
 	/**
+	 * Sets whether keystore signing is enabled
+	 * @param enabled whether keystore signing is enabled
+	 */
+	public void setKeyStoreEnabledOverlay(Boolean enabled);
+
+	/**
+	 * Sets the keystore file
+	 * @param file the keystore file
+	 */
+	public void setKeyStoreFileOverlay(String file);
+
+	/**
+	 * Sets the keystore type
+	 * @param type the keystore type
+	 */
+	public void setKeyStoreTypeOverlay(String type);
+
+	/**
+	 * Sets the keystore store password
+	 * @param storePass the keystore store password
+	 */
+	public void setKeyStoreStorePassOverlay(String storePass);
+
+	/**
+	 * Sets the keystore key password
+	 * @param keyPass the keystore key password
+	 */
+	public void setKeyStoreKeyPassOverlay(String keyPass);
+
+	/**
 	 * Sets the configuration file
 	 * @param configurationFile
 	 */

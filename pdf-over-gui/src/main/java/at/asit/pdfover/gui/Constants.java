@@ -148,6 +148,24 @@ public class Constants {
 	/** Mobile bku BASE64 config parameter */
 	public static final String CFG_MOBILE_BKU_BASE64 = "MOBILE_BKU_BASE64"; //$NON-NLS-1$
 
+	/** KeyStore enabled config parameter */
+	public static final String CFG_KEYSTORE_ENABLED = "KEYSTORE_ENABLED"; //$NON-NLS-1$
+
+	/** KeyStore file config parameter */
+	public static final String CFG_KEYSTORE_FILE = "KEYSTORE_FILE"; //$NON-NLS-1$
+
+	/** KeyStore type config parameter */
+	public static final String CFG_KEYSTORE_TYPE = "KEYSTORE_TYPE"; //$NON-NLS-1$
+
+	/** KeyStore alias config parameter */
+	public static final String CFG_KEYSTORE_ALIAS = "KEYSTORE_ALIAS"; //$NON-NLS-1$
+
+	/** KeyStore store password config parameter */
+	public static final String CFG_KEYSTORE_STOREPASS = "KEYSTORE_STOREPASS"; //$NON-NLS-1$
+
+	/** KeyStore key password config parameter */
+	public static final String CFG_KEYSTORE_KEYPASS = "KEYSTORE_KEYPASS"; //$NON-NLS-1$
+
 	/** The emblem config parameter */
 	public static final String CFG_EMBLEM = "EMBLEM"; //$NON-NLS-1$
 

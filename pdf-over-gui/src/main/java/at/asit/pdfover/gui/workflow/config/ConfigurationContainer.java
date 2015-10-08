@@ -250,10 +250,70 @@ public interface ConfigurationContainer {
 	public SignaturePosition getDefaultSignaturePosition();
 
 	/**
-	 * Gets the default signature position
+	 * Sets the default signature position
 	 * @param signaturePosition the default signature position
 	 */
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
+
+	/**
+	 * Gets whether keystore signing is enabled
+	 * @return whether keystore signing is enabled
+	 */
+	public Boolean getKeyStoreEnabled();
+
+	/**
+	 * Sets whether keystore signing is enabled
+	 * @param enabled whether keystore signing is enabled
+	 */
+	public void setKeyStoreEnabled(Boolean enabled);
+
+	/**
+	 * Gets the keystore file
+	 * @return the keystore file
+	 */
+	public String getKeyStoreFile();
+
+	/**
+	 * Sets the keystore file
+	 * @param file the keystore file
+	 */
+	public void setKeyStoreFile(String file);
+
+	/**
+	 * Gets the keystore type
+	 * @return the keystore type
+	 */
+	public String getKeyStoreType();
+
+	/**
+	 * Sets the keystore type
+	 * @param type the keystore type
+	 */
+	public void setKeyStoreType(String type);
+
+	/**
+	 * Gets the keystore store password
+	 * @return the keystore store password
+	 */
+	public String getKeyStoreStorePass();
+
+	/**
+	 * Sets the keystore store password
+	 * @param storePass the keystore store password
+	 */
+	public void setKeyStoreStorePass(String storePass);
+
+	/**
+	 * Gets the keystore key password
+	 * @return the keystore key password
+	 */
+	public String getKeyStoreKeyPass();
+
+	/**
+	 * Sets the keystore key password
+	 * @param keyPass the keystore key password
+	 */
+	public void setKeyStoreKeyPass(String keyPass);
 
 	/**
 	 * Gets whether to automatically check for application updates

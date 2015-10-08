@@ -109,6 +109,21 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Holds the default signature position */
 	protected SignaturePosition defaultSignaturePosition = null;
 
+	/** Whether keystore signing is enabled */
+	protected Boolean keystoreEnabled = null;
+
+	/** Keystore file */
+	protected String keystoreFile = null;
+
+	/** Keystore type */
+	protected String keystoreType = null;
+
+	/** Keystore store password */
+	protected String keystoreStorePass = null;
+
+	/** Keystore key password */
+	protected String keystoreKeyPass = null;
+
 	/** Whether to automatically check for updates */
 	protected boolean updateCheck = true;
 
@@ -472,6 +487,86 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		this.defaultSignaturePosition = signaturePosition;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreEnabled()
+	 */
+	@Override
+	public Boolean getKeyStoreEnabled() {
+		return this.keystoreEnabled;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreEnabled(boolean)
+	 */
+	@Override
+	public void setKeyStoreEnabled(Boolean enabled) {
+		this.keystoreEnabled = enabled;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreFile()
+	 */
+	@Override
+	public String getKeyStoreFile() {
+		return this.keystoreFile;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreFile(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreFile(String file) {
+		this.keystoreFile = file;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreType()
+	 */
+	@Override
+	public String getKeyStoreType() {
+		return this.keystoreType;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreType(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreType(String type) {
+		this.keystoreType = type;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreStorePass()
+	 */
+	@Override
+	public String getKeyStoreStorePass() {
+		return this.keystoreStorePass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreStorePass(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreStorePass(String storePass) {
+		this.keystoreStorePass = storePass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreKeyPass()
+	 */
+	@Override
+	public String getKeyStoreKeyPass() {
+		return this.keystoreKeyPass;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreKeyPass(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreKeyPass(String keyPass) {
+		this.keystoreKeyPass = keyPass;
+	}
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getUpdateCheck()

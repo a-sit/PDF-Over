@@ -118,6 +118,36 @@ public interface ConfigManipulator {
 	public void setSignaturePdfACompat(boolean compat);
 
 	/**
+	 * Sets whether keystore signing is enabled
+	 * @param enabled whether keystore signing is enabled
+	 */
+	public void setKeyStoreEnabled(Boolean enabled);
+
+	/**
+	 * Sets the keystore file
+	 * @param file the keystore file
+	 */
+	public void setKeyStoreFile(String file);
+
+	/**
+	 * Sets the keystore type
+	 * @param type the keystore type
+	 */
+	public void setKeyStoreType(String type);
+
+	/**
+	 * Sets the keystore store password
+	 * @param storePass the keystore store password
+	 */
+	public void setKeyStoreStorePass(String storePass);
+
+	/**
+	 * Sets the keystore key password
+	 * @param keyPass the keystore key password
+	 */
+	public void setKeyStoreKeyPass(String keyPass);
+
+	/**
 	 * Sets whether to automatically check for application updates
 	 * @param checkUpdate whether to automatically check for application updates
 	 */

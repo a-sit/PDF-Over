@@ -134,6 +134,36 @@ public interface PersistentConfigProvider {
 	public boolean getSignaturePdfACompat();
 
 	/**
+	 * Gets whether keystore signing is enabled
+	 * @return whether keystore signing is enabled
+	 */
+	public Boolean getKeyStoreEnabledPersistent();
+
+	/**
+	 * Gets the keystore file
+	 * @return the keystore file
+	 */
+	public String getKeyStoreFilePersistent();
+
+	/**
+	 * Gets the keystore type
+	 * @return the keystore type
+	 */
+	public String getKeyStoreTypePersistent();
+
+	/**
+	 * Gets the keystore store password
+	 * @return the keystore store password
+	 */
+	public String getKeyStoreStorePassPersistent();
+
+	/**
+	 * Gets the keystore key password
+	 * @return the keystore key password
+	 */
+	public String getKeyStoreKeyPassPersistent();
+
+	/**
 	 * Gets whether to automatically check for application updates
 	 * @return whether to automatically check for application updates
 	 */
