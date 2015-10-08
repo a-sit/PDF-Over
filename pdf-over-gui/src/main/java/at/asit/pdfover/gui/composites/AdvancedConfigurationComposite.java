@@ -53,7 +53,9 @@ import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -904,7 +906,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -912,12 +913,47 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		// Nothing to do here
 	}
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
+	 */
+	@Override
+	public void initConfiguration(PersistentConfigProvider provider) {
+		this.configurationContainer.setDefaultSignaturePosition(
+				provider.getDefaultSignaturePositionPersistent());
+		this.configurationContainer.setSignaturePdfACompat(
+				provider.getSignaturePdfACompat());
+		this.configurationContainer.setPlaceholderTransparency(
+				provider.getPlaceholderTransparency());
+
+		this.configurationContainer.setDefaultBKU(
+				provider.getDefaultBKUPersistent());
+
+		this.configurationContainer.setOutputFolder(
+				provider.getDefaultOutputFolderPersistent());
+
+		this.configurationContainer.setLocale(provider.getLocale());
+
+		this.configurationContainer.setUpdateCheck(
+				provider.getUpdateCheck());
+
+		this.configurationContainer.setProxyHost(
+				provider.getProxyHostPersistent());
+		try {
+			this.configurationContainer.setProxyPort(
+					provider.getProxyPortPersistent());
+		} catch (InvalidPortException e) {
+			log.error("Failed to set proxy port!", e); //$NON-NLS-1$
+		}
+		this.configurationContainer.setProxyUser(
+				provider.getProxyUserPersistent());
+		this.configurationContainer.setProxyPass(
+				provider.getProxyPassPersistent());
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration
-	 * ()
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration()
 	 */
 	@Override
 	public void loadConfiguration() {
@@ -958,12 +994,70 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 //		}
 }
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
+	 */
+	@Override
+	public void storeConfiguration(ConfigManipulator store,
+			PersistentConfigProvider provider) {
+		store.setDefaultSignaturePosition(
+				this.configurationContainer.getDefaultSignaturePosition());
+		store.setSignaturePdfACompat(
+				this.configurationContainer.getSignaturePdfACompat());
+		store.setPlaceholderTransparency(
+				this.configurationContainer.getPlaceholderTransparency());
+
+		store.setDefaultBKU(this.configurationContainer.getDefaultBKU());
+
+		store.setDefaultOutputFolder(this.configurationContainer.getOutputFolder());
+
+		store.setLocale(this.configurationContainer.getLocale());
+
+		store.setUpdateCheck(this.configurationContainer.getUpdateCheck());
+
+		String hostOld = provider.getProxyHostPersistent();
+		String hostNew = this.configurationContainer.getProxyHost();
+		if (hostOld != null && !hostOld.isEmpty() &&
+				(hostNew == null || hostNew.isEmpty())) {
+			// Proxy has been removed, let's clear the system properties
+			// Otherwise, the proxy settings wouldn't get removed
+			System.clearProperty("http.proxyHost"); //$NON-NLS-1$
+			System.clearProperty("https.proxyHost"); //$NON-NLS-1$
+		}
+		store.setProxyHost(hostNew);
+
+		int portOld = provider.getProxyPortPersistent();
+		int portNew = this.configurationContainer.getProxyPort();
+		if (portOld != -1 && portNew == -1) {
+			// cf. above
+			System.clearProperty("http.proxyPort"); //$NON-NLS-1$
+			System.clearProperty("https.proxyPort"); //$NON-NLS-1$
+		}
+		store.setProxyPort(portNew);
+
+		String userOld = provider.getProxyUserPersistent();
+		String userNew = this.configurationContainer.getProxyUser();
+		if (userOld != null && !userOld.isEmpty() &&
+				(userNew == null || userNew.isEmpty())) {
+			// cf. above
+			System.clearProperty("http.proxyUser"); //$NON-NLS-1$
+			System.clearProperty("https.proxyUser"); //$NON-NLS-1$
+		}
+		store.setProxyUser(userNew);
+
+		String passOld = provider.getProxyPassPersistent();
+		String passNew = this.configurationContainer.getProxyPass();
+		if (passOld != null && passNew == null) {
+			// cf. above
+			System.clearProperty("http.proxyPassword"); //$NON-NLS-1$
+			System.clearProperty("https.proxyPassword"); //$NON-NLS-1$
+		}
+		store.setProxyPass(passNew);
+	}
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#validateSettings
-	 * ()
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#validateSettings()
 	 */
 	@Override
 	public void validateSettings(int resumeIndex) throws Exception {

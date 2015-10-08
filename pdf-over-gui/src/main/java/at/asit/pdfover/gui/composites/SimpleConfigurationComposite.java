@@ -62,10 +62,13 @@ import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
+import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
+import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -743,11 +746,36 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		layout(true, true);
 	}
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
+	 */
+	@Override
+	public void initConfiguration(PersistentConfigProvider provider) {
+		try {
+			this.configurationContainer.setMobileNumber(
+					provider.getDefaultMobileNumberPersistent());
+		} catch (InvalidNumberException e) {
+			log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
+		}
+
+		try {
+			this.configurationContainer.setEmblem(
+					provider.getDefaultEmblemPersistent());
+		} catch (InvalidEmblemFile e) {
+			log.error("Failed to set emblem!", e); //$NON-NLS-1$
+		}
+
+		this.configurationContainer.setSignatureLocale(
+				provider.getSignatureLocale());
+
+		this.configurationContainer.setSignatureNote(
+				provider.getSignatureNote());
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration
 	 * ()
 	 */
 	@Override
@@ -783,6 +811,21 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.setVisibleImage();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale());
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
+	 */
+	@Override
+	public void storeConfiguration(ConfigManipulator store,
+			PersistentConfigProvider provider) {
+		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
+
+		store.setDefaultEmblem(this.configurationContainer.getEmblem());
+
+		store.setSignatureLocale(this.configurationContainer.getSignatureLocale());
+
+		store.setSignatureNote(this.configurationContainer.getSignatureNote());
 	}
 
 	/*

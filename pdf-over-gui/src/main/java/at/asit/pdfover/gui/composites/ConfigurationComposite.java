@@ -45,9 +45,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
-import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.PDFSigner;
@@ -378,56 +375,8 @@ public class ConfigurationComposite extends StateComposite {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 			// Initialize Configuration Container
-			this.configurationContainer
-						.setDefaultSignaturePosition(this.configProvider
-								.getDefaultSignaturePositionPersistent());
-
-			this.configurationContainer
-					.setPlaceholderTransparency(this.configProvider
-							.getPlaceholderTransparency());
-
-			this.configurationContainer.setSignatureNote(
-					this.configProvider.getSignatureNote());
-
-			this.configurationContainer.setLocale(this.configProvider.getLocale());
-
-			this.configurationContainer.setSignatureLocale(this.configProvider.getSignatureLocale());
-
-			this.configurationContainer.setSignaturePdfACompat(this.configProvider.getSignaturePdfACompat());
-
-			this.configurationContainer.setDefaultBKU(this.configProvider
-					.getDefaultBKUPersistent());
-			try {
-				this.configurationContainer.setEmblem(this.configProvider
-						.getDefaultEmblemPersistent());
-			} catch (InvalidEmblemFile e) {
-				log.error("Failed to set emblem!", e); //$NON-NLS-1$
-			}
-			try {
-				this.configurationContainer.setMobileNumber(this.configProvider
-						.getDefaultMobileNumberPersistent());
-			} catch (InvalidNumberException e) {
-				log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
-			}
-
-			this.configurationContainer.setOutputFolder(this.configProvider
-					.getDefaultOutputFolderPersistent());
-
-			this.configurationContainer.setUpdateCheck(this.configProvider.
-					getUpdateCheck());
-
-			this.configurationContainer.setProxyHost(this.configProvider
-					.getProxyHostPersistent());
-			try {
-				this.configurationContainer.setProxyPort(this.configProvider
-						.getProxyPortPersistent());
-			} catch (InvalidPortException e) {
-				log.error("Failed to set proxy port!", e); //$NON-NLS-1$
-			}
-			this.configurationContainer.setProxyUser(this.configProvider
-					.getProxyUserPersistent());
-			this.configurationContainer.setProxyPass(this.configProvider
-					.getProxyPassPersistent());
+			this.simpleConfigComposite.initConfiguration(this.configProvider);
+			this.advancedConfigComposite.initConfiguration(this.configProvider);
 
 			this.simpleConfigComposite.loadConfiguration();
 			this.advancedConfigComposite.loadConfiguration();
@@ -504,74 +453,10 @@ public class ConfigurationComposite extends StateComposite {
 		}
 
 		// Write current Configuration
-		this.configManipulator.setDefaultBKU(this.configurationContainer
-				.getDefaultBKU());
-		this.configManipulator
-				.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
-		this.configManipulator
-				.setDefaultSignaturePosition(this.configurationContainer.getDefaultSignaturePosition());
-
-		this.configManipulator.setLocale(this.configurationContainer.getLocale());
-
-		this.configManipulator.setSignatureLocale(this.configurationContainer.getSignatureLocale());
-
-		this.configManipulator.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
-
-		this.configManipulator
-				.setPlaceholderTransparency(this.configurationContainer
-						.getPlaceholderTransparency());
-
-		this.configManipulator
-				.setDefaultOutputFolder(this.configurationContainer
-						.getOutputFolder());
-
-		this.configManipulator.setSignatureNote(this.configurationContainer
-				.getSignatureNote());
-
-		this.configManipulator.setUpdateCheck(this.configurationContainer
-				.getUpdateCheck());
-
-		String hostOld = this.configProvider.getProxyHostPersistent();
-		String hostNew = this.configurationContainer.getProxyHost();
-		if (hostOld != null && !hostOld.isEmpty() &&
-				(hostNew == null || hostNew.isEmpty())) {
-			// Proxy has been removed, let's clear the system properties
-			// Otherwise, the proxy settings wouldn't get removed
-			System.clearProperty("http.proxyHost"); //$NON-NLS-1$
-			System.clearProperty("https.proxyHost"); //$NON-NLS-1$
-		}
-		this.configManipulator.setProxyHost(hostNew);
-
-		int portOld = this.configProvider.getProxyPortPersistent();
-		int portNew = this.configurationContainer.getProxyPort();
-		if (portOld != -1 && portNew == -1) {
-			// cf. above
-			System.clearProperty("http.proxyPort"); //$NON-NLS-1$
-			System.clearProperty("https.proxyPort"); //$NON-NLS-1$
-		}
-		this.configManipulator.setProxyPort(portNew);
-
-		String userOld = this.configProvider.getProxyUserPersistent();
-		String userNew = this.configurationContainer.getProxyUser();
-		if (userOld != null && !userOld.isEmpty() &&
-				(userNew == null || userNew.isEmpty())) {
-			// cf. above
-			System.clearProperty("http.proxyUser"); //$NON-NLS-1$
-			System.clearProperty("https.proxyUser"); //$NON-NLS-1$
-		}
-		this.configManipulator.setProxyUser(userNew);
-
-		String passOld = this.configProvider.getProxyPassPersistent();
-		String passNew = this.configurationContainer.getProxyPass();
-		if (passOld != null && passNew == null) {
-			// cf. above
-			System.clearProperty("http.proxyPassword"); //$NON-NLS-1$
-			System.clearProperty("https.proxyPassword"); //$NON-NLS-1$
-		}
-		this.configManipulator.setProxyPass(passNew);
-
-		this.configManipulator.setDefaultEmblem(this.configurationContainer
-				.getEmblem());
+		this.simpleConfigComposite.storeConfiguration(
+				this.configManipulator, this.configProvider);
+		this.advancedConfigComposite.storeConfiguration(
+				this.configManipulator, this.configProvider);
 
 		status = false;
 		redo = false;
