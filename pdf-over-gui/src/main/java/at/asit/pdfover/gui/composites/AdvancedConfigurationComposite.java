@@ -17,6 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.swt.SWT;
@@ -73,6 +75,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private static final Logger log = LoggerFactory
 			.getLogger(AdvancedConfigurationComposite.class);
 
+
+	private ConfigurationComposite configurationComposite;
+
 	private Group grpSignatur;
 	Button btnAutomatischePositionierung;
 	Button btnPdfACompat;
@@ -83,7 +88,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	private Group grpBkuAuswahl;
 	Combo cmbBKUAuswahl;
-	String[] bkuStrings;
+	List<String> bkuStrings;
 	Button btnKeystoreEnabled;
 
 	private Group grpSpeicherort;
@@ -119,10 +124,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 * @param style
 	 * @param state
 	 * @param container
+	 * @param config
 	 */
 	public AdvancedConfigurationComposite(Composite parent, int style,
-			State state, ConfigurationContainer container) {
+			State state, ConfigurationContainer container,
+			ConfigurationComposite config) {
 		super(parent, style, state, container);
+		this.configurationComposite = config;
 		setLayout(new FormLayout());
 
 		this.grpSignatur = new Group(this, SWT.NONE);
@@ -276,23 +284,25 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbBKUAuswahl[0]));
 
 		int blen = BKUs.values().length;
-		this.bkuStrings = new String[blen];
+		this.bkuStrings = new ArrayList<String>(blen);
 		for (int i = 0; i < blen; i++) {
 			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
-			this.bkuStrings[i] = Messages.getString(lookup);
+			String text = Messages.getString(lookup);
+			this.bkuStrings.add(text);
+			this.cmbBKUAuswahl.add(text);
 		}
-		this.cmbBKUAuswahl.setItems(this.bkuStrings);
 		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int selectionIndex = getBKUElementIndex(AdvancedConfigurationComposite.this.configurationContainer
+				int selectionIndex = getBKUElementIndex(
+						AdvancedConfigurationComposite.this.configurationContainer
 						.getDefaultBKU());
 				if (AdvancedConfigurationComposite.this.cmbBKUAuswahl
 						.getSelectionIndex() != selectionIndex) {
 					selectionIndex = AdvancedConfigurationComposite.this.cmbBKUAuswahl
 							.getSelectionIndex();
-					performBKUSelectionChanged(AdvancedConfigurationComposite.this.cmbBKUAuswahl
+					performBKUSelectionChanged(
+							AdvancedConfigurationComposite.this.cmbBKUAuswahl
 							.getItem(selectionIndex));
 				}
 			}
@@ -314,14 +324,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnKeystoreEnabled.setFont(new Font(Display
 				.getCurrent(), fD_btnKeystoreEnabled[0]));
 
-		this.btnKeystoreEnabled
-				.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						AdvancedConfigurationComposite.this.performKeystoreEnabledSelection(
-								AdvancedConfigurationComposite.this.btnKeystoreEnabled.getSelection());
-					}
-				});
+		this.btnKeystoreEnabled.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.performKeystoreEnabledSelection(
+						AdvancedConfigurationComposite.this.btnKeystoreEnabled.getSelection());
+			}
+		});
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
 		layout = new FormLayout();
@@ -763,15 +772,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		String lookup = "BKU." + bku.toString(); //$NON-NLS-1$
 		String bkuName = Messages.getString(lookup);
 
-		for (int i = 0; i < this.bkuStrings.length; i++) {
-			if (this.bkuStrings[i].equals(bkuName)) {
-				log.debug("BKU: " + bkuName + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
-				return i;
-			}
+		int i = this.bkuStrings.indexOf(bkuName);
+		if (i == -1) {
+			log.warn("NO BKU match for " + bkuName); //$NON-NLS-1$
+			return 0;
 		}
-
-		log.warn("NO BKU match for " + bkuName); //$NON-NLS-1$
-		return 0;
+		return i;
 	}
 
 	void performBKUSelectionChanged(BKUs selected) {
@@ -838,6 +844,21 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	void performKeystoreEnabledSelection(boolean enabled) {
 		this.configurationContainer.setKeyStoreEnabled(enabled);
 		this.btnKeystoreEnabled.setSelection(enabled);
+		this.configurationComposite.keystoreEnabled(enabled);
+
+		int ksIndex = getBKUElementIndex(BKUs.KS);
+		String ksText = this.bkuStrings.get(ksIndex);
+		if (enabled) {
+			if (!this.cmbBKUAuswahl.getItem(ksIndex).equals(ksText))
+				this.cmbBKUAuswahl.add(ksText, ksIndex);
+		} else {
+			int i = this.cmbBKUAuswahl.indexOf(ksText);
+			if (i != -1) {
+				if (this.cmbBKUAuswahl.getSelectionIndex() == i)
+					performBKUSelectionChanged(BKUs.NONE);
+				this.cmbBKUAuswahl.remove(i);
+			}
+		}
 	}
 
 	void performPlaceholderTransparency(int transparency) {

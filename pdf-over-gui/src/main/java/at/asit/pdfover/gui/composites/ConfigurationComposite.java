@@ -65,6 +65,79 @@ public class ConfigurationComposite extends StateComposite {
 	protected PDFSigner signer;
 
 	/**
+	 * SLF4J Logger instance
+	 **/
+	static final Logger log = LoggerFactory
+			.getLogger(ConfigurationComposite.class);
+
+	/**
+	 * configuration manipulator
+	 */
+	ConfigManipulator configManipulator = null;
+
+	/**
+	 * configuration provider
+	 */
+	PersistentConfigProvider configProvider = null;
+
+	/**
+	 * simple configuration composite
+	 */
+	BaseConfigurationComposite simpleConfigComposite;
+
+	/**
+	 * advanced configuration composite
+	 */
+	BaseConfigurationComposite advancedConfigComposite;
+
+	/**
+	 * advanced configuration composite
+	 */
+	BaseConfigurationComposite keystoreConfigComposite = null;
+
+	/**
+	 * The TabFolder
+	 */
+	TabFolder tabFolder;
+
+	/**
+	 * configuration container Keeps state for current configuration changes
+	 */
+	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
+
+	/**
+	 * The stack layout
+	 */
+	StackLayout compositeStack = new StackLayout();
+
+	/**
+	 * SWT style
+	 */
+	int style;
+
+	/**
+	 * base configuration container
+	 */
+	Composite containerComposite;
+
+	/**
+	 * checks whether the user is done
+	 */
+	boolean userDone = false;
+
+	private TabItem simpleTabItem;
+
+	private TabItem advancedTabItem;
+
+	private TabItem keystoreTabItem;
+
+	private TabItem aboutTabItem;
+
+	private Button btnSpeichern;
+
+	private Button btnAbbrechen;
+
+	/**
 	 * @return the signer
 	 */
 	public PDFSigner getSigner() {
@@ -86,22 +159,22 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
-		TabFolder tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
+		this.tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
 		FormData fd_tabFolder = new FormData();
 		fd_tabFolder.bottom = new FormAttachment(100, -5);
 		fd_tabFolder.right = new FormAttachment(100, -5);
 		fd_tabFolder.top = new FormAttachment(0, 5);
 		fd_tabFolder.left = new FormAttachment(0, 5);
-		tabFolder.setLayoutData(fd_tabFolder);
+		this.tabFolder.setLayoutData(fd_tabFolder);
 
-		FontData[] fD_tabFolder = tabFolder.getFont().getFontData();
+		FontData[] fD_tabFolder = this.tabFolder.getFont().getFontData();
 		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
+		this.tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
 
-		this.simpleTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
-		ScrolledComposite simpleCompositeScr = new ScrolledComposite(tabFolder,
+		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder,
 				SWT.H_SCROLL | SWT.V_SCROLL);
 		this.simpleTabItem.setControl(simpleCompositeScr);
 		this.simpleConfigComposite = new SimpleConfigurationComposite(
@@ -113,26 +186,26 @@ public class ConfigurationComposite extends StateComposite {
 		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
 				SWT.DEFAULT, SWT.DEFAULT));
 
-		this.advancedTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
-				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+				this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
 		this.advancedTabItem.setControl(advancedCompositeScr);
 		this.advancedConfigComposite = new AdvancedConfigurationComposite(
 				advancedCompositeScr, SWT.NONE, state,
-				this.configurationContainer);
+				this.configurationContainer, this);
 		advancedCompositeScr.setContent(this.advancedConfigComposite);
 		advancedCompositeScr.setExpandHorizontal(true);
 		advancedCompositeScr.setExpandVertical(true);
 		advancedCompositeScr.setMinSize(this.advancedConfigComposite
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		this.aboutTabItem = new TabItem(tabFolder, SWT.NONE);
+		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //$NON-NLS-1$
 
 		ScrolledComposite aboutCompositeScr = new ScrolledComposite(
-				tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+				this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
 		this.aboutTabItem.setControl(aboutCompositeScr);
 		AboutComposite aboutConfigComposite = new AboutComposite(
 				aboutCompositeScr, SWT.NONE);
@@ -142,7 +215,7 @@ public class ConfigurationComposite extends StateComposite {
 		aboutCompositeScr.setMinSize(aboutConfigComposite
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		tabFolder.setSelection(this.simpleTabItem);
+		this.tabFolder.setSelection(this.simpleTabItem);
 
 		this.btnSpeichern = new Button(this, SWT.NONE);
 		FormData fd_btnSpeichern = new FormData();
@@ -194,7 +267,7 @@ public class ConfigurationComposite extends StateComposite {
 		fd_composite.right = new FormAttachment(100, -5);
 		this.containerComposite.setLayoutData(fd_composite);
 		this.containerComposite.setLayout(this.compositeStack);
-		this.compositeStack.topControl = tabFolder;
+		this.compositeStack.topControl = this.tabFolder;
 
 		getShell().setText(Constants.APP_NAME_VERSION);
 
@@ -215,67 +288,6 @@ public class ConfigurationComposite extends StateComposite {
 			this.advancedConfigComposite.setSigner(getSigner());
 		}
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(ConfigurationComposite.class);
-
-	/**
-	 * configuration manipulator
-	 */
-	ConfigManipulator configManipulator = null;
-
-	/**
-	 * configuration provider
-	 */
-	PersistentConfigProvider configProvider = null;
-
-	/**
-	 * simple configuration composite
-	 */
-	BaseConfigurationComposite simpleConfigComposite;
-
-	/**
-	 * advanced configuration composite
-	 */
-	BaseConfigurationComposite advancedConfigComposite;
-
-	/**
-	 * configuration container Keeps state for current configuration changes
-	 */
-	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
-
-	/**
-	 * The stack layout
-	 */
-	StackLayout compositeStack = new StackLayout();
-
-	/**
-	 * SWT style
-	 */
-	int style;
-
-	/**
-	 * base configuration container
-	 */
-	Composite containerComposite;
-
-	/**
-	 * checks whether the user is done
-	 */
-	boolean userDone = false;
-
-	private TabItem simpleTabItem;
-
-	private TabItem advancedTabItem;
-
-	private TabItem aboutTabItem;
-
-	private Button btnSpeichern;
-
-	private Button btnAbbrechen;
 
 	private class AboutComposite extends StateComposite {
 		private Link lnkAbout;
@@ -357,6 +369,39 @@ public class ConfigurationComposite extends StateComposite {
 		}
 	}
 
+	private boolean keystoreInitialized = false;
+
+	/**
+	 * Set whether keystore tab is enabled
+	 * @param enabled whether keystore tab is enabled
+	 */
+	public void keystoreEnabled(boolean enabled) {
+		if (enabled && this.keystoreConfigComposite == null) {
+			this.keystoreTabItem = new TabItem(this.tabFolder, SWT.NONE, 2);
+			this.keystoreTabItem.setText(Messages.getString("config.Keystore")); //$NON-NLS-1$
+	
+			ScrolledComposite keystoreCompositeScr = new ScrolledComposite(
+					this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+			this.keystoreTabItem.setControl(keystoreCompositeScr);
+			this.keystoreConfigComposite = new KeystoreConfigurationComposite(
+					keystoreCompositeScr, SWT.NONE, this.state,
+					this.configurationContainer);
+			keystoreCompositeScr.setContent(this.keystoreConfigComposite);
+			keystoreCompositeScr.setExpandHorizontal(true);
+			keystoreCompositeScr.setExpandVertical(true);
+			keystoreCompositeScr.setMinSize(this.keystoreConfigComposite
+					.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			if (!this.keystoreInitialized) {
+				this.keystoreConfigComposite.initConfiguration(this.configProvider);
+				this.keystoreInitialized = true;
+			}
+			this.keystoreConfigComposite.loadConfiguration();
+		} else if (!enabled && this.keystoreConfigComposite != null){
+			this.keystoreTabItem.dispose();
+			this.keystoreConfigComposite = null;
+		}
+	}
+
 	/**
 	 * Sets the configuration manipulator
 	 * 
@@ -380,6 +425,8 @@ public class ConfigurationComposite extends StateComposite {
 
 			this.simpleConfigComposite.loadConfiguration();
 			this.advancedConfigComposite.loadConfiguration();
+			if (this.keystoreConfigComposite != null)
+				this.keystoreConfigComposite.loadConfiguration();
 		}
 	}
 
@@ -437,6 +484,41 @@ public class ConfigurationComposite extends StateComposite {
 					}
 				}
 			} while (redo);
+
+			if (!status) {
+				return false;
+			}
+
+			if (this.keystoreConfigComposite != null) {
+				status = false;
+				redo = false;
+				resumeIndex = 0;
+	
+				do {
+					try {
+						this.keystoreConfigComposite.validateSettings(resumeIndex);
+	
+						redo = false;
+						status = true;
+					} catch (ResumableException e) {
+						log.error("Settings validation failed!", e); //$NON-NLS-1$
+						ErrorDialog dialog = new ErrorDialog(getShell(),
+								e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
+						int rc = dialog.open();
+	
+						redo = (rc == SWT.RETRY);
+						if (rc == SWT.IGNORE)
+						{
+							resumeIndex = e.getResumeIndex();
+							redo = true;
+						}
+					}
+				} while (redo);
+	
+				if (!status) {
+					return false;
+				}
+			}
 		} catch (Exception e) {
 			log.error("Settings validation failed!", e); //$NON-NLS-1$
 			String message = e.getMessage();
@@ -457,6 +539,9 @@ public class ConfigurationComposite extends StateComposite {
 				this.configManipulator, this.configProvider);
 		this.advancedConfigComposite.storeConfiguration(
 				this.configManipulator, this.configProvider);
+		if (this.keystoreConfigComposite != null)
+			this.keystoreConfigComposite.storeConfiguration(
+					this.configManipulator, this.configProvider);
 
 		status = false;
 		redo = false;

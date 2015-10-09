@@ -84,8 +84,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	static final Logger log = LoggerFactory
 			.getLogger(SimpleConfigurationComposite.class);
 
-	ConfigurationComposite configurationComposite;
-
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;
 	Text txtMobileNumber;
@@ -718,22 +716,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	void processSignatureNoteChanged() {
 		String note = this.txtSignatureNote.getText();
 		this.configurationContainer.setSignatureNote(note);
-	}
-
-	/**
-	 * @return the configurationComposite
-	 */
-	public ConfigurationComposite getConfigurationComposite() {
-		return this.configurationComposite;
-	}
-
-	/**
-	 * @param configurationComposite
-	 *            the configurationComposite to set
-	 */
-	public void setConfigurationComposite(
-			ConfigurationComposite configurationComposite) {
-		this.configurationComposite = configurationComposite;
 	}
 
 	/*
