@@ -118,6 +118,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Keystore type */
 	protected String keystoreType = null;
 
+	/** Keystore alias */
+	protected String keystoreAlias = null;
+
 	/** Keystore store password */
 	protected String keystoreStorePass = null;
 
@@ -534,6 +537,22 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setKeyStoreType(String type) {
 		this.keystoreType = type;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getKeyStoreAlias()
+	 */
+	@Override
+	public String getKeyStoreAlias() {
+		return this.keystoreAlias;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setKeyStoreAlias(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreAlias(String alias) {
+		this.keystoreAlias = alias;
 	}
 
 	/* (non-Javadoc)

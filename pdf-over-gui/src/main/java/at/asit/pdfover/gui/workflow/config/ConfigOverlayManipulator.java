@@ -109,6 +109,12 @@ public interface ConfigOverlayManipulator {
 	public void setKeyStoreTypeOverlay(String type);
 
 	/**
+	 * Sets the keystore alias
+	 * @param alias the keystore alias
+	 */
+	public void setKeyStoreAliasOverlay(String alias);
+
+	/**
 	 * Sets the keystore store password
 	 * @param storePass the keystore store password
 	 */

@@ -180,6 +180,8 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 				provider.getKeyStoreFilePersistent());
 		this.configurationContainer.setKeyStoreType(
 				provider.getKeyStoreTypePersistent());
+		this.configurationContainer.setKeyStoreAlias(
+				provider.getKeyStoreAliasPersistent());
 		this.configurationContainer.setKeyStoreStorePass(
 				provider.getKeyStoreStorePassPersistent());
 		this.configurationContainer.setKeyStoreKeyPass(
@@ -204,6 +206,7 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 			PersistentConfigProvider provider) {
 		store.setKeyStoreFile(this.configurationContainer.getKeyStoreFile());
 		store.setKeyStoreType(this.configurationContainer.getKeyStoreType());
+		store.setKeyStoreAlias(this.configurationContainer.getKeyStoreAlias());
 		store.setKeyStoreStorePass(this.configurationContainer.getKeyStoreStorePass());
 		store.setKeyStoreKeyPass(this.configurationContainer.getKeyStoreKeyPass());
 	}

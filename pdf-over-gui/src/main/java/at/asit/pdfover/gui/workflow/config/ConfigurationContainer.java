@@ -292,6 +292,17 @@ public interface ConfigurationContainer {
 	public void setKeyStoreType(String type);
 
 	/**
+	 * Gets the keystore alias
+	 * @return the keystore alias
+	 */
+	public String getKeyStoreAlias();
+
+	/**
+	 * Sets the keystore alias
+	 * @param alias the keystore alias
+	 */
+	public void setKeyStoreAlias(String alias);
+	/**
 	 * Gets the keystore store password
 	 * @return the keystore store password
 	 */

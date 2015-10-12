@@ -282,6 +282,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		setKeyStoreFile(keystoreFile);
 		String keystoreType = config.getProperty(Constants.CFG_KEYSTORE_TYPE);
 		setKeyStoreType(keystoreType);
+		String keystoreAlias = config.getProperty(Constants.CFG_KEYSTORE_ALIAS);
+		setKeyStoreAlias(keystoreAlias);
 		String keystoreStorePass = config.getProperty(Constants.CFG_KEYSTORE_STOREPASS);
 		setKeyStoreStorePass(keystoreStorePass);
 		String keystoreKeyPass = config.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
@@ -380,6 +382,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		String keystoreType = getKeyStoreTypePersistent();
 		if (keystoreType != STRING_EMPTY)
 			props.setProperty(Constants.CFG_KEYSTORE_TYPE, keystoreType);
+		String keystoreAlias = getKeyStoreAliasPersistent();
+		if (keystoreAlias != STRING_EMPTY)
+			props.setProperty(Constants.CFG_KEYSTORE_ALIAS, keystoreAlias);
 		String keystoreStorePass = getKeyStoreStorePassPersistent();
 		if (keystoreStorePass != STRING_EMPTY)
 			props.setProperty(Constants.CFG_KEYSTORE_STOREPASS, keystoreStorePass);
@@ -1224,6 +1229,52 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (type == null)
 			type = STRING_EMPTY;
 		return type;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreAlias(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreAlias(String alias) {
+		if (alias == null || alias.trim().isEmpty()) {
+			this.configuration.setKeyStoreAlias(STRING_EMPTY);
+		} else {
+			this.configuration.setKeyStoreAlias(alias);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreAliasOverlay(java.lang.String)
+	 */
+	@Override
+	public void setKeyStoreAliasOverlay(String alias) {
+		if (alias == null || alias.trim().isEmpty()) {
+			this.configurationOverlay.setKeyStoreAlias(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setKeyStoreAlias(alias);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreAlias()
+	 */
+	@Override
+	public String getKeyStoreAlias() {
+		String alias = this.configurationOverlay.getKeyStoreAlias();
+		if (alias == null)
+			alias = getKeyStoreAliasPersistent();
+		return alias;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreAliasPersistent()
+	 */
+	@Override
+	public String getKeyStoreAliasPersistent() {
+		String alias = this.configuration.getKeyStoreAlias();
+		if (alias == null)
+			alias = STRING_EMPTY;
+		return alias;
 	}
 
 	/* (non-Javadoc)

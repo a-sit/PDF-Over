@@ -181,6 +181,12 @@ public interface ConfigProvider {
 	public String getKeyStoreType();
 
 	/**
+	 * Gets the keystore alias
+	 * @return the keystore alias
+	 */
+	public String getKeyStoreAlias();
+
+	/**
 	 * Gets the keystore store password
 	 * @return the keystore store password
 	 */

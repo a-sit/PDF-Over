@@ -136,6 +136,12 @@ public interface ConfigManipulator {
 	public void setKeyStoreType(String type);
 
 	/**
+	 * Sets the keystore alias
+	 * @param alias the keystore alias
+	 */
+	public void setKeyStoreAlias(String alias);
+
+	/**
 	 * Sets the keystore store password
 	 * @param storePass the keystore store password
 	 */

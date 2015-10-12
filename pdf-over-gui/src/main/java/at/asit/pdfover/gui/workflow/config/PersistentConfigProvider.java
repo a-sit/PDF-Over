@@ -152,6 +152,12 @@ public interface PersistentConfigProvider {
 	public String getKeyStoreTypePersistent();
 
 	/**
+	 * Gets the keystore alias
+	 * @return the keystore alias
+	 */
+	public String getKeyStoreAliasPersistent();
+
+	/**
 	 * Gets the keystore store password
 	 * @return the keystore store password
 	 */
