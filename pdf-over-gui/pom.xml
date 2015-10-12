@@ -406,7 +406,7 @@
 		<project.maindir>${project.basedir}/..</project.maindir>
 		<target.name>linux</target.name>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.3</swt.version>
+		<swt.version>4.3.2</swt.version>
 	</properties>
 
 	<profiles>
