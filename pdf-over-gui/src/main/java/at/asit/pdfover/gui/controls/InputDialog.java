@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.controls;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -96,12 +97,18 @@ public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 	 * @return the input
 	 */
 	public String open() {
-		Shell shell = new Shell(getParent(), getStyle());
+		Shell parent = getParent();
+		Shell shell = new Shell(parent, getStyle());
 		shell.setText(getText());
 		createContents(shell);
 		shell.pack();
 		shell.open();
-		Display display = getParent().getDisplay();
+		Display display = parent.getDisplay();
+		Rectangle bounds = parent.getBounds();
+		Rectangle main = shell.getBounds();
+		shell.setLocation(
+				bounds.x + (bounds.width - main.width) / 2,
+				bounds.y + (bounds.height - main.height) / 2);
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
