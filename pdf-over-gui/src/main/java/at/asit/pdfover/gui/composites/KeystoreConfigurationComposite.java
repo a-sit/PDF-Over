@@ -52,9 +52,8 @@ import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.CantLoadKeystoreException;
+import at.asit.pdfover.gui.exceptions.KeystoreAliasDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
-import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
-import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
@@ -88,6 +87,8 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 
 	private Map<String, String> keystoreTypes;
 	private Map<String, String> keystoreTypes_i;
+
+	private KeyStore ks;
 
 	/**
 	 * @param parent
@@ -304,7 +305,7 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 		this.lblKeystoreAlias.setFont(new Font(Display.getCurrent(),
 				fD_lblKeystoreAlias[0]));
 
-		this.cmbKeystoreAlias = new Combo(this.grpKeystore, SWT.READ_ONLY);
+		this.cmbKeystoreAlias = new Combo(this.grpKeystore, SWT.NONE);
 		FormData fd_cmbKeystoreAlias = new FormData();
 		fd_cmbKeystoreAlias.right = new FormAttachment(100, -5);
 		fd_cmbKeystoreAlias.top = new FormAttachment(this.lblKeystoreAlias, 5);
@@ -323,6 +324,13 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 				performKeystoreAliasChanged(
 						KeystoreConfigurationComposite.this.cmbKeystoreAlias.getItem(
 								KeystoreConfigurationComposite.this.cmbKeystoreAlias.getSelectionIndex()));
+			}
+		});
+		this.cmbKeystoreAlias.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				performKeystoreAliasChanged(KeystoreConfigurationComposite.
+						this.cmbKeystoreAlias.getText());
 			}
 		});
 
@@ -372,11 +380,11 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 		ConfigurationContainer config = 
 				KeystoreConfigurationComposite.this.configurationContainer;
 		File f = new File(config.getKeyStoreFile());
-		KeyStore ks = KeyStore.getInstance(config.getKeyStoreType());
+		this.ks = KeyStore.getInstance(config.getKeyStoreType());
 		FileInputStream fis = new FileInputStream(f);
-		ks.load(fis, config.getKeyStoreStorePass().toCharArray());
-		this.cmbKeystoreAlias.removeAll();
-		Enumeration<String> aliases = ks.aliases();
+		this.ks.load(fis, config.getKeyStoreStorePass().toCharArray());
+		this.cmbKeystoreAlias.remove(0, this.cmbKeystoreAlias.getItemCount()-1);
+		Enumeration<String> aliases = this.ks.aliases();
 		while (aliases.hasMoreElements())
 			this.cmbKeystoreAlias.add(aliases.nextElement());
 	}
@@ -442,12 +450,7 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	protected void performKeystoreAliasChanged(String alias) {
 		log.debug("Selected keystore alias: " + alias); //$NON-NLS-1$
 		this.configurationContainer.setKeyStoreAlias(alias);
-		for (int i = 0; i < this.cmbKeystoreAlias.getItemCount(); ++i) {
-			if (this.cmbKeystoreAlias.getItem(i).equals(alias)) {
-				this.cmbKeystoreAlias.select(i);
-				break;
-			}
-		}
+		this.cmbKeystoreAlias.setText(alias);
 	}
 
 	/**
@@ -506,14 +509,16 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
-		performKeystoreFileChanged(
-				this.configurationContainer.getKeyStoreFile());
+		String ks = this.configurationContainer.getKeyStoreFile();
+		performKeystoreFileChanged(ks);
 		performKeystoreTypeChanged(
 				this.configurationContainer.getKeyStoreType());
 		performKeystoreStorePassChanged(
 				this.configurationContainer.getKeyStoreStorePass());
 		try {
-			loadKeystore();
+			File ksf = new File(ks);
+			if (ksf.exists())
+				loadKeystore();
 		} catch (Exception e) {
 			log.error("Error loading keystore", e); //$NON-NLS-1$
 		}
@@ -547,17 +552,24 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	public void validateSettings(int resumeFrom) throws Exception {
 		switch (resumeFrom) {
 		case 0:
-			File f = new File(this.configurationContainer.getKeyStoreFile());
+			String fname = this.configurationContainer.getKeyStoreFile();
+			if (fname.isEmpty())
+				break; //no checks required
+			File f = new File(fname);
 			if (!f.exists() || !f.isFile())
-				throw new KeystoreDoesntExistException(f, 2); //skip next check
+				throw new KeystoreDoesntExistException(f, 3); //skip next checks
 			// Fall through
 		case 1:
 			try {
 				loadKeystore();
 			} catch (Exception e) {
-				throw new CantLoadKeystoreException(e, 2);
+				throw new CantLoadKeystoreException(e, 3); //skip next check
 			}
 			// Fall through
+		case 2:
+			String alias = this.configurationContainer.getKeyStoreAlias();
+			if (!this.ks.containsAlias(alias))
+				throw new KeystoreAliasDoesntExistException(alias, 3);
 		}
 	}
 
