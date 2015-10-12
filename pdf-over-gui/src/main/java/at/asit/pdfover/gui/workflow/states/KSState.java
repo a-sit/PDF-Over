@@ -16,6 +16,8 @@
 package at.asit.pdfover.gui.workflow.states;
 
 // Imports
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +68,21 @@ public class KSState extends State {
 
 		try {
 			String file = config.getKeyStoreFile();
+			File f = new File(file);
+			if (!f.isFile()) {
+				log.error("Keystore not found"); //$NON-NLS-1$
+				ErrorDialog dialog = new ErrorDialog(
+						getStateMachine().getGUIProvider().getMainShell(),
+						String.format(Messages.getString("error.KeyStoreFileNotExist"), f.getName()), //$NON-NLS-1$
+						BUTTONS.RETRY_CANCEL);
+				if (dialog.open() != SWT.RETRY) {
+					//getStateMachine().exit();
+					this.setNextState(new BKUSelectionState(getStateMachine()));
+					return;
+				}
+				this.run();
+				return;
+			}
 			String alias = config.getKeyStoreAlias();
 			String storePass = config.getKeyStoreStorePass();
 			if (storePass.isEmpty()) {

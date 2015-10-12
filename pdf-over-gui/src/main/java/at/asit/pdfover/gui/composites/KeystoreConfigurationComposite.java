@@ -278,7 +278,7 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 				} catch (FileNotFoundException ex) {
 					log.error("Error loading keystore", ex); //$NON-NLS-1$
 					showErrorDialog(String.format(Messages.getString(
-							"error.FileNotExist"), f.getName())); //$NON-NLS-1$
+							"error.KeyStoreFileNotExist"), f.getName())); //$NON-NLS-1$
 				} catch (NoSuchAlgorithmException ex) {
 					log.error("Error loading keystore", ex); //$NON-NLS-1$
 					showErrorDialog(Messages.getString("error.KeyStore")); //$NON-NLS-1$
