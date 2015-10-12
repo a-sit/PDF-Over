@@ -287,6 +287,10 @@ public class ConfigurationComposite extends StateComposite {
 			// not needed at the moment
 			this.advancedConfigComposite.setSigner(getSigner());
 		}
+		if (this.keystoreConfigComposite != null) {
+			// not needed at the moment
+			this.keystoreConfigComposite.setSigner(getSigner());
+		}
 	}
 
 	private class AboutComposite extends StateComposite {
@@ -299,20 +303,6 @@ public class ConfigurationComposite extends StateComposite {
 			super(parent, style, null);
 
 			setLayout(new FormLayout());
-
-			/*Group grpAbout = new Group(this, SWT.NONE | SWT.RESIZE);
-			FormData fd_grpAbout = new FormData();
-			fd_grpAbout.right = new FormAttachment(100, -5);
-			fd_grpAbout.left = new FormAttachment(0, 5);
-			fd_grpAbout.top = new FormAttachment(0, 5);
-			grpAbout.setLayoutData(fd_grpAbout);
-			grpAbout.setLayout(new FillLayout());
-
-			FontData[] fD_grpAbout = grpAbout.getFont()
-					.getFontData();
-			fD_grpAbout[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-			grpAbout.setFont(new Font(Display.getCurrent(),
-					fD_grpAbout[0]));*/
 
 			this.lnkAbout = new Link(this, SWT.WRAP);
 
