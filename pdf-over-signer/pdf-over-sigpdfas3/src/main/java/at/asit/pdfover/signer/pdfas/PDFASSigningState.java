@@ -19,6 +19,7 @@ package at.asit.pdfover.signer.pdfas;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
+import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.api.io.DataSink;
 import at.gv.egiz.pdfas.api.sign.SignatureDetailInformation;
@@ -161,6 +162,15 @@ public class PDFASSigningState implements SigningState {
 	public void setSignatureDetailInformation(
 			SignatureDetailInformation signatureDetailInformation) {
 		this.signatureDetailInformation = signatureDetailInformation;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.signator.SigningState#setKSSigner(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setKSSigner(String file, String alias, String kspassword,
+			String keypassword, String type) throws SignatureException {
+		// Not implemented
 	}
 
 	/* (non-Javadoc)
