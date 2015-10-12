@@ -16,6 +16,8 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +56,11 @@ public class BKUSelectionState extends State {
 					getStateMachine().getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
-		this.selectionComposite.setKeystoreEnabled(
-				getStateMachine().getConfigProvider().getKeyStoreEnabled());
+		if (getStateMachine().getConfigProvider().getKeyStoreEnabled()) {
+			File ks = new File(getStateMachine().getConfigProvider().getKeyStoreFile());
+			this.selectionComposite.setKeystoreEnabled(ks.exists());
+		} else
+			this.selectionComposite.setKeystoreEnabled(false);
 
 		return this.selectionComposite;
 	}
