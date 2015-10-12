@@ -82,6 +82,10 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(PhoneNumberArgument.class);
 		this.handler.addCLIArgument(PasswordArgument.class);
 		this.handler.addCLIArgument(KeystoreFileArgument.class);
+		this.handler.addCLIArgument(KeystoreTypeArgument.class);
+		this.handler.addCLIArgument(KeystoreStorePassArgument.class);
+		this.handler.addCLIArgument(KeystoreAliasArgument.class);
+		this.handler.addCLIArgument(KeystoreKeyPassArgument.class);
 		this.handler.addCLIArgument(ProxyHostArgument.class);
 		this.handler.addCLIArgument(ProxyPortArgument.class);
 		this.handler.addCLIArgument(ProxyUserArgument.class);

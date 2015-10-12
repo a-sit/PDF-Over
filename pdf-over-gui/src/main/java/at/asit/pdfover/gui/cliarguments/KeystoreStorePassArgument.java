@@ -16,31 +16,28 @@
 package at.asit.pdfover.gui.cliarguments;
 
 // Imports
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
 import at.asit.pdfover.gui.utils.Messages;
 
 /**
- * CLI Argument to provide the keystore file
+ * CLI Argument to provide the keystore password
  */
-public class KeystoreFileArgument extends Argument {
+public class KeystoreStorePassArgument extends Argument {
 	/**
 	 * Constructor
 	 */
-	public KeystoreFileArgument() {
-		super(new String[] {"-ks"}, "argument.help.keystorefile"); //$NON-NLS-1$ //$NON-NLS-2$
+	public KeystoreStorePassArgument() {
+		super(new String[] {"-kspass"}, "argument.help.keystorestorepass"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory
-			.getLogger(KeystoreFileArgument.class);
+			.getLogger(KeystoreStorePassArgument.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
@@ -52,25 +49,20 @@ public class KeystoreFileArgument extends Argument {
 		try {
 			if (args.length > argOffset + 1) {
 
-				String ksFile = args[argOffset + 1];
+				String ksStorePass = args[argOffset + 1];
 				
-				File ks = new File(ksFile);
-				if(!ks.exists() || !ks.isFile())
-					throw new KeystoreDoesntExistException(ks, 0);
-				
-				getConfiguration().setKeyStoreFileOverlay(ksFile);
-				getConfiguration().setKeyStoreEnabledOverlay(true);
+				getConfiguration().setKeyStoreStorePassOverlay(ksStorePass);
 				
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Keystore file argument invalid!", ex); //$NON-NLS-1$
+			log.error("Keystore password argument invalid!", ex); //$NON-NLS-1$
 			throw new InitializationException(
-					Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), ex); //$NON-NLS-1$
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), null); //$NON-NLS-1$
 	}
 
 }
