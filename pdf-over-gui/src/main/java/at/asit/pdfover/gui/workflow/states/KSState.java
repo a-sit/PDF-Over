@@ -96,6 +96,7 @@ public class KSState extends State {
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
 			}
+			this.run();
 			return;
 		}
 
