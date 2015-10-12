@@ -24,9 +24,11 @@ import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.PasswordInputDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SigningState;
 
@@ -60,9 +62,29 @@ public class KSState extends State {
 		Status status = getStateMachine().getStatus();
 
 		SigningState signingState = status.getSigningState();
+		ConfigProvider config = getStateMachine().getConfigProvider();
 
 		try {
-			signingState.setKSSigner("D:/Downloads/test.p12", "ecc_test", "123456", "123456", "PKCS12");
+			String file = config.getKeyStoreFile();
+			String alias = config.getKeyStoreAlias();
+			String storePass = config.getKeyStoreStorePass();
+			if (storePass.isEmpty()) {
+				PasswordInputDialog pwd = new PasswordInputDialog(
+						getStateMachine().getGUIProvider().getMainShell(),
+						Messages.getString("keystore_config.KeystoreStorePass"), //$NON-NLS-1$
+						Messages.getString("keystore.KeystoreStorePassEntry")); //$NON-NLS-1$
+				storePass = pwd.open();
+			}
+			String keyPass = config.getKeyStoreKeyPass();
+			if (keyPass.isEmpty()) {
+				PasswordInputDialog pwd = new PasswordInputDialog(
+						getStateMachine().getGUIProvider().getMainShell(),
+						Messages.getString("keystore_config.KeystoreKeyPass"), //$NON-NLS-1$
+						Messages.getString("keystore.KeystoreKeyPassEntry")); //$NON-NLS-1$
+				keyPass = pwd.open();
+			}
+			String type = config.getKeyStoreType();
+			signingState.setKSSigner(file, alias, storePass, keyPass, type);
 		} catch (SignatureException e) {
 			log.error("Error loading keystore", e); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(
