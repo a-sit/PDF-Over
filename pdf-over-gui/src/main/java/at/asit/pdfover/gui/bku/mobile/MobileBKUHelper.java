@@ -69,10 +69,10 @@ public class MobileBKUHelper {
 				return data.substring(startidx, endidx);
 			}
 			log.error("extracting Tag: end tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
-			throw new Exception("end tag not available!"); //$NON-NLS-1$
+			throw new Exception("end tag not available! Mobile BKU site changed?"); //$NON-NLS-1$
 		}
 		log.error("extracting Tag: start tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
-		throw new Exception("start tag not available!"); //$NON-NLS-1$
+		throw new Exception("start tag not available! Mobile BKU site changed?"); //$NON-NLS-1$
 	}
 
 	/**

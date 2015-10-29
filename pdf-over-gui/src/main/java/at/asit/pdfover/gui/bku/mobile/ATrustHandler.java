@@ -75,6 +75,15 @@ public class ATrustHandler extends MobileBKUHandler {
 	public void handleSLRequestResponse(String responseData) throws Exception {
 		ATrustStatus status = getStatus();
 
+		if (responseData.contains("<sl:ErrorResponse")) { //$NON-NLS-1$
+			String errorCode = MobileBKUHelper.extractTag(responseData,
+					"<sl:ErrorCode>", "</sl:ErrorCode>"); //$NON-NLS-1$ //$NON-NLS-2$
+			String errorMsg = MobileBKUHelper.extractTag(responseData,
+					"<sl:Info>", "</sl:Info>"); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new Exception("Error from mobile BKU: " + //$NON-NLS-1$
+					errorCode + " - " + errorMsg); //$NON-NLS-1$
+		}
+
 		// Extract infos:
 		String sessionID = MobileBKUHelper.extractTag(responseData,
 				"identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
