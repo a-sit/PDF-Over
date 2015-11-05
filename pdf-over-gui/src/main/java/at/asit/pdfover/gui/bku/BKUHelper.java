@@ -36,28 +36,39 @@ public class BKUHelper {
 
 	/**
 	 * Get a HTTP Client instance
+	 * @param useProxy whether to use a potentially set proxy
 	 * @return the HttpClient
 	 */
-	public static HttpClient getHttpClient() {
+	public static HttpClient getHttpClient(boolean useProxy) {
 		HttpClient client = new HttpClient();
 		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
 				Constants.USER_AGENT_STRING);
-	
-		String host = System.getProperty("http.proxyHost"); //$NON-NLS-1$
-		String port = System.getProperty("http.proxyPort"); //$NON-NLS-1$
-		if (host != null && !host.isEmpty() &&
-				port != null && !port.isEmpty()) {
-			int p = Integer.parseInt(port);
-			client.getHostConfiguration().setProxy(host, p);
-			String user = System.getProperty("http.proxyUser"); //$NON-NLS-1$
-			String pass = System.getProperty("http.proxyPassword"); //$NON-NLS-1$
-			if (user != null && !user.isEmpty() && pass != null) {
-				client.getState().setProxyCredentials(new AuthScope(host, p),
-						new UsernamePasswordCredentials(user, pass));
+
+		if (useProxy) {
+			String host = System.getProperty("http.proxyHost"); //$NON-NLS-1$
+			String port = System.getProperty("http.proxyPort"); //$NON-NLS-1$
+			if (host != null && !host.isEmpty() &&
+					port != null && !port.isEmpty()) {
+				int p = Integer.parseInt(port);
+				client.getHostConfiguration().setProxy(host, p);
+				String user = System.getProperty("http.proxyUser"); //$NON-NLS-1$
+				String pass = System.getProperty("http.proxyPassword"); //$NON-NLS-1$
+				if (user != null && !user.isEmpty() && pass != null) {
+					client.getState().setProxyCredentials(new AuthScope(host, p),
+							new UsernamePasswordCredentials(user, pass));
+				}
 			}
 		}
-	
+
 		return client;
+	}
+
+		/**
+	 * Get a HTTP Client instance
+	 * @return the HttpClient
+	 */
+	public static HttpClient getHttpClient() {
+		return getHttpClient(true);
 	}
 
 }

@@ -104,7 +104,7 @@ public class LocalBKUState extends State {
 		public void run() {
 			try {
 
-				HttpClient client = BKUHelper.getHttpClient();
+				HttpClient client = BKUHelper.getHttpClient(false);
 
 				PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
