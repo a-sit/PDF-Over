@@ -80,7 +80,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected Locale signatureLocale = null;
 
 	/** Holds the PDF/A compatibility setting */
-	protected boolean pdfACompat = true;
+	protected boolean pdfACompat = false;
 
 	/** Holds the output folder */
 	protected String folder = null;

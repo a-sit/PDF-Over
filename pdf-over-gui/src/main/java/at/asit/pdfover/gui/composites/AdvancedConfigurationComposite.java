@@ -1155,10 +1155,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setText(Messages
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
-		this.btnPdfACompat.setText(Messages
-				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setToolTipText(Messages
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
+		this.btnPdfACompat.setText(Messages
+				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
+		this.btnPdfACompat.setToolTipText(Messages
+				.getString("advanced_config.PdfACompat_ToolTip")); //$NON-NLS-1$
 		this.lblTransparenz.setText(Messages
 				.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
 		this.lblTransparenzLinks.setText(Messages

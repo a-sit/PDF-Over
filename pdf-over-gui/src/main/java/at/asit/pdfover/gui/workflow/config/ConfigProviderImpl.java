@@ -129,7 +129,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
-			setSignaturePdfACompat(!compat.equalsIgnoreCase(Constants.FALSE));
+			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
 
 		String bkuUrl = config
 				.getProperty(Constants.CFG_MOBILE_BKU_URL);
@@ -346,8 +346,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_SIGNATURE_LOCALE, LocaleSerializer.getParsableString(signatureLocale));
 		}
 
-		if (!getSignaturePdfACompat())
-			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.FALSE);
+		if (getSignaturePdfACompat())
+			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.TRUE);
 
 		SignaturePosition pos = getDefaultSignaturePositionPersistent();
 		if (pos == null) {
