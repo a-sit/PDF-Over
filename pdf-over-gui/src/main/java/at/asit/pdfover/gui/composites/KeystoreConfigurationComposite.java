@@ -85,7 +85,7 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	private Label lblKeystoreKeyPass;
 	Text txtKeystoreKeyPass;
 
-	private Map<String, String> keystoreTypes;
+	Map<String, String> keystoreTypes;
 	private Map<String, String> keystoreTypes_i;
 
 	private KeyStore ks;
@@ -216,8 +216,9 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				performKeystoreTypeChanged(
-						KeystoreConfigurationComposite.this.cmbKeystoreType.getItem(
-								KeystoreConfigurationComposite.this.cmbKeystoreType.getSelectionIndex()));
+						KeystoreConfigurationComposite.this.keystoreTypes.get(
+								KeystoreConfigurationComposite.this.cmbKeystoreType.getItem(
+										KeystoreConfigurationComposite.this.cmbKeystoreType.getSelectionIndex())));
 			}
 		});
 
@@ -288,8 +289,10 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 				} catch (IOException ex) {
 					log.error("Error loading keystore", ex); //$NON-NLS-1$
 					showErrorDialog(Messages.getString("error.KeyStore")); //$NON-NLS-1$
+				} catch (NullPointerException ex) {
+					log.error("Error loading keystore - NPE?", ex); //$NON-NLS-1$
+					showErrorDialog(Messages.getString("error.KeyStore")); //$NON-NLS-1$
 				}
-						
 			}
 		});
 
@@ -412,11 +415,11 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 					ext.equalsIgnoreCase("p12") || //$NON-NLS-1$
 					ext.equalsIgnoreCase("pkcs12") || //$NON-NLS-1$
 					ext.equalsIgnoreCase("pfx")) //$NON-NLS-1$
-				performKeystoreTypeChanged(this.keystoreTypes_i.get("PKCS12")); //$NON-NLS-1$
+				performKeystoreTypeChanged("PKCS12"); //$NON-NLS-1$
 			else if (
 					ext.equalsIgnoreCase("ks") || //$NON-NLS-1$
 					ext.equalsIgnoreCase("jks")) //$NON-NLS-1$
-				performKeystoreTypeChanged(this.keystoreTypes_i.get("JCEKS")); //$NON-NLS-1$
+				performKeystoreTypeChanged("JCEKS"); //$NON-NLS-1$
 		}
 	}
 
@@ -425,10 +428,10 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	protected void performKeystoreTypeChanged(String type) {
 		log.debug("Selected keystore type: " + type); //$NON-NLS-1$
-		this.configurationContainer.setKeyStoreType(
-				this.keystoreTypes.get(type));
+		this.configurationContainer.setKeyStoreType(type);
+		String type_text = this.keystoreTypes_i.get(type);
 		for (int i = 0; i < this.cmbKeystoreType.getItemCount(); ++i) {
-			if (this.cmbKeystoreType.getItem(i).equals(type)) {
+			if (this.cmbKeystoreType.getItem(i).equals(type_text)) {
 				this.cmbKeystoreType.select(i);
 				break;
 			}
