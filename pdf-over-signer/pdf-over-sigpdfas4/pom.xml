@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.0.6</pdf-as.version>
+		<pdf-as.version>4.0.8</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -36,12 +36,12 @@
 		<dependency>
 			<groupId>iaik</groupId>
 			<artifactId>iaik_jce_full_signed</artifactId>
-			<version>5.2</version>
+			<version>5.25</version>
 		</dependency>
 		<dependency>
 			<groupId>iaik</groupId>
 			<artifactId>iaik_eccelerate</artifactId>
-			<version>2.15</version>
+			<version>3.01</version>
 		</dependency>
 		<dependency>
 			<groupId>iaik</groupId>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>iaik</groupId>
 			<artifactId>iaik_eccelerate_cms</artifactId>
-			<version>2.15</version>
+			<version>3.01</version>
 		</dependency>
 	</dependencies>
 	<repositories>
