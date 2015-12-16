@@ -53,7 +53,9 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.CantLoadKeystoreException;
 import at.asit.pdfover.gui.exceptions.KeystoreAliasDoesntExistException;
+import at.asit.pdfover.gui.exceptions.KeystoreAliasNoKeyException;
 import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
+import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
@@ -492,16 +494,12 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void initConfiguration(PersistentConfigProvider provider) {
-		this.configurationContainer.setKeyStoreFile(
-				provider.getKeyStoreFilePersistent());
-		this.configurationContainer.setKeyStoreType(
-				provider.getKeyStoreTypePersistent());
-		this.configurationContainer.setKeyStoreAlias(
-				provider.getKeyStoreAliasPersistent());
-		this.configurationContainer.setKeyStoreStorePass(
-				provider.getKeyStoreStorePassPersistent());
-		this.configurationContainer.setKeyStoreKeyPass(
-				provider.getKeyStoreKeyPassPersistent());
+		ConfigurationContainer config = this.configurationContainer;
+		config.setKeyStoreFile(provider.getKeyStoreFilePersistent());
+		config.setKeyStoreType(provider.getKeyStoreTypePersistent());
+		config.setKeyStoreAlias(provider.getKeyStoreAliasPersistent());
+		config.setKeyStoreStorePass(provider.getKeyStoreStorePassPersistent());
+		config.setKeyStoreKeyPass(provider.getKeyStoreKeyPassPersistent());
 	}
 
 	/*
@@ -512,12 +510,11 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
-		String ks = this.configurationContainer.getKeyStoreFile();
+		ConfigurationContainer config = this.configurationContainer;
+		String ks = config.getKeyStoreFile();
 		performKeystoreFileChanged(ks);
-		performKeystoreTypeChanged(
-				this.configurationContainer.getKeyStoreType());
-		performKeystoreStorePassChanged(
-				this.configurationContainer.getKeyStoreStorePass());
+		performKeystoreTypeChanged(config.getKeyStoreType());
+		performKeystoreStorePassChanged(config.getKeyStoreStorePass());
 		try {
 			File ksf = new File(ks);
 			if (ksf.exists())
@@ -525,10 +522,8 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 		} catch (Exception e) {
 			log.error("Error loading keystore", e); //$NON-NLS-1$
 		}
-		performKeystoreAliasChanged(
-				this.configurationContainer.getKeyStoreAlias());
-		performKeystoreKeyPassChanged(
-				this.configurationContainer.getKeyStoreKeyPass());
+		performKeystoreAliasChanged(config.getKeyStoreAlias());
+		performKeystoreKeyPassChanged(config.getKeyStoreKeyPass());
 	}
 
 	/* (non-Javadoc)
@@ -537,11 +532,12 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	public void storeConfiguration(ConfigManipulator store,
 			PersistentConfigProvider provider) {
-		store.setKeyStoreFile(this.configurationContainer.getKeyStoreFile());
-		store.setKeyStoreType(this.configurationContainer.getKeyStoreType());
-		store.setKeyStoreAlias(this.configurationContainer.getKeyStoreAlias());
-		store.setKeyStoreStorePass(this.configurationContainer.getKeyStoreStorePass());
-		store.setKeyStoreKeyPass(this.configurationContainer.getKeyStoreKeyPass());
+		ConfigurationContainer config = this.configurationContainer;
+		store.setKeyStoreFile(config.getKeyStoreFile());
+		store.setKeyStoreType(config.getKeyStoreType());
+		store.setKeyStoreAlias(config.getKeyStoreAlias());
+		store.setKeyStoreStorePass(config.getKeyStoreStorePass());
+		store.setKeyStoreKeyPass(config.getKeyStoreKeyPass());
 	}
 
 	/*
@@ -553,26 +549,38 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 	 */
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {
+		ConfigurationContainer config = this.configurationContainer;
 		switch (resumeFrom) {
 		case 0:
-			String fname = this.configurationContainer.getKeyStoreFile();
+			String fname = config.getKeyStoreFile();
 			if (fname.isEmpty())
 				break; //no checks required
 			File f = new File(fname);
 			if (!f.exists() || !f.isFile())
-				throw new KeystoreDoesntExistException(f, 3); //skip next checks
+				throw new KeystoreDoesntExistException(f, 4); //skip next checks
 			// Fall through
 		case 1:
 			try {
 				loadKeystore();
 			} catch (Exception e) {
-				throw new CantLoadKeystoreException(e, 3); //skip next check
+				throw new CantLoadKeystoreException(e, 4); //skip next checks
 			}
 			// Fall through
 		case 2:
-			String alias = this.configurationContainer.getKeyStoreAlias();
+			String alias = config.getKeyStoreAlias();
 			if (!this.ks.containsAlias(alias))
-				throw new KeystoreAliasDoesntExistException(alias, 3);
+				throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
+			if (!this.ks.isKeyEntry(alias))
+				throw new KeystoreAliasNoKeyException(alias, 4); //skip next check
+			// Fall through
+		case 3:
+			try {
+				alias = config.getKeyStoreAlias();
+				String keypass = config.getKeyStoreKeyPass();
+				this.ks.getKey(alias, keypass.toCharArray());
+			} catch (Exception e) {
+				throw new KeystoreKeyPasswordException(4);
+			}
 		}
 	}
 
