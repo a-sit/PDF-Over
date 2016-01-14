@@ -15,6 +15,10 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
+import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
+
 // Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -32,6 +36,7 @@ import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
+import at.asit.pdfover.gui.composites.MobileBKUQRComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
@@ -70,7 +75,7 @@ public class MobileBKUState extends State {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(MobileBKUState.class);
 
 	SigningState signingState;
@@ -84,6 +89,8 @@ public class MobileBKUState extends State {
 	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
+
+	MobileBKUQRComposite mobileBKUQRComposite = null;
 
 	WaitingComposite waitingComposite = null;
 
@@ -104,6 +111,16 @@ public class MobileBKUState extends State {
 		}
 
 		return this.mobileBKUEnterTANComposite;
+	}
+
+	MobileBKUQRComposite getMobileBKUQRComposite() {
+		if (this.mobileBKUQRComposite == null) {
+			this.mobileBKUQRComposite = getStateMachine()
+					.getGUIProvider().createComposite(
+							MobileBKUQRComposite.class, SWT.RESIZE, this);
+		}
+
+		return this.mobileBKUQRComposite;
 	}
 
 	MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
@@ -303,6 +320,79 @@ public class MobileBKUState extends State {
 				tan.setUserAck(false);
 
 				mobileStatus.setTan(tan.getTan());
+
+				// show waiting composite
+				getStateMachine().getGUIProvider().display(
+						MobileBKUState.this.getWaitingComposite());
+			}
+		});
+	}
+
+	/**
+	 * Show QR code
+	 */
+	public void showQR() {
+		final ATrustStatus status = (ATrustStatus) this.getStatus();
+		final ATrustHandler handler = (ATrustHandler) this.getHandler();
+
+		final Timer checkDone = new Timer(true);
+		checkDone.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// ping signature page to see if code has been scanned
+				try {
+					String resp = handler.getSignaturePage();
+					if (handler.handleQRResponse(resp)) {
+						log.debug("Signature page response: " + resp); //$NON-NLS-1$
+						getMobileBKUQRComposite().setDone(true);
+						Display display = getStateMachine().getGUIProvider().
+								getMainShell().getDisplay();
+						display.wake();
+					}
+					Display.getDefault().wake();
+				} catch (Exception e) {
+					log.error("Error getting signature page", e); //$NON-NLS-1$
+				}
+			}
+		}, 0, 5000);
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				MobileBKUQRComposite qr = getMobileBKUQRComposite();
+		
+				qr.setRefVal(status.getRefVal());
+				qr.setSignatureData(status.getSignatureDataURL());
+				qr.setErrorMessage(status.getErrorMessage());
+				InputStream qrcode = handler.getQRCode();
+				if (qrcode == null) {
+					MobileBKUState.this.threadException = new Exception(
+							Messages.getString("error.FailedToLoadQRCode")); //$NON-NLS-1$
+				}
+				qr.setQR(qrcode);
+				getStateMachine().getGUIProvider().display(qr);
+
+				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+				while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
+					if (!display.readAndDispatch()) {
+						display.sleep();
+					}
+				}
+				checkDone.cancel();
+
+				if (qr.isUserCancel()) {
+					qr.setUserCancel(false);
+					status.setErrorMessage("cancel"); //$NON-NLS-1$
+					return;
+				}
+
+				if (qr.isUserSMS()) {
+					qr.setUserSMS(false);
+					status.setQRCode(null);
+				}
+
+				if (qr.isDone())
+					qr.setDone(false);
 
 				// show waiting composite
 				getStateMachine().getGUIProvider().display(

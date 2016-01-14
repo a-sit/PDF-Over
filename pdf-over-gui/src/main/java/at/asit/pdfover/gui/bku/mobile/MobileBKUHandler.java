@@ -238,8 +238,11 @@ public abstract class MobileBKUHandler {
 				Matcher m = pat.matcher(responseData);
 				if (m.find()) {
 					String content = m.group(1);
-					int start = content.indexOf("URL=") +9; //$NON-NLS-1$
-					redirectLocation  = content.substring(start, content.length() - 5);
+					int start = content.indexOf("URL="); //$NON-NLS-1$
+					if (start != -1) {
+						start += 9;
+						redirectLocation  = content.substring(start, content.length() - 5);
+					}
 				}
 			} else {
 				throw new HttpException(
@@ -252,6 +255,86 @@ public abstract class MobileBKUHandler {
 				get = new GetMethod(redirectLocation);
 				get.setFollowRedirects(true);
 				returnCode = client.executeMethod(get);
+			}
+		} while (redirectLocation != null);
+
+		getStatus().setServer(server);
+		if (server != null)
+			log.info("Server: " + server); //$NON-NLS-1$
+
+		return responseData;
+	}
+
+	/**
+	 * Execute a get from the mobile BKU, following redirects
+	 * @param client the HttpClient
+	 * @param get the GetMethod
+	 * @return the response
+	 * @throws IOException IO error
+	 */
+	protected String executeGet(HttpClient client, GetMethod get) throws IOException {
+		log.debug("Getting " + get.getURI()); //$NON-NLS-1$
+		int returnCode = client.executeMethod(get);
+
+		String redirectLocation = null;
+
+		GetMethod get2 = null;
+
+		String responseData = null;
+
+		String server = null;
+
+		// Follow redirects
+		do {
+			// check return code
+			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
+				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+
+				Header locationHeader = get.getResponseHeader("location"); //$NON-NLS-1$
+				if (locationHeader != null) {
+					redirectLocation = locationHeader.getValue();
+				} else {
+					throw new IOException(
+							"Got HTTP 302 but no location to follow!"); //$NON-NLS-1$
+				}
+			} else if (returnCode == HttpStatus.SC_OK) {
+				if (get2 != null) {
+					responseData = get2.getResponseBodyAsString();
+					Header serverHeader = get2.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				} else {
+					responseData = get.getResponseBodyAsString();
+
+					Header serverHeader = get.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				}
+				redirectLocation = null;
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //$NON-NLS-1$
+				Pattern pat = Pattern.compile(p);
+				Matcher m = pat.matcher(responseData);
+				if (m.find()) {
+					String content = m.group(1);
+					int start = content.indexOf("URL="); //$NON-NLS-1$
+					if (start != -1) {
+						start += 9;
+						redirectLocation  = content.substring(start, content.length() - 5);
+					}
+				}
+			} else {
+				throw new HttpException(
+						HttpStatus.getStatusText(returnCode));
+			}
+
+			if (redirectLocation != null) {
+				redirectLocation = getStatus().ensureSessionID(redirectLocation);
+				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
+				get2 = new GetMethod(redirectLocation);
+				get2.setFollowRedirects(true);
+				returnCode = client.executeMethod(get2);
 			}
 		} while (redirectLocation != null);
 

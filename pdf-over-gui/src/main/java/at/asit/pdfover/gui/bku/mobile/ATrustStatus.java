@@ -37,6 +37,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 
 	private String viewstate;
 	private String eventvalidation;
+	private String qrcode = null;
 
 	/**
 	 * Constructor
@@ -69,7 +70,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public void setViewstate(String viewstate) {
 		this.viewstate = viewstate;
 	}
-	
+
 	/**
 	 * @return the eventvalidation
 	 */
@@ -83,4 +84,20 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public void setEventvalidation(String eventvalidation) {
 		this.eventvalidation = eventvalidation;
 	}
+
+	/**
+	 * @return the QR code
+	 */
+	public String getQRCode() {
+		return this.qrcode;
+	}
+
+	/**
+	 * @param qrcode
+	 *            the QR code to set
+	 */
+	public void setQRCode(String qrcode) {
+		this.qrcode = qrcode;
+	}
+	
 }

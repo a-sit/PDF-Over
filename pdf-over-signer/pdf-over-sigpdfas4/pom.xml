@@ -61,5 +61,9 @@
 			<url>https://joinup.ec.europa.eu/site/pdf-as/maven/</url>
 			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
+		<repository>
+			<id>local-repo</id>
+			<url>file://${project.maindir}/repo</url>
+		</repository>
 	</repositories>
 </project>

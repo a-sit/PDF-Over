@@ -18,9 +18,12 @@ package at.asit.pdfover.gui.bku.mobile;
 // Imports
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.swt.SWT;
@@ -137,6 +140,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		String sessionID = status.getSessionID();
 		String refVal = null;
 		String signatureDataURL = null;
+		String qrCode = null;
 
 		status.setErrorMessage(null);
 
@@ -192,11 +196,18 @@ public class ATrustHandler extends MobileBKUHandler {
 			// credentials ok! TAN entry
 			log.debug("Credentials accepted - TAN required"); //$NON-NLS-1$
 			sessionID = MobileBKUHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
-			eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
-			refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");  //$NON-NLS-1$//$NON-NLS-2$
-			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" +  //$NON-NLS-1$
-					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'");  //$NON-NLS-1$//$NON-NLS-2$
+			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>"); //$NON-NLS-1$ //$NON-NLS-2$
+			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" + //$NON-NLS-1$
+					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'"); //$NON-NLS-1$ //$NON-NLS-2$
+			try {
+				qrCode = MobileBKUHelper.extractTag(responseData, "<img class='qrcode' src='", "'"); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("QR Code found: " + qrCode); //$NON-NLS-1$
+				status.setQRCode(qrCode);
+			} catch (Exception e) {
+				log.debug("No QR Code found"); //$NON-NLS-1$
+			}
 		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
@@ -296,6 +307,93 @@ public class ATrustHandler extends MobileBKUHandler {
 				});
 			}
 		}
+	}
+
+	/**
+	 * Cancel QR process, request SMS TAN
+	 * @return the response
+	 * @throws IOException Error during posting
+	 */
+	public String postSMSRequest() throws IOException {
+		ATrustStatus status = getStatus();
+
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = BKUHelper.getHttpClient();
+
+		PostMethod post = new PostMethod(status.getBaseURL()
+				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
+		post.addParameter(
+				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
+		post.addParameter("__EVENTTARGET", "SmsButton"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter("__EVENTARGUMENT", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+		return executePost(client, post);
+	}
+
+	/**
+	 * Get the QR code image
+	 * @return the QR code image as a String
+	 */
+	public InputStream getQRCode() {
+		ATrustStatus status = getStatus();
+
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = BKUHelper.getHttpClient();
+
+		GetMethod get = new GetMethod(status.getBaseURL() + "/" + //$NON-NLS-1$
+				status.getQRCode());
+
+		try {
+			log.debug("Getting " + get.getURI()); //$NON-NLS-1$
+			int returnCode = client.executeMethod(get);
+
+			if (returnCode != HttpStatus.SC_OK) {
+				log.error("Error getting QR code"); //$NON-NLS-1$
+				return null;
+			}
+
+			return get.getResponseBodyAsStream();
+		} catch (Exception e) {
+			log.error("Error getting QR code", e); //$NON-NLS-1$
+			return null;
+		}
+	}
+
+	/**
+	 * Get Signature page after scanning QR code
+	 * @return the response
+	 * @throws IOException Error during get
+	 */
+	public String getSignaturePage() throws IOException {
+		ATrustStatus status = getStatus();
+
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = BKUHelper.getHttpClient();
+
+		GetMethod get = new GetMethod(status.getBaseURL()
+				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+
+		return executeGet(client, get);
+	}
+
+	/**
+	 * Parse QR code response
+	 * @param responseData
+	 * @return whether a SL response was received
+	 */
+	public boolean handleQRResponse(String responseData) {
+		getStatus().setErrorMessage(null);
+		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //$NON-NLS-1$
+		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //$NON-NLS-1$
+			// success !!
+
+			getSigningState().setSignatureResponse(
+					new SLResponse(responseData, getStatus().getServer(), null, null));
+			return true;
+		}
+		return false;
 	}
 
 	@Override

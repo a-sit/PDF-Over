@@ -19,7 +19,10 @@ package at.asit.pdfover.gui.bku;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
+import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
@@ -105,26 +108,54 @@ public class MobileBKUConnector implements BkuSlConnector {
 			}
 	
 			do {
-				// Get TAN
-				this.state.checkTAN();
+				MobileBKUStatus status = this.state.getStatus();
+				boolean enterTAN = true;
+				String responseData = null;
+				if (status instanceof ATrustStatus) {
+					ATrustStatus aStatus = (ATrustStatus) status;
+					ATrustHandler aHandler = (ATrustHandler) handler;
+					if (aStatus.getQRCode() != null) {
+						this.state.showQR();
+						if (this.state.getStatus().getErrorMessage() != null &&
+								this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+							throw new SignatureException(new IllegalStateException());
+						if (aStatus.getQRCode() == null) {
+							try {
+								String response = aHandler.postSMSRequest();
+								log.trace("Response from mobile BKU: " + response); //$NON-NLS-1$
+								handler.handleCredentialsResponse(response);
+							} catch (Exception ex) {
+								log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
+								this.state.setThreadException(ex);
+								this.state.displayError(ex);
+								throw new SignatureException(ex);
+							}
+						} else {
+							enterTAN = false;
+						}
+					}
+				}
+				if (enterTAN) {
+					// Get TAN
+					this.state.checkTAN();
 
-				if (this.state.getStatus().getErrorMessage() != null &&
-						this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
-					throw new SignatureException(new IllegalStateException());
+					if (this.state.getStatus().getErrorMessage() != null &&
+							this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+						throw new SignatureException(new IllegalStateException());
 
-				// Post TAN
-				try {
-					String responseData = handler.postTAN();
-		
-					// Now we have received some data lets check it:
-					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
-		
-					handler.handleTANResponse(responseData);
-				} catch (Exception ex) {
-					log.error("Error in PostTanThread", ex); //$NON-NLS-1$
-					this.state.setThreadException(ex);
-					this.state.displayError(ex);
-					throw new SignatureException(ex);
+					// Post TAN
+					try {
+						responseData = handler.postTAN();
+						log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+
+						// Now we have received some data lets check it:
+						handler.handleTANResponse(responseData);
+					} catch (Exception ex) {
+						log.error("Error in PostTanThread", ex); //$NON-NLS-1$
+						this.state.setThreadException(ex);
+						this.state.displayError(ex);
+						throw new SignatureException(ex);
+					}
 				}
 			} while (this.state.getStatus().getErrorMessage() != null);
 			if (this.state.getStatus().getTanTries() == -1)
