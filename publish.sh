@@ -48,6 +48,15 @@ echo -e "Publishing to: $TYELLOW$PUBLISH_DIR$TNORMAL"
 mkdir -p "$PUBLISH_DIR"
 mkdir -p "$LOG_DIR"
 
+begin_phase "Cleaning..."
+mvn clean > "$LOG_DIR/clean.log" 2>&1
+RETVAL=$?
+if [ $RETVAL -eq 0 ]; then
+	end_phase "OK"
+else
+	end_phase "FAILED"
+fi
+
 profiles=( linux windows mac )
 names=( linux windows mac )
 if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
