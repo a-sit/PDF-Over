@@ -277,8 +277,8 @@ public class MobileBKUQRComposite extends StateComposite {
 		});
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -120);
-		fd_containerComposite.bottom = new FormAttachment(50, 120);
+		fd_containerComposite.top = new FormAttachment(50, -140);
+		fd_containerComposite.bottom = new FormAttachment(50, 140);
 		fd_containerComposite.left = new FormAttachment(50, -200);
 		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
