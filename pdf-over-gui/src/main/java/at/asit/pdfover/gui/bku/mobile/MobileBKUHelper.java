@@ -56,10 +56,11 @@ public class MobileBKUHelper {
 	 *            the start marker
 	 * @param end
 	 *            the end marker
-	 * @return the substring
+	 * @return    the substring
 	 * @throws Exception
+	 *            not found
 	 */
-	public static String extractTag(String data, String start, String end)
+	public static String extractSubstring(String data, String start, String end)
 			throws Exception {
 		int startidx = data.indexOf(start);
 		if (startidx > 0) {
@@ -68,11 +69,106 @@ public class MobileBKUHelper {
 			if (endidx > startidx) {
 				return data.substring(startidx, endidx);
 			}
-			log.error("extracting Tag: end tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
-			throw new Exception("end tag not available! Mobile BKU site changed?"); //$NON-NLS-1$
+			log.error("extracting substring: end not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
+			throw new Exception("End string not available! Mobile BKU site changed?"); //$NON-NLS-1$
 		}
-		log.error("extracting Tag: start tag not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
-		throw new Exception("start tag not available! Mobile BKU site changed?"); //$NON-NLS-1$
+		log.error("extracting substring: start not valid!: " + start + " ... " + end); //$NON-NLS-1$//$NON-NLS-2$
+		throw new Exception("Start string not available! Mobile BKU site changed?"); //$NON-NLS-1$
+	}
+
+	/**
+	 * Extracts an XML tag from data with the given param="value"
+	 * 
+	 * @param data
+	 *            the whole data string
+	 * @param tag
+	 *            the tag name (empty string to match all tags)
+	 * @param param
+	 *            the parameter to look for
+	 * @param value
+	 *            the parameter value to look for
+	 * @return    the found tag
+	 * @throws Exception
+	 *            not found
+	 */
+	public static String extractTagWithParam(String data, String tag,
+			String param, String value) throws Exception {
+		String start = '<' + tag;
+		int startidx, endidx = 0;
+		while ((startidx = data.indexOf(start, endidx)) != -1) {
+			endidx = data.indexOf('>', startidx);
+			if (endidx == -1) {
+				log.error("extracting tag: unterminated tag! " + tag + " (" + param + "=" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
+			}
+			String found = data.substring(startidx, endidx + 1);
+			if (found.contains(param + "='" + value + "'") || //$NON-NLS-1$ //$NON-NLS-2$
+			    found.contains(param + "=\"" + value + "\"")) //$NON-NLS-1$ //$NON-NLS-2$
+				return found;
+		}
+		log.error("extracting tag: not found!: " + tag + " (" + param + "='" + value + "')"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
+	}
+
+	/**
+	 * Extracts a parameter value from an XML tag from data with the given param="value"
+	 * 
+	 * @param data
+	 *            the whole data string
+	 * @param tag
+	 *            the tag name (empty string to match all tags)
+	 * @param param
+	 *            the parameter to look for
+	 * @param value
+	 *            the parameter value to look for
+	 * @param returnparam
+	 *            the parameter whose value to return
+	 * @return    the found tag
+	 * @throws Exception
+	 *            not found
+	 */
+	public static String extractValueFromTagWithParam(String data, String tag,
+			String param, String value, String returnparam) throws Exception {
+		String found = extractTagWithParam(data, tag, param, value);
+		int startidx = found.indexOf(returnparam + '=');
+		if (startidx == -1) {
+			log.error("extracting tag: param not found! " + tag + " (" + param + "=" + value + ") - " + returnparam); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
+		}
+		startidx += returnparam.length() + 1;
+		int endidx = found.indexOf(found.charAt(startidx), startidx + 1);
+		if (endidx == -1) {
+			log.error("extracting tag: unterminated param value! " + tag + " (" + param + "=" + value + ") - " + returnparam); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
+		}
+		return found.substring(startidx + 1, endidx);
+	}
+
+	/**
+	 * Extracts the content from an XML tag from data with the given param="value"
+	 * 
+	 * @param data
+	 *            the whole data string
+	 * @param tag
+	 *            the tag name
+	 * @param param
+	 *            the parameter to look for
+	 * @param value
+	 *            the parameter value to look for
+	 * @return    the found tag's content
+	 * @throws Exception
+	 *            not found
+	 */
+	public static String extractContentFromTagWithParam(String data, String tag,
+			String param, String value) throws Exception {
+		String found = extractTagWithParam(data, tag, param, value);
+		int startidx = data.indexOf(found) + found.length();
+		int endidx = data.indexOf("</" + tag + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (endidx == -1) {
+			log.error("extracting tag: closing tag not found! " + tag + " (" + param + "=" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
+		}
+		return data.substring(startidx, endidx);
 	}
 
 	/**

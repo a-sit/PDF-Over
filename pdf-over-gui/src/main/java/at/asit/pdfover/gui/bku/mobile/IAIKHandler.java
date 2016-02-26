@@ -68,7 +68,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		IAIKStatus status = getStatus();
 
 		// Extract infos:
-		String credentialURL = MobileBKUHelper.extractTag(responseData,
+		String credentialURL = MobileBKUHelper.extractSubstring(responseData,
 				"name=\"userCredLogon\" method=\"post\" action=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		URL baseURL = new URL(status.getBaseURL());
 		int p = baseURL.getPort();
@@ -76,7 +76,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		credentialURL = baseURL.getProtocol() + "://" + baseURL.getHost() + port + //$NON-NLS-1$
 		(credentialURL.startsWith("/") ? "" : "/") + credentialURL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		String viewState = MobileBKUHelper.extractTag(responseData,
+		String viewState = MobileBKUHelper.extractSubstring(responseData,
 				"id=\"javax.faces.ViewState\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 
 		String sessionID = credentialURL.substring(credentialURL.indexOf("jsessionid=") + 11); //$NON-NLS-1$
@@ -133,7 +133,7 @@ public class IAIKHandler extends MobileBKUHandler {
 
 			String errorMessage;
 			try {
-				errorMessage = MobileBKUHelper.extractTag(responseData, ":errorMessage\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
+				errorMessage = MobileBKUHelper.extractSubstring(responseData, ":errorMessage\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (Exception e) {
 				errorMessage = Messages.getString("error.Unexpected"); //$NON-NLS-1$
 			}
@@ -149,16 +149,16 @@ public class IAIKHandler extends MobileBKUHandler {
 		String redirectURL = status.getBaseURL().substring(0,
 				status.getBaseURL().lastIndexOf('/',
 						status.getBaseURL().lastIndexOf('/') - 1) + 1); //Cut off last directory
-		redirectURL += MobileBKUHelper.extractTag(responseData,
+		redirectURL += MobileBKUHelper.extractSubstring(responseData,
 				"redirection_url\":\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		redirectURL = status.ensureSessionID(redirectURL);
 
 		responseData = getRedirect(client, redirectURL);
 
-		refVal = MobileBKUHelper.extractTag(responseData,
+		refVal = MobileBKUHelper.extractSubstring(responseData,
 				"id=\"j_idt6:refValue\" class=\"strong\">", "</"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		String viewState = MobileBKUHelper.extractTag(responseData,
+		String viewState = MobileBKUHelper.extractSubstring(responseData,
 				"id=\"javax.faces.ViewState\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		status.setViewState(viewState);
 
@@ -186,7 +186,7 @@ public class IAIKHandler extends MobileBKUHandler {
 				return;
 			}
 
-			redirectURL = MobileBKUHelper.extractTag(responseData,
+			redirectURL = MobileBKUHelper.extractSubstring(responseData,
 					"redirect url=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			URL baseURL = new URL(status.getBaseURL());
 			int p = baseURL.getPort();
@@ -196,7 +196,7 @@ public class IAIKHandler extends MobileBKUHandler {
 
 			responseData = getRedirect(client, redirectURL);
 
-			viewState = MobileBKUHelper.extractTag(responseData,
+			viewState = MobileBKUHelper.extractSubstring(responseData,
 					"id=\"javax.faces.ViewState\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			status.setViewState(viewState);
 		}
@@ -204,11 +204,11 @@ public class IAIKHandler extends MobileBKUHandler {
 		signatureDataURL = status.getBaseURL();
 		signatureDataURL = signatureDataURL.substring(0, signatureDataURL.lastIndexOf('/') + 1);
 		signatureDataURL += "viewer.jsf" + //$NON-NLS-1$
-				MobileBKUHelper.extractTag(responseData, "viewer.jsf", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+				MobileBKUHelper.extractSubstring(responseData, "viewer.jsf", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		signatureDataURL += (signatureDataURL.contains("?") ? "&" : "?") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				"pdfoversessionid=" + status.getSessionID(); //$NON-NLS-1$
 
-		String tanURL = MobileBKUHelper.extractTag(responseData,
+		String tanURL = MobileBKUHelper.extractSubstring(responseData,
 				"name=\"j_idt6\" method=\"post\" action=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		URL baseURL = new URL(status.getBaseURL());
 		int p = baseURL.getPort();
@@ -259,7 +259,7 @@ public class IAIKHandler extends MobileBKUHandler {
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 		} else {
 			try {
-				String errorMessage = MobileBKUHelper.extractTag(responseData,
+				String errorMessage = MobileBKUHelper.extractSubstring(responseData,
 						":errorMessage\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
 				getStatus().setErrorMessage(errorMessage);
 			} catch (Exception e) {

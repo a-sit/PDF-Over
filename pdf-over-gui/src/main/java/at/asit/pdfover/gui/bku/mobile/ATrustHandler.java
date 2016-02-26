@@ -79,23 +79,23 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		if (responseData.contains("<sl:ErrorResponse")) { //$NON-NLS-1$
-			String errorCode = MobileBKUHelper.extractTag(responseData,
+			String errorCode = MobileBKUHelper.extractSubstring(responseData,
 					"<sl:ErrorCode>", "</sl:ErrorCode>"); //$NON-NLS-1$ //$NON-NLS-2$
-			String errorMsg = MobileBKUHelper.extractTag(responseData,
+			String errorMsg = MobileBKUHelper.extractSubstring(responseData,
 					"<sl:Info>", "</sl:Info>"); //$NON-NLS-1$ //$NON-NLS-2$
 			throw new Exception("Error from mobile BKU: " + //$NON-NLS-1$
 					errorCode + " - " + errorMsg); //$NON-NLS-1$
 		}
 
 		// Extract infos:
-		String sessionID = MobileBKUHelper.extractTag(responseData,
+		String sessionID = MobileBKUHelper.extractSubstring(responseData,
 				"identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 
-		String viewState = MobileBKUHelper.extractTag(responseData,
-				"id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+		String viewState = MobileBKUHelper.extractValueFromTagWithParam(
+				responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-		String eventValidation = MobileBKUHelper.extractTag(responseData,
-				"id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+		String eventValidation = MobileBKUHelper.extractValueFromTagWithParam(
+				responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
@@ -117,7 +117,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = BKUHelper.getHttpClient();
-	
+
 		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
@@ -125,7 +125,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		post.addParameter("handynummer", status.getPhoneNumber()); //$NON-NLS-1$
 		post.addParameter("signaturpasswort", status.getMobilePassword()); //$NON-NLS-1$
 		post.addParameter("Button_Identification", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
-	
+
 		return executePost(client, post);
 	}
 
@@ -147,7 +147,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
 			// Certification expiration interstitial - skip
 			String notice = Messages.getString("mobileBKU.notice") + " " + //$NON-NLS-1$ //$NON-NLS-2$
-					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractTag(responseData, "<span id=\"Label2\">", "</span>")) //$NON-NLS-1$ //$NON-NLS-2$
+					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					.replaceAll("\\<.*?\\>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			log.info(notice);
 
@@ -174,9 +174,9 @@ public class ATrustHandler extends MobileBKUHandler {
 				expiryNoticeDisplayed = true;
 			}
 
-			String t_sessionID = MobileBKUHelper.extractTag(responseData, "ExpiresInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			String t_viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
-			String t_eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$  //$NON-NLS-2$
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "ExpiresInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 			// Post again to skip
 			MobileBKUHelper.registerTrustedSocketFactory();
@@ -195,14 +195,14 @@ public class ATrustHandler extends MobileBKUHandler {
 		if (responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
 			// credentials ok! TAN entry
 			log.debug("Credentials accepted - TAN required"); //$NON-NLS-1$
-			sessionID = MobileBKUHelper.extractTag(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			viewState = MobileBKUHelper.extractTag(responseData, "id=\"__VIEWSTATE\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			eventValidation = MobileBKUHelper.extractTag(responseData, "id=\"__EVENTVALIDATION\" value=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			refVal = MobileBKUHelper.extractTag(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>"); //$NON-NLS-1$ //$NON-NLS-2$
+			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>"); //$NON-NLS-1$ //$NON-NLS-2$
 			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" + //$NON-NLS-1$
-					MobileBKUHelper.extractTag(responseData, "ShowSigobj.aspx", "'"); //$NON-NLS-1$ //$NON-NLS-2$
+					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'"); //$NON-NLS-1$ //$NON-NLS-2$
 			try {
-				qrCode = MobileBKUHelper.extractTag(responseData, "<img class='qrcode' src='", "'"); //$NON-NLS-1$ //$NON-NLS-2$
+				qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				log.debug("QR Code found: " + qrCode); //$NON-NLS-1$
 				status.setQRCode(qrCode);
 			} catch (Exception e) {
@@ -218,11 +218,11 @@ public class ATrustHandler extends MobileBKUHandler {
 			// error page
 			// extract error text!
 			try {
-				String errorMessage = MobileBKUHelper.extractTag(responseData, "<span id=\"Label1\" class=\"ErrorClass\">", "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
+				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass"); //$NON-NLS-1$ //$NON-NLS-2$  //$NON-NLS-3$
 				status.setErrorMessage(errorMessage);
 			} catch (Exception e) {
-				throw new SignatureException(MobileBKUHelper.extractTag(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						MobileBKUHelper.extractTag(responseData, "<sl:Info>", "</sl:Info>")); //$NON-NLS-1$ //$NON-NLS-2$
+				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			// force UI again!
@@ -279,7 +279,7 @@ public class ATrustHandler extends MobileBKUHandler {
 					new SLResponse(responseData, getStatus().getServer(), null, null));
 		} else {
 			try {
-				String tries = MobileBKUHelper.extractTag(
+				String tries = MobileBKUHelper.extractSubstring(
 						responseData, "Sie haben noch", "Versuch"); //$NON-NLS-1$ //$NON-NLS-2$
 				getStatus().setTanTries(Integer.parseInt(tries.trim()));
 				getStatus().setErrorMessage("mobileBKU.wrong_tan"); //$NON-NLS-1$
