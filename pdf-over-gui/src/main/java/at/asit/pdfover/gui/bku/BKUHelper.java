@@ -68,7 +68,6 @@ public class BKUHelper {
 	 * @return the HttpClient
 	 */
 	public static HttpClient getHttpClient() {
-		return getHttpClient(true);
+		return getHttpClient(false);
 	}
-
 }

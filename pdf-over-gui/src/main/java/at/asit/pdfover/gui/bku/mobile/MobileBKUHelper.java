@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.exceptions.PasswordTooLongException;
@@ -250,5 +251,15 @@ public class MobileBKUHelper {
 	public static void registerTrustedSocketFactory() {
 		Protocol.registerProtocol("https", //$NON-NLS-1$
 				new Protocol("https", new TrustedSocketFactory(), 443)); //$NON-NLS-1$
+	}
+
+	/**
+	 * Get a HTTP Client instance
+	 * @param status the mobile BKU status
+	 * @return the HttpClient
+	 */
+	public static HttpClient getHttpClient(MobileBKUStatus status) {
+		HttpClient client = BKUHelper.getHttpClient(true);
+		return client;
 	}
 }

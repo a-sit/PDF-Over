@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -116,7 +115,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -180,7 +179,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 			// Post again to skip
 			MobileBKUHelper.registerTrustedSocketFactory();
-			HttpClient client = BKUHelper.getHttpClient();
+			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 			PostMethod post = new PostMethod(status.getBaseURL() + "/ExpiresInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
 			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
@@ -250,7 +249,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 	
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 	
 		PostMethod post = new PostMethod(status.getBaseURL()
 				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
@@ -318,7 +317,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		PostMethod post = new PostMethod(status.getBaseURL()
 				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
@@ -340,7 +339,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		GetMethod get = new GetMethod(status.getBaseURL() + "/" + //$NON-NLS-1$
 				status.getQRCode());
@@ -370,7 +369,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		GetMethod get = new GetMethod(status.getBaseURL()
 				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$

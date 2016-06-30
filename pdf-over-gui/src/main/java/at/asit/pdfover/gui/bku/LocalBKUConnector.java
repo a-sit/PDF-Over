@@ -68,7 +68,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 	@Override
 	public SLResponse handleSLRequest(SLRequest request) throws SignatureException {
 		try {
-			HttpClient client = BKUHelper.getHttpClient(false);
+			HttpClient client = BKUHelper.getHttpClient();
 			PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
 			String sl_request = request.getRequest();

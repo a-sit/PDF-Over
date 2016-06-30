@@ -33,7 +33,6 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
@@ -70,7 +69,7 @@ public abstract class MobileBKUHandler {
 	 */
 	public String postSLRequest(String mobileBKUUrl, SLRequest request) throws IOException {
 		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = BKUHelper.getHttpClient();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		PostMethod post = new PostMethod(mobileBKUUrl);
 		String sl_request;
@@ -274,6 +273,7 @@ public abstract class MobileBKUHandler {
 	 */
 	protected String executeGet(HttpClient client, GetMethod get) throws IOException {
 		log.debug("Getting " + get.getURI()); //$NON-NLS-1$
+
 		int returnCode = client.executeMethod(get);
 
 		String redirectLocation = null;
