@@ -126,7 +126,8 @@
 						<showWarnings>true</showWarnings>
 						<showDeprecation>true</showDeprecation>
 						<encoding>UTF-8</encoding>
-						<debug>false</debug>
+						<debug>true</debug>
+						<debuglevel>lines,vars,source</debuglevel>
 					</configuration>
 				</plugin>
 			</plugins>
