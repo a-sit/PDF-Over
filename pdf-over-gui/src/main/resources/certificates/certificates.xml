@@ -4,6 +4,5 @@
 	<certificate>A-Trust-nQual-03.crt</certificate>
 	<certificate>A-Trust-Root-05.crt</certificate>
 	<certificate>ComodoRSACA.crt</certificate>
-	<certificate>mccDemoAuxRoot.crt</certificate>
-	<certificate>mccDemoTLS.crt</certificate>
+	<certificate>iaik-tls-ca.cer</certificate>
 </certificates>
