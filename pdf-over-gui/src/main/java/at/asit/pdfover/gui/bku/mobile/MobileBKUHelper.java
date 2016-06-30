@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -167,7 +168,7 @@ public class MobileBKUHelper {
 			String param, String value) throws Exception {
 		String found = extractTagWithParam(data, tag, param, value);
 		int startidx = data.indexOf(found) + found.length();
-		int endidx = data.indexOf("</" + tag + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+		int endidx = data.indexOf("</" + tag + ">", startidx); //$NON-NLS-1$ //$NON-NLS-2$
 		if (endidx == -1) {
 			log.error("extracting tag: closing tag not found! " + tag + " (" + param + "=" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
@@ -235,16 +236,33 @@ public class MobileBKUHelper {
 	/**
 	 * Removes file extension from URL
 	 * 
-	 * @param query
+	 * @param url
 	 *            the url string
 	 * @return the stripped url
 	 */
-	public static String stripQueryString(String query) {
-		int pathidx = query.lastIndexOf('/');
+	public static String stripQueryString(String url) {
+		int pathidx = url.lastIndexOf('/');
 		if (pathidx > 0) {
-			return query.substring(0, pathidx);
+			return url.substring(0, pathidx);
 		}
-		return query;
+		return url;
+	}
+
+	/**
+	 * Build a fully qualified URL out of a base URL plus a URL fragment
+	 * @param fragment the URL fragment
+	 * @param base the base URL
+	 * @return the fully qualified URL
+	 */
+	public static String getQualifiedURL(String fragment, URL base) {
+		if (fragment.startsWith("http:") || fragment.startsWith("https:")) //$NON-NLS-1$ //$NON-NLS-2$
+			return fragment;
+		int p = base.getPort();
+		String port = ((p != -1) && (p != base.getDefaultPort())) ? ":" + p : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		if (fragment.startsWith("/")) { //$NON-NLS-1$
+			return base.getProtocol() + "://" + base.getHost() + port + fragment; //$NON-NLS-1$
+		}
+		return stripQueryString(base.toString()) + "/" + fragment; //$NON-NLS-1$
 	}
 
 	/**

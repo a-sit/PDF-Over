@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.bku.mobile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -249,6 +250,7 @@ public abstract class MobileBKUHandler {
 			}
 
 			if (redirectLocation != null) {
+				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(post.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
 				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
 				get = new GetMethod(redirectLocation);
@@ -332,6 +334,7 @@ public abstract class MobileBKUHandler {
 			}
 
 			if (redirectLocation != null) {
+				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(get.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
 				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
 				get2 = new GetMethod(redirectLocation);
