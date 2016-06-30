@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Locale;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -118,7 +119,7 @@ public class PrepareConfigurationState extends State {
 					// we only check for resource config file if it is the
 					// default value!
 					try {
-						InputStream is = this.getClass().getResourceAsStream(
+						InputStream is = getClass().getResourceAsStream(
 								Constants.RES_PKG_PATH + filename);
 						getStateMachine().getConfigProvider()
 								.loadConfiguration(is);
@@ -135,6 +136,23 @@ public class PrepareConfigurationState extends State {
 		} catch (IOException ex) {
 			throw new InitializationException(
 					"Failed to read configuration from config file", ex); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Update configuration values as necessary
+	 */
+	private void updateConfiguration() {
+		ConfigProvider config = getStateMachine().getConfigProvider();
+
+		//Update signature note if old default is used
+		String note = config.getSignatureNote();
+		Locale loc = config.getSignatureLocale();
+
+		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //$NON-NLS-1$
+		if (note.equals(note_old)) {
+			note = Messages.getString("simple_config.Note_Default", loc); //$NON-NLS-1$
+			getStateMachine().getConfigManipulator().setSignatureNote(note);
 		}
 	}
 
@@ -155,7 +173,7 @@ public class PrepareConfigurationState extends State {
 		InputStream inputStream = null;
 		FileOutputStream pdfOverConfig = null;
 		try {
-			inputStream = this.getClass().getResourceAsStream(
+			inputStream = getClass().getResourceAsStream(
 					Constants.RES_PKG_PATH + Constants.DEFAULT_CONFIG_FILENAME);
 			pdfOverConfig = new FileOutputStream(
 					getStateMachine().getConfigProvider().getConfigurationDirectory() +
@@ -199,7 +217,7 @@ public class PrepareConfigurationState extends State {
 		InputStream inputStream = null;
 		FileOutputStream pdfOverConfig = null;
 		try {
-			inputStream = this.getClass().getResourceAsStream(
+			inputStream = getClass().getResourceAsStream(
 					Constants.RES_PKG_PATH + Constants.DEFAULT_LOG4J_FILENAME);
 			String filename = getStateMachine().getConfigProvider().getConfigurationDirectory()
 					+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
@@ -238,7 +256,7 @@ public class PrepareConfigurationState extends State {
 	}
 
 	private void unzipPdfAsConfig(File configDir) throws InitializationException {
-		InputStream is = this.getClass().getResourceAsStream(Constants.RES_CFG_ZIP);
+		InputStream is = getClass().getResourceAsStream(Constants.RES_CFG_ZIP);
 
 		try {
 			Zipper.unzip(is, configDir.getAbsolutePath());
@@ -268,7 +286,7 @@ public class PrepareConfigurationState extends State {
 	}
 
 	private void initializeConfig() throws InitializationException {
-		this.initializeFromConfigurationFile(getStateMachine()
+		initializeFromConfigurationFile(getStateMachine()
 				.getConfigProvider().getConfigurationFile());
 		
 		getStateMachine().getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
@@ -394,7 +412,7 @@ public class PrepareConfigurationState extends State {
 
 			// Read cli arguments for config file first
 			try {
-				this.initializeFromArguments(stateMachine.getCmdArgs(),
+				initializeFromArguments(stateMachine.getCmdArgs(),
 						this.configFileHandler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
@@ -407,11 +425,12 @@ public class PrepareConfigurationState extends State {
 			}
 
 			// initialize from config file
-			this.initializeFromConfigurationFile(config.getConfigurationFile());
+			initializeFromConfigurationFile(config.getConfigurationFile());
+			updateConfiguration();
 
 			// Read cli arguments
 			try {
-				this.initializeFromArguments(stateMachine.getCmdArgs(),
+				initializeFromArguments(stateMachine.getCmdArgs(),
 						this.handler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
@@ -487,7 +506,7 @@ public class PrepareConfigurationState extends State {
 			status.setSignaturePosition(getStateMachine().getConfigProvider()
 							.getDefaultSignaturePosition());
 
-			this.setNextState(new OpenState(stateMachine));
+			setNextState(new OpenState(stateMachine));
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
@@ -496,7 +515,7 @@ public class PrepareConfigurationState extends State {
 					Messages.getString("error.Initialization"), //$NON-NLS-1$
 					BUTTONS.OK);
 			// error.setException(e);
-			// this.setNextState(error);
+			// setNextState(error);
 			error.open();
 			getStateMachine().exit();
 		}
@@ -524,6 +543,6 @@ public class PrepareConfigurationState extends State {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName();
+		return getClass().getName();
 	}
 }
