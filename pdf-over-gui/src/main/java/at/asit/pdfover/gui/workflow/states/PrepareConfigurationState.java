@@ -49,7 +49,10 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.utils.Zipper;
+import at.asit.pdfover.gui.workflow.GUIProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.Signator;
 
 /**
@@ -60,7 +63,7 @@ import at.asit.pdfover.signator.Signator;
 public class PrepareConfigurationState extends State {
 
 	/** SLF4J Logger instance **/
-	private static final Logger log = LoggerFactory
+	static final Logger log = LoggerFactory
 			.getLogger(PrepareConfigurationState.class);
 
 	private static String FILE_SEPARATOR = File.separator;
@@ -370,7 +373,10 @@ public class PrepareConfigurationState extends State {
 	public void run() {
 		// Read config file
 		try {
-			String cDir = getStateMachine().getConfigProvider().getConfigurationDirectory();
+			StateMachine stateMachine = getStateMachine();
+			ConfigProvider config = stateMachine.getConfigProvider();
+			final GUIProvider gui = stateMachine.getGUIProvider();
+			String cDir = config.getConfigurationDirectory();
 			File configDir = new File(cDir);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
@@ -388,92 +394,100 @@ public class PrepareConfigurationState extends State {
 
 			// Read cli arguments for config file first
 			try {
-				this.initializeFromArguments(getStateMachine().getCmdArgs(),
+				this.initializeFromArguments(stateMachine.getCmdArgs(),
 						this.configFileHandler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
-				ErrorDialog error = new ErrorDialog(getStateMachine()
-						.getGUIProvider().getMainShell(),
+				ErrorDialog error = new ErrorDialog(gui.getMainShell(),
 						Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
 						e.getMessage(),
 						BUTTONS.OK);
 				error.open();
-				getStateMachine().exit();
+				stateMachine.exit();
 			}
 
 			// initialize from config file
-			this.initializeFromConfigurationFile(getStateMachine()
-					.getConfigProvider().getConfigurationFile());
+			this.initializeFromConfigurationFile(config.getConfigurationFile());
 
 			// Read cli arguments
 			try {
-				this.initializeFromArguments(getStateMachine().getCmdArgs(),
+				this.initializeFromArguments(stateMachine.getCmdArgs(),
 						this.handler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
 				ErrorDialog error;
 				
 				if (e.getCause() instanceof FileNotFoundException) {
-					error = new ErrorDialog(getStateMachine()
-						.getGUIProvider().getMainShell(),
+					error = new ErrorDialog(gui.getMainShell(),
 						String.format(
 								Messages.getString("error.FileNotExist"), //$NON-NLS-1$
 								e.getCause().getMessage()),
 						BUTTONS.OK);
 				} else {
-					error = new ErrorDialog(getStateMachine()
-							.getGUIProvider().getMainShell(),
+					error = new ErrorDialog(gui.getMainShell(),
 							Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
 							e.getMessage(),
 							BUTTONS.OK);
 				}
 				error.open();
-				getStateMachine().exit();
+				stateMachine.exit();
 			}
 
 			// Check for updates
-			if (getStateMachine().getConfigProvider().getUpdateCheck() && Constants.APP_VERSION != null) {
-				HttpClient client = BKUHelper.getHttpClient();
-				GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
-				try {
-					client.executeMethod(method);
-					String version = method.getResponseBodyAsString().trim();
+			if (config.getUpdateCheck() && Constants.APP_VERSION != null) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						HttpClient client = BKUHelper.getHttpClient();
+						GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
+						try {
+							client.executeMethod(method);
+							final String version = method.getResponseBodyAsString().trim();
+							if (!VersionComparator.before(Constants.APP_VERSION, version))
+								return;
 
-					if (VersionComparator.before(Constants.APP_VERSION, version)) {
-						Dialog info = new Dialog(getStateMachine()
-							.getGUIProvider().getMainShell(),
-							Messages.getString("version_check.UpdateTitle"), //$NON-NLS-1$
-							String.format(Messages.getString("version_check.UpdateText"), //$NON-NLS-1$
-									version),
-							BUTTONS.OK_CANCEL, ICON.INFORMATION);
-						if (info.open() == SWT.OK)
-						{
-							if (Desktop.isDesktopSupported()) {
-								Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
-							} else {
-								log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
-								Program.launch(Constants.UPDATE_URL);
-							}
+							gui.getMainShell().getDisplay().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									Dialog info = new Dialog(gui.getMainShell(),
+											Messages.getString("version_check.UpdateTitle"), //$NON-NLS-1$
+											String.format(Messages.getString("version_check.UpdateText"), //$NON-NLS-1$
+													version),
+											BUTTONS.OK_CANCEL, ICON.INFORMATION);
+										if (info.open() == SWT.OK)
+										{
+											if (Desktop.isDesktopSupported()) {
+												try {
+													Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
+												} catch (Exception e) {
+													log.error("Error opening update location ", e); //$NON-NLS-1$
+												}
+											} else {
+												log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+												Program.launch(Constants.UPDATE_URL);
+											}
+										}
+								}
+							});
+						} catch (Exception e) {
+							log.error("Error downloading update information: ", e); //$NON-NLS-1$
 						}
 					}
-				} catch (Exception e) {
-					log.error("Error downloading update information: ", e); //$NON-NLS-1$
-				}
+				}).start();
 			}
 
 			// Set usedSignerLib ...
-			getStateMachine().getPDFSigner().setUsedPDFSignerLibrary(
+			stateMachine.getPDFSigner().setUsedPDFSignerLibrary(
 					Signator.Signers.PDFAS4);
 
 			// Create PDF Signer
-			getStateMachine().getStatus().setBKU(
-					getStateMachine().getConfigProvider().getDefaultBKU());
+			Status status = stateMachine.getStatus();
+			status.setBKU(getStateMachine().getConfigProvider().getDefaultBKU());
 
-			getStateMachine().getStatus().setSignaturePosition(
-					getStateMachine().getConfigProvider()
+			status.setSignaturePosition(getStateMachine().getConfigProvider()
 							.getDefaultSignaturePosition());
 
-			this.setNextState(new OpenState(getStateMachine()));
+			this.setNextState(new OpenState(stateMachine));
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e); //$NON-NLS-1$
