@@ -316,10 +316,10 @@ public class Constants {
 	public static final String RES_IMG_ERROR = "/img/error.png"; //$NON-NLS-1$
 
 	/** Card image resource */
-	public static final String RES_IMG_CARD = "/img/karte.gif"; //$NON-NLS-1$
+	public static final String RES_IMG_CARD = "/img/karte.png"; //$NON-NLS-1$
 
 	/** Mobile phone image resource */
-	public static final String RES_IMG_MOBILE = "/img/handy.gif"; //$NON-NLS-1$
+	public static final String RES_IMG_MOBILE = "/img/handy.png"; //$NON-NLS-1$
 
 	/** Package resource path */
 	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/"; //$NON-NLS-1$
