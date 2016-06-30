@@ -54,6 +54,26 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class DataSourceSelectComposite extends StateComposite {
 
 	/**
+	 * Open the input document selection dialog
+	 */
+	public void openFileDialog() {
+		FileDialog dialog = new FileDialog(
+				DataSourceSelectComposite.this.getShell(), SWT.OPEN);
+		dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
+		dialog.setFilterNames(new String[] {
+				Messages.getString("common.PDFExtension_Description"),  //$NON-NLS-1$
+				Messages.getString("common.AllExtension_Description") }); //$NON-NLS-1$
+		String fileName = dialog.open();
+		File file = null;
+		if (fileName != null) {
+			file = new File(fileName);
+			if (file.exists()) {
+				DataSourceSelectComposite.this.setSelected(file);
+			}
+		}
+	}
+
+	/**
 	 * Selection adapter for file browsing
 	 */
 	private final class FileBrowseDialogListener extends SelectionAdapter {
@@ -65,20 +85,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileDialog dialog = new FileDialog(
-					DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
-			dialog.setFilterNames(new String[] { 
-					Messages.getString("common.PDFExtension_Description"),  //$NON-NLS-1$
-					Messages.getString("common.AllExtension_Description") }); //$NON-NLS-1$
-			String fileName = dialog.open();
-			File file = null;
-			if (fileName != null) {
-				file = new File(fileName);
-				if (file.exists()) {
-					DataSourceSelectComposite.this.setSelected(file);
-				}
-			}
+			openFileDialog();
 		}
 	}
 
@@ -316,8 +323,6 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.redrawDrop();
 	}
 
-	private boolean press = false;
-
 	Composite drop_area;
 
 	FormData fd_lbl_drag;
@@ -334,21 +339,6 @@ public class DataSourceSelectComposite extends StateComposite {
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
-	}
-
-	/**
-	 * @return the press
-	 */
-	public boolean isPress() {
-		return this.press;
-	}
-
-	/**
-	 * @param press
-	 *            the press to set
-	 */
-	public void setPress(boolean press) {
-		this.press = press;
 	}
 
 	/*

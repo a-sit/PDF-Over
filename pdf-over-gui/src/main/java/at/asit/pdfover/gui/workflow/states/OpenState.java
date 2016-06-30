@@ -57,9 +57,6 @@ public class OpenState extends State {
 
 	@Override
 	public void run() {
-		
-		
-		
 		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState) &&
 			!(status.getPreviousState() instanceof OpenState))
@@ -87,7 +84,15 @@ public class OpenState extends State {
 		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
 		this.setNextState(new PositioningState(getStateMachine()));
 	}
-	
+
+	/**
+	 * Open the input document selection dialog
+	 */
+	public void openFileDialog() {
+		if (this.selectionComposite != null)
+			this.selectionComposite.openFileDialog();
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
@@ -105,6 +110,7 @@ public class OpenState extends State {
 		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
+		behavior.setEnabled(Buttons.OPEN, true);
 		behavior.setActive(Buttons.OPEN, true);
 	}
 

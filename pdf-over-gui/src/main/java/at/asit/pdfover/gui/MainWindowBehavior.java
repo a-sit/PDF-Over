@@ -44,7 +44,7 @@ public class MainWindowBehavior {
 	 */
 	public MainWindowBehavior() {
 		this.buttonsActive = new EnumMap<MainWindow.Buttons, Boolean>(MainWindow.Buttons.class);
-		this.buttonsEnabled = new EnumMap<MainWindow.Buttons, Boolean>(	MainWindow.Buttons.class);
+		this.buttonsEnabled = new EnumMap<MainWindow.Buttons, Boolean>(MainWindow.Buttons.class);
 		reset();
 	}
 

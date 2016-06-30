@@ -318,8 +318,13 @@ public class MainWindow {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				MainWindow.this.stateMachine.jumpToState(new OpenState(
-						MainWindow.this.stateMachine));
+				if (MainWindow.this.stateMachine.getStatus().getCurrentState() instanceof OpenState) {
+					((OpenState) MainWindow.this.stateMachine.getStatus()
+							.getCurrentState()).openFileDialog();
+				} else {
+					MainWindow.this.stateMachine.jumpToState(new OpenState(
+							MainWindow.this.stateMachine));
+				}
 			}
 		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
