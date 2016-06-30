@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
+import org.apache.commons.httpclient.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,6 @@ public class IAIKStatus extends AbstractMobileBKUStatusImpl {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(IAIKStatus.class);
 
 	/** Maximum number of TAN tries */
@@ -68,13 +68,38 @@ public class IAIKStatus extends AbstractMobileBKUStatusImpl {
 		this.viewState = viewState;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#parseCookies(org.apache.commons.httpclient.Cookie[])
+	 */
+	@Override
+	public void parseCookies(Cookie[] cookies) {
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("JSESSIONID")) { //$NON-NLS-1$
+				log.debug("Got session ID: " + cookie.toExternalForm()); //$NON-NLS-1$
+				setSessionID(cookie.getValue());
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#getCookies()
+	 */
+	@Override
+	public Cookie[] getCookies() {
+		// Currently not used
+		return null;
+	}
+
 	@Override
 	public String ensureSessionID(String url)
 	{
 		if (url.contains("jsessionid=")) //$NON-NLS-1$
 			return url;
 
-		url += ";jsessionid=" + getSessionID(); //$NON-NLS-1$
+		String sid = getSessionID();
+		if (sid != null)
+			url += ";jsessionid=" + sid; //$NON-NLS-1$
 		return url;
 	}
 }

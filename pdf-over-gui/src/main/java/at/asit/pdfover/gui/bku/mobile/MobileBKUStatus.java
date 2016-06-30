@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
+import org.apache.commons.httpclient.Cookie;
+
 /**
  * 
  */
@@ -130,6 +132,18 @@ public interface MobileBKUStatus {
 	 * @param signatureDataURL the signature data URL
 	 */
 	public void setSignatureDataURL(String signatureDataURL);
+
+	/**
+	 * Parse the cookies set by the SL request server
+	 * @param cookies the cookies
+	 */
+	void parseCookies(Cookie[] cookies);
+
+	/**
+	 * Get the cookies to set during a request to the SL server
+	 * @return the cookies to set
+	 */
+	public Cookie[] getCookies();
 
 	/**
 	 * Ensure that given URL contains a session ID (if necessary)

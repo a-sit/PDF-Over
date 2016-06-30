@@ -19,6 +19,9 @@ package at.asit.pdfover.gui.bku.mobile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,6 +263,14 @@ public class MobileBKUHelper {
 	 */
 	public static HttpClient getHttpClient(MobileBKUStatus status) {
 		HttpClient client = BKUHelper.getHttpClient(true);
+		Cookie[] cookies = status.getCookies();
+		if (cookies != null) {
+			HttpState state = new HttpState();
+			for (Cookie cookie : cookies) {
+				state.addCookie(cookie);
+			}
+			client.setState(state);
+		}
 		return client;
 	}
 }

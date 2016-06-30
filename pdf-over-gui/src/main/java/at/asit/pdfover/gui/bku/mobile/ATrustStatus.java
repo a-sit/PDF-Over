@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
+import org.apache.commons.httpclient.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,5 +100,21 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public void setQRCode(String qrcode) {
 		this.qrcode = qrcode;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#parseCookies(org.apache.commons.httpclient.Cookie[])
+	 */
+	@Override
+	public void parseCookies(Cookie[] cookies) {
+		//not needed yet
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#getCookies()
+	 */
+	@Override
+	public Cookie[] getCookies() {
+		//not needed yet
+		return null;
+	}
 }

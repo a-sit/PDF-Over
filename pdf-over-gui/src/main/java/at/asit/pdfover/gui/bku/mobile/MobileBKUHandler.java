@@ -261,6 +261,8 @@ public abstract class MobileBKUHandler {
 		if (server != null)
 			log.info("Server: " + server); //$NON-NLS-1$
 
+		getStatus().parseCookies(client.getState().getCookies());
+
 		return responseData;
 	}
 
@@ -341,6 +343,8 @@ public abstract class MobileBKUHandler {
 		getStatus().setServer(server);
 		if (server != null)
 			log.info("Server: " + server); //$NON-NLS-1$
+
+		getStatus().parseCookies(client.getState().getCookies());
 
 		return responseData;
 	}
