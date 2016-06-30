@@ -319,16 +319,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-		PostMethod post = new PostMethod(status.getBaseURL()
-				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
-		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
-		post.addParameter(
-				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter("__EVENTTARGET", "SmsButton"); //$NON-NLS-1$ //$NON-NLS-2$
-		post.addParameter("__EVENTARGUMENT", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		GetMethod get = new GetMethod(status.getBaseURL()
+				+ "/sendsms.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		get.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 
-		return executePost(client, post);
+		return executeGet(client, get);
 	}
 
 	/**
