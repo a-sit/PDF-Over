@@ -409,9 +409,12 @@ public class PositioningComposite extends StateComposite {
 	 *            the signature position
 	 */
 	void setFinalPosition() {
-		this.position = new SignaturePosition(
-				this.viewer.getSignaturePositionX(),
-				this.viewer.getSignaturePositionY(), this.currentPage);
+		if (this.currentPage == 0)
+			this.position = new SignaturePosition();
+		else
+			this.position = new SignaturePosition(
+					this.viewer.getSignaturePositionX(),
+					this.viewer.getSignaturePositionY(), this.currentPage);
 		PositioningComposite.this.state.updateStateMachine();
 	}
 
