@@ -144,7 +144,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		status.setErrorMessage(null);
 
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
-			// Certification expiration interstitial - skip
+			// Certificate expiration interstitial - skip
 			String notice = Messages.getString("mobileBKU.notice") + " " + //$NON-NLS-1$ //$NON-NLS-2$
 					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					.replaceAll("\\<.*?\\>", ""); //$NON-NLS-1$ //$NON-NLS-2$

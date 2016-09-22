@@ -427,7 +427,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang
 						                  .getSelectionIndex()];
 				if (!currentLocale.equals(selectedLocale)) {
-					performSignatureLangSelectionChanged(selectedLocale);
+					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
 				}
 			}
 		});
@@ -682,10 +682,17 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		return 0;
 	}
 
-	void performSignatureLangSelectionChanged(Locale selected) {
+	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
 		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
+		if (previous != null) {
+			String prev_default_note = Messages.getString("simple_config.Note_Default", previous); //$NON-NLS-1$
+			if (this.txtSignatureNote.getText().equals(prev_default_note)) {
+				this.txtSignatureNote.setText(Messages.getString("simple_config.Note_Default", selected)); //$NON-NLS-1$);
+				processSignatureNoteChanged();
+			}
+		}
 	}
 
 	/*
@@ -792,7 +799,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		this.setVisibleImage();
 
-		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale());
+		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale(), null);
 	}
 
 	/* (non-Javadoc)
