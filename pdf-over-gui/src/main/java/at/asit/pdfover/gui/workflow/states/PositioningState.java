@@ -36,8 +36,8 @@ import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
-import at.asit.pdfover.signator.FileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -104,7 +104,7 @@ public class PositioningState extends State {
 		// Update possibly changed values
 		ConfigProvider config = stateMachine.getConfigProvider();
 		SignatureParameter param = stateMachine.getPDFSigner().getPDFSigner().newParameter();
-		Emblem emblem = new FileNameEmblem(config.getDefaultEmblem());
+		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
 			param.setProperty("SIG_NOTE", config.getSignatureNote()); //$NON-NLS-1$

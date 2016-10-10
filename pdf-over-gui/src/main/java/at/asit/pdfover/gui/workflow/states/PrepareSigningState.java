@@ -26,14 +26,14 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
-import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.FileNameEmblem;
+import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.Signer;
@@ -144,7 +144,7 @@ public class PrepareSigningState extends State {
 
 				if (configuration.getDefaultEmblem() != null
 						&& !configuration.getDefaultEmblem().isEmpty()) {
-					this.state.signatureParameter.setEmblem(new FileNameEmblem(
+					this.state.signatureParameter.setEmblem(new CachedFileNameEmblem(
 							configuration.getDefaultEmblem()));
 				}
 

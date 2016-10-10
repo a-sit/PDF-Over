@@ -70,7 +70,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.FileNameEmblem;
+import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
 
 /**
@@ -619,7 +619,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				param.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
 				if (image != null && !image.trim().isEmpty()) {
 					logo = new ImageData(image);
-					param.setEmblem(new FileNameEmblem(image));
+					param.setEmblem(new CachedFileNameEmblem(image));
 				}
 	
 				img = SignaturePlaceholderCache.getSWTPlaceholder(param);

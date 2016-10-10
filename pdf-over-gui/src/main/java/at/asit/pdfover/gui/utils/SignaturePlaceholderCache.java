@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.signator.CachedFileNameEmblem;
+import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;
 
 /**
@@ -71,7 +73,15 @@ public class SignaturePlaceholderCache {
 		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
 
 		String sigLang = param.getSignatureLanguage();
-		String sigEmbl = (param.getEmblem() == null ? "" : param.getEmblem().getFileName()); //$NON-NLS-1$
+		String sigEmbl = ""; //$NON-NLS-1$
+		if (param.getEmblem() != null) {
+			Emblem embl = param.getEmblem();
+			if (embl instanceof CachedFileNameEmblem) {
+				sigEmbl = ((CachedFileNameEmblem) embl).getOriginalFileName();
+			} else {
+				sigEmbl = embl.getFileName();
+			}
+		}
 		String sigPdfA = param.getSignaturePdfACompat() ? Constants.TRUE : Constants.FALSE;
 		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
 		if (sigNote == null)

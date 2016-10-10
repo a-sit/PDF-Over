@@ -162,9 +162,9 @@ public abstract class SignatureParameter {
 	public abstract SignatureDimension getPlaceholderDimension();
 
 	/**
-	 * Gets the Dimension to display the Placeholder
+	 * Gets the Placeholder image
 	 * 
-	 * @return the placeholder dimensions
+	 * @return the placeholder image
 	 */
 	public abstract Image getPlaceholder();
 
