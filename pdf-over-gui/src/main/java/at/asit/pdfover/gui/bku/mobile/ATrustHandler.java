@@ -189,6 +189,26 @@ public class ATrustHandler extends MobileBKUHandler {
 
 			responseData = executePost(client, post);
 			log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+		} else if (responseData.contains("tanAppInfo.aspx?sid=")) { //$NON-NLS-1$
+			// App info interstitial - skip
+			log.info("Skipping tan app interstitial"); //$NON-NLS-1$
+
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "tanAppInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+			// Post again to skip
+			MobileBKUHelper.registerTrustedSocketFactory();
+			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
+
+			PostMethod post = new PostMethod(status.getBaseURL() + "/tanAppInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
+			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
+			post.addParameter("__VIEWSTATE", t_viewState); //$NON-NLS-1$
+			post.addParameter("__EVENTVALIDATION", t_eventValidation); //$NON-NLS-1$
+			post.addParameter("NextBtn", "Weiter"); //$NON-NLS-1$ //$NON-NLS-2$
+
+			responseData = executePost(client, post);
+			log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		}
 
 		if (responseData.contains("signature.aspx?sid=")) { //$NON-NLS-1$
