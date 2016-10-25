@@ -69,15 +69,18 @@ public class SignaturePlaceholderCache {
 
 		final String sigLangProp = "LANG"; //$NON-NLS-1$
 		final String sigEmblProp = "EMBL"; //$NON-NLS-1$
+		final String sigEHshProp = "EHSH"; //$NON-NLS-1$
 		final String sigPdfAProp = "PDFA"; //$NON-NLS-1$
 		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
 
 		String sigLang = param.getSignatureLanguage();
 		String sigEmbl = ""; //$NON-NLS-1$
+		String sigEHsh = ""; //$NON-NLS-1$
 		if (param.getEmblem() != null) {
 			Emblem embl = param.getEmblem();
 			if (embl instanceof CachedFileNameEmblem) {
 				sigEmbl = ((CachedFileNameEmblem) embl).getOriginalFileName();
+				sigEHsh = ((CachedFileNameEmblem) embl).getOriginalFileHash();
 			} else {
 				sigEmbl = embl.getFileName();
 			}
@@ -94,6 +97,7 @@ public class SignaturePlaceholderCache {
 			sigProps.load(in);
 			if (sigLang.equals(sigProps.getProperty(sigLangProp)) &&
 			    sigEmbl.equals(sigProps.getProperty(sigEmblProp)) &&
+			    sigEHsh.equals(sigProps.getProperty(sigEHshProp)) &&
 			    sigNote.equals(sigProps.getProperty(sigNoteProp)) &&
 			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp))) {
 				log.debug("Placeholder cache hit"); //$NON-NLS-1$
@@ -102,6 +106,7 @@ public class SignaturePlaceholderCache {
 			log.debug("Placeholder cache miss (" + //$NON-NLS-1$
 					sigLang + "|" + sigProps.getProperty(sigLangProp) + " - " +//$NON-NLS-1$ //$NON-NLS-2$
 					sigEmbl + "|" + sigProps.getProperty(sigEmblProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
+					sigEHsh + "|" + sigProps.getProperty(sigEHshProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
 					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
 					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (Exception e) {
@@ -112,6 +117,7 @@ public class SignaturePlaceholderCache {
 		try {
 			sigProps.setProperty(sigLangProp, sigLang);
 			sigProps.setProperty(sigEmblProp, sigEmbl);
+			sigProps.setProperty(sigEHshProp, sigEHsh);
 			sigProps.setProperty(sigNoteProp, sigNote);
 			sigProps.setProperty(sigPdfAProp, sigPdfA);
 			OutputStream out = new FileOutputStream(new File(fileDir, propFileName));

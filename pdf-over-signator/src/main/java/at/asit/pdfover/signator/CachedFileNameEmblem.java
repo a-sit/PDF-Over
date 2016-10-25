@@ -93,7 +93,7 @@ public class CachedFileNameEmblem implements Emblem {
 					return cachedEmblemFileName; //$NON-NLS-1$
 				}
 			}
-			log.debug("Emblem cache miss");
+			log.debug("Emblem cache miss"); //$NON-NLS-1$
 		} catch (Exception e) {
 			log.warn("Can't load emblem cache", e); //$NON-NLS-1$
 		}
@@ -146,5 +146,20 @@ public class CachedFileNameEmblem implements Emblem {
 	 */
 	public String getOriginalFileName() {
 		return this.fileName;
+	}
+
+	/**
+	 * Return the original filename
+	 * @return the original filename
+	 */
+	public String getOriginalFileHash() {
+		if (this.fileName == null || !(new File(this.fileName).exists()))
+			return ""; //$NON-NLS-1$
+		try {
+			return getFileHash(this.fileName);
+		} catch (IOException e) {
+			log.debug("Error getting file hash", e);
+			return ""; //$NON-NLS-1$
+		}
 	}
 }
