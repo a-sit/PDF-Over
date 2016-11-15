@@ -17,7 +17,10 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
+
+import javax.imageio.ImageIO;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -64,6 +67,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
+import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
@@ -635,7 +639,14 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 
 		if (logo != null) {
-			this.logo = new Image(this.getDisplay(), logo);
+			try {
+				File imgFile = new File(image);
+				this.logo = new Image(this.getDisplay(),
+						ImageConverter.convertToSWT(CachedFileNameEmblem.fixImage(
+								ImageIO.read(imgFile), imgFile)));
+			} catch (IOException e) {
+				log.error("Error reading image", e); //$NON-NLS-1$
+			}
 		} else {
 			this.logo = null;
 		}
