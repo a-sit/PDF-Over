@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.1.11-SNAPSHOT</version>
+	<version>4.1.11</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
@@ -62,7 +62,8 @@
 		<connection>scm:git:http://git.egiz.gv.at/git/pdf-over</connection>
 		<developerConnection>scm:git:ssh://gitlab@gitlab.iaik.tugraz.at/egiz/pdf-over.git</developerConnection>
 		<url>http://git.egiz.gv.at/pdf-over</url>
-	</scm>
+	  <tag>pdf-over-4.1.11</tag>
+  </scm>
 
 	<issueManagement>
 		<system>JIRA</system>
