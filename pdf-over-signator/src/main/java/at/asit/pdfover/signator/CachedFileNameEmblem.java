@@ -101,51 +101,56 @@ public class CachedFileNameEmblem implements Emblem {
 				if (reader.getFormatName().equals("JPEG")) {
 					try {
 						Metadata metadata = ImageMetadataReader.readMetadata(imgFile);
-						int orientation = metadata.getFirstDirectoryOfType(
-								ExifIFD0Directory.class).getInt(
-										ExifDirectoryBase.TAG_ORIENTATION);
-						if (orientation > 2) {
-							// rotate
-							double rotation = 0;
-							int height = owidth;
-							int width = oheight;
-							switch ((orientation + 1) / 2) {
-								case 2:
-									rotation = Math.PI;
-									height = oheight;
-									width = owidth;
-									break;
-								case 3:
-									rotation = Math.PI/2;
-									break;
-								case 4:
-									rotation = 3*Math.PI/2;
-									break;
+
+						if(metadata != null) {
+							int orientation = metadata.getFirstDirectoryOfType(
+									ExifIFD0Directory.class).getInt(
+									ExifDirectoryBase.TAG_ORIENTATION);
+							if (orientation > 2) {
+								// rotate
+								double rotation = 0;
+								int height = owidth;
+								int width = oheight;
+								switch ((orientation + 1) / 2) {
+									case 2:
+										rotation = Math.PI;
+										height = oheight;
+										width = owidth;
+										break;
+									case 3:
+										rotation = Math.PI / 2;
+										break;
+									case 4:
+										rotation = 3 * Math.PI / 2;
+										break;
+								}
+								log.debug("EXIF orientation " + orientation + ", rotating " + rotation + "rad");
+								BufferedImage result = new BufferedImage(width, height, img.getType());
+								Graphics2D g = result.createGraphics();
+								g.translate((width - owidth) / 2, (height - oheight) / 2);
+								g.rotate(rotation, owidth / 2, oheight / 2);
+								g.drawRenderedImage(img, null);
+								g.dispose();
+								img = result;
+								owidth = width;
+								oheight = height;
 							}
-							log.debug("EXIF orientation " + orientation + ", rotating " + rotation + "rad");
-							BufferedImage result = new BufferedImage(width, height, img.getType());
-							Graphics2D g = result.createGraphics();
-							g.translate((width - owidth) / 2, (height - oheight) / 2);
-							g.rotate(rotation, owidth / 2, oheight / 2);
-							g.drawRenderedImage(img, null);
-							g.dispose();
-							img = result;
-							owidth = width;
-							oheight = height;
-						}
-						if (((orientation < 5) && (orientation % 2 == 0)) ||
-						     (orientation > 5) && (orientation % 2 == 1)) {
-							// flip
-							log.debug("flipping image");
-							BufferedImage result = new BufferedImage(owidth, oheight, img.getType());
-							Graphics2D g = result.createGraphics();
-							g.drawImage(img, owidth, 0, -owidth, oheight, null);
-							g.dispose();
-							img = result;
+							if (((orientation < 5) && (orientation % 2 == 0)) ||
+									(orientation > 5) && (orientation % 2 == 1)) {
+								// flip
+								log.debug("flipping image");
+								BufferedImage result = new BufferedImage(owidth, oheight, img.getType());
+								Graphics2D g = result.createGraphics();
+								g.drawImage(img, owidth, 0, -owidth, oheight, null);
+								g.dispose();
+								img = result;
+							}
 						}
 					} catch (ImageProcessingException e) {
 						log.error("Error reading emblem metadata", e);
 					} catch (MetadataException e) {
+						log.error("Error reading emblem metadata", e);
+					} catch (NullPointerException e) {
 						log.error("Error reading emblem metadata", e);
 					}
 				}
