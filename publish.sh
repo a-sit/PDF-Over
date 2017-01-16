@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #### CONFIGURE: ######
-PUBLISH_DIR="/srv/apache2/www/pdf-over"
+PUBLISH_DIR="/home/andreas/Documents/pdf-over-build"
 LOG_DIR="log"
 CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
