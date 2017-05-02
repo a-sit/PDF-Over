@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.bku;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.http.client.config.CookieSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,9 @@ public class BKUHelper {
 
 	/**
 	 * Get a HTTP Client instance
-	 * @param useProxy whether to use a potentially set proxy
+	 * 
+	 * @param useProxy
+	 *            whether to use a potentially set proxy
 	 * @return the HttpClient
 	 */
 	public static HttpClient getHttpClient(boolean useProxy) {
@@ -44,15 +47,20 @@ public class BKUHelper {
 		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
 				Constants.USER_AGENT_STRING);
 
+		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY);
+
 		if (useProxy) {
-			String host = System.getProperty("http.proxyHost"); //$NON-NLS-1$
-			String port = System.getProperty("http.proxyPort"); //$NON-NLS-1$
-			if (host != null && !host.isEmpty() &&
-					port != null && !port.isEmpty()) {
+			String host = System.getProperty("http.proxyHost");
+			// $NON-NLS-1$
+			String port = System.getProperty("http.proxyPort");
+			// $NON-NLS-1$
+			if (host != null && !host.isEmpty() && port != null && !port.isEmpty()) {
 				int p = Integer.parseInt(port);
 				client.getHostConfiguration().setProxy(host, p);
-				String user = System.getProperty("http.proxyUser"); //$NON-NLS-1$
-				String pass = System.getProperty("http.proxyPassword"); //$NON-NLS-1$
+				String user = System.getProperty("http.proxyUser");
+				// $NON-NLS-1$
+				String pass = System.getProperty("http.proxyPassword");
+				// $NON-NLS-1$
 				if (user != null && !user.isEmpty() && pass != null) {
 					client.getState().setProxyCredentials(new AuthScope(host, p),
 							new UsernamePasswordCredentials(user, pass));
@@ -63,8 +71,9 @@ public class BKUHelper {
 		return client;
 	}
 
-		/**
+	/**
 	 * Get a HTTP Client instance
+	 * 
 	 * @return the HttpClient
 	 */
 	public static HttpClient getHttpClient() {
