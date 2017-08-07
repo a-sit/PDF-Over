@@ -15,12 +15,15 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
+import java.io.File;
+import java.io.FileInputStream;
 // Imports
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -82,7 +85,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		}
 
 		/*
-		 * A-Trust Certificates
+		 *Certificates
 		 */
 
 		KeyStore myKeyStore = KeyStore.getInstance(KeyStore
@@ -93,16 +96,25 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		Document doc = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder()
 				.parse(this.getClass().getResourceAsStream(Constants.RES_CERT_LIST));
-
+		
+		
+			File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
+			
+			Document doc_added = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder()
+					.parse(added_cert);
+		
+		Node certificates_added = doc_added.getFirstChild();		
 		Node certificates = doc.getFirstChild();
 
-		if (!certificates.getNodeName().equals("certificates")) { //$NON-NLS-1$
+		if (!certificates.getNodeName().equals("certificates") && !certificates_added.getNodeName().equals("certificates")) { //$NON-NLS-1$
 			throw new Exception(
 					"Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
 		}
 
+		NodeList certificates_added_list = certificates_added.getChildNodes();
 		NodeList certificateList = certificates.getChildNodes();
-
+		
 		for (int i = 0; i < certificateList.getLength(); i++) {
 			try {
 
@@ -117,7 +129,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 					continue;
 				}
 
-				String certResource = Constants.RES_CERT_PATH + certificateNode.getTextContent();
+				String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
 
 				X509Certificate cert = (X509Certificate) CertificateFactory
 						.getInstance("X509"). //$NON-NLS-1$
@@ -133,6 +145,39 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
+		
+		for (int i = 0; i < certificates_added_list.getLength(); i++) {
+			try {
+
+				Node certificateNode = certificates_added_list.item(i);
+
+				if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
+					continue; // Ignore dummy text node ..
+				}
+
+				if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
+					log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
+					continue;
+				}
+
+				String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
+
+				FileInputStream addedNode = new FileInputStream(certResource);
+				
+				X509Certificate cert = (X509Certificate) CertificateFactory
+						.getInstance("X509"). //$NON-NLS-1$
+						generateCertificate(
+								addedNode);
+
+				myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
+
+				log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
+
+			} catch (Exception ex) {
+				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		}
+		
 
 		tmf.init(myKeyStore);
 

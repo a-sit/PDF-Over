@@ -86,6 +86,12 @@ public class PdfAs4Signer implements Signer {
 		param.setSignatureProfileId(sigProfile);
 		String id = UUID.randomUUID().toString();
 		param.setTransactionId(id);
+
+		if (parameter.isSearchForPlaceholderSignatures()) {
+			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_MODE, "3");
+			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_SEARCH_ENABLED, IConfigurationConstants.TRUE);
+		}
+
 		state.setSignParameter(param);
 		state.setOutput(output);
 		return state;

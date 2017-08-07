@@ -152,6 +152,10 @@ public interface ConfigurationContainer {
 	 * @return the default BKU
 	 */
 	public BKUs getDefaultBKU();
+	
+	
+	
+
 
 	/**
 	 * Sets the default BKU 
@@ -361,4 +365,32 @@ public interface ConfigurationContainer {
 	 * @param skipFinish whether to skip the finish screen
 	 */
 	public void setSkipFinish(boolean skipFinish);
+
+	
+	/**
+	 * Gets theCertificate-Download URL
+	 * @return the Certificate-Download URL
+	 */
+	public String getDownloadURL();
+
+	/**
+	 * Sets the Certificate-Download URL
+	 * @param downloadURL 
+	 */
+	public void setDownloadURL(String downloadURL);
+	
+	/**
+	 * Gets whether to use an existing signature marker.
+	 *
+	 * @return whether to use an existing signature marker
+	 */
+	public boolean getUseMarker();
+
+	/**
+	 * Sets whether to use an existing signature marker.
+	 *
+	 * @param useMarker
+	 *            whether to use an existing signature marker
+	 */
+	public void setUseMarker(boolean useMarker);
 }

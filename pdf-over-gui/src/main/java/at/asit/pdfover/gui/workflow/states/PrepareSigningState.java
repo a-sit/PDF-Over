@@ -155,6 +155,9 @@ public class PrepareSigningState extends State {
 				}
 
 				this.state.signatureParameter
+						.setSearchForPlaceholderSignatures(getStateMachine().getStatus().isSearchForPlaceholderSignature());
+
+				this.state.signatureParameter
 						.setSignatureLanguage(configuration.getSignatureLocale()
 								.getLanguage());
 

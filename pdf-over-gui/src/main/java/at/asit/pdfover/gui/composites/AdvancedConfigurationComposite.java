@@ -81,6 +81,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private Group grpSignatur;
 	Button btnAutomatischePositionierung;
 	Button btnPdfACompat;
+	Button btnPlatzhalterVerwenden;
 	private Label lblTransparenz;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenzRechts;
@@ -174,11 +175,30 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 					}
 				});
 
+		this.btnPlatzhalterVerwenden = new Button(this.grpSignatur, SWT.CHECK);
+		FormData fd_btnPlatzhalterVerwenden = new FormData();
+		fd_btnPlatzhalterVerwenden.right = new FormAttachment(100, -5);
+		fd_btnPlatzhalterVerwenden.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
+		fd_btnPlatzhalterVerwenden.left = new FormAttachment(0, 5);
+		this.btnPlatzhalterVerwenden.setLayoutData(fd_btnPlatzhalterVerwenden);
+
+		FontData[] fD_btnPlatzhalterVerwenden = this.btnPlatzhalterVerwenden.getFont().getFontData();
+		fD_btnPlatzhalterVerwenden[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnPlatzhalterVerwenden.setFont(new Font(Display.getCurrent(), fD_btnPlatzhalterVerwenden[0]));
+
+		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+						AdvancedConfigurationComposite.this.btnPlatzhalterVerwenden.getSelection());
+			}
+		});
+
 		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
 		FormData fd_btnPdfACompat = new FormData();
 		fd_btnPdfACompat.right = new FormAttachment(100, -5);
 		fd_btnPdfACompat.top = new FormAttachment(
-				this.btnAutomatischePositionierung, 5);
+				this.btnPlatzhalterVerwenden, 5);
 		fd_btnPdfACompat.left = new FormAttachment(0, 5);
 		this.btnPdfACompat
 				.setLayoutData(fd_btnPdfACompat);
@@ -836,6 +856,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
+	void performUseMarkerSelection(boolean useMarker) {
+		this.configurationContainer.setUseMarker(useMarker);
+		this.btnPlatzhalterVerwenden.setSelection(useMarker);
+	}
+
 	void performPdfACompatSelection(boolean compat) {
 		this.configurationContainer.setSignaturePdfACompat(compat);
 		this.btnPdfACompat.setSelection(compat);
@@ -973,6 +998,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	public void initConfiguration(PersistentConfigProvider provider) {
 		this.configurationContainer.setDefaultSignaturePosition(
 				provider.getDefaultSignaturePositionPersistent());
+		this.configurationContainer.setUseMarker(provider.getUseMarker());
+		this.configurationContainer.setDownloadURL(
+				provider.getDownloadURL());
 		this.configurationContainer.setSignaturePdfACompat(
 				provider.getSignaturePdfACompat());
 		this.configurationContainer.setPlaceholderTransparency(
@@ -1021,6 +1049,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		SignaturePosition pos = this.configurationContainer
 				.getDefaultSignaturePosition();
 		performPositionSelection(pos != null && pos.useAutoPositioning());
+		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		performLocaleSelectionChanged(this.configurationContainer.getLocale());
@@ -1038,15 +1067,15 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			this.txtProxyHost.setText(host);
 		}
 
-//		String user = this.configurationContainer.getProxyUser();
-//		if (user != null) {
-//			this.txtProxyUser.setText(user);
-//		}
-//
-//		String pass = this.configurationContainer.getProxyPass();
-//		if (pass != null) {
-//			this.txtProxyPass.setText(pass);
-//		}
+		/*String user = this.configurationContainer.getProxyUser();
+		if (user != null) {
+		this.txtProxyUser.setText(user);
+	}
+
+		String pass = this.configurationContainer.getProxyPass();
+		if (pass != null) {
+			this.txtProxyPass.setText(pass);
+		}*/
 }
 
 
@@ -1058,6 +1087,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			PersistentConfigProvider provider) {
 		store.setDefaultSignaturePosition(
 				this.configurationContainer.getDefaultSignaturePosition());
+		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setSignaturePdfACompat(
 				this.configurationContainer.getSignaturePdfACompat());
 		store.setPlaceholderTransparency(
@@ -1157,6 +1187,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setToolTipText(Messages
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
+		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker")); //$NON-NLS-1$
+		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //$NON-NLS-1$
 		this.btnPdfACompat.setText(Messages
 				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
 		this.btnPdfACompat.setToolTipText(Messages

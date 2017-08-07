@@ -170,4 +170,21 @@ public interface ConfigManipulator {
 	 * @throws IOException
 	 */
 	public void saveCurrentConfiguration() throws IOException;
+
+	
+	/**
+	 * Sets whether to use an existing signaturemarker.
+	 *
+	 * @param useMarker
+	 *            whether to use an existing signaturemarker
+	 */
+	public void setUseMarker(boolean useMarker);
+	
+	/**
+	 * @param downloadURL 
+	 * @param Sets the DownloadURL for Certificates
+	 */
+	public void setDefaultDownloadURL(String downloadURL);
 }
+
+

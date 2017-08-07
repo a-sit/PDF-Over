@@ -180,4 +180,17 @@ public interface PersistentConfigProvider {
 	 * @return the configured MainWindow size
 	 */
 	public Point getMainWindowSize();
+	
+	/**
+	 * Gets the configured Download URL for certificates
+	 * @return the configured download URL
+	 */
+	public String getDownloadURL();
+	
+	/**
+	 * Gets whether to use an existing singature marker.
+	 *
+	 * @return whether to use an existing singature marker
+	 */
+	public boolean getUseMarker();
 }

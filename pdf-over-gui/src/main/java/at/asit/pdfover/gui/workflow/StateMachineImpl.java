@@ -15,6 +15,9 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 //Imports
 import java.lang.reflect.Constructor;
 
@@ -24,9 +27,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.utils.CertificateDownloadSource;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
@@ -248,8 +253,29 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * Workflow main entrance point
 	 */
 	public void start() {
+	
 		// Call update to start processing ...
 		update();
+	
+		try {
+			File certificates = new File (Constants.RES_CERT_LIST_ADDED);
+			if (!certificates.exists())
+			{
+				
+					FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
+					CertificateDownloadSource.getAcceptedCertificates();
+				
+				
+			}
+			else
+			{
+				CertificateDownloadSource.getAcceptedCertificates();
+			}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 
 		// if a user interaction is required we have a shell ...
 		Shell shell = nonCreatingGetShell();

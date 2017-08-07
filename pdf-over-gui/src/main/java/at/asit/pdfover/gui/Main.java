@@ -15,20 +15,39 @@
  */
 package at.asit.pdfover.gui;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 //Imports
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
+import javax.security.auth.login.Configuration;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.gui.utils.CertificateDownloadSource;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 
 /**
  * Main entry point for production
@@ -39,11 +58,13 @@ public class Main {
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
-	
+	private static URL url=null;
+
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		log.debug("Loading SWT libraries"); //$NON-NLS-1$
 		try {
 			SWTLoader.loadSWT();
@@ -57,24 +78,39 @@ public class Main {
 		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
 
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
-		if(!configDir.exists()) {
+	
+		if (!configDir.exists()) {
+			try {
+				FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			configDir.mkdir();
 		}
+		
 
 		File log4j = new File(configDir.getAbsolutePath() + File.separator + Constants.DEFAULT_LOG4J_FILENAME);
-		if(log4j.exists()) {
+		if (log4j.exists()) {
 			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
-
+		
+		
 		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
 
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
-
+		
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
 		stateMachine.start();
+		//Download Certificates//
+		CertificateDownloadSource.getAcceptedCertificates();
+		
 		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
+
 
 		// Workaround for remaining AWT-Shutdown thread on OSX
 		System.exit(0);
 	}
+
+
 }

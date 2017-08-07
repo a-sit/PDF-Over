@@ -53,6 +53,7 @@ public class StatusImpl implements Status {
 	
 	private MainWindowBehavior behavior;
 
+	private boolean searchForPlacehoderSignature = false;
 
 	/**
 	 * Constructor
@@ -180,5 +181,26 @@ public class StatusImpl implements Status {
 	@Override
 	public SignResult getSignResult() {
 		return this.signResult;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.asit.pdfover.gui.workflow.Status#getConfiguration()
+	 */
+	@Override
+	public boolean isSearchForPlaceholderSignature() {
+		return this.searchForPlacehoderSignature;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.Status#setSearchForPlaceholderSignature(
+	 * boolean)
+	 */
+	public void setSearchForPlaceholderSignature(boolean value) {
+		this.searchForPlacehoderSignature = value;
 	}
 }

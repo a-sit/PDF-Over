@@ -43,7 +43,6 @@ import at.asit.pdfover.signator.SignaturePosition;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
-
 /**
  * Decides where to position the signature block
  */

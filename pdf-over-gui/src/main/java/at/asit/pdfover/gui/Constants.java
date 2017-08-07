@@ -68,7 +68,10 @@ public class Constants {
 	/** The signature placeholder cache properties file name */
 	public static final String PLACEHOLDER_CACHE_PROPS_FILENAME = ".placeholder.properties"; //$NON-NLS-1$
 
-	/** The minimum PDF-AS configuration version (older ones will be backed up and updated */
+	/**
+	 * The minimum PDF-AS configuration version (older ones will be backed up
+	 * and updated
+	 */
 	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.0"; //$NON-NLS-1$
 
 	/** The configuration backup filename */
@@ -107,22 +110,23 @@ public class Constants {
 	/** False */
 	public static final String FALSE = "false"; //$NON-NLS-1$
 
-
 	/* Configuration parameters */
 
 	/** The bku config parameter */
 	public static final String CFG_BKU = "BKU"; //$NON-NLS-1$
 
-	/** The value for the Signature position in the configuration file
-	 * values for this entry are:
+	/**
+	 * The value for the Signature position in the configuration file values for
+	 * this entry are:
 	 *
 	 * x=vx;y=vy;p=vp or auto
 	 *
-	 * vx:= float value
-	 * vy:= float value
-	 * vp:= integer value
+	 * vx:= float value vy:= float value vp:= integer value
 	 */
 	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION"; //$NON-NLS-1$
+
+	/** The use marker parameter (true/false) */
+	public static final String CFG_USE_MARKER = "USE_MARKER"; //$NON-NLS-1$
 
 	/** The signature placeholder transparency config parameter (0-255) */
 	public static final String CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$
@@ -195,7 +199,9 @@ public class Constants {
 
 	/** The theme */
 	public static final String CFG_THEME = "THEME"; //$NON-NLS-1$
-
+	
+	/** Download URL for accepted Certificates*/
+	public static final String CFG_DOWNLOAD_URL="DOWNLOAD_URL"; //$NON-NLS-1$
 
 	/* Theme constants */
 
@@ -207,10 +213,10 @@ public class Constants {
 
 	/** The used theme */
 	public static final Themes THEME = getTheme();
+
 	private static Themes getTheme() {
 		File f = new File(CONFIG_DIRECTORY + File.separatorChar + DEFAULT_CONFIG_FILENAME);
-		if (f.canRead())
-		{
+		if (f.canRead()) {
 			try {
 				Properties config = new Properties();
 				config.load(new FileInputStream(f));
@@ -235,35 +241,37 @@ public class Constants {
 	public static final Color MAINBAR_ACTIVE_BACK_LIGHT = getMainbarActiveBackLight();
 	private static Color getMainbarActiveBackLight() {
 		switch (THEME) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0xB4, 0xCD, 0xEC);
-			case GEMPLUSH:
-				return new Color(display, 0xEC, 0xAD, 0xE7);
+		default:
+		case DEFAULT:
+			return new Color(display, 0xB4, 0xCD, 0xEC);
+		case GEMPLUSH:
+			return new Color(display, 0xEC, 0xAD, 0xE7);
 		}
 	}
 
 	/** Main bar active background - dark end of gradient */
 	public static final Color MAINBAR_ACTIVE_BACK_DARK = getMainbarActiveBackDark();
+
 	private static Color getMainbarActiveBackDark() {
 		switch (THEME) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0x6B, 0xA5, 0xD9);
-			case GEMPLUSH:
-				return new Color(display, 0xD9, 0x53, 0x9C);
+		default:
+		case DEFAULT:
+			return new Color(display, 0x6B, 0xA5, 0xD9);
+		case GEMPLUSH:
+			return new Color(display, 0xD9, 0x53, 0x9C);
 		}
 	}
 
 	/** Main bar inactive background */
 	public static final Color MAINBAR_INACTIVE_BACK = getMainbarInactiveBack();
+
 	private static Color getMainbarInactiveBack() {
 		switch (THEME) {
-			default:
-			case DEFAULT:
-				return new Color(display, 0xD4, 0xE7, 0xF1);
-			case GEMPLUSH:
-				return new Color(display, 0xF1, 0xD1, 0xE8);
+		default:
+		case DEFAULT:
+			return new Color(display, 0xD4, 0xE7, 0xF1);
+		case GEMPLUSH:
+			return new Color(display, 0xF1, 0xD1, 0xE8);
 		}
 	}
 
@@ -275,7 +283,7 @@ public class Constants {
 
 	/** Drop background color */
 	public static final Color DROP_BACK = new Color(display, 0xFF, 0xFF, 0xFF);
-	
+
 	/** Drop border color */
 	public static final Color DROP_BORDER_COLOR = MAINBAR_ACTIVE_BACK_LIGHT;
 
@@ -291,7 +299,6 @@ public class Constants {
 	/** Big text size */
 	public static final int TEXT_SIZE_BIG = 14;
 
-
 	/* Resources */
 
 	/** Shell icon resource */
@@ -299,13 +306,14 @@ public class Constants {
 
 	/** Config image resource */
 	public static final String RES_IMG_CONFIG = getResImgConfig();
+
 	private static String getResImgConfig() {
 		switch (THEME) {
-			default:
-			case DEFAULT:
-				return "/img/config.png"; //$NON-NLS-1$
-			case GEMPLUSH:
-				return "/img/config_p.png"; //$NON-NLS-1$
+		default:
+		case DEFAULT:
+			return "/img/config.png"; //$NON-NLS-1$
+		case GEMPLUSH:
+			return "/img/config_p.png"; //$NON-NLS-1$
 		}
 	}
 
@@ -332,4 +340,15 @@ public class Constants {
 
 	/** Accepted certificate list resource */
 	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
+
+	/** Accepted certificate list config */
+	public static final String RES_CERT_PATH_ADDED = CONFIG_DIRECTORY + "/certificates/tobeadded/"; //$NON-NLS-1$
+
+	/** Accepted certificate list resource */
+	public static final String RES_CERT_LIST_ADDED = RES_CERT_PATH_ADDED + "certificates.xml"; //$NON-NLS-1$
+
+	/** Download URL for accepted certificates */
+	public static final String CERTIFICATE_DOWNLOAD_XML_URL = "https://www.buergerkarte.at/trust/"; //$NON-NLS-1$
+	
+	public static final String CERTIFICATE_XML_FILE = "certificates.xml"; //$NON-NLS-1$
 }

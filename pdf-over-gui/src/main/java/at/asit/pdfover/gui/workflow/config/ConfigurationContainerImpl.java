@@ -132,6 +132,13 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** Whether to skip the output state */
 	protected boolean skipFinish = false;
+	
+	/** Default Download URL for certificates*/
+	protected String downloadURL = null;
+	
+
+	/** Whether to use an existing signature marker. */
+	protected boolean useMarker = false;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -635,5 +642,47 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setSkipFinish(boolean skipFinish) {
 		this.skipFinish = skipFinish;
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setDownloadURL(java.lang.String)
+	 */
+	@Override
+	public void setDownloadURL(String downloadURL) {
+		this.downloadURL = downloadURL;
+		
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getDownloadURL()
+	 */
+	@Override
+	public String getDownloadURL() {
+		return this.downloadURL;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getUseMarker()
+	 */
+	@Override
+	public boolean getUseMarker() {
+		return this.useMarker;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setUseMarker(
+	 * boolean)
+	 */
+	@Override
+	public void setUseMarker(boolean useMarker) {
+		this.useMarker = useMarker;
 	}
 }

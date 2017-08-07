@@ -457,7 +457,7 @@ public class PrepareConfigurationState extends State {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						HttpClient client = BKUHelper.getHttpClient();
+						HttpClient client = (HttpClient) BKUHelper.getHttpClient();
 						GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
 						try {
 							client.executeMethod(method);

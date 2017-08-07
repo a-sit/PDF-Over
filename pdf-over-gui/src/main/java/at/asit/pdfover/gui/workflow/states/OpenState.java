@@ -15,17 +15,26 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
+import java.io.IOException;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
 //Imports
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.signator.SignaturePosition;
+import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
+import at.gv.egiz.pdfas.lib.impl.pdfbox.placeholder.SignaturePlaceholderExtractor;
+import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
 
 /**
  * Selects the data source for the signature process.
@@ -82,6 +91,53 @@ public class OpenState extends State {
 			} 
 		}
 		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
+
+		// scan for signature placeholders
+		// - see if we want to scan for placeholders in the settings
+		if (getStateMachine().getConfigProvider().getUseMarker()) {
+			try {
+				// - scan for placeholders
+				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
+				SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor.extract(pddocument,
+						"1", 3);
+
+				if (null != signaturePlaceholderData) {
+					log.debug("we got a position", signaturePlaceholderData.getId()); //$NON-NLS-1$
+					// create a dialog with ok and cancel buttons and a question
+					// icon
+					MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+							SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+					dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
+					dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
+
+					// open dialog and await user selection
+					if (SWT.YES == dialog.open()) {
+						// if the user chooses to use the signature placeholder
+						// - fill the position information so that we skip to
+						// the
+						// next stages without breaking stuff
+						SignaturePosition position = new SignaturePosition(
+								signaturePlaceholderData.getTablePos().getPosX(),
+								signaturePlaceholderData.getTablePos().getPosY(),
+								signaturePlaceholderData.getTablePos().getPage());
+						status.setSignaturePosition(position);
+
+						getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+					} else {
+						getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+					}
+				}
+			} catch (PdfAsException e) {
+				// fail silently. In case we got here no dialog has been shown.
+				// Just
+				// proceed with the usual process.
+			} catch (IOException e) {
+				// fail silently. In case we got here no dialog has been shown.
+				// Just
+				// proceed with the usual process.
+			}
+		}
+
 		this.setNextState(new PositioningState(getStateMachine()));
 	}
 

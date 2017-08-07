@@ -61,4 +61,5 @@ public interface SigningState {
 	 */
 	public void setKSSigner(String file, String alias, String kspassword,
 			String keypassword, String type) throws SignatureException;
+
 }

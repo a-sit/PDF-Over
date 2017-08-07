@@ -44,6 +44,25 @@ public abstract class SignatureParameter {
 
 	/** The signature device */
 	protected BKUs signatureDevice;
+
+	/** Whether so look for placeholder signatures or not. */
+	protected boolean searchForPlaceholderSignatures = false;
+
+	/**
+	 * @return the searchForPlaceholderSignatures
+	 */
+	public boolean isSearchForPlaceholderSignatures() {
+		return this.searchForPlaceholderSignatures;
+	}
+
+	/**
+	 * @param value
+	 *            the searchForPlaceholderSignatures to set
+	 */
+	public void setSearchForPlaceholderSignatures(boolean value) {
+		this.searchForPlaceholderSignatures = value;
+	}
+
 	/**
 	 * @return the signatureDevice
 	 */

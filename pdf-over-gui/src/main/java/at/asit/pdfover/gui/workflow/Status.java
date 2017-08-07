@@ -105,4 +105,19 @@ public interface Status {
 	 * @return the sign result
 	 */
 	public SignResult getSignResult();
+
+	/**
+	 * Checks if search for placeholder signature-flag is on.
+	 *
+	 * @return true, if is search for placeholder signature
+	 */
+	public boolean isSearchForPlaceholderSignature();
+
+	/**
+	 * Sets the search for placeholder signature-flag.
+	 *
+	 * @param value
+	 *            the new search for placeholder signature
+	 */
+	public void setSearchForPlaceholderSignature(boolean value);
 }
