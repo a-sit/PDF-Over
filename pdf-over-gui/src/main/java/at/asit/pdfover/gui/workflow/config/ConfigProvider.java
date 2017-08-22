@@ -248,19 +248,6 @@ public interface ConfigProvider {
 	public boolean getSkipFinish();
 
 	/**
-	 * @param downloadURL
-	 * @param Sets the DownloadURL for Certificates
-	 */
-	public void setDownloadURL(String downloadURL);
-
-	/**
-	 * @return downloadURL for accepted Certificates
-	 */
-	public String getDownloadURL();
-
-	
-
-	/**
 	 * Gets whether to use signature markers.
 	 *
 	 * @return whether to use a signature maker

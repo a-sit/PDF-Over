@@ -647,13 +647,13 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setDownloadURL(java.lang.String)
-	 */
+	 
 	@Override
 	public void setDownloadURL(String downloadURL) {
 		this.downloadURL = downloadURL;
 		
 		
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getDownloadURL()

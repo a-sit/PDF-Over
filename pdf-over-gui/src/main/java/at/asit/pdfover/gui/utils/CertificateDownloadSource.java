@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
@@ -54,23 +56,12 @@ public class CertificateDownloadSource {
 	public static void getAcceptedCertificates()
 	{
 	try {
-			
-			ConfigProviderImpl cpi = new ConfigProviderImpl();
-		
-			String url= cpi.getDownloadURL();
-			if (url.equals(null) || url.equals("")) //$NON-NLS-1$
-			{
-				url = Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE;
-		
-			}
-			else
-			{
-				url+=Constants.CERTIFICATE_XML_FILE;
-			}
+
+			URL url = new URL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
+			URLConnection connection = url.openConnection();
+			InputStream is = connection.getInputStream();
 			log.info("===== Starting to download accepted certificate =====");
-		
-			
-			BufferedInputStream bis = new BufferedInputStream(new URL(url).openStream());
+			BufferedInputStream bis = new BufferedInputStream(is);
 			FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
 			byte[] buffer = new byte[1024];
 			int count = 0;
@@ -84,11 +75,7 @@ public class CertificateDownloadSource {
 		} catch (IOException e) {
 			File f = new File(Constants.RES_CERT_LIST_ADDED);
 			e.printStackTrace();}
-		
-		
-	
-		
-	//	downloadCertificatesFromServer();
+
 		
 	}
 	
@@ -129,11 +116,13 @@ public class CertificateDownloadSource {
 					}
 
 					ConfigProviderImpl cpi = new ConfigProviderImpl();
-
-					String certResource = cpi.getDownloadURL().toString() + certificateNode.getTextContent();
-				
-					//String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL + certificateNode.getTextContent();
-			        BufferedInputStream bis = new BufferedInputStream(new URL(certResource).openStream());
+					
+					String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL + certificateNode.getTextContent();	
+					log.info("===== Starting to download accepted certificates =====");
+					URL url = new URL(certResource);
+					URLConnection connection = url.openConnection();					
+					InputStream is = connection.getInputStream();
+					BufferedInputStream bis = new BufferedInputStream(is);
 			        FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_PATH_ADDED+certificateNode.getTextContent()));
 			        byte[] buffer = new byte[1024];
 			        int count=0;  
@@ -146,7 +135,7 @@ public class CertificateDownloadSource {
 
 
 				} catch (Exception ex) {
-					log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
+					log.debug(ex.toString()); //$NON-NLS-1$
 				}
 			}
 			

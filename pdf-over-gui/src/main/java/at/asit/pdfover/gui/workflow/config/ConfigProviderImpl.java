@@ -114,8 +114,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 		
 		// Set Default Certificate Download URL
-				setDefaultDownloadURL(config
-						.getProperty(Constants.CFG_DOWNLOAD_URL));
+				//		.getProperty(Constants.CFG_DOWNLOAD_URL));
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
@@ -146,12 +145,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			this.configuration.setMobileBKUURL(bkuUrl);
 		}
 
-  		String downloadURL = config
+  		/*String downloadURL = config
 				.getProperty(Constants.CFG_DOWNLOAD_URL);
 		
 		if (downloadURL != null && !downloadURL.isEmpty()) {
 			this.configuration.setDownloadURL(downloadURL);
-		}
+		}*/
 		
 
 		String bkuType = config
@@ -343,7 +342,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_PROXY_PASS, proxyPass);
 
 		props.setProperty(Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
-		props.setProperty(Constants.CFG_DOWNLOAD_URL, getDownloadURL());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
 		props.setProperty(Constants.CFG_OUTPUT_FOLDER, getDefaultOutputFolderPersistent());
@@ -751,23 +749,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return emblem;
 	}
 	
-	@Override
+	/*@Override
 	public String getDownloadURL() {
-		String downloadURL="";
-	try
-	{
-		downloadURL = this.configuration.getDownloadURL();
-		if (downloadURL.isEmpty()||downloadURL == null)
-			{downloadURL = Constants.CERTIFICATE_DOWNLOAD_XML_URL;
-			}
-		return downloadURL;
-	} catch (NullPointerException npe){
-		 String message = npe.getMessage();
- 			downloadURL = Constants.CERTIFICATE_DOWNLOAD_XML_URL;
-		
-	}
-		return downloadURL;
-	}
+		return Constants.CERTIFICATE_DOWNLOAD_XML_URL;
+	}*/
 
 	/**
 	 * Sets the proxy host
@@ -985,14 +970,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	}
 
 	
-	@Override
+	/*@Override
 	public void setDefaultDownloadURL(String downloadURL) {
 		if (downloadURL == null || downloadURL.trim().isEmpty()) {
 			this.configuration.setDownloadURL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
 		} else {
 			this.configuration.setDownloadURL(downloadURL);
 		}
-	}/*
+	}
 	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultOutputFolderOverlay(java.lang.String)
@@ -1466,14 +1451,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configurationOverlay.setSkipFinish(skipFinish);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setDownloadURL(java.lang.String)
-	 */
-	@Override
-	public void setDownloadURL(String downloadURL) {
-		this.configuration.setDownloadURL(downloadURL);
-		
-	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1494,4 +1471,5 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public void setUseMarker(boolean useMarker) {
 		this.configurationOverlay.setUseMarker(useMarker);
 	}
+
 }

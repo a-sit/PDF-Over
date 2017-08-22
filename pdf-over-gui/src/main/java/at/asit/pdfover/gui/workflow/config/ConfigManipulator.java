@@ -180,11 +180,6 @@ public interface ConfigManipulator {
 	 */
 	public void setUseMarker(boolean useMarker);
 	
-	/**
-	 * @param downloadURL 
-	 * @param Sets the DownloadURL for Certificates
-	 */
-	public void setDefaultDownloadURL(String downloadURL);
 }
 
 

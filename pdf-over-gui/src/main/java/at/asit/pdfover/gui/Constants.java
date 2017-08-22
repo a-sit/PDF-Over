@@ -342,7 +342,7 @@ public class Constants {
 	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
 
 	/** Accepted certificate list config */
-	public static final String RES_CERT_PATH_ADDED = CONFIG_DIRECTORY + "/certificates/tobeadded/"; //$NON-NLS-1$
+	public static final String RES_CERT_PATH_ADDED = CONFIG_DIRECTORY + "/certificates/"; //$NON-NLS-1$
 
 	/** Accepted certificate list resource */
 	public static final String RES_CERT_LIST_ADDED = RES_CERT_PATH_ADDED + "certificates.xml"; //$NON-NLS-1$

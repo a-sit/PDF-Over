@@ -80,12 +80,6 @@ public class Main {
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
 	
 		if (!configDir.exists()) {
-			try {
-				FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			configDir.mkdir();
 		}
 		
@@ -102,8 +96,7 @@ public class Main {
 		
 		log.debug("Starting stateMachine ..."); //$NON-NLS-1$
 		stateMachine.start();
-		//Download Certificates//
-		CertificateDownloadSource.getAcceptedCertificates();
+		
 		
 		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
 

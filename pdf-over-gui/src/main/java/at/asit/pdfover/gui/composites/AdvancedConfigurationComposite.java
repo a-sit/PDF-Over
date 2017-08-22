@@ -999,8 +999,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setDefaultSignaturePosition(
 				provider.getDefaultSignaturePositionPersistent());
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
-		this.configurationContainer.setDownloadURL(
-				provider.getDownloadURL());
+		/*this.configurationContainer.setDownloadURL(
+				provider.getDownloadURL());*/
 		this.configurationContainer.setSignaturePdfACompat(
 				provider.getSignaturePdfACompat());
 		this.configurationContainer.setPlaceholderTransparency(

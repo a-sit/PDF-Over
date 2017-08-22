@@ -373,11 +373,7 @@ public interface ConfigurationContainer {
 	 */
 	public String getDownloadURL();
 
-	/**
-	 * Sets the Certificate-Download URL
-	 * @param downloadURL 
-	 */
-	public void setDownloadURL(String downloadURL);
+
 	
 	/**
 	 * Gets whether to use an existing signature marker.

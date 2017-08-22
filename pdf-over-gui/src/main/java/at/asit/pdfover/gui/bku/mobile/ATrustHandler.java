@@ -351,6 +351,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	 * @return the QR code image as a String
 	 */
 	public InputStream getQRCode() {
+		//TODO: Update HTTPClient here
+		
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();

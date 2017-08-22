@@ -23,8 +23,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
-import java.util.List;
-
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -129,7 +127,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 					continue;
 				}
 
-				String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
+				String certResource = Constants.RES_CERT_PATH+ certificateNode.getTextContent();
 
 				X509Certificate cert = (X509Certificate) CertificateFactory
 						.getInstance("X509"). //$NON-NLS-1$
