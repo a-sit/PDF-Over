@@ -60,14 +60,7 @@ public class CertificateDownloadSource {
 			URL url = new URL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
 			URLConnection connection = url.openConnection();
 			InputStream is = connection.getInputStream();
-			
-			int b = is.read();
-			if (b==-1)
-			{
-				log.info("Cannot read file");
-			}
-			else
-			{
+
 				BufferedInputStream bis = new BufferedInputStream(is);
 				FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
 				
@@ -80,7 +73,7 @@ public class CertificateDownloadSource {
 				fis2.close();
 				bis.close();
 				downloadCertificatesFromServer();
-			}
+			
 		} catch (IOException e) {
 			log.debug("File not found");}
 
@@ -110,9 +103,7 @@ public class CertificateDownloadSource {
 			
 			Node certificates_added = doc_added.getFirstChild();
 			NodeList certificates_added_list = certificates_added.getChildNodes();
-		
-			if (doc_added.hasChildNodes())
-			{
+			
 			//identify the certificate that has to be downloaded
 			for (int i = 0; i < certificates_added_list.getLength(); i++) {
 				try {
@@ -152,7 +143,9 @@ public class CertificateDownloadSource {
 				}
 			}
 			
-			}}
+			}
+			
+
 		} catch (IOException e) {
 
 			e.printStackTrace();
