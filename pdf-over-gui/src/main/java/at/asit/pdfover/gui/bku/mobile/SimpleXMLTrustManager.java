@@ -95,22 +95,13 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 				.newDocumentBuilder()
 				.parse(this.getClass().getResourceAsStream(Constants.RES_CERT_LIST));
 		
-		
-			File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
-			
-			Document doc_added = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder()
-					.parse(added_cert);
-		
-		Node certificates_added = doc_added.getFirstChild();		
 		Node certificates = doc.getFirstChild();
 
-		if (!certificates.getNodeName().equals("certificates") && !certificates_added.getNodeName().equals("certificates")) { //$NON-NLS-1$
+		if (!certificates.getNodeName().equals("certificates")) { //$NON-NLS-1$
 			throw new Exception(
 					"Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
 		}
 
-		NodeList certificates_added_list = certificates_added.getChildNodes();
 		NodeList certificateList = certificates.getChildNodes();
 		
 		for (int i = 0; i < certificateList.getLength(); i++) {
@@ -144,6 +135,29 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			}
 		}
 		
+		
+		File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
+		
+		if (added_cert.exists())
+		{	
+		Document doc_added = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder()
+				.parse(added_cert);
+		
+		Node certificates_added = doc_added.getFirstChild();		
+		
+		if (!certificates_added.getNodeName().equals("certificates")) { //$NON-NLS-1$
+			throw new Exception(
+					"Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
+		}
+		
+		
+		if (certificates_added.hasChildNodes())
+		{
+
+			NodeList certificates_added_list = certificates_added.getChildNodes();
+			
+			
 		for (int i = 0; i < certificates_added_list.getLength(); i++) {
 			try {
 
@@ -175,7 +189,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
-		
+		}}
 
 		tmf.init(myKeyStore);
 

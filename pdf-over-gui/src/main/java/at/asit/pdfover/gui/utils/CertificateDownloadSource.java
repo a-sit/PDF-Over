@@ -56,25 +56,33 @@ public class CertificateDownloadSource {
 	public static void getAcceptedCertificates()
 	{
 	try {
-
+			
 			URL url = new URL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
 			URLConnection connection = url.openConnection();
 			InputStream is = connection.getInputStream();
-			log.info("===== Starting to download accepted certificate =====");
-			BufferedInputStream bis = new BufferedInputStream(is);
-			FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
-			byte[] buffer = new byte[1024];
-			int count = 0;
-			while ((count = bis.read(buffer, 0, 1024)) != -1) {
-				fis2.write(buffer, 0, count);
+			
+			int b = is.read();
+			if (b==-1)
+			{
+				log.info("Cannot read file");
 			}
-			fis2.close();
-			bis.close();
-			downloadCertificatesFromServer();
-
+			else
+			{
+				BufferedInputStream bis = new BufferedInputStream(is);
+				FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
+				
+				
+				byte[] buffer = new byte[1024];
+				int count = 0;
+				while ((count = bis.read(buffer, 0, 1024)) != -1) {
+					fis2.write(buffer, 0, count);
+				}
+				fis2.close();
+				bis.close();
+				downloadCertificatesFromServer();
+			}
 		} catch (IOException e) {
-			File f = new File(Constants.RES_CERT_LIST_ADDED);
-			e.printStackTrace();}
+			log.debug("File not found");}
 
 		
 	}
@@ -89,9 +97,12 @@ public class CertificateDownloadSource {
 		FileReader fr = null;
 
 		try {
+			
+		
 			File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
 	
-			
+			if (added_cert.exists())
+			{		
 			Document doc_added = DocumentBuilderFactory.newInstance()
 					.newDocumentBuilder()
 					.parse(added_cert);
@@ -99,7 +110,9 @@ public class CertificateDownloadSource {
 			
 			Node certificates_added = doc_added.getFirstChild();
 			NodeList certificates_added_list = certificates_added.getChildNodes();
-			
+		
+			if (doc_added.hasChildNodes())
+			{
 			//identify the certificate that has to be downloaded
 			for (int i = 0; i < certificates_added_list.getLength(); i++) {
 				try {
@@ -139,10 +152,7 @@ public class CertificateDownloadSource {
 				}
 			}
 			
-			
-			
-			
-
+			}}
 		} catch (IOException e) {
 
 			e.printStackTrace();

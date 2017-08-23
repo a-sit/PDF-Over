@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 //Imports
 import java.lang.reflect.Constructor;
+import java.nio.file.Files;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -257,24 +258,8 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		// Call update to start processing ...
 		update();
 	
-		try {
-			File certificates = new File (Constants.RES_CERT_LIST_ADDED);
-			if (!certificates.exists())
-			{
-				
-					FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
-					CertificateDownloadSource.getAcceptedCertificates();
-				
-				
-			}
-			else
-			{
-				CertificateDownloadSource.getAcceptedCertificates();
-			}
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		CertificateDownloadSource.getAcceptedCertificates();
+
 			
 
 		// if a user interaction is required we have a shell ...
