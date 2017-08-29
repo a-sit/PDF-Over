@@ -144,6 +144,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			}
 		}
 		
+		
 		for (int i = 0; i < certificates_added_list.getLength(); i++) {
 			try {
 
@@ -157,7 +158,9 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 					log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
 					continue;
 				}
-
+				
+				if (!certificateNode.getTextContent().equals(""))
+				{
 				String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
 
 				FileInputStream addedNode = new FileInputStream(certResource);
@@ -170,7 +173,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 				myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
 
 				log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
-
+				}
 			} catch (Exception ex) {
 				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
 			}

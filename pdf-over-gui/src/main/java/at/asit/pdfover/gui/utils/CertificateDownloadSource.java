@@ -119,7 +119,8 @@ public class CertificateDownloadSource {
 						continue;
 					}
 
-					ConfigProviderImpl cpi = new ConfigProviderImpl();
+					if (!certificateNode.getTextContent().equals(""))
+					{ConfigProviderImpl cpi = new ConfigProviderImpl();
 					
 					String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL + certificateNode.getTextContent();	
 					log.info("===== Starting to download accepted certificates =====");
@@ -136,8 +137,7 @@ public class CertificateDownloadSource {
 			        }
 			        fis.close();
 			        bis.close();
-
-
+					}
 				} catch (Exception ex) {
 					log.debug(ex.toString()); //$NON-NLS-1$
 				}
