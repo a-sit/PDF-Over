@@ -99,7 +99,7 @@ public class MobileBKUHelper {
 	public static String extractTagWithParam(String data, String tag,
 			String param, String value) throws Exception {
 		String start = '<' + tag;
-		int startidx, endidx = 0;
+		int startidx, endidx = 0;	
 		while ((startidx = data.indexOf(start, endidx)) != -1) {
 			endidx = data.indexOf('>', startidx);
 			if (endidx == -1) {

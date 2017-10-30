@@ -1,30 +1,33 @@
+/*
+ * Copyright 2017 by A-SIT, Secure Information Technology Center Austria
+ *
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ * the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and
+ * limitations under the Licence.
+ */
 package at.asit.pdfover.gui.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 //Imports
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-
-import javax.security.auth.login.Configuration;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import at.asit.pdfover.gui.Constants;
@@ -34,6 +37,21 @@ import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.gv.egiz.sl.schema.ToBeEncryptedType.Element;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.File;
 
 
 /**
@@ -51,6 +69,7 @@ public class CertificateDownloadSource {
 	private static URL url=null;
 	
 	/**
+	 * @throws ParserConfigurationException 
 	 * 
 	 */
 	public static void getAcceptedCertificates()
@@ -74,10 +93,34 @@ public class CertificateDownloadSource {
 				bis.close();
 				downloadCertificatesFromServer();
 			
-		} catch (IOException e) {
-			log.debug("File not found");}
+		} catch (Exception e) {
+			//if file can not be downloaded, try to create it//
+			 try {
+			   DocumentBuilderFactory dbFactory =
+				         DocumentBuilderFactory.newInstance();
+				         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				         Document doc = dBuilder.newDocument();
+				         
+				         // root element
+				         Node rootElement = doc.createElement("certificates");
+				         doc.appendChild(rootElement);
+				         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				         Transformer transformer = transformerFactory.newTransformer();
+				         DOMSource source = new DOMSource(doc);
+				         StreamResult result = new StreamResult(new File(Constants.RES_CERT_LIST_ADDED));
+				        
+							transformer.transform(source, result);
+						} catch (TransformerException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ParserConfigurationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+			
+			
+			e.printStackTrace();} //$NON-NLS-1$
 
-		
 	}
 	
 	/**
@@ -103,6 +146,7 @@ public class CertificateDownloadSource {
 			
 			Node certificates_added = doc_added.getFirstChild();
 			NodeList certificates_added_list = certificates_added.getChildNodes();
+			log.info("===== Starting to download accepted certificates =====");
 			
 			//identify the certificate that has to be downloaded
 			for (int i = 0; i < certificates_added_list.getLength(); i++) {
@@ -120,10 +164,9 @@ public class CertificateDownloadSource {
 					}
 
 					if (!certificateNode.getTextContent().equals(""))
-					{ConfigProviderImpl cpi = new ConfigProviderImpl();
-					
+					{
 					String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL + certificateNode.getTextContent();	
-					log.info("===== Starting to download accepted certificates =====");
+					
 					URL url = new URL(certResource);
 					URLConnection connection = url.openConnection();					
 					InputStream is = connection.getInputStream();
@@ -141,13 +184,14 @@ public class CertificateDownloadSource {
 				} catch (Exception ex) {
 					log.debug(ex.toString()); //$NON-NLS-1$
 				}
-			}
 			
-			}
+			}	}
+			else{
+			log.info("Certificates-File could not be downloaded, will be created");} //$NON-NLS-1$
+		}
+
+		 catch (IOException e) {
 			
-
-		} catch (IOException e) {
-
 			e.printStackTrace();
 
 		} catch (SAXException e) {
@@ -159,7 +203,6 @@ public class CertificateDownloadSource {
 		} finally {
 
 			try {
-
 				if (br != null)
 					br.close();
 

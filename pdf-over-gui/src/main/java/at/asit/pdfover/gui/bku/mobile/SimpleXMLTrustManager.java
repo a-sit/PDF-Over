@@ -83,102 +83,103 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		}
 
 		/*
-		 *Certificates
+		 * Certificates
 		 */
 
-		KeyStore myKeyStore = KeyStore.getInstance(KeyStore
-				.getDefaultType());
+		KeyStore myKeyStore = KeyStore.getInstance(KeyStore.getDefaultType());
 
 		myKeyStore.load(null);
 
-		Document doc = DocumentBuilderFactory.newInstance()
-				.newDocumentBuilder()
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(this.getClass().getResourceAsStream(Constants.RES_CERT_LIST));
-		
-		
-			File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
-			
-			Document doc_added = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder()
-					.parse(added_cert);
-		
-		Node certificates_added = doc_added.getFirstChild();		
 		Node certificates = doc.getFirstChild();
-
-		if (!certificates.getNodeName().equals("certificates") && !certificates_added.getNodeName().equals("certificates")) { //$NON-NLS-1$
-			throw new Exception(
-					"Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
-		}
-
-		NodeList certificates_added_list = certificates_added.getChildNodes();
 		NodeList certificateList = certificates.getChildNodes();
+
+		try {
+			if (!certificates.getNodeName().equals("certificates")) { //$NON-NLS-1$
+				throw new Exception("Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
+			}
+
+			//add trusted certificates to certStore//
+			for (int i = 0; i < certificateList.getLength(); i++) {
+				try {
+
+					Node certificateNode = certificateList.item(i);
+
+					if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
+						continue; // Ignore dummy text node ..
+					}
+
+					if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
+						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
+						continue;
+					}
+
+					String certResource = Constants.RES_CERT_PATH + certificateNode.getTextContent();
+
+					X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //$NON-NLS-1$
+							generateCertificate(this.getClass().getResourceAsStream(certResource));
+
+					myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
+
+					log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
+
+				} catch (Exception ex) {
+					log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+
+		}
+
+		catch (Exception e) {
+			e.toString();
+		}
+
+		File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
 		
-		for (int i = 0; i < certificateList.getLength(); i++) {
-			try {
+		//check if the additional certificates.xml file exists//
 
-				Node certificateNode = certificateList.item(i);
+		if (added_cert.exists()) {
+			Node certificates_added = null;
 
-				if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
-					continue; // Ignore dummy text node ..
+			Document doc_added = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(added_cert);
+
+			certificates_added = doc_added.getFirstChild();
+
+			NodeList certificates_added_list = certificates_added.getChildNodes();
+
+			//if exists, add trusted certificates to cert-Store
+			for (int i = 0; i < certificates_added_list.getLength(); i++) {
+				try {
+
+					Node certificateNode = certificates_added_list.item(i);
+
+					if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
+						continue; // Ignore dummy text node ..
+					}
+
+					if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
+						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
+						continue;
+					}
+
+					if (!certificateNode.getTextContent().equals("")) {
+						String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
+
+						FileInputStream addedNode = new FileInputStream(certResource);
+
+						X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //$NON-NLS-1$
+								generateCertificate(addedNode);
+
+						myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
+
+						log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
+					}
+				} catch (Exception ex) {
+					log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-
-				if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
-					log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
-					continue;
-				}
-
-				String certResource = Constants.RES_CERT_PATH+ certificateNode.getTextContent();
-
-				X509Certificate cert = (X509Certificate) CertificateFactory
-						.getInstance("X509"). //$NON-NLS-1$
-						generateCertificate(
-								this.getClass().getResourceAsStream(
-										certResource));
-
-				myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
-
-				log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
-
-			} catch (Exception ex) {
-				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
-		
-		
-		for (int i = 0; i < certificates_added_list.getLength(); i++) {
-			try {
-
-				Node certificateNode = certificates_added_list.item(i);
-
-				if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
-					continue; // Ignore dummy text node ..
-				}
-
-				if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
-					log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
-					continue;
-				}
-				
-				if (!certificateNode.getTextContent().equals(""))
-				{
-				String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
-
-				FileInputStream addedNode = new FileInputStream(certResource);
-				
-				X509Certificate cert = (X509Certificate) CertificateFactory
-						.getInstance("X509"). //$NON-NLS-1$
-						generateCertificate(
-								addedNode);
-
-				myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
-
-				log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
-				}
-			} catch (Exception ex) {
-				log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-		}
-		
 
 		tmf.init(myKeyStore);
 
@@ -195,8 +196,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			}
 		}
 
-		if (this.sunJSSEX509TrustManager != null
-				&& this.atrustTrustManager != null) {
+		if (this.sunJSSEX509TrustManager != null && this.atrustTrustManager != null) {
 			return;
 		}
 
@@ -215,8 +215,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 	 * X509Certificate[], java.lang.String)
 	 */
 	@Override
-	public void checkClientTrusted(X509Certificate[] arg0, String arg1)
-			throws CertificateException {
+	public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
 		try {
 			this.atrustTrustManager.checkServerTrusted(arg0, arg1);
 		} catch (CertificateException ex) {
@@ -237,8 +236,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 	 * X509Certificate[], java.lang.String)
 	 */
 	@Override
-	public void checkServerTrusted(X509Certificate[] arg0, String arg1)
-			throws CertificateException {
+	public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
 		try {
 			this.atrustTrustManager.checkServerTrusted(arg0, arg1);
 		} catch (CertificateException ex) {

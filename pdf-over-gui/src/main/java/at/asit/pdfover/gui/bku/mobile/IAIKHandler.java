@@ -163,6 +163,19 @@ public class IAIKHandler extends MobileBKUHandler {
 					new SLResponse(responseData, status.getServer(), null, null));
 			return;
 		}
+		
+		if (responseData.contains("tanCodeLogon"))
+		{
+			refVal = MobileBKUHelper.extractContentFromTagWithParam(responseData,
+					"span", "id", "tanCodeLogon:refValue"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+		else
+		{
+			refVal = MobileBKUHelper.extractContentFromTagWithParam(responseData,
+					"span", "id", "j_idt5:refValue"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+		
+
 
 		if (responseData.contains("/error")) { //$NON-NLS-1$
 			// Error response - try again
@@ -177,9 +190,9 @@ public class IAIKHandler extends MobileBKUHandler {
 			return;
 		}
 
-		refVal = MobileBKUHelper.extractContentFromTagWithParam(responseData,
-				"span", "id", "j_idt5:refValue"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
+		
+		
+		
 		String viewState = MobileBKUHelper.extractValueFromTagWithParam(
 				responseData, "input", "name", "javax.faces.ViewState", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		status.setViewState(viewState);
@@ -187,6 +200,8 @@ public class IAIKHandler extends MobileBKUHandler {
 		if (!responseData.contains("tanCodeLogon.jsf")) { //$NON-NLS-1$
 			// Assume that we need to confirm reference value dialog
 			log.debug("viewState: " + viewState); //$NON-NLS-1$
+			
+		
 
 			PostMethod post = new PostMethod(redirectURL);
 			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
