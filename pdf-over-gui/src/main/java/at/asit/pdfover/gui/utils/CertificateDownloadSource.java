@@ -23,6 +23,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.InetSocketAddress;
+import java.net.NoRouteToHostException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,12 +57,11 @@ import org.w3c.dom.NodeList;
 
 import java.io.File;
 
-
 /**
  * Download of accepted certificates
  */
 public class CertificateDownloadSource {
-	
+
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -66,132 +69,158 @@ public class CertificateDownloadSource {
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(CertificateDownloadSource.class);
-	private static URL url=null;
-	
+	private static URL url = null;
+
 	/**
-	 * @throws ParserConfigurationException 
+	 * @throws ParserConfigurationException
 	 * 
 	 */
-	public static void getAcceptedCertificates()
-	{
-	try {
+	public static void getAcceptedCertificates(ConfigProvider cp) {
+		try {
+
+			URL url = new URL(Constants.CERTIFICATE_DOWNLOAD_XML_URL + Constants.CERTIFICATE_XML_FILE);
+			URLConnection connection = null;
+			String host = null;
+			int port=0;
 			
-			URL url = new URL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
-			URLConnection connection = url.openConnection();
+			
+			
+			if (!cp.getProxyHost().equals("")) {
+				log.info("Found PDF-Over Host settings: "+cp.getProxyHost().toString()); //$NON-NLS-1$
+				
+				try{
+				host = cp.getProxyHost();
+				port = cp.getProxyPort();
+				Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, port));
+				
+			
+				 connection = url.openConnection(proxy);}
+				catch (NoRouteToHostException nrte)
+				{log.info("No route to host (Host unreachable)");} //$NON-NLS-1$
+				catch (ConnectException nrte)
+				{log.info("Proxy-Connection refused)");} //$NON-NLS-1$
+				catch (IllegalArgumentException iae)
+				{log.info("Illegal Argument for Proxy and/or Host)");} //$NON-NLS-1$
+				
+			} else {
+				log.info("Opening default connection");
+				 connection = url.openConnection();
+				
+			}
+		
+
 			InputStream is = connection.getInputStream();
 
-				BufferedInputStream bis = new BufferedInputStream(is);
-				FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
-				
-				
-				byte[] buffer = new byte[1024];
-				int count = 0;
-				while ((count = bis.read(buffer, 0, 1024)) != -1) {
-					fis2.write(buffer, 0, count);
-				}
-				fis2.close();
-				bis.close();
-				downloadCertificatesFromServer();
-			
+			BufferedInputStream bis = new BufferedInputStream(is);
+			FileOutputStream fis2 = new FileOutputStream(new File(Constants.RES_CERT_LIST_ADDED));
+
+			byte[] buffer = new byte[1024];
+			int count = 0;
+			while ((count = bis.read(buffer, 0, 1024)) != -1) {
+				fis2.write(buffer, 0, count);
+			}
+			fis2.close();
+			bis.close();
+			downloadCertificatesFromServer(host,port);
+
 		} catch (Exception e) {
-			//if file can not be downloaded, try to create it//
-			 try {
-			   DocumentBuilderFactory dbFactory =
-				         DocumentBuilderFactory.newInstance();
-				         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				         Document doc = dBuilder.newDocument();
-				         
-				         // root element
-				         Node rootElement = doc.createElement("certificates");
-				         doc.appendChild(rootElement);
-				         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				         Transformer transformer = transformerFactory.newTransformer();
-				         DOMSource source = new DOMSource(doc);
-				         StreamResult result = new StreamResult(new File(Constants.RES_CERT_LIST_ADDED));
-				        
-							transformer.transform(source, result);
-						} catch (TransformerException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (ParserConfigurationException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-			
-			
-			e.printStackTrace();} //$NON-NLS-1$
+			// if file can not be downloaded, try to create it//
+			try {
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.newDocument();
+
+				// root element
+				Node rootElement = doc.createElement("certificates");
+				doc.appendChild(rootElement);
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new File(Constants.RES_CERT_LIST_ADDED));
+
+				transformer.transform(source, result);
+			} catch (TransformerException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ParserConfigurationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			e.printStackTrace();
+		} // $NON-NLS-1$
 
 	}
-	
+
 	/**
 	 * Download accepted Certificates from Server
 	 */
-	public static void downloadCertificatesFromServer()
-	{
+	public static void downloadCertificatesFromServer(String proxyHost, int proxyPort) {
 
 		BufferedReader br = null;
 		FileReader fr = null;
 
 		try {
-			
-		
+
 			File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
-	
-			if (added_cert.exists())
-			{		
-			Document doc_added = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder()
-					.parse(added_cert);
-			
-			
-			Node certificates_added = doc_added.getFirstChild();
-			NodeList certificates_added_list = certificates_added.getChildNodes();
-			log.info("===== Starting to download accepted certificates =====");
-			
-			//identify the certificate that has to be downloaded
-			for (int i = 0; i < certificates_added_list.getLength(); i++) {
-				try {
 
-					Node certificateNode = certificates_added_list.item(i);
+			if (added_cert.exists()) {
+				Document doc_added = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(added_cert);
 
-					if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
-						continue; // Ignore dummy text node ..
+				Node certificates_added = doc_added.getFirstChild();
+				NodeList certificates_added_list = certificates_added.getChildNodes();
+				log.info("===== Starting to download accepted certificates =====");
+
+				// identify the certificate that has to be downloaded
+				for (int i = 0; i < certificates_added_list.getLength(); i++) {
+					try {
+
+						Node certificateNode = certificates_added_list.item(i);
+
+						if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
+							continue; // Ignore dummy text node ..
+						}
+
+						if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
+							log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
+							continue;
+						}
+
+						URLConnection connection;
+						if (!certificateNode.getTextContent().equals("")) {
+							String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL
+									+ certificateNode.getTextContent();
+							URL url = new URL(certResource);
+							
+							if (proxyHost!=null){
+								Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+								connection = url.openConnection(proxy);
+							}else
+							{connection = url.openConnection();}
+							InputStream is = connection.getInputStream();
+							BufferedInputStream bis = new BufferedInputStream(is);
+							FileOutputStream fis = new FileOutputStream(
+									new File(Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent()));
+							byte[] buffer = new byte[1024];
+							int count = 0;
+							while ((count = bis.read(buffer, 0, 1024)) != -1) {
+								fis.write(buffer, 0, count);
+							}
+							fis.close();
+							bis.close();
+						}
+					} catch (Exception ex) {
+						log.debug(ex.toString()); // $NON-NLS-1$
 					}
 
-					if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
-						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
-						continue;
-					}
-
-					if (!certificateNode.getTextContent().equals(""))
-					{
-					String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL + certificateNode.getTextContent();	
-					
-					URL url = new URL(certResource);
-					URLConnection connection = url.openConnection();					
-					InputStream is = connection.getInputStream();
-					BufferedInputStream bis = new BufferedInputStream(is);
-			        FileOutputStream fis = new FileOutputStream(new File(Constants.RES_CERT_PATH_ADDED+certificateNode.getTextContent()));
-			        byte[] buffer = new byte[1024];
-			        int count=0;  
-			        while((count = bis.read(buffer,0,1024)) != -1)
-			        {
-			            fis.write(buffer, 0, count);
-			        }
-			        fis.close();
-			        bis.close();
-					}
-				} catch (Exception ex) {
-					log.debug(ex.toString()); //$NON-NLS-1$
 				}
-			
-			}	}
-			else{
-			log.info("Certificates-File could not be downloaded, will be created");} //$NON-NLS-1$
+			} else {
+				log.info("Certificates-File could not be downloaded, will be created"); //$NON-NLS-1$
+			}
 		}
 
-		 catch (IOException e) {
-			
+		catch (IOException e) {
+
 			e.printStackTrace();
 
 		} catch (SAXException e) {

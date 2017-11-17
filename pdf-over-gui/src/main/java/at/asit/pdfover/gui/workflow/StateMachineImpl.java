@@ -258,8 +258,10 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		// Call update to start processing ...
 		update();
 	
-		CertificateDownloadSource.getAcceptedCertificates();
-
+		ConfigProvider cp = this.getConfigProvider();
+		
+		CertificateDownloadSource.getAcceptedCertificates(this.getConfigProvider());
+		
 			
 
 		// if a user interaction is required we have a shell ...
