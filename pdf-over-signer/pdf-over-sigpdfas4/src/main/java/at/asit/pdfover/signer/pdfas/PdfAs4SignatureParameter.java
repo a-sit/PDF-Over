@@ -48,6 +48,11 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	private static final String PROFILE_ID_NOTE = "_NOTE";
 	/** The profile ID extension for PDF/A compatibility */
 	private static final String PROFILE_ID_PDFA = "_PDFA";
+	
+	/**
+	 * Visibility of signature block
+	 */
+	public static boolean PROFILE_VISIBILITY=true;
 
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
@@ -155,10 +160,22 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		String lang = getSignatureLanguage();
 		boolean useNote = (getProperty("SIG_NOTE") != null);
 		boolean usePdfACompat = (getSignaturePdfACompat());
-
-		String profileId = PROFILE_ID_BASE;
+		
+		//Add Signature Param here//
+		String profileId;
+		
+		
+		
+		if (PROFILE_VISIBILITY)
+		{
+		profileId = PROFILE_ID_BASE;
 		profileId += (lang != null && lang.equals("en")) ?
-				PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
+				PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;}
+		
+		else
+		{
+			profileId ="INVISIBLE";
+		}
 
 		if (useNote)
 			profileId += PROFILE_ID_NOTE;

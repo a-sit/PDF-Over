@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 
 /**
  * Handler to process CLI Arguments

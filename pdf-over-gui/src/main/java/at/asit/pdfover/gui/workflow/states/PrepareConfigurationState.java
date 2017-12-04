@@ -99,6 +99,7 @@ public class PrepareConfigurationState extends State {
 		this.handler.addCLIArgument(SkipFinishArgument.class);
 		// adding config file argument to this handler so it appears in help
 		this.handler.addCLIArgument(ConfigFileArgument.class);
+		this.handler.addCLIArgument(InvisibleProfile.class);
 
 		this.configFileHandler = new ArgumentHandler(getStateMachine());
 		this.configFileHandler.addCLIArgument(ConfigFileArgument.class);
