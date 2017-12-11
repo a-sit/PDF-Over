@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.1.16-SNAPSHOT</version>
+	<version>4.1.16</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
@@ -63,7 +63,7 @@
 		<!--developerConnection>scm:git:ssh://gitlab@gitlab.iaik.tugraz.at/egiz/pdf-over.git</developerConnection-->
 		<developerConnection>scm:git:https://gitlab.iaik.tugraz.at/egiz/pdf-over.git</developerConnection>
 		<url>http://git.egiz.gv.at/pdf-over</url>
-	  <tag>pdf-over-4.1.13</tag>
+	  <tag>pdf-over-4.1.16</tag>
   </scm>
 
 	<issueManagement>
