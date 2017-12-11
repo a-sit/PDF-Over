@@ -2,9 +2,9 @@
 .svn/
 
 # Eclipse project files
-#.project
-#.classpath
-#.settings/
+.project
+.classpath
+.settings/
 .euml2
 .umlproject
 
