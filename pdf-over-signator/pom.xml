@@ -24,5 +24,9 @@
 			<groupId>com.drewnoakes</groupId>
 			<artifactId>metadata-extractor</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>javax.activation</groupId>
+    		<artifactId>activation</artifactId>
+		</dependency>
 	</dependencies>
 </project>
