@@ -34,6 +34,7 @@
 		<res id="customicons.xml" src="./customicons.xml" />
 		<res id="Installer.image" src="logo.gif" />
 		<res id="Installer.image.0" src="logo.gif" />
+		<res id="postInstall.jar" src="postInstall.jar" />
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
@@ -49,6 +50,7 @@
 		<panel classname="InstallPanel" />
 		<panel classname="ShortcutPanel" />
 		<panel classname="SimpleFinishPanel" />
+        <panel classname="ProcessPanel"/>
 	</panels>
 
 	<packs>
@@ -66,9 +68,12 @@
 			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="Uninstaller.exe" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
-			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
+            <file src="postInstall.jar" targetdir="$INSTALL_PATH/scripts" />
+            <executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
+				os="unix" stage="never"></executable>
+            <executable targetfile="$INSTALL_PATH/scripts/postInstall_linux.sh"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win.bat"
 				os="windows" stage="never"></executable>
@@ -76,9 +81,15 @@
 				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_mac.sh"
 				os="mac" stage="never"></executable>
+            <executable targetfile="$INSTALL_PATH/scripts/postInstall_linux.sh"
+				os="unix" stage="postInstall" keep="true"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/postinstall_mac.sh"
 				os="mac" stage="postinstall"></executable>
+            <executable targetfile="$INSTALL_PATH/scripts/postInstall_win.bat"
+				os="win" stage="postinstall" keep="true"></executable> 
 		</pack>
 	</packs>
+    
+
 
 </installation>

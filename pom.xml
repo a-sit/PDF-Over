@@ -48,6 +48,16 @@
 			</roles>
 			<timezone>+1</timezone>
 		</developer>
+        <developer>
+			<id>aabraham</id>
+			<name>Andreas Abraham</name>
+			<email>andreas.abraham@egiz.gv.at</email>
+			<organization>EGIZ</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 
 	<licenses>

@@ -15,39 +15,16 @@
  */
 package at.asit.pdfover.gui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 //Imports
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-
-import javax.security.auth.login.Configuration;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.utils.CertificateDownloadSource;
-import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 
 /**
  * Main entry point for production
@@ -65,17 +42,17 @@ public class Main {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		log.debug("Loading SWT libraries"); //$NON-NLS-1$
-		try {
-			SWTLoader.loadSWT();
-		} catch (InitializationException e) {
-			log.error("Could not load SWT libraries", e); //$NON-NLS-1$
-			JOptionPane.showMessageDialog(null,
-					Messages.getString("error.SWTLib"), //$NON-NLS-1$
-					Messages.getString("error.TitleFatal"), //$NON-NLS-1$
-					JOptionPane.ERROR_MESSAGE);
-		}
-		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
+//		log.debug("Loading SWT libraries"); //$NON-NLS-1$
+//		try {
+//			SWTLoader.loadSWT();
+//		} catch (InitializationException e) {
+//			log.error("Could not load SWT libraries", e); //$NON-NLS-1$
+//			JOptionPane.showMessageDialog(null,
+//					Messages.getString("error.SWTLib"), //$NON-NLS-1$
+//					Messages.getString("error.TitleFatal"), //$NON-NLS-1$
+//					JOptionPane.ERROR_MESSAGE);
+//		}
+//		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
 
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
 	
@@ -90,7 +67,7 @@ public class Main {
 		}
 		
 		
-		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
+//		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
 
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 		
