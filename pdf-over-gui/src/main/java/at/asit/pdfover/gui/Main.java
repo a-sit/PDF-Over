@@ -35,7 +35,7 @@ public class Main {
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
-	private static URL url=null;
+//	private static URL url=null;
 
 	/**
 	 * @param args
