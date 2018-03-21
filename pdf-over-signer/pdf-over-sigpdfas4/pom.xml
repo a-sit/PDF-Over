@@ -58,7 +58,7 @@
 		<repository>
 			<id>pdf-as-4</id>
 			<name>PDF-AS 4 Repository</name>
-			<url>https://joinup.ec.europa.eu/site/pdf-as/maven/</url>
+			<url>https://apps.egiz.gv.at/maven/</url>
 			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
 		<repository>

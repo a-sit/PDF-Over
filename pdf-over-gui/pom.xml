@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>pdf-over</artifactId>
@@ -167,6 +168,15 @@
 									<outputDirectory>${staging.dir}/lib-swt</outputDirectory>
 									<destFileName>swt-${target.name}-64.jar</destFileName>
 								</artifactItem>
+<!-- 								<artifactItem> -->
+<!-- 									<groupId>at.a-sit</groupId> -->
+<!-- 									<artifactId>pdf-over-install-helper</artifactId> -->
+<!-- 									<version>1.0.0</version> -->
+<!-- 									<type>jar</type> -->
+<!-- 									<overWrite>true</overWrite> -->
+<!-- 									<outputDirectory>${staging.dir}/lib</outputDirectory> -->
+<!-- 									<destFileName>pdf-over-install-helper-1.0.0.jar</destFileName> -->
+<!-- 								</artifactItem> -->
 							</artifactItems>
 						</configuration>
 					</execution>
@@ -288,7 +298,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<minVersion>1.6.0</minVersion>
+								<minVersion>1.7.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -322,7 +332,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<minVersion>1.6.0</minVersion>
+								<minVersion>1.7.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -418,16 +428,46 @@
 	<properties>
 		<izpack-standalone.version>4.3.5</izpack-standalone.version>
 		<project.maindir>${project.basedir}/..</project.maindir>
-		<target.name>linux</target.name>
+		<target.name>windows</target.name>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
 		<swt.version>4.3.2</swt.version>
 	</properties>
 
 	<profiles>
-		<!--
-			Note: Build system profile has to come first!
-			Else it overwrites the chosen profile
-		 -->
+		<!-- Note: Build system profile has to come first! Else it overwrites the 
+			chosen profile -->
+		<profile>
+			<id>windows-64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
+				<target.name>windows</target.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
+				<target.name>windows</target.name>
+			</properties>
+		</profile>
+
+
 		<profile>
 			<id>linux-64</id>
 			<activation>
@@ -459,36 +499,7 @@
 			</properties>
 		</profile>
 
-		<profile>
-			<id>windows</id>
-			<activation>
-				<os>
-					<family>windows</family>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
-				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
-				<target.name>windows</target.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>windows-64</id>
-			<activation>
-				<os>
-					<family>windows</family>
-					<arch>amd64</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
-				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
-				<target.name>windows</target.name>
-			</properties>
-		</profile>
+
 
 		<profile>
 			<id>mac</id>
