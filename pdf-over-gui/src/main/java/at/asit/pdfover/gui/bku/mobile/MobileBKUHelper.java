@@ -225,7 +225,7 @@ public class MobileBKUHelper {
 	 */
 	public static void validatePassword(String password)
 			throws InvalidPasswordException {
-		if (password.length() < 6 || password.length() > 20) {
+		if (password.length() < 5 || password.length() > 200) {
 			if (password.length() < 6) {
 				throw new PasswordTooShortException();
 			}
