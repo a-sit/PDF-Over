@@ -168,15 +168,15 @@
 									<outputDirectory>${staging.dir}/lib-swt</outputDirectory>
 									<destFileName>swt-${target.name}-64.jar</destFileName>
 								</artifactItem>
-<!-- 								<artifactItem> -->
-<!-- 									<groupId>at.a-sit</groupId> -->
-<!-- 									<artifactId>pdf-over-install-helper</artifactId> -->
-<!-- 									<version>1.0.0</version> -->
-<!-- 									<type>jar</type> -->
-<!-- 									<overWrite>true</overWrite> -->
-<!-- 									<outputDirectory>${staging.dir}/lib</outputDirectory> -->
-<!-- 									<destFileName>pdf-over-install-helper-1.0.0.jar</destFileName> -->
-<!-- 								</artifactItem> -->
+								<artifactItem>
+									<groupId>at.a-sit</groupId>
+									<artifactId>pdf-over-install-helper</artifactId>
+									<version>1.0.0</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${staging.dir}/lib</outputDirectory>
+									<destFileName>pdf-over-install-helper-1.0.0.jar</destFileName>
+								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
@@ -619,7 +619,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jarsigner-plugin</artifactId>
-						<version>1.2</version>
+						<version>1.4</version>
 						<configuration>
 							<keystore>${ks-file}</keystore>
 							<alias>a-sit-3</alias>

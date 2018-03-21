@@ -20,10 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**
@@ -54,6 +57,7 @@ public class Main {
 //		}
 //		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
 
+		try {
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
 	
 		if (!configDir.exists()) {
@@ -76,7 +80,15 @@ public class Main {
 		
 		
 		log.debug("Ended stateMachine ..."); //$NON-NLS-1$
-
+		}
+		catch (Throwable e) {
+			
+			log.error("Error wrong Java Architecture, please re-install pdf-over "); //$NON-NLS-1$
+			log.error(e.getMessage());
+			JOptionPane.showMessageDialog(null,
+					"Invalid Java Architecture! Please re-install the latest version of PDF-Over", //$NON-NLS-1$
+					null, JOptionPane.ERROR_MESSAGE);
+		}
 
 		// Workaround for remaining AWT-Shutdown thread on OSX
 		System.exit(0);

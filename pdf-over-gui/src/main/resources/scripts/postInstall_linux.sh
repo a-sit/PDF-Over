@@ -1,2 +1,2 @@
 #!/bin/sh
-exec java -jar postInstall.jar
+exec java -jar ../lib/pdf-over-install-helper-1.0.0.jar
