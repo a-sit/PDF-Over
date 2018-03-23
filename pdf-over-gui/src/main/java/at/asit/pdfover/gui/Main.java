@@ -45,17 +45,6 @@ public class Main {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-//		log.debug("Loading SWT libraries"); //$NON-NLS-1$
-//		try {
-//			SWTLoader.loadSWT();
-//		} catch (InitializationException e) {
-//			log.error("Could not load SWT libraries", e); //$NON-NLS-1$
-//			JOptionPane.showMessageDialog(null,
-//					Messages.getString("error.SWTLib"), //$NON-NLS-1$
-//					Messages.getString("error.TitleFatal"), //$NON-NLS-1$
-//					JOptionPane.ERROR_MESSAGE);
-//		}
-//		log.info("===== Starting " + Constants.APP_NAME_VERSION + " ====="); //$NON-NLS-1$ //$NON-NLS-2$
 
 		try {
 		File configDir = new File(Constants.CONFIG_DIRECTORY);
@@ -70,8 +59,6 @@ public class Main {
 			PropertyConfigurator.configureAndWatch(log4j.getAbsolutePath());
 		}
 		
-		
-//		log.debug("SWT version: " + SWT.getVersion()); //$NON-NLS-1$
 
 		StateMachineImpl stateMachine = new StateMachineImpl(args);
 		

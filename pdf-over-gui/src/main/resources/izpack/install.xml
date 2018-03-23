@@ -34,7 +34,6 @@
 		<res id="customicons.xml" src="./customicons.xml" />
 		<res id="Installer.image" src="logo.gif" />
 		<res id="Installer.image.0" src="logo.gif" />
-<!-- 		<res id="pdf-over-install-helper-1.0.0.jar" src="pdf-over-install-helper-1.0.0.jar" /> -->
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
@@ -65,8 +64,8 @@
 			<file src="scripts" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
-			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
-			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/>
+<!-- 			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/> -->
+<!-- 			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/> -->
 			<file src="Uninstaller.exe" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
 <!--             <file src="pdf-over-install-helper-1.0.0.jar" targetdir="$INSTALL_PATH/libs" /> -->
             <executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
@@ -81,12 +80,12 @@
 				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_mac.sh"
 				os="mac" stage="never"></executable>
-            <executable targetfile="$INSTALL_PATH/scripts/postInstall_linux.sh"
-				os="unix" stage="postInstall" keep="true"></executable>
+<!--            <executable targetfile="$INSTALL_PATH/scripts/postInstall_linux.sh"
+				os="unix" stage="postinstall" ></executable>-->
 			<executable targetfile="$INSTALL_PATH/scripts/postinstall_mac.sh"
 				os="mac" stage="postinstall"></executable>
-            <executable targetfile="$INSTALL_PATH/scripts/postInstall_win.bat"
-				os="win" stage="postinstall" keep="true"></executable> 
+<!--            <executable targetfile="$INSTALL_PATH/scripts/postInstall_win.bat"
+				os="win" stage="postinstall" ></executable> -->
 		</pack>
 	</packs>
     

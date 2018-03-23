@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DOCUMENT Type="Advanced Installer" CreateVersion="9.5" version="9.6.1" Modules="professional" RootPath="." Language="en" Id="{5F3751A5-1A33-4D3E-B8FB-9F3FB48C9300}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
-    <ROW Name="HiddenItems" Value="UpdaterComponent;SerValComponent;PreReqComponent;MsiExtComponent;MsiAssemblyComponent;MsiServInstComponent;MsiOrgComponent;ActSyncAppComponent;MsiThemeComponent;BackgroundImagesComponent;CPLAppletComponent;MsiClassComponent;WebApplicationsComponent;MsiOdbcDataSrcComponent;MsiAppSearchComponent;MsiInstExSeqComponent"/>
+    <ROW Name="HiddenItems" Value="UpdaterComponent;SerValComponent;PreReqComponent;MsiExtComponent;MsiAssemblyComponent;ActSyncAppComponent;MsiThemeComponent;BackgroundImagesComponent;CPLAppletComponent;MsiClassComponent;WebApplicationsComponent;MsiOdbcDataSrcComponent;MsiAppSearchComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiValidationComponent">
     <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="32767" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="2" ColumnIndex="7" ColumnSize="2" MsiKey="File#Sequence"/>
@@ -9,16 +9,16 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_DESKTOP_SH" Value="1" Type="4" MsiKey="AI_DESKTOP_SH"/>
-    <ROW Property="AI_MINJREVERSION" MultiBuildValue="DefaultBuild:1.6" ValueLocId="-"/>
+    <ROW Property="AI_MINJREVERSION" MultiBuildValue="DefaultBuild:1.7" ValueLocId="-"/>
     <ROW Property="AI_SHORTCUTSREG" Value="0|0|0|0|"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="icon.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="A-SIT (Secure Information Technology Center - Austria)"/>
-    <ROW Property="ProductCode" Value="1033:{DF2807F0-45B9-4E8C-A3E6-D1373C9C3837} 1031:{1A08CCCC-5F44-4F11-AB48-E5ECDA86E315} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{4E07870C-BD21-4652-93DC-8181F8C79DF1} 1031:{FC0E2324-B1D9-47DC-959E-2EC6EE0DD08B} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="PDF-Over"/>
-    <ROW Property="ProductVersion" Value="4.0.2" Type="32"/>
+    <ROW Property="ProductVersion" Value="4.1.17" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{4F146EA4-79F9-4873-9A4C-A66A525AF62F}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -26,77 +26,90 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
-    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="Deskto~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
-    <ROW Directory="SendToFolder" Directory_Parent="TARGETDIR" DefaultDir="SendTo~1|SendToFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="icons_Dir" Directory_Parent="APPDIR" DefaultDir="icons"/>
     <ROW Directory="lib_Dir" Directory_Parent="APPDIR" DefaultDir="lib"/>
     <ROW Directory="libswt_Dir" Directory_Parent="APPDIR" DefaultDir="lib-swt"/>
+    <ROW Directory="scripts_Dir" Directory_Parent="APPDIR" DefaultDir="scripts"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AIShRegAnswer" ComponentId="{19C5B0EB-63C2-4BE4-B2C8-B5EFC6393279}" Directory_="APPDIR" Attributes="4" KeyPath="AIShRegAnswer"/>
-    <ROW Component="PDFOver.exe" ComponentId="{21AF1E6B-2154-42F3-84E1-496EEDB15CD0}" Directory_="APPDIR" Attributes="0" KeyPath="PDFOver.exe"/>
-    <ROW Component="PDFOvercli.exe" ComponentId="{75ADBB0C-A267-4C8F-B5A0-124F120C1174}" Directory_="APPDIR" Attributes="0" KeyPath="PDFOvercli.exe"/>
     <ROW Component="ProductInformation" ComponentId="{8126D538-2928-475F-8DBB-9BFB1EB29D9F}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="ReadMe.txt" ComponentId="{6B219988-85AA-46D3-B6A6-9BF7FBC7C381}" Directory_="APPDIR" Attributes="0" KeyPath="ReadMe.txt" Type="0"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{064E7424-083A-428F-A6BE-309C263AE208}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="axis1.0.jar" ComponentId="{6E2F5E04-A7E7-401C-B22D-504B6BC92501}" Directory_="lib_Dir" Attributes="0" KeyPath="axis1.0.jar" Type="0"/>
-    <ROW Component="icon.ico" ComponentId="{D8E8BCE8-7FC0-4C55-9DAA-5BC40E88CBA4}" Directory_="icons_Dir" Attributes="0" KeyPath="icon.ico" Type="0"/>
-    <ROW Component="swtwindows32.jar" ComponentId="{3DBC73A4-AC6C-4DB9-B66A-20845DFABF72}" Directory_="libswt_Dir" Attributes="0" KeyPath="swtwindows32.jar" Type="0"/>
+    <ROW Component="activation1.1.1.jar" ComponentId="{5A3CCF53-8D57-4335-94FD-A6997BE6C938}" Directory_="lib_Dir" Attributes="0" KeyPath="activation1.1.1.jar" Type="0"/>
+    <ROW Component="icon.icns" ComponentId="{6AF4C48A-67F2-4834-B92A-3BD385330513}" Directory_="icons_Dir" Attributes="0" KeyPath="icon.icns" Type="0"/>
+    <ROW Component="pdfover_linux.sh" ComponentId="{E0008BB3-9A30-4864-8AEA-6DA6AF4082CB}" Directory_="scripts_Dir" Attributes="0" KeyPath="postInstall_win.bat" Type="0"/>
+    <ROW Component="swtwindows32.jar" ComponentId="{7BE75155-5A2F-4D98-B5C9-A70B144C37EB}" Directory_="libswt_Dir" Attributes="0" KeyPath="swtwindows32.jar" Type="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AIShRegAnswer PDFOver.exe PDFOvercli.exe ProductInformation ReadMe.txt SHORTCUTDIR axis1.0.jar icon.ico swtwindows32.jar"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AIShRegAnswer ProductInformation activation1.1.1.jar icon.icns pdfover_linux.sh swtwindows32.jar"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="PDFOver.exe" Component_="PDFOver.exe" FileName="PDF-Over.exe" Attributes="0" SourcePath="C:\Programme\PDF-Over\PDF-Over.exe" SelfReg="false" NextFile="PDFOvercli.exe"/>
-    <ROW File="PDFOvercli.exe" Component_="PDFOvercli.exe" FileName="PDF-Ov~1.exe|PDF-Over-cli.exe" Attributes="0" SourcePath="C:\Programme\PDF-Over\PDF-Over-cli.exe" SelfReg="false" NextFile="axis1.0.jar"/>
-    <ROW File="ReadMe.txt" Component_="ReadMe.txt" FileName="ReadMe.txt" Attributes="0" SourcePath="C:\Programme\PDF-Over\ReadMe.txt" SelfReg="false" NextFile="PDFOver.exe"/>
-    <ROW File="axis1.0.jar" Component_="axis1.0.jar" FileName="axis-1~1.jar|axis-1.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\axis-1.0.jar" SelfReg="false" NextFile="axisjaxrpc1.0.jar"/>
-    <ROW File="axisjaxrpc1.0.jar" Component_="axis1.0.jar" FileName="axis-j~1.jar|axis-jaxrpc-1.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\axis-jaxrpc-1.0.jar" SelfReg="false" NextFile="axissaaj1.0.jar"/>
-    <ROW File="axissaaj1.0.jar" Component_="axis1.0.jar" FileName="axis-s~1.jar|axis-saaj-1.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\axis-saaj-1.0.jar" SelfReg="false" NextFile="axiswsdl4j1.0.jar"/>
-    <ROW File="axiswsdl4j1.0.jar" Component_="axis1.0.jar" FileName="axis-w~1.jar|axis-wsdl4j-1.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\axis-wsdl4j-1.0.jar" SelfReg="false" NextFile="bcprovjdk14138.jar"/>
-    <ROW File="bcprovjdk14138.jar" Component_="axis1.0.jar" FileName="bcprov~1.jar|bcprov-jdk14-138.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\bcprov-jdk14-138.jar" SelfReg="false" NextFile="commonscodec1.6.jar"/>
-    <ROW File="commonscodec1.6.jar" Component_="axis1.0.jar" FileName="common~1.jar|commons-codec-1.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-codec-1.6.jar" SelfReg="false" NextFile="commonsdiscovery0.2.jar"/>
-    <ROW File="commonsdiscovery0.2.jar" Component_="axis1.0.jar" FileName="common~2.jar|commons-discovery-0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-discovery-0.2.jar" SelfReg="false" NextFile="commonshttpclient3.0.jar"/>
-    <ROW File="commonshttpclient3.0.jar" Component_="axis1.0.jar" FileName="common~3.jar|commons-httpclient-3.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-httpclient-3.0.jar" SelfReg="false" NextFile="commonsio2.4.jar"/>
-    <ROW File="commonsio2.4.jar" Component_="axis1.0.jar" FileName="common~4.jar|commons-io-2.4.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-io-2.4.jar" SelfReg="false" NextFile="commonslang2.6.jar"/>
-    <ROW File="commonslang2.6.jar" Component_="axis1.0.jar" FileName="common~5.jar|commons-lang-2.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-lang-2.6.jar" SelfReg="false" NextFile="commonslogging1.0.3.jar"/>
-    <ROW File="commonslogging1.0.3.jar" Component_="axis1.0.jar" FileName="common~6.jar|commons-logging-1.0.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\commons-logging-1.0.3.jar" SelfReg="false" NextFile="core1.6jdk14.jar"/>
-    <ROW File="core1.6jdk14.jar" Component_="axis1.0.jar" FileName="core-1~1.jar|core-1.6-jdk14.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\core-1.6-jdk14.jar" SelfReg="false" NextFile="fontbox0.8.0incubator.jar"/>
-    <ROW File="fontbox0.8.0incubator.jar" Component_="axis1.0.jar" FileName="fontbo~1.jar|fontbox-0.8.0-incubator.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\fontbox-0.8.0-incubator.jar" SelfReg="false" NextFile="iaik_ecc_eval_signed2.19.jar"/>
-    <ROW File="iaik_ecc_eval_signed2.19.jar" Component_="axis1.0.jar" FileName="iaik_e~1.jar|iaik_ecc_eval_signed-2.19.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\iaik_ecc_eval_signed-2.19.jar" SelfReg="false" NextFile="iaik_jce_eval_signed4.0.jar"/>
-    <ROW File="iaik_jce_eval_signed4.0.jar" Component_="axis1.0.jar" FileName="iaik_j~1.jar|iaik_jce_eval_signed-4.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\iaik_jce_eval_signed-4.0.jar" SelfReg="false" NextFile="itext2.1.5rev3628pdfas1.2.jar"/>
-    <ROW File="icon.ico" Component_="icon.ico" FileName="icon.ico" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon.ico" SelfReg="false" NextFile="icon.png"/>
-    <ROW File="icon.png" Component_="icon.ico" FileName="icon.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon.png" SelfReg="false" NextFile="icon144x144.png"/>
-    <ROW File="icon144x144.png" Component_="icon.ico" FileName="icon14~1.png|icon144x144.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon144x144.png" SelfReg="false" NextFile="icon16x16.png"/>
-    <ROW File="icon16x16.png" Component_="icon.ico" FileName="icon16~1.png|icon16x16.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon16x16.png" SelfReg="false" NextFile="icon24x24.png"/>
-    <ROW File="icon24x24.png" Component_="icon.ico" FileName="icon24~1.png|icon24x24.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon24x24.png" SelfReg="false" NextFile="icon32x32.png"/>
-    <ROW File="icon32x32.png" Component_="icon.ico" FileName="icon32~1.png|icon32x32.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon32x32.png" SelfReg="false" NextFile="icon48x48.png"/>
-    <ROW File="icon48x48.png" Component_="icon.ico" FileName="icon48~1.png|icon48x48.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon48x48.png" SelfReg="false" NextFile="icon96x96.png"/>
-    <ROW File="icon96x96.png" Component_="icon.ico" FileName="icon96~1.png|icon96x96.png" Attributes="0" SourcePath="C:\Programme\PDF-Over\icons\icon96x96.png" SelfReg="false" NextFile="ReadMe.txt"/>
-    <ROW File="itext2.1.5rev3628pdfas1.2.jar" Component_="axis1.0.jar" FileName="itext-~1.jar|itext-2.1.5-rev3628-pdfas-1.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\itext-2.1.5-rev3628-pdfas-1.2.jar" SelfReg="false" NextFile="javase1.6jdk14.jar"/>
-    <ROW File="javase1.6jdk14.jar" Component_="axis1.0.jar" FileName="javase~1.jar|javase-1.6-jdk14.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\javase-1.6-jdk14.jar" SelfReg="false" NextFile="jbig21.0.jar"/>
-    <ROW File="jbig21.0.jar" Component_="axis1.0.jar" FileName="jbig2-~1.jar|jbig2-1.0.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\jbig2-1.0.jar" SelfReg="false" NextFile="jempbox0.8.0incubator.jar"/>
-    <ROW File="jempbox0.8.0incubator.jar" Component_="axis1.0.jar" FileName="jempbo~1.jar|jempbox-0.8.0-incubator.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\jempbox-0.8.0-incubator.jar" SelfReg="false" NextFile="junit3.8.1.jar"/>
-    <ROW File="junit3.8.1.jar" Component_="axis1.0.jar" FileName="junit-~1.jar|junit-3.8.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\junit-3.8.1.jar" SelfReg="false" NextFile="log4j1.2.17.jar"/>
-    <ROW File="log4j1.2.17.jar" Component_="axis1.0.jar" FileName="log4j-~1.jar|log4j-1.2.17.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\log4j-1.2.17.jar" SelfReg="false" NextFile="lucene1.4.3.jar"/>
-    <ROW File="lucene1.4.3.jar" Component_="axis1.0.jar" FileName="lucene~1.jar|lucene-1.4.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\lucene-1.4.3.jar" SelfReg="false" NextFile="lucenedemos1.4.3.jar"/>
-    <ROW File="lucenedemos1.4.3.jar" Component_="axis1.0.jar" FileName="lucene~2.jar|lucene-demos-1.4.3.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\lucene-demos-1.4.3.jar" SelfReg="false" NextFile="ognl2.6.9.jar"/>
-    <ROW File="ognl2.6.9.jar" Component_="axis1.0.jar" FileName="ognl-2~1.jar|ognl-2.6.9.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\ognl-2.6.9.jar" SelfReg="false" NextFile="pdfaslib3.5.jar"/>
-    <ROW File="pdfaslib3.5.jar" Component_="axis1.0.jar" FileName="pdf-as~1.jar|pdf-as-lib-3.5.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-as-lib-3.5.jar" SelfReg="false" NextFile="pdfbox0.7.2pdfas1.1.jar"/>
-    <ROW File="pdfbox0.7.2pdfas1.1.jar" Component_="axis1.0.jar" FileName="pdfbox~1.jar|pdfbox-0.7.2-pdfas-1.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfbox-0.7.2-pdfas-1.1.jar" SelfReg="false" NextFile="pdfbox0.8.0incubating.jar"/>
-    <ROW File="pdfbox0.8.0incubating.jar" Component_="axis1.0.jar" FileName="pdfbox~2.jar|pdfbox-0.8.0-incubating.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfbox-0.8.0-incubating.jar" SelfReg="false" NextFile="pdfovergui4.0.2.jar"/>
-    <ROW File="pdfovergui4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~1.jar|pdf-over-gui-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-gui-4.0.2.jar" SelfReg="false" NextFile="pdfoversignator4.0.2.jar"/>
-    <ROW File="pdfoversignator4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~2.jar|pdf-over-signator-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-signator-4.0.2.jar" SelfReg="false" NextFile="pdfoversigpdfas4.0.2.jar"/>
-    <ROW File="pdfoversigpdfas4.0.2.jar" Component_="axis1.0.jar" FileName="pdf-ov~3.jar|pdf-over-sigpdfas-4.0.2.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdf-over-sigpdfas-4.0.2.jar" SelfReg="false" NextFile="pdfview0.9.2Borisvl.jar"/>
-    <ROW File="pdfview0.9.2Borisvl.jar" Component_="axis1.0.jar" FileName="pdfvie~1.jar|pdfview-0.9.2-Borisvl.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\pdfview-0.9.2-Borisvl.jar" SelfReg="false" NextFile="slf4japi1.6.6.jar"/>
-    <ROW File="slf4japi1.6.6.jar" Component_="axis1.0.jar" FileName="slf4j-~1.jar|slf4j-api-1.6.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\slf4j-api-1.6.6.jar" SelfReg="false" NextFile="slf4jlog4j121.6.6.jar"/>
-    <ROW File="slf4jlog4j121.6.6.jar" Component_="axis1.0.jar" FileName="slf4j-~2.jar|slf4j-log4j12-1.6.6.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\slf4j-log4j12-1.6.6.jar" SelfReg="false" NextFile="xercesImpl2.7.1.jar"/>
-    <ROW File="swtwindows32.jar" Component_="swtwindows32.jar" FileName="swt-wi~1.jar|swt-windows-32.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib-swt\swt-windows-32.jar" SelfReg="false" NextFile="swtwindows64.jar"/>
-    <ROW File="swtwindows64.jar" Component_="swtwindows32.jar" FileName="swt-wi~2.jar|swt-windows-64.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib-swt\swt-windows-64.jar" SelfReg="false" NextFile="icon.ico"/>
-    <ROW File="xercesImpl2.7.1.jar" Component_="axis1.0.jar" FileName="xerces~1.jar|xercesImpl-2.7.1.jar" Attributes="0" SourcePath="C:\Programme\PDF-Over\lib\xercesImpl-2.7.1.jar" SelfReg="false"/>
+    <ROW File="FastInfoset1.2.13.jar" Component_="activation1.1.1.jar" FileName="FastIn~1.jar|FastInfoset-1.2.13.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\FastInfoset-1.2.13.jar" SelfReg="false" NextFile="fontbox1.8.11.jar"/>
+    <ROW File="activation1.1.1.jar" Component_="activation1.1.1.jar" FileName="activa~1.jar|activation-1.1.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\activation-1.1.1.jar" SelfReg="false" NextFile="commonscodec1.6.jar"/>
+    <ROW File="commonscodec1.6.jar" Component_="activation1.1.1.jar" FileName="common~1.jar|commons-codec-1.6.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-codec-1.6.jar" SelfReg="false" NextFile="commonscollections3.2.2.jar"/>
+    <ROW File="commonscollections3.2.2.jar" Component_="activation1.1.1.jar" FileName="common~2.jar|commons-collections-3.2.2.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-collections-3.2.2.jar" SelfReg="false" NextFile="commonscollections44.1.jar"/>
+    <ROW File="commonscollections44.1.jar" Component_="activation1.1.1.jar" FileName="common~3.jar|commons-collections4-4.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-collections4-4.1.jar" SelfReg="false" NextFile="commonshttpclient3.1.jar"/>
+    <ROW File="commonshttpclient3.1.jar" Component_="activation1.1.1.jar" FileName="common~4.jar|commons-httpclient-3.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-httpclient-3.1.jar" SelfReg="false" NextFile="commonsio2.4.jar"/>
+    <ROW File="commonsio2.4.jar" Component_="activation1.1.1.jar" FileName="common~5.jar|commons-io-2.4.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-io-2.4.jar" SelfReg="false" NextFile="commonslang33.3.2.jar"/>
+    <ROW File="commonslang33.3.2.jar" Component_="activation1.1.1.jar" FileName="common~6.jar|commons-lang3-3.3.2.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-lang3-3.3.2.jar" SelfReg="false" NextFile="commonslogging1.0.4.jar"/>
+    <ROW File="commonslogging1.0.4.jar" Component_="activation1.1.1.jar" FileName="common~7.jar|commons-logging-1.0.4.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\commons-logging-1.0.4.jar" SelfReg="false" NextFile="core3.2.0.jar"/>
+    <ROW File="core3.2.0.jar" Component_="activation1.1.1.jar" FileName="core-3~1.jar|core-3.2.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\core-3.2.0.jar" SelfReg="false" NextFile="FastInfoset1.2.13.jar"/>
+    <ROW File="fontbox1.8.11.jar" Component_="activation1.1.1.jar" FileName="fontbo~1.jar|fontbox-1.8.11.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\fontbox-1.8.11.jar" SelfReg="false" NextFile="httpclient4.5.3.jar"/>
+    <ROW File="httpclient4.5.3.jar" Component_="activation1.1.1.jar" FileName="httpcl~1.jar|httpclient-4.5.3.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\httpclient-4.5.3.jar" SelfReg="false" NextFile="httpcore4.4.6.jar"/>
+    <ROW File="httpcore4.4.6.jar" Component_="activation1.1.1.jar" FileName="httpco~1.jar|httpcore-4.4.6.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\httpcore-4.4.6.jar" SelfReg="false" NextFile="httpmime4.3.5.jar"/>
+    <ROW File="httpmime4.3.5.jar" Component_="activation1.1.1.jar" FileName="httpmi~1.jar|httpmime-4.3.5.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\httpmime-4.3.5.jar" SelfReg="false" NextFile="iaik_cms2.15.jar"/>
+    <ROW File="iaik_cms2.15.jar" Component_="activation1.1.1.jar" FileName="iaik_c~1.jar|iaik_cms-2.15.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\iaik_cms-2.15.jar" SelfReg="false" NextFile="iaik_eccelerate3.01.jar"/>
+    <ROW File="iaik_eccelerate3.01.jar" Component_="activation1.1.1.jar" FileName="iaik_e~1.jar|iaik_eccelerate-3.01.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\iaik_eccelerate-3.01.jar" SelfReg="false" NextFile="iaik_eccelerate_cms3.01.jar"/>
+    <ROW File="iaik_eccelerate_cms3.01.jar" Component_="activation1.1.1.jar" FileName="iaik_e~2.jar|iaik_eccelerate_cms-3.01.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\iaik_eccelerate_cms-3.01.jar" SelfReg="false" NextFile="iaik_jce_full_signed5.5.jar"/>
+    <ROW File="iaik_jce_full_signed5.5.jar" Component_="activation1.1.1.jar" FileName="iaik_j~1.jar|iaik_jce_full_signed-5.5.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\iaik_jce_full_signed-5.5.jar" SelfReg="false" NextFile="istackcommonsruntime3.0.5.jar"/>
+    <ROW File="icon.icns" Component_="icon.icns" FileName="icon~1.icn|icon.icns" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon.icns" SelfReg="false" NextFile="icon.ico"/>
+    <ROW File="icon.ico" Component_="icon.icns" FileName="icon.ico" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon.ico" SelfReg="false" NextFile="icon.png"/>
+    <ROW File="icon.png" Component_="icon.icns" FileName="icon.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon.png" SelfReg="false" NextFile="icon16x16.png"/>
+    <ROW File="icon144x144.png" Component_="icon.icns" FileName="icon14~1.png|icon144x144.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon144x144.png" SelfReg="false"/>
+    <ROW File="icon16x16.png" Component_="icon.icns" FileName="icon16~1.png|icon16x16.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon16x16.png" SelfReg="false" NextFile="icon24x24.png"/>
+    <ROW File="icon24x24.png" Component_="icon.icns" FileName="icon24~1.png|icon24x24.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon24x24.png" SelfReg="false" NextFile="icon32x32.png"/>
+    <ROW File="icon32x32.png" Component_="icon.icns" FileName="icon32~1.png|icon32x32.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon32x32.png" SelfReg="false" NextFile="icon48x48.png"/>
+    <ROW File="icon48x48.png" Component_="icon.icns" FileName="icon48~1.png|icon48x48.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon48x48.png" SelfReg="false" NextFile="icon96x96.png"/>
+    <ROW File="icon96x96.png" Component_="icon.icns" FileName="icon96~1.png|icon96x96.png" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon96x96.png" SelfReg="false" NextFile="icon144x144.png"/>
+    <ROW File="istackcommonsruntime3.0.5.jar" Component_="activation1.1.1.jar" FileName="istack~1.jar|istack-commons-runtime-3.0.5.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\istack-commons-runtime-3.0.5.jar" SelfReg="false" NextFile="javase3.2.0.jar"/>
+    <ROW File="javase3.2.0.jar" Component_="activation1.1.1.jar" FileName="javase~1.jar|javase-3.2.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\javase-3.2.0.jar" SelfReg="false" NextFile="javassist3.11.0.GA.jar"/>
+    <ROW File="javassist3.11.0.GA.jar" Component_="activation1.1.1.jar" FileName="javass~1.jar|javassist-3.11.0.GA.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\javassist-3.11.0.GA.jar" SelfReg="false" NextFile="jaxbapi2.3.0.jar"/>
+    <ROW File="jaxbapi2.3.0.jar" Component_="activation1.1.1.jar" FileName="jaxb-a~1.jar|jaxb-api-2.3.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jaxb-api-2.3.0.jar" SelfReg="false" NextFile="jaxbcore2.3.0.jar"/>
+    <ROW File="jaxbcore2.3.0.jar" Component_="activation1.1.1.jar" FileName="jaxb-c~1.jar|jaxb-core-2.3.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jaxb-core-2.3.0.jar" SelfReg="false" NextFile="jaxbruntime2.3.0.jar"/>
+    <ROW File="jaxbruntime2.3.0.jar" Component_="activation1.1.1.jar" FileName="jaxb-r~1.jar|jaxb-runtime-2.3.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jaxb-runtime-2.3.0.jar" SelfReg="false" NextFile="jbig21.0.jar"/>
+    <ROW File="jbig21.0.jar" Component_="activation1.1.1.jar" FileName="jbig2-~1.jar|jbig2-1.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jbig2-1.0.jar" SelfReg="false" NextFile="jcloverslf4j1.7.18.jar"/>
+    <ROW File="jcloverslf4j1.7.18.jar" Component_="activation1.1.1.jar" FileName="jcl-ov~1.jar|jcl-over-slf4j-1.7.18.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jcl-over-slf4j-1.7.18.jar" SelfReg="false" NextFile="jempbox1.8.11.jar"/>
+    <ROW File="jempbox1.8.11.jar" Component_="activation1.1.1.jar" FileName="jempbo~1.jar|jempbox-1.8.11.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\jempbox-1.8.11.jar" SelfReg="false" NextFile="log4j1.2.17.jar"/>
+    <ROW File="log4j1.2.17.jar" Component_="activation1.1.1.jar" FileName="log4j-~1.jar|log4j-1.2.17.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\log4j-1.2.17.jar" SelfReg="false" NextFile="metadataextractor2.9.1.jar"/>
+    <ROW File="metadataextractor2.9.1.jar" Component_="activation1.1.1.jar" FileName="metada~1.jar|metadata-extractor-2.9.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\metadata-extractor-2.9.1.jar" SelfReg="false" NextFile="ognl3.0.8.jar"/>
+    <ROW File="ognl3.0.8.jar" Component_="activation1.1.1.jar" FileName="ognl-3~1.jar|ognl-3.0.8.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\ognl-3.0.8.jar" SelfReg="false" NextFile="pdfascommon4.1.1.jar"/>
+    <ROW File="pdfascommon4.1.1.jar" Component_="activation1.1.1.jar" FileName="pdf-as~1.jar|pdf-as-common-4.1.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-as-common-4.1.1.jar" SelfReg="false" NextFile="pdfaslib4.1.1.jar"/>
+    <ROW File="pdfaslib4.1.1.jar" Component_="activation1.1.1.jar" FileName="pdf-as~2.jar|pdf-as-lib-4.1.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-as-lib-4.1.1.jar" SelfReg="false" NextFile="pdfaspdfbox4.1.1.jar"/>
+    <ROW File="pdfaspdfbox4.1.1.jar" Component_="activation1.1.1.jar" FileName="pdf-as~3.jar|pdf-as-pdfbox-4.1.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-as-pdfbox-4.1.1.jar" SelfReg="false" NextFile="pdfovergui4.1.17SNAPSHOT.jar"/>
+    <ROW File="pdfbox1.8.11.jar" Component_="activation1.1.1.jar" FileName="pdfbox~1.jar|pdfbox-1.8.11.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdfbox-1.8.11.jar" SelfReg="false" NextFile="pdfview0.9.3CyBot.jar"/>
+    <ROW File="pdfover_linux.sh" Component_="pdfover_linux.sh" FileName="pdf-ov~1.sh|pdf-over_linux.sh" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\pdf-over_linux.sh" SelfReg="false" NextFile="pdfover_mac.sh"/>
+    <ROW File="pdfover_mac.sh" Component_="pdfover_linux.sh" FileName="pdf-ov~2.sh|pdf-over_mac.sh" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\pdf-over_mac.sh" SelfReg="false" NextFile="postInstall_linux.sh"/>
+    <ROW File="pdfover_win.bat" Component_="pdfover_linux.sh" FileName="pdf-ov~1.bat|pdf-over_win.bat" Attributes="0" SourcePath="..\..\pdf-over-gui\src\main\resources\scripts\pdf-over_win.bat" SelfReg="false" NextFile="activation1.1.1.jar"/>
+    <ROW File="pdfovergui4.1.17SNAPSHOT.jar" Component_="activation1.1.1.jar" FileName="pdf-ov~1.jar|pdf-over-gui-4.1.17-SNAPSHOT.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-over-gui-4.1.17-SNAPSHOT.jar" SelfReg="false" NextFile="pdfoverinstallhelper1.0.0.jar"/>
+    <ROW File="pdfoverinstallhelper1.0.0.jar" Component_="activation1.1.1.jar" FileName="pdf-ov~2.jar|pdf-over-install-helper-1.0.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-over-install-helper-1.0.0.jar" SelfReg="false" NextFile="pdfoversignator4.1.17SNAPSHOT.jar"/>
+    <ROW File="pdfoversignator4.1.17SNAPSHOT.jar" Component_="activation1.1.1.jar" FileName="pdf-ov~3.jar|pdf-over-signator-4.1.17-SNAPSHOT.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-over-signator-4.1.17-SNAPSHOT.jar" SelfReg="false" NextFile="pdfoversigpdfas44.1.17SNAPSHOT.jar"/>
+    <ROW File="pdfoversigpdfas44.1.17SNAPSHOT.jar" Component_="activation1.1.1.jar" FileName="pdf-ov~4.jar|pdf-over-sigpdfas4-4.1.17-SNAPSHOT.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdf-over-sigpdfas4-4.1.17-SNAPSHOT.jar" SelfReg="false" NextFile="pdfbox1.8.11.jar"/>
+    <ROW File="pdfview0.9.3CyBot.jar" Component_="activation1.1.1.jar" FileName="pdfvie~1.jar|pdfview-0.9.3-CyBot.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\pdfview-0.9.3-CyBot.jar" SelfReg="false" NextFile="sigspades4.1.1.jar"/>
+    <ROW File="postInstall_linux.sh" Component_="pdfover_linux.sh" FileName="postIn~1.sh|postInstall_linux.sh" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\postInstall_linux.sh" SelfReg="false" NextFile="postinstall_mac.sh"/>
+    <ROW File="postInstall_win.bat" Component_="pdfover_linux.sh" FileName="postIn~1.bat|postInstall_win.bat" Attributes="0" SourcePath="..\..\pdf-over-gui\src\main\resources\scripts\postInstall_win.bat" SelfReg="false" NextFile="pdfover_win.bat"/>
+    <ROW File="postinstall_mac.sh" Component_="pdfover_linux.sh" FileName="postin~2.sh|postinstall_mac.sh" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\postinstall_mac.sh" SelfReg="false" NextFile="uninstall_linux.sh"/>
+    <ROW File="sigspades4.1.1.jar" Component_="activation1.1.1.jar" FileName="sigs-p~1.jar|sigs-pades-4.1.1.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\sigs-pades-4.1.1.jar" SelfReg="false" NextFile="slf4japi1.6.6.jar"/>
+    <ROW File="slf4japi1.6.6.jar" Component_="activation1.1.1.jar" FileName="slf4j-~1.jar|slf4j-api-1.6.6.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\slf4j-api-1.6.6.jar" SelfReg="false" NextFile="slf4jlog4j121.6.6.jar"/>
+    <ROW File="slf4jlog4j121.6.6.jar" Component_="activation1.1.1.jar" FileName="slf4j-~2.jar|slf4j-log4j12-1.6.6.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\slf4j-log4j12-1.6.6.jar" SelfReg="false" NextFile="staxex1.7.8.jar"/>
+    <ROW File="staxex1.7.8.jar" Component_="activation1.1.1.jar" FileName="stax-e~1.jar|stax-ex-1.7.8.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\stax-ex-1.7.8.jar" SelfReg="false" NextFile="txw22.3.0.jar"/>
+    <ROW File="swtwindows32.jar" Component_="swtwindows32.jar" FileName="swt-wi~1.jar|swt-windows-32.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib-swt\swt-windows-32.jar" SelfReg="false" NextFile="swtwindows64.jar"/>
+    <ROW File="swtwindows64.jar" Component_="swtwindows32.jar" FileName="swt-wi~2.jar|swt-windows-64.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib-swt\swt-windows-64.jar" SelfReg="false" NextFile="pdfover_linux.sh"/>
+    <ROW File="txw22.3.0.jar" Component_="activation1.1.1.jar" FileName="txw2-2~1.jar|txw2-2.3.0.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\txw2-2.3.0.jar" SelfReg="false" NextFile="xmpcore5.1.2.jar"/>
+    <ROW File="uninstall_linux.sh" Component_="pdfover_linux.sh" FileName="uninst~1.sh|uninstall_linux.sh" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\uninstall_linux.sh" SelfReg="false" NextFile="uninstall_win.bat"/>
+    <ROW File="uninstall_win.bat" Component_="pdfover_linux.sh" FileName="uninst~1.bat|uninstall_win.bat" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\scripts\uninstall_win.bat" SelfReg="false" NextFile="icon.icns"/>
+    <ROW File="xmpcore5.1.2.jar" Component_="activation1.1.1.jar" FileName="xmpcor~1.jar|xmpcore-5.1.2.jar" Attributes="0" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\lib\xmpcore-5.1.2.jar" SelfReg="false" NextFile="swtwindows32.jar"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en;de" LangOpt="1" InstallationType="4" UseLargeSchema="true"/>
@@ -109,7 +122,7 @@
     <ATTRIBUTE name="TranslateSegments" value="8116002816"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
-    <ROW DigitalCertificate="..\CodeSigningZertifikat_PDF-OVER.pfx" TimeStampUrl="http://timestamp.verisign.com/scripts/timstamp.dll" SignOptions="7" SignTool="0"/>
+    <ROW DigitalCertificate="Y:\EGIZ_Projects\Key\key_neu\asit_code_signing_14_12_2020.p12" TimeStampUrl="http://timestamp.verisign.com/scripts/timstamp.dll" SignOptions="7" SignTool="0" Password="4D9998A4F093BB033F808753BE42A311CAFB787AFF801C00C896D7073E68FE22E90A"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
@@ -169,9 +182,6 @@
     <ROW Dialog_="ShortcutsDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
     <ROW Dialog_="ShortcutsDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
   </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
-    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR"/>
-  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DATA_SETTER" Type="51" Source="AI_DEL_EMPTY_SHORTCUTDIR" Target="[SHORTCUTDIR]"/>
     <ROW Action="AI_DELETE_SHORTCUTS" Type="1" Source="aicustact.dll" Target="DeleteShortcuts"/>
@@ -189,9 +199,10 @@
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFilesFolder][ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+    <ROW Action="postInstall_win.bat" Type="82" Source="postInstall_win.bat"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="icon.exe" SourcePath="C:\Programme\PDF-Over\icons\icon.ico" Index="0"/>
+    <ROW Name="icon.exe" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -201,10 +212,11 @@
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_ResolveLocalizedCredentials" Sequence="51"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
-    <ROW Action="AI_DetectJRE" Condition="1" Sequence="399" Builds="DefaultBuild"/>
     <ROW Action="AI_DELETE_SHORTCUTS" Condition="NOT (REMOVE=&quot;ALL&quot;)" Sequence="1401"/>
-    <ROW Action="AI_DEL_EMPTY_SHORTCUTDIR" Condition="NOT (REMOVE=&quot;ALL&quot;)" Sequence="6402"/>
-    <ROW Action="AI_DATA_SETTER" Condition="NOT (REMOVE=&quot;ALL&quot;)" Sequence="6401"/>
+    <ROW Action="AI_DEL_EMPTY_SHORTCUTDIR" Condition="NOT (REMOVE=&quot;ALL&quot;)" Sequence="6403"/>
+    <ROW Action="AI_DATA_SETTER" Condition="NOT (REMOVE=&quot;ALL&quot;)" Sequence="6402"/>
+    <ROW Action="postInstall_win.bat" Condition="( ( NOT Installed ) OR ( Installed AND REMOVE &lt;&gt; &quot;ALL&quot; AND AI_INSTALL_MODE &lt;&gt; &quot;Remove&quot; ) )" Sequence="6401"/>
+    <ROW Action="AI_DetectJRE" Condition="1" Sequence="399" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
@@ -225,11 +237,6 @@
     <ROW Registry="AIShRegAnswer" Root="-1" Key="Software\Caphyon\Advanced Installer\Installs\[ProductCode]" Name="AIShRegAnswer" Value="[AI_SHORTCUTSREG]" Component_="AIShRegAnswer"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="PDFOver" Directory_="DesktopFolder" Name="PDF-Over" Component_="PDFOver.exe" Target="[#PDFOver.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="PDFOver_1" Directory_="SendToFolder" Name="PDF-Over" Component_="PDFOver.exe" Target="[#PDFOver.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="PDFOver_2" Directory_="SHORTCUTDIR" Name="PDF-Over" Component_="PDFOver.exe" Target="[#PDFOver.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR" Advertised="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

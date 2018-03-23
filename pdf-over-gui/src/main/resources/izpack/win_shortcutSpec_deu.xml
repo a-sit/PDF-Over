@@ -11,7 +11,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH/PDF-Over.exe"
+     target="$INSTALL_PATH/scripts/pdf-over_win.bat"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
      description="PDF-Over 4.1"
