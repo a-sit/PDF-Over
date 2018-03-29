@@ -56,6 +56,9 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
+	/**
+	 * This parameters are defining the signature block size 
+	 */
 	private int sig_w = 229;
 	private int sig_h = 77;
 
