@@ -85,6 +85,7 @@
 		<module>pdf-over-gui</module>
 		<module>pdf-over-signator</module>
 		<module>pdf-over-signer</module>
+		<module>pdf-over-install-helper</module>
 	</modules>
 
 	<properties>
