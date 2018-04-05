@@ -4,13 +4,13 @@
 		<artifactId>pdf-over-signer</artifactId>
 		<groupId>at.a-sit</groupId>
 		<version>4.1.18-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+<!-- 		<relativePath>..</relativePath> -->
 	</parent>
 	<artifactId>pdf-over-sigpdfas4</artifactId>
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.1.1</pdf-as.version>
+		<pdf-as.version>4.1.2</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
