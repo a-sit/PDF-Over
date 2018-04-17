@@ -15,12 +15,8 @@
  */
 package at.asit.pdfover.gui.workflow;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 //Imports
 import java.lang.reflect.Constructor;
-import java.nio.file.Files;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -28,7 +24,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
@@ -176,17 +171,27 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	}
 
 	private void createMainWindow() {
-		this.display = Display.getDefault();
+		try {
 
-		this.mainWindow = new MainWindow(this);
-		this.mainWindow.open();
+			this.display = Display.getDefault();
 
-		this.shell = this.mainWindow.getShell();
+			this.mainWindow = new MainWindow(this);
+			this.mainWindow.open();
 
-		this.container = this.mainWindow.getContainer();
+			this.shell = this.mainWindow.getShell();
 
-		this.shell.open();
-		this.shell.layout();
+			this.container = this.mainWindow.getContainer();
+
+			this.shell.open();
+			this.shell.layout();
+		} catch (Exception e) {
+			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage()); //$NON-NLS-1$
+			this.display = null;
+			this.mainWindow = null;
+			this.shell = null;
+			this.container = null;
+			throw e;
+		}
 	}
 
 	/**
@@ -194,7 +199,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * 
 	 * @return Composite
 	 */
-	public Composite getComposite() {
+	public synchronized Composite getComposite() {
 		// Main window will be built on first call
 		// returns SWT Composite container for states to draw their GUI
 
@@ -375,7 +380,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * @see at.asit.pdfover.gui.workflow.GUIProvider#getMainShell()
 	 */
 	@Override
-	public Shell getMainShell() {
+	public synchronized Shell getMainShell() {
 		if(this.shell == null) {
 			this.createMainWindow();
 		}

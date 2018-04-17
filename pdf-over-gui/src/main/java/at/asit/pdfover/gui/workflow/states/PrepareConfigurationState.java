@@ -465,7 +465,11 @@ public class PrepareConfigurationState extends State {
 							final String version = method.getResponseBodyAsString().trim();
 							if (!VersionComparator.before(Constants.APP_VERSION, version))
 								return;
-
+														
+							// wait 500ms before invoke the GUI message, because GUI had to be started from
+							// main thread
+							try {Thread.sleep(500); } catch (InterruptedException e1) { }
+							// invoke GUI message in main thread
 							gui.getMainShell().getDisplay().asyncExec(new Runnable() {
 								@Override
 								public void run() {
