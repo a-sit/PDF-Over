@@ -15,10 +15,10 @@
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="icon.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="A-SIT (Secure Information Technology Center - Austria)"/>
-    <ROW Property="ProductCode" Value="1033:{4E07870C-BD21-4652-93DC-8181F8C79DF1} 1031:{FC0E2324-B1D9-47DC-959E-2EC6EE0DD08B} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{581CC1A4-D72D-43CB-815D-F4CE311AF0AC} 1031:{4A062CC5-8273-4B3C-A425-1E090246D7B5} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="PDF-Over"/>
-    <ROW Property="ProductVersion" Value="4.1.17" Type="32"/>
+    <ROW Property="ProductVersion" Value="4.1.18" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{4F146EA4-79F9-4873-9A4C-A66A525AF62F}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
