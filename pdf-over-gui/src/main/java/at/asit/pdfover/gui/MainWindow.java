@@ -142,6 +142,10 @@ public class MainWindow {
 	 */
 	public void doLayout() {
 		Control ctrl = this.stack.topControl;
+		if (this.container.isDisposed()) {
+			//Note: if the conainter is disposed, we are finished here 
+			return;
+		}
 		this.container.layout(true, true);
 		getShell().layout(true, true);
 		// Note: SWT only layouts children! No grandchildren!
