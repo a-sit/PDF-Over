@@ -1,47 +1,44 @@
-PDF-Over 4.0
+PDF-Over 4.1.19
 ------------
 
-Kommandozeilenoptionen:
--h, -?, --help:
-	Zeigt diese Hilfe an
--p:
-	Wählt das Passwort für die Handy-BKU. Bsp.: -p <Passwort>
--i:
-	Wählt das zu signierende Dokument. Bsp.: -i <Dateiname>
--proxyport:
-	Wählt den Proxy-Server-Port. Bsp.: -proxyport <Portnummer>
--proxy:
-	Wählt den Proxy-Server. Bsp.: -proxy <Hostname/IP>
--o:
-	Wählt den Ausgabeordner oder die Ausgabedatei. Bsp.: -o <Ordner>
--b:
-	Wählen Sie die BKU. Gültige Werte: LOCAL, MOBILE. Bsp.: -b <bku>
--n:
-	Wählt die Telefonnummer für die Handy-BKU. Bsp.: -n <Nummer>
--c:
-	Auswahl der Konfigurationsdatei. Bsp.: -c <Dateiname>
--e:
-	Wählt die Bildmarke für die Signatur. Bsp.: -e <Dateiname>
-
-
 Command line arguments:
--o:
-	Sets the output folder or file to use. Example: -o <folder>
--proxy:
-	Sets the proxy host to use. Example: -proxy <hostname/IP>
--p:
-	Sets the password to use for mobile CCE. Example: -p <password>
 -h, -?, --help:
-	Shows this help message
--c:
-	Defines which configuration file to use. Example: -c <config file>
--n:
-	Sets the telephone number to use for mobile CCE. Example: -n <number>
--e:
-	Sets the signature logo file to use for the signature. Example: -e <emblem file>
+        Shows this help message
 -i:
-	Sets the document to sign. Example: -i <input document>
+        Sets the document to sign. Example: -i <input document>
+-o:
+        Sets the output folder or file to use. Example: -o <folder>
 -b:
-	Select the CCE to use. Values are: LOCAL, MOBILE. Example: -b <option>
+        Select the CCE to use. Possible values are: LOCAL, MOBILE, KS. Example: -b MOBILE
+-n:
+        Sets the telephone number to use for mobile CCE. Example: -n <number>
+-p:
+        Sets the password to use for mobile CCE. Example: -p <password>
+-ks:
+        Sets the keystore file. Example : -ks <keystore file>
+-kstype:
+        Sets the keystore type. Example : -kstype [PKCS12|JKS|JCEKS]
+-kspass:
+        Sets the keystore key password. Example : -kskeypass <password>
+-ksalias:
+        Sets the keystore key alias. Example : -ksalias <alias>
+-kskeypass:
+        Sets the keystore password. Example : -kspass <password>
+-proxy:
+        Sets the proxy host to use. Example: -proxy <hostname/IP>
 -proxyport:
-	Sets the proxy port to use. Example: -proxyport <port>
+        Sets the proxy port to use. Example: -proxyport <port>
+-proxyuser:
+        Sets the proxy username to use. Example: -proxyuser <username>
+-proxypass:
+        Sets the proxy password to use. Example: -proxypass <password>
+-e:
+        Sets the signature logo file to use for the signature. Example: -e <emblem file>
+-a:
+        Enables automatic signature positioning
+-s:
+        Enables skipping of the "Finish" dialog (if successfully saved)
+-c:
+        Defines which configuration file to use. Example: -c <config file>
+-v:
+        Sets the visibility of a signature.  Example: -v "true"
