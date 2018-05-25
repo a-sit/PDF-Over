@@ -70,11 +70,12 @@ public class Main {
 		}
 		catch (Throwable e) {
 			
-			log.error("Error wrong Java Architecture, please re-install pdf-over "); //$NON-NLS-1$
-			log.error(e.getMessage());
-			JOptionPane.showMessageDialog(null,
-					"Invalid Java Architecture! Please re-install the latest version of PDF-Over", //$NON-NLS-1$
-					null, JOptionPane.ERROR_MESSAGE);
+			log.error("Error occured " + e.getMessage()); //$NON-NLS-1$
+			log.error(e.toString());
+			
+			/*JOptionPane.showMessageDialog(null,
+					"Error occured " + e.getMessage(), //$NON-NLS-1$
+					null, JOptionPane.ERROR_MESSAGE);*/
 		}
 
 		// Workaround for remaining AWT-Shutdown thread on OSX
