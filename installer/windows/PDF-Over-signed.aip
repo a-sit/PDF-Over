@@ -258,7 +258,7 @@
     <ROW Shortcut="PDFOver_2" Directory_="SendToFolder" Name="PDF-Over" Component_="pdfover_win.bat" Target="[#pdfover_win.bat_1]" Hotkey="0" Icon_="icon.exe" IconIndex="0" ShowCmd="1" WkDir="scripts_1_Dir"/>
     <ROW Shortcut="PDFOver_3" Directory_="ProgramMenuFolder" Name="PDF-Over" Component_="pdfover_win.bat" Target="[#pdfover_win.bat_1]" Hotkey="0" Icon_="icon.exe" IconIndex="0" ShowCmd="1" WkDir="scripts_1_Dir"/>
     <ROW Shortcut="UninstallPDFOver" Directory_="APPDIR" Name="Uninst~1|Uninstall-PDF-Over" Component_="AIShRegAnswer" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
-    <ROW Shortcut="UninstallPDFOver_1" Directory_="SHORTCUTDIR" Name="Uninst~1|Uninstall-PDF-Over" Component_="swtwindows32.jar_1" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="UninstallPDFOver_1" Directory_="SHORTCUTDIR" Name="Uninst~2|Uninstall PDF-Over" Component_="swtwindows32.jar_1" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="icon.exe" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
