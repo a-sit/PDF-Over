@@ -429,7 +429,7 @@
 		<project.maindir>${project.basedir}/..</project.maindir>
 		<target.name>windows</target.name>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.3.2</swt.version>
+		<swt.version>4.7M3</swt.version>
 	</properties>
 
 	<profiles>
@@ -638,7 +638,7 @@
 	<repositories>
 		<repository>
 			<id>maven-eclipse-repo</id>
-			<url>http://maven-eclipse.github.io/maven</url>
+			<url>http://maven-eclipse.github.io/maven</url> 
 		</repository>
 	</repositories>
 </project>

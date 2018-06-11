@@ -32,7 +32,7 @@ public class Main {
 	
 
 	public static int getArchBits() {
-		String arch = System.getProperty("os.arch");
+		String arch = System.getProperty("sun.arch.data.model");
 		return arch.contains("64") ? 64 : 32;
 	}
 
