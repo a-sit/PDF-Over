@@ -71,7 +71,6 @@ public class Main {
 		catch (Throwable e) {
 			
 			log.error("Error occured " + e.getMessage()); //$NON-NLS-1$
-			log.error(e.toString());
 			
 			/*JOptionPane.showMessageDialog(null,
 					"Error occured " + e.getMessage(), //$NON-NLS-1$
