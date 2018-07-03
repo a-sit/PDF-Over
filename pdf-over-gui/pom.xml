@@ -170,11 +170,11 @@
 								<artifactItem>
 									<groupId>at.a-sit</groupId>
 									<artifactId>pdf-over-install-helper</artifactId>
-									<version>1.0.0</version>
+									<version>1.0.1</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${staging.dir}/lib</outputDirectory>
-									<destFileName>pdf-over-install-helper-1.0.0.jar</destFileName>
+									<destFileName>pdf-over-install-helper.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

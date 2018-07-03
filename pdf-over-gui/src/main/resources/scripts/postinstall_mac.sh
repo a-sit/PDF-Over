@@ -3,7 +3,7 @@ SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
 BASEDIR=$(cd "$(dirname "$0")/.."; pwd)
 export LC_CTYPE="UTF-8"
 cd "$SCRIPTDIR"
-java -jar "$BASEDIR/lib/pdf-over-install-helper-1.0.0.jar"
+java -jar "$BASEDIR/lib/pdf-over-install-helper.jar"
 chmod a+x pdf-over_mac.sh
 cd "$BASEDIR"
 if [ -d "$BASEDIR.app" ]; then

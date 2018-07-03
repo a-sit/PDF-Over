@@ -71,7 +71,7 @@
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
 				os="unix" stage="never"></executable>
-            <executable targetfile="$INSTALL_PATH/lib/pdf-over-install-helper-1.0.0.jar"
+            <executable targetfile="$INSTALL_PATH/lib/pdf-over-install-helper.jar"
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win.bat"
 				os="windows" stage="never"></executable>
