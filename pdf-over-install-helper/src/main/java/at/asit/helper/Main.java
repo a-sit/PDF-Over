@@ -22,6 +22,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class Main {
 	
+	private final static String SWT_VERSION = "4.8"; 
+	
 	public static void main(String[] args) {
 		
 		System.out.println("start post install task");
@@ -80,13 +82,13 @@ public class Main {
 		String swtTargetLibName; 
 		
 		if (os.contains("win")) {
-				swtTargetLibName = "org.eclipse.swt.win32.win32.x86-4.3.2.jar";
+				swtTargetLibName = "org.eclipse.swt.win32.win32.x86-" + SWT_VERSION + ".jar";
 			}
 		else if (os.contains("mac")) {
-			swtTargetLibName = "org.eclipse.swt.cocoa.macosx-4.3.2.jar";
+			swtTargetLibName = "org.eclipse.swt.cocoa.macosx-" + SWT_VERSION + ".jar";
 		}
 		else if (os.contains("linux") || os.contains("nix")) {
-			swtTargetLibName = "org.eclipse.swt.gtk.linux.x86-4.3.2.jar";
+			swtTargetLibName = "org.eclipse.swt.gtk.linux.x86-" + SWT_VERSION + ".jar";
 		}
 		else {
 			throw new SWTLoadFailedException("Unknown OS: " + os);
