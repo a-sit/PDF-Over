@@ -384,7 +384,12 @@ public class OutputComposite extends StateComposite {
 				File f = new File(FilenameUtils.normalize(
 						OutputComposite.this.outputFile.getAbsolutePath()));
 				log.debug("Trying to open " + f.toString()); //$NON-NLS-1$
-				if (Desktop.isDesktopSupported()) {
+				// work around for the case of Linux and Java version 8 
+				if (isSpecialCase()) {
+					reReloadResources(f.toString()); 
+					return;
+				}
+				else if (Desktop.isDesktopSupported()) {
 					Desktop.getDesktop().open(f);
 				} else {
 					log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
@@ -417,6 +422,32 @@ public class OutputComposite extends StateComposite {
 		this.layout(true);
 	}
 
+	/**
+	 * @return true when linux and java version <= 8
+	 * 
+	 */
+	public boolean isSpecialCase() {
+
+		boolean isSCase = false;
+		try {
+			String os = System.getProperty("os.name").toLowerCase(); //$NON-NLS-1$
+			if (os.contains("linux")) { //$NON-NLS-1$
+				String version = System.getProperty("java.version"); //$NON-NLS-1$
+				if (version.contains(".")) { //$NON-NLS-1$
+					String[] parts = version.split("\\."); //$NON-NLS-1$
+					isSCase = Integer.valueOf(parts[0]) <= 8 ? true : false;
+				} else {
+					isSCase = Integer.valueOf(version) <= 8 ? true : false;
+				}
+			}
+		} catch (Exception e) {
+			log.debug("Error: " + e.getMessage()); //$NON-NLS-1$
+			isSCase = false;
+		}
+		return isSCase;
+	}
+
+	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
@@ -433,4 +464,20 @@ public class OutputComposite extends StateComposite {
 		}
 		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 	}
+	
+	public void reReloadResources(String str) {
+		this.lbl_success_message.setText(Messages.getString("output.success_message")); //$NON-NLS-1$
+		if (this.outputFile == null) {
+			this.lnk_saved_file.setText(Messages
+					.getString("output.link_save_message")); //$NON-NLS-1$
+		} else {
+			String str2 = "File location: " + str; //$NON-NLS-1$
+			this.lbl_success_message.setText(str2);
+			this.lnk_saved_file.setText(""); //$NON-NLS-1$
+		}
+		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+	}
+	
+	
+	
 }
