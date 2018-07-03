@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.1.19</version>
+	<version>4.1.20-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
