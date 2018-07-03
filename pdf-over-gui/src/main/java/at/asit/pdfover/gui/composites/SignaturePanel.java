@@ -426,12 +426,12 @@ public class SignaturePanel extends JPanel {
 		/** Handles a mouseMoved event */
 		@Override
 		public void mouseMoved(MouseEvent evt) {
-//			try {
-			boolean onSig = isOnSignature(evt.getX(), evt.getY());
-			setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
-//			}catch (NullPointerException e) {
-//				log.debug("Error " +e.getMessage()); //$NON-NLS-1$
-//			}
+			try {
+				boolean onSig = isOnSignature(evt.getX(), evt.getY());
+				setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
+			} catch (NullPointerException e) {
+				// do nothing
+			}
 		}
 
 		/** Handles a mousePressed event */
