@@ -228,5 +228,10 @@
 			<id>local-repo</id>
 			<url>file://${project.maindir}/repo</url>
 		</repository>
+		<repository>
+			<id>internal-repo</id>
+			<name>Internal Repository</name>
+			<url>https://apps.egiz.gv.at/maven/</url>
+		</repository>
 	</repositories>
 </project>
