@@ -88,6 +88,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 				try {
 					String responseData = handler.postCredentials();
 
+					//TODO check the response data to determine authentication method 
+				
 					// Now we have received some data lets check it:
 					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		
