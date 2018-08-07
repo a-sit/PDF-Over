@@ -90,8 +90,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	static final Logger log = LoggerFactory
 			.getLogger(MobileBKUFingerprintComposite.class);
 
-//	private Label lblFP;
-
 	boolean userCancel = false;
 	boolean userSMS = false;
 	boolean done = false;
@@ -304,16 +302,10 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		this.lblFPLabel = new Label(containerComposite, SWT.NATIVE);
 		this.lblFPLabel.setAlignment(SWT.LEFT);
 		FormData fd_lblFPLabel = new FormData();
-		fd_lblFPLabel.left = new FormAttachment(0, 0);
+		fd_lblFPLabel.left = new FormAttachment(25, 10);
 		fd_lblFPLabel.top = new FormAttachment(this.lblRefValLabel, 10);
 		this.lblFPLabel.setLayoutData(fd_lblFPLabel);
 
-//		this.lblFP = new Label(containerComposite, SWT.NATIVE);
-//		FormData fd_lblFP = new FormData();
-//		fd_lblFP.left = new FormAttachment(50, 10);
-//		fd_lblFP.right = new FormAttachment(100, -20);
-//		fd_lblFP.top = new FormAttachment(this.lblRefVal, 10);
-//		this.lblFP.setLayoutData(fd_lblFP);
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 

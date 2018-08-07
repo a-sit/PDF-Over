@@ -140,6 +140,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		String refVal = null;
 		String signatureDataURL = null;
 		String qrCode = null;
+		String tanField = null;
+		String tanTextTan = null;
 
 		status.setErrorMessage(null);
 
@@ -227,6 +229,19 @@ public class ATrustHandler extends MobileBKUHandler {
 			} catch (Exception e) {
 				log.debug("No QR Code found"); //$NON-NLS-1$
 			}
+			try {
+				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				status.setTanField(tanField);
+			} catch (Exception e) {
+				log.debug("No tan field found"); //$NON-NLS-1$
+			}
+			try {
+				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				status.setIsAPPTan(tanTextTan);
+			}catch (Exception e) {
+				log.debug("No text_tan tag"); //$NON-NLS-1$
+			}
+			
 		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$

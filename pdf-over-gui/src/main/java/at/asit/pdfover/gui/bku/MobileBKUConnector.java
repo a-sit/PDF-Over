@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.bku;
 
+import java.io.IOException;
+
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,8 +90,6 @@ public class MobileBKUConnector implements BkuSlConnector {
 				try {
 					String responseData = handler.postCredentials();
 
-					//TODO check the response data to determine authentication method 
-				
 					// Now we have received some data lets check it:
 					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
 		
@@ -136,8 +136,38 @@ public class MobileBKUConnector implements BkuSlConnector {
 							enterTAN = false;
 						}
 					}
+					if (enterTAN) {
+						try {
+							this.state.showFingerPrintInformation();
+							if (this.state.getStatus().getErrorMessage() != null &&
+									this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+								throw new SignatureException(new IllegalStateException());
+						} catch (Exception ex) {
+							log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
+							this.state.setThreadException(ex);
+							this.state.displayError(ex);
+							throw new SignatureException(ex);
+						}
+						
+						if (this.state.getSMSStatus()) {
+							String response;
+							try {
+								response = aHandler.postSMSRequest();
+								handler.handleCredentialsResponse(response);
+							} catch (Exception e) {
+								log.error("Error in PostCredentialsThread", e); //$NON-NLS-1$
+								this.state.setThreadException(e);
+								this.state.displayError(e);
+								throw new SignatureException(e);
+							}
+						}
+						else {
+							enterTAN = false; 
+						}
+					}
 				}
-				if (enterTAN) {
+				
+				if (enterTAN || this.state.getSMSStatus()) {
 					// Get TAN
 					this.state.checkTAN();
 

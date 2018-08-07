@@ -39,6 +39,8 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private String viewstate;
 	private String eventvalidation;
 	private String qrcode = null;
+	private boolean tanField = false;
+	private boolean isAPPTan = false;
 
 	/**
 	 * Constructor
@@ -99,6 +101,34 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 */
 	public void setQRCode(String qrcode) {
 		this.qrcode = qrcode;
+	}
+	
+	/**
+	 * @param tanField
+	 */
+	public void setTanField(String tanField) {
+		this.tanField = tanField.equals("input_tan"); //$NON-NLS-1$
+	}
+	
+	/**
+	 * @return boolean if response contained tan field
+	 */
+	public boolean getTanField() {
+		return this.tanField;
+	}
+	
+	/**
+	 * @param tanString the tan string from the response
+	 */
+	public void setIsAPPTan(String tanString) {
+		this.isAPPTan = !tanString.toLowerCase().contains("sms"); //$NON-NLS-1$
+	}
+	
+	/**
+	 * @return true if the user receives the tan via app
+	 */
+	public boolean getIsAPPTan() {
+		return this.isAPPTan;
 	}
 
 	/* (non-Javadoc)
