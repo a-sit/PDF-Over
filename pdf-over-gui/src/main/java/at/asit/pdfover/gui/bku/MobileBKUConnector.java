@@ -15,8 +15,6 @@
  */
 package at.asit.pdfover.gui.bku;
 
-import java.io.IOException;
-
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,8 +133,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 						} else {
 							enterTAN = false;
 						}
-					}
-					if (enterTAN) {
+					} 
+					if (enterTAN && !aStatus.getTanField()) {
 						try {
 							this.state.showFingerPrintInformation();
 							if (this.state.getStatus().getErrorMessage() != null &&
@@ -167,7 +165,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					}
 				}
 				
-				if (enterTAN || this.state.getSMSStatus()) {
+				if (enterTAN) {
 					// Get TAN
 					this.state.checkTAN();
 
