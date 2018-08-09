@@ -12,7 +12,3 @@
 target/
 log/
 *~
-*pom.xml.releaseBackup
-pdf-over-build/
-release.properties
-*.jar-bak
