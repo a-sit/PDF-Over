@@ -4,7 +4,7 @@
 
 	<info>
 		<appname>PDF-Over</appname>
-		<appversion>4.1.19</appversion>
+		<appversion>4.2.1</appversion>
 <!-- 		<javaversion>1.7</javaversion> -->
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
@@ -32,8 +32,8 @@
 		<res id="TargetPanel.dir.windows" src="defaultInstallDirWinProfile.txt" />
 		<res id="JFrameIcon.png" src="icon16x16.png" />
 		<res id="customicons.xml" src="./customicons.xml" />
-		<res id="Installer.image" src="logo.gif" />
-		<res id="Installer.image.0" src="logo.gif" />
+		<res id="Installer.image" src="a-sit-icon.png" />
+		<res id="Installer.image.0" src="a-sit-icon.png" />
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />

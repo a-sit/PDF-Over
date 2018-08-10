@@ -322,7 +322,7 @@ public class ConfigurationComposite extends StateComposite {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-						URI url = new URI("http://demo.a-sit.at/lizenzbedingungen/"); //$NON-NLS-1$
+						URI url = new URI("https://technology.a-sit.at/lizenzbedingungen/"); //$NON-NLS-1$
 						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
 						if (Desktop.isDesktopSupported()) {
 							Desktop.getDesktop().browse(url);
