@@ -300,12 +300,12 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
-		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE ); 
 		FormData fd_lbl_error = new FormData();
-		//fd_lbl_error.top = new FormAttachment(70, -15);
-		fd_lbl_error.bottom = new FormAttachment(100, -20);
-		fd_lbl_error.left = new FormAttachment(15, 0);
-		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10);
+		fd_lbl_error.top = new FormAttachment(87, -15);   
+		fd_lbl_error.bottom = new FormAttachment(103, -20); 
+		fd_lbl_error.left = new FormAttachment(5, 0);
+		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10); 
 		this.lbl_error.setLayoutData(fd_lbl_error);
 
 	}

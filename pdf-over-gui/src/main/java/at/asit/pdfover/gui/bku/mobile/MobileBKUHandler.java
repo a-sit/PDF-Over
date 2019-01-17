@@ -197,8 +197,8 @@ public abstract class MobileBKUHandler {
 		int returnCode = client.executeMethod(post);
 
 		String redirectLocation = null;
-
 		GetMethod get = null;
+		
 
 		String responseData = null;
 
