@@ -17,14 +17,20 @@ package at.asit.pdfover.gui.bku.mobile;
 
 // Imports
 import java.awt.Desktop;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.util.HttpURLConnection;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
@@ -32,6 +38,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
@@ -245,10 +255,15 @@ public class ATrustHandler extends MobileBKUHandler {
 		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
-			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, getStatus().getServer(), null, null));
+			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
 			return;
-		} else {
+		} else if (responseData.contains("page_undecided")) { //$NON-NLS-1$
+			// skip intermediate page 
+			log.debug("Page Undecided"); //$NON-NLS-1$
+			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
+			status.setErrorMessage("waiting..."); //$NON-NLS-1$
+			return; 
+		}else {
 			// error page
 			// extract error text!
 			try {
@@ -439,4 +454,84 @@ public class ATrustHandler extends MobileBKUHandler {
 	public boolean useBase64Request() {
 		return this.useBase64;
 	}
+	
+	
+	/* (non-Javadoc)
+	 * 
+	 */
+	@Override
+	public void handlePolling(String responseData) {
+		
+		ATrustStatus status = getStatus();
+		URLConnection urlconnection = null;
+		String isReady = null; 
+		Status serverStatus = null; 
+		int waits = 0; 
+	    final String ERROR = "Error: Server is not responding";  //$NON-NLS-1$
+
+		try {
+			do {
+				urlconnection = new URL(status.getBaseURL() + "/UndecidedPolling.aspx?sid=" + status.getSessionID()) //$NON-NLS-1$
+						.openConnection();
+				InputStream in = new BufferedInputStream(urlconnection.getInputStream());
+
+				isReady = IOUtils.toString(in, "utf-8"); //$NON-NLS-1$
+				serverStatus = new Status(isReady);
+				if (serverStatus.isWait()) waits++;
+				if (waits > 4) {
+					status.setErrorMessage(ERROR); 
+					log.error(ERROR); 
+					throw new Exception(ERROR); 
+				}
+				
+			} while (serverStatus.isWait());
+
+			if (serverStatus.isFin()) {
+				String response = getSignaturePage();
+				handleCredentialsResponse(response);
+			}
+			else {
+				status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
+				log.error("Server reponded ERROR during polling");  //$NON-NLS-1$
+				return;
+			}
+
+
+		} catch (Exception e) {
+			log.error("handle polling failed" + e.getMessage()); //$NON-NLS-1$
+		}
+
+	}
+	
+	private class Status {
+		private final boolean fin; 
+		private final boolean error; 
+		private final boolean wait; 
+		
+		public Status(String status) {
+			 JsonElement jelement = new JsonParser().parse(status.toLowerCase());
+			 JsonObject  jobject = jelement.getAsJsonObject();
+			 this.fin = jobject.get("fin").getAsBoolean(); //$NON-NLS-1$ 
+			 this.error = jobject.get("error").getAsBoolean(); //$NON-NLS-1$ 
+			 this.wait = jobject.get("wait").getAsBoolean(); //$NON-NLS-1$ 
+		}
+
+		public boolean isFin() {
+			return fin;
+		}
+
+		public boolean isError() {
+			return error;
+		}
+
+		public boolean isWait() {
+			return wait;
+		}
+		
+		
+		
+	}
+	
 }
+
+
