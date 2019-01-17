@@ -15,6 +15,9 @@
  */
 package at.asit.pdfover.gui.bku;
 
+import java.net.URL;
+
+import org.apache.commons.httpclient.util.HttpURLConnection;
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,10 +91,18 @@ public class MobileBKUConnector implements BkuSlConnector {
 				try {
 					String responseData = handler.postCredentials();
 
-					// Now we have received some data lets check it:
-					log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
-		
-					handler.handleCredentialsResponse(responseData);
+					if (responseData.contains("page_undecided"))	{ //$NON-NLS-1$
+						
+						// handle polling 
+						handler.handlePolling(responseData);
+						
+					} else {
+
+					    // Now we have received some data lets check it:
+						log.trace("Response from mobile BKU: " + responseData); //$NON-NLS-1$
+						handler.handleCredentialsResponse(responseData);
+					}
+
 				} catch (Exception ex) {
 					log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
 					this.state.setThreadException(ex);
