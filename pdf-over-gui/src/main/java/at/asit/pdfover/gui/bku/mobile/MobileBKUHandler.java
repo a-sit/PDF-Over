@@ -351,4 +351,6 @@ public abstract class MobileBKUHandler {
 
 		return responseData;
 	}
+	
+	public abstract void handlePolling(String responseData);
 }
