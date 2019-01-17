@@ -355,7 +355,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		// fd_btn_cancel.left = new FormAttachment(95, 0);
 		fd_btn_cancel.right = new FormAttachment(100, -20);
 		//fd_btn_cancel.left = new FormAttachment(100, -70);
-		fd_btn_cancel.bottom = new FormAttachment(100, -20);
+		fd_btn_cancel.bottom = new FormAttachment(100, -5);
 
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
@@ -364,7 +364,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		// fd_btn_sms.left = new FormAttachment(95, 0);
 		fd_btn_sms.right = new FormAttachment(this.btn_cancel, -20);
 		//fd_btn_sms.left = new FormAttachment(100, -70);
-		fd_btn_sms.bottom = new FormAttachment(100, -20);
+		fd_btn_sms.bottom = new FormAttachment(100, -5);
 
 		this.btn_sms.setLayoutData(fd_btn_sms);
 		this.btn_sms.addSelectionListener(new SMSSelectionListener());
