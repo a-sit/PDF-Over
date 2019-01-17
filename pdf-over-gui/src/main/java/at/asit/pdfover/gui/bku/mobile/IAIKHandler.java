@@ -360,4 +360,9 @@ public class IAIKHandler extends MobileBKUHandler {
 	public boolean useBase64Request() {
 		return false;
 	}
+	
+	@Override
+	public void handlePolling(String responseData) {
+		//nothing todo
+	}
 }
