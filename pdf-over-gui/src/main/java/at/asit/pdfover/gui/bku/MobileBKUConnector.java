@@ -94,7 +94,9 @@ public class MobileBKUConnector implements BkuSlConnector {
 					if (responseData.contains("page_undecided"))	{ //$NON-NLS-1$
 						
 						// handle polling 
+						this.state.showOpenAppMessage();
 						handler.handlePolling(responseData);
+						
 						
 					} else {
 

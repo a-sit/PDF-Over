@@ -39,6 +39,7 @@ import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.MobileBKUFingerprintComposite;
 import at.asit.pdfover.gui.composites.MobileBKUQRComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
+import at.asit.pdfover.gui.composites.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.Messages;
@@ -96,7 +97,19 @@ public class MobileBKUState extends State {
 	MobileBKUFingerprintComposite mobileBKUFingerprintComposite = null;
 
 	WaitingComposite waitingComposite = null;
+	
+	WaitingForAppComposite waitingForAppComposite = null;
 
+	
+	WaitingForAppComposite getWaitingForAppComposite() {
+		if (this.waitingForAppComposite == null) {
+			this.waitingForAppComposite = getStateMachine().getGUIProvider()
+					.createComposite(WaitingForAppComposite.class, SWT.RESIZE, this);
+		}
+
+		return this.waitingForAppComposite;
+	}
+	
 	WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
 			this.waitingComposite = getStateMachine().getGUIProvider()
@@ -419,7 +432,18 @@ public class MobileBKUState extends State {
 		});
 	}
 	
-	
+	/**
+	 *  This composite notifies the user to open the signature-app
+	 */
+	public void showOpenAppMessage() {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingForAppComposite());
+			}
+		});
+	}
+
 	/**
 	 *  when fingerprint or faceid is selected in the app 
 	 *  this information is shown 
