@@ -463,8 +463,7 @@ public class MobileBKUState extends State {
 					if (handler.handleQRResponse(resp)) {
 						log.debug("Signature page response: " + resp); //$NON-NLS-1$
 						getMobileBKUFingerprintComposite().setDone(true);
-						Display display = getStateMachine().getGUIProvider().
-								getMainShell().getDisplay();
+						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 						display.wake();
 					}
 					Display.getDefault().wake();

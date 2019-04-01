@@ -46,6 +46,7 @@ import com.google.gson.JsonParser;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
@@ -454,20 +455,20 @@ public class ATrustHandler extends MobileBKUHandler {
 	public boolean useBase64Request() {
 		return this.useBase64;
 	}
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
 	 * 
 	 */
 	@Override
-	public void handlePolling(String responseData) {
-		
+	public void handlePolling(String responseData) throws ATrustConnectionException {
+
 		ATrustStatus status = getStatus();
 		URLConnection urlconnection = null;
-		String isReady = null; 
-		Status serverStatus = null; 
-		int waits = 0; 
-	    final String ERROR = "Error: Server is not responding";  //$NON-NLS-1$
+		String isReady = null;
+		Status serverStatus = null;
+		int waits = 0;
+		final String ERROR = "Error: Server is not responding"; //$NON-NLS-1$
 
 		try {
 			do {
@@ -477,30 +478,29 @@ public class ATrustHandler extends MobileBKUHandler {
 
 				isReady = IOUtils.toString(in, "utf-8"); //$NON-NLS-1$
 				serverStatus = new Status(isReady);
-				if (serverStatus.isWait()) waits++;
+				if (serverStatus.isWait())
+					waits++;
 				if (waits > 4) {
-					status.setErrorMessage(ERROR); 
-					log.error(ERROR); 
-					throw new Exception(ERROR); 
+					status.setErrorMessage(ERROR);
+					log.error(ERROR);
+					throw new ATrustConnectionException();
 				}
-				
+
 			} while (serverStatus.isWait());
 
 			if (serverStatus.isFin()) {
 				String response = getSignaturePage();
 				handleCredentialsResponse(response);
-			}
-			else {
+			} else {
 				status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
-				log.error("Server reponded ERROR during polling");  //$NON-NLS-1$
-				return;
+				log.error("Server reponded ERROR during polling"); //$NON-NLS-1$
+				throw new ATrustConnectionException();
 			}
-
 
 		} catch (Exception e) {
 			log.error("handle polling failed" + e.getMessage()); //$NON-NLS-1$
+			throw new ATrustConnectionException();
 		}
-
 	}
 	
 	private class Status {
@@ -515,6 +515,12 @@ public class ATrustHandler extends MobileBKUHandler {
 			 this.error = jobject.get("error").getAsBoolean(); //$NON-NLS-1$ 
 			 this.wait = jobject.get("wait").getAsBoolean(); //$NON-NLS-1$ 
 		}
+		
+		public Status(boolean error) {
+			this.error = error; 
+			this.fin = false; 
+			this.wait = false; 
+		}
 
 		public boolean isFin() {
 			return fin;
@@ -527,6 +533,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		public boolean isWait() {
 			return wait;
 		}
+		
 		
 		
 		

@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
@@ -355,5 +356,5 @@ public abstract class MobileBKUHandler {
 	/**
 	 * @param responseData
 	 */
-	public abstract void handlePolling(String responseData);
+	public abstract void handlePolling(String responseData) throws ATrustConnectionException;
 }
