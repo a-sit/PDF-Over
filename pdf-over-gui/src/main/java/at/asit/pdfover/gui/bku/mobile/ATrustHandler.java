@@ -156,7 +156,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		status.setErrorMessage(null);
 
-		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
+		if (responseData.contains(/*"ExpiresInfo.aspx?sid="*/"./identification.aspx?sid=")) { //$NON-NLS-1$
 			// Certificate expiration interstitial - skip
 			String notice = Messages.getString("mobileBKU.notice") + " " + //$NON-NLS-1$ //$NON-NLS-2$
 					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -186,7 +186,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				expiryNoticeDisplayed = true;
 			}
 
-			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "ExpiresInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, /*"ExpiresInfo.aspx?sid="*/"./identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
