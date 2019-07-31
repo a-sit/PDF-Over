@@ -41,6 +41,10 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private String qrcode = null;
 	private boolean tanField = false;
 	private boolean isAPPTan = false;
+	private String viewstateGenerator; 
+	private String dynAttrPhonenumber; 
+	private String dynAttrPassword; 
+	private String dynAttrBtnId; 
 
 	/**
 	 * Constructor
@@ -130,6 +134,20 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public boolean getIsAPPTan() {
 		return this.isAPPTan;
 	}
+	
+	/**
+	 * @param viewstateGenerator
+	 */
+	public void setViewStateGenerator(String viewstateGenerator) {
+		this.viewstateGenerator = viewstateGenerator; 
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getViewstateGenerator() {
+		return this.viewstateGenerator;
+	}
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#parseCookies(org.apache.commons.httpclient.Cookie[])
@@ -147,4 +165,49 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 		//not needed yet
 		return null;
 	}
+	
+	
+	
+	/**
+	 * @return the dynAttrPhonenumber
+	 */
+	public String getDynAttrPhonenumber() {
+		return this.dynAttrPhonenumber;
+	}
+
+	/**
+	 * @param dynAttrPhonenumber the dynAttrPhonenumber to set
+	 */
+	public void setDynAttrPhonenumber(String dynAttrPhonenumber) {
+		this.dynAttrPhonenumber = dynAttrPhonenumber;
+	}
+
+	/**
+	 * @return the dynAttrPassword
+	 */
+	public String getDynAttrPassword() {
+		return this.dynAttrPassword;
+	}
+
+	/**
+	 * @param dynAttrPassword the dynAttrPassword to set
+	 */
+	public void setDynAttrPassword(String dynAttrPassword) {
+		this.dynAttrPassword = dynAttrPassword;
+	}
+
+	/**
+	 * @return the dynAttrBtnId
+	 */
+	public String getDynAttrBtnId() {
+		return this.dynAttrBtnId;
+	}
+
+	/**
+	 * @param dynAttrBtnId the dynAttrBtnId to set
+	 */
+	public void setDynAttrBtnId(String dynAttrBtnId) {
+		this.dynAttrBtnId = dynAttrBtnId;
+	}
+
 }

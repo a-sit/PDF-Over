@@ -24,6 +24,11 @@ import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
+import org.jsoup.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,6 +152,23 @@ public class MobileBKUHelper {
 			throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
 		}
 		return found.substring(startidx + 1, endidx);
+	}
+	
+	/**
+	 * This method is the same as the non optional method but instead of throwing the exception it returns null 
+	 * @return the string or null 
+	 */
+	public static String extractValueFromTagWithParamOptional(String data, String tag,
+			String param, String value, String returnparam) {
+		String str; 
+		try {
+			str = extractValueFromTagWithParam(data, tag, param, value, returnparam);
+		} catch (Exception e) {
+			log.debug("Optional value is not available");
+			str = null;
+		}
+		return str;
+		
 	}
 
 	/**
@@ -290,5 +312,22 @@ public class MobileBKUHelper {
 			client.setState(state);
 		}
 		return client;
+	}
+	
+	/***
+	 * 
+	 * @param htmlString describes the html data in String representation 
+	 * @param attributeName is the attribute which should be selected 
+	 * @return returns the attribute name or null otherswise
+	 */
+	public static String getNameAttribute(String htmlString, String attributeName) {
+		
+		Document doc = Jsoup.parse(htmlString);
+		Elements inputs = doc.select("div input#" + attributeName);
+		
+		if (inputs.size() == 0 ) return null; 
+		
+		String name = inputs.get(0).attr("name"); 
+		return name; 
 	}
 }

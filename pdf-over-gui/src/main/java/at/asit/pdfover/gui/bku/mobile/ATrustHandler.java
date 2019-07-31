@@ -106,16 +106,24 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		String eventValidation = MobileBKUHelper.extractValueFromTagWithParam(
 				responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		
+		String viewstateGenerator = MobileBKUHelper.extractValueFromTagWithParamOptional(responseData, "", "id", "__VIEWSTATEGENERATOR", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
+		String dynamicAttrPhonenumber = MobileBKUHelper.getNameAttribute(responseData, "handynummer"); //$NON-NLS-1$
+		String dynamicAttrPassword = MobileBKUHelper.getNameAttribute(responseData, "signaturpasswort"); //$NON-NLS-1$
+		String dynamicAttrButtonId = MobileBKUHelper.getNameAttribute(responseData, "Button_Identification"); //$NON-NLS-1$
+		
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
 		log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
 
 		status.setSessionID(sessionID);
-
 		status.setViewstate(viewState);
-
 		status.setEventvalidation(eventValidation);
+		if (viewstateGenerator != null ) { status.setViewStateGenerator(viewstateGenerator); }
+		status.setDynAttrPhonenumber(dynamicAttrPhonenumber);
+		status.setDynAttrPassword(dynamicAttrPassword);
+		status.setDynAttrBtnId(dynamicAttrButtonId);
 	}
 
 	/* (non-Javadoc)
@@ -131,10 +139,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATEGENERATOR", status.getViewstateGenerator() ); //$NON-NLS-1$
 		post.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter("handynummer", status.getPhoneNumber()); //$NON-NLS-1$
-		post.addParameter("signaturpasswort", status.getMobilePassword()); //$NON-NLS-1$
-		post.addParameter("Button_Identification", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter(status.getDynAttrPhonenumber(), status.getPhoneNumber()); //$NON-NLS-1$
+		post.addParameter(status.getDynAttrPassword(), status.getMobilePassword()); //$NON-NLS-1$
+		post.addParameter(status.getDynAttrBtnId(), "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		return executePost(client, post);
 	}
@@ -153,10 +162,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		String qrCode = null;
 		String tanField = null;
 		String tanTextTan = null;
+		String viewstateGenerator = status.getViewstateGenerator();
 
 		status.setErrorMessage(null);
 
-		if (responseData.contains(/*"ExpiresInfo.aspx?sid="*/"./identification.aspx?sid=")) { //$NON-NLS-1$
+		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
 			// Certificate expiration interstitial - skip
 			String notice = Messages.getString("mobileBKU.notice") + " " + //$NON-NLS-1$ //$NON-NLS-2$
 					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -186,7 +196,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				expiryNoticeDisplayed = true;
 			}
 
-			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, /*"ExpiresInfo.aspx?sid="*/"./identification.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "ExpiresInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
@@ -290,6 +300,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		status.setViewstate(viewState);
 		status.setEventvalidation(eventValidation);
 		status.setSignatureDataURL(signatureDataURL);
+		status.setViewStateGenerator(viewstateGenerator);
 	}
 
 	/* (non-Javadoc)
