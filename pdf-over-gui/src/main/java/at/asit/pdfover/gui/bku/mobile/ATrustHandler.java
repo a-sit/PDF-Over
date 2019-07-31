@@ -112,6 +112,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		String dynamicAttrPhonenumber = MobileBKUHelper.getNameAttribute(responseData, "handynummer"); //$NON-NLS-1$
 		String dynamicAttrPassword = MobileBKUHelper.getNameAttribute(responseData, "signaturpasswort"); //$NON-NLS-1$
 		String dynamicAttrButtonId = MobileBKUHelper.getNameAttribute(responseData, "Button_Identification"); //$NON-NLS-1$
+		String dynamicAttrTan = MobileBKUHelper.getNameAttribute(responseData, "input_tan"); //$NON-NLS-1$
 		
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
@@ -124,6 +125,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		status.setDynAttrPhonenumber(dynamicAttrPhonenumber);
 		status.setDynAttrPassword(dynamicAttrPassword);
 		status.setDynAttrBtnId(dynamicAttrButtonId);
+		status.setDynAttrTan(dynamicAttrTan);
+		
 	}
 
 	/* (non-Javadoc)
@@ -141,9 +144,9 @@ public class ATrustHandler extends MobileBKUHandler {
 		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
 		post.addParameter("__VIEWSTATEGENERATOR", status.getViewstateGenerator() ); //$NON-NLS-1$
 		post.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrPhonenumber(), status.getPhoneNumber()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrPassword(), status.getMobilePassword()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrBtnId(), "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter(status.getDynAttrPhonenumber(), status.getPhoneNumber()); 
+		post.addParameter(status.getDynAttrPassword(), status.getMobilePassword()); 
+		post.addParameter(status.getDynAttrBtnId(), "Identifizieren"); //$NON-NLS-1$ 
 
 		return executePost(client, post);
 	}
@@ -268,7 +271,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
 			return;
-		} else if (responseData.contains("page_undecided")) { //$NON-NLS-1$
+		} else if (responseData.contains(/*page_undecided*/"undecided.aspx?sid=")) { //$NON-NLS-1$
 			// skip intermediate page 
 			log.debug("Page Undecided"); //$NON-NLS-1$
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
@@ -319,7 +322,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
 		post.addParameter(
 				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter("input_tan", status.getTan()); //$NON-NLS-1$
+		post.addParameter(status.getDynAttrTan(), status.getTan()); //$NON-NLS-1$
 		post.addParameter("SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
 		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
 	

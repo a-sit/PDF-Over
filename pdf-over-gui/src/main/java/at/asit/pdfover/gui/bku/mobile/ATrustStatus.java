@@ -45,6 +45,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private String dynAttrPhonenumber; 
 	private String dynAttrPassword; 
 	private String dynAttrBtnId; 
+	private String dynAttrTan; 
 
 	/**
 	 * Constructor
@@ -53,6 +54,20 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public ATrustStatus(ConfigProvider provider) {
 		setPhoneNumber(provider.getDefaultMobileNumber());
 		setMobilePassword(provider.getDefaultMobilePassword());
+	}
+
+	/**
+	 * @return the dynAttrTan
+	 */
+	public String getDynAttrTan() {
+		return dynAttrTan;
+	}
+
+	/**
+	 * @param dynAttrTan the dynAttrTan to set
+	 */
+	public void setDynAttrTan(String dynAttrTan) {
+		this.dynAttrTan = dynAttrTan;
 	}
 
 	/* (non-Javadoc)
