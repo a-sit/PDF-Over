@@ -442,7 +442,52 @@ public class MobileBKUState extends State {
 				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingForAppComposite());
 			}
 		});
+		
 	}
+	
+//	/**
+//	 * 
+//	 */
+//	public void showOpenAppMessageWithSMSandCancel() {
+//			
+//			final ATrustStatus status = (ATrustStatus) this.getStatus();
+//			final ATrustHandler handler = (ATrustHandler) this.getHandler();
+//
+//			Display.getDefault().syncExec(new Runnable() {
+//				@Override
+//				public void run() {
+//					WaitingForAppComposite waitingForAppcomposite = getWaitingForAppComposite();
+//					getStateMachine().getGUIProvider().display(waitingForAppcomposite);
+//
+//					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+//					while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS() && !waitingForAppcomposite.getDone()) {
+//						if (!display.readAndDispatch()) {
+//							display.sleep();
+//						}
+//					}
+//
+//					if (waitingForAppcomposite.getUserCancel()) {
+//						waitingForAppcomposite.setUserCancel(false);
+//						status.setErrorMessage("cancel"); //$NON-NLS-1$
+//						return;
+//					}
+//
+//					if (waitingForAppcomposite.getUserSMS()) {
+//						status.setQRCode(null);
+//						status.setErrorMessage(null);
+//						return; 
+//						
+//					}
+//
+//					if (waitingForAppcomposite.getDone())
+//						waitingForAppcomposite.setDone(false);
+//
+//					// show waiting composite
+//					getStateMachine().getGUIProvider().display(
+//							MobileBKUState.this.getWaitingComposite());
+//				}
+//			});
+//	}
 
 	/**
 	 *  when fingerprint or faceid is selected in the app 
@@ -570,6 +615,8 @@ public class MobileBKUState extends State {
 			this.mobileBKUEnterTANComposite.dispose();
 		if (this.waitingComposite != null)
 			this.waitingComposite.dispose();
+		if (this.waitingForAppComposite != null)
+			this.waitingForAppComposite.dispose();
 	}
 
 	/*

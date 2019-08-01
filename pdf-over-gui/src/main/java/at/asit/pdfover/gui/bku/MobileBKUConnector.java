@@ -97,7 +97,6 @@ public class MobileBKUConnector implements BkuSlConnector {
 						this.state.showOpenAppMessage();
 						handler.handlePolling(responseData);
 						
-						
 					} else {
 
 					    // Now we have received some data lets check it:
@@ -149,6 +148,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					} 
 					if (enterTAN && !aStatus.getTanField()) {
 						try {
+							 
 							this.state.showFingerPrintInformation();
 							if (this.state.getStatus().getErrorMessage() != null &&
 									this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$

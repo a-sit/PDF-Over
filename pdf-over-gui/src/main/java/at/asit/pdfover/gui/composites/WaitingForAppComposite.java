@@ -18,16 +18,12 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.swt.widgets.Button;
-
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -36,37 +32,6 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public class WaitingForAppComposite extends StateComposite {
 	private Label lbl_description;
-	private Button btnRequestSms;
-	private boolean userSms; 
-	
-	/**
-	 * 
-	 */
-	private final class SMSSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public SMSSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(!WaitingForAppComposite.this.btnRequestSms.getEnabled()) {
-				return;
-			}
-
-			WaitingForAppComposite.this.setUserSMS(true);
-			WaitingForAppComposite.this.btnRequestSms.setEnabled(false);
-		}
-	}
-	
-	public void setUserSMS(boolean bool ) {
-		this.userSms = bool; 
-	}
-	
-	public boolean getUserSMS() {
-		return this.userSms; 
-	}
 
 	/**
 	 * Create the composite.
@@ -95,14 +60,6 @@ public class WaitingForAppComposite extends StateComposite {
 		fd_progressBar.right = new FormAttachment(50, +100);
 		progressBar.setLayoutData(fd_progressBar);
 		
-		
-		this.btnRequestSms = new Button(this, SWT.NONE);
-		FormData fd_btnRequestSms = new FormData();
-		fd_btnRequestSms.top = new FormAttachment(progressBar, 23);
-		fd_btnRequestSms.right = new FormAttachment(100, -123);
-		this.btnRequestSms.setLayoutData(fd_btnRequestSms);
-		this.btnRequestSms.setText(Messages.getString("WaitingForAppComposite.btnRequestSms.text")); //$NON-NLS-1$
-		this.btnRequestSms.addSelectionListener(new SMSSelectionListener());
 		reloadResources();
 
 	}
@@ -126,6 +83,5 @@ public class WaitingForAppComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		this.lbl_description.setText(Messages.getString("waiting_for_app.message")); //$NON-NLS-1$
-		this.btnRequestSms.setText(Messages.getString("tanEnter.SMS")); //$NON-NLS-1$
 	}
 }
