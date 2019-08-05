@@ -84,8 +84,8 @@ public class Constants {
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request"; //$NON-NLS-1$
 
 	/** Default Mobile BKU URL */
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile2/https-security-layer-request/default.aspx";//"https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile2/https-security-layer-request/default.aspx";//"https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	//public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
 	/** Default Mobile BKU type */
 	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
@@ -350,7 +350,9 @@ public class Constants {
 
 	/** Download URL for accepted certificates */
 	
-	public static final String CERTIFICATE_DOWNLOAD_XML_URL = "https://www.buergerkarte.at/trust/";
+	public static final String CERTIFICATE_DOWNLOAD_XML_URL = "https://www.buergerkarte.at/trust/"; //$NON-NLS-1$
 	
 	public static final String CERTIFICATE_XML_FILE = "certificates.xml"; //$NON-NLS-1$
+	
+	public static final String LABEL_TAN = "input_tan"; //$NON-NLS-1$
 }

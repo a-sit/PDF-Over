@@ -91,7 +91,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 				try {
 					String responseData = handler.postCredentials();
 
-					if (responseData.contains(/*"page_undecided"*/"undecided.aspx?sid="))	{ //$NON-NLS-1$
+					if (responseData.contains("undecided.aspx?sid="))	{ //$NON-NLS-1$
 						
 						// handle polling 
 						this.state.showOpenAppMessage();
@@ -181,6 +181,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 				if (enterTAN) {
 					// Get TAN
 					this.state.checkTAN();
+					
 
 					if (this.state.getStatus().getErrorMessage() != null &&
 							this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$

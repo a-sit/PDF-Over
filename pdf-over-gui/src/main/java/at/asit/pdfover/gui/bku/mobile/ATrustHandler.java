@@ -43,6 +43,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -125,8 +127,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		status.setDynAttrPhonenumber(dynamicAttrPhonenumber);
 		status.setDynAttrPassword(dynamicAttrPassword);
 		status.setDynAttrBtnId(dynamicAttrButtonId);
-		status.setDynAttrTan(dynamicAttrTan);
-		
+		//status.setDynAttrTan(dynamicAttrTan);
+		status.setDynAttrTan("ctl00$content$input_tan");
 	}
 
 	/* (non-Javadoc)
@@ -222,7 +224,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "tanAppInfo.aspx?sid=", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
+			
 			// Post again to skip
 			MobileBKUHelper.registerTrustedSocketFactory();
 			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
@@ -256,12 +258,14 @@ public class ATrustHandler extends MobileBKUHandler {
 			try {
 				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				status.setTanField(tanField);
+				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
 			} catch (Exception e) {
 				log.debug("No tan field found"); //$NON-NLS-1$
 			}
 			try {
 				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				status.setIsAPPTan(tanTextTan);
+				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
 			}catch (Exception e) {
 				log.debug("No text_tan tag"); //$NON-NLS-1$
 			}
@@ -271,7 +275,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
 			return;
-		} else if (responseData.contains(/*page_undecided*/"undecided.aspx?sid=")) { //$NON-NLS-1$
+		} else if (responseData.contains("undecided.aspx?sid=")) { //$NON-NLS-1$
 			// skip intermediate page 
 			log.debug("Page Undecided"); //$NON-NLS-1$
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
@@ -323,7 +327,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		post.addParameter(
 				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
 		post.addParameter(status.getDynAttrTan(), status.getTan()); //$NON-NLS-1$
-		post.addParameter("SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter(/*button name: "SignButton"*/"ctl00$content$SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
 		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
 	
 		return executePost(client, post);
