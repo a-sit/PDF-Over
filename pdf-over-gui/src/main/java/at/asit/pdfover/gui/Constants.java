@@ -85,8 +85,8 @@ public class Constants {
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request"; //$NON-NLS-1$
 
 	/** Default Mobile BKU URL */
-	public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile2/https-security-layer-request/default.aspx";//"https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile2/https-security-layer-request/default.aspx";//"https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
 	/** Default Mobile BKU type */
 	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
