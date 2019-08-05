@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>at.a-sit</groupId>
 		<artifactId>pdf-over</artifactId>
-		<version>4.2.3-SNAPSHOT</version>
+		<version>4.2.2-SNAPSHOT</version>
 	</parent>
 <!-- 	<groupId>at.a-sit</groupId> -->
 	<artifactId>pdf-over-install-helper</artifactId>
