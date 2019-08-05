@@ -320,7 +320,7 @@ public class MobileBKUHelper {
 	 * @param attributeName is the attribute which should be selected 
 	 * @return returns the attribute name or null otherswise
 	 */
-	public static String getNameAttribute(String htmlString, String attributeName) {
+	public static String getDynamicNameAttribute(String htmlString, String attributeName) {
 		
 		Document doc = Jsoup.parse(htmlString);
 		Elements inputs = doc.select("div input#" + attributeName);

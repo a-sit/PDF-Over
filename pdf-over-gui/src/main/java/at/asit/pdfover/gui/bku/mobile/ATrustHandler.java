@@ -111,10 +111,10 @@ public class ATrustHandler extends MobileBKUHandler {
 		
 		String viewstateGenerator = MobileBKUHelper.extractValueFromTagWithParamOptional(responseData, "", "id", "__VIEWSTATEGENERATOR", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-		String dynamicAttrPhonenumber = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_PHONE_NUMBER); 
-		String dynamicAttrPassword = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_PASS); 
-		String dynamicAttrButtonId = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_BTN_IDF); 
-		String dynamicAttrTan = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN); 
+		String dynamicAttrPhonenumber = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_PHONE_NUMBER); 
+		String dynamicAttrPassword = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_PASS); 
+		String dynamicAttrButtonId = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_BTN_IDF); 
+		String dynamicAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN); 
 		
 		
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
@@ -258,16 +258,16 @@ public class ATrustHandler extends MobileBKUHandler {
 			try {
 				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				status.setTanField(tanField);
-				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
-				status.setDynAttrSignButton(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
+				status.setDynAttrTan(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN));
+				status.setDynAttrSignButton(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
 			} catch (Exception e) {
 				log.debug("No tan field found"); //$NON-NLS-1$
 			}
 			try {
 				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				status.setIsAPPTan(tanTextTan);
-				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
-				status.setDynAttrSignButton(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
+				status.setDynAttrTan(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN));
+				status.setDynAttrSignButton(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
 			}catch (Exception e) {
 				log.debug("No text_tan tag"); //$NON-NLS-1$
 			}
