@@ -111,10 +111,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		
 		String viewstateGenerator = MobileBKUHelper.extractValueFromTagWithParamOptional(responseData, "", "id", "__VIEWSTATEGENERATOR", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-		String dynamicAttrPhonenumber = MobileBKUHelper.getNameAttribute(responseData, "handynummer"); //$NON-NLS-1$
-		String dynamicAttrPassword = MobileBKUHelper.getNameAttribute(responseData, "signaturpasswort"); //$NON-NLS-1$
-		String dynamicAttrButtonId = MobileBKUHelper.getNameAttribute(responseData, "Button_Identification"); //$NON-NLS-1$
-		String dynamicAttrTan = MobileBKUHelper.getNameAttribute(responseData, "input_tan"); //$NON-NLS-1$
+		String dynamicAttrPhonenumber = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_PHONE_NUMBER); 
+		String dynamicAttrPassword = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_PASS); 
+		String dynamicAttrButtonId = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_BTN_IDF); 
+		String dynamicAttrTan = MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN); 
+		
 		
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
@@ -127,8 +128,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		status.setDynAttrPhonenumber(dynamicAttrPhonenumber);
 		status.setDynAttrPassword(dynamicAttrPassword);
 		status.setDynAttrBtnId(dynamicAttrButtonId);
-		//status.setDynAttrTan(dynamicAttrTan);
-		status.setDynAttrTan("ctl00$content$input_tan");
+		status.setDynAttrTan(dynamicAttrTan);
 	}
 
 	/* (non-Javadoc)
@@ -259,6 +259,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				status.setTanField(tanField);
 				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
+				status.setDynAttrSignButton(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
 			} catch (Exception e) {
 				log.debug("No tan field found"); //$NON-NLS-1$
 			}
@@ -266,6 +267,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				status.setIsAPPTan(tanTextTan);
 				status.setDynAttrTan(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_TAN));
+				status.setDynAttrSignButton(MobileBKUHelper.getNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
 			}catch (Exception e) {
 				log.debug("No text_tan tag"); //$NON-NLS-1$
 			}
@@ -326,8 +328,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
 		post.addParameter(
 				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrTan(), status.getTan()); //$NON-NLS-1$
-		post.addParameter(/*button name: "SignButton"*/"ctl00$content$SignButton", "Signieren"); //$NON-NLS-1$ //$NON-NLS-2$
+		post.addParameter(status.getDynAttrTan(), status.getTan()); 
+		post.addParameter(status.getDynAttrSignButton(), "Signieren"); //$NON-NLS-1$ 
 		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
 	
 		return executePost(client, post);

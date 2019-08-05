@@ -46,6 +46,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private String dynAttrPassword; 
 	private String dynAttrBtnId; 
 	private String dynAttrTan; 
+	private String dynAttrSignButton; 
 
 	/**
 	 * Constructor
@@ -60,7 +61,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 * @return the dynAttrTan
 	 */
 	public String getDynAttrTan() {
-		return dynAttrTan;
+		return this.dynAttrTan;
 	}
 
 	/**
@@ -223,6 +224,20 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 */
 	public void setDynAttrBtnId(String dynAttrBtnId) {
 		this.dynAttrBtnId = dynAttrBtnId;
+	}
+
+	/**
+	 * @return the dynAttrSignButton
+	 */
+	public String getDynAttrSignButton() {
+		return this.dynAttrSignButton;
+	}
+
+	/**
+	 * @param dynAttrSignButton the dynAttrSignButton to set
+	 */
+	public void setDynAttrSignButton(String dynAttrSignButton) {
+		this.dynAttrSignButton = dynAttrSignButton;
 	}
 
 }

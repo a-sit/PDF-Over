@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
+import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
 /**
@@ -355,4 +356,13 @@ public class Constants {
 	public static final String CERTIFICATE_XML_FILE = "certificates.xml"; //$NON-NLS-1$
 	
 	public static final String LABEL_TAN = "input_tan"; //$NON-NLS-1$
+	
+	public static final String LABEL_SIGN_BTN = "SignButton"; //$NON-NLS-1$
+	
+	public static final String LABEL_PHONE_NUMBER = "handynummer"; //$NON-NLS-1$
+	
+	public static final String LABEL_SIGN_PASS = "signaturpasswort"; //$NON-NLS-1$
+	
+	public static final String LABEL_BTN_IDF = "Button_Identification"; //$NON-NLS-1$
+	
 }
