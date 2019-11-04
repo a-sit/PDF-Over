@@ -36,6 +36,7 @@ import org.eclipse.swt.events.SelectionEvent;
 public class WaitingForAppComposite extends StateComposite {
 	private Label lbl_description;
 	private Button btn_sms; 
+	private Button btn_cancel;
 	private Boolean isUserSMS = false; 
 	private Boolean userCancel = false; 
 	private Boolean isDone = false; 
@@ -44,7 +45,7 @@ public class WaitingForAppComposite extends StateComposite {
 	 * @return the isDone
 	 */
 	public Boolean getIsDone() {
-		return isDone;
+		return this.isDone;
 	}
 
 	/**
@@ -84,14 +85,40 @@ public class WaitingForAppComposite extends StateComposite {
 		this.btn_sms = new Button(this, SWT.NONE);
 		this.btn_sms.addSelectionListener(new SMSSelectionListener());
 		
-		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.bottom = new FormAttachment(100, -26);
-		fd_btnNewButton.right = new FormAttachment(100, -40);
-		this.btn_sms.setLayoutData(fd_btnNewButton);
+		FormData fd_btnSMS = new FormData();
+		fd_btnSMS.top = new FormAttachment(progressBar, 24);
+		fd_btnSMS.right = new FormAttachment(progressBar, 0, SWT.RIGHT);
+		this.btn_sms.setLayoutData(fd_btnSMS);
 		this.btn_sms.setText(Messages.getString("SMS tan")); //$NON-NLS-1$
+		
+		this.btn_cancel = new Button(this, SWT.NONE);
+		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
+		FormData fd_btnCancel = new FormData();
+		fd_btnCancel.top = new FormAttachment(btn_sms, 0, SWT.TOP);
+		fd_btnCancel.right = new FormAttachment(btn_sms, -6);
+		this.btn_cancel.setLayoutData(fd_btnCancel);
+		this.btn_cancel.setText(Messages.getString("WaitingForAppComposite.btnCancel.text")); //$NON-NLS-1$
 		
 		reloadResources();
 
+	}
+	
+	/**
+	 * 
+	 */
+	private final class CancelSelectionListener extends SelectionAdapter {
+		/**
+		 * Empty constructor
+		 */
+		public CancelSelectionListener() {
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			WaitingForAppComposite.this.setUserCancel(true);
+			WaitingForAppComposite.this.btn_cancel.setEnabled(false);
+			WaitingForAppComposite.this.btn_sms.setEnabled(false);
+		}
 	}
 	
 	private final class SMSSelectionListener extends SelectionAdapter {
@@ -109,6 +136,7 @@ public class WaitingForAppComposite extends StateComposite {
 
 			WaitingForAppComposite.this.setUserSMS(true);
 			WaitingForAppComposite.this.btn_sms.setEnabled(false);
+			WaitingForAppComposite.this.btn_cancel.setEnabled(false);
 		}
 	}
 	
@@ -135,21 +163,23 @@ public class WaitingForAppComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		this.lbl_description.setText(Messages.getString("waiting_for_app.message")); //$NON-NLS-1$
-		this.btn_sms.setText("SMS tan"); //$NON-NLS-1$
+		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //$NON-NLS-1$
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //$NON-NLS-1$
 	}
 
 	/**
 	 * @return
 	 */
 	public boolean getUserCancel() {
-		return userCancel;
+		return this.userCancel;
 	}
 
 	/**
 	 * @param b
 	 */
 	public void setUserCancel(boolean b) {
-		userCancel = b; 
+		this.userCancel = b; 
 		
 	}
 

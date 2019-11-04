@@ -15,10 +15,6 @@
  */
 package at.asit.pdfover.gui.bku;
 
-import java.io.IOException;
-import java.net.URL;
-
-import org.apache.commons.httpclient.util.HttpURLConnection;
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +96,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 							ATrustHandler aHandler = (ATrustHandler) handler;
 							String response = aHandler.postSMSRequest();
 							aHandler.handleCredentialsResponse(response);
+						} else if (((ATrustStatus) this.state.getStatus()).getErrorMessage().equals("cancel")) { //$NON-NLS-1$
+							throw new SignatureException(new IllegalStateException());
 						} else {
 							handler.handlePolling(responseData);
 						}
@@ -113,9 +111,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 				} catch (Exception ex) {
 					log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
-					this.state.setThreadException(ex);
-					this.state.displayError(ex);
-					throw new SignatureException(ex);
+					this.state.setThreadException(new IllegalStateException());
+					throw new SignatureException(new IllegalStateException());
 				}
 			} while(this.state.getStatus().getErrorMessage() != null);
 	
@@ -145,9 +142,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 								handler.handleCredentialsResponse(response);
 							} catch (Exception ex) {
 								log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
-								this.state.setThreadException(ex);
-								this.state.displayError(ex);
-								throw new SignatureException(ex);
+								this.state.setThreadException(new IllegalStateException());
+								throw new SignatureException(new IllegalStateException());
 							}
 						} else {
 							enterTAN = false;
@@ -214,37 +210,6 @@ public class MobileBKUConnector implements BkuSlConnector {
 		} while (this.state.getStatus().getTanTries() == -2);
 
 		return signingState.getSignatureResponse();
-	}
-	
-	
-	private void handleSMSTan(MobileBKUHandler handler) throws Exception {
-		
-		if (handler instanceof ATrustHandler) {
-			((ATrustStatus)this.state.getStatus()).setSmsTan(false);
-			ATrustHandler aHandler = (ATrustHandler) handler;
-			String response = aHandler.postSMSRequest();
-			aHandler.handleCredentialsResponse(response);
-			//((ATrustStatus)this.state.getStatus()).setIsAPPTan("sms"); //$NON-NLS-1$
-			this.state.checkTAN();
-			
-			// Post TAN
-			try {
-				response = aHandler.postTAN();
-				log.trace("Response from mobile BKU: " + response); //$NON-NLS-1$
-	
-				// Now we have received some data lets check it:
-				aHandler.handleTANResponse(response);
-				
-			} catch (Exception ex) {
-				log.error("Error in PostTanThread", ex); //$NON-NLS-1$
-				this.state.setThreadException(ex);
-				this.state.displayError(ex);
-				throw new SignatureException(ex);
-			}
-			// if everything went fine -> return 
-			//return signingState.getSignatureResponse();
-		}
-	}
-		
+	}	
 	
 }

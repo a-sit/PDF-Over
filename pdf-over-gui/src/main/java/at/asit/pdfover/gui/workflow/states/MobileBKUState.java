@@ -446,7 +446,7 @@ public class MobileBKUState extends State {
 	}
 	
 	/**
-	 * 
+	 *  This composite notifies the user to open the signature-app
 	 */
 	public void showOpenAppMessageWithSMSandCancel() {
 
@@ -509,7 +509,7 @@ public class MobileBKUState extends State {
 					waitingForAppcomposite.setIsDone(false);
 
 				// show waiting composite
-				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+				//getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
 			}
 		});
 	}
