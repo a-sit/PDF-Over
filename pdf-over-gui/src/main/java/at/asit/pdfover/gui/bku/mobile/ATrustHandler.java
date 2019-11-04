@@ -444,6 +444,22 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		return executeGet(client, get);
 	}
+	
+	/**
+	 * @param responseData
+	 * @return a boolean
+	 */
+	public Boolean handleWaitforAppResponse(String responseData) {
+		
+		getStatus().setErrorMessage(null); 
+		if (!responseData.contains("Bitte starten Sie Ihre")) { //$NON-NLS-1$
+			//getSigningState().setSignatureResponse(
+				//	new SLResponse(responseData, getStatus().getServer(), null, null));
+			return true;
+			
+		}
+		return false; 
+	}
 
 	/**
 	 * Parse QR code response

@@ -47,6 +47,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	private String dynAttrBtnId; 
 	private String dynAttrTan; 
 	private String dynAttrSignButton; 
+	private boolean smsTan = false;
 
 	/**
 	 * Constructor
@@ -238,6 +239,20 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 */
 	public void setDynAttrSignButton(String dynAttrSignButton) {
 		this.dynAttrSignButton = dynAttrSignButton;
+	}
+
+	/**
+	 * @return the smsTan
+	 */
+	public boolean isSmsTan() {
+		return smsTan;
+	}
+
+	/**
+	 * @param smsTan the smsTan to set
+	 */
+	public void setSmsTan(boolean smsTan) {
+		this.smsTan = smsTan;
 	}
 
 }

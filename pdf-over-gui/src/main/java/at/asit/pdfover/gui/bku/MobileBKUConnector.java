@@ -94,8 +94,20 @@ public class MobileBKUConnector implements BkuSlConnector {
 					if (responseData.contains("undecided.aspx?sid="))	{ //$NON-NLS-1$
 						
 						// handle polling 
-						this.state.showOpenAppMessage();
-						handler.handlePolling(responseData);
+						//this.state.showOpenAppMessage();
+						this.state.showOpenAppMessageWithSMSandCancel();
+
+						if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
+							//((ATrustStatus)this.state.getStatus()).setSmsTan(false);
+							ATrustHandler aHandler = (ATrustHandler) handler;
+							String response = aHandler.postSMSRequest();
+							aHandler.handleCredentialsResponse(response);
+							((ATrustStatus)this.state.getStatus()).setIsAPPTan("sms"); //$NON-NLS-1$
+							this.state.checkTAN();
+						} else {
+							handler.handlePolling(responseData);
+						}
+
 						
 					} else {
 
@@ -146,7 +158,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 							enterTAN = false;
 						}
 					} 
-					if (enterTAN && !aStatus.getTanField()) {
+					if (enterTAN && !aStatus.getTanField() && !aStatus.isSmsTan()) {
 						try {
 							 
 							this.state.showFingerPrintInformation();

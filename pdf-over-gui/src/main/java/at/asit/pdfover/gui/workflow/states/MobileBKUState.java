@@ -445,49 +445,74 @@ public class MobileBKUState extends State {
 		
 	}
 	
-//	/**
-//	 * 
-//	 */
-//	public void showOpenAppMessageWithSMSandCancel() {
-//			
-//			final ATrustStatus status = (ATrustStatus) this.getStatus();
-//			final ATrustHandler handler = (ATrustHandler) this.getHandler();
-//
-//			Display.getDefault().syncExec(new Runnable() {
-//				@Override
-//				public void run() {
-//					WaitingForAppComposite waitingForAppcomposite = getWaitingForAppComposite();
-//					getStateMachine().getGUIProvider().display(waitingForAppcomposite);
-//
-//					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-//					while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS() && !waitingForAppcomposite.getDone()) {
-//						if (!display.readAndDispatch()) {
-//							display.sleep();
-//						}
-//					}
-//
-//					if (waitingForAppcomposite.getUserCancel()) {
-//						waitingForAppcomposite.setUserCancel(false);
-//						status.setErrorMessage("cancel"); //$NON-NLS-1$
-//						return;
-//					}
-//
-//					if (waitingForAppcomposite.getUserSMS()) {
-//						status.setQRCode(null);
-//						status.setErrorMessage(null);
-//						return; 
-//						
-//					}
-//
-//					if (waitingForAppcomposite.getDone())
-//						waitingForAppcomposite.setDone(false);
-//
-//					// show waiting composite
-//					getStateMachine().getGUIProvider().display(
-//							MobileBKUState.this.getWaitingComposite());
-//				}
-//			});
-//	}
+	/**
+	 * 
+	 */
+	public void showOpenAppMessageWithSMSandCancel() {
+
+		final ATrustStatus status = (ATrustStatus) this.getStatus();
+		final ATrustHandler handler = (ATrustHandler) this.getHandler();
+
+		final Timer checkDone = new Timer(true);
+		checkDone.scheduleAtFixedRate(new TimerTask() {
+
+			@Override
+			public void run() {
+				// ping signature page to see if code has been scanned
+				try {
+					String resp = handler.getSignaturePage();
+					if (handler.handleWaitforAppResponse(resp)) {
+						log.debug("Signature page response: " + resp); //$NON-NLS-1$
+						getWaitingForAppComposite().setIsDone(true);
+						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+						display.wake();
+					}
+					Display.getDefault().wake();
+				} catch (Exception e) {
+					log.error("Error getting signature page", e); //$NON-NLS-1$
+				}
+			}
+		}, 0, 5000);
+
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				WaitingForAppComposite waitingForAppcomposite = MobileBKUState.this.getWaitingForAppComposite();// getWaitingForAppComposite();
+				getStateMachine().getGUIProvider().display(waitingForAppcomposite);
+
+				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+				while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
+						&& !waitingForAppcomposite.getIsDone()) {
+					if (!display.readAndDispatch()) {
+						display.sleep();
+					}
+				}
+
+				if (waitingForAppcomposite.getUserCancel()) {
+					waitingForAppcomposite.setUserCancel(false);
+					status.setErrorMessage("cancel"); //$NON-NLS-1$
+					return;
+				}
+
+				if (waitingForAppcomposite.getUserSMS()) {
+					status.setQRCode(null);
+					waitingForAppcomposite.setUserSMS(false);
+					status.setErrorMessage("sms"); //$NON-NLS-1$
+					status.setSmsTan(true);
+					// show waiting composite
+					getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+					return;
+
+				}
+
+				if (waitingForAppcomposite.getIsDone())
+					waitingForAppcomposite.setIsDone(false);
+
+				// show waiting composite
+				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+			}
+		});
+	}
 
 	/**
 	 *  when fingerprint or faceid is selected in the app 
