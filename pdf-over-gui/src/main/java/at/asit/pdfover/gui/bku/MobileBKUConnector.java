@@ -96,7 +96,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 							ATrustHandler aHandler = (ATrustHandler) handler;
 							String response = aHandler.postSMSRequest();
 							aHandler.handleCredentialsResponse(response);
-						} else if (((ATrustStatus) this.state.getStatus()).getErrorMessage().equals("cancel")) { //$NON-NLS-1$
+						} else if (handleErrorMessage()) { 
 							throw new SignatureException(new IllegalStateException());
 						} else {
 							handler.handlePolling(responseData);
@@ -211,5 +211,18 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 		return signingState.getSignatureResponse();
 	}	
+	
+	private boolean handleErrorMessage() {
+		
+		if (this.state.getStatus() instanceof ATrustStatus) {
+			ATrustStatus aStatus = (ATrustStatus)this.state.getStatus() ; 
+			if (aStatus.getErrorMessage() != null && 
+				aStatus.getErrorMessage().equals("cancel")) { //$NON-NLS-1$
+					((ATrustStatus)this.state.getStatus()).setErrorMessage(null);
+					return true;
+			}
+		}
+		return false; 
+	}
 	
 }
