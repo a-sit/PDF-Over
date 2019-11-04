@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.gui.bku;
 
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.httpclient.util.HttpURLConnection;
@@ -92,22 +93,16 @@ public class MobileBKUConnector implements BkuSlConnector {
 					String responseData = handler.postCredentials();
 
 					if (responseData.contains("undecided.aspx?sid="))	{ //$NON-NLS-1$
-						
 						// handle polling 
-						//this.state.showOpenAppMessage();
 						this.state.showOpenAppMessageWithSMSandCancel();
 
 						if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
-							//((ATrustStatus)this.state.getStatus()).setSmsTan(false);
 							ATrustHandler aHandler = (ATrustHandler) handler;
 							String response = aHandler.postSMSRequest();
 							aHandler.handleCredentialsResponse(response);
-							((ATrustStatus)this.state.getStatus()).setIsAPPTan("sms"); //$NON-NLS-1$
-							this.state.checkTAN();
 						} else {
 							handler.handlePolling(responseData);
 						}
-
 						
 					} else {
 
@@ -220,4 +215,36 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 		return signingState.getSignatureResponse();
 	}
+	
+	
+	private void handleSMSTan(MobileBKUHandler handler) throws Exception {
+		
+		if (handler instanceof ATrustHandler) {
+			((ATrustStatus)this.state.getStatus()).setSmsTan(false);
+			ATrustHandler aHandler = (ATrustHandler) handler;
+			String response = aHandler.postSMSRequest();
+			aHandler.handleCredentialsResponse(response);
+			//((ATrustStatus)this.state.getStatus()).setIsAPPTan("sms"); //$NON-NLS-1$
+			this.state.checkTAN();
+			
+			// Post TAN
+			try {
+				response = aHandler.postTAN();
+				log.trace("Response from mobile BKU: " + response); //$NON-NLS-1$
+	
+				// Now we have received some data lets check it:
+				aHandler.handleTANResponse(response);
+				
+			} catch (Exception ex) {
+				log.error("Error in PostTanThread", ex); //$NON-NLS-1$
+				this.state.setThreadException(ex);
+				this.state.displayError(ex);
+				throw new SignatureException(ex);
+			}
+			// if everything went fine -> return 
+			//return signingState.getSignatureResponse();
+		}
+	}
+		
+	
 }
