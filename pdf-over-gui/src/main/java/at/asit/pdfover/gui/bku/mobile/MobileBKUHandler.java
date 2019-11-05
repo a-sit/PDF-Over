@@ -356,5 +356,5 @@ public abstract class MobileBKUHandler {
 	/**
 	 * @param responseData
 	 */
-	public abstract void handlePolling(String responseData) throws ATrustConnectionException;
+	public abstract boolean handlePolling() throws ATrustConnectionException;
 }

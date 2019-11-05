@@ -452,11 +452,10 @@ public class ATrustHandler extends MobileBKUHandler {
 	public Boolean handleWaitforAppResponse(String responseData) {
 		
 		getStatus().setErrorMessage(null); 
-		if (!responseData.contains("Bitte starten Sie Ihre")) { //$NON-NLS-1$
-			//getSigningState().setSignatureResponse(
-				//	new SLResponse(responseData, getStatus().getServer(), null, null));
+		if (!responseData.toLowerCase().contains("Bitte starten Sie Ihre Handy-Signatur App!".toLowerCase())/* ||  //$NON-NLS-1$
+		    responseData.toLowerCase().contains("TAN (Handy-Signatur App)".toLowerCase())*/) { //$NON-NLS-1$
+
 			return true;
-			
 		}
 		return false; 
 	}
@@ -497,14 +496,15 @@ public class ATrustHandler extends MobileBKUHandler {
 	 * 
 	 */
 	@Override
-	public void handlePolling(String responseData) throws ATrustConnectionException {
-
+	public boolean handlePolling() throws ATrustConnectionException {
+		
 		ATrustStatus status = getStatus();
 		URLConnection urlconnection = null;
 		String isReady = null;
 		Status serverStatus = null;
 		int waits = 0;
 		final String ERROR = "Error: Server is not responding"; //$NON-NLS-1$
+		
 
 		try {
 			do {
@@ -527,11 +527,11 @@ public class ATrustHandler extends MobileBKUHandler {
 			if (serverStatus.isFin()) {
 				String response = getSignaturePage();
 				handleCredentialsResponse(response);
-			} else {
-				status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
-				log.error("Server reponded ERROR during polling"); //$NON-NLS-1$
-				throw new ATrustConnectionException();
+				return true; 
 			}
+			status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
+			log.error("Server reponded ERROR during polling"); //$NON-NLS-1$
+			throw new ATrustConnectionException();
 
 		} catch (Exception e) {
 			log.error("handle polling failed" + e.getMessage()); //$NON-NLS-1$

@@ -458,10 +458,10 @@ public class MobileBKUState extends State {
 
 			@Override
 			public void run() {
-				// ping signature page to see if code has been scanned
+				// ping signature page 
 				try {
 					String resp = handler.getSignaturePage();
-					if (handler.handleWaitforAppResponse(resp)) {
+					if (handler.handleWaitforAppResponse(resp) || handler.handlePolling()) {
 						log.debug("Signature page response: " + resp); //$NON-NLS-1$
 						getWaitingForAppComposite().setIsDone(true);
 						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();

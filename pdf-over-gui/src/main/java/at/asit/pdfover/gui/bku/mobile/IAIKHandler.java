@@ -362,7 +362,8 @@ public class IAIKHandler extends MobileBKUHandler {
 	}
 	
 	@Override
-	public void handlePolling(String responseData) {
+	public boolean handlePolling() {
 		//nothing todo
+		return true; 
 	}
 }

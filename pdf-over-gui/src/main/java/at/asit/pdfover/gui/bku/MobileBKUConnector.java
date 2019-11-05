@@ -88,20 +88,17 @@ public class MobileBKUConnector implements BkuSlConnector {
 				try {
 					String responseData = handler.postCredentials();
 
-					if (responseData.contains("undecided.aspx?sid="))	{ //$NON-NLS-1$
-						// handle polling 
+					if (responseData.contains("undecided.aspx?sid=")) { //$NON-NLS-1$
+						// handle polling
 						this.state.showOpenAppMessageWithSMSandCancel();
 
-						if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
-							ATrustHandler aHandler = (ATrustHandler) handler;
-							String response = aHandler.postSMSRequest();
-							aHandler.handleCredentialsResponse(response);
-						} else if (handleErrorMessage()) { 
-							throw new SignatureException(new IllegalStateException());
-						} else {
-							handler.handlePolling(responseData);
-						}
-						
+							if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
+								ATrustHandler aHandler = (ATrustHandler) handler;
+								String response = aHandler.postSMSRequest();
+								aHandler.handleCredentialsResponse(response);
+							} else if (handleErrorMessage()) {
+								throw new SignatureException(new IllegalStateException());
+							} 
 					} else {
 
 					    // Now we have received some data lets check it:
@@ -149,7 +146,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 							enterTAN = false;
 						}
 					} 
-					if (enterTAN && !aStatus.getTanField() && !aStatus.isSmsTan()) {
+					if (enterTAN && !aStatus.getTanField()) {
 						try {
 							 
 							this.state.showFingerPrintInformation();
@@ -158,9 +155,9 @@ public class MobileBKUConnector implements BkuSlConnector {
 								throw new SignatureException(new IllegalStateException());
 						} catch (Exception ex) {
 							log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
-							this.state.setThreadException(ex);
-							this.state.displayError(ex);
-							throw new SignatureException(ex);
+							this.state.setThreadException(new IllegalStateException());
+							//this.state.displayError(ex);
+							throw new SignatureException(new IllegalStateException());
 						}
 						
 						if (this.state.getSMSStatus()) {
