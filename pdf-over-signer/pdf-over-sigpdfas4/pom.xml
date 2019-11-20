@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.1.5</pdf-as.version>
+		<pdf-as.version>4.1.6-RC</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>at.gv.egiz.pdfas</groupId>
-			<artifactId>pdf-as-pdfbox</artifactId>
+			<artifactId>pdf-as-pdfbox-2</artifactId>
 			<version>${pdf-as.version}</version>
 		</dependency>
 		<dependency>
@@ -55,10 +55,15 @@
 		</dependency>
 	</dependencies>
 	<repositories>
+<!-- 		<repository> -->
+<!-- 			<id>pdf-as-4</id> -->
+<!-- 			<name>PDF-AS 4 Repository</name> -->
+<!-- 			<url>https://apps.egiz.gv.at/maven/</url> -->
+<!-- 		</repository> -->
 		<repository>
-			<id>pdf-as-4</id>
-			<name>PDF-AS 4 Repository</name>
-			<url>https://apps.egiz.gv.at/maven/</url>
+			<id>pdf-as-4-rc</id>
+			<name>PDF-AS 4 Repository RC</name>
+			<url>https://apps.egiz.gv.at/releases/pdf-as/release/4.1.6RC/mvn-repo/releases/</url>
 			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
 		<repository>

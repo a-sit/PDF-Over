@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+
 //Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -33,8 +34,9 @@ import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
-import at.gv.egiz.pdfas.lib.impl.pdfbox.placeholder.SignaturePlaceholderExtractor;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
+import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignaturePlaceholderExtractor;
+
 
 /**
  * Selects the data source for the signature process.
