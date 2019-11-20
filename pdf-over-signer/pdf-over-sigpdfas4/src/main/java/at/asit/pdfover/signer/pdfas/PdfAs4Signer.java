@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import javax.activation.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignResultImpl;
@@ -34,10 +31,8 @@ import at.knowcenter.wag.egov.egiz.pdf.TablePos;
  */
 public class PdfAs4Signer implements Signer {
 
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(PdfAs4Signer.class);
+	
+	
 
 	/**
 	 * The template URL
@@ -116,7 +111,7 @@ public class PdfAs4Signer implements Signer {
 			SignParameter param = sstate.getSignParameter();
 
 			Configuration config = param.getConfiguration();
-			log.debug("Use base64 request? " + sstate.getUseBase64Request());
+//			log.debug("Use base64 request? " + sstate.getUseBase64Request());
 			config.setValue(IConfigurationConstants.SL_REQUEST_TYPE,
 					sstate.getUseBase64Request() ?
 							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
