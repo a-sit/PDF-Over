@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow.states;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -35,7 +36,9 @@ import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
+import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsExtractor;
 import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignaturePlaceholderExtractor;
+//import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.
 
 
 /**
@@ -98,13 +101,20 @@ public class OpenState extends State {
 		// - see if we want to scan for placeholders in the settings
 		if (getStateMachine().getConfigProvider().getUseMarker()) {
 			try {
+
 				// - scan for placeholders
 				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
+				
+				// test other placeholders 
+				List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
+				for (String string : fields) {
+					System.out.println(string);
+				}
+				
 				SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor.extract(pddocument,
 						"1", 3);
 
-				if (null != signaturePlaceholderData) {
-					log.debug("we got a position", signaturePlaceholderData.getId()); //$NON-NLS-1$
+				if (null != signaturePlaceholderData || fields.size() > 0) {
 					// create a dialog with ok and cancel buttons and a question
 					// icon
 					MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
@@ -114,6 +124,9 @@ public class OpenState extends State {
 
 					// open dialog and await user selection
 					if (SWT.YES == dialog.open()) {
+						
+						//TODO if yes handle the two differnet cases 
+						
 						// if the user chooses to use the signature placeholder
 						// - fill the position information so that we skip to
 						// the
