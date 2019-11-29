@@ -139,8 +139,10 @@ public class PrepareSigningState extends State {
 								.getDocument()));
 				this.state.signatureParameter.setSignatureDevice(status
 						.getBKU());
-				this.state.signatureParameter.setSignaturePosition(status
+				if (status.getSignaturePosition() != null ) {
+					this.state.signatureParameter.setSignaturePosition(status
 						.getSignaturePosition());
+				}
 
 				if (configuration.getDefaultEmblem() != null
 						&& !configuration.getDefaultEmblem().isEmpty()) {

@@ -15,8 +15,12 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -26,8 +30,10 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.Constants;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.gui.PlaceholderSelectionGui;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -112,7 +118,7 @@ public class OpenState extends State {
 				}
 				
 				SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor.extract(pddocument,
-						"1", 3);
+						"1", 3); //$NON-NLS-1$
 
 				if (null != signaturePlaceholderData || fields.size() > 0) {
 					// create a dialog with ok and cancel buttons and a question
@@ -125,7 +131,41 @@ public class OpenState extends State {
 					// open dialog and await user selection
 					if (SWT.YES == dialog.open()) {
 						
-						//TODO if yes handle the two differnet cases 
+						if (fields.size() > 0) {
+							
+							PlaceholderSelectionGui gui = new PlaceholderSelectionGui(getStateMachine().getGUIProvider().getMainShell(), 
+									65570, "text","select the fields", fields); //$NON-NLS-1$ //$NON-NLS-2$
+							int res = gui.open();
+							if (res != -1) {
+								
+								System.out.println("ok pressed"); //$NON-NLS-1$
+								getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+								//TODO configure and skip placing 
+								//TODO fix this
+								try {
+									String cfgPath = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties"; //$NON-NLS-1$
+								FileInputStream in = new FileInputStream(cfgPath); 
+								Properties props = new Properties();
+								props.load(in);
+								in.close();
+
+								FileOutputStream out = new FileOutputStream(cfgPath); //$NON-NLS-1$
+								props.setProperty("signature_field_name", fields.get(res)); //$NON-NLS-1$ //$NON-NLS-2$
+								props.store(out, null);
+								out.close();
+								
+								} catch (Exception e) {
+									System.err.println(e.getMessage());
+									System.err.println(e.getStackTrace());
+								}
+								
+								this.setNextState(new BKUSelectionState(getStateMachine()));
+								return; 
+								
+							}
+							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+							
+						} else {
 						
 						// if the user chooses to use the signature placeholder
 						// - fill the position information so that we skip to
@@ -138,7 +178,8 @@ public class OpenState extends State {
 						status.setSignaturePosition(position);
 
 						getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
-					} else {
+					} 
+						} else {
 						getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
 					}
 				}
