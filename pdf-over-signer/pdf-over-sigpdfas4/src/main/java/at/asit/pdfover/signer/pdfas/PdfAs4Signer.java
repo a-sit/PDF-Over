@@ -61,7 +61,6 @@ public class PdfAs4Signer implements Signer {
 		String sigProfile = sign_para.getPdfAsSignatureProfileId();
 		String sigEmblem = (sign_para.getEmblem() == null ? null : sign_para.getEmblem().getFileName());
 		String sigNote = sign_para.getProperty("SIG_NOTE");
-		//String sigPos = sign_para.getPdfAsSignaturePosition(); //TODO just for testing
 
 		PdfAs pdfas = PdfAs4Helper.getPdfAs();
 		Configuration config = pdfas.getConfiguration();
@@ -77,7 +76,6 @@ public class PdfAs4Signer implements Signer {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataSource input = new ByteArrayDataSource(parameter.getInputDocument().getByteArray());
 		SignParameter param = PdfAsFactory.createSignParameter(config, input, output);
-//		param.setSignaturePosition(sigPos); //TODO just for testing
 		param.setSignatureProfileId(sigProfile);
 		String id = UUID.randomUUID().toString();
 		param.setTransactionId(id);
@@ -111,7 +109,6 @@ public class PdfAs4Signer implements Signer {
 			SignParameter param = sstate.getSignParameter();
 
 			Configuration config = param.getConfiguration();
-//			log.debug("Use base64 request? " + sstate.getUseBase64Request());
 			config.setValue(IConfigurationConstants.SL_REQUEST_TYPE,
 					sstate.getUseBase64Request() ?
 							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
@@ -130,32 +127,10 @@ public class PdfAs4Signer implements Signer {
 
 			pdfas.sign(param);
 
-			// Preparing Result Response
 			SignResultImpl result = new SignResultImpl();
-
-//			// Set Signer Certificate
-//			result.setSignerCertificate(..);
-			
-			// Set Signature position
-			
-			//TODO just for testing
-//			TablePos tp = new TablePos(param.getSignaturePosition());
-//			SignaturePosition sp;
-//			if (tp.isXauto() && tp.isYauto())
-//				sp = new SignaturePosition();
-//			else if (tp.isPauto())
-//				sp = new SignaturePosition(tp.getPosX(), tp.getPosY());
-//			else
-//				sp = new SignaturePosition(tp.getPosX(), tp.getPosY(), tp.getPage());
-//			result.setSignaturePosition(sp);
-
-			// Set signed Document
 			result.setSignedDocument(new ByteArrayDocumentSource(sstate.getOutput().toByteArray()));
 			return result;
 		} 
-//		catch (PdfAsException e) { //TODO just for testing
-//			throw new SignatureException(e);
-//		} 
 		catch (PDFASError e) {
 			throw new SignatureException(e);
 		}
