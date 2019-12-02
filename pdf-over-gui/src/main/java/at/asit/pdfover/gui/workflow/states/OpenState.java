@@ -18,7 +18,9 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,6 +48,10 @@ import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsExtractor;
 import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignaturePlaceholderExtractor;
 //import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 
 /**
  * Selects the data source for the signature process.
@@ -64,7 +70,8 @@ public class OpenState extends State {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(OpenState.class);
-
+	private static final String advancedConfig = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties"; //$NON-NLS-1$
+	
 	private DataSourceSelectComposite selectionComposite = null;
 
 	private DataSourceSelectComposite getSelectionComposite() {
@@ -140,25 +147,8 @@ public class OpenState extends State {
 								
 								System.out.println("ok pressed"); //$NON-NLS-1$
 								getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
-								//TODO configure and skip placing 
-								//TODO fix this
-								try {
-									String cfgPath = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties"; //$NON-NLS-1$
-								FileInputStream in = new FileInputStream(cfgPath); 
-								Properties props = new Properties();
-								props.load(in);
-								in.close();
 
-								FileOutputStream out = new FileOutputStream(cfgPath); //$NON-NLS-1$
-								props.setProperty("signature_field_name", fields.get(res)); //$NON-NLS-1$ //$NON-NLS-2$
-								props.store(out, null);
-								out.close();
-								
-								} catch (Exception e) {
-									System.err.println(e.getMessage());
-									System.err.println(e.getStackTrace());
-								}
-								
+								addPlaceholderSelectionToConfig(fields.get(res));
 								this.setNextState(new BKUSelectionState(getStateMachine()));
 								return; 
 								
@@ -195,6 +185,40 @@ public class OpenState extends State {
 		}
 
 		this.setNextState(new PositioningState(getStateMachine()));
+	}
+	
+	/**
+	 * The selected placeholder is added to the configuration file
+	 * @param selection
+	 */
+	@SuppressWarnings("static-method")
+	private void addPlaceholderSelectionToConfig(String selection) {
+		try {
+			FileInputStream in = new FileInputStream(advancedConfig);
+//			Properties props = new Properties();
+//			props.load(in);
+//			in.close();
+//			
+//			 
+//
+//			FileOutputStream out = new FileOutputStream(advancedConfig);
+//			props.setProperty(Constants.SIGNATURE_FIELD_NAME_CONF, selection); //$NON-NLS-1$
+//			
+//			props.store(out, null);
+//			out.close();
+			
+
+	        PropertiesConfiguration config = new PropertiesConfiguration();
+	        PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config);
+	        layout.load(new InputStreamReader(new FileInputStream(advancedConfig)));
+
+	        config.setProperty(Constants.SIGNATURE_FIELD_NAME_CONF, selection);
+	        layout.save(new FileWriter(advancedConfig, false));
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e.getStackTrace());
+		}
+
 	}
 
 	/**

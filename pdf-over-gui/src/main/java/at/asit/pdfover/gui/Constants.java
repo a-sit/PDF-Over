@@ -44,6 +44,11 @@ public class Constants {
 		// Has to be set before (implicitly) initializing Display
 		Display.setAppName(APP_NAME);
 	}
+	
+	/**
+	 * 
+	 */
+	public static final String SIGNATURE_FIELD_NAME_CONF = "signature_field_name";
 
 	/** Current display - used for Colors */
 	private static Display display = Display.getCurrent();
