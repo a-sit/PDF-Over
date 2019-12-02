@@ -120,10 +120,6 @@ public class OpenState extends State {
 				
 				// test other placeholders 
 				List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
-				for (String string : fields) {
-					System.out.println(string);
-				}
-				
 				SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor.extract(pddocument,
 						"1", 3); //$NON-NLS-1$
 
@@ -144,8 +140,6 @@ public class OpenState extends State {
 									65570, "text","select the fields", fields); //$NON-NLS-1$ //$NON-NLS-2$
 							int res = gui.open();
 							if (res != -1) {
-								
-								System.out.println("ok pressed"); //$NON-NLS-1$
 								getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
 
 								addPlaceholderSelectionToConfig(fields.get(res));
