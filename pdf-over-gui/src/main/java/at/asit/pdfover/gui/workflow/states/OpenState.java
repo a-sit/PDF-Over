@@ -195,19 +195,6 @@ public class OpenState extends State {
 	private void addPlaceholderSelectionToConfig(String selection) {
 		try {
 			FileInputStream in = new FileInputStream(advancedConfig);
-//			Properties props = new Properties();
-//			props.load(in);
-//			in.close();
-//			
-//			 
-//
-//			FileOutputStream out = new FileOutputStream(advancedConfig);
-//			props.setProperty(Constants.SIGNATURE_FIELD_NAME_CONF, selection); //$NON-NLS-1$
-//			
-//			props.store(out, null);
-//			out.close();
-			
-
 	        PropertiesConfiguration config = new PropertiesConfiguration();
 	        PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config);
 	        layout.load(new InputStreamReader(new FileInputStream(advancedConfig)));
