@@ -187,4 +187,11 @@ public interface PersistentConfigProvider {
 	 * @return whether to use an existing singature marker
 	 */
 	public boolean getUseMarker();
+	
+	/**
+	 * Gets whether to use an existing signature fields.
+	 *
+	 * @return boolean
+	 */
+	public boolean getUseSignatureFields();
 }

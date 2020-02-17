@@ -253,4 +253,11 @@ public interface ConfigProvider {
 	 * @return whether to use a signature maker
 	 */
 	public boolean getUseMarker();
+	
+	/**
+	 * Gets whether to use signature fileds instead of QR code.
+	 *
+	 * @return boolean
+	 */
+	public boolean getUseSignatureFields();
 }

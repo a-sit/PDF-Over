@@ -133,6 +133,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		String useMarker = config.getProperty(Constants.CFG_USE_MARKER);
 		if(null != useMarker)
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
+		
+		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
+		if (useSignatureFields != null)
+			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
 
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
@@ -1460,6 +1464,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public boolean getUseMarker() {
 		return this.configurationOverlay.getUseMarker();
 	}
+	
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getUseSignatureFields()
+	 */
+	@Override
+	public boolean getUseSignatureFields() {
+		return this.configurationOverlay.getUseSignatureFields();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1470,6 +1482,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setUseMarker(boolean useMarker) {
 		this.configurationOverlay.setUseMarker(useMarker);
+		if (useMarker) setUseSignatureFields(false);
 	}
 
+	@Override
+	public void setUseSignatureFields(boolean useFields) {
+		this.configurationOverlay.setUseSignatureFields(useFields);
+		if (useFields) setUseMarker(false);
+	}
+	
 }

@@ -390,6 +390,7 @@ public interface ConfigurationContainer {
 	 */
 	public void setUseMarker(boolean useMarker);
 	
+	
 	/***
 	 * Extension to the standard use marker implementation
 	 * @param useFields
@@ -397,5 +398,8 @@ public interface ConfigurationContainer {
 	public void setUseSignatureFields(boolean useFields);
 	
 	
+	/**
+	 * @return if the usage of signatureFields is enabled
+	 */
 	public boolean getUseSignatureFields();
 }

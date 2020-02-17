@@ -174,13 +174,19 @@ public interface ConfigManipulator {
 	
 	/**
 	 * Sets whether to use an existing signaturemarker.
-	 *
+	 * QR-Code only
+	 * 
 	 * @param useMarker
 	 *            whether to use an existing signaturemarker
 	 */
 	public void setUseMarker(boolean useMarker);
 	
 
+	/**
+	 * Sets the use of signature fields as signature marker 
+	 * @param useFields
+	 */
+	public void setUseSignatureFields(boolean useFields);
 	
 }
 
