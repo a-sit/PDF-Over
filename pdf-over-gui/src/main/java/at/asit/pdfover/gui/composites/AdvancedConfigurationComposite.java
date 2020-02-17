@@ -183,7 +183,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		FormData fd_btnPdfACompat = new FormData();
 		fd_btnPdfACompat.right = new FormAttachment(100, -5);
 		fd_btnPdfACompat.top = new FormAttachment(
-				this.btnSignatureFieldsUsage, 5);
+				this.btnAutomatischePositionierung, 5);
 		fd_btnPdfACompat.left = new FormAttachment(0, 5);
 		this.btnPdfACompat
 				.setLayoutData(fd_btnPdfACompat);
@@ -1225,6 +1225,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
 		this.btnAutomatischePositionierung.setToolTipText(Messages
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
+		this.grpPlaceholder.setText(Messages.getString("advanced_config.Placeholder_Title")); //$NON-NLS-1$
 		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker")); //$NON-NLS-1$
 		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //$NON-NLS-1$
 		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields")); //$NON-NLS-1$
