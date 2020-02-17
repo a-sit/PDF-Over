@@ -79,9 +79,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	private ConfigurationComposite configurationComposite;
 
 	private Group grpSignatur;
+	private Group grpPlaceholder; 
 	Button btnAutomatischePositionierung;
 	Button btnPdfACompat;
 	Button btnPlatzhalterVerwenden;
+	Button btnSignatureFieldsUsage; 
 	private Label lblTransparenz;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenzRechts;
@@ -174,31 +176,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 										.getSelection());
 					}
 				});
-
-		this.btnPlatzhalterVerwenden = new Button(this.grpSignatur, SWT.CHECK);
-		FormData fd_btnPlatzhalterVerwenden = new FormData();
-		fd_btnPlatzhalterVerwenden.right = new FormAttachment(100, -5);
-		fd_btnPlatzhalterVerwenden.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
-		fd_btnPlatzhalterVerwenden.left = new FormAttachment(0, 5);
-		this.btnPlatzhalterVerwenden.setLayoutData(fd_btnPlatzhalterVerwenden);
-
-		FontData[] fD_btnPlatzhalterVerwenden = this.btnPlatzhalterVerwenden.getFont().getFontData();
-		fD_btnPlatzhalterVerwenden[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnPlatzhalterVerwenden.setFont(new Font(Display.getCurrent(), fD_btnPlatzhalterVerwenden[0]));
-
-		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUseMarkerSelection(
-						AdvancedConfigurationComposite.this.btnPlatzhalterVerwenden.getSelection());
-			}
-		});
+		
+		
 
 		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
 		FormData fd_btnPdfACompat = new FormData();
 		fd_btnPdfACompat.right = new FormAttachment(100, -5);
 		fd_btnPdfACompat.top = new FormAttachment(
-				this.btnPlatzhalterVerwenden, 5);
+				this.btnSignatureFieldsUsage, 5);
 		fd_btnPdfACompat.left = new FormAttachment(0, 5);
 		this.btnPdfACompat
 				.setLayoutData(fd_btnPdfACompat);
@@ -273,6 +258,59 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 						.getSelection());
 			}
 		});
+		
+		
+		this.grpPlaceholder = new Group(this, SWT.NONE);
+		FormLayout layout_grpPlaceholder = new FormLayout();
+		layout_grpPlaceholder.marginHeight = 10;
+		layout_grpPlaceholder.marginWidth = 5;
+		this.grpPlaceholder.setLayout(layout_grpPlaceholder);
+		
+		FormData fd_grpPlaceholder = new FormData();
+		fd_grpPlaceholder.top = new FormAttachment(this.grpSignatur, 5);
+		fd_grpPlaceholder.right = new FormAttachment(100, -5);
+		fd_grpPlaceholder.left = new FormAttachment(0, 5);
+		this.grpPlaceholder.setLayoutData(fd_grpPlaceholder);
+
+		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
+		FormData fd_btnPlatzhalterVerwenden = new FormData();
+		fd_btnPlatzhalterVerwenden.right = new FormAttachment(100, -5);
+		fd_btnPlatzhalterVerwenden.top = new FormAttachment(0, 5);
+		fd_btnPlatzhalterVerwenden.left = new FormAttachment(0, 5);
+		this.btnPlatzhalterVerwenden.setLayoutData(fd_btnPlatzhalterVerwenden);
+
+		FontData[] fD_btnPlatzhalterVerwenden = this.btnPlatzhalterVerwenden.getFont().getFontData();
+		fD_btnPlatzhalterVerwenden[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnPlatzhalterVerwenden.setFont(new Font(Display.getCurrent(), fD_btnPlatzhalterVerwenden[0]));
+
+		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+						AdvancedConfigurationComposite.this.btnPlatzhalterVerwenden.getSelection());
+			}
+		});
+		
+		this.btnSignatureFieldsUsage = new Button(this.grpPlaceholder, SWT.RADIO);
+		FormData fd_btnSignatureFieldsUsage = new FormData();
+		fd_btnSignatureFieldsUsage.right = new FormAttachment(100, -5);
+		fd_btnSignatureFieldsUsage.top = new FormAttachment(this.btnPlatzhalterVerwenden, 5);
+		fd_btnSignatureFieldsUsage.left = new FormAttachment(0, 5);
+		this.btnSignatureFieldsUsage.setLayoutData(fd_btnSignatureFieldsUsage);
+		
+		
+		FontData[] fD_btnSignatureFieldsUsage = this.btnSignatureFieldsUsage.getFont().getFontData();
+		fD_btnSignatureFieldsUsage[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnSignatureFieldsUsage.setFont(new Font(Display.getCurrent(), fD_btnSignatureFieldsUsage[0]));
+		
+		this.btnSignatureFieldsUsage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+						AdvancedConfigurationComposite.this.btnSignatureFieldsUsage.getSelection());
+			}
+		});
+		
 
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
 		layout = new FormLayout();
@@ -280,7 +318,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		layout.marginWidth = 5;
 		this.grpBkuAuswahl.setLayout(layout);
 		FormData fd_grpBkuAuswahl = new FormData();
-		fd_grpBkuAuswahl.top = new FormAttachment(this.grpSignatur, 5);
+		fd_grpBkuAuswahl.top = new FormAttachment(this.grpPlaceholder, 5);
 		fd_grpBkuAuswahl.left = new FormAttachment(0, 5);
 		fd_grpBkuAuswahl.right = new FormAttachment(100, -5);
 		this.grpBkuAuswahl.setLayoutData(fd_grpBkuAuswahl);
@@ -1189,6 +1227,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
 		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker")); //$NON-NLS-1$
 		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //$NON-NLS-1$
+		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields")); //$NON-NLS-1$
+		this.btnSignatureFieldsUsage.setToolTipText(Messages.getString("advanced_config.UseSignatureFields_ToolTip")); //$NON-NLS-1$
 		this.btnPdfACompat.setText(Messages
 				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
 		this.btnPdfACompat.setToolTipText(Messages
