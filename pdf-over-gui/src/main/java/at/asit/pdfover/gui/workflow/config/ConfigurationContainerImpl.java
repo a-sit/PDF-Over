@@ -140,6 +140,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Whether to use an existing signature marker. */
 	protected boolean useMarker = false;
 
+	/** Either QR-Code or signature fields as marker */
+	protected boolean useSignatureFields = false; 
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
 	 */
@@ -684,5 +687,21 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public void setUseMarker(boolean useMarker) {
 		this.useMarker = useMarker;
+		if (useMarker) setUseSignatureFields(false);
 	}
+	
+	
+	@Override
+	public void setUseSignatureFields(boolean useFields) {
+		this.useSignatureFields  = useFields;
+		if (useFields) setUseMarker(false);
+	}
+
+	
+	
+	@Override
+	public boolean getUseSignatureFields() {
+		return this.useSignatureFields;
+	}
+	
 }

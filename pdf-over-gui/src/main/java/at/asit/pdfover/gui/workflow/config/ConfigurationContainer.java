@@ -389,4 +389,13 @@ public interface ConfigurationContainer {
 	 *            whether to use an existing signature marker
 	 */
 	public void setUseMarker(boolean useMarker);
+	
+	/***
+	 * Extension to the standard use marker implementation
+	 * @param useFields
+	 */
+	public void setUseSignatureFields(boolean useFields);
+	
+	
+	public boolean getUseSignatureFields();
 }

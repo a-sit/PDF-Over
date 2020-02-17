@@ -271,6 +271,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpPlaceholder.right = new FormAttachment(100, -5);
 		fd_grpPlaceholder.left = new FormAttachment(0, 5);
 		this.grpPlaceholder.setLayoutData(fd_grpPlaceholder);
+		
+		FontData[] fD_grpPlaceholder = this.grpPlaceholder.getFont().getFontData();
+		fD_grpPlaceholder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpPlaceholder.setFont(new Font(Display.getCurrent(),
+				fD_grpPlaceholder[0]));
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
 		FormData fd_btnPlatzhalterVerwenden = new FormData();
@@ -896,7 +901,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performUseMarkerSelection(boolean useMarker) {
 		this.configurationContainer.setUseMarker(useMarker);
-		this.btnPlatzhalterVerwenden.setSelection(useMarker);
+		//this.btnPlatzhalterVerwenden.setSelection(useMarker);
+	}
+	
+	void performUseSignatureFieldsSelection(boolean useFields) {
+		this.configurationContainer.setUseSignatureFields(useFields);
+		//this.btnPlatzhalterVerwenden.setSelection(useMarker);
 	}
 
 	void performPdfACompatSelection(boolean compat) {

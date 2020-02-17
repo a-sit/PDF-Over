@@ -180,6 +180,8 @@ public interface ConfigManipulator {
 	 */
 	public void setUseMarker(boolean useMarker);
 	
+
+	
 }
 
 
