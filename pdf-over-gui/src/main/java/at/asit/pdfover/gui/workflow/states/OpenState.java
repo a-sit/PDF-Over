@@ -85,18 +85,16 @@ public class OpenState extends State {
 	@Override
 	public void run() {
 		Status status = getStateMachine().getStatus();
-		if (!(status.getPreviousState() instanceof PrepareConfigurationState) &&
-			!(status.getPreviousState() instanceof OpenState))
-		{
+		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
+				&& !(status.getPreviousState() instanceof OpenState)) {
 			ConfigProvider config = getStateMachine().getConfigProvider();
 			status.setBKU(config.getDefaultBKU());
 			status.setDocument(null);
 			status.setSignaturePosition(config.getDefaultSignaturePosition());
 		}
-		
+
 		if (status.getDocument() == null) {
-			DataSourceSelectComposite selection = this
-					.getSelectionComposite();
+			DataSourceSelectComposite selection = this.getSelectionComposite();
 
 			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
@@ -106,67 +104,97 @@ public class OpenState extends State {
 			if (status.getDocument() == null) {
 				// Not selected yet
 				return;
-			} 
+			}
 		}
 		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath()); //$NON-NLS-1$
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
-		if (getStateMachine().getConfigProvider().getUseMarker() || getStateMachine().getConfigProvider().getUseSignatureFields()) {
+		if (getStateMachine().getConfigProvider().getEnablePlaceholderUsage()) {
+			// getStateMachine().getConfigProvider().getUseMarker() ||
+			// getStateMachine().getConfigProvider().getUseSignatureFields()) {
 			try {
 
 				// - scan for placeholders
 				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
-				
-				// test other placeholders 
-				List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
-				SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor.extract(pddocument,
-						"1", 3); //$NON-NLS-1$
 
-				if (null != signaturePlaceholderData || fields.size() > 0) {
-					// create a dialog with ok and cancel buttons and a question
-					// icon
-					MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
-							SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-					dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
-					dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
+				if (getStateMachine().getConfigProvider().getUseSignatureFields()) {
 
-					// open dialog and await user selection
-					if (SWT.YES == dialog.open()) {
-						
-						if (fields.size() > 0) {
-							
-							PlaceholderSelectionGui gui = new PlaceholderSelectionGui(getStateMachine().getGUIProvider().getMainShell(), 
-									65570, "text","select the fields", fields); //$NON-NLS-1$ //$NON-NLS-2$
-							int res = gui.open();
-							if (res != -1) {
-								getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+					List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
 
-								addPlaceholderSelectionToConfig(fields.get(res));
-								this.setNextState(new BKUSelectionState(getStateMachine()));
-								return; 
-								
+					if (fields.size() > 0) {
+
+						// create a dialog with ok and cancel buttons and a question
+						// icon
+						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+								SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
+						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
+
+						// open dialog and await user selection
+						if (SWT.YES == dialog.open()) {
+
+							if (fields.size() > 0) {
+
+								PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
+										getStateMachine().getGUIProvider().getMainShell(), 65570, "text", //$NON-NLS-1$
+										"select the fields", fields); //$NON-NLS-1$
+								int res = gui.open();
+								if (res != -1) {
+									getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+
+									addPlaceholderSelectionToConfig(fields.get(res));
+									this.setNextState(new BKUSelectionState(getStateMachine()));
+									return;
+
+								}
+								getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+
 							}
-							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
-							
-						} else {
-						
-						// if the user chooses to use the signature placeholder
-						// - fill the position information so that we skip to
-						// the
-						// next stages without breaking stuff
-						SignaturePosition position = new SignaturePosition(
-								signaturePlaceholderData.getTablePos().getPosX(),
-								signaturePlaceholderData.getTablePos().getPosY(),
-								signaturePlaceholderData.getTablePos().getPage());
-						status.setSignaturePosition(position);
 
-						getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
-					} 
 						} else {
-						getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+						}
 					}
+
+				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
+
+					SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor
+							.extract(pddocument, "1", 3); //$NON-NLS-1$
+
+					if (null != signaturePlaceholderData) {
+
+						// create a dialog with ok and cancel buttons and a question
+						// icon
+						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+								SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
+						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
+
+						// open dialog and await user selection
+						if (SWT.YES == dialog.open()) {
+
+							// if the user chooses to use the signature placeholder
+							// - fill the position information so that we skip to
+							// the
+							// next stages without breaking stuff
+							SignaturePosition position = new SignaturePosition(
+									signaturePlaceholderData.getTablePos().getPosX(),
+									signaturePlaceholderData.getTablePos().getPosY(),
+									signaturePlaceholderData.getTablePos().getPage());
+							status.setSignaturePosition(position);
+
+							getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+
+						} else {
+							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+						}
+					}
+
+				} else {
+					// Do nothing
 				}
+
 			} catch (PdfAsException e) {
 				// fail silently. In case we got here no dialog has been shown.
 				// Just
@@ -180,6 +208,10 @@ public class OpenState extends State {
 
 		this.setNextState(new PositioningState(getStateMachine()));
 	}
+
+
+
+
 	
 	/**
 	 * The selected placeholder is added to the configuration file
