@@ -111,13 +111,11 @@ public class OpenState extends State {
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
 		if (getStateMachine().getConfigProvider().getEnablePlaceholderUsage()) {
-			// getStateMachine().getConfigProvider().getUseMarker() ||
-			// getStateMachine().getConfigProvider().getUseSignatureFields()) {
 			try {
-
 				// - scan for placeholders
 				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
 
+				//first check the signature fields placeholder 
 				if (getStateMachine().getConfigProvider().getUseSignatureFields()) {
 
 					List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
@@ -149,14 +147,13 @@ public class OpenState extends State {
 
 								}
 								getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
-
 							}
 
 						} else {
 							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
 						}
 					}
-
+					// second check if qr code placeholder search is enabled
 				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
 
 					SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor
@@ -205,14 +202,10 @@ public class OpenState extends State {
 				// proceed with the usual process.
 			}
 		}
-
+		
 		this.setNextState(new PositioningState(getStateMachine()));
 	}
 
-
-
-
-	
 	/**
 	 * The selected placeholder is added to the configuration file
 	 * @param selection
