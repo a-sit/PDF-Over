@@ -380,6 +380,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (getUseSignatureFields()) {
 			props.setProperty(Constants.CFG_USE_SIGNATURE_FIELDS, Constants.TRUE);
 		}
+		
+		if (getEnablePlaceholderUsage()) {
+			props.setProperty(Constants.CFG_ENABLE_PLACEHOLDER, Constants.TRUE);
+		}
 
 		if (getSignaturePdfACompat())
 			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.TRUE);
@@ -1485,6 +1489,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public boolean getUseSignatureFields() {
 		return this.configurationOverlay.getUseSignatureFields();
 	}
+	
+	
+	
 
 	/*
 	 * (non-Javadoc)
@@ -1508,6 +1515,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setEnablePlaceholderUsage(boolean bool) {
 		this.configurationOverlay.setEnablePlaceholderUsage(bool);
+	}
+	
+	public boolean getEnablePlaceholderUsage() {
+		return this.configurationOverlay.getEnablePlaceholderUsage();
 	}
 	
 	

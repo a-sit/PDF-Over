@@ -194,4 +194,9 @@ public interface PersistentConfigProvider {
 	 * @return boolean
 	 */
 	public boolean getUseSignatureFields();
+	
+	/**
+	 * @return
+	 */
+	public boolean getEnablePlaceholderUsage();
 }

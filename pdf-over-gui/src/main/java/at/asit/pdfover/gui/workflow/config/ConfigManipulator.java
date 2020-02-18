@@ -193,6 +193,11 @@ public interface ConfigManipulator {
 	 */
 	public void setEnablePlaceholderUsage(boolean bool);
 	
+	/**
+	 * @return
+	 */
+	public boolean getEnablePlaceholderUsage();
+	
 }
 
 

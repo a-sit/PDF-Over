@@ -279,8 +279,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_grpPlaceholder[0]));
 		
 		
-		///-----
-		
 		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
 		FormData fd_btnEnablePlaceholderUsage = new FormData();
 		fd_btnEnablePlaceholderUsage.right = new FormAttachment(100, -5);
@@ -295,7 +293,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnEnablePlaceholderUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+				AdvancedConfigurationComposite.this.performEnableUsePlaceholder(
 						AdvancedConfigurationComposite.this.btnEnablePlaceholderUsage.getSelection());
 			}
 		});
@@ -1080,6 +1078,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				provider.getDefaultSignaturePositionPersistent());
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
+		this.configurationContainer.setEnablePlaceholderUsage(provider.getEnablePlaceholderUsage());
 		/*this.configurationContainer.setDownloadURL(
 				provider.getDownloadURL());*/
 		this.configurationContainer.setSignaturePdfACompat(
@@ -1132,6 +1131,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		performPositionSelection(pos != null && pos.useAutoPositioning());
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
+		performEnableUsePlaceholder(this.configurationContainer.getEnablePlaceholderUsage());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		performLocaleSelectionChanged(this.configurationContainer.getLocale());
@@ -1171,6 +1171,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				this.configurationContainer.getDefaultSignaturePosition());
 		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
+		store.setEnablePlaceholderUsage(this.configurationContainer.getEnablePlaceholderUsage());
 		store.setSignaturePdfACompat(
 				this.configurationContainer.getSignaturePdfACompat());
 		store.setPlaceholderTransparency(

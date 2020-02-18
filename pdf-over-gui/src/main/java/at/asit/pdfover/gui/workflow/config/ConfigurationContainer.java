@@ -409,7 +409,7 @@ public interface ConfigurationContainer {
 	public void setEnablePlaceholderUsage(boolean bool);
 	
 	/**
-	 * @return
+	 * @return boolean
 	 */
 	public boolean getEnablePlaceholderUsage();
 }
