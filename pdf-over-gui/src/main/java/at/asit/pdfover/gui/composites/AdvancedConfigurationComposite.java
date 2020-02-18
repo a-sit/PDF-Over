@@ -311,7 +311,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnSignatureFieldsUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+				AdvancedConfigurationComposite.this.performUseSignatureFieldsSelection(
 						AdvancedConfigurationComposite.this.btnSignatureFieldsUsage.getSelection());
 			}
 		});
@@ -901,12 +901,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 	void performUseMarkerSelection(boolean useMarker) {
 		this.configurationContainer.setUseMarker(useMarker);
-		//this.btnPlatzhalterVerwenden.setSelection(useMarker);
+		this.btnPlatzhalterVerwenden.setSelection(useMarker);
 	}
 	
 	void performUseSignatureFieldsSelection(boolean useFields) {
 		this.configurationContainer.setUseSignatureFields(useFields);
-		//this.btnPlatzhalterVerwenden.setSelection(useMarker);
+		this.btnSignatureFieldsUsage.setSelection(useFields);
 	}
 
 	void performPdfACompatSelection(boolean compat) {
@@ -1047,6 +1047,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setDefaultSignaturePosition(
 				provider.getDefaultSignaturePositionPersistent());
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
+		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
 		/*this.configurationContainer.setDownloadURL(
 				provider.getDownloadURL());*/
 		this.configurationContainer.setSignaturePdfACompat(
@@ -1098,6 +1099,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				.getDefaultSignaturePosition();
 		performPositionSelection(pos != null && pos.useAutoPositioning());
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
+		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
 		this.sclTransparenz.setSelection(this.configurationContainer
 				.getPlaceholderTransparency());
 		performLocaleSelectionChanged(this.configurationContainer.getLocale());
@@ -1136,6 +1138,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		store.setDefaultSignaturePosition(
 				this.configurationContainer.getDefaultSignaturePosition());
 		store.setUseMarker(this.configurationContainer.getUseMarker());
+		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
 		store.setSignaturePdfACompat(
 				this.configurationContainer.getSignaturePdfACompat());
 		store.setPlaceholderTransparency(

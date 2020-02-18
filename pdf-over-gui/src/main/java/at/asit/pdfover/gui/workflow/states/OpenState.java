@@ -112,7 +112,7 @@ public class OpenState extends State {
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
-		if (getStateMachine().getConfigProvider().getUseMarker()) {
+		if (getStateMachine().getConfigProvider().getUseMarker() || getStateMachine().getConfigProvider().getUseSignatureFields()) {
 			try {
 
 				// - scan for placeholders

@@ -115,6 +115,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		
 		// Set Default Certificate Download URL
 				//		.getProperty(Constants.CFG_DOWNLOAD_URL));
+		
+	
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
@@ -135,9 +137,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
 		
 		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
-		if (useSignatureFields != null)
+		if (useSignatureFields == null) {
+			config.setProperty(Constants.CFG_USE_SIGNATURE_FIELDS, ""); 
+		} else {
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
-
+		}
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
 			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
@@ -367,6 +371,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (getUseMarker())
 			props.setProperty(Constants.CFG_USE_MARKER, Constants.TRUE);
+		
+		if (getUseSignatureFields()) {
+			props.setProperty(Constants.CFG_USE_SIGNATURE_FIELDS, Constants.TRUE);
+		}
 
 		if (getSignaturePdfACompat())
 			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.TRUE);
