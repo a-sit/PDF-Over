@@ -137,9 +137,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
 		
 		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
-		if (useSignatureFields == null) {
-			config.setProperty(Constants.CFG_USE_SIGNATURE_FIELDS, ""); 
-		} else {
+		if (useSignatureFields != null) {
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
 		}
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);

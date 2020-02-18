@@ -84,6 +84,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	Button btnPdfACompat;
 	Button btnPlatzhalterVerwenden;
 	Button btnSignatureFieldsUsage; 
+	Button btnEnablePlaceholderUsage; 
 	private Label lblTransparenz;
 	private Label lblTransparenzLinks;
 	private Label lblTransparenzRechts;
