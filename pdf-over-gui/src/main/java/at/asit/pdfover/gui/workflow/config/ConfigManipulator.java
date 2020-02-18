@@ -188,6 +188,11 @@ public interface ConfigManipulator {
 	 */
 	public void setUseSignatureFields(boolean useFields);
 	
+	/**
+	 * @param bool
+	 */
+	public void setEnablePlaceholderUsage(boolean bool);
+	
 }
 
 

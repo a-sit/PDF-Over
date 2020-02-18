@@ -140,6 +140,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (useSignatureFields != null) {
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
 		}
+		
+		String enablePlaceholder = config.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
+		if (enablePlaceholder != null) {
+			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
+		}
+		
+		
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
 			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
@@ -1496,5 +1503,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configurationOverlay.setUseSignatureFields(useFields);
 		if (useFields) setUseMarker(false);
 	}
+	
+	
+	@Override
+	public void setEnablePlaceholderUsage(boolean bool) {
+		this.configurationOverlay.setEnablePlaceholderUsage(bool);
+	}
+	
+	
 	
 }

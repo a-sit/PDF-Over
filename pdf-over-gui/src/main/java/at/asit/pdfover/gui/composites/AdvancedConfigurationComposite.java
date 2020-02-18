@@ -277,11 +277,36 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		fD_grpPlaceholder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.grpPlaceholder.setFont(new Font(Display.getCurrent(),
 				fD_grpPlaceholder[0]));
+		
+		
+		///-----
+		
+		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
+		FormData fd_btnEnablePlaceholderUsage = new FormData();
+		fd_btnEnablePlaceholderUsage.right = new FormAttachment(100, -5);
+		fd_btnEnablePlaceholderUsage.top = new FormAttachment(0, 5);
+		fd_btnEnablePlaceholderUsage.left = new FormAttachment(0, 5);
+		this.btnEnablePlaceholderUsage.setLayoutData(fd_btnEnablePlaceholderUsage);
+
+		FontData[] fD_btnEnablePlaceholderUsage = this.btnEnablePlaceholderUsage.getFont().getFontData();
+		fD_btnEnablePlaceholderUsage[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+		this.btnEnablePlaceholderUsage.setFont(new Font(Display.getCurrent(), fD_btnEnablePlaceholderUsage[0]));
+
+		this.btnEnablePlaceholderUsage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AdvancedConfigurationComposite.this.performUseMarkerSelection(
+						AdvancedConfigurationComposite.this.btnEnablePlaceholderUsage.getSelection());
+			}
+		});
+		
+		////----
+		
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
 		FormData fd_btnPlatzhalterVerwenden = new FormData();
 		fd_btnPlatzhalterVerwenden.right = new FormAttachment(100, -5);
-		fd_btnPlatzhalterVerwenden.top = new FormAttachment(0, 5);
+		fd_btnPlatzhalterVerwenden.top = new FormAttachment(this.btnEnablePlaceholderUsage, 5);
 		fd_btnPlatzhalterVerwenden.left = new FormAttachment(0, 5);
 		this.btnPlatzhalterVerwenden.setLayoutData(fd_btnPlatzhalterVerwenden);
 
@@ -904,12 +929,18 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setUseMarker(useMarker);
 		this.btnPlatzhalterVerwenden.setSelection(useMarker);
 	}
-	
+
 	void performUseSignatureFieldsSelection(boolean useFields) {
 		this.configurationContainer.setUseSignatureFields(useFields);
 		this.btnSignatureFieldsUsage.setSelection(useFields);
 	}
-
+	
+	void performEnableUsePlaceholder(boolean enable) {
+		this.btnPlatzhalterVerwenden.setEnabled(enable);
+		this.btnSignatureFieldsUsage.setEnabled(enable);
+		this.configurationContainer.setEnablePlaceholderUsage(enable);
+	}
+	
 	void performPdfACompatSelection(boolean compat) {
 		this.configurationContainer.setSignaturePdfACompat(compat);
 		this.btnPdfACompat.setSelection(compat);
@@ -1244,6 +1275,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //$NON-NLS-1$
 		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields")); //$NON-NLS-1$
 		this.btnSignatureFieldsUsage.setToolTipText(Messages.getString("advanced_config.UseSignatureFields_ToolTip")); //$NON-NLS-1$
+		this.btnEnablePlaceholderUsage.setText(Messages.getString("advanced_config.Placeholder_Enabled"));
 		this.btnPdfACompat.setText(Messages
 				.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
 		this.btnPdfACompat.setToolTipText(Messages

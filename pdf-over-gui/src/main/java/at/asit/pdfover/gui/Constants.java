@@ -137,6 +137,9 @@ public class Constants {
 	
 	/** The use of signature fields instead of QR codes */
 	public static final String CFG_USE_SIGNATURE_FIELDS = "USE_FIELDS";  //$NON-NLS-1$
+	
+	/** */
+	public static final String CFG_ENABLE_PLACEHOLDER = "USE_PLACEHOLDER_SEARCH"; //$NON-NLS-1$
 
 	/** The signature placeholder transparency config parameter (0-255) */
 	public static final String CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //$NON-NLS-1$

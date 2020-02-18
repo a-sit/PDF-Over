@@ -136,7 +136,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/** Default Download URL for certificates*/
 	protected String downloadURL = null;
 	
-
+	/** describes if the placeholder search is enabled */
+	protected boolean enabledPlaceholderUsage = false; 
+	
 	/** Whether to use an existing signature marker. */
 	protected boolean useMarker = false;
 
@@ -702,6 +704,23 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public boolean getUseSignatureFields() {
 		return this.useSignatureFields;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setEnablePlaceholderUsage(boolean)
+	 */
+	@Override
+	public void setEnablePlaceholderUsage(boolean bool) {
+		this.enabledPlaceholderUsage = bool; 
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getEnablePlaceholderUsage()
+	 */
+	@Override
+	public boolean getEnablePlaceholderUsage() {
+		return this.enabledPlaceholderUsage;
 	}
 	
 }

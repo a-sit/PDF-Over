@@ -402,4 +402,14 @@ public interface ConfigurationContainer {
 	 * @return if the usage of signatureFields is enabled
 	 */
 	public boolean getUseSignatureFields();
+	
+	/**
+	 * @param bool
+	 */
+	public void setEnablePlaceholderUsage(boolean bool);
+	
+	/**
+	 * @return
+	 */
+	public boolean getEnablePlaceholderUsage();
 }
