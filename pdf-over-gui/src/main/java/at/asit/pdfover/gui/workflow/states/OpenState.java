@@ -17,13 +17,10 @@ package at.asit.pdfover.gui.workflow.states;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Properties;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 //Imports
@@ -48,7 +45,6 @@ import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsExtractor;
 import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignaturePlaceholderExtractor;
 //import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
@@ -131,8 +127,13 @@ public class OpenState extends State {
 
 						// open dialog and await user selection
 						if (SWT.YES == dialog.open()) {
-
-							if (fields.size() > 0) {
+							
+							if (fields.size() == 1) {
+								addPlaceholderSelectionToConfig(fields.get(0));
+								this.setNextState(new BKUSelectionState(getStateMachine()));
+								return;
+								
+							} else if (fields.size() > 1) {
 
 								PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
 										getStateMachine().getGUIProvider().getMainShell(), 65570, "text", //$NON-NLS-1$

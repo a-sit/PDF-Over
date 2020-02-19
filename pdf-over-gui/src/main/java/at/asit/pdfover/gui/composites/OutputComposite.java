@@ -465,6 +465,9 @@ public class OutputComposite extends StateComposite {
 		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
 	}
 	
+	/**
+	 * @param str
+	 */
 	public void reReloadResources(String str) {
 		this.lbl_success_message.setText(Messages.getString("output.success_message")); //$NON-NLS-1$
 		if (this.outputFile == null) {

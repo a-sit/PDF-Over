@@ -1517,6 +1517,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configurationOverlay.setEnablePlaceholderUsage(bool);
 	}
 	
+	@Override
 	public boolean getEnablePlaceholderUsage() {
 		return this.configurationOverlay.getEnablePlaceholderUsage();
 	}

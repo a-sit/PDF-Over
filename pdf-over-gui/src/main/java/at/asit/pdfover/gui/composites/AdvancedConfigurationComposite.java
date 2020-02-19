@@ -297,9 +297,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 						AdvancedConfigurationComposite.this.btnEnablePlaceholderUsage.getSelection());
 			}
 		});
-		
-		////----
-		
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
 		FormData fd_btnPlatzhalterVerwenden = new FormData();
@@ -937,6 +934,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnPlatzhalterVerwenden.setEnabled(enable);
 		this.btnSignatureFieldsUsage.setEnabled(enable);
 		this.configurationContainer.setEnablePlaceholderUsage(enable);
+		this.btnEnablePlaceholderUsage.setSelection(enable);
 	}
 	
 	void performPdfACompatSelection(boolean compat) {
