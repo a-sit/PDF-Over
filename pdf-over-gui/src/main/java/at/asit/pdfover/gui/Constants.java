@@ -56,8 +56,26 @@ public class Constants {
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 	
-	public static final String[] SUPPORTED_PROFILES = {"Signaturblock Normal", "Signaturblock Klein", "Amtssignaturblock", "Nur Bildmarke"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	public static final String[] SUPPORTED_PROFILES_STRINGS = {"Signaturblock Normal", "Signaturblock Klein", "Amtssignaturblock", "Nur Bildmarke"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
+	public static enum PROFILE {
+		SIGNATUREBLOCK_NORMAL("Signaturblock Normal"), //$NON-NLS-1$
+		SIGNATUREBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
+		AMTSSIGNATUREBLOCK("Amtssignaturblock"),  //$NON-NLS-1$
+		LOGO_ONLY("Nur Bildmarke"); //$NON-NLS-1$
+
+		public static int length = 4; 
+		private String name; 
+		
+		PROFILE(String profile){
+			this.name = profile; 
+		}
+		
+		public String getName() {
+			return this.name; 
+		}
+	}
+	
 	/** Configuration directory */
 	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 

@@ -726,6 +726,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		return this.enabledPlaceholderUsage;
 	}
 	
+	
 	@Override 
 	public String getSignatureProfile() {
 		return this.signatureProfile; 
