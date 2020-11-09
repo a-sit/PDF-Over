@@ -144,6 +144,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** Either QR-Code or signature fields as marker */
 	protected boolean useSignatureFields = false; 
+	
+	/**	The Signature Profile */
+	protected String signatureProfile = "Normal"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -721,6 +724,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override
 	public boolean getEnablePlaceholderUsage() {
 		return this.enabledPlaceholderUsage;
+	}
+	
+	@Override 
+	public String getSignatureProfile() {
+		return this.signatureProfile; 
 	}
 	
 }

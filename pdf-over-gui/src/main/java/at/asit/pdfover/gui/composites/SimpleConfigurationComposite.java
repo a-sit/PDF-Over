@@ -113,6 +113,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	String logoFile;
 	Image sigPreview = null;
 	Image logo = null;
+	
+	private final Group grpSingnatureProfile;
+	private final Label lblSignatureProfile;
+	private final Combo cmbSingatureProfiles;
+	
 
 	/**
 	 * @param parent
@@ -198,12 +203,80 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				processNumberChanged();
 			}
 		});
+		
+		
+		//-----------------------------------------------------------------------
+		
+		this.grpSingnatureProfile = new Group(this, SWT.NONE);
+		
+		FormData fd_grpSingnatureProfile = new FormData();
+		fd_grpSingnatureProfile.right = new FormAttachment(100, -5);
+		fd_grpSingnatureProfile.left = new FormAttachment(0, 5);
+		fd_grpSingnatureProfile.top = new FormAttachment(this.grpHandySignatur, 5);
+		this.grpSingnatureProfile.setLayoutData(fd_grpSingnatureProfile);
+		this.grpSingnatureProfile.setLayout(new GridLayout(2, false));
+		this.grpSingnatureProfile.setText("Signature Profile");
+		
+		
+		this.lblSignatureProfile = new Label(this.grpSingnatureProfile, SWT.NONE);
+		
+		FontData[] fD_grpSingnatureProfile = this.grpSingnatureProfile.getFont()
+				.getFontData();
+		fD_grpSingnatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpSingnatureProfile.setFont(new Font(Display.getCurrent(),
+				fD_grpSingnatureProfile[0]));
+		
+		// TODO create text for each language 
+		this.lblSignatureProfile.setText("Profile"); //$NON-NLS-1$
+		
+		FontData[] fD_lblSignatureProfile = this.lblSignatureProfile.getFont()
+				.getFontData();
+		fD_lblSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblSignatureProfile.setFont(new Font(Display.getCurrent(),
+				fD_lblSignatureProfile[0]));
+		
+		this.cmbSingatureProfiles = new Combo(this.grpSingnatureProfile, SWT.READ_ONLY);
+		FormData fd_cmbSingatureProfiles = new FormData();
+		fd_cmbSingatureProfiles.left = new FormAttachment(this.grpSingnatureProfile, 10);
+		fd_cmbSingatureProfiles.right = new FormAttachment(100, -10);
+		fd_cmbSingatureProfiles.top = new FormAttachment(0, 10);
+		fd_cmbSingatureProfiles.bottom = new FormAttachment(100, -10);
+		this.grpSingnatureProfile.setLayoutData(fd_cmbSingatureProfiles);
+
+		FontData[] fD_cmbSignatureLang = this.grpSingnatureProfile.getFont()
+				.getFontData();
+		fD_cmbSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpSingnatureProfile.setFont(new Font(Display.getCurrent(),
+				fD_cmbSignatureLang[0]));
+
+		String[] profiles = new String[Constants.SUPPORTED_PROFILES.length];
+		for (int i = 0; i < Constants.SUPPORTED_PROFILES.length; ++i) {
+			profiles[i] = Constants.SUPPORTED_PROFILES[i];
+		}
+		this.cmbSignatureLang.setItems(profiles);
+		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer
+						.getSignatureLocale();
+				String selectedLocale = Constants.
+						SUPPORTED_PROFILES[SimpleConfigurationComposite.this.cmbSignatureLang
+						                  .getSelectionIndex()];
+				if (!currentLocale.equals(selectedLocale)) {
+					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
+				}
+			}
+		});
+		
+		
+		//------------------------------------------------------------------------
+		
 
 		this.grpLogo = new Group(this, SWT.NONE);
 		FormData fd_grpBildmarke = new FormData();
 		fd_grpBildmarke.left = new FormAttachment(0, 5);
 		fd_grpBildmarke.right = new FormAttachment(100, -5);
-		fd_grpBildmarke.top = new FormAttachment(this.grpHandySignatur, 5);
+		fd_grpBildmarke.top = new FormAttachment(this.grpSingnatureProfile, 5);
 		this.grpLogo.setLayoutData(fd_grpBildmarke);
 		this.grpLogo.setLayout(new FormLayout());
 
@@ -411,16 +484,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbSignatureLang.bottom = new FormAttachment(100, -10);
 		this.cmbSignatureLang.setLayoutData(fd_cmbSignatureLang);
 
-		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
-				.getFontData();
-		fD_cmbSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+//		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
+//				.getFontData();
+//		fD_cmbSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.cmbSignatureLang.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureLang[0]));
 
-		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
-		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
-		}
+//		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
+//		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
+//			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
+//		}
 		this.cmbSignatureLang.setItems(localeSignStrings);
 		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -704,6 +777,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				processSignatureNoteChanged();
 			}
 		}
+	}
+	
+	private void preformProfileSelectionChanged(String selected, String previous) {
+		
+		
+		
+		
 	}
 
 	/*

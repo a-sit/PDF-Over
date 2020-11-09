@@ -55,6 +55,8 @@ public class Constants {
 
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
+	
+	public static final String[] SUPPORTED_PROFILES = {"Signaturblock Normal", "Signaturblock Klein", "Amtssignaturblock", "Nur Bildmarke"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	/** Configuration directory */
 	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$

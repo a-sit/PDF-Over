@@ -412,4 +412,10 @@ public interface ConfigurationContainer {
 	 * @return boolean
 	 */
 	public boolean getEnablePlaceholderUsage();
+	
+	
+	/**
+	 * @return selected signature profile as string
+	 */
+	public String getSignatureProfile();
 }
