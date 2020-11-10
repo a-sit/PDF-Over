@@ -116,7 +116,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	Image logo = null;
 	
 	private final Group grpSignatureProfile;
-//	private final Label lblSignatureProfile;
 	private final Combo cmbSingatureProfiles;
 
 
@@ -216,7 +215,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpSingnatureProfile.left = new FormAttachment(0, 5);
 		fd_grpSingnatureProfile.top = new FormAttachment(this.grpHandySignatur, 5);
 		this.grpSignatureProfile.setLayoutData(fd_grpSingnatureProfile);
-//		this.grpSignatureProfile.setLayout(new GridLayout(2, false));
 		this.grpSignatureProfile.setText("Signature Profile"); //$NON-NLS-1$
 		this.grpSignatureProfile.setLayout(new FormLayout());
 	
@@ -241,30 +239,20 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
-
-		String[] profiles = new String[PROFILE.length];
-		int i = 0; 
-		for (PROFILE profile : PROFILE.values()) {
-			profiles[i] = profile.name();
-			i++;
-		}
-		
-		this.cmbSingatureProfiles.setItems(profiles);
+		this.cmbSingatureProfiles.setItems(PROFILE.getProfileStrings());
+		this.configurationContainer.getSignatureProfile();
+		this.cmbSingatureProfiles.select(this.configurationContainer.getSignatureProfile().ordinal());
 		this.cmbSingatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				String selected = profiles[SimpleConfigurationComposite.this.cmbSingatureProfiles
-						                  .getSelectionIndex()];
+				PROFILE current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
+				PROFILE selected = PROFILE.getProfileByIndex(SimpleConfigurationComposite.this.cmbSingatureProfiles
+						                  .getSelectionIndex());
 				if (!current.equals(selected)) {
-					preformProfileSelectionChanged(selected, current);
+					preformProfileSelectionChanged(selected);
 				}
 			}
 		});
-		
-		
-		//------------------------------------------------------------------------
-		
 
 		this.grpLogo = new Group(this, SWT.NONE);
 		FormData fd_grpBildmarke = new FormData();
@@ -772,12 +760,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		}
 	}
-	private void preformProfileSelectionChanged(String selected, String previous) {
 	
-		
-		
-		
-		
+    void preformProfileSelectionChanged(PROFILE selected) {
+		log.debug("Signature Profile {0} was selected", selected.getName());
+    	this.configurationContainer.setSignatureProfile(selected);
 	}
 
 	/*

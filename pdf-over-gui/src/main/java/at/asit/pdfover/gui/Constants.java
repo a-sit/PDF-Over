@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
+import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
@@ -59,7 +60,7 @@ public class Constants {
 	public static final String[] SUPPORTED_PROFILES_STRINGS = {"Signaturblock Normal", "Signaturblock Klein", "Amtssignaturblock", "Nur Bildmarke"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	public static enum PROFILE {
-		SIGNATUREBLOCK_NORMAL("Signaturblock Normal"), //$NON-NLS-1$
+		SIGNATUREBLOCK_NORMAL("Signaturblock Normal") , //$NON-NLS-1$
 		SIGNATUREBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
 		AMTSSIGNATUREBLOCK("Amtssignaturblock"),  //$NON-NLS-1$
 		LOGO_ONLY("Nur Bildmarke"); //$NON-NLS-1$
@@ -71,8 +72,39 @@ public class Constants {
 			this.name = profile; 
 		}
 		
+		public static String[] getProfileStrings() {
+			String[] profiles = new String[PROFILE.length];
+			int i = 0; 
+			for (PROFILE profile : PROFILE.values()) {
+				profiles[i] = profile.getName();
+				i++;
+			}
+			return profiles;
+		}
+		
+		public static PROFILE getProfileByIndex(int index) {
+			String[] profiles = getProfileStrings();
+			if (profiles.length < index) {
+				return null;
+			}
+			return getProfile(profiles[index]);
+		}
+		
 		public String getName() {
 			return this.name; 
+		}
+		
+		public static PROFILE getProfile(String profile) {
+			if (SIGNATUREBLOCK_NORMAL.getName().equals(profile)) {
+				return SIGNATUREBLOCK_NORMAL;
+			} else if (SIGNATUREBLOCK_SMALL.getName().equals(profile)) {
+				return SIGNATUREBLOCK_SMALL;
+			} else if (AMTSSIGNATUREBLOCK.getName().equals(profile)) {
+				return AMTSSIGNATUREBLOCK;
+			} else if (LOGO_ONLY.getName().equals(profile)) {
+				return LOGO_ONLY;
+			} 
+			return null; 
 		}
 	}
 	

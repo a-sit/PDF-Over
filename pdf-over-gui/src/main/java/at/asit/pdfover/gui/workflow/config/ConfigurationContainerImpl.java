@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
@@ -146,7 +147,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected boolean useSignatureFields = false; 
 	
 	/**	The Signature Profile */
-	protected String signatureProfile = "Normal"; //$NON-NLS-1$
+	protected PROFILE signatureProfile = PROFILE.SIGNATUREBLOCK_NORMAL; //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -728,8 +729,13 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	
 	
 	@Override 
-	public String getSignatureProfile() {
+	public PROFILE getSignatureProfile() {
 		return this.signatureProfile; 
 	}
 	
+	@Override
+	public void setSignatureProfile(PROFILE profile) {
+		this.signatureProfile = profile;
+	}
+ 	
 }

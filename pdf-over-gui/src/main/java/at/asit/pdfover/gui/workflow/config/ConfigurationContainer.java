@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import org.eclipse.swt.graphics.Point;
 
+import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -415,7 +416,13 @@ public interface ConfigurationContainer {
 	
 	
 	/**
+	 * @param profile set the selected profile
+	 */
+	public void setSignatureProfile(PROFILE profile);
+	
+	
+	/**
 	 * @return selected signature profile as string
 	 */
-	public String getSignatureProfile();
+	public PROFILE getSignatureProfile();
 }
