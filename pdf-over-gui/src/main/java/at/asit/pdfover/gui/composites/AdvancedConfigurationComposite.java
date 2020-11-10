@@ -1183,6 +1183,8 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		store.setLocale(this.configurationContainer.getLocale());
 
 		store.setUpdateCheck(this.configurationContainer.getUpdateCheck());
+		
+		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
 
 		String hostOld = provider.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.getProxyHost();

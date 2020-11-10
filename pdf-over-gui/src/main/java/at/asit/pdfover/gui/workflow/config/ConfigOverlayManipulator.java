@@ -131,4 +131,10 @@ public interface ConfigOverlayManipulator {
 	 * @param configurationFile
 	 */
 	public void setConfigurationFile(String configurationFile);
+	
+	/**
+	 * 
+	 * @param profile
+	 */
+	public void setSignatureProfile(String profile); 
 }

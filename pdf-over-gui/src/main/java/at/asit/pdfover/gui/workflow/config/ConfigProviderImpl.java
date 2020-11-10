@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -112,11 +113,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		// Set Output Folder
 		setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
-		
-		// Set Default Certificate Download URL
-				//		.getProperty(Constants.CFG_DOWNLOAD_URL));
-		
-	
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
@@ -146,6 +142,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
 		}
 		
+		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
+		if (signatureProfile != null) {
+			this.configuration.setSignatureProfile(PROFILE.getProfile(signatureProfile));
+		}
 		
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
@@ -157,14 +157,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (bkuUrl != null && !bkuUrl.isEmpty()) {
 			this.configuration.setMobileBKUURL(bkuUrl);
 		}
-
-  		/*String downloadURL = config
-				.getProperty(Constants.CFG_DOWNLOAD_URL);
-		
-		if (downloadURL != null && !downloadURL.isEmpty()) {
-			this.configuration.setDownloadURL(downloadURL);
-		}*/
-		
 
 		String bkuType = config
 				.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
@@ -433,6 +425,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (!getUpdateCheck())
 			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
+		
+		props.setProperty(Constants.SIGNATURE_PROFILE, getSignatureProfile());
 		
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
@@ -1509,6 +1503,16 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public void setUseSignatureFields(boolean useFields) {
 		this.configurationOverlay.setUseSignatureFields(useFields);
 		if (useFields) setUseMarker(false);
+	}
+	
+	@Override
+	public void setSignatureProfile(String profile) {
+		this.configurationOverlay.setSignatureProfile(PROFILE.getProfile(profile));
+	}
+	
+	@Override
+	public String getSignatureProfile() {
+		return this.configurationOverlay.getSignatureProfile().getName();
 	}
 	
 	

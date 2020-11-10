@@ -40,6 +40,8 @@ public class Constants {
 
 	/** Application name + version */
 	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //$NON-NLS-1$
+	
+	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE"; //$NON-NLS-1$
 
 	static {
 		// Has to be set before (implicitly) initializing Display

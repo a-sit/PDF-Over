@@ -265,4 +265,17 @@ public interface ConfigProvider {
 	 * @return
 	 */
 	public boolean getEnablePlaceholderUsage();
+
+	/**
+	 * @param profile
+	 */
+	public void setSignatureProfile(String profile);
+	
+	
+	/**
+	 * @return
+	 */
+	public String getSignatureProfile();
 }
+
+
