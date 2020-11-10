@@ -119,6 +119,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 //	private final Label lblSignatureProfile;
 	private final Combo cmbSingatureProfiles;
 
+
 	
 
 	/**
@@ -210,32 +211,21 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		//-----------------------------------------------------------------------
 		
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
-		
 		FormData fd_grpSingnatureProfile = new FormData();
 		fd_grpSingnatureProfile.right = new FormAttachment(100, -5);
 		fd_grpSingnatureProfile.left = new FormAttachment(0, 5);
 		fd_grpSingnatureProfile.top = new FormAttachment(this.grpHandySignatur, 5);
 		this.grpSignatureProfile.setLayoutData(fd_grpSingnatureProfile);
-		//this.grpSignatureProfile.setLayout(new GridLayout(2, false));
+//		this.grpSignatureProfile.setLayout(new GridLayout(2, false));
 		this.grpSignatureProfile.setText("Signature Profile"); //$NON-NLS-1$
-		
-		
-//		this.lblSignatureProfile = new Label(this.grpSignatureProfile, SWT.NONE);
-//		
+		this.grpSignatureProfile.setLayout(new FormLayout());
+	
 		FontData[] fD_grpSignatureProfile = this.grpSignatureProfile.getFont()
 				.getFontData();
 		fD_grpSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.grpSignatureProfile.setFont(new Font(Display.getCurrent(),
 				fD_grpSignatureProfile[0]));
 		
-		// TODO create text for each language 
-//		this.lblSignatureProfile.setText("Profile"); //$NON-NLS-1$
-//		
-//		FontData[] fD_lblSignatureProfile = this.lblSignatureProfile.getFont()
-//				.getFontData();
-//		fD_lblSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-//		this.lblSignatureProfile.setFont(new Font(Display.getCurrent(),
-//				fD_lblSignatureProfile[0]));
 		
 		this.cmbSingatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
 		
@@ -246,11 +236,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cmbSingatureProfiles.bottom = new FormAttachment(100, -10);
 		this.cmbSingatureProfiles.setLayoutData(fd_cmbSingatureProfiles);
 
-
-		FontData[] fD_cmbSignatureProfile = this.grpSignatureProfile.getFont()
+		FontData[] fD_cmbSignatureProfile = this.cmbSingatureProfiles.getFont()
 				.getFontData();
 		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSignatureProfile.setFont(new Font(Display.getCurrent(),
+		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
 
 		String[] profiles = new String[PROFILE.length];
