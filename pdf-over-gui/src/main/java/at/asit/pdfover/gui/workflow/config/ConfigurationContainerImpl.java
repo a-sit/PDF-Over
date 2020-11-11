@@ -147,7 +147,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected boolean useSignatureFields = false; 
 	
 	/**	The Signature Profile */
-	protected PROFILE signatureProfile = PROFILE.SIGNATUREBLOCK_NORMAL; 
+	protected PROFILE signatureProfile = null; 
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -730,6 +730,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	
 	@Override 
 	public PROFILE getSignatureProfile() {
+		if (this.signatureProfile == null) {
+			this.signatureProfile = PROFILE.SIGNATUREBLOCK_NORMAL;
+		}
 		return this.signatureProfile; 
 	}
 	

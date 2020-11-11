@@ -91,32 +91,32 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;
-	Text txtMobileNumber;
-	FormData fd_txtMobileNumber;
-	ErrorMarker txtMobileNumberErrorMarker;
-	FormData fd_txtMobileNumberErrorMarker;
+	protected Text txtMobileNumber;
+	protected FormData fd_txtMobileNumber;
+	protected ErrorMarker txtMobileNumberErrorMarker;
+	protected FormData fd_txtMobileNumberErrorMarker;
 
 	private Group grpLogo;
 	private Canvas cLogo;
 	private Label lblDropLogo;
-	Button btnClearImage;
+	protected Button btnClearImage;
 	private Button btnBrowseLogo;
-	Canvas cSigPreview;
+	protected Canvas cSigPreview;
 
 	private Group grpSignatureNote;
 	private Label lblSignatureNote;
-	Text txtSignatureNote;
+	protected Text txtSignatureNote;
 	private Button btnSignatureNoteDefault;
 
-	private Group grpSignatureLang;
-	Combo cmbSignatureLang;
+	protected final Group grpSignatureLang;
+	protected final Combo cmbSignatureLang;
 
-	String logoFile;
-	Image sigPreview = null;
-	Image logo = null;
+	protected String logoFile = null;
+	protected Image sigPreview = null;
+	protected Image logo = null;
 	
-	private final Group grpSignatureProfile;
-	private final Combo cmbSingatureProfiles;
+	protected final Group grpSignatureProfile;
+	protected final Combo cmbSingatureProfiles;
 
 
 	
@@ -205,10 +205,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				processNumberChanged();
 			}
 		});
-		
-		
-		//-----------------------------------------------------------------------
-		
+
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
 		FormData fd_grpSingnatureProfile = new FormData();
 		fd_grpSingnatureProfile.right = new FormAttachment(100, -5);
@@ -240,8 +237,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
 		this.cmbSingatureProfiles.setItems(PROFILE.getProfileStrings());
-		this.configurationContainer.getSignatureProfile();
-		this.cmbSingatureProfiles.select(this.configurationContainer.getSignatureProfile().ordinal());
+		//this.cmbSingatureProfiles.select(this.configurationContainer.getSignatureProfile().ordinal());
 		this.cmbSingatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -324,7 +320,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		FormData fd_lbl_drop = new FormData();
 		fd_lbl_drop.left = new FormAttachment(0, 20);
 		fd_lbl_drop.right = new FormAttachment(100, -20);
-		// fd_lbl_drop.top = new FormAttachment(50, -20);
 		fd_lbl_drop.bottom = new FormAttachment(this.btnBrowseLogo, -20);
 
 		this.lblDropLogo.setLayoutData(fd_lbl_drop);
@@ -762,8 +757,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	}
 	
     void preformProfileSelectionChanged(PROFILE selected) {
-		log.debug("Signature Profile {0} was selected", selected.getName());
+		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
     	this.configurationContainer.setSignatureProfile(selected);
+    	this.cmbSingatureProfiles.select(selected.ordinal());
 	}
 
 	/*
@@ -871,6 +867,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.setVisibleImage();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale(), null);
+		
+		this.preformProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
+		
 	}
 
 	/* (non-Javadoc)
