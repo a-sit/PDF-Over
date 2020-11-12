@@ -26,6 +26,7 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -163,6 +164,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		String lang = getSignatureLanguage();
 		boolean useNote = (getProperty("SIG_NOTE") != null);
 		boolean usePdfACompat = (getSignaturePdfACompat());
+		String profile = getProperty("SIGNATURE_PROFILE");
 		
 		//Add Signature Param here//
 		String profileId;

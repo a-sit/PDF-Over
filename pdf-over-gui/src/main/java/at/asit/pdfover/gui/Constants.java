@@ -59,8 +59,6 @@ public class Constants {
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 	
-	public static final String[] SUPPORTED_PROFILES_STRINGS = {"Signaturblock Normal", "Signaturblock Klein", "Amtssignaturblock", "Nur Bildmarke"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
 	public static enum PROFILE {
 		SIGNATUREBLOCK_NORMAL("Signaturblock Normal") , //$NON-NLS-1$
 		SIGNATUREBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
