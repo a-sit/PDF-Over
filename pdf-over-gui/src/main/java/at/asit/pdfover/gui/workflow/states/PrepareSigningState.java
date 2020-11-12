@@ -166,6 +166,8 @@ public class PrepareSigningState extends State {
 				this.state.signatureParameter
 						.setSignaturePdfACompat(configuration.getSignaturePdfACompat());
 
+				this.state.signatureParameter.setSignatureProfile(configuration.getSignatureProfile());
+
 				this.state.signingState = this.state.signer
 						.prepare(this.state.signatureParameter);
 
@@ -199,7 +201,7 @@ public class PrepareSigningState extends State {
 
 	at.asit.pdfover.signator.SigningState signingState = null;
 
-	Signer signer;
+	Signer  signer;
 
 	Exception threadException = null;
 

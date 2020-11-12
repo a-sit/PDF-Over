@@ -221,4 +221,9 @@ public abstract class SignatureParameter {
 	 * @return associated value
 	 */
 	public abstract String getProperty(String key);
+
+
+	public abstract void setSignatureProfile(String profile);
+
+	public abstract String getSignatureProfile();
 }

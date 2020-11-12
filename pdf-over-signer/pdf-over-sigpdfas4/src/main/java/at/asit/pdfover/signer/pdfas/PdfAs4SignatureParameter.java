@@ -68,6 +68,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAs4SignatureParameter.class);
+	private String profile;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
@@ -164,7 +165,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		String lang = getSignatureLanguage();
 		boolean useNote = (getProperty("SIG_NOTE") != null);
 		boolean usePdfACompat = (getSignaturePdfACompat());
-		String profile = getProperty("SIGNATURE_PROFILE");
+
 		
 		//Add Signature Param here//
 		String profileId;
@@ -191,4 +192,17 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		log.debug("Profile ID: " + profileId);
 		return profileId;
 	}
+
+	@Override
+	public void setSignatureProfile(String profile) {
+		this.profile = profile;
+	}
+
+	@Override
+	public String getSignatureProfile() {
+		return this.profile;
+	}
 }
+
+
+

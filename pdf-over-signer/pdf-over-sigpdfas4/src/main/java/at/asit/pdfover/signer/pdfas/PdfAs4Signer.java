@@ -91,7 +91,7 @@ public class PdfAs4Signer implements Signer {
 			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_SEARCH_ENABLED, IConfigurationConstants.TRUE);
 		}
 		
-		
+
 
 		state.setSignParameter(param);
 		state.setOutput(output);

@@ -663,8 +663,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		try {
 			if (this.signer != null) {
-				SignatureParameter param = this.signer.getPDFSigner()
-						.newParameter();
+				SignatureParameter param = this.signer.getPDFSigner().newParameter();
 				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
 					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
 				}
@@ -762,6 +761,16 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
     	this.cmbSingatureProfiles.select(selected.ordinal());
 	}
 
+	void setSignatureProfileSetting(){
+		try {
+			SignatureParameter param = this.signer.getPDFSigner().newParameter();
+			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
+
+		} catch (Exception e){
+			log.debug("Cannot save siganture profile" + e.getMessage());
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -771,6 +780,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	protected void signerChanged() {
 		this.setVisibleImage();
+		this.setSignatureProfileSetting();
 	}
 
 	/**
