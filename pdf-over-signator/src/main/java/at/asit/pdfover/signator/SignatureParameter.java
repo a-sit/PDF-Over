@@ -226,4 +226,5 @@ public abstract class SignatureParameter {
 	public abstract void setSignatureProfile(String profile);
 
 	public abstract String getSignatureProfile();
+
 }

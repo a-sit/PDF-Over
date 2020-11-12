@@ -166,22 +166,20 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		boolean useNote = (getProperty("SIG_NOTE") != null);
 		boolean usePdfACompat = (getSignaturePdfACompat());
 
-		
 		//Add Signature Param here//
 		String profileId;
 		
 		
 		
-		if (PROFILE_VISIBILITY)
-		{
-		profileId = PROFILE_ID_BASE;
-		profileId += (lang != null && lang.equals("en")) ?
-				PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;}
-		
-		else
+		if (!PROFILE_VISIBILITY || this.profile.equals("Unsichtbar"))
 		{
 			profileId ="INVISIBLE";
+		} else {
+			profileId = PROFILE_ID_BASE;
+			profileId += (lang != null && lang.equals("en")) ?
+					PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
 		}
+
 
 		if (useNote)
 			profileId += PROFILE_ID_NOTE;
@@ -189,7 +187,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		if (usePdfACompat)
 			profileId += PROFILE_ID_PDFA;
 
-		log.debug("Profile ID: " + profileId);
+		log.debug("Profile ID: {0}", profileId);
 		return profileId;
 	}
 
@@ -202,6 +200,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	public String getSignatureProfile() {
 		return this.profile;
 	}
+
 }
 
 
