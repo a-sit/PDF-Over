@@ -62,10 +62,11 @@ public class Constants {
 	public static enum PROFILE {
 		SIGNATUREBLOCK_NORMAL("Signaturblock Normal") , //$NON-NLS-1$
 		SIGNATUREBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
-		AMTSSIGNATUREBLOCK("Amtssignaturblock"),  //$NON-NLS-1$
-		LOGO_ONLY("Nur Bildmarke"); //$NON-NLS-1$
+		AMTSSIGNATUREBLOCK("Amtssignatur"),  //$NON-NLS-1$
+		LOGO_ONLY("Nur Bildmarke"), //$NON-NLS-1$
+		INVISIBLE("Unsichtbar");
 
-		public static int length = 4; 
+		public static int length = 5;
 		private String name; 
 		
 		PROFILE(String profile){
@@ -103,7 +104,9 @@ public class Constants {
 				return AMTSSIGNATUREBLOCK;
 			} else if (LOGO_ONLY.getName().equals(profile)) {
 				return LOGO_ONLY;
-			} 
+			} else if (INVISIBLE.getName().equals(profile)){
+				return INVISIBLE;
+			}
 			return null; 
 		}
 	}
