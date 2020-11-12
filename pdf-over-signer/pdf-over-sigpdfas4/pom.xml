@@ -56,15 +56,14 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>pdf-as-4</id>
-			<name>PDF-AS 4 Repository</name>
+			<id>EGIZ Maven</id>
+			<name>EGIZ Maven Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
 		<repository>
 			<id>pdf-as-4-rc</id>
 			<name>PDF-AS 4 Repository RC</name>
 			<url>https://apps.egiz.gv.at/releases/pdf-as/release/4.1.6RC/mvn-repo/releases/</url>
-			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
 		<repository>
 			<id>local-repo</id>
