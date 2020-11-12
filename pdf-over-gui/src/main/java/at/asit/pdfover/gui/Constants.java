@@ -60,9 +60,9 @@ public class Constants {
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 	
 	public static enum PROFILE {
-		SIGNATUREBLOCK_NORMAL("Signaturblock Normal") , //$NON-NLS-1$
-		SIGNATUREBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
-		AMTSSIGNATUREBLOCK("Amtssignatur"),  //$NON-NLS-1$
+		SIGNATURBLOCK("Signaturblock Normal") , //$NON-NLS-1$
+		SIGNATURBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
+		AMTSSIGNATURBLOCK("Amtssignatur"),  //$NON-NLS-1$
 		LOGO_ONLY("Nur Bildmarke"), //$NON-NLS-1$
 		INVISIBLE("Unsichtbar");
 
@@ -96,12 +96,12 @@ public class Constants {
 		}
 		
 		public static PROFILE getProfile(String profile) {
-			if (SIGNATUREBLOCK_NORMAL.getName().equals(profile)) {
-				return SIGNATUREBLOCK_NORMAL;
-			} else if (SIGNATUREBLOCK_SMALL.getName().equals(profile)) {
-				return SIGNATUREBLOCK_SMALL;
-			} else if (AMTSSIGNATUREBLOCK.getName().equals(profile)) {
-				return AMTSSIGNATUREBLOCK;
+			if (SIGNATURBLOCK.getName().equals(profile)) {
+				return SIGNATURBLOCK;
+			} else if (SIGNATURBLOCK_SMALL.getName().equals(profile)) {
+				return SIGNATURBLOCK_SMALL;
+			} else if (AMTSSIGNATURBLOCK.getName().equals(profile)) {
+				return AMTSSIGNATURBLOCK;
 			} else if (LOGO_ONLY.getName().equals(profile)) {
 				return LOGO_ONLY;
 			} else if (INVISIBLE.getName().equals(profile)){
