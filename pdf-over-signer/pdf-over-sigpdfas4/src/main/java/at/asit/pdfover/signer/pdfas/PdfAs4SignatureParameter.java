@@ -40,8 +40,6 @@ import at.asit.pdfover.commons.Profile;
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 public class PdfAs4SignatureParameter extends SignatureParameter {
-	/** The base profile ID */
-	private static final String PROFILE_ID_BASE = "SIGNATURBLOCK_SMALL";
 	/** The profile ID extension for the German signature block */
 	private static final String PROFILE_ID_LANG_DE = "_DE";
 	/** The profile ID extension for the English signature block */
@@ -172,7 +170,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 
 
-		if (!PROFILE_VISIBILITY || this.profile.equals("Unsichtbar") || Profile.getProfile(this.profile).equals(Profile.INVISIBLE))
+		if (!PROFILE_VISIBILITY || Profile.getProfile(this.profile).equals(Profile.INVISIBLE))
 		{
 			profileId = "INVISIBLE";
 		} else {
