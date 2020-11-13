@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -28,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
@@ -147,7 +147,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected boolean useSignatureFields = false; 
 	
 	/**	The Signature Profile */
-	protected PROFILE signatureProfile = null; 
+	protected Profile signatureProfile = null;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -729,15 +729,15 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	
 	
 	@Override 
-	public PROFILE getSignatureProfile() {
+	public Profile getSignatureProfile() {
 		if (this.signatureProfile == null) {
-			this.signatureProfile = PROFILE.SIGNATURBLOCK;
+			this.signatureProfile = Profile.SIGNATURBLOCK;
 		}
 		return this.signatureProfile; 
 	}
 	
 	@Override
-	public void setSignatureProfile(PROFILE profile) {
+	public void setSignatureProfile(Profile profile) {
 		this.signatureProfile = profile;
 	}
  	

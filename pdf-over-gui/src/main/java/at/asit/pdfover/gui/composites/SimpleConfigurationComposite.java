@@ -62,7 +62,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.Constants.PROFILE;
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
@@ -236,13 +236,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
-		this.cmbSingatureProfiles.setItems(PROFILE.getProfileStrings());
+		this.cmbSingatureProfiles.setItems(Profile.getProfileStrings());
 		//this.cmbSingatureProfiles.select(this.configurationContainer.getSignatureProfile().ordinal());
 		this.cmbSingatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PROFILE current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				PROFILE selected = PROFILE.getProfileByIndex(SimpleConfigurationComposite.this.cmbSingatureProfiles
+				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
+				Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSingatureProfiles
 						                  .getSelectionIndex());
 				if (!current.equals(selected)) {
 					preformProfileSelectionChanged(selected);
@@ -755,7 +755,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		}
 	}
 	
-    void preformProfileSelectionChanged(PROFILE selected) {
+    void preformProfileSelectionChanged(Profile selected) {
 		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
     	this.configurationContainer.setSignatureProfile(selected);
     	this.cmbSingatureProfiles.select(selected.ordinal());

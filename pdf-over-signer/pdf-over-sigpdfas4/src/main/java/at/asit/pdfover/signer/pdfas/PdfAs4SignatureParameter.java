@@ -34,7 +34,7 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Profile;
 
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
@@ -172,13 +172,11 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 
 
-		if (!PROFILE_VISIBILITY || this.profile.equals("Unsichtbar"))
+		if (!PROFILE_VISIBILITY || this.profile.equals("Unsichtbar") || Profile.getProfile(this.profile).equals(Profile.INVISIBLE))
 		{
-			//TODO set base profile id using the this.profile
-			//TODO verifiy 
 			profileId = "INVISIBLE";
 		} else {
-			profileId = Constants.PROFILE.getProfile(this.profile).name();//PROFILE_ID_BASE;
+			profileId = Profile.getProfile(this.profile).name();
 			profileId += (lang != null && lang.equals("en")) ?
 					PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
 		}

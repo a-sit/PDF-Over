@@ -17,9 +17,9 @@ package at.asit.pdfover.gui.workflow.config;
 
 import java.util.Locale;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Point;
 
-import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -414,11 +414,11 @@ public interface ConfigurationContainer {
 	/**
 	 * @param profile set the selected profile
 	 */
-	public void setSignatureProfile(PROFILE profile);
+	public void setSignatureProfile(Profile profile);
 	
 	
 	/**
 	 * @return selected signature profile as string
 	 */
-	public PROFILE getSignatureProfile();
+	public Profile getSignatureProfile();
 }

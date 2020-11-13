@@ -48,7 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.Constants.PROFILE;
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
@@ -953,7 +953,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				provider.getProxyUserPersistent());
 		this.configurationContainer.setProxyPass(
 				provider.getProxyPassPersistent());
-		this.configurationContainer.setSignatureProfile(PROFILE.getProfile(provider.getSignatureProfile()));
+		this.configurationContainer.setSignatureProfile(Profile.getProfile(provider.getSignatureProfile()));
 	}
 
 	/*
@@ -1001,7 +1001,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 * @param profile 
 	 * 
 	 */
-	public void performSetSignatureProfile(PROFILE profile) {
+	public void performSetSignatureProfile(Profile profile) {
 		this.configurationContainer.setSignatureProfile(profile);
 	}
 

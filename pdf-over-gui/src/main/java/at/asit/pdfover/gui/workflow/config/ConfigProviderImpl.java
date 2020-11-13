@@ -25,12 +25,12 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.Constants.PROFILE;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
@@ -144,8 +144,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		
 		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
 		if (signatureProfile != null) {
-			this.configuration.setSignatureProfile(PROFILE.getProfile(signatureProfile));
-			this.configurationOverlay.setSignatureProfile(PROFILE.getProfile(signatureProfile));
+			this.configuration.setSignatureProfile(Profile.getProfile(signatureProfile));
+			this.configurationOverlay.setSignatureProfile(Profile.getProfile(signatureProfile));
 		}
 		
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
@@ -1508,7 +1508,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	
 	@Override
 	public void setSignatureProfile(String profile) {
-		this.configurationOverlay.setSignatureProfile(PROFILE.getProfile(profile));
+		this.configurationOverlay.setSignatureProfile(Profile.getProfile(profile));
 	}
 	
 	@Override

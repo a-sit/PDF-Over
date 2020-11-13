@@ -23,8 +23,7 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import at.asit.pdfover.gui.Constants.PROFILE;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
+
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
 /**
@@ -58,58 +57,6 @@ public class Constants {
 
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
-	
-	public static enum PROFILE {
-		SIGNATURBLOCK("Signaturblock Normal") , //$NON-NLS-1$
-		SIGNATURBLOCK_SMALL("Signaturblock Klein"),  //$NON-NLS-1$
-		AMTSSIGNATURBLOCK("Amtssignatur"),  //$NON-NLS-1$
-		LOGO_ONLY("Nur Bildmarke"), //$NON-NLS-1$
-		INVISIBLE("Unsichtbar");
-
-		public static int length = 5;
-		private String name; 
-		
-		PROFILE(String profile){
-			this.name = profile; 
-		}
-		
-		public static String[] getProfileStrings() {
-			String[] profiles = new String[PROFILE.length];
-			int i = 0; 
-			for (PROFILE profile : PROFILE.values()) {
-				profiles[i] = profile.getName();
-				i++;
-			}
-			return profiles;
-		}
-		
-		public static PROFILE getProfileByIndex(int index) {
-			String[] profiles = getProfileStrings();
-			if (profiles.length < index) {
-				return null;
-			}
-			return getProfile(profiles[index]);
-		}
-		
-		public String getName() {
-			return this.name; 
-		}
-		
-		public static PROFILE getProfile(String profile) {
-			if (SIGNATURBLOCK.getName().equals(profile)) {
-				return SIGNATURBLOCK;
-			} else if (SIGNATURBLOCK_SMALL.getName().equals(profile)) {
-				return SIGNATURBLOCK_SMALL;
-			} else if (AMTSSIGNATURBLOCK.getName().equals(profile)) {
-				return AMTSSIGNATURBLOCK;
-			} else if (LOGO_ONLY.getName().equals(profile)) {
-				return LOGO_ONLY;
-			} else if (INVISIBLE.getName().equals(profile)){
-				return INVISIBLE;
-			}
-			return null; 
-		}
-	}
 	
 	/** Configuration directory */
 	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
