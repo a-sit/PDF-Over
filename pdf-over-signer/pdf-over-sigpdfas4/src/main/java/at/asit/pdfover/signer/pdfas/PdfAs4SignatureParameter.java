@@ -34,6 +34,7 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
+import at.asit.pdfover.gui.Constants;
 
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
@@ -49,7 +50,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	private static final String PROFILE_ID_NOTE = "_NOTE";
 	/** The profile ID extension for PDF/A compatibility */
 	private static final String PROFILE_ID_PDFA = "_PDFA";
-	
+
 	/**
 	 * Visibility of signature block
 	 */
@@ -58,7 +59,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
 	/**
-	 * This parameters are defining the signature block size 
+	 * This parameters are defining the signature block size
 	 */
 	private int sig_w = 229;
 	private int sig_h = 77;
@@ -131,7 +132,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 	/**
 	 * Gets the Signature Position String for PDF-AS
-	 * 
+	 *
 	 * @return Signature Position String
 	 */
 	public String getPdfAsSignaturePosition() {
@@ -168,14 +169,16 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 		//Add Signature Param here//
 		String profileId;
-		
-		
-		
+
+
+
 		if (!PROFILE_VISIBILITY || this.profile.equals("Unsichtbar"))
 		{
-			profileId ="INVISIBLE";
+			//TODO set base profile id using the this.profile
+			//TODO verifiy 
+			profileId = "INVISIBLE";
 		} else {
-			profileId = PROFILE_ID_BASE;
+			profileId = Constants.PROFILE.getProfile(this.profile).name();//PROFILE_ID_BASE;
 			profileId += (lang != null && lang.equals("en")) ?
 					PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
 		}
@@ -187,7 +190,8 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		if (usePdfACompat)
 			profileId += PROFILE_ID_PDFA;
 
-		log.debug("Profile ID: {0}", profileId);
+		log.debug("Profile ID: {}", profileId);
+		System.out.println(profileId);
 		return profileId;
 	}
 

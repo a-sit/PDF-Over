@@ -767,7 +767,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
 
 		} catch (Exception e){
-			log.debug("Cannot save siganture profile" + e.getMessage());
+			log.debug("Cannot save signature profile" + e.getMessage());
 		}
 	}
 
