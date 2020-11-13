@@ -80,7 +80,7 @@ public class Constants {
 	 * The minimum PDF-AS configuration version (older ones will be backed up
 	 * and updated
 	 */
-	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.0"; //$NON-NLS-1$
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.6"; //$NON-NLS-1$
 
 	/** The configuration backup filename */
 	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup"; //$NON-NLS-1$
