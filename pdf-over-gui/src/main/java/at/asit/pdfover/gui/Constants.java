@@ -105,7 +105,7 @@ public class Constants {
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	/** PDF-Over User Agent string */
-	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.1" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** Current release file */
 	public static final String CURRENT_RELEASE_URL = "http://webstart.buergerkarte.at/PDF-Over/Release.txt"; //$NON-NLS-1$
