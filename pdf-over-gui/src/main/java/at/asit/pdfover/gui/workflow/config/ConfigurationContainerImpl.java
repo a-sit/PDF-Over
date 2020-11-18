@@ -731,7 +731,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	@Override 
 	public Profile getSignatureProfile() {
 		if (this.signatureProfile == null) {
-			this.signatureProfile = Profile.SIGNATURBLOCK;
+			this.signatureProfile = Profile.SIGNATURBLOCK_SMALL;
 		}
 		return this.signatureProfile; 
 	}
