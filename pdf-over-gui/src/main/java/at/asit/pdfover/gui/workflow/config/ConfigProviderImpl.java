@@ -114,7 +114,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
-		setSaveFilePostFix(config.getProperty(Constants.CFG_POSTFIX));
+		String postFix = config.getProperty(Constants.CFG_POSTFIX);
+		if (postFix == null){
+			setSaveFilePostFix(Constants.DEFAULT_POSTFIX);
+		} else {
+			setSaveFilePostFix(postFix);
+		}
+
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
