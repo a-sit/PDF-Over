@@ -412,13 +412,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		});
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
-		layout = new FormLayout();
-		layout.marginHeight = 10;
-		layout.marginWidth = 5;
-		this.grpSpeicherort.setLayout(layout);
+		GridLayout gl_grpSpeicherort = new GridLayout(3, false);
+		grpSpeicherort.setLayout(gl_grpSpeicherort);
 		FormData fd_grpSpeicherort = new FormData();
+		fd_grpSpeicherort.left = new FormAttachment(100, -499);
 		fd_grpSpeicherort.top = new FormAttachment(this.grpBkuAuswahl, 5);
-		fd_grpSpeicherort.left = new FormAttachment(0, 5);
 		fd_grpSpeicherort.right = new FormAttachment(100, -5);
 		this.grpSpeicherort.setLayoutData(fd_grpSpeicherort);
 
@@ -428,114 +426,101 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_grpSpeicherort[0]));
 
 		this.lblDefaultOutputFolder = new Label(this.grpSpeicherort, SWT.NONE);
-		FormData fd_lblDefaultOutputFolder = new FormData();
-		fd_lblDefaultOutputFolder.top = new FormAttachment(0);
-		fd_lblDefaultOutputFolder.left = new FormAttachment(0, 5);
-		this.lblDefaultOutputFolder.setLayoutData(fd_lblDefaultOutputFolder);
 
 		FontData[] fD_lblDefaultOutputFolder = this.lblDefaultOutputFolder.getFont()
 				.getFontData();
 		fD_lblDefaultOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lblDefaultOutputFolder.setFont(new Font(Display.getCurrent(),
 				fD_lblDefaultOutputFolder[0]));
-
-		this.txtOutputFolder = new Text(this.grpSpeicherort, SWT.BORDER);
-		FormData fd_text = new FormData();
-		fd_text.top = new FormAttachment(this.lblDefaultOutputFolder, 5);
-		fd_text.left = new FormAttachment(0, 15);
-		this.txtOutputFolder.setLayoutData(fd_text);
-
-		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont()
-				.getFontData();
+		
+				this.txtOutputFolder = new Text(this.grpSpeicherort, SWT.BORDER);
+				GridData gd_txtOutputFolder = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+				gd_txtOutputFolder.widthHint = 291;
+				txtOutputFolder.setLayoutData(gd_txtOutputFolder);
+				
+						FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont()
+								.getFontData();
+						this.txtOutputFolder.setFont(new Font(Display.getCurrent(),
+								fD_txtOutputFolder[0]));
+						
+								this.txtOutputFolder.addFocusListener(new FocusAdapter() {
+						
+									@Override
+									public void focusLost(FocusEvent e) {
+										performOutputFolderChanged(AdvancedConfigurationComposite.this.txtOutputFolder
+												.getText());
+									}
+								});
 		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtOutputFolder.setFont(new Font(Display.getCurrent(),
-				fD_txtOutputFolder[0]));
-
-		this.txtOutputFolder.addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				performOutputFolderChanged(AdvancedConfigurationComposite.this.txtOutputFolder
-						.getText());
-			}
-		});
-
-		this.btnBrowse = new Button(this.grpSpeicherort, SWT.NONE);
-		fd_text.right = new FormAttachment(this.btnBrowse, -5);
-
-		FontData[] fD_btnBrowse = this.btnBrowse.getFont().getFontData();
-		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
-
-		FormData fd_btnBrowse = new FormData();
-		fd_btnBrowse.top = new FormAttachment(this.lblDefaultOutputFolder, 5);
-		fd_btnBrowse.right = new FormAttachment(100, -5);
-		this.btnBrowse.setLayoutData(fd_btnBrowse);
-
-		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dlg = new DirectoryDialog(
-						AdvancedConfigurationComposite.this.getShell());
-
-				// Set the initial filter path according
-				// to anything they've selected or typed in
-				dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder
-						.getText());
-
-				// Change the title bar text
-				dlg.setText(Messages
-						.getString("advanced_config.OutputFolder.Dialog_Title")); //$NON-NLS-1$
-
-				// Customizable message displayed in the dialog
-				dlg.setMessage(Messages
-						.getString("advanced_config.OutputFolder.Dialog")); //$NON-NLS-1$
-
-				// Calling open() will open and run the dialog.
-				// It will return the selected directory, or
-				// null if user cancels
-				String dir = dlg.open();
-				if (dir != null) {
-					// Set the text box to the new selection
-					performOutputFolderChanged(dir);
-				}
-			}
-		});
-
-
-		this.lblSaveFilePostFix = new Label(this.grpSpeicherort, SWT.NONE);
-		FormData fd_lblSaveFilePostFix = new FormData();
-		fd_lblSaveFilePostFix.top = new FormAttachment(this.lblDefaultOutputFolder);
-		fd_lblSaveFilePostFix.left = new FormAttachment(0, 5);
-		this.lblSaveFilePostFix.setLayoutData(fd_lblSaveFilePostFix);
-
-		FontData[] fD_lblSaveFilePostFix = this.lblSaveFilePostFix.getFont()
-				.getFontData();
+//		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
+				
+						this.btnBrowse = new Button(this.grpSpeicherort, SWT.NONE);
+						btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+						
+								FontData[] fD_btnBrowse = this.btnBrowse.getFont().getFontData();
+								this.btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
+								
+										this.btnBrowse.addSelectionListener(new SelectionAdapter() {
+								
+											@Override
+											public void widgetSelected(SelectionEvent e) {
+												DirectoryDialog dlg = new DirectoryDialog(
+														AdvancedConfigurationComposite.this.getShell());
+								
+												// Set the initial filter path according
+												// to anything they've selected or typed in
+												dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder
+														.getText());
+								
+												// Change the title bar text
+												dlg.setText(Messages
+														.getString("advanced_config.OutputFolder.Dialog_Title")); //$NON-NLS-1$
+								
+												// Customizable message displayed in the dialog
+												dlg.setMessage(Messages
+														.getString("advanced_config.OutputFolder.Dialog")); //$NON-NLS-1$
+								
+												// Calling open() will open and run the dialog.
+												// It will return the selected directory, or
+												// null if user cancels
+												String dir = dlg.open();
+												if (dir != null) {
+													// Set the text box to the new selection
+													performOutputFolderChanged(dir);
+												}
+											}
+										});
+				
+				
+						this.lblSaveFilePostFix = new Label(this.grpSpeicherort, SWT.NONE);
+						lblSaveFilePostFix.setText(Messages.getString("AdvancedConfigurationComposite.lblSaveFilePostFix.text"));
+						
+								FontData[] fD_lblSaveFilePostFix = this.lblSaveFilePostFix.getFont()
+										.getFontData();
+								this.lblSaveFilePostFix.setFont(new Font(Display.getCurrent(),
+										fD_lblSaveFilePostFix[0]));
+		
+				this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.BORDER);
+				GridData gd_txtSaveFilePostFix = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+				gd_txtSaveFilePostFix.widthHint = 256;
+				txtSaveFilePostFix.setLayoutData(gd_txtSaveFilePostFix);
+				
+						FontData[] fD_txtPostFix = this.txtSaveFilePostFix.getFont()
+								.getFontData();
+						this.txtSaveFilePostFix.setFont(new Font(Display.getCurrent(),
+								fD_txtPostFix[0]));
+						
+								this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
+						
+									@Override
+									public void focusLost(FocusEvent e) {
+										//performOutputFolderChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix
+												//.getText());
+									}
+								});
+		new Label(grpSpeicherort, SWT.NONE);
 		fD_lblSaveFilePostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblSaveFilePostFix.setFont(new Font(Display.getCurrent(),
-				fD_lblSaveFilePostFix[0]));
-
-		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.NONE);
-		FormData fd_PostFix = new FormData();
-		fd_PostFix.top = new FormAttachment(this.lblSaveFilePostFix, 5);
-		fd_PostFix.left = new FormAttachment(0, 15);
-		this.txtSaveFilePostFix.setLayoutData(fd_text);
-
-		FontData[] fD_txtPostFix = this.txtSaveFilePostFix.getFont()
-				.getFontData();
-		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtSaveFilePostFix.setFont(new Font(Display.getCurrent(),
-				fD_txtOutputFolder[0]));
-
-		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				//performOutputFolderChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix
-						//.getText());
-			}
-		});
+		fD_txtPostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 
 		
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
@@ -544,7 +529,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		layout_grpLocaleAuswahl.marginWidth = 5;
 		this.grpLocaleAuswahl.setLayout(layout_grpLocaleAuswahl);
 		FormData fd_grpLocaleAuswahl = new FormData();
-		fd_grpLocaleAuswahl.top = new FormAttachment(this.grpSpeicherort, 5);
+		fd_grpLocaleAuswahl.top = new FormAttachment(grpSpeicherort, 5);
 		fd_grpLocaleAuswahl.left = new FormAttachment(0, 5);
 		fd_grpLocaleAuswahl.right = new FormAttachment(100, -5);
 		this.grpLocaleAuswahl.setLayoutData(fd_grpLocaleAuswahl);
