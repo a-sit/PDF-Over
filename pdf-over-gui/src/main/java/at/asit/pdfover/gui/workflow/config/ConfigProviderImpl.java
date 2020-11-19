@@ -114,6 +114,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		setDefaultOutputFolder(config
 				.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
+		setSaveFilePostFix(config.getProperty(Constants.CFG_POSTFIX));
+
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
@@ -351,6 +353,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
 		props.setProperty(Constants.CFG_OUTPUT_FOLDER, getDefaultOutputFolderPersistent());
+		props.setProperty(Constants.CFG_POSTFIX, getSaveFilePostFix());
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(getPlaceholderTransparency()));
 
@@ -985,16 +988,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	
-	/*@Override
-	public void setDefaultDownloadURL(String downloadURL) {
-		if (downloadURL == null || downloadURL.trim().isEmpty()) {
-			this.configuration.setDownloadURL(Constants.CERTIFICATE_DOWNLOAD_XML_URL+Constants.CERTIFICATE_XML_FILE);
-		} else {
-			this.configuration.setDownloadURL(downloadURL);
-		}
-	}
-	
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultOutputFolderOverlay(java.lang.String)
 	 */
@@ -1510,8 +1503,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public void setSignatureProfile(String profile) {
 		this.configurationOverlay.setSignatureProfile(Profile.getProfile(profile));
 	}
-	
-	@Override
+
+    @Override
+    public void setSaveFilePostFix(String postFix) {
+        this.configurationOverlay.setSaveFilePostFix(postFix);
+    }
+
+    @Override
+	public String getSaveFilePostFix(){
+		return this.configurationOverlay.getSaveFilePostFix();
+	}
+
+    @Override
 	public String getSignatureProfile() {
 		return this.configurationOverlay.getSignatureProfile().getName();
 	}

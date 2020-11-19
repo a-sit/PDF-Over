@@ -276,6 +276,8 @@ public interface ConfigProvider {
 	 * @return
 	 */
 	public String getSignatureProfile();
+
+	public String getSaveFilePostFix();
 }
 
 

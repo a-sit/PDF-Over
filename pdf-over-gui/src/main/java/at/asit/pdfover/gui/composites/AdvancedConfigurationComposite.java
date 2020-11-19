@@ -869,6 +869,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setKeyStoreEnabled(provider.getKeyStoreEnabledPersistent());
 
 		this.configurationContainer.setOutputFolder(provider.getDefaultOutputFolderPersistent());
+		this.configurationContainer.setSaveFilePostFix(provider.getSaveFilePostFix());
 
 		this.configurationContainer.setLocale(provider.getLocale());
 
@@ -898,6 +899,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		String outputFolder = this.configurationContainer.getOutputFolder();
 		if (outputFolder != null) {
 			performOutputFolderChanged(outputFolder);
+		}
+		String postFix = this.configurationContainer.getSaveFilePostFix();
+		if (postFix != null) {
+			performPostFixChanged(postFix);
+		} else {
+			performPostFixChanged(Constants.DEFAULT_POSTFIX);
 		}
 		SignaturePosition pos = this.configurationContainer.getDefaultSignaturePosition();
 		performPositionSelection(pos != null && pos.useAutoPositioning());
@@ -963,7 +970,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		store.setKeyStoreEnabled(this.configurationContainer.getKeyStoreEnabled());
 
 		store.setDefaultOutputFolder(this.configurationContainer.getOutputFolder());
-
+		store.setSaveFilePostFix(this.configurationContainer.getSaveFilePostFix());
 		store.setLocale(this.configurationContainer.getLocale());
 
 		store.setUpdateCheck(this.configurationContainer.getUpdateCheck());

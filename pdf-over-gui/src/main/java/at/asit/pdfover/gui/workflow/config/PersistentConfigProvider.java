@@ -204,5 +204,7 @@ public interface PersistentConfigProvider {
 	 * 
 	 * @return the signature profile 
 	 */
-	public String getSignatureProfile(); 
+	public String getSignatureProfile();
+
+	public String getSaveFilePostFix();
 }

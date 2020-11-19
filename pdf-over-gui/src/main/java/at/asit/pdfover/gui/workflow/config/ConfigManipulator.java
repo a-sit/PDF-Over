@@ -201,7 +201,9 @@ public interface ConfigManipulator {
 	/**
 	 * @param profile
 	 */
-	void setSignatureProfile(String profile);
+	public void setSignatureProfile(String profile);
+
+	public void setSaveFilePostFix(String postFix);
 	
 }
 

@@ -41,8 +41,9 @@ public class Constants {
 	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //$NON-NLS-1$
 	
 	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE"; //$NON-NLS-1$
+    public static final String DEFAULT_POSTFIX = "_signed";
 
-	static {
+    static {
 		// Has to be set before (implicitly) initializing Display
 		Display.setAppName(APP_NAME);
 	}
@@ -208,6 +209,8 @@ public class Constants {
 
 	/** The output folder config parameter */
 	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
+
+	public static final String CFG_POSTFIX = "SAVE_FILE_POSTFIX";
 
 	/** The main window size (Format: width,height) */
 	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE"; //$NON-NLS-1$
