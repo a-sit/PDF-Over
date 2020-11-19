@@ -35,8 +35,6 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -116,7 +114,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	protected Image logo = null;
 	
 	protected final Group grpSignatureProfile;
-	protected final Combo cmbSingatureProfiles;
+	protected final Combo cmbSignatureProfiles;
 
 
 	
@@ -218,26 +216,34 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				fD_grpSignatureProfile[0]));
 		
 		
-		this.cmbSingatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
+		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
 		
 		FormData fd_cmbSingatureProfiles = new FormData();
 		fd_cmbSingatureProfiles.left = new FormAttachment(0, 10);
 		fd_cmbSingatureProfiles.right = new FormAttachment(100, -10);
 		fd_cmbSingatureProfiles.top = new FormAttachment(0, 10);
 		fd_cmbSingatureProfiles.bottom = new FormAttachment(100, -10);
-		this.cmbSingatureProfiles.setLayoutData(fd_cmbSingatureProfiles);
+		this.cmbSignatureProfiles.setLayoutData(fd_cmbSingatureProfiles);
 
-		FontData[] fD_cmbSignatureProfile = this.cmbSingatureProfiles.getFont()
+		FontData[] fD_cmbSignatureProfile = this.cmbSignatureProfiles.getFont()
 				.getFontData();
 		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
+		this.cmbSignatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
-		this.cmbSingatureProfiles.setItems(Profile.getProfileStrings());
-		this.cmbSingatureProfiles.addSelectionListener(new SelectionAdapter() {
+
+		String[] items = new String[Profile.values().length];
+		int i = 0;
+		for (Profile profile : Profile.values()) {
+			items[i] = Messages.getString("simple_config." +  profile.name());
+			i++;
+		}
+
+		this.cmbSignatureProfiles.setItems(items);
+		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSingatureProfiles
+				Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSignatureProfiles
 						                  .getSelectionIndex());
 				if (!current.equals(selected)) {
 					preformProfileSelectionChanged(selected);
@@ -731,7 +737,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
     void preformProfileSelectionChanged(Profile selected) {
 		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
     	this.configurationContainer.setSignatureProfile(selected);
-    	this.cmbSingatureProfiles.select(selected.ordinal());
+    	this.cmbSignatureProfiles.select(selected.ordinal());
 
     	if (selected.equals(Profile.AMTSSIGNATURBLOCK)){
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
