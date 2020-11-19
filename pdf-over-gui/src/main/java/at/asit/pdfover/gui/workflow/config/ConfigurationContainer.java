@@ -421,4 +421,9 @@ public interface ConfigurationContainer {
 	 * @return selected signature profile as string
 	 */
 	public Profile getSignatureProfile();
+
+
+	public void setSaveFilePostFix(String postFix);
+
+	public String getSaveFilePostFix();
 }

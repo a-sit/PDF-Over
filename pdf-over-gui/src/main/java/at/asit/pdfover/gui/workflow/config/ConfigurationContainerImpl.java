@@ -149,6 +149,8 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	/**	The Signature Profile */
 	protected Profile signatureProfile = null;
 
+	protected String saveFilePostFix = "_signed";
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
 	 */
@@ -735,8 +737,19 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		}
 		return this.signatureProfile; 
 	}
-	
-	@Override
+
+    @Override
+    public String getSaveFilePostFix() {
+        return this.saveFilePostFix;
+    }
+
+    @Override
+	public void setSaveFilePostFix(String postfix){
+		this.saveFilePostFix = postfix;
+	}
+
+
+    @Override
 	public void setSignatureProfile(Profile profile) {
 		this.signatureProfile = profile;
 	}

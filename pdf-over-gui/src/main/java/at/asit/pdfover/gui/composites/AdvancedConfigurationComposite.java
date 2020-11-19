@@ -371,10 +371,11 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		GridLayout gl_grpSpeicherort = new GridLayout(3, false);
 		grpSpeicherort.setLayout(gl_grpSpeicherort);
 		FormData fd_grpSpeicherort = new FormData();
-		fd_grpSpeicherort.left = new FormAttachment(100, -499);
+		fd_grpSpeicherort.left = new FormAttachment(0,5);
 		fd_grpSpeicherort.top = new FormAttachment(this.grpBkuAuswahl, 5);
 		fd_grpSpeicherort.right = new FormAttachment(100, -5);
 		this.grpSpeicherort.setLayoutData(fd_grpSpeicherort);
+
 
 		FontData[] fD_grpSpeicherort = this.grpSpeicherort.getFont().getFontData();
 		fD_grpSpeicherort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -388,10 +389,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtOutputFolder = new Text(this.grpSpeicherort, SWT.BORDER);
 		GridData gd_txtOutputFolder = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_txtOutputFolder.widthHint = 291;
 		txtOutputFolder.setLayoutData(gd_txtOutputFolder);
 
 		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont().getFontData();
+		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.txtOutputFolder.setFont(new Font(Display.getCurrent(), fD_txtOutputFolder[0]));
 
 		this.txtOutputFolder.addFocusListener(new FocusAdapter() {
@@ -402,14 +403,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		// fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 
 		this.btnBrowse = new Button(this.grpSpeicherort, SWT.NONE);
 		btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 
 		FontData[] fD_btnBrowse = this.btnBrowse.getFont().getFontData();
+		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
-
 		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -446,18 +446,18 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.BORDER);
 		GridData gd_txtSaveFilePostFix = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-//		gd_txtSaveFilePostFix.widthHint = 256;
+
 		txtSaveFilePostFix.setLayoutData(gd_txtSaveFilePostFix);
 
 		FontData[] fD_txtPostFix = this.txtSaveFilePostFix.getFont().getFontData();
+		fD_txtPostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.txtSaveFilePostFix.setFont(new Font(Display.getCurrent(), fD_txtPostFix[0]));
 
 		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				// performOutputFolderChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix
-				// .getText());
+				performPostFixChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix.getText());
 			}
 		});
 		new Label(grpSpeicherort, SWT.NONE);
@@ -647,6 +647,13 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 		reloadResources();
+	}
+
+	private void performPostFixChanged(String postfix) {
+
+		log.debug("Save file postfix changed to : {}", postfix); //$NON-NLS-1$
+		this.configurationContainer.setSaveFilePostFix(postfix);
+		AdvancedConfigurationComposite.this.txtSaveFilePostFix.setText(postfix);
 	}
 
 	/*
