@@ -121,7 +121,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setSaveFilePostFix(postFix);
 		}
 
-
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
