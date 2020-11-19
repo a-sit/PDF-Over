@@ -33,7 +33,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -189,13 +188,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtMobileNumber.setFont(new Font(Display.getCurrent(),
 				fD_txtMobileNumber[0]));
 
-		this.txtMobileNumber.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processNumberChanged();
-				}
+		this.txtMobileNumber.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processNumberChanged();
 			}
 		});
 
@@ -238,7 +233,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.cmbSingatureProfiles.setFont(new Font(Display.getCurrent(),
 				fD_cmbSignatureProfile[0]));
 		this.cmbSingatureProfiles.setItems(Profile.getProfileStrings());
-		//this.cmbSingatureProfiles.select(this.configurationContainer.getSignatureProfile().ordinal());
 		this.cmbSingatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -282,16 +276,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_controlComposite.top = new FormAttachment(0, 20);
 		fd_controlComposite.bottom = new FormAttachment(100, -20);
 		controlComposite.setLayoutData(fd_controlComposite);
-		controlComposite.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				e.gc.setForeground(Constants.DROP_BORDER_COLOR);
-				e.gc.setLineWidth(3);
-				e.gc.setLineStyle(SWT.LINE_DASH);
-				Point size = controlComposite.getSize();
-				e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
-						10, 10);
-			}
+		controlComposite.addPaintListener(e -> {
+			e.gc.setForeground(Constants.DROP_BORDER_COLOR);
+			e.gc.setLineWidth(3);
+			e.gc.setLineStyle(SWT.LINE_DASH);
+			Point size = controlComposite.getSize();
+			e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
+					10, 10);
 		});
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
@@ -309,12 +300,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cLogo.height = 40;
 		fd_cLogo.width = 40;
 		this.cLogo.setLayoutData(fd_cLogo);
-		this.cLogo.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				imagePaintControl(e, SimpleConfigurationComposite.this.logo);
-			}
-		});
+		this.cLogo.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.logo));
 
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
 
@@ -332,12 +318,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cSigPreview.bottom = new FormAttachment(100, -20);
 
 		this.cSigPreview.setLayoutData(fd_cSigPreview);
-		this.cSigPreview.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview);
-			}
-		});
+		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
 
 		FontData[] fD_cSigPreview = this.cSigPreview.getFont().getFontData();
 		fD_cSigPreview[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -358,7 +339,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error("File: " + files[0] + " does not exist!"); //$NON-NLS-1$//$NON-NLS-2$
+							log.error("File: {} does not exist!", files[0]); //$NON-NLS-1$//$NON-NLS-2$
 							return;
 						}
 						processEmblemChanged(file.getAbsolutePath());
@@ -540,12 +521,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtSignatureNote.addTraverseListener(new TraverseListener() {
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processSignatureNoteChanged();
-				}
+		this.txtSignatureNote.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processSignatureNoteChanged();
 			}
 		});
 
@@ -628,10 +606,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			if (fileName != null) {
 				file = new File(fileName);
 				if (file.exists()) {
-					/*
-					 * SimpleConfigurationComposite.this.txtEmblemFile
-					 * .setText(fileName);
-					 */
 					processEmblemChanged(fileName);
 				}
 			}
@@ -644,11 +618,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	private void setEmblemFileInternal(final String filename, boolean force)
 			throws Exception {
-		if (!force) {
-			if (this.configurationContainer.getEmblem() != null) {
-				if (this.configurationContainer.getEmblem().equals(filename)) {
-					return; // Ignore ...
-				}
+		if (!force && this.configurationContainer.getEmblem() != null) {
+			if (this.configurationContainer.getEmblem().equals(filename)) {
+				return; // Ignore ...
 			}
 		}
 
@@ -734,17 +706,17 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("Locale: {} IDX: {}",locale, i); //$NON-NLS-1$ //$NON-NLS-2$
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
+		log.warn("NO Locale match for {}", locale); //$NON-NLS-1$
 		return 0;
 	}
 
 	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
-		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
+		log.debug("Selected Sign Locale: {}", selected); //$NON-NLS-1$
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 		if (previous != null) {
@@ -763,7 +735,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
     	if (selected.equals(Profile.AMTSSIGNATURBLOCK)){
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
-			//TODO also set the radio button in advanced config
 		}
 
 	}
@@ -774,7 +745,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
 
 		} catch (Exception e){
-			log.debug("Cannot save signature profile" + e.getMessage());
+			log.debug("Cannot save signature profile {}", e.getMessage());
 		}
 	}
 
@@ -861,7 +832,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		String emblemFile = this.configurationContainer.getEmblem();
 		if (emblemFile != null && !emblemFile.trim().isEmpty()) {
-			// this.txtEmblemFile.setText(emblemFile);
 			this.logoFile = emblemFile;
 			try {
 				setEmblemFileInternal(emblemFile, true);
@@ -921,8 +891,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			// Fall through
 		case 1:
 			this.processSignatureNoteChanged();
+			break;
+		default:
+				//Fall through
 		}
-		// this.plainEmblemSetter(this.emblemFile);
 	}
 
 	/*
