@@ -59,6 +59,7 @@ public class OutputState extends State {
 			}
 			
 			this.outputComposite.setOutputDir(config.getDefaultOutputFolder());
+			this.outputComposite.setSaveFilePostFix(config.getSaveFilePostFix());
 			this.outputComposite.setTempDir(tmpDir.getAbsolutePath());
 			this.outputComposite.setInputFile(status.getDocument());
 
