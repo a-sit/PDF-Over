@@ -94,12 +94,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	List<String> bkuStrings;
 	Button btnKeystoreEnabled;
 
-	private Group grpSpeicherort;
-	private Label lblDefaultOutputFolder;
+	private final Group grpSpeicherort;
+	private final Label lblDefaultOutputFolder;
 	Text txtOutputFolder;
-	private Button btnBrowse;
+	private final Button btnBrowse;
+	private final Label lblSaveFilePostFix;
+	private final Text txtSaveFilePostFix;
 
-	private Group grpLocaleAuswahl;
+	private final Group grpLocaleAuswahl;
 	Combo cmbLocaleAuswahl;
 
 	private Group grpUpdateCheck;
@@ -500,6 +502,41 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				}
 			}
 		});
+
+
+		this.lblSaveFilePostFix = new Label(this.grpSpeicherort, SWT.NONE);
+		FormData fd_lblSaveFilePostFix = new FormData();
+		fd_lblSaveFilePostFix.top = new FormAttachment(this.lblDefaultOutputFolder);
+		fd_lblSaveFilePostFix.left = new FormAttachment(0, 5);
+		this.lblSaveFilePostFix.setLayoutData(fd_lblSaveFilePostFix);
+
+		FontData[] fD_lblSaveFilePostFix = this.lblSaveFilePostFix.getFont()
+				.getFontData();
+		fD_lblSaveFilePostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.lblSaveFilePostFix.setFont(new Font(Display.getCurrent(),
+				fD_lblSaveFilePostFix[0]));
+
+		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.NONE);
+		FormData fd_PostFix = new FormData();
+		fd_PostFix.top = new FormAttachment(this.lblSaveFilePostFix, 5);
+		fd_PostFix.left = new FormAttachment(0, 15);
+		this.txtSaveFilePostFix.setLayoutData(fd_text);
+
+		FontData[] fD_txtPostFix = this.txtSaveFilePostFix.getFont()
+				.getFontData();
+		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.txtSaveFilePostFix.setFont(new Font(Display.getCurrent(),
+				fD_txtOutputFolder[0]));
+
+		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				//performOutputFolderChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix
+						//.getText());
+			}
+		});
+
 		
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
 		FormLayout layout_grpLocaleAuswahl = new FormLayout();
