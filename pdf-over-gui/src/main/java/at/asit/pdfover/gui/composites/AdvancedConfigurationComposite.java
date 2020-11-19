@@ -388,7 +388,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.lblDefaultOutputFolder.setFont(new Font(Display.getCurrent(), fD_lblDefaultOutputFolder[0]));
 
 		this.txtOutputFolder = new Text(this.grpSpeicherort, SWT.BORDER);
-		GridData gd_txtOutputFolder = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gd_txtOutputFolder = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		txtOutputFolder.setLayoutData(gd_txtOutputFolder);
 
 		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont().getFontData();
@@ -445,7 +445,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.lblSaveFilePostFix.setFont(new Font(Display.getCurrent(), fD_lblSaveFilePostFix[0]));
 
 		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.BORDER);
-		GridData gd_txtSaveFilePostFix = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gd_txtSaveFilePostFix = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 
 		txtSaveFilePostFix.setLayoutData(gd_txtSaveFilePostFix);
 
