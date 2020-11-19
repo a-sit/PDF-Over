@@ -26,8 +26,6 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -363,7 +361,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbBKUAuswahl[0]));
 
 		int blen = BKUs.values().length;
-		this.bkuStrings = new ArrayList<String>(blen);
+		this.bkuStrings = new ArrayList<>(blen);
 		for (int i = 0; i < blen; i++) {
 			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
 			String text = Messages.getString(lookup);
@@ -651,13 +649,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtProxyHost.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processProxyHostChanged();
-				}
+		this.txtProxyHost.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processProxyHostChanged();
 			}
 		});
 
@@ -687,13 +681,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.txtProxyPort.setFont(new Font(Display.getCurrent(),
 				fD_txtProxyPort[0]));
 
-		this.txtProxyPort.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processProxyPortChanged();
-				}
+		this.txtProxyPort.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processProxyPortChanged();
 			}
 		});
 
@@ -729,7 +719,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	}
 
 	void performOutputFolderChanged(String foldername) {
-		log.debug("Selected Output folder: " + foldername); //$NON-NLS-1$
+		log.debug("Selected Output folder: {}", foldername); //$NON-NLS-1$
 		this.configurationContainer.setOutputFolder(foldername);
 		AdvancedConfigurationComposite.this.txtOutputFolder.setText(foldername);
 	}
@@ -740,14 +730,14 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		int i = this.bkuStrings.indexOf(bkuName);
 		if (i == -1) {
-			log.warn("NO BKU match for " + bkuName); //$NON-NLS-1$
+			log.warn("NO BKU match for {}", bkuName); //$NON-NLS-1$
 			return 0;
 		}
 		return i;
 	}
 
 	void performBKUSelectionChanged(BKUs selected) {
-		log.debug("Selected BKU: " + selected.toString()); //$NON-NLS-1$
+		log.debug("Selected BKU: {}", selected); //$NON-NLS-1$
 		this.configurationContainer.setDefaultBKU(selected);
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
 	}
@@ -757,7 +747,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			BKUs bkuvalue = resolveBKU(selected);
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
-			log.error("Failed to parse BKU value: " + selected, ex); //$NON-NLS-1$
+			log.error("Failed to parse BKU value: {} {}", selected, ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(getShell(),
 					Messages.getString("error.InvalidBKU"), BUTTONS.OK); //$NON-NLS-1$
 			dialog.open();
@@ -780,23 +770,23 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("Locale: {} IDX: {}", locale, i); //$NON-NLS-1$ //$NON-NLS-2$
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
+		log.warn("NO Locale match for {}", locale); //$NON-NLS-1$
 		return 0;
 	}
 	
 	void performLocaleSelectionChanged(Locale selected) {
-		log.debug("Selected Locale: " + selected); //$NON-NLS-1$
+		log.debug("Selected Locale: {}", selected); //$NON-NLS-1$
 		this.configurationContainer.setLocale(selected);
 		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
 	}
 
 	void performPositionSelection(boolean automatic) {
-		log.debug("Selected Position: " + automatic); //$NON-NLS-1$
+		log.debug("Selected Position: {}", automatic); //$NON-NLS-1$
 		SignaturePosition pos = automatic ? new SignaturePosition() : null;
 		this.configurationContainer.setDefaultSignaturePosition(pos);
 		this.btnAutomatischePositionierung.setSelection(automatic);
@@ -921,8 +911,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
 		this.configurationContainer.setEnablePlaceholderUsage(provider.getEnablePlaceholderUsage());
-		/*this.configurationContainer.setDownloadURL(
-				provider.getDownloadURL());*/
 		this.configurationContainer.setSignaturePdfACompat(
 				provider.getSignaturePdfACompat());
 		this.configurationContainer.setPlaceholderTransparency(
