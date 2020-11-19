@@ -1007,11 +1007,12 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			case AMTSSIGNATURBLOCK:
 				this.performPositionSelection(true);
 				this.btnAutomatischePositionierung.setEnabled(false);
-				this.grpPlaceholder.setEnabled(false);
+				this.btnEnablePlaceholderUsage.setEnabled(true);
+				this.performEnableUsePlaceholder(false);
 				break;
 			default:
 				this.btnAutomatischePositionierung.setEnabled(true);
-				this.grpPlaceholder.setEnabled(true);
+				this.btnEnablePlaceholderUsage.setEnabled(true);
 		}
 	}
 
