@@ -49,6 +49,8 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	/** The profile ID extension for PDF/A compatibility */
 	private static final String PROFILE_ID_PDFA = "_PDFA";
 
+	private static final String PROFILE_ID_RECOMMENDED = "_RECOMMENDED";
+
 	/**
 	 * Visibility of signature block
 	 */
@@ -168,17 +170,25 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		//Add Signature Param here//
 		String profileId;
 
-
-
-		if (!PROFILE_VISIBILITY || Profile.getProfile(this.profile).equals(Profile.INVISIBLE))
-		{
-			profileId = "INVISIBLE";
-		} else {
-			profileId = Profile.getProfile(this.profile).name();
-			profileId += (lang != null && lang.equals("en")) ?
-					PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
+		if (!PROFILE_VISIBILITY){
+			log.debug("Profile visibility was set to false");
+			return Profile.INVISIBLE.name();
 		}
 
+		switch (Profile.getProfile(this.profile)){
+			case BASE_LOGO:
+			case INVISIBLE:
+				return getProfileName();
+			case AMTSSIGNATURBLOCK:
+				profileId = getProfileName();
+				profileId += getLangProfilePart(lang);
+				profileId += PROFILE_ID_RECOMMENDED;
+				return profileId;
+			default:
+				profileId = getProfileName();
+				profileId += getLangProfilePart(lang);
+				break;
+		}
 
 		if (useNote)
 			profileId += PROFILE_ID_NOTE;
@@ -189,6 +199,14 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		log.debug("Profile ID: {}", profileId);
 		System.out.println(profileId);
 		return profileId;
+	}
+
+	private String getProfileName(){
+		return Profile.getProfile(this.profile).name();
+	}
+
+	private String getLangProfilePart(String lang){
+		return (lang != null && lang.equals("en")) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
 	}
 
 	@Override

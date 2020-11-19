@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.activation.DataSource;
 
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignResultImpl;
@@ -144,6 +145,8 @@ public class PdfAs4Signer implements Signer {
 					sp = new SignaturePosition();
 				else if (tp.isPauto())
 					sp = new SignaturePosition(tp.getPosX(), tp.getPosY());
+				else if (param.getSignatureProfileId().contains(Profile.AMTSSIGNATURBLOCK.getName()))
+					sp = new SignaturePosition();
 				else
 					sp = new SignaturePosition(tp.getPosX(), tp.getPosY(), tp.getPage());
 				result.setSignaturePosition(sp);
@@ -151,9 +154,7 @@ public class PdfAs4Signer implements Signer {
 
 			result.setSignedDocument(new ByteArrayDocumentSource(sstate.getOutput().toByteArray()));
 			return result;
-		} catch (PdfAsException e) {
-			throw new SignatureException(e);
-		} catch (PDFASError e) {
+		} catch (PdfAsException | PDFASError e) {
 			throw new SignatureException(e);
 		}
 	}

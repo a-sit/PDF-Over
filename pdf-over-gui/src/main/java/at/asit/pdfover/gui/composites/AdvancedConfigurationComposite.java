@@ -1002,7 +1002,17 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	 * 
 	 */
 	public void performSetSignatureProfile(Profile profile) {
-		this.configurationContainer.setSignatureProfile(profile);
+		switch (profile){
+			case INVISIBLE:
+			case AMTSSIGNATURBLOCK:
+				this.performPositionSelection(true);
+				this.btnAutomatischePositionierung.setEnabled(false);
+				this.grpPlaceholder.setEnabled(false);
+				break;
+			default:
+				this.btnAutomatischePositionierung.setEnabled(true);
+				this.grpPlaceholder.setEnabled(true);
+		}
 	}
 
 	/* (non-Javadoc)

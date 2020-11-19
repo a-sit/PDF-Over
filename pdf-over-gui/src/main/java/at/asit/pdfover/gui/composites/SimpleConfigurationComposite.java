@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
+import at.asit.pdfover.signator.SignaturePosition;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -759,6 +760,12 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
     	this.configurationContainer.setSignatureProfile(selected);
     	this.cmbSingatureProfiles.select(selected.ordinal());
+
+    	if (selected.equals(Profile.AMTSSIGNATURBLOCK)){
+			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
+			//TODO also set the radio button in advanced config
+		}
+
 	}
 
 	void setSignatureProfileSetting(){
