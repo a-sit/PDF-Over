@@ -739,7 +739,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
     	this.configurationContainer.setSignatureProfile(selected);
     	this.cmbSignatureProfiles.select(selected.ordinal());
 
-    	if (selected.equals(Profile.AMTSSIGNATURBLOCK)){
+    	if (selected.equals(Profile.AMTSSIGNATURBLOCK) || selected.equals(Profile.INVISIBLE)){
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
 		}
 
