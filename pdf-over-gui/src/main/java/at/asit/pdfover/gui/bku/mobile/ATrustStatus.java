@@ -245,7 +245,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 * @return the smsTan
 	 */
 	public boolean isSmsTan() {
-		return smsTan;
+		return this.smsTan;
 	}
 
 	/**

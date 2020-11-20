@@ -38,10 +38,7 @@ public class Messages {
 	
 	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //$NON-NLS-1$
 
-	private static HashMap<Locale, ResourceBundle> bundles = new HashMap<Locale, ResourceBundle>();
-	
-	//private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-	//		.getBundle(BUNDLE_NAME);
+	private static HashMap<Locale, ResourceBundle> bundles = new HashMap<>();
 
 	private static Locale currentLocale = getDefaultLocale();
 	
@@ -71,17 +68,17 @@ public class Messages {
 	
 	private static ResourceBundle getBundle(Locale locale) {
 		if(!bundles.containsKey(locale)) {
-			log.debug("Loading resource bundle for " + locale); //$NON-NLS-1$
+			log.debug("Loading resource bundle for {}", locale); //$NON-NLS-1$
 			ResourceBundle tmp = null;
 			try {
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME, locale);
-				log.debug("Received bundle for " + tmp.getLocale()); //$NON-NLS-1$
+				log.debug("Received bundle for {}", tmp.getLocale()); //$NON-NLS-1$
 			} catch(Exception e) {
-				log.error("NO RESOURCE BUNDLE FOR " + locale.toString(), e); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR {} {}", locale, e); //$NON-NLS-1$
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			if(tmp == null) {
-				log.error("NO RESOURCE BUNDLE FOR " + locale.toString()); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR {}", locale); //$NON-NLS-1$
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			bundles.put(locale, tmp);
@@ -98,7 +95,6 @@ public class Messages {
 	public static String getString(String key) {
 		try {
 			return getBundle(currentLocale).getString(key);
-			//return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
@@ -113,7 +109,6 @@ public class Messages {
 	public static String getString(String key, Locale locale) {
 		try {
 			return getBundle(locale).getString(key);
-			//return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}

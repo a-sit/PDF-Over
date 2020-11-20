@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
+import at.asit.pdfover.signator.SignaturePosition;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -32,11 +33,8 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -62,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
@@ -90,29 +89,35 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;
-	Text txtMobileNumber;
-	FormData fd_txtMobileNumber;
-	ErrorMarker txtMobileNumberErrorMarker;
-	FormData fd_txtMobileNumberErrorMarker;
+	protected Text txtMobileNumber;
+	protected FormData fd_txtMobileNumber;
+	protected ErrorMarker txtMobileNumberErrorMarker;
+	protected FormData fd_txtMobileNumberErrorMarker;
 
 	private Group grpLogo;
 	private Canvas cLogo;
 	private Label lblDropLogo;
-	Button btnClearImage;
+	protected Button btnClearImage;
 	private Button btnBrowseLogo;
-	Canvas cSigPreview;
+	protected Canvas cSigPreview;
 
 	private Group grpSignatureNote;
 	private Label lblSignatureNote;
-	Text txtSignatureNote;
+	protected Text txtSignatureNote;
 	private Button btnSignatureNoteDefault;
 
-	private Group grpSignatureLang;
-	Combo cmbSignatureLang;
+	protected final Group grpSignatureLang;
+	protected final Combo cmbSignatureLang;
 
-	String logoFile;
-	Image sigPreview = null;
-	Image logo = null;
+	protected String logoFile = null;
+	protected Image sigPreview = null;
+	protected Image logo = null;
+	
+	protected final Group grpSignatureProfile;
+	protected final Combo cmbSignatureProfiles;
+
+
+	
 
 	/**
 	 * @param parent
@@ -181,13 +186,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.txtMobileNumber.setFont(new Font(Display.getCurrent(),
 				fD_txtMobileNumber[0]));
 
-		this.txtMobileNumber.addTraverseListener(new TraverseListener() {
-
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processNumberChanged();
-				}
+		this.txtMobileNumber.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processNumberChanged();
 			}
 		});
 
@@ -199,11 +200,62 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
+		this.grpSignatureProfile = new Group(this, SWT.NONE);
+		FormData fd_grpSingnatureProfile = new FormData();
+		fd_grpSingnatureProfile.right = new FormAttachment(100, -5);
+		fd_grpSingnatureProfile.left = new FormAttachment(0, 5);
+		fd_grpSingnatureProfile.top = new FormAttachment(this.grpHandySignatur, 5);
+		this.grpSignatureProfile.setLayoutData(fd_grpSingnatureProfile);
+		this.grpSignatureProfile.setText("Signature Profile"); //$NON-NLS-1$
+		this.grpSignatureProfile.setLayout(new FormLayout());
+	
+		FontData[] fD_grpSignatureProfile = this.grpSignatureProfile.getFont()
+				.getFontData();
+		fD_grpSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.grpSignatureProfile.setFont(new Font(Display.getCurrent(),
+				fD_grpSignatureProfile[0]));
+		
+		
+		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
+		
+		FormData fd_cmbSingatureProfiles = new FormData();
+		fd_cmbSingatureProfiles.left = new FormAttachment(0, 10);
+		fd_cmbSingatureProfiles.right = new FormAttachment(100, -10);
+		fd_cmbSingatureProfiles.top = new FormAttachment(0, 10);
+		fd_cmbSingatureProfiles.bottom = new FormAttachment(100, -10);
+		this.cmbSignatureProfiles.setLayoutData(fd_cmbSingatureProfiles);
+
+		FontData[] fD_cmbSignatureProfile = this.cmbSignatureProfiles.getFont()
+				.getFontData();
+		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+		this.cmbSignatureProfiles.setFont(new Font(Display.getCurrent(),
+				fD_cmbSignatureProfile[0]));
+
+		String[] items = new String[Profile.values().length];
+		int i = 0;
+		for (Profile profile : Profile.values()) {
+			items[i] = Messages.getString("simple_config." +  profile.name());
+			i++;
+		}
+
+		this.cmbSignatureProfiles.setItems(items);
+		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
+				Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSignatureProfiles
+						                  .getSelectionIndex());
+				if (!current.equals(selected)) {
+					preformProfileSelectionChanged(selected);
+				}
+			}
+		});
+
 		this.grpLogo = new Group(this, SWT.NONE);
 		FormData fd_grpBildmarke = new FormData();
 		fd_grpBildmarke.left = new FormAttachment(0, 5);
 		fd_grpBildmarke.right = new FormAttachment(100, -5);
-		fd_grpBildmarke.top = new FormAttachment(this.grpHandySignatur, 5);
+		fd_grpBildmarke.top = new FormAttachment(this.grpSignatureProfile, 5);
 		this.grpLogo.setLayoutData(fd_grpBildmarke);
 		this.grpLogo.setLayout(new FormLayout());
 
@@ -230,16 +282,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_controlComposite.top = new FormAttachment(0, 20);
 		fd_controlComposite.bottom = new FormAttachment(100, -20);
 		controlComposite.setLayoutData(fd_controlComposite);
-		controlComposite.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				e.gc.setForeground(Constants.DROP_BORDER_COLOR);
-				e.gc.setLineWidth(3);
-				e.gc.setLineStyle(SWT.LINE_DASH);
-				Point size = controlComposite.getSize();
-				e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
-						10, 10);
-			}
+		controlComposite.addPaintListener(e -> {
+			e.gc.setForeground(Constants.DROP_BORDER_COLOR);
+			e.gc.setLineWidth(3);
+			e.gc.setLineStyle(SWT.LINE_DASH);
+			Point size = controlComposite.getSize();
+			e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
+					10, 10);
 		});
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
@@ -257,19 +306,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cLogo.height = 40;
 		fd_cLogo.width = 40;
 		this.cLogo.setLayoutData(fd_cLogo);
-		this.cLogo.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				imagePaintControl(e, SimpleConfigurationComposite.this.logo);
-			}
-		});
+		this.cLogo.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.logo));
 
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
 
 		FormData fd_lbl_drop = new FormData();
 		fd_lbl_drop.left = new FormAttachment(0, 20);
 		fd_lbl_drop.right = new FormAttachment(100, -20);
-		// fd_lbl_drop.top = new FormAttachment(50, -20);
 		fd_lbl_drop.bottom = new FormAttachment(this.btnBrowseLogo, -20);
 
 		this.lblDropLogo.setLayoutData(fd_lbl_drop);
@@ -281,12 +324,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		fd_cSigPreview.bottom = new FormAttachment(100, -20);
 
 		this.cSigPreview.setLayoutData(fd_cSigPreview);
-		this.cSigPreview.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview);
-			}
-		});
+		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
 
 		FontData[] fD_cSigPreview = this.cSigPreview.getFont().getFontData();
 		fD_cSigPreview[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -307,7 +345,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error("File: " + files[0] + " does not exist!"); //$NON-NLS-1$//$NON-NLS-2$
+							log.error("File: {} does not exist!", files[0]); //$NON-NLS-1$//$NON-NLS-2$
 							return;
 						}
 						processEmblemChanged(file.getAbsolutePath());
@@ -418,8 +456,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				fD_cmbSignatureLang[0]));
 
 		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
-		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeSignStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage();
+		for (int idx = 0; idx < Constants.SUPPORTED_LOCALES.length; ++idx) {
+			localeSignStrings[idx] = Constants.SUPPORTED_LOCALES[idx].getDisplayLanguage();
 		}
 		this.cmbSignatureLang.setItems(localeSignStrings);
 		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
@@ -489,12 +527,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.txtSignatureNote.addTraverseListener(new TraverseListener() {
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					processSignatureNoteChanged();
-				}
+		this.txtSignatureNote.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processSignatureNoteChanged();
 			}
 		});
 
@@ -577,10 +612,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			if (fileName != null) {
 				file = new File(fileName);
 				if (file.exists()) {
-					/*
-					 * SimpleConfigurationComposite.this.txtEmblemFile
-					 * .setText(fileName);
-					 */
 					processEmblemChanged(fileName);
 				}
 			}
@@ -593,11 +624,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 	private void setEmblemFileInternal(final String filename, boolean force)
 			throws Exception {
-		if (!force) {
-			if (this.configurationContainer.getEmblem() != null) {
-				if (this.configurationContainer.getEmblem().equals(filename)) {
-					return; // Ignore ...
-				}
+		if (!force && this.configurationContainer.getEmblem() != null) {
+			if (this.configurationContainer.getEmblem().equals(filename)) {
+				return; // Ignore ...
 			}
 		}
 
@@ -613,8 +642,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		try {
 			if (this.signer != null) {
-				SignatureParameter param = this.signer.getPDFSigner()
-						.newParameter();
+				SignatureParameter param = this.signer.getPDFSigner().newParameter();
 				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
 					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
 				}
@@ -684,17 +712,17 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: " + locale + " IDX: " + i); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("Locale: {} IDX: {}",locale, i); //$NON-NLS-1$ //$NON-NLS-2$
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for " + locale); //$NON-NLS-1$
+		log.warn("NO Locale match for {}", locale); //$NON-NLS-1$
 		return 0;
 	}
 
 	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
-		log.debug("Selected Sign Locale: " + selected); //$NON-NLS-1$
+		log.debug("Selected Sign Locale: {}", selected); //$NON-NLS-1$
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 		if (previous != null) {
@@ -703,6 +731,27 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 				this.txtSignatureNote.setText(Messages.getString("simple_config.Note_Default", selected)); //$NON-NLS-1$);
 				processSignatureNoteChanged();
 			}
+		}
+	}
+	
+    void preformProfileSelectionChanged(Profile selected) {
+		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
+    	this.configurationContainer.setSignatureProfile(selected);
+    	this.cmbSignatureProfiles.select(selected.ordinal());
+
+    	if (selected.equals(Profile.AMTSSIGNATURBLOCK) || selected.equals(Profile.INVISIBLE)){
+			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
+		}
+
+	}
+
+	void setSignatureProfileSetting(){
+		try {
+			SignatureParameter param = this.signer.getPDFSigner().newParameter();
+			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
+
+		} catch (Exception e){
+			log.debug("Cannot save signature profile {}", e.getMessage());
 		}
 	}
 
@@ -715,6 +764,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	@Override
 	protected void signerChanged() {
 		this.setVisibleImage();
+		this.setSignatureProfileSetting();
 	}
 
 	/**
@@ -788,7 +838,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		String emblemFile = this.configurationContainer.getEmblem();
 		if (emblemFile != null && !emblemFile.trim().isEmpty()) {
-			// this.txtEmblemFile.setText(emblemFile);
 			this.logoFile = emblemFile;
 			try {
 				setEmblemFileInternal(emblemFile, true);
@@ -811,6 +860,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.setVisibleImage();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale(), null);
+		
+		this.preformProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
+		
 	}
 
 	/* (non-Javadoc)
@@ -826,6 +878,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		store.setSignatureLocale(this.configurationContainer.getSignatureLocale());
 
 		store.setSignatureNote(this.configurationContainer.getSignatureNote());
+		
+		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
 	}
 
 	/*
@@ -843,8 +897,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			// Fall through
 		case 1:
 			this.processSignatureNoteChanged();
+			break;
+		default:
+				//Fall through
 		}
-		// this.plainEmblemSetter(this.emblemFile);
 	}
 
 	/*

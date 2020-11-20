@@ -16,3 +16,4 @@ log/
 pdf-over-build/
 release.properties
 *.jar-bak
+*.iml

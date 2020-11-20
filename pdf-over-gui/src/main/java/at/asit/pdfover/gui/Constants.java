@@ -23,7 +23,7 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
+
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
 /**
@@ -39,8 +39,11 @@ public class Constants {
 
 	/** Application name + version */
 	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //$NON-NLS-1$
+	
+	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE"; //$NON-NLS-1$
+    public static final String DEFAULT_POSTFIX = "_signed";
 
-	static {
+    static {
 		// Has to be set before (implicitly) initializing Display
 		Display.setAppName(APP_NAME);
 	}
@@ -55,7 +58,7 @@ public class Constants {
 
 	/** Supported locales */
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
-
+	
 	/** Configuration directory */
 	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -78,7 +81,7 @@ public class Constants {
 	 * The minimum PDF-AS configuration version (older ones will be backed up
 	 * and updated
 	 */
-	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.0"; //$NON-NLS-1$
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.6"; //$NON-NLS-1$
 
 	/** The configuration backup filename */
 	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup"; //$NON-NLS-1$
@@ -103,13 +106,13 @@ public class Constants {
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	/** PDF-Over User Agent string */
-	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.1" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** Current release file */
-	public static final String CURRENT_RELEASE_URL = "http://webstart.buergerkarte.at/PDF-Over/Release.txt"; //$NON-NLS-1$
+	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt"; //$NON-NLS-1$
 
 	/** Update URL */
-	public static final String UPDATE_URL = "http://webstart.buergerkarte.at/PDF-Over/"; //$NON-NLS-1$
+	public static final String UPDATE_URL = "https://technology.a-sit.at/en/pdf-over/"; //$NON-NLS-1$
 
 	/** True */
 	public static final String TRUE = "true"; //$NON-NLS-1$
@@ -206,6 +209,8 @@ public class Constants {
 
 	/** The output folder config parameter */
 	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
+
+	public static final String CFG_POSTFIX = "SAVE_FILE_POSTFIX";
 
 	/** The main window size (Format: width,height) */
 	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE"; //$NON-NLS-1$

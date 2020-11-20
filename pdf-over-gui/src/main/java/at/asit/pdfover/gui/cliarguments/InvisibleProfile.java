@@ -54,8 +54,8 @@ public class InvisibleProfile extends Argument {
 			log.info("Set Profile Invisible");
 			
 			if (args.length > argOffset + 1) {
-
 				PdfAs4SignatureParameter.PROFILE_VISIBILITY=false;
+				log.debug("We are setting the profile visibility to false");
 				return argOffset + 1;	
 			}
 			

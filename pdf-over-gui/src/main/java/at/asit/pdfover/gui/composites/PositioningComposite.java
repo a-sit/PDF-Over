@@ -310,6 +310,7 @@ public class PositioningComposite extends StateComposite {
 
 			if (e.getWheelRotation() < 0) {
 				if (PositioningComposite.this.currentPage > 1)
+					System.out.println("################## page " + newPage);
 					newPage--;
 			} else if (e.getWheelRotation() > 0) {
 				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)

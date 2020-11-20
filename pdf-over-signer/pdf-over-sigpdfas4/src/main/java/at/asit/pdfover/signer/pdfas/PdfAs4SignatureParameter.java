@@ -26,6 +26,7 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -33,13 +34,12 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
+import at.asit.pdfover.commons.Profile;
 
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 public class PdfAs4SignatureParameter extends SignatureParameter {
-	/** The base profile ID */
-	private static final String PROFILE_ID_BASE = "SIGNATURBLOCK_SMALL";
 	/** The profile ID extension for the German signature block */
 	private static final String PROFILE_ID_LANG_DE = "_DE";
 	/** The profile ID extension for the English signature block */
@@ -48,7 +48,9 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	private static final String PROFILE_ID_NOTE = "_NOTE";
 	/** The profile ID extension for PDF/A compatibility */
 	private static final String PROFILE_ID_PDFA = "_PDFA";
-	
+
+	private static final String PROFILE_ID_RECOMMENDED = "_RECOMMENDED";
+
 	/**
 	 * Visibility of signature block
 	 */
@@ -57,7 +59,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
 	/**
-	 * This parameters are defining the signature block size 
+	 * This parameters are defining the signature block size
 	 */
 	private int sig_w = 229;
 	private int sig_h = 77;
@@ -67,6 +69,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAs4SignatureParameter.class);
+	private String profile;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
@@ -129,7 +132,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
 	/**
 	 * Gets the Signature Position String for PDF-AS
-	 * 
+	 *
 	 * @return Signature Position String
 	 */
 	public String getPdfAsSignaturePosition() {
@@ -163,21 +166,28 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		String lang = getSignatureLanguage();
 		boolean useNote = (getProperty("SIG_NOTE") != null);
 		boolean usePdfACompat = (getSignaturePdfACompat());
-		
+
 		//Add Signature Param here//
 		String profileId;
-		
-		
-		
-		if (PROFILE_VISIBILITY)
-		{
-		profileId = PROFILE_ID_BASE;
-		profileId += (lang != null && lang.equals("en")) ?
-				PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;}
-		
-		else
-		{
-			profileId ="INVISIBLE";
+
+		if (!PROFILE_VISIBILITY){
+			log.debug("Profile visibility was set to false");
+			return Profile.INVISIBLE.name();
+		}
+
+		switch (Profile.getProfile(this.profile)){
+			case BASE_LOGO:
+			case INVISIBLE:
+				return getProfileName();
+			case AMTSSIGNATURBLOCK:
+				profileId = getProfileName();
+				profileId += getLangProfilePart(lang);
+				profileId += PROFILE_ID_RECOMMENDED;
+				return profileId;
+			default:
+				profileId = getProfileName();
+				profileId += getLangProfilePart(lang);
+				break;
 		}
 
 		if (useNote)
@@ -186,7 +196,30 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 		if (usePdfACompat)
 			profileId += PROFILE_ID_PDFA;
 
-		log.debug("Profile ID: " + profileId);
+		log.debug("Profile ID: {}", profileId);
+		System.out.println(profileId);
 		return profileId;
 	}
+
+	private String getProfileName(){
+		return Profile.getProfile(this.profile).name();
+	}
+
+	private String getLangProfilePart(String lang){
+		return (lang != null && lang.equals("en")) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
+	}
+
+	@Override
+	public void setSignatureProfile(String profile) {
+		this.profile = profile;
+	}
+
+	@Override
+	public String getSignatureProfile() {
+		return this.profile;
+	}
+
 }
+
+
+

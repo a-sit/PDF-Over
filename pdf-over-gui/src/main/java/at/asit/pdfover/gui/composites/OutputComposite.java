@@ -78,6 +78,8 @@ public class OutputComposite extends StateComposite {
 
 	private boolean saveFailed = false;
 
+	private String postFix = null;
+
 	/**
 	 * Create the composite.
 	 * 
@@ -211,6 +213,17 @@ public class OutputComposite extends StateComposite {
 		this.btn_save.setVisible(doEnable);
 	}
 
+	public void setSaveFilePostFix(String postFix){
+		this.postFix = postFix;
+	}
+
+	public String getSaveFilePostFix(){
+		if (this.postFix == null){
+			this.postFix = Constants.DEFAULT_POSTFIX;
+		}
+		return this.postFix;
+	}
+
 	/**
 	 * Saves the signed document.
 	 * 
@@ -334,11 +347,11 @@ public class OutputComposite extends StateComposite {
 	 * @param name input filename
 	 * @return proposed output filename
 	 */
-	private static String getSignedFileName(String name) {
+	private String getSignedFileName(String name) {
 		name = FilenameUtils.getName(name);
 		String extension = FilenameUtils.getExtension(name);
 		name = FilenameUtils.removeExtension(name);
-		return name + Constants.SIGNED_SUFFIX + FilenameUtils.EXTENSION_SEPARATOR  + extension;
+		return name + getSaveFilePostFix() + FilenameUtils.EXTENSION_SEPARATOR  + extension;
 	}
 
 	/**

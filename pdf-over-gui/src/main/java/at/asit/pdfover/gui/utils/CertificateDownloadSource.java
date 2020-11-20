@@ -85,7 +85,7 @@ public class CertificateDownloadSource {
 			
 			
 			
-			if (!cp.getProxyHost().equals("")) {
+			if (!cp.getProxyHost().equals("")) { //$NON-NLS-1$
 				log.info("Found PDF-Over Host settings: "+cp.getProxyHost().toString()); //$NON-NLS-1$
 				
 				try{
@@ -103,7 +103,7 @@ public class CertificateDownloadSource {
 				{log.info("Illegal Argument for Proxy and/or Host)");} //$NON-NLS-1$
 				
 			} else {
-				log.info("Opening default connection");
+				log.info("Opening default connection"); //$NON-NLS-1$
 				 connection = url.openConnection();
 				
 			}
@@ -131,7 +131,7 @@ public class CertificateDownloadSource {
 				Document doc = dBuilder.newDocument();
 
 				// root element
-				Node rootElement = doc.createElement("certificates");
+				Node rootElement = doc.createElement("certificates"); //$NON-NLS-1$
 				doc.appendChild(rootElement);
 				TransformerFactory transformerFactory = TransformerFactory.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
@@ -169,7 +169,7 @@ public class CertificateDownloadSource {
 
 				Node certificates_added = doc_added.getFirstChild();
 				NodeList certificates_added_list = certificates_added.getChildNodes();
-				log.info("===== Starting to download accepted certificates =====");
+				log.info("===== Starting to download accepted certificates ====="); //$NON-NLS-1$
 
 				// identify the certificate that has to be downloaded
 				for (int i = 0; i < certificates_added_list.getLength(); i++) {
@@ -187,7 +187,7 @@ public class CertificateDownloadSource {
 						}
 
 						URLConnection connection;
-						if (!certificateNode.getTextContent().equals("")) {
+						if (!certificateNode.getTextContent().equals("")) { //$NON-NLS-1$
 							String certResource = Constants.CERTIFICATE_DOWNLOAD_XML_URL
 									+ certificateNode.getTextContent();
 							URL url = new URL(certResource);
