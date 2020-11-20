@@ -109,10 +109,10 @@ public class Constants {
 	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** Current release file */
-	public static final String CURRENT_RELEASE_URL = "http://webstart.buergerkarte.at/PDF-Over/Release.txt"; //$NON-NLS-1$
+	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt"; //$NON-NLS-1$
 
 	/** Update URL */
-	public static final String UPDATE_URL = "http://webstart.buergerkarte.at/PDF-Over/"; //$NON-NLS-1$
+	public static final String UPDATE_URL = "https://technology.a-sit.at/en/pdf-over/"; //$NON-NLS-1$
 
 	/** True */
 	public static final String TRUE = "true"; //$NON-NLS-1$
