@@ -4,7 +4,7 @@
 		<artifactId>pdf-over</artifactId>
 		<groupId>at.a-sit</groupId>
 		<version>4.2.4-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>pdf-over-gui</artifactId>
 	<name>PDF-Over GUI</name>
