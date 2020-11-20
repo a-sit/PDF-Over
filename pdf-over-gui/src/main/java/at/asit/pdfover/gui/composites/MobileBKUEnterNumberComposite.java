@@ -360,6 +360,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	public String getMobilePassword() {
 		return this.mobilePassword;
 	}
+	
+
 
 	/**
 	 * @param mobilePassword

@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.workflow.config;
 
 import java.util.Locale;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Point;
 
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
@@ -152,10 +153,6 @@ public interface ConfigurationContainer {
 	 * @return the default BKU
 	 */
 	public BKUs getDefaultBKU();
-	
-	
-	
-
 
 	/**
 	 * Sets the default BKU 
@@ -412,4 +409,21 @@ public interface ConfigurationContainer {
 	 * @return boolean
 	 */
 	public boolean getEnablePlaceholderUsage();
+	
+	
+	/**
+	 * @param profile set the selected profile
+	 */
+	public void setSignatureProfile(Profile profile);
+	
+	
+	/**
+	 * @return selected signature profile as string
+	 */
+	public Profile getSignatureProfile();
+
+
+	public void setSaveFilePostFix(String postFix);
+
+	public String getSaveFilePostFix();
 }

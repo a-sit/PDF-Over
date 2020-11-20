@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -144,6 +145,11 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** Either QR-Code or signature fields as marker */
 	protected boolean useSignatureFields = false; 
+	
+	/**	The Signature Profile */
+	protected Profile signatureProfile = null;
+
+	protected String saveFilePostFix = "_signed";
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#getEmblem()
@@ -723,4 +729,29 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		return this.enabledPlaceholderUsage;
 	}
 	
+	
+	@Override 
+	public Profile getSignatureProfile() {
+		if (this.signatureProfile == null) {
+			this.signatureProfile = Profile.SIGNATURBLOCK_SMALL;
+		}
+		return this.signatureProfile; 
+	}
+
+    @Override
+    public String getSaveFilePostFix() {
+        return this.saveFilePostFix;
+    }
+
+    @Override
+	public void setSaveFilePostFix(String postfix){
+		this.saveFilePostFix = postfix;
+	}
+
+
+    @Override
+	public void setSignatureProfile(Profile profile) {
+		this.signatureProfile = profile;
+	}
+ 	
 }

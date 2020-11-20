@@ -199,4 +199,12 @@ public interface PersistentConfigProvider {
 	 * @return
 	 */
 	public boolean getEnablePlaceholderUsage();
+	
+	/***
+	 * 
+	 * @return the signature profile 
+	 */
+	public String getSignatureProfile();
+
+	public String getSaveFilePostFix();
 }

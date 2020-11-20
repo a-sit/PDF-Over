@@ -197,6 +197,13 @@ public interface ConfigManipulator {
 	 * @return
 	 */
 	public boolean getEnablePlaceholderUsage();
+
+	/**
+	 * @param profile
+	 */
+	public void setSignatureProfile(String profile);
+
+	public void setSaveFilePostFix(String postFix);
 	
 }
 

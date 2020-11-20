@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.1.6-RC</pdf-as.version>
+		<pdf-as.version>4.1.6</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,18 +53,18 @@
 			<artifactId>iaik_eccelerate_cms</artifactId>
 			<version>3.01</version>
 		</dependency>
+		<dependency>
+			<groupId>at.a-sit</groupId>
+			<artifactId>pdf-over-commons</artifactId>
+			<version>4.2.4-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>pdf-as-4</id>
-			<name>PDF-AS 4 Repository</name>
+			<id>EGIZ Repo</id>
+			<name>EGIZ Internal Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
-		</repository>
-		<repository>
-			<id>pdf-as-4-rc</id>
-			<name>PDF-AS 4 Repository RC</name>
-			<url>https://apps.egiz.gv.at/releases/pdf-as/release/4.1.6RC/mvn-repo/releases/</url>
-			<!--url>http://demo.egiz.gv.at/pdf-as-mvn-snpshot/</url-->
 		</repository>
 		<repository>
 			<id>local-repo</id>

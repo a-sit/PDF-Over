@@ -173,6 +173,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
+		System.out.println(Messages.getString("config.Simple"));
 
 		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder,
 				SWT.H_SCROLL | SWT.V_SCROLL);
@@ -188,6 +189,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
+		System.out.print(Messages.getString("config.Advanced"));
 
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
 				this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -322,7 +324,7 @@ public class ConfigurationComposite extends StateComposite {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-						URI url = new URI("https://technology.a-sit.at/lizenzbedingungen/"); //$NON-NLS-1$
+						URI url = new URI(Messages.getString("config.LicenseURL")); //$NON-NLS-1$
 						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
 						if (Desktop.isDesktopSupported()) {
 							Desktop.getDesktop().browse(url);
