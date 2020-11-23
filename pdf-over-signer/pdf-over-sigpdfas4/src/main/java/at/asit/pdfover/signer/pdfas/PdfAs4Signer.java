@@ -147,7 +147,7 @@ public class PdfAs4Signer implements Signer {
 					sp = new SignaturePosition();
 				else if (tp.isPauto())
 					sp = new SignaturePosition(tp.getPosX(), tp.getPosY());
-				else if (param.getSignatureProfileId().contains(Profile.AMTSSIGNATURBLOCK.getName()))
+				else if (param.getSignatureProfileId().contains(Profile.AMTSSIGNATURBLOCK.name()))
 					sp = new SignaturePosition();
 				else
 					sp = new SignaturePosition(tp.getPosX(), tp.getPosY(), tp.getPage());

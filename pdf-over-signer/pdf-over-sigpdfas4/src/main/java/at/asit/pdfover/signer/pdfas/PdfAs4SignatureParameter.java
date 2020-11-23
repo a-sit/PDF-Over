@@ -69,7 +69,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	 **/
 	static final Logger log = LoggerFactory
 			.getLogger(PdfAs4SignatureParameter.class);
-	private String profile;
+	private String profile = null;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
@@ -175,7 +175,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 			return Profile.INVISIBLE.name();
 		}
 
-		switch (Profile.getProfile(this.profile)){
+		switch (Profile.getProfile(getProfileName())){
 			case BASE_LOGO:
 			case INVISIBLE:
 				return getProfileName();
@@ -202,6 +202,9 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 	}
 
 	private String getProfileName(){
+		if (this.profile == null){
+				this.profile = Profile.SIGNATURBLOCK_SMALL.name();
+		}
 		return Profile.getProfile(this.profile).name();
 	}
 

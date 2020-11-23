@@ -243,8 +243,11 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSignatureProfiles
-						                  .getSelectionIndex());
+				//Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSignatureProfiles
+				//		                  .getSelectionIndex());
+				//TODO to test
+				int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
+				Profile selected = Profile.values()[index];
 				if (!current.equals(selected)) {
 					preformProfileSelectionChanged(selected);
 				}
@@ -735,7 +738,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	}
 	
     void preformProfileSelectionChanged(Profile selected) {
-		log.debug("Signature Profile {} was selected", selected.getName()); //$NON-NLS-1$
+		log.debug("Signature Profile {} was selected", selected.name()); //$NON-NLS-1$
     	this.configurationContainer.setSignatureProfile(selected);
     	this.cmbSignatureProfiles.select(selected.ordinal());
 
@@ -748,7 +751,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	void setSignatureProfileSetting(){
 		try {
 			SignatureParameter param = this.signer.getPDFSigner().newParameter();
-			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
+			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		} catch (Exception e){
 			log.debug("Cannot save signature profile {}", e.getMessage());
@@ -879,7 +882,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		store.setSignatureNote(this.configurationContainer.getSignatureNote());
 		
-		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
+		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 	}
 
 	/*

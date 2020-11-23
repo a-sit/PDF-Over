@@ -1521,7 +1521,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
     @Override
 	public String getSignatureProfile() {
-		return this.configurationOverlay.getSignatureProfile().getName();
+		return this.configurationOverlay.getSignatureProfile().name();
 	}
 	
 	

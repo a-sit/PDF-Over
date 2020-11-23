@@ -2,48 +2,21 @@ package at.asit.pdfover.commons;
 
 public enum Profile {
 
-    SIGNATURBLOCK_SMALL("Signaturblock Normal"),  //$NON-NLS-1$
-    AMTSSIGNATURBLOCK("Amtssignatur"),  //$NON-NLS-1$
-    BASE_LOGO("Nur Bildmarke"), //$NON-NLS-1$
-    INVISIBLE("Unsichtbar");
+    SIGNATURBLOCK_SMALL,  //$NON-NLS-1$
+    AMTSSIGNATURBLOCK,  //$NON-NLS-1$
+    BASE_LOGO, //$NON-NLS-1$
+    INVISIBLE;
 
     public static int length = 4;
-    private String name;
 
-    Profile(String profile){
-        this.name = profile;
-    }
-
-    public static String[] getProfileStrings() {
-        String[] profiles = new String[Profile.length];
-        int i = 0;
-        for (Profile profile : Profile.values()) {
-            profiles[i] = profile.getName();
-            i++;
-        }
-        return profiles;
-    }
-
-    public static Profile getProfileByIndex(int index) {
-        String[] profiles = getProfileStrings();
-        if (profiles.length < index) {
-            return null;
-        }
-        return getProfile(profiles[index]);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public static Profile getProfile(String profile) {
-         if (SIGNATURBLOCK_SMALL.getName().equals(profile)) {
+    public static Profile getProfile(String name) {
+         if (SIGNATURBLOCK_SMALL.name().equals(name)) {
             return SIGNATURBLOCK_SMALL;
-        } else if (AMTSSIGNATURBLOCK.getName().equals(profile)) {
+        } else if (AMTSSIGNATURBLOCK.name().equals(name)) {
             return AMTSSIGNATURBLOCK;
-        } else if (BASE_LOGO.getName().equals(profile)) {
+        } else if (BASE_LOGO.name().equals(name)) {
             return BASE_LOGO;
-        } else if (INVISIBLE.getName().equals(profile)){
+        } else if (INVISIBLE.name().equals(name)){
             return INVISIBLE;
         }
         return null;

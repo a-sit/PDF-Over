@@ -975,7 +975,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 
 		store.setUpdateCheck(this.configurationContainer.getUpdateCheck());
 
-		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().getName());
+		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		String hostOld = provider.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.getProxyHost();
