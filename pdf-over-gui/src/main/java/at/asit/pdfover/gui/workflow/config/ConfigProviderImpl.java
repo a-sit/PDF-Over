@@ -151,8 +151,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		
 		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
 		if (signatureProfile != null) {
-			this.configuration.setSignatureProfile(Profile.getProfile(signatureProfile));
-			this.configurationOverlay.setSignatureProfile(Profile.getProfile(signatureProfile));
+			Profile profile = Profile.getProfile(signatureProfile);
+			if (profile != null) {
+				this.configuration.setSignatureProfile(profile);
+				this.configurationOverlay.setSignatureProfile(profile);
+			}
 		}
 		
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);

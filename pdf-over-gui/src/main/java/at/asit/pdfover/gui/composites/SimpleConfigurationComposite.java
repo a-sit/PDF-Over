@@ -243,9 +243,6 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				//Profile selected = Profile.getProfileByIndex(SimpleConfigurationComposite.this.cmbSignatureProfiles
-				//		                  .getSelectionIndex());
-				//TODO to test
 				int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
 				Profile selected = Profile.values()[index];
 				if (!current.equals(selected)) {
