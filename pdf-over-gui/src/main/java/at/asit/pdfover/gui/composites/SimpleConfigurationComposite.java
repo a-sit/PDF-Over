@@ -742,16 +742,20 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
     	if (selected.equals(Profile.AMTSSIGNATURBLOCK) || selected.equals(Profile.INVISIBLE)){
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
 		}
-
+    	setSignatureProfileSetting();
 	}
 
 	void setSignatureProfileSetting(){
+		if (this.signer == null){
+			log.debug("In setSignatureProfileSettings: Signer was null");
+			return;
+		}
 		try {
 			SignatureParameter param = this.signer.getPDFSigner().newParameter();
 			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		} catch (Exception e){
-			log.debug("Cannot save signature profile {}", e.getMessage());
+			log.warn("Cannot save signature profile {}", e.getMessage());
 		}
 	}
 

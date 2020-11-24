@@ -72,6 +72,7 @@ public class SignaturePlaceholderCache {
 		final String sigEHshProp = "EHSH"; //$NON-NLS-1$
 		final String sigPdfAProp = "PDFA"; //$NON-NLS-1$
 		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
+		final String sigProfProp = "PROF"; //$NON-NLS-1$
 
 		String sigLang = param.getSignatureLanguage();
 		String sigEmbl = ""; //$NON-NLS-1$
@@ -89,7 +90,10 @@ public class SignaturePlaceholderCache {
 		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
 		if (sigNote == null)
 			sigNote = ""; //$NON-NLS-1$
-
+		String profile = param.getSignatureProfile();
+		if (profile == null){
+			profile = "";
+		}
 		Properties sigProps = new Properties();
 		// compare cache, try to load if match
 		try {
@@ -99,7 +103,7 @@ public class SignaturePlaceholderCache {
 			    sigEmbl.equals(sigProps.getProperty(sigEmblProp)) &&
 			    sigEHsh.equals(sigProps.getProperty(sigEHshProp)) &&
 			    sigNote.equals(sigProps.getProperty(sigNoteProp)) &&
-			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp))) {
+			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp)) ) {
 				log.debug("Placeholder cache hit"); //$NON-NLS-1$
 				return loadImage(fileDir, imgFileName, imgFileExt);
 			}
@@ -120,6 +124,7 @@ public class SignaturePlaceholderCache {
 			sigProps.setProperty(sigEHshProp, sigEHsh);
 			sigProps.setProperty(sigNoteProp, sigNote);
 			sigProps.setProperty(sigPdfAProp, sigPdfA);
+			sigProps.setProperty(sigProfProp, profile);
 			OutputStream out = new FileOutputStream(new File(fileDir, propFileName));
 			sigProps.store(out, null);
 			Image img = param.getPlaceholder();

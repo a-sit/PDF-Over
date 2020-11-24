@@ -94,6 +94,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     @Override
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
+
         String sigEmblem = (getEmblem() == null ? null : getEmblem().getFileName());
         String sigNote = getProperty("SIG_NOTE");
 
@@ -225,6 +226,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
     @Override
     public void setSignatureProfile(String profile) {
+        System.out.println(profile);
         this.profile = profile;
     }
 
