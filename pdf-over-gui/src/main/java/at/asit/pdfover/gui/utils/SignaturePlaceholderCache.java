@@ -28,6 +28,7 @@ import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
+import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.ImageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +93,8 @@ public class SignaturePlaceholderCache {
 			sigNote = ""; //$NON-NLS-1$
 		String profile = param.getSignatureProfile();
 		if (profile == null){
-			profile = "";
+			// set default value
+			profile = Profile.getDefaultProfile();
 		}
 		Properties sigProps = new Properties();
 		// compare cache, try to load if match

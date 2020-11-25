@@ -7,7 +7,7 @@ public enum Profile {
     BASE_LOGO, //$NON-NLS-1$
     INVISIBLE;
 
-    public static int length = 4;
+    public static int length = Profile.values().length;
 
     public static Profile getProfile(String name) {
          if (SIGNATURBLOCK_SMALL.name().equals(name)) {
@@ -20,6 +20,10 @@ public enum Profile {
             return INVISIBLE;
         }
         return null;
+    }
+
+    public static String getDefaultProfile(){
+        return SIGNATURBLOCK_SMALL.name();
     }
 
 

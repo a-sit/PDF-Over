@@ -653,8 +653,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 					logo = new ImageData(image);
 					param.setEmblem(new CachedFileNameEmblem(image));
 				}
-	
-				img = SignaturePlaceholderCache.getSWTPlaceholder(param);
+				//TODO deactivated the placeholder preview
+				//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 			}
 		} catch (Exception e) {
 			log.error("Failed to load image for display...", e); //$NON-NLS-1$
