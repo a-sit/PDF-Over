@@ -105,7 +105,8 @@ public class SignaturePlaceholderCache {
 			    sigEmbl.equals(sigProps.getProperty(sigEmblProp)) &&
 			    sigEHsh.equals(sigProps.getProperty(sigEHshProp)) &&
 			    sigNote.equals(sigProps.getProperty(sigNoteProp)) &&
-			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp)) ) {
+			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp)) &&
+				profile.equals(sigProps.getProperty(sigProfProp))) {
 				log.debug("Placeholder cache hit"); //$NON-NLS-1$
 				return loadImage(fileDir, imgFileName, imgFileExt);
 			}
@@ -114,7 +115,8 @@ public class SignaturePlaceholderCache {
 					sigEmbl + "|" + sigProps.getProperty(sigEmblProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
 					sigEHsh + "|" + sigProps.getProperty(sigEHshProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
 					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
-					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
+					profile + "|" + sigProps.getProperty(sigProfProp) + ")");
 		} catch (Exception e) {
 			log.warn("Can't load signature Placeholder", e); //$NON-NLS-1$
 		}

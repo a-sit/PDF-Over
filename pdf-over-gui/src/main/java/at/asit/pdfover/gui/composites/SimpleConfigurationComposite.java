@@ -654,6 +654,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 					param.setEmblem(new CachedFileNameEmblem(image));
 				}
 				//TODO deactivated the placeholder preview
+				//TODO display accurate placeholder preview -> now its only standard placeholder shown
 				//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 			}
 		} catch (Exception e) {

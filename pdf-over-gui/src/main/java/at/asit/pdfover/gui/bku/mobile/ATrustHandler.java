@@ -508,8 +508,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		try {
 			do {
-				String baseUrl = "https://www.handy-signatur.at/mobile/https-security-layer-request/";
-				urlconnection = new URL(/*status.getBaseURL()*/ baseUrl + "/UndecidedPolling.aspx?sid=" + status.getSessionID()) //$NON-NLS-1$
+				urlconnection = new URL(status.getBaseURL() + "/UndecidedPolling.aspx?sid=" + status.getSessionID()) //$NON-NLS-1$
 						.openConnection();
 				InputStream in = new BufferedInputStream(urlconnection.getInputStream());
 

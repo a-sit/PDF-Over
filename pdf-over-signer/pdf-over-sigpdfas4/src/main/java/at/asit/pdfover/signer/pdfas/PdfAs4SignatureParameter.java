@@ -78,7 +78,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
      **/
     static final Logger log = LoggerFactory
             .getLogger(PdfAs4SignatureParameter.class);
-    private String profile = null;
+    private String profile = Profile.getDefaultProfile();
 
     /* (non-Javadoc)
      * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
