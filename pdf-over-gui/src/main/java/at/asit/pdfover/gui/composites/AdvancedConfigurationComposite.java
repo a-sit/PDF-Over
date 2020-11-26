@@ -755,6 +755,10 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnSignatureFieldsUsage.setEnabled(enable);
 		this.configurationContainer.setEnablePlaceholderUsage(enable);
 		this.btnEnablePlaceholderUsage.setSelection(enable);
+		if (!enable){
+			this.btnPlatzhalterVerwenden.setSelection(false);
+			this.btnSignatureFieldsUsage.setSelection(false);
+		}
 	}
 
 	void performPdfACompatSelection(boolean compat) {
@@ -937,7 +941,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 	public void performSetSignatureProfile(Profile profile) {
 		switch (profile) {
 		case INVISIBLE:
-		case AMTSSIGNATURBLOCK:
 			this.performPositionSelection(true);
 			this.btnAutomatischePositionierung.setEnabled(false);
 			this.btnEnablePlaceholderUsage.setEnabled(false);

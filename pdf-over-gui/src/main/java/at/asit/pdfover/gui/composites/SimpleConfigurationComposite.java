@@ -885,6 +885,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		store.setSignatureNote(this.configurationContainer.getSignatureNote());
 		
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
+
+
 	}
 
 	/*
