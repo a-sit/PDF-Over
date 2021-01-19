@@ -542,42 +542,39 @@ public class MobileBKUState extends State {
 				}
 			}
 		}, 0, 5000);
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				MobileBKUFingerprintComposite fingerprintComposite = getMobileBKUFingerprintComposite();
-		
-				fingerprintComposite.setRefVal(status.getRefVal());
-				fingerprintComposite.setSignatureData(status.getSignatureDataURL());
-				fingerprintComposite.setErrorMessage(status.getErrorMessage());
-				getStateMachine().getGUIProvider().display(fingerprintComposite);
+		Display.getDefault().syncExec(() -> {
+			MobileBKUFingerprintComposite fingerprintComposite = getMobileBKUFingerprintComposite();
 
-				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-				while (!fingerprintComposite.isUserCancel() && !fingerprintComposite.isUserSMS() && !fingerprintComposite.isDone()) {
-					if (!display.readAndDispatch()) {
-						display.sleep();
-					}
+			fingerprintComposite.setRefVal(status.getRefVal());
+			fingerprintComposite.setSignatureData(status.getSignatureDataURL());
+			fingerprintComposite.setErrorMessage(status.getErrorMessage());
+			getStateMachine().getGUIProvider().display(fingerprintComposite);
+
+			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			while (!fingerprintComposite.isUserCancel() && !fingerprintComposite.isUserSMS() && !fingerprintComposite.isDone()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
 				}
-				checkDone.cancel();
-
-				if (fingerprintComposite.isUserCancel()) {
-					fingerprintComposite.setUserCancel(false);
-					status.setErrorMessage("cancel"); //$NON-NLS-1$
-					return;
-				}
-
-				if (fingerprintComposite.isUserSMS()) {
-//					fingerprintComposite.setUserSMS(false);
-					status.setQRCode(null);
-				}
-
-				if (fingerprintComposite.isDone())
-					fingerprintComposite.setDone(false);
-
-				// show waiting composite
-				getStateMachine().getGUIProvider().display(
-						MobileBKUState.this.getWaitingComposite());
 			}
+			checkDone.cancel();
+
+			if (fingerprintComposite.isUserCancel()) {
+				fingerprintComposite.setUserCancel(false);
+				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				return;
+			}
+
+			if (fingerprintComposite.isUserSMS()) {
+//					fingerprintComposite.setUserSMS(false);
+				status.setQRCode(null);
+			}
+
+			if (fingerprintComposite.isDone())
+				fingerprintComposite.setDone(false);
+
+			// show waiting composite
+			getStateMachine().getGUIProvider().display(
+					MobileBKUState.this.getWaitingComposite());
 		});
 	}
 

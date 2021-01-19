@@ -642,7 +642,7 @@
 						<version>1.4</version>
 						<configuration>
 							<keystore>${ks-file}</keystore>
-							<alias>a-sit-3</alias>
+							<alias>code_signing</alias>
 							<storepass>${ks-pass}</storepass>
 							<keypass>${ks-pass}</keypass>
 							<keystoreConfig>

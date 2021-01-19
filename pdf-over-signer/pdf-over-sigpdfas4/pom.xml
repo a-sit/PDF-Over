@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.1.6</pdf-as.version>
+		<pdf-as.version>4.1.7-SNAPSHOT</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,6 +69,11 @@
 		<repository>
 			<id>local-repo</id>
 			<url>file://${project.maindir}/repo</url>
+		</repository>
+		<repository>
+			<id>EGIZ SNAPSHOT Repo</id>
+			<name>EGIZ SNAPSHOT Maven Repository</name>
+			<url>https://apps.egiz.gv.at/snapshots/</url>
 		</repository>
 	</repositories>
 </project>
