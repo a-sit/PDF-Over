@@ -15,11 +15,13 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
 // Imports
+import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -451,67 +453,65 @@ public class MobileBKUState extends State {
 	public void showOpenAppMessageWithSMSandCancel() {
 
 		final ATrustStatus status = (ATrustStatus) this.getStatus();
+
+		Display.getDefault().syncExec(() -> {
+			WaitingForAppComposite waitingForAppcomposite = MobileBKUState.this.getWaitingForAppComposite();
+			getStateMachine().getGUIProvider().display(waitingForAppcomposite);
+
+			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			undecidedPolling();
+
+			while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
+					&& !waitingForAppcomposite.getIsDone()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+
+			if (waitingForAppcomposite.getUserCancel()) {
+				waitingForAppcomposite.setUserCancel(false);
+				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				return;
+			}
+
+			if (waitingForAppcomposite.getUserSMS()) {
+				status.setQRCode(null);
+				waitingForAppcomposite.setUserSMS(false);
+				status.setErrorMessage("sms"); //$NON-NLS-1$
+				status.setSmsTan(true);
+				// show waiting composite
+				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+				return;
+
+			}
+
+			if (waitingForAppcomposite.getIsDone())
+				waitingForAppcomposite.setIsDone(false);
+		});
+	}
+
+	private void undecidedPolling(){
 		final ATrustHandler handler = (ATrustHandler) this.getHandler();
 
-		final Timer checkDone = new Timer(true);
-		checkDone.scheduleAtFixedRate(new TimerTask() {
-
-			@Override
-			public void run() {
-				// ping signature page 
-				try {
-					String resp = handler.getSignaturePage();
-					if (handler.handleWaitforAppResponse(resp) || handler.handlePolling()) {
-						log.debug("Signature page response: " + resp); //$NON-NLS-1$
-						getWaitingForAppComposite().setIsDone(true);
-						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
-						display.wake();
-					}
-					Display.getDefault().wake();
-				} catch (Exception e) {
-					log.error("Error getting signature page", e); //$NON-NLS-1$
+		Thread pollingThread = new Thread(() -> {
+			try {
+				if (handler.handlePolling()){
+					String response = handler.getSignaturePage();
+					handler.handleCredentialsResponse(response);
+					Display.getDefault().syncExec(new Runnable() {
+						@Override
+						public void run() {
+							getWaitingForAppComposite().setIsDone(true);
+						}
+					});
 				}
-			}
-		}, 0, 5000);
-
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				WaitingForAppComposite waitingForAppcomposite = MobileBKUState.this.getWaitingForAppComposite();// getWaitingForAppComposite();
-				getStateMachine().getGUIProvider().display(waitingForAppcomposite);
-
-				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
-				while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
-						&& !waitingForAppcomposite.getIsDone()) {
-					if (!display.readAndDispatch()) {
-						display.sleep();
-					}
-				}
-
-				if (waitingForAppcomposite.getUserCancel()) {
-					waitingForAppcomposite.setUserCancel(false);
-					status.setErrorMessage("cancel"); //$NON-NLS-1$
-					return;
-				}
-
-				if (waitingForAppcomposite.getUserSMS()) {
-					status.setQRCode(null);
-					waitingForAppcomposite.setUserSMS(false);
-					status.setErrorMessage("sms"); //$NON-NLS-1$
-					status.setSmsTan(true);
-					// show waiting composite
-					getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
-					return;
-
-				}
-
-				if (waitingForAppcomposite.getIsDone())
-					waitingForAppcomposite.setIsDone(false);
-
-				// show waiting composite
-				//getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+			} catch (ATrustConnectionException e) {
+				log.error("Error when calling polling endpoint");
+			} catch (Exception e) {
+				log.error("Exception occurred during calling polling endpoint");
 			}
 		});
+		pollingThread.start();
 	}
 
 	/**
