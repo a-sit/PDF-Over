@@ -20,16 +20,13 @@ import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.swt.SWT;
@@ -44,7 +41,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
@@ -439,6 +435,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
+		//TODO check
+		//String baseURL = "https://www.a-trust.at/mobile/https-security-layer-request";
 		GetMethod get = new GetMethod(status.getBaseURL()
 				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
 
@@ -505,37 +503,16 @@ public class ATrustHandler extends MobileBKUHandler {
 		int waits = 0;
 		final String ERROR = "Error: Server is not responding"; //$NON-NLS-1$
 		HttpClient client;
-
-		//Connection: keep-alive
-
 		try {
 			do {
-
-				String baseURL = "https://www.handy-signatur.at/mobile/https-security-layer-request";
-
 				client = MobileBKUHelper.getHttpClient(getStatus());
-				String uri = status.getBaseURL() + "/UndecidedPolling.aspx?sid=" + status.getSessionID();
+				String uri = status.getBaseURL()  + "/UndecidedPolling.aspx?sid=" + status.getSessionID();
 				GetMethod get = new GetMethod(uri);
 
 				status.getBaseURL();
-				//urlconnection = new URL(status.getBaseURL() + "/UndecidedPolling.aspx?sid=" + status.getSessionID()) //$NON-NLS-1$
-				//		.openConnection();
 
-
-				//		GET /mobile/https-security-layer-request/UndecidedPolling.aspx?sid=A3_RFOOXWTJGFOQXHZSXIWQPSZQCHBA&_=1610983069567 HTTP/2
-				//		Host: www.handy-signatur.at
-				//		User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0
-				//		Accept: application/json, text/javascript, */*; q=0.01
-				//      Accept-Language: de,en-US;q=0.7,en;q=0.3
-				//      Accept-Encoding: gzip, deflate, br
-				//       DNT: 1
-				//    Connection: keep-alive
-				//     Referer: https://www.handy-signatur.at/mobile/https-security-layer-request/undecided.aspx?sid=A3_RFOOXWTJGFOQXHZSXIWQPSZQCHBA
-				//    Cookie: ASP.NET_SessionId=hbplnlm1l5gv25rgknfqc3zt
-				//   TE: Trailers
-
-				client.setTimeout(35000);
-				client.setConnectionTimeout(35000);
+				//client.setTimeout(35000);
+				//client.setConnectionTimeout(35000);
 				get.addRequestHeader("Accept", "application/json, text/javascript");
 				get.addRequestHeader("Connection", "keep-alive");
 				get.addRequestHeader("Referer", uri);
@@ -544,35 +521,42 @@ public class ATrustHandler extends MobileBKUHandler {
 
 
 				int returnValue = client.executeMethod(get);
-				System.out.println("retVal" + returnValue);
+				System.out.println("retVal " + returnValue);
 				//InputStream in = new BufferedInputStream(urlconnection.getInputStream());
 				InputStream in = new BufferedInputStream(get.getResponseBodyAsStream());
 
 				isReady = IOUtils.toString(in, "utf-8"); //$NON-NLS-1$
+				System.out.print(isReady);
 				serverStatus = new Status(isReady);
-				if (serverStatus.isWait())
+
+				if (serverStatus.isFin()) {
+					return true;
+				} else if (serverStatus.isError()) {
+					log.error("A-Trust returned Error code during polling");
+					throw new ATrustConnectionException();
+				}
+
+				/*if (serverStatus.isWait())
 					waits++;
 				if (waits > 4) {
 					status.setErrorMessage(ERROR);
 					log.error(ERROR);
 					throw new ATrustConnectionException();
-				}
+				}*/
 
 			} while (serverStatus.isWait());
 
 			if (serverStatus.isFin()) {
-				String response = getSignaturePage();
-				handleCredentialsResponse(response);
 				return true; 
 			}
+			//else error
 			status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
 			log.error("Server reponded ERROR during polling"); //$NON-NLS-1$
 			throw new ATrustConnectionException();
 
 		} catch (Exception e) {
 			log.error("handle polling failed" + e.getMessage()); //$NON-NLS-1$
-			//throw new ATrustConnectionException();
-			return false;
+			throw new ATrustConnectionException();
 		}
 	}
 	
