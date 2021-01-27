@@ -19,9 +19,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 
 // Imports
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
+import at.asit.pdfover.signator.SignatureException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -451,7 +453,7 @@ public class MobileBKUState extends State {
 	/**
 	 *  This composite notifies the user to open the signature-app
 	 */
-	public void showOpenAppMessageWithSMSandCancel() {
+	public void showOpenAppMessageWithSMSandCancel() throws SignatureException {
 
 		final ATrustStatus status = (ATrustStatus) this.getStatus();
 
@@ -461,9 +463,10 @@ public class MobileBKUState extends State {
 
 			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 			undecidedPolling();
+			long startTime = System.nanoTime();
 
 			while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
-					&& !waitingForAppcomposite.getIsDone()) {
+					&& !waitingForAppcomposite.getIsDone() && !isTimout(startTime)) {
 				if (!display.readAndDispatch()) {
 					display.sleep();
 				}
@@ -488,6 +491,14 @@ public class MobileBKUState extends State {
 
 			if (waitingForAppcomposite.getIsDone())
 				waitingForAppcomposite.setIsDone(false);
+
+			if (isTimout(startTime)){
+				log.warn("The undecided polling got a timeout");
+				status.setQRCode(null);
+				status.setErrorMessage("Polling Timeout");
+
+
+			}
 		});
 	}
 
@@ -583,7 +594,15 @@ public class MobileBKUState extends State {
 		
 		return this.getMobileBKUFingerprintComposite().isUserSMS(); 
 	}
-	 
+
+
+	private boolean isTimout(long startTime){
+		long NANOSEC_PER_SEC  = 1000l*1000*1000;
+		if ((System.nanoTime()-startTime)< 5*60*NANOSEC_PER_SEC){
+			return false;
+		}
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)
