@@ -260,6 +260,7 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 			public void widgetSelected(SelectionEvent e) {
 				AdvancedConfigurationComposite.this.performEnableUsePlaceholder(
 						AdvancedConfigurationComposite.this.btnEnablePlaceholderUsage.getSelection());
+
 			}
 		});
 
@@ -757,6 +758,9 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnEnablePlaceholderUsage.setSelection(enable);
 		if (!enable){
 			this.btnPlatzhalterVerwenden.setSelection(false);
+			this.btnSignatureFieldsUsage.setSelection(false);
+		} else if (enable){
+			this.btnPlatzhalterVerwenden.setSelection(true);
 			this.btnSignatureFieldsUsage.setSelection(false);
 		}
 	}
