@@ -516,13 +516,9 @@ public class ATrustHandler extends MobileBKUHandler {
 				get.addRequestHeader("Accept", "application/json, text/javascript");
 				get.addRequestHeader("Connection", "keep-alive");
 				get.addRequestHeader("Referer", uri);
-				System.out.println("URL" + uri);
-				System.out.println("Cookies " + getStatus().getCookies());
 
 
 				int returnValue = client.executeMethod(get);
-				System.out.println("retVal " + returnValue);
-				//InputStream in = new BufferedInputStream(urlconnection.getInputStream());
 				InputStream in = new BufferedInputStream(get.getResponseBodyAsStream());
 
 				isReady = IOUtils.toString(in, "utf-8"); //$NON-NLS-1$
@@ -535,14 +531,6 @@ public class ATrustHandler extends MobileBKUHandler {
 					log.error("A-Trust returned Error code during polling");
 					throw new ATrustConnectionException();
 				}
-
-				/*if (serverStatus.isWait())
-					waits++;
-				if (waits > 4) {
-					status.setErrorMessage(ERROR);
-					log.error(ERROR);
-					throw new ATrustConnectionException();
-				}*/
 
 			} while (serverStatus.isWait());
 

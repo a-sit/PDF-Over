@@ -368,7 +368,7 @@ public class MobileBKUState extends State {
 		final ATrustStatus status = (ATrustStatus) this.getStatus();
 		final ATrustHandler handler = (ATrustHandler) this.getHandler();
 
-		final Timer checkDone = new Timer(true);
+		final Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
 			
 			@Override
@@ -382,6 +382,7 @@ public class MobileBKUState extends State {
 						Display display = getStateMachine().getGUIProvider().
 								getMainShell().getDisplay();
 						display.wake();
+						checkDone.cancel();
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
@@ -389,51 +390,51 @@ public class MobileBKUState extends State {
 				}
 			}
 		}, 0, 5000);
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				MobileBKUQRComposite qr = getMobileBKUQRComposite();
-		
-				qr.setRefVal(status.getRefVal());
-				qr.setSignatureData(status.getSignatureDataURL());
-				qr.setErrorMessage(status.getErrorMessage());
-				InputStream qrcode = handler.getQRCode();
-				if (qrcode == null) {
-					MobileBKUState.this.threadException = new Exception(
-							Messages.getString("error.FailedToLoadQRCode")); //$NON-NLS-1$
-				}
-				qr.setQR(qrcode);
-				getStateMachine().getGUIProvider().display(qr);
 
-				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-				while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
-					if (!display.readAndDispatch()) {
-						display.sleep();
-					}
-				}
-				checkDone.cancel();
+		Display.getDefault().syncExec(() -> {
+			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
-				if (qr.isUserCancel()) {
-					qr.setUserCancel(false);
-					status.setErrorMessage("cancel"); //$NON-NLS-1$
-					return;
-				}
-
-				if (qr.isUserSMS()) {
-					qr.setUserSMS(false);
-					status.setQRCode(null);
-				}
-
-				if (qr.isDone())
-					qr.setDone(false);
-
-				// show waiting composite
-				getStateMachine().getGUIProvider().display(
-						MobileBKUState.this.getWaitingComposite());
+			qr.setRefVal(status.getRefVal());
+			qr.setSignatureData(status.getSignatureDataURL());
+			qr.setErrorMessage(status.getErrorMessage());
+			InputStream qrcode = handler.getQRCode();
+			if (qrcode == null) {
+				MobileBKUState.this.threadException = new Exception(
+						Messages.getString("error.FailedToLoadQRCode")); //$NON-NLS-1$
 			}
+			qr.setQR(qrcode);
+			getStateMachine().getGUIProvider().display(qr);
+
+			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+
+			checkDone.cancel();
+
+			if (qr.isUserCancel()) {
+				qr.setUserCancel(false);
+				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				return;
+			}
+
+			if (qr.isUserSMS()) {
+				qr.setUserSMS(false);
+				status.setQRCode(null);
+			}
+
+			if (qr.isDone())
+				qr.setDone(false);
+
+			// show waiting composite
+			getStateMachine().getGUIProvider().display(
+					MobileBKUState.this.getWaitingComposite());
 		});
 	}
-	
+
+
 	/**
 	 *  This composite notifies the user to open the signature-app
 	 */
@@ -498,12 +499,8 @@ public class MobileBKUState extends State {
 				if (handler.handlePolling()){
 					String response = handler.getSignaturePage();
 					handler.handleCredentialsResponse(response);
-					Display.getDefault().syncExec(new Runnable() {
-						@Override
-						public void run() {
-							getWaitingForAppComposite().setIsDone(true);
-						}
-					});
+					Display.getDefault().syncExec(() ->
+							getWaitingForAppComposite().setIsDone(true));
 				}
 			} catch (ATrustConnectionException e) {
 				log.error("Error when calling polling endpoint");
@@ -522,7 +519,7 @@ public class MobileBKUState extends State {
 		final ATrustStatus status = (ATrustStatus) this.getStatus();
 		final ATrustHandler handler = (ATrustHandler) this.getHandler();
 
-		final Timer checkDone = new Timer(true);
+		Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
 			
 			@Override
@@ -535,6 +532,7 @@ public class MobileBKUState extends State {
 						getMobileBKUFingerprintComposite().setDone(true);
 						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 						display.wake();
+						checkDone.cancel();
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
