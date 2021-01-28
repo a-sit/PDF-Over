@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<project.maindir>${project.basedir}/../..</project.maindir>
-		<pdf-as.version>4.1.7-RC-0.0.1</pdf-as.version>
+		<pdf-as.version>4.1.7-RC-0.0.2</pdf-as.version>
 	</properties>
 	<dependencies>
 		<dependency>

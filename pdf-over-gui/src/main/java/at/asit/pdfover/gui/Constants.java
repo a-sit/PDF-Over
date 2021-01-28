@@ -81,7 +81,7 @@ public class Constants {
 	 * The minimum PDF-AS configuration version (older ones will be backed up
 	 * and updated
 	 */
-	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.6"; //$NON-NLS-1$
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.1.7"; //$NON-NLS-1$
 
 	/** The configuration backup filename */
 	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup"; //$NON-NLS-1$
@@ -94,8 +94,8 @@ public class Constants {
 
 	/** Default Mobile BKU URL */
 	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile/https-security-layer-request/default.aspx";
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile2/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.handy-signatur.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
+	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 
 	/** Default Mobile BKU type */
 	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
