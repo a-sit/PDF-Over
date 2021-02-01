@@ -756,13 +756,6 @@ public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
 		this.btnSignatureFieldsUsage.setEnabled(enable);
 		this.configurationContainer.setEnablePlaceholderUsage(enable);
 		this.btnEnablePlaceholderUsage.setSelection(enable);
-		if (!enable){
-			this.btnPlatzhalterVerwenden.setSelection(false);
-			this.btnSignatureFieldsUsage.setSelection(false);
-		} else if (enable){
-			this.btnPlatzhalterVerwenden.setSelection(true);
-			this.btnSignatureFieldsUsage.setSelection(false);
-		}
 	}
 
 	void performPdfACompatSelection(boolean compat) {
