@@ -658,8 +658,9 @@
 
 	<repositories>
 		<repository>
-			<id>maven-eclipse-repo</id>
-			<url>http://maven-eclipse.github.io/maven</url> 
+			<id>internal-repo</id>
+			<name>Internal Repository</name>
+			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
 	</repositories>
 </project>
