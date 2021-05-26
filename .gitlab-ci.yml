@@ -7,4 +7,4 @@ build:
   tags:
     - docker
   script: 
-    - mvn clean install -P dummy-sign
+    - mvn clean compile -DskipTests=true
