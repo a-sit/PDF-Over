@@ -191,7 +191,7 @@
 								<artifactItem>
 									<groupId>at.a-sit</groupId>
 									<artifactId>pdf-over-install-helper</artifactId>
-									<version>1.0.1</version>
+									<version>${project.parent.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${staging.dir}/lib</outputDirectory>
