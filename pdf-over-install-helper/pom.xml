@@ -6,7 +6,7 @@
 		<version>4.3.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>pdf-over-install-helper</artifactId>
-	<version>${project.version}</version>
+	<version>${project.parent.version}</version>
 
 	<dependencies>
 		<dependency>
