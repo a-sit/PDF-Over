@@ -3,7 +3,19 @@
 
 [![pipeline status](https://gitlab.iaik.tugraz.at/egiz/pdf-over/badges/master/pipeline.svg)](https://gitlab.iaik.tugraz.at/egiz/pdf-over/-/commits/master)
 
+## Usage Notes
+
+- Inquiries to: software@egiz.gv.at
+- Important: The Linux installer requires Java 8 or Java 11.
+
 ## Release Notes 
+
+### PDF-Over 4.3.1
+- Updated used PDF-AS Version 
+- Fixed multi-threading problem 
+
+SHA-256 hash sum for version 4.3.1 Windows Installer:
+97DE1C7618A504569195077C8E514780AD2F1C057AB18C935B80E3BBD784C5CB
 
 ### PDF-Over 4.3.0
 - Support of the following signature profiles:
@@ -17,9 +29,5 @@
 - Support custom postfix
   + The postfix of the signed file to save can be set in the advanced configuration settings
 
-Inquiries to: software@egiz.gv.at
 
-Important: The Linux installer requires Java 8 or Java 11.
 
-SHA-256 hash sum for version 4.3.1 Windows Installer:
-97DE1C7618A504569195077C8E514780AD2F1C057AB18C935B80E3BBD784C5CB
