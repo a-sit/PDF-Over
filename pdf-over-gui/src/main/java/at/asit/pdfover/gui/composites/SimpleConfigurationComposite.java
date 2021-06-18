@@ -728,9 +728,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 		if (previous != null) {
-			String prev_default_note = getSignatureBlockNoteTextAccordingToProfile(this.configurationContainer.getSignatureProfile(), previous);
+			Profile profile = Profile.values()[this.cmbSignatureProfiles.getSelectionIndex()];
+			String prev_default_note = getSignatureBlockNoteTextAccordingToProfile(profile, previous);
 			if (this.txtSignatureNote.getText().equals(prev_default_note)) {
-				this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(this.configurationContainer.getSignatureProfile(), selected)); //$NON-NLS-1$);
+				this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile, selected)); //$NON-NLS-1$);
 				processSignatureNoteChanged();
 			}
 		}
@@ -763,8 +764,13 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	}
 
 	boolean detectChanges(Profile profile){
-		if (this.configurationContainer.getSignatureNote().equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK)) ||
-			this.configurationContainer.getSignatureNote().equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL))) {
+
+		String note = this.txtSignatureNote.getText();
+		note = note.replace("!","");
+		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK)) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL)) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE)) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO))){
 			return false;
 		}
 		return true;
