@@ -209,6 +209,7 @@ public class MobileBKUHelper {
 			throws InvalidNumberException {
 		// Verify number and normalize
 
+		number = number.replaceAll("\\s","");
 		// Compile and use regular expression
 		Pattern pattern = Pattern.compile(NUMBER_REGEX);
 		Matcher matcher = pattern.matcher(number);
