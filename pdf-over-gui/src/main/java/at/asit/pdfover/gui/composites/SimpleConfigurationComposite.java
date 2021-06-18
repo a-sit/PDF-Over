@@ -746,6 +746,10 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
     	setSignatureProfileSetting();
 	}
 
+	void adoptSignatureNoteText(){
+		//TODO check if one of the text
+	}
+
 	void setSignatureProfileSetting(){
 		if (this.signer == null){
 			log.debug("In setSignatureProfileSettings: Signer was null");
