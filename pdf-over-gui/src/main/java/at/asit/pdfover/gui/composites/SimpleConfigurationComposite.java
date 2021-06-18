@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import at.asit.pdfover.signator.SignaturePosition;
 import org.eclipse.swt.SWT;
@@ -551,8 +552,8 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.txtSignatureNote.setText(
-						Messages.getString("simple_config.Note_Default", //$NON-NLS-1$
+				SimpleConfigurationComposite.this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(
+						SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile(),
 						SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()));
 			}
 		});
@@ -727,13 +728,15 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 		if (previous != null) {
-			String prev_default_note = Messages.getString("simple_config.Note_Default", previous); //$NON-NLS-1$
+			String prev_default_note = getSignatureBlockNoteTextAccordingToProfile(this.configurationContainer.getSignatureProfile(), previous);
 			if (this.txtSignatureNote.getText().equals(prev_default_note)) {
-				this.txtSignatureNote.setText(Messages.getString("simple_config.Note_Default", selected)); //$NON-NLS-1$);
+				this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(this.configurationContainer.getSignatureProfile(), selected)); //$NON-NLS-1$);
 				processSignatureNoteChanged();
 			}
 		}
 	}
+
+
 	
     void preformProfileSelectionChanged(Profile selected) {
 		log.debug("Signature Profile {} was selected", selected.name()); //$NON-NLS-1$
@@ -744,10 +747,42 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
 		}
     	setSignatureProfileSetting();
+		alignSignatureNoteTextToProfile(selected);
+
 	}
 
-	void adoptSignatureNoteText(){
-		//TODO check if one of the text
+	void alignSignatureNoteTextToProfile(Profile profile){
+
+		if (detectChanges(profile) == false){
+			this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile));
+			this.configurationContainer.setSignatureNote(
+					Messages.getString(getSignatureBlockNoteTextAccordingToProfile(profile))
+			);
+		}
+
+	}
+
+	boolean detectChanges(Profile profile){
+		if (this.configurationContainer.getSignatureNote().equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK)) ||
+			this.configurationContainer.getSignatureNote().equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL))) {
+			return false;
+		}
+		return true;
+	}
+
+	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale locale){
+
+		if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){
+			return Messages.getString("simple_config.Note_Default_Standard", locale);
+		} else if (profile.equals(Profile.AMTSSIGNATURBLOCK)){
+			return Messages.getString("simple_config.Note_Default_OfficialSignature", locale);
+		} else {
+			return "";
+		}
+	}
+
+	String getSignatureBlockNoteTextAccordingToProfile(Profile profile){
+		return getSignatureBlockNoteTextAccordingToProfile(profile, this.configurationContainer.getSignatureLocale());
 	}
 
 	void setSignatureProfileSetting(){
