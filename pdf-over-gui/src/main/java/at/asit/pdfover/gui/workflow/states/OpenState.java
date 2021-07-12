@@ -157,9 +157,11 @@ public class OpenState extends State {
 					// second check if qr code placeholder search is enabled
 				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
 
-//					SignaturePlaceholderExtractor extractor = new SignaturePlaceholderExtractor()
-					SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor
-							.extract(pddocument, "1", 3); //$NON-NLS-1$
+					// TODO FIX
+//					SignaturePlaceholderExtractor extractor = new SignaturePlaceholderExtractor("1", 3, pddocument);
+//					SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor
+//							.extract(pddocument, "1", 3); //$NON-NLS-1$
+					SignaturePlaceholderData signaturePlaceholderData = new SignaturePlaceholderData( "profile",  "type",  "sigKey", "String ");
 
 					if (null != signaturePlaceholderData) {
 
@@ -194,10 +196,6 @@ public class OpenState extends State {
 					// Do nothing
 				}
 
-			} catch (PdfAsException e) {
-				// fail silently. In case we got here no dialog has been shown.
-				// Just
-				// proceed with the usual process.
 			} catch (IOException e) {
 				// fail silently. In case we got here no dialog has been shown.
 				// Just
