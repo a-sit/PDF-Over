@@ -326,7 +326,12 @@ public class PositioningComposite extends StateComposite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			System.out.println("selection: " + PositioningComposite.this.scrollbar.getSelection());
-			PositioningComposite.this.showPage(PositioningComposite.this.scrollbar.getSelection());
+			int selection = PositioningComposite.this.scrollbar.getSelection();
+			if (selection < 0) {
+				selection = 0;
+				System.out.println("corrected selecttion to: " + selection);
+			}
+			PositioningComposite.this.showPage(selection);
 		}
 	};
 
