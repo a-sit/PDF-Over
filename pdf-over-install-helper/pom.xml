@@ -3,10 +3,10 @@
 	<parent>
 		<groupId>at.a-sit</groupId>
 		<artifactId>pdf-over</artifactId>
-		<version>4.3.2-SNAPSHOT</version>
+		<version>4.3.2</version>
 	</parent>
 	<artifactId>pdf-over-install-helper</artifactId>
-	<version>${project.parent.version}</version>
+	<version>4.3.2</version>
 
 	<dependencies>
 		<dependency>
