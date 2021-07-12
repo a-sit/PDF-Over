@@ -157,6 +157,7 @@ public class OpenState extends State {
 					// second check if qr code placeholder search is enabled
 				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
 
+//					SignaturePlaceholderExtractor extractor = new SignaturePlaceholderExtractor()
 					SignaturePlaceholderData signaturePlaceholderData = SignaturePlaceholderExtractor
 							.extract(pddocument, "1", 3); //$NON-NLS-1$
 
