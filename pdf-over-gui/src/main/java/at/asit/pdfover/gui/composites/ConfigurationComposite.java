@@ -32,13 +32,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -297,6 +291,8 @@ public class ConfigurationComposite extends StateComposite {
 
 	private class AboutComposite extends StateComposite {
 		private Link lnkAbout;
+		private Link lnkDataProtection;
+		private Label lblDataProtection;
 		/**
 	 * @param parent
 	 * @param style
@@ -306,7 +302,7 @@ public class ConfigurationComposite extends StateComposite {
 
 			setLayout(new FormLayout());
 
-			this.lnkAbout = new Link(this, SWT.WRAP);
+			this.lnkAbout = new Link(this, SWT.NONE);
 
 			FormData fd_lnkAbout = new FormData();
 			fd_lnkAbout.right = new FormAttachment(100, -5);
@@ -340,9 +336,59 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			});
 
+			this.lblDataProtection = new Label(this, SWT.NONE);
+			FormData fd_lblDataProtection = new FormData();
+			fd_lblDataProtection.top = new FormAttachment(this.lnkAbout, 15);
+			fd_lblDataProtection.right = new FormAttachment(100, -5);
+			fd_lblDataProtection.left = new FormAttachment(0, 5);
+			fd_lblDataProtection.width = 100;
+			this.lblDataProtection.setLayoutData(fd_lblDataProtection);
+
+			FontData[] fD_lblDataProtection = this.lblDataProtection.getFont().getFontData();
+			fD_lblDataProtection[0].setHeight(Constants.TEXT_SIZE_BIG);
+			this.lblDataProtection.setFont(new Font(Display.getCurrent(),
+					fD_lblDataProtection[0]));
+
+			this.lnkDataProtection = new Link(this, SWT.NONE);
+
+			FormData fd_lnkDataProtection = new FormData();
+			fd_lnkDataProtection.right = new FormAttachment(100, -5);
+			fd_lnkDataProtection.left = new FormAttachment(0, 5);
+			fd_lnkDataProtection.top = new FormAttachment(this.lblDataProtection, 10);
+			fd_lnkDataProtection.width = 100;
+			fd_lnkDataProtection.height = 120;
+			this.lnkDataProtection.setLayoutData(fd_lnkDataProtection);
+
+			FontData[] fD_lnkDataProtection = this.lnkDataProtection.getFont().getFontData();
+			fD_lnkDataProtection[0].setHeight(Constants.TEXT_SIZE_NORMAL);
+			this.lnkDataProtection.setFont(new Font(Display.getCurrent(),
+					fD_lnkDataProtection[0]));
+
+
+			this.lnkDataProtection.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						URI url = new URI(Messages.getString("config.DataProtectionURL")); //$NON-NLS-1$
+						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
+						if (Desktop.isDesktopSupported()) {
+							Desktop.getDesktop().browse(url);
+						} else {
+							log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
+							Program.launch(url.toString());
+						}
+					} catch (IOException ex) {
+						log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					} catch (URISyntaxException ex) {
+						log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					}
+				}
+			});
+
 			// Load localized strings
 			reloadResources();
 		}
+
 
 		/* (non-Javadoc)
 		 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
@@ -358,6 +404,8 @@ public class ConfigurationComposite extends StateComposite {
 		@Override
 		public void reloadResources() {
 			this.lnkAbout.setText(Messages.getString("config.AboutText")); //$NON-NLS-1$
+			this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
+			this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
 		}
 	}
 
