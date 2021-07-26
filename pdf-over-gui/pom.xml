@@ -243,7 +243,7 @@
 					<includes>
 						<include>*.jar</include>
 					</includes>
-					<verify>true</verify>
+<!--					<verify>true</verify>-->
 				</configuration>
 			</plugin>
 			<plugin>
