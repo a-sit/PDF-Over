@@ -66,8 +66,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
 
-				
-				number = MobileBKUHelper.normalizeMobileNumber(number);
+				number = number.replaceAll("\\s","");
 				
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
@@ -83,11 +82,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
 				
-			} catch(InvalidNumberException ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
-				MobileBKUEnterNumberComposite.this
-				.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
-				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 			} catch(InvalidPasswordException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
