@@ -66,8 +66,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
 
-				
-				number = MobileBKUHelper.normalizeMobileNumber(number);
+				number = number.replaceAll("\\s","");
 				
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
@@ -83,11 +82,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
 				
-			} catch(InvalidNumberException ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
-				MobileBKUEnterNumberComposite.this
-				.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
-				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 			} catch(InvalidPasswordException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
 				MobileBKUEnterNumberComposite.this
@@ -101,8 +95,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
-
-			//MobileBKUEnterNumberComposite.this.state.updateStateMachine();
 		}
 	};
 
@@ -202,20 +194,16 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		setLayout(new FormLayout());
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
-		containerComposite.addPaintListener(new PaintListener() {
-			
-			@Override
-			public void paintControl(PaintEvent e) {
-				Rectangle clientArea = containerComposite.getClientArea();
-				
-				//e.gc.setForeground();
-				e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_DARK);
-				e.gc.setLineWidth(3);
-				e.gc.setLineStyle(SWT.LINE_SOLID);
-				e.gc.drawRoundRectangle(clientArea.x, 
-						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
-						10, 10);
-			}
+		containerComposite.addPaintListener(e -> {
+			Rectangle clientArea = containerComposite.getClientArea();
+
+			//e.gc.setForeground();
+			e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_DARK);
+			e.gc.setLineWidth(3);
+			e.gc.setLineStyle(SWT.LINE_SOLID);
+			e.gc.drawRoundRectangle(clientArea.x,
+					clientArea.y, clientArea.width - 2, clientArea.height - 2,
+					10, 10);
 		});
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
@@ -228,7 +216,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
 		FormData fd_number = new FormData();
-		//fd_number.top = new FormAttachment(0, 20);
 		fd_number.bottom = new FormAttachment(50, -10);
 		fd_number.left = new FormAttachment(50, 10);
 		fd_number.right = new FormAttachment(100, -20);
@@ -240,9 +227,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_number.setAlignment(SWT.RIGHT);
 		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
 		FormData fd_lbl_number = new FormData();
-		//fd_lbl_number.top = new FormAttachment(30, -15);
 		fd_lbl_number.bottom = new FormAttachment(50, -10);
-		//fd_lbl_number.left = new FormAttachment(0, 20);
 		fd_lbl_number.right = new FormAttachment(50, -10);
 		this.lbl_number.setLayoutData(fd_lbl_number);
 
@@ -252,8 +237,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		Image mobile = new Image(getDisplay(), data); 
 		
 		FormData fd_lbl_image = new FormData();
-		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
-		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
+		fd_lbl_image.top = new FormAttachment(20, -1 * (data.width / 2));
+		fd_lbl_image.bottom = new FormAttachment(20, data.width / 2);
 		fd_lbl_image.left = new FormAttachment(0, 10);
 		fd_lbl_image.width = data.width;
 		lbl_image.setLayoutData(fd_lbl_image);
@@ -264,7 +249,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				| SWT.BORDER | SWT.NATIVE);
 		FormData fd_password = new FormData();
 		fd_password.top = new FormAttachment(50, 10);
-		//fd_password.bottom = new FormAttachment(50, 15);
 		fd_password.left = new FormAttachment(50, 10);
 		fd_password.right = new FormAttachment(100, -20);
 		this.txt_password.setLayoutData(fd_password);
@@ -275,28 +259,22 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
 		FormData fd_lbl_password = new FormData();
 		fd_lbl_password.top = new FormAttachment(50, 10);
-		//fd_lbl_password.bottom = new FormAttachment(50, 15);
-		//fd_lbl_password.left = new FormAttachment(0, 20);
 		fd_lbl_password.right = new FormAttachment(50, -10);
 		this.lbl_password.setLayoutData(fd_lbl_password);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
 		FormData fd_btn_ok = new FormData();
-		//fd_btn_ok.top = new FormAttachment(87, 0);
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 		fd_btn_ok.right = new FormAttachment(100, -20);
-		//fd_btn_ok.left = new FormAttachment(100, -70);
 		this.btn_ok.setLayoutData(fd_btn_ok);
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
 		FormData fd_btn_cancel = new FormData();
-		//fd_btn_cancel.top = new FormAttachment(87, 0);
 		fd_btn_cancel.bottom = new FormAttachment(100, -20);
 		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -10);
-		//fd_btn_cancel.left = new FormAttachment(100, -70);
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
@@ -322,7 +300,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.btn_ok.setEnabled(true);
 	}
 	
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
@@ -377,7 +355,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		}
 	}
 
-	/* (non-Javadoc)
+	/** (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
