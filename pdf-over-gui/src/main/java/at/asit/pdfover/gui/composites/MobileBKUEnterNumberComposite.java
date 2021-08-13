@@ -196,20 +196,16 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		setLayout(new FormLayout());
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
-		containerComposite.addPaintListener(new PaintListener() {
-			
-			@Override
-			public void paintControl(PaintEvent e) {
-				Rectangle clientArea = containerComposite.getClientArea();
-				
-				//e.gc.setForeground();
-				e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_DARK);
-				e.gc.setLineWidth(3);
-				e.gc.setLineStyle(SWT.LINE_SOLID);
-				e.gc.drawRoundRectangle(clientArea.x, 
-						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
-						10, 10);
-			}
+		containerComposite.addPaintListener(e -> {
+			Rectangle clientArea = containerComposite.getClientArea();
+
+			//e.gc.setForeground();
+			e.gc.setForeground(Constants.MAINBAR_ACTIVE_BACK_DARK);
+			e.gc.setLineWidth(3);
+			e.gc.setLineStyle(SWT.LINE_SOLID);
+			e.gc.drawRoundRectangle(clientArea.x,
+					clientArea.y, clientArea.width - 2, clientArea.height - 2,
+					10, 10);
 		});
 		containerComposite.setLayout(new FormLayout());
 		FormData fd_containerComposite = new FormData();
@@ -246,8 +242,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		Image mobile = new Image(getDisplay(), data); 
 		
 		FormData fd_lbl_image = new FormData();
-		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
-		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
+		fd_lbl_image.top = new FormAttachment(20, -1 * (data.width / 2));
+		fd_lbl_image.bottom = new FormAttachment(20, data.width / 2);
 		fd_lbl_image.left = new FormAttachment(0, 10);
 		fd_lbl_image.width = data.width;
 		lbl_image.setLayoutData(fd_lbl_image);
