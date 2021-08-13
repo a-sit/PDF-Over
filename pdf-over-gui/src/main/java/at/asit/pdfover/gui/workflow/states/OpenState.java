@@ -21,6 +21,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsAndPlaceHolderExtractor;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 //Imports
@@ -39,11 +42,9 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.SignaturePosition;
-import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
-import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsExtractor;
-import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignaturePlaceholderExtractor;
-//import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.
+
+
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
@@ -114,7 +115,7 @@ public class OpenState extends State {
 				//first check the signature fields placeholder 
 				if (getStateMachine().getConfigProvider().getUseSignatureFields()) {
 
-					List<String> fields = SignatureFieldsExtractor.findEmptySignatureFields(pddocument);
+					List<String> fields = SignatureFieldsAndPlaceHolderExtractor.findEmptySignatureFields(pddocument);
 
 					if (fields.size() > 0) {
 
@@ -157,7 +158,7 @@ public class OpenState extends State {
 					// second check if qr code placeholder search is enabled
 				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
 
-					SignaturePlaceholderData signaturePlaceholderData = SignatureFieldsExtractor.getNextSignaturePlaceHolder(pddocument);
+					SignaturePlaceholderData signaturePlaceholderData = SignatureFieldsAndPlaceHolderExtractor.getNextUnusedSignaturePlaceHolder(pddocument);
 
 					if (null != signaturePlaceholderData) {
 

@@ -50,7 +50,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 		this.state = state;
 	}
 
-	/* (non-Javadoc)
+	/** (non-Javadoc)
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
 	@Override
