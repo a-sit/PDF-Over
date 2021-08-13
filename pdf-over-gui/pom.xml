@@ -172,7 +172,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.eclipse.swt</groupId>
-									<artifactId>${swt.artifactId.32}</artifactId>
+									<artifactId>${swt.artifactId.64}</artifactId>
 									<version>${swt.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
@@ -450,7 +450,7 @@
 		<project.maindir>${project.basedir}/..</project.maindir>
 		<target.name>windows</target.name>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.13</swt.version>
+		<swt.version>4.20</swt.version>
 	</properties>
 
 	<profiles>
@@ -465,7 +465,7 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
 				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>windows</target.name>
@@ -480,14 +480,13 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.win32.win32.x86</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.win32.win32.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
-
-
+		
 		<profile>
 			<id>linux-64</id>
 			<activation>
@@ -497,7 +496,7 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId.64>
 				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>linux</target.name>
@@ -512,9 +511,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.gtk.linux.x86</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
@@ -530,9 +529,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -545,9 +544,9 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
-				<swt.artifactId>${swt.artifactId.32}</swt.artifactId>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -560,7 +559,7 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
 				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>
@@ -575,7 +574,7 @@
 				</os>
 			</activation>
 			<properties>
-				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>
+<!--				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>-->
 				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId.64>
 				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
 				<target.name>mac</target.name>

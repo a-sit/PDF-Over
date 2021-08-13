@@ -22,7 +22,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class Main {
 	
-	private final static String SWT_VERSION = "4.8"; 
+	private final static String SWT_VERSION = "4.20";
 	
 	public static void main(String[] args) {
 		
