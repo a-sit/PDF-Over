@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.commons;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Locale;
@@ -23,8 +24,6 @@ import java.util.Properties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-
-import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 
 /**
  * Various constants
@@ -96,9 +95,6 @@ public class Constants {
 	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile/https-security-layer-request/default.aspx";
 	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
 	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //$NON-NLS-1$
-
-	/** Default Mobile BKU type */
-	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
 
 	/** Default signature placeholder transparency */
 	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;

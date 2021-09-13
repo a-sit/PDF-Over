@@ -153,24 +153,9 @@ public class PrepareConfigurationState extends State {
 
 		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //$NON-NLS-1$
 		if (note.equals(note_old)) {
-			String profileNote = getDefaultNote(config);
-
-			note = Messages.getString("simple_config.Note_Default", loc); //$NON-NLS-1$
+			String profile = config.getSignatureProfile();
+			note = Profile.getSignatureBlockNoteTextAccordingToProfile(Profile.getProfile(profile), config.getLocale());
 			getStateMachine().getConfigManipulator().setSignatureNote(note);
-		}
-	}
-
-	private String getDefaultNote(ConfigProvider config){
-
-		Profile profile = Profile.getProfile(config.getSignatureProfile());
-		Locale locale = config.getLocale();
-
-		if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){
-			return Messages.getString("simple_config.Note_Default_Standard", locale);
-		} else if (profile.equals(Profile.AMTSSIGNATURBLOCK)){
-			return Messages.getString("simple_config.Note_Default_OfficialSignature", locale);
-		} else {
-			return "";
 		}
 	}
 

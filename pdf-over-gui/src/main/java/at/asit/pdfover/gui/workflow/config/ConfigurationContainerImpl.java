@@ -99,7 +99,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	protected String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
 
 	/** Holds the mobile BKU type */
-	protected MobileBKUs mobileBKUType = Constants.DEFAULT_MOBILE_BKU_TYPE;
+	protected MobileBKUs mobileBKUType = ConfigProviderImpl.DEFAULT_MOBILE_BKU_TYPE;
 
 	/** Holds the mobile BKU BASE64 setting */
 	protected boolean mobileBKUBase64 = false;

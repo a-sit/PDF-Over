@@ -45,6 +45,12 @@ import at.asit.pdfover.signator.SignaturePosition;
  */
 public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		ConfigOverlayManipulator, PersistentConfigProvider {
+
+
+	/** Default Mobile BKU type */
+	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
+
+
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -178,7 +184,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 						bkuType.trim().toUpperCase()));
 			} catch (IllegalArgumentException e) {
 				log.error("Invalid BKU type: " + bkuType); //$NON-NLS-1$
-				this.configuration.setMobileBKUType(Constants.DEFAULT_MOBILE_BKU_TYPE);
+				this.configuration.setMobileBKUType(DEFAULT_MOBILE_BKU_TYPE);
 			}
 		}
 
@@ -408,7 +414,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			props.setProperty(Constants.CFG_MOBILE_BKU_URL, mobileBKUURL);
 
 		MobileBKUs mobileBKUType = getMobileBKUType();
-		if (mobileBKUType != Constants.DEFAULT_MOBILE_BKU_TYPE)
+		if (mobileBKUType != DEFAULT_MOBILE_BKU_TYPE)
 			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
 
 		if (getMobileBKUBase64())

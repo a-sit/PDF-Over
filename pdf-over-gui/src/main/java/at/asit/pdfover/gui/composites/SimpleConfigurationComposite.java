@@ -753,9 +753,9 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 	void alignSignatureNoteTextToProfile(Profile profile){
 
 		if (detectChanges(profile) == false){
-			this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile));
+			this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()));
 			this.configurationContainer.setSignatureNote(
-					Messages.getString(getSignatureBlockNoteTextAccordingToProfile(profile))
+					Messages.getString(getSignatureBlockNoteTextAccordingToProfile(profile, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()))
 			);
 		}
 
@@ -765,29 +765,19 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 
 		String note = this.txtSignatureNote.getText();
 		note = note.replace("!","");
-		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK)) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL)) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE)) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO))){
+		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()))){
 			return false;
 		}
 		return true;
 	}
 
-	//TODO FIX ME
-	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale locale){
 
-		if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){
-			return Messages.getString("simple_config.Note_Default_Standard", locale);
-		} else if (profile.equals(Profile.AMTSSIGNATURBLOCK)){
-			return Messages.getString("simple_config.Note_Default_OfficialSignature", locale);
-		} else {
-			return "";
-		}
-	}
 
-	String getSignatureBlockNoteTextAccordingToProfile(Profile profile){
-		return getSignatureBlockNoteTextAccordingToProfile(profile, this.configurationContainer.getSignatureLocale());
+	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale signatureLocale){
+		return Profile.getSignatureBlockNoteTextAccordingToProfile(profile, this.configurationContainer.getSignatureLocale());
 	}
 
 	void setSignatureProfileSetting(){
