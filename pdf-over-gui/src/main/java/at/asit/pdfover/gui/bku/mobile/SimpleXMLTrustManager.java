@@ -34,7 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 
 /**
  * 

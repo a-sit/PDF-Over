@@ -23,7 +23,7 @@ import org.apache.http.client.config.CookieSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 
 /**
  * 

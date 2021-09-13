@@ -25,8 +25,8 @@ import org.eclipse.swt.internal.Callback;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 
-import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.Messages;
 
 /**
  * Provide a hook to connecting the Preferences, About and Quit menu items of

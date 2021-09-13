@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.controls;
 // Imports
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 
 /**
  * An error dialog

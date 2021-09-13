@@ -33,7 +33,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;

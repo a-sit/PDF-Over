@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;

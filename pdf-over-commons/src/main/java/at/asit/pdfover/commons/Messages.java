@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.utils;
+package at.asit.pdfover.commons;
 
 // Imports
 import java.util.HashMap;
@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
 
 /**
  * Localizes string messages for PDFOver GUI

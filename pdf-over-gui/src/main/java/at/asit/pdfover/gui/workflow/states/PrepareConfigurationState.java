@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.Locale;
 
+import at.asit.pdfover.commons.Profile;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.PropertyConfigurator;
@@ -39,7 +40,7 @@ import org.eclipse.swt.program.Program;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.cliarguments.*;
 import at.asit.pdfover.gui.controls.Dialog;
@@ -47,7 +48,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.utils.Zipper;
 import at.asit.pdfover.gui.workflow.GUIProvider;
@@ -152,8 +153,24 @@ public class PrepareConfigurationState extends State {
 
 		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //$NON-NLS-1$
 		if (note.equals(note_old)) {
+			String profileNote = getDefaultNote(config);
+
 			note = Messages.getString("simple_config.Note_Default", loc); //$NON-NLS-1$
 			getStateMachine().getConfigManipulator().setSignatureNote(note);
+		}
+	}
+
+	private String getDefaultNote(ConfigProvider config){
+
+		Profile profile = Profile.getProfile(config.getSignatureProfile());
+		Locale locale = config.getLocale();
+
+		if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){
+			return Messages.getString("simple_config.Note_Default_Standard", locale);
+		} else if (profile.equals(Profile.AMTSSIGNATURBLOCK)){
+			return Messages.getString("simple_config.Note_Default_OfficialSignature", locale);
+		} else {
+			return "";
 		}
 	}
 

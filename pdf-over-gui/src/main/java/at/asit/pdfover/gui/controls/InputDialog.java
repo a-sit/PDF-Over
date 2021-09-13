@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 
 /**
  * 

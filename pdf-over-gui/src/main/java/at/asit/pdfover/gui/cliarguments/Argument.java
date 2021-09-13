@@ -16,7 +16,7 @@
 package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;

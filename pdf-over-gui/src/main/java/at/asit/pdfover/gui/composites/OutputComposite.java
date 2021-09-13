@@ -41,12 +41,12 @@ import org.eclipse.swt.widgets.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
 

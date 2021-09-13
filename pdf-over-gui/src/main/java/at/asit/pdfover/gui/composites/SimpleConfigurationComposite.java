@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 import at.asit.pdfover.signator.SignaturePosition;
 import org.eclipse.swt.SWT;
@@ -60,7 +59,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
@@ -68,8 +67,7 @@ import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.utils.ImageConverter;
-import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
@@ -776,6 +774,7 @@ public class SimpleConfigurationComposite extends BaseConfigurationComposite {
 		return true;
 	}
 
+	//TODO FIX ME
 	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale locale){
 
 		if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){

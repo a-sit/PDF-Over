@@ -18,15 +18,12 @@ package at.asit.pdfover.gui;
 //Imports
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
-import javax.swing.JOptionPane;
-
+import at.asit.pdfover.commons.Constants;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.utils.Messages;
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
 
 /**

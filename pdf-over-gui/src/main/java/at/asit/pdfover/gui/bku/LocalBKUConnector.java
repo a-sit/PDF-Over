@@ -31,7 +31,7 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;

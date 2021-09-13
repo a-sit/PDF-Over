@@ -15,11 +15,9 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
 
 // Imports
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
@@ -46,7 +44,7 @@ import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.composites.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.SigningState;

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
 

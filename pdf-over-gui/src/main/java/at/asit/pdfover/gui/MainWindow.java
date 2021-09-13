@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.Map;
 
+import at.asit.pdfover.commons.Constants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.custom.StackLayout;
@@ -56,7 +57,7 @@ import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.osx.CocoaUIEnhancer;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;

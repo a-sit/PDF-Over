@@ -15,7 +15,7 @@
  */
 package at.asit.pdfover.gui.exceptions;
 
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 
 // Imports
 

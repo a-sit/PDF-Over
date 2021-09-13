@@ -18,6 +18,7 @@ package at.asit.pdfover.gui;
 //Imports
 import java.io.File;
 
+import at.asit.pdfover.commons.Constants;
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;

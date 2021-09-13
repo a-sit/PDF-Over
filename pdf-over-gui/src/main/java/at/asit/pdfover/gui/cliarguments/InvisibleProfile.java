@@ -16,14 +16,12 @@
 package at.asit.pdfover.gui.cliarguments;
 
 // Imports
-import java.io.File;
-import java.io.FileNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 
 /**

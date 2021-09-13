@@ -34,14 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.gui.utils.Messages;
-import at.asit.pdfover.gui.utils.SWTLoader;
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.gv.egiz.sl.schema.ToBeEncryptedType.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -50,12 +44,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.io.File;
 
 /**
  * Download of accepted certificates

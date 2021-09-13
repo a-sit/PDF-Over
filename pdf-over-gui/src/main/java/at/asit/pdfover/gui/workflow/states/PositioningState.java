@@ -31,7 +31,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.PositioningComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;

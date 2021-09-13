@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.exceptions;
 // Imports
 import java.io.File;
 
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Messages;
 
 /**
  * 

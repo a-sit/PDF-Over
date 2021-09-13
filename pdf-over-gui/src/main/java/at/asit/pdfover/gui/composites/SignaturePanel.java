@@ -35,8 +35,8 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.Constants;
-import at.asit.pdfover.gui.utils.Messages;
+import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.Messages;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;

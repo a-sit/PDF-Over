@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui;
+package at.asit.pdfover.commons;
 
 import java.io.File;
 import java.io.FileInputStream;
