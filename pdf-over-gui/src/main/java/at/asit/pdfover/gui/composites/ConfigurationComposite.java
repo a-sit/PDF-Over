@@ -355,6 +355,7 @@ public class ConfigurationComposite extends StateComposite {
 			fd_lnkDataProtection.right = new FormAttachment(100, -5);
 			fd_lnkDataProtection.left = new FormAttachment(0, 5);
 			fd_lnkDataProtection.top = new FormAttachment(this.lblDataProtection, 10);
+			fd_lnkDataProtection.bottom = new FormAttachment(100, -5);
 			fd_lnkDataProtection.width = 100;
 			fd_lnkDataProtection.height = 120;
 			this.lnkDataProtection.setLayoutData(fd_lnkDataProtection);
