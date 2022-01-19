@@ -62,7 +62,7 @@ public class PdfAs4Signer implements Signer {
 		String sigProfile = sign_para.getPdfAsSignatureProfileId();
 		String sigEmblem = (sign_para.getEmblem() == null ? null : sign_para.getEmblem().getFileName());
 		String sigNote = sign_para.getProperty("SIG_NOTE");
-		String sigPos = null; 
+		String sigPos = null;
 		if (sign_para.getSignaturePosition() != null) {
 			sigPos = sign_para.getPdfAsSignaturePosition();
 		}

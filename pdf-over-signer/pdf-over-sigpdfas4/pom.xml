@@ -72,18 +72,8 @@
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
 		<repository>
-			<id>EGIZ Maven Snapshot</id>
-			<name>EGIZ Maven Snapshot Repository</name>
-			<url>https://apps.egiz.gv.at/maven-snapshot/</url>
-		</repository>
-		<repository>
 			<id>local-repo</id>
 			<url>file://${project.maindir}/repo</url>
-		</repository>
-		<repository>
-			<id>EGIZ SNAPSHOT Repo 2</id>
-			<name>EGIZ SNAPSHOT Maven Repository 2</name>
-			<url>https://apps.egiz.gv.at/snapshot/</url>
 		</repository>
 	</repositories>
 </project>

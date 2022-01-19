@@ -238,10 +238,5 @@
 			<name>Internal Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
-		<repository>
-			<id>EGIZ Maven Snapshot</id>
-			<name>EGIZ Maven Snapshot Repository</name>
-			<url>https://apps.egiz.gv.at/maven-snapshot/</url>
-		</repository>
 	</repositories>
 </project>
