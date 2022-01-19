@@ -2,7 +2,7 @@
 
 #### CONFIGURE: ######
 PUBLISH_DIR="pdf-over-build"
-LOG_DIR="log"
+LOG_DIR="/tmp/pdfover_log"
 CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
 HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
