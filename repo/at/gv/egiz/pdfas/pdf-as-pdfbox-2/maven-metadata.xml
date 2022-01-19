@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>at.gv.egiz.pdfas</groupId>
+  <artifactId>pdf-as-pdfbox-2</artifactId>
+  <versioning>
+    <latest>4.2.1-snapshot</latest>
+    <versions>
+      <version>4.2.1-snapshot</version>
+      <version>4.2.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20211216153148</lastUpdated>
+  </versioning>
+</metadata>

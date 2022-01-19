@@ -1,0 +1,177 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "at.gv.egiz.pdfas",
+    "module": "pdf-as-common",
+    "version": "4.2.1-snapshot",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.8.3",
+      "buildId": "p64czxgonrdlfnrjffin6iyvja"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.30"
+          }
+        },
+        {
+          "group": "commons-collections",
+          "module": "commons-collections",
+          "version": {
+            "requires": "3.2.2"
+          }
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.8.0"
+          }
+        },
+        {
+          "group": "ognl",
+          "module": "ognl",
+          "version": {
+            "requires": "3.2.19"
+          }
+        },
+        {
+          "group": "javax.xml.bind",
+          "module": "jaxb-api",
+          "version": {
+            "requires": "2.3.1"
+          }
+        },
+        {
+          "group": "commons-codec",
+          "module": "commons-codec",
+          "version": {
+            "requires": "1.10"
+          }
+        },
+        {
+          "group": "org.glassfish.jaxb",
+          "module": "jaxb-runtime",
+          "version": {
+            "requires": "2.3.3"
+          }
+        },
+        {
+          "group": "javax.jws",
+          "module": "javax.jws-api",
+          "version": {
+            "requires": "1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "pdf-as-common-4.2.1-snapshot.jar",
+          "url": "pdf-as-common-4.2.1-snapshot.jar",
+          "size": 55815,
+          "sha512": "aa5f2351b556808e57cbd5f00aefddf6cb80c3eb06a4183b09ae3270be33c867adb1533ed849e4b96a11f052f8f27dfc5fe8109b24eee1b099b29cd259626dca",
+          "sha256": "db8237ef82364dcb8b101d96d40312fed8212f8c9f00389d0ad7d4a86a9b7174",
+          "sha1": "14e58c710f8c4873c4929ab470e35860e205d7fe",
+          "md5": "3560fe500b305c0b1a0b0a2589050498"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.30"
+          }
+        },
+        {
+          "group": "commons-collections",
+          "module": "commons-collections",
+          "version": {
+            "requires": "3.2.2"
+          }
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.8.0"
+          }
+        },
+        {
+          "group": "ognl",
+          "module": "ognl",
+          "version": {
+            "requires": "3.2.19"
+          }
+        },
+        {
+          "group": "javax.xml.bind",
+          "module": "jaxb-api",
+          "version": {
+            "requires": "2.3.1"
+          }
+        },
+        {
+          "group": "commons-codec",
+          "module": "commons-codec",
+          "version": {
+            "requires": "1.10"
+          }
+        },
+        {
+          "group": "org.glassfish.jaxb",
+          "module": "jaxb-runtime",
+          "version": {
+            "requires": "2.3.3"
+          }
+        },
+        {
+          "group": "javax.jws",
+          "module": "javax.jws-api",
+          "version": {
+            "requires": "1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "pdf-as-common-4.2.1-snapshot.jar",
+          "url": "pdf-as-common-4.2.1-snapshot.jar",
+          "size": 55815,
+          "sha512": "aa5f2351b556808e57cbd5f00aefddf6cb80c3eb06a4183b09ae3270be33c867adb1533ed849e4b96a11f052f8f27dfc5fe8109b24eee1b099b29cd259626dca",
+          "sha256": "db8237ef82364dcb8b101d96d40312fed8212f8c9f00389d0ad7d4a86a9b7174",
+          "sha1": "14e58c710f8c4873c4929ab470e35860e205d7fe",
+          "md5": "3560fe500b305c0b1a0b0a2589050498"
+        }
+      ]
+    }
+  ]
+}

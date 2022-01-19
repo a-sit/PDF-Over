@@ -1,0 +1,191 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "at.gv.egiz.pdfas",
+    "module": "pdf-as-pdfbox-2",
+    "version": "4.2.1-snapshot",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.8.3",
+      "buildId": "p64czxgonrdlfnrjffin6iyvja"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.apache.pdfbox",
+          "module": "pdfbox",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "org.apache.pdfbox",
+          "module": "pdfbox-tools",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "org.apache.pdfbox",
+          "module": "preflight",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "com.github.jai-imageio",
+          "module": "jai-imageio-jpeg2000",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.github.jai-imageio",
+          "module": "jai-imageio-core",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.levigo.jbig2",
+          "module": "levigo-jbig2-imageio",
+          "version": {
+            "requires": "2.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "pdf-as-pdfbox-2-4.2.1-snapshot.jar",
+          "url": "pdf-as-pdfbox-2-4.2.1-snapshot.jar",
+          "size": 132505,
+          "sha512": "869c83a8ebb993e733dfca50d9582373ec04d701fc0c21dfb3fcdf70c3ecd3fb7281bd457d8e12891a400bb4eb730cd942916362b2d72c25d51e6fef40a4399a",
+          "sha256": "47367edb10f3173ff9fac40ca6a543dadc4ff6bd6d785397ea168d4f6f58373b",
+          "sha1": "d30365d8884cb41fb7519234661b563c4ec4b9f6",
+          "md5": "8b5581e48ffb2dba774a34ebc2ddd06e"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "at.gv.egiz.pdfas",
+          "module": "pdf-as-lib",
+          "version": {
+            "requires": "4.2.1-snapshot"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.30"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "jcl-over-slf4j",
+          "version": {
+            "requires": "1.7.30"
+          }
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.8"
+          }
+        },
+        {
+          "group": "ognl",
+          "module": "ognl",
+          "version": {
+            "requires": "3.2.19"
+          }
+        },
+        {
+          "group": "javax.activation",
+          "module": "activation",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "org.apache.pdfbox",
+          "module": "pdfbox",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "org.apache.pdfbox",
+          "module": "pdfbox-tools",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "org.apache.pdfbox",
+          "module": "preflight",
+          "version": {
+            "requires": "2.0.23"
+          }
+        },
+        {
+          "group": "com.github.jai-imageio",
+          "module": "jai-imageio-jpeg2000",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.github.jai-imageio",
+          "module": "jai-imageio-core",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.levigo.jbig2",
+          "module": "levigo-jbig2-imageio",
+          "version": {
+            "requires": "2.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "pdf-as-pdfbox-2-4.2.1-snapshot.jar",
+          "url": "pdf-as-pdfbox-2-4.2.1-snapshot.jar",
+          "size": 132505,
+          "sha512": "869c83a8ebb993e733dfca50d9582373ec04d701fc0c21dfb3fcdf70c3ecd3fb7281bd457d8e12891a400bb4eb730cd942916362b2d72c25d51e6fef40a4399a",
+          "sha256": "47367edb10f3173ff9fac40ca6a543dadc4ff6bd6d785397ea168d4f6f58373b",
+          "sha1": "d30365d8884cb41fb7519234661b563c4ec4b9f6",
+          "md5": "8b5581e48ffb2dba774a34ebc2ddd06e"
+        }
+      ]
+    }
+  ]
+}
