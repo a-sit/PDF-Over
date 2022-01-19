@@ -661,5 +661,9 @@
 			<name>Internal Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
+        <repository>
+			<id>local-repo</id>
+			<url>file://${project.maindir}/repo</url>
+		</repository>
 	</repositories>
 </project>
