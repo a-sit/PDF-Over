@@ -92,73 +92,54 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		config.load(configSource);
 
-		// Set Emblem
-		setDefaultEmblem(config
-				.getProperty(Constants.CFG_EMBLEM));
+		setDefaultEmblem(config.getProperty(Constants.CFG_EMBLEM));
 
-		// Set Mobile Phone Number
-		setDefaultMobileNumber(config
-				.getProperty(Constants.CFG_MOBILE_NUMBER));
+		setDefaultMobileNumber(config.getProperty(Constants.CFG_MOBILE_NUMBER));
 
-		// Set signature note
-		setSignatureNote(config
-				.getProperty(Constants.CFG_SIGNATURE_NOTE));
+		setSignatureNote(config.getProperty(Constants.CFG_SIGNATURE_NOTE));
 
-		// Set Proxy Host
-		setProxyHost(config
-				.getProperty(Constants.CFG_PROXY_HOST));
+		setProxyHost(config.getProperty(Constants.CFG_PROXY_HOST));
+		setProxyUser(config.getProperty(Constants.CFG_PROXY_USER));
+		setProxyPass(config.getProperty(Constants.CFG_PROXY_PASS));
 
-		// Set Proxy User
-		setProxyUser(config
-				.getProperty(Constants.CFG_PROXY_USER));
-
-		// Set Proxy Password
-		setProxyPass(config
-				.getProperty(Constants.CFG_PROXY_PASS));
-
-		// Set Output Folder
-		setDefaultOutputFolder(config
-				.getProperty(Constants.CFG_OUTPUT_FOLDER));
+		setDefaultOutputFolder(config.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
 		String postFix = config.getProperty(Constants.CFG_POSTFIX);
-		if (postFix == null){
+		if (postFix == null)
 			setSaveFilePostFix(Constants.DEFAULT_POSTFIX);
-		} else {
+		else
 			setSaveFilePostFix(postFix);
-		}
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
 		
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
-		if (targetLocale != null) {
+		if (targetLocale != null)
 			setLocale(targetLocale);
-		}
 
 		String signatureLocaleString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
 		
 		Locale signatureTargetLocale = LocaleSerializer.parseFromString(signatureLocaleString);
-		if (signatureTargetLocale != null) {
+		if (signatureTargetLocale != null)
 			setSignatureLocale(signatureTargetLocale);
-		}
 
 		String useMarker = config.getProperty(Constants.CFG_USE_MARKER);
-		if(null != useMarker)
+		if (useMarker != null)
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
 		
 		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
-		if (useSignatureFields != null) {
+		if (useSignatureFields != null)
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
-		}
 		
 		String enablePlaceholder = config.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
-		if (enablePlaceholder != null) {
+		if (enablePlaceholder != null)
 			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
-		}
 		
 		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
-		if (signatureProfile != null) {
+		if (signatureProfile != null)
+		{
 			Profile profile = Profile.getProfile(signatureProfile);
-			if (profile != null) {
+			if (profile != null)
+			{
 				this.configuration.setSignatureProfile(profile);
 				this.configurationOverlay.setSignatureProfile(profile);
 			}
@@ -168,18 +149,17 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (compat != null)
 			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
 
-		String bkuUrl = config
-				.getProperty(Constants.CFG_MOBILE_BKU_URL);
-		
-		if (bkuUrl != null && !bkuUrl.isEmpty()) {
+		String bkuUrl = config.getProperty(Constants.CFG_MOBILE_BKU_URL);
+		if (bkuUrl != null && !bkuUrl.isEmpty())
 			this.configuration.setMobileBKUURL(bkuUrl);
-		}
 
 		String bkuType = config
 				.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
 
-		if (bkuType != null && !bkuType.isEmpty()) {
-			try {
+		if (bkuType != null && !bkuType.isEmpty())
+		{
+			try
+			{
 				this.configuration.setMobileBKUType(MobileBKUs.valueOf(
 						bkuType.trim().toUpperCase()));
 			} catch (IllegalArgumentException e) {
@@ -192,18 +172,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (useBase64 != null)
 			this.configuration.setMobileBKUBase64(useBase64.equalsIgnoreCase(Constants.TRUE));
 
-		// Set Proxy Port
-		String proxyPortString = config
-				.getProperty(Constants.CFG_PROXY_PORT);
-
-		if (proxyPortString != null && !proxyPortString.trim().isEmpty()) {
+		String proxyPortString = config.getProperty(Constants.CFG_PROXY_PORT);
+		if (proxyPortString != null && !proxyPortString.trim().isEmpty())
+		{
 			int port = Integer.parseInt(proxyPortString);
 
-			if (port > 0 && port <= 0xFFFF) {
+			if (port > 0 && port <= 0xFFFF)
 				setProxyPort(port);
-			} else {
+			else
 				log.warn("Proxy port is out of range!: " + port); //$NON-NLS-1$
-			}
 		}
 
 		// Set Default BKU
@@ -257,19 +234,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configuration.setMainWindowSize(new Point(width, height));
 
 		// Set Signature Position
-		String signaturePosition = config
-				.getProperty(Constants.CFG_SIGNATURE_POSITION);
-
+		String signaturePosition = config.getProperty(Constants.CFG_SIGNATURE_POSITION);
 		SignaturePosition position = null;
-
 		if (signaturePosition != null && !signaturePosition.trim().isEmpty()) {
-
 			signaturePosition = signaturePosition.trim().toLowerCase();
 
 			Pattern pattern = Pattern.compile(SIGN_POS_REGEX);
-
 			Matcher matcher = pattern.matcher(signaturePosition);
-
 			if (matcher.matches()) {
 				if (matcher.groupCount() == 8) {
 					if (matcher.group(1) != null) {
@@ -315,14 +286,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		String keystoreEnabled = config.getProperty(Constants.CFG_KEYSTORE_ENABLED);
 		if (keystoreEnabled != null)
 			setKeyStoreEnabled(keystoreEnabled.equalsIgnoreCase(Constants.TRUE));
-		String keystoreFile = config.getProperty(Constants.CFG_KEYSTORE_FILE);
-		setKeyStoreFile(keystoreFile);
-		String keystoreType = config.getProperty(Constants.CFG_KEYSTORE_TYPE);
-		setKeyStoreType(keystoreType);
-		String keystoreAlias = config.getProperty(Constants.CFG_KEYSTORE_ALIAS);
-		setKeyStoreAlias(keystoreAlias);
-		String keystoreStorePass = config.getProperty(Constants.CFG_KEYSTORE_STOREPASS);
-		setKeyStoreStorePass(keystoreStorePass);
+		setKeyStoreFile(config.getProperty(Constants.CFG_KEYSTORE_FILE));
+		setKeyStoreType(config.getProperty(Constants.CFG_KEYSTORE_TYPE));
+		setKeyStoreAlias(config.getProperty(Constants.CFG_KEYSTORE_ALIAS));
+		setKeyStoreStorePass(config.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
 		String keystoreKeyPass = config.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
 		setKeyStoreKeyPass(keystoreKeyPass);
 

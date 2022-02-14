@@ -24,3 +24,5 @@ release.properties
 /installer/windows/*
 *.jks
 *.p12
+*.pem
+test-output/*
