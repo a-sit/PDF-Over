@@ -209,7 +209,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
             profileId += PROFILE_ID_PDFA;
 
         log.debug("Profile ID: {}", profileId);
-        System.out.println(profileId);
         return profileId;
     }
 
@@ -226,7 +225,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
 
     @Override
     public void setSignatureProfile(String profile) {
-        System.out.println(profile);
         this.profile = profile;
     }
 

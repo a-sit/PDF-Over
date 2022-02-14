@@ -159,6 +159,5 @@ public class PlaceholderSelectionGui extends Dialog {
 	@Override
 	protected void checkSubclass() {
 	    //  allow subclass
-	    System.out.println("info   : checking menu subclass"); //$NON-NLS-1$
 	}
 }

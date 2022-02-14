@@ -522,7 +522,6 @@ public class ATrustHandler extends MobileBKUHandler {
 				InputStream in = new BufferedInputStream(get.getResponseBodyAsStream());
 
 				isReady = IOUtils.toString(in, "utf-8"); //$NON-NLS-1$
-				System.out.print(isReady);
 				serverStatus = new Status(isReady);
 
 				if (serverStatus.isFin()) {
