@@ -103,6 +103,18 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 			ConfigurationContainer container) {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
+		
+		class InterfaceSetupHelper
+		{
+			public void setFontDataHeight(Control c, int height)
+			{
+				FontData[] fD = c.getFont().getFontData();
+				fD[0].setHeight(height);
+				c.setFont(new Font(Display.getCurrent(), fD[0]));
+			}
+		}
+
+		InterfaceSetupHelper helper = new InterfaceSetupHelper();
 
 		this.grpKeystore = new Group(this, SWT.NONE | SWT.RESIZE);
 		FormLayout layout = new FormLayout();
@@ -114,55 +126,67 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 		fd_grpKeystore.left = new FormAttachment(0, 5);
 		fd_grpKeystore.right = new FormAttachment(100, -5);
 		this.grpKeystore.setLayoutData(fd_grpKeystore);
-
-		FontData[] fD_grpKeystore = this.grpKeystore.getFont().getFontData();
-		fD_grpKeystore[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpKeystore.setFont(new Font(Display.getCurrent(),
-				fD_grpKeystore[0]));
+		helper.setFontDataHeight(this.grpKeystore, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblKeystoreFile = new Label(this.grpKeystore, SWT.NONE);
 		FormData fd_lblKeystoreFile = new FormData();
 		fd_lblKeystoreFile.top = new FormAttachment(0);
 		fd_lblKeystoreFile.left = new FormAttachment(0, 5);
 		this.lblKeystoreFile.setLayoutData(fd_lblKeystoreFile);
-
-		FontData[] fD_lblKeystoreFile = this.lblKeystoreFile.getFont()
-				.getFontData();
-		fD_lblKeystoreFile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblKeystoreFile.setFont(new Font(Display.getCurrent(),
-				fD_lblKeystoreFile[0]));
+		helper.setFontDataHeight(this.lblKeystoreFile, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtKeystoreFile = new Text(this.grpKeystore, SWT.BORDER);
 		FormData fd_txtKeystoreFile = new FormData();
 		fd_txtKeystoreFile.top = new FormAttachment(this.lblKeystoreFile, 5);
 		fd_txtKeystoreFile.left = new FormAttachment(0, 15);
 		this.txtKeystoreFile.setLayoutData(fd_txtKeystoreFile);
-
-		FontData[] fD_txtKeystoreFile = this.txtKeystoreFile.getFont()
-				.getFontData();
-		fD_txtKeystoreFile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtKeystoreFile.setFont(new Font(Display.getCurrent(),
-				fD_txtKeystoreFile[0]));
-
-		this.txtKeystoreFile.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				performKeystoreFileChanged(KeystoreConfigurationComposite.this.
-						txtKeystoreFile.getText());
-			}
-		});
+		helper.setFontDataHeight(this.txtKeystoreFile, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnBrowse = new Button(this.grpKeystore, SWT.NONE);
 		fd_txtKeystoreFile.right = new FormAttachment(this.btnBrowse, -5);
-
-		FontData[] fD_btnBrowse = this.btnBrowse.getFont().getFontData();
-		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
+		helper.setFontDataHeight(this.btnBrowse, Constants.TEXT_SIZE_BUTTON);
 
 		FormData fd_btnBrowse = new FormData();
 		fd_btnBrowse.top = new FormAttachment(this.lblKeystoreFile, 5);
 		fd_btnBrowse.right = new FormAttachment(100, -5);
 		this.btnBrowse.setLayoutData(fd_btnBrowse);
+
+		this.lblKeystoreType = new Label(this.grpKeystore, SWT.NONE);
+		FormData fd_lblKeystoreType = new FormData();
+		fd_lblKeystoreType.top = new FormAttachment(this.txtKeystoreFile, 5);
+		fd_lblKeystoreType.left = new FormAttachment(0, 5);
+		this.lblKeystoreType.setLayoutData(fd_lblKeystoreType);
+		helper.setFontDataHeight(this.lblKeystoreType, Constants.TEXT_SIZE_NORMAL);
+
+		this.cmbKeystoreType = new Combo(this.grpKeystore, SWT.READ_ONLY);
+		FormData fd_cmbKeystoreType = new FormData();
+		fd_cmbKeystoreType.right = new FormAttachment(100, -5);
+		fd_cmbKeystoreType.top = new FormAttachment(this.lblKeystoreType, 5);
+		fd_cmbKeystoreType.left = new FormAttachment(0, 15);
+		this.cmbKeystoreType.setLayoutData(fd_cmbKeystoreType);
+		helper.setFontDataHeight(this.cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
+
+		this.lblKeystoreAlias = new Label(this.grpKeystore, SWT.NONE);
+		FormData fd_lblKeystoreAlias = new FormData();
+		fd_lblKeystoreAlias.top = new FormAttachment(this.cmbKeystoreType, 5);
+		fd_lblKeystoreAlias.left = new FormAttachment(0, 5);
+		this.lblKeystoreAlias.setLayoutData(fd_lblKeystoreAlias);
+		helper.setFontDataHeight(this.lblKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
+
+		this.cmbKeystoreAlias = new Combo(this.grpKeystore, SWT.NONE);
+		FormData fd_cmbKeystoreAlias = new FormData();
+		fd_cmbKeystoreAlias.top = new FormAttachment(this.lblKeystoreAlias, 5);
+		fd_cmbKeystoreAlias.left = new FormAttachment(0, 15);
+		this.cmbKeystoreAlias.setLayoutData(fd_cmbKeystoreAlias);
+		helper.setFontDataHeight(this.cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
+
+
+		this.txtKeystoreFile.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				performKeystoreFileChanged(KeystoreConfigurationComposite.this.txtKeystoreFile.getText());
+			}
+		});
 
 		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -187,30 +211,6 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 			}
 		});
 
-		this.lblKeystoreType = new Label(this.grpKeystore, SWT.NONE);
-		FormData fd_lblKeystoreType = new FormData();
-		fd_lblKeystoreType.top = new FormAttachment(this.txtKeystoreFile, 5);
-		fd_lblKeystoreType.left = new FormAttachment(0, 5);
-		this.lblKeystoreType.setLayoutData(fd_lblKeystoreType);
-
-		FontData[] fD_lblKeystoreType = this.lblKeystoreType.getFont()
-				.getFontData();
-		fD_lblKeystoreType[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblKeystoreType.setFont(new Font(Display.getCurrent(),
-				fD_lblKeystoreType[0]));
-
-		this.cmbKeystoreType = new Combo(this.grpKeystore, SWT.READ_ONLY);
-		FormData fd_cmbKeystoreType = new FormData();
-		fd_cmbKeystoreType.right = new FormAttachment(100, -5);
-		fd_cmbKeystoreType.top = new FormAttachment(this.lblKeystoreType, 5);
-		fd_cmbKeystoreType.left = new FormAttachment(0, 15);
-		this.cmbKeystoreType.setLayoutData(fd_cmbKeystoreType);
-
-		FontData[] fD_cmbKeystoreType = this.cmbKeystoreType.getFont()
-				.getFontData();
-		fD_cmbKeystoreType[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbKeystoreType.setFont(new Font(Display.getCurrent(),
-				fD_cmbKeystoreType[0]));
 
 		initKeystoreTypes();
 		this.cmbKeystoreType.setItems(this.keystoreTypes.keySet().toArray(new String[0]));
@@ -297,31 +297,6 @@ public class KeystoreConfigurationComposite extends BaseConfigurationComposite {
 				}
 			}
 		});
-
-		this.lblKeystoreAlias = new Label(this.grpKeystore, SWT.NONE);
-		FormData fd_lblKeystoreAlias = new FormData();
-		fd_lblKeystoreAlias.top = new FormAttachment(this.txtKeystoreStorePass, 5);
-		fd_lblKeystoreAlias.left = new FormAttachment(0, 5);
-		this.lblKeystoreAlias.setLayoutData(fd_lblKeystoreAlias);
-
-		FontData[] fD_lblKeystoreAlias = this.lblKeystoreAlias.getFont()
-				.getFontData();
-		fD_lblKeystoreAlias[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblKeystoreAlias.setFont(new Font(Display.getCurrent(),
-				fD_lblKeystoreAlias[0]));
-
-		this.cmbKeystoreAlias = new Combo(this.grpKeystore, SWT.NONE);
-		FormData fd_cmbKeystoreAlias = new FormData();
-		fd_cmbKeystoreAlias.right = new FormAttachment(100, -5);
-		fd_cmbKeystoreAlias.top = new FormAttachment(this.lblKeystoreAlias, 5);
-		fd_cmbKeystoreAlias.left = new FormAttachment(0, 15);
-		this.cmbKeystoreAlias.setLayoutData(fd_cmbKeystoreAlias);
-
-		FontData[] fD_cmbKeystoreAlias = this.cmbKeystoreAlias.getFont()
-				.getFontData();
-		fD_cmbKeystoreAlias[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbKeystoreAlias.setFont(new Font(Display.getCurrent(),
-				fD_cmbKeystoreAlias[0]));
 
 		this.cmbKeystoreAlias.addSelectionListener(new SelectionAdapter() {
 			@Override
