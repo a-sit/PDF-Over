@@ -1331,9 +1331,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public String getKeyStoreStorePass() {
 		String storePass = this.configurationOverlay.getKeyStoreStorePass();
-		if (storePass == null)
-			storePass = getKeyStoreStorePassPersistent();
-		return storePass;
+		if (storePass != null)
+			return storePass;
+		return getKeyStoreStorePassPersistent();
 	}
 
 	/* (non-Javadoc)
@@ -1377,9 +1377,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public String getKeyStoreKeyPass() {
 		String keyPass = this.configurationOverlay.getKeyStoreKeyPass();
-		if (keyPass == null)
-			keyPass = getKeyStoreKeyPassPersistent();
-		return keyPass;
+		if (keyPass != null)
+			return keyPass;
+		return getKeyStoreKeyPassPersistent();
 	}
 
 	/* (non-Javadoc)

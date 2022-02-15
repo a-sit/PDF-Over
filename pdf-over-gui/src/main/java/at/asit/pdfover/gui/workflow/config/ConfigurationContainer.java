@@ -303,6 +303,7 @@ public interface ConfigurationContainer {
 	 * @param alias the keystore alias
 	 */
 	public void setKeyStoreAlias(String alias);
+	
 	/**
 	 * Gets the keystore store password
 	 * @return the keystore store password

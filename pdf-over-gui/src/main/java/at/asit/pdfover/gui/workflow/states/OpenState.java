@@ -210,7 +210,6 @@ public class OpenState extends State {
 	@SuppressWarnings("static-method")
 	private void addPlaceholderSelectionToConfig(String selection) {
 		try {
-			FileInputStream in = new FileInputStream(advancedConfig);
 	        PropertiesConfiguration config = new PropertiesConfiguration();
 	        PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config);
 	        layout.load(new InputStreamReader(new FileInputStream(advancedConfig)));
