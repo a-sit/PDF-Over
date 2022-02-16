@@ -13,11 +13,12 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.composites.configuration;
 
 
 import org.eclipse.swt.widgets.Composite;
 
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;

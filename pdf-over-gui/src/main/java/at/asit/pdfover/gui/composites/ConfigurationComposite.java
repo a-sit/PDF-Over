@@ -38,6 +38,10 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.composites.configuration.AdvancedConfigurationComposite;
+import at.asit.pdfover.gui.composites.configuration.BaseConfigurationComposite;
+import at.asit.pdfover.gui.composites.configuration.KeystoreConfigurationComposite;
+import at.asit.pdfover.gui.composites.configuration.SimpleConfigurationComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.commons.Messages;
