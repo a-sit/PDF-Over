@@ -18,11 +18,14 @@ package at.asit.pdfover.gui.composites.configuration;
 // Imports
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
 import at.asit.pdfover.signator.SignaturePosition;
+import at.gv.egiz.pdfas.lib.api.Configuration;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -89,9 +92,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;
 	protected Text txtMobileNumber;
-	protected FormData fd_txtMobileNumber;
 	protected ErrorMarker txtMobileNumberErrorMarker;
-	protected FormData fd_txtMobileNumberErrorMarker;
 
 	private Group grpLogo;
 	private Canvas cLogo;
@@ -131,59 +132,25 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		setLayout(new FormLayout());
 
 		this.grpHandySignatur = new Group(this, SWT.NONE | SWT.RESIZE);
-		FormData fd_grpHandySignatur = new FormData();
-		fd_grpHandySignatur.right = new FormAttachment(100, -5);
-		fd_grpHandySignatur.left = new FormAttachment(0, 5);
-		fd_grpHandySignatur.top = new FormAttachment(0, 5);
-		this.grpHandySignatur.setLayoutData(fd_grpHandySignatur);
-		this.grpHandySignatur.setLayout(new GridLayout(2, false));
+		ConfigurationCompositeBase.anchor(grpHandySignatur).right(100,-5).left(0,5).top(0,5).set();
+		grpHandySignatur.setLayout(new GridLayout(2, false));
+		ConfigurationCompositeBase.setFontHeight(grpHandySignatur, Constants.TEXT_SIZE_NORMAL);
 
-		FontData[] fD_grpHandySignatur = this.grpHandySignatur.getFont()
-				.getFontData();
-		fD_grpHandySignatur[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpHandySignatur.setFont(new Font(Display.getCurrent(),
-				fD_grpHandySignatur[0]));
-
-		this.lblMobileNumber = new Label(this.grpHandySignatur, SWT.NONE
-				| SWT.RESIZE);
-		this.lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1));
-
-		FontData[] fD_lblMobileNumber = this.lblMobileNumber.getFont()
-				.getFontData();
-		fD_lblMobileNumber[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblMobileNumber.setFont(new Font(Display.getCurrent(),
-				fD_lblMobileNumber[0]));
+		this.lblMobileNumber = new Label(grpHandySignatur, SWT.NONE | SWT.RESIZE);
+		this.lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		ConfigurationCompositeBase.setFontHeight(lblMobileNumber, Constants.TEXT_SIZE_NORMAL);
 
 		Composite compMobileNumerContainer = new Composite(this.grpHandySignatur, SWT.NONE);
 		compMobileNumerContainer.setLayout(new FormLayout());
-		compMobileNumerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				1, 1));
+		compMobileNumerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		this.txtMobileNumber = new Text(compMobileNumerContainer, SWT.BORDER | SWT.RESIZE);
-		this.fd_txtMobileNumber = new FormData();
-		this.fd_txtMobileNumber.left = new FormAttachment(0, 5);
-		this.fd_txtMobileNumber.right = new FormAttachment(100, -42);
-		this.fd_txtMobileNumber.top = new FormAttachment(0);
-		this.txtMobileNumber.setLayoutData(this.fd_txtMobileNumber);
+		ConfigurationCompositeBase.anchor(txtMobileNumber).left(0,5).right(100,-42).top(0).set();
+		ConfigurationCompositeBase.setFontHeight(txtMobileNumber, Constants.TEXT_SIZE_NORMAL);
 
-
-		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer,
-				SWT.NONE, ""); //$NON-NLS-1$
+		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer, SWT.NONE, "");
 		this.txtMobileNumberErrorMarker.setVisible(false);
-		this.fd_txtMobileNumberErrorMarker = new FormData();
-		this.fd_txtMobileNumberErrorMarker.left = new FormAttachment(100, -32);
-		this.fd_txtMobileNumberErrorMarker.right = new FormAttachment(100);
-		this.fd_txtMobileNumberErrorMarker.top = new FormAttachment(0);
-		this.fd_txtMobileNumberErrorMarker.bottom = new FormAttachment(0, 32);
-		this.txtMobileNumberErrorMarker
-				.setLayoutData(this.fd_txtMobileNumberErrorMarker);
-
-		FontData[] fD_txtMobileNumber = this.txtMobileNumber.getFont()
-				.getFontData();
-		fD_txtMobileNumber[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtMobileNumber.setFont(new Font(Display.getCurrent(),
-				fD_txtMobileNumber[0]));
+		ConfigurationCompositeBase.anchor(txtMobileNumberErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
 
 		this.txtMobileNumber.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -192,7 +159,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.txtMobileNumber.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				processNumberChanged();
@@ -200,44 +166,15 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
-		FormData fd_grpSingnatureProfile = new FormData();
-		fd_grpSingnatureProfile.right = new FormAttachment(100, -5);
-		fd_grpSingnatureProfile.left = new FormAttachment(0, 5);
-		fd_grpSingnatureProfile.top = new FormAttachment(this.grpHandySignatur, 5);
-		this.grpSignatureProfile.setLayoutData(fd_grpSingnatureProfile);
-		this.grpSignatureProfile.setText("Signature Profile"); //$NON-NLS-1$
+		ConfigurationCompositeBase.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5).set();
+		this.grpSignatureProfile.setText("Signature Profile"); // TODO: move to message
 		this.grpSignatureProfile.setLayout(new FormLayout());
-	
-		FontData[] fD_grpSignatureProfile = this.grpSignatureProfile.getFont()
-				.getFontData();
-		fD_grpSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSignatureProfile.setFont(new Font(Display.getCurrent(),
-				fD_grpSignatureProfile[0]));
-		
+		ConfigurationCompositeBase.setFontHeight(grpSignatureProfile, Constants.TEXT_SIZE_NORMAL);
 		
 		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
-		
-		FormData fd_cmbSingatureProfiles = new FormData();
-		fd_cmbSingatureProfiles.left = new FormAttachment(0, 10);
-		fd_cmbSingatureProfiles.right = new FormAttachment(100, -10);
-		fd_cmbSingatureProfiles.top = new FormAttachment(0, 10);
-		fd_cmbSingatureProfiles.bottom = new FormAttachment(100, -10);
-		this.cmbSignatureProfiles.setLayoutData(fd_cmbSingatureProfiles);
-
-		FontData[] fD_cmbSignatureProfile = this.cmbSignatureProfiles.getFont()
-				.getFontData();
-		fD_cmbSignatureProfile[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbSignatureProfiles.setFont(new Font(Display.getCurrent(),
-				fD_cmbSignatureProfile[0]));
-
-		String[] items = new String[Profile.values().length];
-		int i = 0;
-		for (Profile profile : Profile.values()) {
-			items[i] = Messages.getString("simple_config." +  profile.name());
-			i++;
-		}
-
-		this.cmbSignatureProfiles.setItems(items);
+		ConfigurationCompositeBase.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
+		ConfigurationCompositeBase.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
+		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
 		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -251,36 +188,17 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpLogo = new Group(this, SWT.NONE);
-		FormData fd_grpBildmarke = new FormData();
-		fd_grpBildmarke.left = new FormAttachment(0, 5);
-		fd_grpBildmarke.right = new FormAttachment(100, -5);
-		fd_grpBildmarke.top = new FormAttachment(this.grpSignatureProfile, 5);
-		this.grpLogo.setLayoutData(fd_grpBildmarke);
+		ConfigurationCompositeBase.anchor(grpLogo).left(0,5).right(100,-5).top(grpSignatureProfile, 5).set();
 		this.grpLogo.setLayout(new FormLayout());
+		ConfigurationCompositeBase.setFontHeight(grpLogo, Constants.TEXT_SIZE_NORMAL);
 
-		FontData[] fD_grpBildmarke = this.grpLogo.getFont().getFontData();
-		fD_grpBildmarke[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpLogo.setFont(new Font(Display.getCurrent(),
-				fD_grpBildmarke[0]));
-
-		Composite containerComposite = new Composite(this.grpLogo,
-				SWT.NONE);
+		Composite containerComposite = new Composite(this.grpLogo, SWT.NONE);
+		ConfigurationCompositeBase.anchor(containerComposite).left(0).right(100).top(0).bottom(100).set();
 		containerComposite.setLayout(new FormLayout());
-		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.left = new FormAttachment(0);
-		fd_containerComposite.right = new FormAttachment(100);
-		fd_containerComposite.top = new FormAttachment(0);
-		fd_containerComposite.bottom = new FormAttachment(100);
-		containerComposite.setLayoutData(fd_containerComposite);
 
 		final Composite controlComposite = new Composite(containerComposite, SWT.NONE);
+		ConfigurationCompositeBase.anchor(controlComposite).left(0,20).right(0,300).top(0,20).bottom(100,-20).set();
 		controlComposite.setLayout(new FormLayout());
-		FormData fd_controlComposite = new FormData();
-		fd_controlComposite.left = new FormAttachment(0, 20);
-		fd_controlComposite.right = new FormAttachment(0, 300);
-		fd_controlComposite.top = new FormAttachment(0, 20);
-		fd_controlComposite.bottom = new FormAttachment(100, -20);
-		controlComposite.setLayoutData(fd_controlComposite);
 		controlComposite.addPaintListener(e -> {
 			e.gc.setForeground(Constants.DROP_BORDER_COLOR);
 			e.gc.setLineWidth(3);
@@ -291,46 +209,26 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
+		ConfigurationCompositeBase.anchor(cSigPreview).left(controlComposite, 20).right(100,-20).top(0,20).bottom(100,-20).set();
+		ConfigurationCompositeBase.setFontHeight(cSigPreview, Constants.TEXT_SIZE_NORMAL);
+		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
 
 		this.btnBrowseLogo = new Button(controlComposite, SWT.NONE);
+		ConfigurationCompositeBase.anchor(btnBrowseLogo).bottom(100,-20).right(100,-20).set();
+		ConfigurationCompositeBase.setFontHeight(btnBrowseLogo, Constants.TEXT_SIZE_BUTTON);
 
 		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE | SWT.CENTER);
+		ConfigurationCompositeBase.anchor(lblDropLogo).left(0,20).right(100,-20).bottom(btnBrowseLogo,-20).set();
 
 		this.cLogo = new Canvas(controlComposite, SWT.NONE);
-		FormData fd_cLogo = new FormData();
-		fd_cLogo.left = new FormAttachment(0, 20);
-		fd_cLogo.right = new FormAttachment(100, -20);
-		fd_cLogo.top = new FormAttachment(0, 20);
-		fd_cLogo.bottom = new FormAttachment(this.lblDropLogo, -20);
-		fd_cLogo.height = 40;
-		fd_cLogo.width = 40;
-		this.cLogo.setLayoutData(fd_cLogo);
+		ConfigurationCompositeBase.anchor(cLogo).left(0,20).right(100,-20).top(0,20).bottom(lblDropLogo,-20).height(40).width(40).set();
 		this.cLogo.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.logo));
 
 		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
+		ConfigurationCompositeBase.anchor(btnClearImage).bottom(100,-20).right(btnBrowseLogo, -10).set();
+		ConfigurationCompositeBase.setFontHeight(btnClearImage, Constants.TEXT_SIZE_BUTTON);
 
-		FormData fd_lbl_drop = new FormData();
-		fd_lbl_drop.left = new FormAttachment(0, 20);
-		fd_lbl_drop.right = new FormAttachment(100, -20);
-		fd_lbl_drop.bottom = new FormAttachment(this.btnBrowseLogo, -20);
-
-		this.lblDropLogo.setLayoutData(fd_lbl_drop);
-
-		FormData fd_cSigPreview = new FormData();
-		fd_cSigPreview.left = new FormAttachment(controlComposite, 20);
-		fd_cSigPreview.right = new FormAttachment(100, -20);
-		fd_cSigPreview.top = new FormAttachment(0, 20);
-		fd_cSigPreview.bottom = new FormAttachment(100, -20);
-
-		this.cSigPreview.setLayoutData(fd_cSigPreview);
-		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
-
-		FontData[] fD_cSigPreview = this.cSigPreview.getFont().getFontData();
-		fD_cSigPreview[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cSigPreview.setFont(new Font(Display.getCurrent(), fD_cSigPreview[0]));
-
-		DropTarget dnd_target = new DropTarget(controlComposite,
-				DND.DROP_DEFAULT | DND.DROP_COPY);
+		DropTarget dnd_target = new DropTarget(controlComposite, DND.DROP_DEFAULT | DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
 		Transfer[] types = new Transfer[] { fileTransfer };
 		dnd_target.setTransfer(types);
@@ -398,67 +296,19 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				SimpleConfigurationComposite.this.processEmblemChanged(null);
 			}
 		});
-
-		FontData[] fD_btnUseImage = this.btnClearImage.getFont().getFontData();
-		fD_btnUseImage[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnClearImage.setFont(new Font(Display.getCurrent(),
-				fD_btnUseImage[0]));
-
-		FormData fd_btnUseImage = new FormData();
-
-		fd_btnUseImage.bottom = new FormAttachment(100, -20);
-		fd_btnUseImage.right = new FormAttachment(this.btnBrowseLogo, -10);
-
-		this.btnClearImage.setLayoutData(fd_btnUseImage);
-
-		FormData fd_btnBrowseLogo = new FormData();
-
-		fd_btnBrowseLogo.bottom = new FormAttachment(100, -20);
-		fd_btnBrowseLogo.right = new FormAttachment(100, -20);
-
-		this.btnBrowseLogo.setLayoutData(fd_btnBrowseLogo);
 		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
-
-		FontData[] fD_btnBrowseLogo = this.btnBrowseLogo.getFont()
-				.getFontData();
-		fD_btnBrowseLogo[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnBrowseLogo.setFont(new Font(Display.getCurrent(),
-				fD_btnBrowseLogo[0]));
 
 
 		this.grpSignatureLang = new Group(this, SWT.NONE);
-		FormData fd_grpSignatureLang = new FormData();
-		fd_grpSignatureLang.right = new FormAttachment(100, -5);
-		fd_grpSignatureLang.top = new FormAttachment(this.grpLogo, 5);
-		fd_grpSignatureLang.left = new FormAttachment(0, 5);
-		this.grpSignatureLang.setLayoutData(fd_grpSignatureLang);
+		ConfigurationCompositeBase.anchor(grpSignatureLang).right(100,-5).top(grpLogo, 5).left(0,5).set();
 		this.grpSignatureLang.setLayout(new FormLayout());
-
-		FontData[] fD_grpSignatureLang = this.grpSignatureLang.getFont()
-				.getFontData();
-		fD_grpSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSignatureLang.setFont(new Font(Display.getCurrent(),
-				fD_grpSignatureLang[0]));
+		ConfigurationCompositeBase.setFontHeight(grpSignatureLang, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
-		FormData fd_cmbSignatureLang = new FormData();
-		fd_cmbSignatureLang.left = new FormAttachment(0, 10);
-		fd_cmbSignatureLang.right = new FormAttachment(100, -10);
-		fd_cmbSignatureLang.top = new FormAttachment(0, 10);
-		fd_cmbSignatureLang.bottom = new FormAttachment(100, -10);
-		this.cmbSignatureLang.setLayoutData(fd_cmbSignatureLang);
+		ConfigurationCompositeBase.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
+		ConfigurationCompositeBase.setFontHeight(cmbSignatureLang, Constants.TEXT_SIZE_NORMAL);
+		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 
-		FontData[] fD_cmbSignatureLang = this.cmbSignatureLang.getFont()
-				.getFontData();
-		fD_cmbSignatureLang[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbSignatureLang.setFont(new Font(Display.getCurrent(),
-				fD_cmbSignatureLang[0]));
-
-		String[] localeSignStrings = new String[Constants.SUPPORTED_LOCALES.length];
-		for (int idx = 0; idx < Constants.SUPPORTED_LOCALES.length; ++idx) {
-			localeSignStrings[idx] = Constants.SUPPORTED_LOCALES[idx].getDisplayLanguage();
-		}
-		this.cmbSignatureLang.setItems(localeSignStrings);
 		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -473,51 +323,28 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-
 		this.grpSignatureNote = new Group(this, SWT.NONE);
-		FormData fd_grpSignatureNote = new FormData();
-		fd_grpSignatureNote.right = new FormAttachment(100, -5);
-		fd_grpSignatureNote.top = new FormAttachment(this.grpSignatureLang, 5);
-		fd_grpSignatureNote.left = new FormAttachment(0, 5);
-		this.grpSignatureNote.setLayoutData(fd_grpSignatureNote);
+		ConfigurationCompositeBase.anchor(grpSignatureNote).right(100,-5).top(grpSignatureLang,5).left(0,5).set();
 		this.grpSignatureNote.setLayout(new GridLayout(2, false));
-
-		FontData[] fD_grpSignatureNote = this.grpSignatureNote.getFont()
-				.getFontData();
-		fD_grpSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSignatureNote.setFont(new Font(Display.getCurrent(),
-				fD_grpSignatureNote[0]));
+		ConfigurationCompositeBase.setFontHeight(grpSignatureNote, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblSignatureNote = new Label(this.grpSignatureNote, SWT.NONE);
-		GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 1, 1);
-		gd_lblSignatureNote.widthHint = 66;
-		this.lblSignatureNote.setLayoutData(gd_lblSignatureNote);
-		this.lblSignatureNote.setBounds(0, 0, 57, 15);
-
-		FontData[] fD_lblSignatureNote = this.lblSignatureNote.getFont()
-				.getFontData();
-		fD_lblSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblSignatureNote.setFont(new Font(Display.getCurrent(),
-				fD_lblSignatureNote[0]));
+		do { /* grid positioning */
+			GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER,
+					false, false, 1, 1);
+			gd_lblSignatureNote.widthHint = 66;
+			this.lblSignatureNote.setLayoutData(gd_lblSignatureNote);
+			this.lblSignatureNote.setBounds(0, 0, 57, 15);
+		} while (false);
+		ConfigurationCompositeBase.setFontHeight(lblSignatureNote, Constants.TEXT_SIZE_NORMAL);
 
 		Composite compSignatureNoteContainer = new Composite(this.grpSignatureNote, SWT.NONE);
-		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				1, 1));
+		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		compSignatureNoteContainer.setLayout(new FormLayout());
 
 		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
-		FormData fd_txtSignatureNote = new FormData();
-		fd_txtSignatureNote.top = new FormAttachment(0, 0);
-		fd_txtSignatureNote.left = new FormAttachment(0, 5);
-		fd_txtSignatureNote.right = new FormAttachment(100, -42);
-		this.txtSignatureNote.setLayoutData(fd_txtSignatureNote);
-
-		FontData[] fD_txtSignatureNote = this.txtSignatureNote.getFont()
-				.getFontData();
-		fD_txtSignatureNote[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtSignatureNote.setFont(new Font(Display.getCurrent(),
-				fD_txtSignatureNote[0]));
+		ConfigurationCompositeBase.anchor(txtSignatureNote).top(0,0).left(0,5).right(100,-42).set();
+		ConfigurationCompositeBase.setFontHeight(txtSignatureNote, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
 			@Override
@@ -533,20 +360,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		Composite compSignatureNoteButtonContainer = new Composite(this.grpSignatureNote, SWT.NONE);
-		compSignatureNoteButtonContainer.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-				false, false, 2, 1));
+		compSignatureNoteButtonContainer.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
 		compSignatureNoteButtonContainer.setLayout(new FormLayout());
 
 		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
-		FormData fd_btnSignatureNoteDefault = new FormData();
-		fd_btnSignatureNoteDefault.top = new FormAttachment(0, 0);
-		fd_btnSignatureNoteDefault.right = new FormAttachment(100, -42);
-		this.btnSignatureNoteDefault.setLayoutData(fd_btnSignatureNoteDefault);
-		FontData[] fD_btnSignatureNoteDefault = this.btnSignatureNoteDefault.getFont()
-				.getFontData();
-		fD_btnSignatureNoteDefault[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnSignatureNoteDefault.setFont(new Font(Display.getCurrent(),
-				fD_btnSignatureNoteDefault[0]));
+		ConfigurationCompositeBase.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42).set();
+		ConfigurationCompositeBase.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
 		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

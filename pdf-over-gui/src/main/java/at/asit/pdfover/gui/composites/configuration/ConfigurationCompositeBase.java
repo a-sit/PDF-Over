@@ -81,9 +81,13 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 
 		public void set() { this.c.setLayoutData(this.fd); }
 
+		public AnchorSetter height(int h) { fd.height = h; return this; }
+		public AnchorSetter width(int w) { fd.width = w; return this; }
+
 		public AnchorSetter top(FormAttachment a) { fd.top = a; return this; }
 		public AnchorSetter left(FormAttachment a) { fd.left = a; return this; }
 		public AnchorSetter right(FormAttachment a) { fd.right = a; return this; }
+		public AnchorSetter bottom(FormAttachment a) { fd.bottom = a; return this; }
 
 		public AnchorSetter top(Control control, int offset) { return top(new FormAttachment(control, offset)); }
 		public AnchorSetter top(int num, int offset) { return top(new FormAttachment(num, offset)); }
@@ -96,6 +100,10 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 		public AnchorSetter right(Control control, int offset) { return right(new FormAttachment(control, offset)); }
 		public AnchorSetter right(int num, int offset) { return right(new FormAttachment(num, offset)); }
 		public AnchorSetter right(int num) { return right(new FormAttachment(num)); }
+
+		public AnchorSetter bottom(Control control, int offset) { return bottom(new FormAttachment(control, offset)); }
+		public AnchorSetter bottom(int num, int offset) { return bottom(new FormAttachment(num, offset)); }
+		public AnchorSetter bottom(int num) { return bottom(new FormAttachment(num)); }
 	}
 
 	protected static AnchorSetter anchor(Control c) { return new AnchorSetter(c); }
