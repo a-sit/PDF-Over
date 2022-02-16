@@ -347,7 +347,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
 		ConfigurationCompositeBase.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5).set();
 		ConfigurationCompositeBase.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
-		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage(l)).toArray(String[]::new));
+		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
