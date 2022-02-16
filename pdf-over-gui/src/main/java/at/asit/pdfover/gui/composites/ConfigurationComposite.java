@@ -15,11 +15,7 @@
  */
 package at.asit.pdfover.gui.composites;
 
-// Imports
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -31,13 +27,13 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.composites.configuration.AboutComposite;
 import at.asit.pdfover.gui.composites.configuration.AdvancedConfigurationComposite;
 import at.asit.pdfover.gui.composites.configuration.ConfigurationCompositeBase;
 import at.asit.pdfover.gui.composites.configuration.KeystoreConfigurationComposite;
@@ -288,127 +284,6 @@ public class ConfigurationComposite extends StateComposite {
 		if (this.keystoreConfigComposite != null) {
 			// not needed at the moment
 			this.keystoreConfigComposite.setSigner(getSigner());
-		}
-	}
-
-	private class AboutComposite extends StateComposite {
-		private Link lnkAbout;
-		private Link lnkDataProtection;
-		private Label lblDataProtection;
-		/**
-	 * @param parent
-	 * @param style
-		 */
-		public AboutComposite(Composite parent, int style) {
-			super(parent, style, null);
-
-			setLayout(new FormLayout());
-
-			this.lnkAbout = new Link(this, SWT.NONE);
-
-			FormData fd_lnkAbout = new FormData();
-			fd_lnkAbout.right = new FormAttachment(100, -5);
-			fd_lnkAbout.left = new FormAttachment(0, 5);
-			fd_lnkAbout.top = new FormAttachment(0, 5);
-			fd_lnkAbout.width = 100;
-			this.lnkAbout.setLayoutData(fd_lnkAbout);
-
-			FontData[] fD_lnkAbout = this.lnkAbout.getFont().getFontData();
-			fD_lnkAbout[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-			this.lnkAbout.setFont(new Font(Display.getCurrent(),
-					fD_lnkAbout[0]));
-
-			this.lnkAbout.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					try {
-						URI url = new URI(Messages.getString("config.LicenseURL")); //$NON-NLS-1$
-						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
-						if (Desktop.isDesktopSupported()) {
-							Desktop.getDesktop().browse(url);
-						} else {
-							log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
-							Program.launch(url.toString());
-						}
-					} catch (IOException ex) {
-						log.error("AboutComposite: ", ex); //$NON-NLS-1$
-					} catch (URISyntaxException ex) {
-						log.error("AboutComposite: ", ex); //$NON-NLS-1$
-					}
-				}
-			});
-
-			this.lblDataProtection = new Label(this, SWT.NONE);
-			FormData fd_lblDataProtection = new FormData();
-			fd_lblDataProtection.top = new FormAttachment(this.lnkAbout, 15);
-			fd_lblDataProtection.right = new FormAttachment(100, -5);
-			fd_lblDataProtection.left = new FormAttachment(0, 5);
-			fd_lblDataProtection.width = 100;
-			this.lblDataProtection.setLayoutData(fd_lblDataProtection);
-
-			FontData[] fD_lblDataProtection = this.lblDataProtection.getFont().getFontData();
-			fD_lblDataProtection[0].setHeight(Constants.TEXT_SIZE_BIG);
-			this.lblDataProtection.setFont(new Font(Display.getCurrent(),
-					fD_lblDataProtection[0]));
-
-			this.lnkDataProtection = new Link(this, SWT.NONE);
-
-			FormData fd_lnkDataProtection = new FormData();
-			fd_lnkDataProtection.right = new FormAttachment(100, -5);
-			fd_lnkDataProtection.left = new FormAttachment(0, 5);
-			fd_lnkDataProtection.top = new FormAttachment(this.lblDataProtection, 10);
-			fd_lnkDataProtection.bottom = new FormAttachment(100, -5);
-			fd_lnkDataProtection.width = 100;
-			fd_lnkDataProtection.height = 120;
-			this.lnkDataProtection.setLayoutData(fd_lnkDataProtection);
-
-			FontData[] fD_lnkDataProtection = this.lnkDataProtection.getFont().getFontData();
-			fD_lnkDataProtection[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-			this.lnkDataProtection.setFont(new Font(Display.getCurrent(),
-					fD_lnkDataProtection[0]));
-
-
-			this.lnkDataProtection.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					try {
-						URI url = new URI(Messages.getString("config.DataProtectionURL")); //$NON-NLS-1$
-						log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
-						if (Desktop.isDesktopSupported()) {
-							Desktop.getDesktop().browse(url);
-						} else {
-							log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
-							Program.launch(url.toString());
-						}
-					} catch (IOException ex) {
-						log.error("AboutComposite: ", ex); //$NON-NLS-1$
-					} catch (URISyntaxException ex) {
-						log.error("AboutComposite: ", ex); //$NON-NLS-1$
-					}
-				}
-			});
-
-			// Load localized strings
-			reloadResources();
-		}
-
-
-		/* (non-Javadoc)
-		 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-		 */
-		@Override
-		public void doLayout() {
-			// Nothing to do here
-		}
-
-		/* (non-Javadoc)
-		 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
-		 */
-		@Override
-		public void reloadResources() {
-			this.lnkAbout.setText(Messages.getString("config.AboutText")); //$NON-NLS-1$
-			this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
-			this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
 		}
 	}
 
