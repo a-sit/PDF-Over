@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.commons;
 
+import java.io.UnsupportedEncodingException;
 // Imports
 import java.util.HashMap;
 import java.util.Locale;
@@ -92,11 +93,7 @@ public class Messages {
 	 * @return the localized message
 	 */
 	public static String getString(String key) {
-		try {
-			return getBundle(currentLocale).getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
+		return getString(key, currentLocale);
 	}
 	
 	/**
@@ -107,7 +104,14 @@ public class Messages {
 	 */
 	public static String getString(String key, Locale locale) {
 		try {
-			return getBundle(locale).getString(key);
+			String value = getBundle(locale).getString(key);
+			
+			/* DIRTY HACK: this recognizes java 8 ("1.8") and older; these versions read .properties files as ISO-8859-1 instead of UTF-8 */
+			if (System.getProperty("java.version").startsWith("1."))
+				try { value = new String(value.getBytes("ISO-8859-1"), "UTF-8"); } catch (UnsupportedEncodingException e) {}
+
+			log.trace("[{}] {}: {} -> {}", new Object[]{System.getProperty("java.version"), currentLocale, key, value});
+			return value;
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
