@@ -167,14 +167,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
 		ConfigurationCompositeBase.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5).set();
-		this.grpSignatureProfile.setText("Signature Profile"); // TODO: move to message
 		this.grpSignatureProfile.setLayout(new FormLayout());
 		ConfigurationCompositeBase.setFontHeight(grpSignatureProfile, Constants.TEXT_SIZE_NORMAL);
 		
 		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
 		ConfigurationCompositeBase.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
 		ConfigurationCompositeBase.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
-		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
 		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -786,5 +784,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.grpSignatureLang.setText(Messages.getString("simple_config.SigBlockLang_Title"));
 		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip"));
+
+		this.grpSignatureProfile.setText(Messages.getString("simple_config.SigProfile_Title"));
+		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
 	}
 }
