@@ -770,31 +770,21 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.grpHandySignatur.setText(Messages
-				.getString("simple_config.MobileBKU_Title")); //$NON-NLS-1$
-		this.lblMobileNumber.setText(Messages
-				.getString("simple_config.PhoneNumber")); //$NON-NLS-1$
-		this.txtMobileNumber.setToolTipText(Messages
-				.getString("simple_config.ExampleNumber_ToolTip")); //$NON-NLS-1$
-		this.txtMobileNumber.setMessage(Messages
-				.getString("simple_config.ExampleNumber")); //$NON-NLS-1$
+		this.grpHandySignatur.setText(Messages.getString("simple_config.MobileBKU_Title"));
+		this.lblMobileNumber.setText(Messages.getString("simple_config.PhoneNumber"));
+		this.txtMobileNumber.setToolTipText(Messages.getString("simple_config.ExampleNumber_ToolTip"));
+		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber"));
 
-		this.grpLogo.setText(Messages
-				.getString("simple_config.Emblem_Title")); //$NON-NLS-1$
-		this.lblDropLogo.setText(Messages.getString("simple_config.EmblemEmpty")); //$NON-NLS-1$
-		this.btnClearImage.setText(Messages
-				.getString("simple_config.ClearEmblem")); //$NON-NLS-1$
-		this.btnBrowseLogo.setText(Messages.getString("common.browse")); //$NON-NLS-1$
+		this.grpLogo.setText(Messages.getString("simple_config.Emblem_Title"));
+		this.lblDropLogo.setText(Messages.getString("simple_config.EmblemEmpty"));
+		this.btnClearImage.setText(Messages.getString("simple_config.ClearEmblem"));
+		this.btnBrowseLogo.setText(Messages.getString("common.browse"));
+		this.grpSignatureNote.setText(Messages.getString("simple_config.Note_Title"));
+		this.lblSignatureNote.setText(Messages.getString("simple_config.Note"));
+		this.txtSignatureNote.setToolTipText(Messages.getString("simple_config.Note_Tooltip"));
+		this.btnSignatureNoteDefault.setText(Messages.getString("simple_config.Note_SetDefault"));
 
-		this.grpSignatureNote.setText(Messages
-				.getString("simple_config.Note_Title")); //$NON-NLS-1$
-		this.lblSignatureNote.setText(Messages.getString("simple_config.Note")); //$NON-NLS-1$
-		this.txtSignatureNote.setToolTipText(Messages
-				.getString("simple_config.Note_Tooltip")); //$NON-NLS-1$
-		this.btnSignatureNoteDefault.setText(Messages
-				.getString("simple_config.Note_SetDefault")); //$NON-NLS-1$
-
-		this.grpSignatureLang.setText(Messages.getString("simple_config.SigBlockLang_Title")); //$NON-NLS-1$
-		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip")); //$NON-NLS-1$
+		this.grpSignatureLang.setText(Messages.getString("simple_config.SigBlockLang_Title"));
+		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip"));
 	}
 }
