@@ -16,7 +16,13 @@
 package at.asit.pdfover.gui.composites.configuration;
 
 
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;
@@ -28,7 +34,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 /**
  * Base class for configuration composites
  */
-public abstract class BaseConfigurationComposite extends StateComposite {
+public abstract class ConfigurationCompositeBase extends StateComposite {
 	
 	/**
 	 * the configuration container
@@ -60,13 +66,47 @@ public abstract class BaseConfigurationComposite extends StateComposite {
 	 */
 	protected abstract void signerChanged();
 
+	protected static void setFontHeight(Control c, int height)
+	{
+		FontData[] fD = c.getFont().getFontData();
+		fD[0].setHeight(height);
+		c.setFont(new Font(Display.getCurrent(), fD[0]));
+	}
+
+	protected static class AnchorSetter
+	{
+		private final Control c;
+		private final FormData fd = new FormData();
+		private AnchorSetter(Control c) { this.c = c; }
+
+		public void set() { this.c.setLayoutData(this.fd); }
+
+		public AnchorSetter top(FormAttachment a) { fd.top = a; return this; }
+		public AnchorSetter left(FormAttachment a) { fd.left = a; return this; }
+		public AnchorSetter right(FormAttachment a) { fd.right = a; return this; }
+
+		public AnchorSetter top(Control control, int offset) { return top(new FormAttachment(control, offset)); }
+		public AnchorSetter top(int num, int offset) { return top(new FormAttachment(num, offset)); }
+		public AnchorSetter top(int num) { return top(new FormAttachment(num)); }
+
+		public AnchorSetter left(Control control, int offset) { return left(new FormAttachment(control, offset)); }
+		public AnchorSetter left(int num, int offset) { return left(new FormAttachment(num, offset)); }
+		public AnchorSetter left(int num) { return left(new FormAttachment(num)); }
+
+		public AnchorSetter right(Control control, int offset) { return right(new FormAttachment(control, offset)); }
+		public AnchorSetter right(int num, int offset) { return right(new FormAttachment(num, offset)); }
+		public AnchorSetter right(int num) { return right(new FormAttachment(num)); }
+	}
+
+	protected static AnchorSetter anchor(Control c) { return new AnchorSetter(c); }
+
 	/**
 	 * @param parent
 	 * @param style
 	 * @param state
 	 * @param configuration 
 	 */
-	public BaseConfigurationComposite(Composite parent, int style, State state, ConfigurationContainer configuration) {
+	public ConfigurationCompositeBase(Composite parent, int style, State state, ConfigurationContainer configuration) {
 		super(parent, style, state);
 		this.configurationContainer = configuration;
 	}

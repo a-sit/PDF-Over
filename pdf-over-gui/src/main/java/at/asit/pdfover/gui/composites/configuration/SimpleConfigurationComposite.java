@@ -78,7 +78,7 @@ import at.asit.pdfover.signator.SignatureParameter;
 /**
  * 
  */
-public class SimpleConfigurationComposite extends BaseConfigurationComposite {
+public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	/**
 	 * SLF4J Logger instance

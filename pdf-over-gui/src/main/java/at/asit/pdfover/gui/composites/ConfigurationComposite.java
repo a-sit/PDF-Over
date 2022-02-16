@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.composites.configuration.AdvancedConfigurationComposite;
-import at.asit.pdfover.gui.composites.configuration.BaseConfigurationComposite;
+import at.asit.pdfover.gui.composites.configuration.ConfigurationCompositeBase;
 import at.asit.pdfover.gui.composites.configuration.KeystoreConfigurationComposite;
 import at.asit.pdfover.gui.composites.configuration.SimpleConfigurationComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
@@ -81,17 +81,17 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * simple configuration composite
 	 */
-	BaseConfigurationComposite simpleConfigComposite;
+	ConfigurationCompositeBase simpleConfigComposite;
 
 	/**
 	 * advanced configuration composite
 	 */
-	BaseConfigurationComposite advancedConfigComposite;
+	ConfigurationCompositeBase advancedConfigComposite;
 
 	/**
 	 * advanced configuration composite
 	 */
-	BaseConfigurationComposite keystoreConfigComposite = null;
+	ConfigurationCompositeBase keystoreConfigComposite = null;
 
 	/**
 	 * The TabFolder

@@ -67,7 +67,7 @@ import at.asit.pdfover.signator.SignaturePosition;
  * 
  * Contains the simple configuration composite
  */
-public class AdvancedConfigurationComposite extends BaseConfigurationComposite {
+public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/**
 	 * SLF4J Logger instance
