@@ -18,8 +18,10 @@ package at.asit.pdfover.gui.composites.configuration;
 // Imports
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -134,26 +136,12 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		layout.marginHeight = 10;
 		layout.marginWidth = 5;
 		this.grpSignatur.setLayout(layout);
-		FormData fd_grpSignatur = new FormData();
-		fd_grpSignatur.top = new FormAttachment(0, 5);
-		fd_grpSignatur.right = new FormAttachment(100, -5);
-		fd_grpSignatur.left = new FormAttachment(0, 5);
-		this.grpSignatur.setLayoutData(fd_grpSignatur);
-
-		FontData[] fD_grpSignaturPosition = this.grpSignatur.getFont().getFontData();
-		fD_grpSignaturPosition[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSignatur.setFont(new Font(Display.getCurrent(), fD_grpSignaturPosition[0]));
+		ConfigurationCompositeBase.anchor(grpSignatur).top(0,5).right(100,-5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(grpSignatur, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnAutomatischePositionierung = new Button(this.grpSignatur, SWT.CHECK);
-		FormData fd_btnAutomatischePositionierung = new FormData();
-		fd_btnAutomatischePositionierung.right = new FormAttachment(100, -5);
-		fd_btnAutomatischePositionierung.top = new FormAttachment(0);
-		fd_btnAutomatischePositionierung.left = new FormAttachment(0, 5);
-		this.btnAutomatischePositionierung.setLayoutData(fd_btnAutomatischePositionierung);
-
-		FontData[] fD_btnAutomatischePositionierung = this.btnAutomatischePositionierung.getFont().getFontData();
-		fD_btnAutomatischePositionierung[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnAutomatischePositionierung.setFont(new Font(Display.getCurrent(), fD_btnAutomatischePositionierung[0]));
+		ConfigurationCompositeBase.anchor(btnAutomatischePositionierung).right(100,-5).top(0).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnAutomatischePositionierung, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnAutomatischePositionierung.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -164,15 +152,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
-		FormData fd_btnPdfACompat = new FormData();
-		fd_btnPdfACompat.right = new FormAttachment(100, -5);
-		fd_btnPdfACompat.top = new FormAttachment(this.btnAutomatischePositionierung, 5);
-		fd_btnPdfACompat.left = new FormAttachment(0, 5);
-		this.btnPdfACompat.setLayoutData(fd_btnPdfACompat);
-
-		FontData[] fD_btnPdfACompat = this.btnPdfACompat.getFont().getFontData();
-		fD_btnPdfACompat[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnPdfACompat.setFont(new Font(Display.getCurrent(), fD_btnPdfACompat[0]));
+		ConfigurationCompositeBase.anchor(btnPdfACompat).right(100,-5).top(btnAutomatischePositionierung, 5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnPdfACompat, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnPdfACompat.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -183,41 +164,19 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.lblTransparenz = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		FormData fd_lblTransparenz = new FormData();
-		fd_lblTransparenz.top = new FormAttachment(this.btnPdfACompat, 5);
-		fd_lblTransparenz.left = new FormAttachment(0, 5);
-		this.lblTransparenz.setLayoutData(fd_lblTransparenz);
-
-		FontData[] fD_lblTransparenz = this.lblTransparenz.getFont().getFontData();
-		fD_lblTransparenz[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblTransparenz.setFont(new Font(Display.getCurrent(), fD_lblTransparenz[0]));
+		ConfigurationCompositeBase.anchor(lblTransparenz).top(btnPdfACompat, 5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(lblTransparenz, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblTransparenzLinks = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		FormData fd_lblTransparenzLinks = new FormData();
-		fd_lblTransparenzLinks.top = new FormAttachment(this.lblTransparenz, 5);
-		fd_lblTransparenzLinks.left = new FormAttachment(0, 15);
-		this.lblTransparenzLinks.setLayoutData(fd_lblTransparenzLinks);
-
-		FontData[] fD_lblTransparenzLinks = this.lblTransparenzLinks.getFont().getFontData();
-		fD_lblTransparenzLinks[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblTransparenzLinks.setFont(new Font(Display.getCurrent(), fD_lblTransparenzLinks[0]));
+		ConfigurationCompositeBase.anchor(lblTransparenzLinks).top(lblTransparenz, 5).left(0,15).set();
+		ConfigurationCompositeBase.setFontHeight(lblTransparenzLinks, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblTransparenzRechts = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		FormData fd_lblTransparenzRechts = new FormData();
-		fd_lblTransparenzRechts.top = new FormAttachment(this.lblTransparenz, 5);
-		fd_lblTransparenzRechts.right = new FormAttachment(100, -5);
-		this.lblTransparenzRechts.setLayoutData(fd_lblTransparenzRechts);
-
-		FontData[] fD_lblTransparenzRechts = this.lblTransparenzRechts.getFont().getFontData();
-		fD_lblTransparenzRechts[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblTransparenzRechts.setFont(new Font(Display.getCurrent(), fD_lblTransparenzRechts[0]));
+		ConfigurationCompositeBase.anchor(lblTransparenzRechts).top(lblTransparenz, 5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(lblTransparenzRechts, Constants.TEXT_SIZE_NORMAL);
 
 		this.sclTransparenz = new Scale(this.grpSignatur, SWT.HORIZONTAL);
-		FormData fd_sldTransparenz = new FormData();
-		fd_sldTransparenz.right = new FormAttachment(this.lblTransparenzRechts, -5);
-		fd_sldTransparenz.top = new FormAttachment(this.lblTransparenz, 5);
-		fd_sldTransparenz.left = new FormAttachment(this.lblTransparenzLinks, 5);
-		this.sclTransparenz.setLayoutData(fd_sldTransparenz);
+		ConfigurationCompositeBase.anchor(sclTransparenz).right(lblTransparenzRechts, -5).top(lblTransparenz, 5).left(lblTransparenzLinks, 5).set();
 		this.sclTransparenz.setMinimum(0);
 		this.sclTransparenz.setMaximum(255);
 		this.sclTransparenz.setIncrement(1);
@@ -234,27 +193,12 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		layout_grpPlaceholder.marginHeight = 10;
 		layout_grpPlaceholder.marginWidth = 5;
 		this.grpPlaceholder.setLayout(layout_grpPlaceholder);
-
-		FormData fd_grpPlaceholder = new FormData();
-		fd_grpPlaceholder.top = new FormAttachment(this.grpSignatur, 5);
-		fd_grpPlaceholder.right = new FormAttachment(100, -5);
-		fd_grpPlaceholder.left = new FormAttachment(0, 5);
-		this.grpPlaceholder.setLayoutData(fd_grpPlaceholder);
-
-		FontData[] fD_grpPlaceholder = this.grpPlaceholder.getFont().getFontData();
-		fD_grpPlaceholder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpPlaceholder.setFont(new Font(Display.getCurrent(), fD_grpPlaceholder[0]));
+		ConfigurationCompositeBase.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(grpPlaceholder, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
-		FormData fd_btnEnablePlaceholderUsage = new FormData();
-		fd_btnEnablePlaceholderUsage.right = new FormAttachment(100, -5);
-		fd_btnEnablePlaceholderUsage.top = new FormAttachment(0, 5);
-		fd_btnEnablePlaceholderUsage.left = new FormAttachment(0, 5);
-		this.btnEnablePlaceholderUsage.setLayoutData(fd_btnEnablePlaceholderUsage);
-
-		FontData[] fD_btnEnablePlaceholderUsage = this.btnEnablePlaceholderUsage.getFont().getFontData();
-		fD_btnEnablePlaceholderUsage[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnEnablePlaceholderUsage.setFont(new Font(Display.getCurrent(), fD_btnEnablePlaceholderUsage[0]));
+		ConfigurationCompositeBase.anchor(btnEnablePlaceholderUsage).top(0,5).left(0,5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(btnEnablePlaceholderUsage, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnEnablePlaceholderUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -266,15 +210,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
-		FormData fd_btnPlatzhalterVerwenden = new FormData();
-		fd_btnPlatzhalterVerwenden.right = new FormAttachment(100, -5);
-		fd_btnPlatzhalterVerwenden.top = new FormAttachment(this.btnEnablePlaceholderUsage, 5);
-		fd_btnPlatzhalterVerwenden.left = new FormAttachment(0, 5);
-		this.btnPlatzhalterVerwenden.setLayoutData(fd_btnPlatzhalterVerwenden);
-
-		FontData[] fD_btnPlatzhalterVerwenden = this.btnPlatzhalterVerwenden.getFont().getFontData();
-		fD_btnPlatzhalterVerwenden[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnPlatzhalterVerwenden.setFont(new Font(Display.getCurrent(), fD_btnPlatzhalterVerwenden[0]));
+		ConfigurationCompositeBase.anchor(btnPlatzhalterVerwenden).right(100,-5).top(btnEnablePlaceholderUsage,5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnPlatzhalterVerwenden, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -285,15 +222,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnSignatureFieldsUsage = new Button(this.grpPlaceholder, SWT.RADIO);
-		FormData fd_btnSignatureFieldsUsage = new FormData();
-		fd_btnSignatureFieldsUsage.right = new FormAttachment(100, -5);
-		fd_btnSignatureFieldsUsage.top = new FormAttachment(this.btnPlatzhalterVerwenden, 5);
-		fd_btnSignatureFieldsUsage.left = new FormAttachment(0, 5);
-		this.btnSignatureFieldsUsage.setLayoutData(fd_btnSignatureFieldsUsage);
-
-		FontData[] fD_btnSignatureFieldsUsage = this.btnSignatureFieldsUsage.getFont().getFontData();
-		fD_btnSignatureFieldsUsage[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnSignatureFieldsUsage.setFont(new Font(Display.getCurrent(), fD_btnSignatureFieldsUsage[0]));
+		ConfigurationCompositeBase.anchor(btnSignatureFieldsUsage).right(100,-5).top(btnPlatzhalterVerwenden, 5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnSignatureFieldsUsage, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnSignatureFieldsUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -308,35 +238,15 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		layout.marginHeight = 10;
 		layout.marginWidth = 5;
 		this.grpBkuAuswahl.setLayout(layout);
-		FormData fd_grpBkuAuswahl = new FormData();
-		fd_grpBkuAuswahl.top = new FormAttachment(this.grpPlaceholder, 5);
-		fd_grpBkuAuswahl.left = new FormAttachment(0, 5);
-		fd_grpBkuAuswahl.right = new FormAttachment(100, -5);
-		this.grpBkuAuswahl.setLayoutData(fd_grpBkuAuswahl);
-
-		FontData[] fD_grpBkuAuswahl = this.grpBkuAuswahl.getFont().getFontData();
-		fD_grpBkuAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpBkuAuswahl.setFont(new Font(Display.getCurrent(), fD_grpBkuAuswahl[0]));
+		ConfigurationCompositeBase.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(grpBkuAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbBKUAuswahl = new Combo(this.grpBkuAuswahl, SWT.READ_ONLY);
-		FormData fd_cmbBKUAuswahl = new FormData();
-		fd_cmbBKUAuswahl.right = new FormAttachment(100, -5);
-		fd_cmbBKUAuswahl.top = new FormAttachment(0);
-		fd_cmbBKUAuswahl.left = new FormAttachment(0, 5);
-		this.cmbBKUAuswahl.setLayoutData(fd_cmbBKUAuswahl);
+		ConfigurationCompositeBase.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(cmbBKUAuswahl, Constants.TEXT_SIZE_NORMAL);
 
-		FontData[] fD_cmbBKUAuswahl = this.cmbBKUAuswahl.getFont().getFontData();
-		fD_cmbBKUAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbBKUAuswahl.setFont(new Font(Display.getCurrent(), fD_cmbBKUAuswahl[0]));
-
-		int blen = BKUs.values().length;
-		this.bkuStrings = new ArrayList<>(blen);
-		for (int i = 0; i < blen; i++) {
-			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
-			String text = Messages.getString(lookup);
-			this.bkuStrings.add(text);
-			this.cmbBKUAuswahl.add(text);
-		}
+		this.bkuStrings = Arrays.stream(BKUs.values()).map(s -> Messages.getString("BKU."+s)).collect(Collectors.toList());
+		this.cmbBKUAuswahl.setItems(bkuStrings.toArray(new String[0]));
 		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -351,15 +261,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnKeystoreEnabled = new Button(this.grpBkuAuswahl, SWT.CHECK);
-		FormData fd_btnKeystoreEnabled = new FormData();
-		fd_btnKeystoreEnabled.right = new FormAttachment(100, -5);
-		fd_btnKeystoreEnabled.top = new FormAttachment(this.cmbBKUAuswahl, 5);
-		fd_btnKeystoreEnabled.left = new FormAttachment(0, 5);
-		this.btnKeystoreEnabled.setLayoutData(fd_btnKeystoreEnabled);
-
-		FontData[] fD_btnKeystoreEnabled = this.btnKeystoreEnabled.getFont().getFontData();
-		fD_btnKeystoreEnabled[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnKeystoreEnabled.setFont(new Font(Display.getCurrent(), fD_btnKeystoreEnabled[0]));
+		ConfigurationCompositeBase.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnKeystoreEnabled, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnKeystoreEnabled.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -370,50 +273,29 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
-		GridLayout gl_grpSpeicherort = new GridLayout(3, false);
-		grpSpeicherort.setLayout(gl_grpSpeicherort);
-		FormData fd_grpSpeicherort = new FormData();
-		fd_grpSpeicherort.left = new FormAttachment(0,5);
-		fd_grpSpeicherort.top = new FormAttachment(this.grpBkuAuswahl, 5);
-		fd_grpSpeicherort.right = new FormAttachment(100, -5);
-		this.grpSpeicherort.setLayoutData(fd_grpSpeicherort);
-
-
-		FontData[] fD_grpSpeicherort = this.grpSpeicherort.getFont().getFontData();
-		fD_grpSpeicherort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpSpeicherort.setFont(new Font(Display.getCurrent(), fD_grpSpeicherort[0]));
+		grpSpeicherort.setLayout(new GridLayout(3, false));
+		ConfigurationCompositeBase.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(grpSpeicherort, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblDefaultOutputFolder = new Label(this.grpSpeicherort, SWT.NONE);
-
-		FontData[] fD_lblDefaultOutputFolder = this.lblDefaultOutputFolder.getFont().getFontData();
-		fD_lblDefaultOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblDefaultOutputFolder.setFont(new Font(Display.getCurrent(), fD_lblDefaultOutputFolder[0]));
+		ConfigurationCompositeBase.setFontHeight(lblDefaultOutputFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtOutputFolder = new Text(this.grpSpeicherort, SWT.BORDER);
-		GridData gd_txtOutputFolder = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		txtOutputFolder.setLayoutData(gd_txtOutputFolder);
-
-		FontData[] fD_txtOutputFolder = this.txtOutputFolder.getFont().getFontData();
-		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtOutputFolder.setFont(new Font(Display.getCurrent(), fD_txtOutputFolder[0]));
+		txtOutputFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		ConfigurationCompositeBase.setFontHeight(txtOutputFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtOutputFolder.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				performOutputFolderChanged(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
 			}
 		});
-		fD_txtOutputFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 
 		this.btnBrowse = new Button(this.grpSpeicherort, SWT.NONE);
 		btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		ConfigurationCompositeBase.setFontHeight(btnBrowse, Constants.TEXT_SIZE_BUTTON);
 
-		FontData[] fD_btnBrowse = this.btnBrowse.getFont().getFontData();
-		fD_btnBrowse[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnBrowse.setFont(new Font(Display.getCurrent(), fD_btnBrowse[0]));
 		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dlg = new DirectoryDialog(AdvancedConfigurationComposite.this.getShell());
@@ -441,62 +323,32 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.lblSaveFilePostFix = new Label(this.grpSpeicherort, SWT.NONE);
 		lblSaveFilePostFix.setText(Messages.getString("AdvancedConfigurationComposite.lblSaveFilePostFix.text"));
-
-		FontData[] fD_lblSaveFilePostFix = this.lblSaveFilePostFix.getFont().getFontData();
-		fD_lblSaveFilePostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblSaveFilePostFix.setFont(new Font(Display.getCurrent(), fD_lblSaveFilePostFix[0]));
+		ConfigurationCompositeBase.setFontHeight(lblSaveFilePostFix, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.BORDER);
-		GridData gd_txtSaveFilePostFix = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-
-		txtSaveFilePostFix.setLayoutData(gd_txtSaveFilePostFix);
-
-		FontData[] fD_txtPostFix = this.txtSaveFilePostFix.getFont().getFontData();
-		fD_txtPostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtSaveFilePostFix.setFont(new Font(Display.getCurrent(), fD_txtPostFix[0]));
+		txtSaveFilePostFix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		ConfigurationCompositeBase.setFontHeight(txtSaveFilePostFix, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				performPostFixChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix.getText());
 			}
 		});
-		new Label(grpSpeicherort, SWT.NONE);
-		fD_lblSaveFilePostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		fD_txtPostFix[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
 		FormLayout layout_grpLocaleAuswahl = new FormLayout();
 		layout_grpLocaleAuswahl.marginHeight = 10;
 		layout_grpLocaleAuswahl.marginWidth = 5;
 		this.grpLocaleAuswahl.setLayout(layout_grpLocaleAuswahl);
-		FormData fd_grpLocaleAuswahl = new FormData();
-		fd_grpLocaleAuswahl.top = new FormAttachment(grpSpeicherort, 5);
-		fd_grpLocaleAuswahl.left = new FormAttachment(0, 5);
-		fd_grpLocaleAuswahl.right = new FormAttachment(100, -5);
-		this.grpLocaleAuswahl.setLayoutData(fd_grpLocaleAuswahl);
-
-		FontData[] fD_grpLocaleAuswahl = this.grpLocaleAuswahl.getFont().getFontData();
-		fD_grpLocaleAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpLocaleAuswahl.setFont(new Font(Display.getCurrent(), fD_grpLocaleAuswahl[0]));
+		ConfigurationCompositeBase.anchor(grpLocaleAuswahl).top(grpSpeicherort, 5).left(0,5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
-		FormData fd_cmbLocaleAuswahl = new FormData();
-		fd_cmbLocaleAuswahl.right = new FormAttachment(100, -5);
-		fd_cmbLocaleAuswahl.top = new FormAttachment(0);
-		fd_cmbLocaleAuswahl.left = new FormAttachment(0, 5);
-		this.cmbLocaleAuswahl.setLayoutData(fd_cmbLocaleAuswahl);
+		ConfigurationCompositeBase.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
+		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage(l)).toArray(String[]::new));
 
-		FontData[] fD_cmbLocaleAuswahl = this.cmbLocaleAuswahl.getFont().getFontData();
-		fD_cmbLocaleAuswahl[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.cmbLocaleAuswahl.setFont(new Font(Display.getCurrent(), fD_cmbLocaleAuswahl[0]));
-
-		String[] localeStrings = new String[Constants.SUPPORTED_LOCALES.length];
-		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; ++i) {
-			localeStrings[i] = Constants.SUPPORTED_LOCALES[i].getDisplayLanguage(Constants.SUPPORTED_LOCALES[i]);
-		}
-		this.cmbLocaleAuswahl.setItems(localeStrings);
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -514,84 +366,47 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		layout_grpUpdateCheck.marginHeight = 10;
 		layout_grpUpdateCheck.marginWidth = 5;
 		this.grpUpdateCheck.setLayout(layout_grpUpdateCheck);
-		FormData fd_grpUpdateCheck = new FormData();
-		fd_grpUpdateCheck.top = new FormAttachment(this.grpLocaleAuswahl, 5);
-		fd_grpUpdateCheck.left = new FormAttachment(0, 5);
-		fd_grpUpdateCheck.right = new FormAttachment(100, -5);
-		this.grpUpdateCheck.setLayoutData(fd_grpUpdateCheck);
-
-		FontData[] fD_grpUpdateCheck = this.grpUpdateCheck.getFont().getFontData();
-		fD_grpUpdateCheck[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpUpdateCheck.setFont(new Font(Display.getCurrent(), fD_grpUpdateCheck[0]));
+		ConfigurationCompositeBase.anchor(grpUpdateCheck).top(grpLocaleAuswahl, 5).left(0,5).right(100,-5).set();
+		ConfigurationCompositeBase.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnUpdateCheck = new Button(this.grpUpdateCheck, SWT.CHECK);
-		FormData fd_btnUpdateCheck = new FormData();
-		fd_btnUpdateCheck.right = new FormAttachment(100, -5);
-		fd_btnUpdateCheck.top = new FormAttachment(0);
-		fd_btnUpdateCheck.left = new FormAttachment(0, 5);
-		this.btnUpdateCheck.setLayoutData(fd_btnUpdateCheck);
-
-		FontData[] fD_btnUpdateCheck = this.btnUpdateCheck.getFont().getFontData();
-		fD_btnUpdateCheck[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnUpdateCheck.setFont(new Font(Display.getCurrent(), fD_btnUpdateCheck[0]));
+		ConfigurationCompositeBase.anchor(btnUpdateCheck).right(100,-5).top(0).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnUpdateCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this
-						.performUpdateCheckSelection(AdvancedConfigurationComposite.this.btnUpdateCheck.getSelection());
+				AdvancedConfigurationComposite.this.performUpdateCheckSelection(AdvancedConfigurationComposite.this.btnUpdateCheck.getSelection());
 			}
 		});
 
 		this.grpProxy = new Group(this, SWT.NONE);
-		FormData fd_grpProxy = new FormData();
-		fd_grpProxy.right = new FormAttachment(100, -5);
-		fd_grpProxy.top = new FormAttachment(this.grpUpdateCheck, 5);
-		fd_grpProxy.left = new FormAttachment(0, 5);
-		this.grpProxy.setLayoutData(fd_grpProxy);
+		ConfigurationCompositeBase.anchor(grpProxy).right(100,-5).top(grpUpdateCheck, 5).left(0,5).set();
 		this.grpProxy.setLayout(new GridLayout(2, false));
-
-		FontData[] fD_grpProxy = this.grpProxy.getFont().getFontData();
-		fD_grpProxy[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.grpProxy.setFont(new Font(Display.getCurrent(), fD_grpProxy[0]));
+		ConfigurationCompositeBase.setFontHeight(grpProxy, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
-		GridData gd_lblProxyHost = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_lblProxyHost.widthHint = 66;
-		this.lblProxyHost.setLayoutData(gd_lblProxyHost);
-		this.lblProxyHost.setBounds(0, 0, 57, 15);
-
-		FontData[] fD_lblProxyHost = this.lblProxyHost.getFont().getFontData();
-		fD_lblProxyHost[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblProxyHost.setFont(new Font(Display.getCurrent(), fD_lblProxyHost[0]));
+		do { /* grid positioning */
+			GridData gd_lblProxyHost = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+			gd_lblProxyHost.widthHint = 66;
+			this.lblProxyHost.setLayoutData(gd_lblProxyHost);
+			this.lblProxyHost.setBounds(0, 0, 57, 15);
+		} while (false);
+		ConfigurationCompositeBase.setFontHeight(lblProxyHost, Constants.TEXT_SIZE_NORMAL);
 
 		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
 		compProxyHostContainer.setLayout(new FormLayout());
 		compProxyHostContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
 		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
-		FormData fd_txtProxyHost = new FormData();
-		fd_txtProxyHost.right = new FormAttachment(100, -42);
-		fd_txtProxyHost.top = new FormAttachment(0);
-		fd_txtProxyHost.left = new FormAttachment(0, 5);
-
-		FontData[] fD_txtProxyHost = this.txtProxyHost.getFont().getFontData();
-		fD_txtProxyHost[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtProxyHost.setFont(new Font(Display.getCurrent(), fD_txtProxyHost[0]));
+		ConfigurationCompositeBase.anchor(txtProxyHost).right(100,-42).top(0).left(0,5).set();
+		ConfigurationCompositeBase.setFontHeight(txtProxyHost, Constants.TEXT_SIZE_NORMAL);
 
 		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //$NON-NLS-1$
-
-		FormData fd_proxyHostErrorMarker = new FormData();
-		fd_proxyHostErrorMarker.left = new FormAttachment(100, -32);
-		fd_proxyHostErrorMarker.right = new FormAttachment(100);
-		fd_proxyHostErrorMarker.top = new FormAttachment(0);
-		fd_proxyHostErrorMarker.bottom = new FormAttachment(0, 32);
-
-		this.proxyHostErrorMarker.setLayoutData(fd_proxyHostErrorMarker);
+		ConfigurationCompositeBase.anchor(proxyHostErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
 		this.proxyHostErrorMarker.setVisible(false);
-		this.txtProxyHost.setLayoutData(fd_txtProxyHost);
 
 		this.txtProxyHost.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				processProxyHostChanged();
@@ -606,25 +421,15 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.lblProxyPort = new Label(this.grpProxy, SWT.NONE);
 		this.lblProxyPort.setBounds(0, 0, 57, 15);
-
-		FontData[] fD_lblProxyPort = this.lblProxyPort.getFont().getFontData();
-		fD_lblProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lblProxyPort.setFont(new Font(Display.getCurrent(), fD_lblProxyPort[0]));
+		ConfigurationCompositeBase.setFontHeight(lblProxyPort, Constants.TEXT_SIZE_NORMAL);
 
 		Composite compProxyPortContainer = new Composite(this.grpProxy, SWT.NONE);
 		compProxyPortContainer.setLayout(new FormLayout());
 		compProxyPortContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		this.txtProxyPort = new Text(compProxyPortContainer, SWT.BORDER);
-		this.fd_txtProxyPort = new FormData();
-		this.fd_txtProxyPort.top = new FormAttachment(0, 0);
-		this.fd_txtProxyPort.left = new FormAttachment(0, 5);
-		this.fd_txtProxyPort.right = new FormAttachment(100, -42);
-		this.txtProxyPort.setLayoutData(this.fd_txtProxyPort);
-
-		FontData[] fD_txtProxyPort = this.txtProxyPort.getFont().getFontData();
-		fD_txtProxyPort[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.txtProxyPort.setFont(new Font(Display.getCurrent(), fD_txtProxyPort[0]));
+		ConfigurationCompositeBase.anchor(txtProxyPort).top(0,0).left(0,5).right(100,-42).set();
+		ConfigurationCompositeBase.setFontHeight(txtProxyPort, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtProxyPort.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -633,21 +438,16 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //$NON-NLS-1$
-		this.fd_txtProxyPortErrorMarker = new FormData();
-		this.fd_txtProxyPortErrorMarker.left = new FormAttachment(100, -32);
-		this.fd_txtProxyPortErrorMarker.right = new FormAttachment(100);
-		this.fd_txtProxyPortErrorMarker.top = new FormAttachment(0);
-		this.fd_txtProxyPortErrorMarker.bottom = new FormAttachment(0, 32);
-		this.txtProxyPortErrorMarker.setLayoutData(this.fd_txtProxyPortErrorMarker);
+		ConfigurationCompositeBase.anchor(txtProxyPortErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
 		this.txtProxyPortErrorMarker.setVisible(false);
 
 		this.txtProxyPort.addFocusListener(new FocusAdapter() {
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				processProxyPortChanged();
 			}
 		});
+
 		reloadResources();
 	}
 
