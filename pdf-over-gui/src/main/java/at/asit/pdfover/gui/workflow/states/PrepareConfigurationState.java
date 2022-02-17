@@ -296,7 +296,7 @@ public class PrepareConfigurationState extends State {
 		initializeFromConfigurationFile(getStateMachine()
 				.getConfigProvider().getConfigurationFile());
 		
-		getStateMachine().getConfigManipulator().setSignatureNote(Messages.getString("simple_config.Note_Default")); //$NON-NLS-1$
+		resetSignatureNoteField(getStateMachine().getConfigProvider());
 		
 		try {
 			getStateMachine().getConfigManipulator().saveCurrentConfiguration();
