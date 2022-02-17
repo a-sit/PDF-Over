@@ -309,7 +309,7 @@
 						<configuration>
 							<headerType>gui</headerType>
 							<dontWrapJar>true</dontWrapJar>
-							<jar>lib/${artifactId}-${version}.jar</jar>
+							<jar>lib/${project.artifactId}-${project.version}.jar</jar>
 							<outfile>${staging.dir}/PDF-Over.exe</outfile>
 							<errTitle>Error</errTitle>
 							<classPath>
@@ -323,11 +323,11 @@
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
-								<txtFileVersion>${version}</txtFileVersion>
+								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over PDF signer</fileDescription>
 								<copyright>(C) 2012 A-SIT</copyright>
 								<productVersion>${version.exe}</productVersion>
-								<txtProductVersion>${version}</txtProductVersion>
+								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>PDF-Over</internalName>
 								<originalFilename>PDF-Over.exe</originalFilename>
@@ -343,7 +343,7 @@
 						<configuration>
 							<headerType>console</headerType>
 							<dontWrapJar>true</dontWrapJar>
-							<jar>lib/${artifactId}-${version}.jar</jar>
+							<jar>lib/${project.artifactId}-${project.version}.jar</jar>
 							<outfile>${staging.dir}/PDF-Over-cli.exe</outfile>
 							<errTitle>Error</errTitle>
 							<classPath>
@@ -357,11 +357,11 @@
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
-								<txtFileVersion>${version}</txtFileVersion>
+								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over PDF signer CLI</fileDescription>
 								<copyright>(C) 2012 A-SIT</copyright>
 								<productVersion>${version.exe}</productVersion>
-								<txtProductVersion>${version}</txtProductVersion>
+								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>PDF-Over-cli</internalName>
 								<originalFilename>PDF-Over-cli.exe</originalFilename>
@@ -392,11 +392,11 @@
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
-								<txtFileVersion>${version}</txtFileVersion>
+								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over Uninstaller</fileDescription>
 								<copyright>A-SIT (Secure Information Technology Center - Austria)</copyright>
 								<productVersion>${version.exe}</productVersion>
-								<txtProductVersion>${version}</txtProductVersion>
+								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>Uninstaller</internalName>
 								<originalFilename>Uninstaller.exe</originalFilename>
