@@ -64,9 +64,6 @@ public class Constants {
 	/** The default configuration file name */
 	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //$NON-NLS-1$
 
-	/** The default log4j file name */
-	public static final String DEFAULT_LOG4J_FILENAME = "log4j.properties"; //$NON-NLS-1$
-
 	/** The configuration version file name */
 	public static final String CONFIG_VERSION_FILENAME = ".version"; //$NON-NLS-1$
 

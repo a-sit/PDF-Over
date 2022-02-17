@@ -18,12 +18,13 @@ package at.asit.pdfover.gui.osx;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.C;
 import org.eclipse.swt.internal.Callback;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -52,7 +53,7 @@ import at.asit.pdfover.commons.Messages;
  * href="http://www.eclipse.org/legal/epl-v10.html">EPL</a>).
  */
 public class CocoaUIEnhancer {
-	static final Logger log = Logger.getLogger(CocoaUIEnhancer.class);
+	static final Logger log = LoggerFactory.getLogger(CocoaUIEnhancer.class);
 
 	private static final long kAboutMenuItem = 0;
 	private static final long kPreferencesMenuItem = 2;

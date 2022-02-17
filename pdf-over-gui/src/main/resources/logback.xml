@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  Built in 2022-02-17 04:16 by logback-translator            -->
+<!--                                                             -->
+<!--  For sponsoring SLF4J/logback/reload4j projects see         -->
+<!--    https://github.com/sponsors/qos-ch                       -->
+<!--                                                             -->
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoding>UTF-8</encoding>
+    <encoder>
+      <pattern>%-5p | %t @ %c{40} | %m%n</pattern>
+    </encoder>
+  </appender>
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+    <encoding>UTF-8</encoding>
+    <file>${user.home}/.pdf-over/pdf-over.log</file>
+    <encoder>
+      <pattern>%-5p | %d | %t @ %c | %m%n</pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <maxIndex>10</maxIndex>
+      <FileNamePattern>${user.home}/.pdf-over/pdf-over.log.%i</FileNamePattern>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>100KB</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+  <logger name="at.asit.pdfover" level="INFO"/>
+  <root level="WARN">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="LOGFILE"/>
+  </root>
+</configuration>

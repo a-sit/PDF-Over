@@ -34,7 +34,6 @@ import java.util.Locale;
 import at.asit.pdfover.commons.Profile;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
 import org.slf4j.Logger;
@@ -218,6 +217,8 @@ public class PrepareConfigurationState extends State {
 	}
 
 	private void copyLog4jConfig() throws InitializationException {
+		// TODO: figure out if we still need this
+		/*
 		// 1Kb buffer
 		byte[] buffer = new byte[1024];
 		int byteCount = 0;
@@ -260,7 +261,7 @@ public class PrepareConfigurationState extends State {
 							"Failed to close Resource stream for log4j config", e); //$NON-NLS-1$
 				}
 			}
-		}
+		}*/
 	}
 
 	private void unzipPdfAsConfig(File configDir) throws InitializationException {

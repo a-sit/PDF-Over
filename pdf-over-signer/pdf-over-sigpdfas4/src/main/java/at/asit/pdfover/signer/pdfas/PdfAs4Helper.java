@@ -63,9 +63,6 @@ public class PdfAs4Helper {
 	 * @throws PdfAsException
 	 */
 	private static PdfAs createPdfAs() {
-		File directory = new File (".");
-		System.setProperty("log4j.configuration", directory.getAbsolutePath() +
-				"/log4j.properties");
 		return PdfAsFactory.createPdfAs(new File(getWorkDir()));
 	}
 
