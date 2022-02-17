@@ -151,16 +151,14 @@ public class PrepareConfigurationState extends State {
 		Locale loc = config.getSignatureLocale();
 
 		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //$NON-NLS-1$
-		if (!note.equals(note_old)) {
-			updateSignatureNoteField(config);
-		}
+		if (note.equals(note_old))
+			resetSignatureNoteField(config);
 	}
 
-	private void updateSignatureNoteField(ConfigProvider config){
-		String note;
-		String profile = config.getSignatureProfile();
-		note = Profile.getSignatureBlockNoteTextAccordingToProfile(Profile.getProfile(profile), config.getLocale());
-		getStateMachine().getConfigManipulator().setSignatureNote(note);
+	private void resetSignatureNoteField(ConfigProvider config){
+		getStateMachine().getConfigManipulator().setSignatureNote(
+			Profile.getSignatureBlockNoteTextAccordingToProfile(Profile.getProfile(config.getSignatureProfile()), config.getLocale())
+		);
 	}
 
 	private void initializeFromArguments(String[] args, ArgumentHandler handler)
