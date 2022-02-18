@@ -15,7 +15,6 @@
  */
 package at.asit.pdfover.commons;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Locale;

@@ -25,8 +25,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.jsoup.*;
 import org.slf4j.Logger;
