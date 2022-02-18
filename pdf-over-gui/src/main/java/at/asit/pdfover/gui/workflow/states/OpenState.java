@@ -81,10 +81,10 @@ public class OpenState extends State {
 
 	@Override
 	public void run() {
+		ConfigProvider config = getStateMachine().getConfigProvider();
 		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {
-			ConfigProvider config = getStateMachine().getConfigProvider();
 			status.setBKU(config.getDefaultBKU());
 			status.setDocument(null);
 			status.setSignaturePosition(config.getDefaultSignaturePosition());
@@ -107,13 +107,16 @@ public class OpenState extends State {
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
-		if (getStateMachine().getConfigProvider().getEnablePlaceholderUsage()) {
+		if (config.getEnablePlaceholderUsage()) {
 			try {
 				// - scan for placeholders
 				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
 
+				boolean useSignatureFields = config.getUseSignatureFields();
+				boolean useMarker = config.getUseMarker();
+				log.debug("Placeholder usage enabled. Signature fields: {}, QR Markers: {}", useSignatureFields, useMarker);
 				//first check the signature fields placeholder 
-				if (getStateMachine().getConfigProvider().getUseSignatureFields()) {
+				if (useSignatureFields) {
 
 					List<String> fields = SignatureFieldsAndPlaceHolderExtractor.findEmptySignatureFields(pddocument);
 
@@ -156,14 +159,13 @@ public class OpenState extends State {
 						}
 					}
 					// second check if qr code placeholder search is enabled
-				} else if (getStateMachine().getConfigProvider().getUseMarker()) {
+				} else if (useMarker) {
 
 					SignaturePlaceholderData signaturePlaceholderData = SignatureFieldsAndPlaceHolderExtractor.getNextUnusedSignaturePlaceHolder(pddocument);
 
 					if (null != signaturePlaceholderData) {
 
-						// create a dialog with ok and cancel buttons and a question
-						// icon
+						// create a dialog with ok and cancel buttons and a question icon
 						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
 								SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
@@ -187,6 +189,7 @@ public class OpenState extends State {
 						} else {
 							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
 						}
+						// TODO: why does this use a different logic (via PositioningState) than the signature placeholders?
 					}
 
 				} else {
