@@ -537,9 +537,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 		if (previous != null) {
 			Profile profile = Profile.values()[this.cmbSignatureProfiles.getSelectionIndex()];
-			String prev_default_note = getSignatureBlockNoteTextAccordingToProfile(profile, previous);
+			String prev_default_note = profile.getDefaultSignatureBlockNote(previous);
 			if (this.txtSignatureNote.getText().equals(prev_default_note)) {
-				this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile, selected)); //$NON-NLS-1$);
+				this.txtSignatureNote.setText(profile.getDefaultSignatureBlockNote(selected));
 				processSignatureNoteChanged();
 			}
 		}
@@ -575,10 +575,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		String note = this.txtSignatureNote.getText();
 		note = note.replace("!","");
-		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()))){
+		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK, configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL, configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE, configurationContainer.getSignatureLocale())) ||
+				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO, configurationContainer.getSignatureLocale()))){
 			return false;
 		}
 		return true;
@@ -587,7 +587,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 
 	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale signatureLocale){
-		return Profile.getSignatureBlockNoteTextAccordingToProfile(profile, this.configurationContainer.getSignatureLocale());
+		return profile.getDefaultSignatureBlockNote(configurationContainer.getSignatureLocale());
 	}
 
 	void setSignatureProfileSetting(){

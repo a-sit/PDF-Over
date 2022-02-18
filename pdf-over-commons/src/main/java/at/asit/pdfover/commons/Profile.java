@@ -28,11 +28,11 @@ public enum Profile {
         return SIGNATURBLOCK_SMALL.name();
     }
 
-    public static String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale locale){
+    public String getDefaultSignatureBlockNote(Locale locale){
 
-        if (profile.equals(Profile.SIGNATURBLOCK_SMALL)){
+        if (this == Profile.SIGNATURBLOCK_SMALL){
             return Messages.getString("simple_config.Note_Default_Standard", locale);
-        } else if (profile.equals(Profile.AMTSSIGNATURBLOCK)){
+        } else if (this == Profile.AMTSSIGNATURBLOCK) {
             return Messages.getString("simple_config.Note_Default_OfficialSignature", locale);
         } else {
             return "";

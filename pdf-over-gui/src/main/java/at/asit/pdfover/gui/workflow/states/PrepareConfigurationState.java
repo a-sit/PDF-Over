@@ -157,7 +157,7 @@ public class PrepareConfigurationState extends State {
 
 	private void resetSignatureNoteField(ConfigProvider config){
 		getStateMachine().getConfigManipulator().setSignatureNote(
-			Profile.getSignatureBlockNoteTextAccordingToProfile(Profile.getProfile(config.getSignatureProfile()), config.getLocale())
+			Profile.getProfile(config.getSignatureProfile()).getDefaultSignatureBlockNote(config.getLocale())
 		);
 	}
 
