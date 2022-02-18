@@ -23,6 +23,8 @@ import java.util.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,11 +32,25 @@ import org.eclipse.swt.widgets.Display;
  */
 public class Constants {
 
+	static private final Logger log = LoggerFactory.getLogger(Constants.class);
+
 	/** Application name */
 	public static final String APP_NAME = "PDF-Over"; //$NON-NLS-1$
 
 	/** Application version */
-	public static final String APP_VERSION = Constants.class.getPackage().getImplementationVersion();
+	public static final String APP_VERSION;
+	static
+	{
+		String v = null;
+		try {
+			Properties props = new Properties();
+			props.load(Constants.class.getClassLoader().getResourceAsStream("version.properties"));
+			v = props.getProperty("version");
+		} catch (Exception e) {
+			log.warn("Failed to load project version", e);
+		}
+		APP_VERSION = v;
+	}
 
 	/** Application name + version */
 	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //$NON-NLS-1$
