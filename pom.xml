@@ -133,8 +133,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<version>3.7.0</version>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
+						<source>11</source>
+						<target>8</target>
 						<verbose>true</verbose>
 						<showWarnings>true</showWarnings>
 						<showDeprecation>true</showDeprecation>
@@ -168,7 +168,7 @@
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
-				<version>1.6</version>
+				<version>1.15</version>
 			</dependency>
 <!--			<dependency>
   				<groupId>org.apache.httpcomponents</groupId>
@@ -188,7 +188,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.4</version>
+				<version>2.11.0</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
