@@ -207,7 +207,6 @@ public class OpenState extends State {
 	 * The selected placeholder is added to the configuration file
 	 * @param selection
 	 */
-	@SuppressWarnings("static-method")
 	private void addPlaceholderSelectionToConfig(String selection) {
 		try {
 	        PropertiesConfiguration config = new PropertiesConfiguration();
@@ -218,7 +217,7 @@ public class OpenState extends State {
 	        layout.save(new FileWriter(advancedConfig, false));
 
 		} catch (Exception e) {
-			log.error(e.getMessage(), e.getStackTrace());
+			log.error("Failed to add placeholder selection to config", e);
 		}
 
 	}

@@ -25,4 +25,4 @@ release.properties
 *.jks
 *.p12
 *.pem
-test-output/*
+test-*/*

@@ -68,10 +68,12 @@ public class BKUSelectionState extends State {
 	@Override
 	public void run() {
 		Status status = getStateMachine().getStatus();
-		if (!(status.getPreviousState() instanceof BKUSelectionState) && 
-			!(status.getPreviousState() instanceof PositioningState)) {
+		State previousState = status.getPreviousState();
+		if (!(previousState instanceof OpenState) && 
+			!(previousState instanceof PositioningState) &&
+			!(previousState instanceof BKUSelectionState)) {
 			status.setBKU(BKUs.NONE);
-		} else if((status.getPreviousState() instanceof PositioningState)) {
+		} else if(!(status.getPreviousState() instanceof BKUSelectionState)) {
 			ConfigProvider config = getStateMachine().getConfigProvider();
 			status.setBKU(config.getDefaultBKU());
 		}
