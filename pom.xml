@@ -133,8 +133,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<version>3.7.0</version>
 					<configuration>
-						<source>11</source>
-						<target>8</target>
+						<source>1.8</source>
+						<target>1.8</target>
 						<verbose>true</verbose>
 						<showWarnings>true</showWarnings>
 						<showDeprecation>true</showDeprecation>
