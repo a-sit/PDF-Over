@@ -1,4 +1,4 @@
-PDF-Over 4.1.19
+PDF-Over ${project.version}
 ------------
 
 Command line arguments:

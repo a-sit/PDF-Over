@@ -284,6 +284,12 @@
 									<includes>
 										<include>icons/*</include>
 										<include>scripts/*</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>src/main/resources</directory>
+									<filtering>true</filtering>
+									<includes>
 										<include>ReadMe.txt</include>
 									</includes>
 								</resource>
