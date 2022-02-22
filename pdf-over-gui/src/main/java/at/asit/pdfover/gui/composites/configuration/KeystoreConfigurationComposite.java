@@ -58,6 +58,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
+import iaik.security.provider.IAIK;
 
 /**
  * 
@@ -268,6 +269,11 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	void showErrorDialog(String error) {
 		ErrorDialog e = new ErrorDialog(getShell(), error, BUTTONS.OK);
 		e.open();
+	}
+
+	static
+	{
+		IAIK.addAsProvider();
 	}
 
 	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
