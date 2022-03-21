@@ -325,7 +325,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<minVersion>1.7.0</minVersion>
+								<minVersion>1.8.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -359,7 +359,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<minVersion>1.7.0</minVersion>
+								<minVersion>1.8.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -394,7 +394,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<minVersion>1.6.0</minVersion>
+								<minVersion>1.8.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
