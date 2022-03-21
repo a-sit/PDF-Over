@@ -3,10 +3,10 @@
 	<parent>
 		<groupId>at.a-sit</groupId>
 		<artifactId>pdf-over</artifactId>
-		<version>4.3.3-RC7</version>
+		<version>4.3.3-RC8-SNAPSHOT</version>
 	</parent>
 	<artifactId>pdf-over-install-helper</artifactId>
-	<version>4.3.3-RC7</version>
+	<version>4.3.3-RC8-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
