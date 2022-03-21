@@ -325,6 +325,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
+								<path>%JAVA_HOME%;%PATH%</path> 
 								<minVersion>1.8.0</minVersion>
 							</jre>
 							<versionInfo>
@@ -359,6 +360,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
+								<path>%JAVA_HOME%;%PATH%</path> 
 								<minVersion>1.8.0</minVersion>
 							</jre>
 							<versionInfo>
