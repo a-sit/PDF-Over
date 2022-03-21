@@ -586,6 +586,21 @@
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
+        <profile>
+			<id>mac-64-3</id>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<arch>aarch64</arch>
+				</os>
+			</activation>
+			<properties>
+<!--				<swt.artifactId.32>org.eclipse.swt.cocoa.macosx</swt.artifactId.32>-->
+				<swt.artifactId.64>org.eclipse.swt.cocoa.macosx.aarch64</swt.artifactId.64>
+				<swt.artifactId>${swt.artifactId.64}</swt.artifactId>
+				<target.name>mac</target.name>
+			</properties>
+		</profile>
 
 		<profile>
 			<id>dummy-sign</id>
