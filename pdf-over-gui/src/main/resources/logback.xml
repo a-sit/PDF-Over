@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--  Built in 2022-02-17 04:16 by logback-translator            -->
-<!--                                                             -->
-<!--  For sponsoring SLF4J/logback/reload4j projects see         -->
-<!--    https://github.com/sponsors/qos-ch                       -->
-<!--                                                             -->
 <configuration>
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -13,7 +8,6 @@
     </encoder>
   </appender>
   <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
     <file>${user.home}/.pdf-over/pdf-over.log</file>
     <encoder>
       <charset>UTF-8</charset>

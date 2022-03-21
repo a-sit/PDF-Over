@@ -19,6 +19,8 @@ package at.asit.pdfover.gui;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import at.asit.pdfover.commons.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,11 +62,11 @@ public class Main {
 		}
 		catch (Throwable e) {
 			
-			log.error("Error occured " + e.getMessage()); //$NON-NLS-1$
+			log.error("Unhandled error", e); //$NON-NLS-1$
 			
-			/*JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(null,
 					"Error occured " + e.getMessage(), //$NON-NLS-1$
-					null, JOptionPane.ERROR_MESSAGE);*/
+					null, JOptionPane.ERROR_MESSAGE);
 		}
 
 		// Workaround for remaining AWT-Shutdown thread on OSX
