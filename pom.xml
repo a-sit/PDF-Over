@@ -70,9 +70,8 @@
 
 	<scm>
 		<connection>scm:git:http://git.egiz.gv.at/git/pdf-over</connection>
-		<developerConnection>scm:git:https://gitlab.iaik.tugraz.at/egiz/pdf-over.git</developerConnection>
+		<developerConnection>scm:git:git@gitlab.iaik.tugraz.at:egiz/pdf-over.git</developerConnection>
 		<url>http://git.egiz.gv.at/pdf-over</url>
-	  <tag>pdf-over-4.1.19</tag>
    </scm>
 
 	<issueManagement>
