@@ -5,7 +5,8 @@
 	<info>
 		<appname>PDF-Over</appname>
 		<appversion>4.3.2</appversion>
-<!-- 		<javaversion>1.7</javaversion> -->
+ 		<javaversion>1.8</javaversion>
+		<requiresjdk>yes</requiresjdk>
 		<authors>
 			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
 		</authors>
