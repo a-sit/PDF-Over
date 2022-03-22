@@ -58,7 +58,6 @@ import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.osx.CocoaUIEnhancer;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.utils.SWTLoader;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
@@ -211,23 +210,6 @@ public class MainWindow {
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) { //$NON-NLS-1$ //$NON-NLS-2$
 			if (System.getProperty("os.name").contains("OS X")) { //$NON-NLS-1$ //$NON-NLS-2$
 				hookupOSXMenu();
-			}
-			// Workaround for SWT bug on Mac: disable full screen mode
-			try {
-				Field field = Control.class.getDeclaredField("view"); //$NON-NLS-1$
-				Object /*NSView*/ view = field.get(getShell());
-				if (view != null)
-				{
-					Class<?> c = Class.forName("org.eclipse.swt.internal.cocoa.NSView"); //$NON-NLS-1$
-					Object nswindow = c.getDeclaredMethod("window").invoke(view); //$NON-NLS-1$
-					c = Class.forName("org.eclipse.swt.internal.cocoa.NSWindow"); //$NON-NLS-1$
-					Method setCollectionBehavior = c.getDeclaredMethod(
-							"setCollectionBehavior", //$NON-NLS-1$
-							(SWTLoader.getArchBits() == 64) ? long.class : int.class);
-					setCollectionBehavior.invoke(nswindow, 0);
-				}
-			} catch (Exception e) {
-				log.error("Error disabling full screen mode", e); //$NON-NLS-1$
 			}
 		}
 		try {

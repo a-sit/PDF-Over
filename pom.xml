@@ -81,7 +81,6 @@
 	</issueManagement>
 
 	<modules>
-		<module>pdf-over-install-helper</module>
 		<module>pdf-over-commons</module>
 		<module>pdf-over-gui</module>
 		<module>pdf-over-signator</module>

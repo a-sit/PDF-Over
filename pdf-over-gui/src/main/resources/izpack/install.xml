@@ -57,10 +57,8 @@
 			<description>Main Installation</description>
 			<updatecheck>
 				<include name="lib/**" />
-				<include name="lib-swt/**" />
 			</updatecheck>
 			<file src="lib" targetdir="$INSTALL_PATH" />
-			<file src="lib-swt" targetdir="$INSTALL_PATH" />
 			<file src="scripts" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
@@ -71,8 +69,6 @@
 				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
 				os="unix" stage="never"></executable>
-            <executable targetfile="$INSTALL_PATH/lib/pdf-over-install-helper.jar"
-				os="unix" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win.bat"
 				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_win-cli.bat"
@@ -81,12 +77,8 @@
 				os="windows" stage="never"></executable>
 			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_mac.sh"
 				os="mac" stage="never"></executable>
-<!--            <executable targetfile="$INSTALL_PATH/scripts/postInstall_linux.sh"
-				os="unix" stage="postinstall" ></executable>-->
 			<executable targetfile="$INSTALL_PATH/scripts/postinstall_mac.sh"
 				os="mac" stage="postinstall"></executable>
-<!--            <executable targetfile="$INSTALL_PATH/scripts/postInstall_win.bat"
-				os="win" stage="postinstall" ></executable> -->
 		</pack>
 	</packs>
     
