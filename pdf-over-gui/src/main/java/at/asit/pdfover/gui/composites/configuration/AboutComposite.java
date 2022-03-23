@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 
@@ -36,8 +37,8 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		setLayout(new FormLayout());
 
 		this.lnkAbout = new Link(this, SWT.NONE);
-		ConfigurationCompositeBase.anchor(lnkAbout).right(100,-5).left(0,5).top(0,5).width(100).set();
-		ConfigurationCompositeBase.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.anchor(lnkAbout).right(100,-5).left(0,5).top(0,5).width(100).set();
+		StateComposite.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
 
 		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -60,13 +61,13 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		});
 
 		this.lblDataProtection = new Label(this, SWT.NONE);
-		ConfigurationCompositeBase.anchor(lblDataProtection).top(lnkAbout, 15).right(100,-5).left(0,5).width(100).set();
-		ConfigurationCompositeBase.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
-		ConfigurationCompositeBase.setFontStyle(lblDataProtection, SWT.BOLD);
+		StateComposite.anchor(lblDataProtection).top(lnkAbout, 15).right(100,-5).left(0,5).width(100).set();
+		StateComposite.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
+		StateComposite.setFontStyle(lblDataProtection, SWT.BOLD);
 
 		this.lnkDataProtection = new Link(this, SWT.NONE);
-		ConfigurationCompositeBase.anchor(lnkDataProtection).right(100,-5).left(0,5).top(lblDataProtection,10).bottom(100,-5).width(100).height(120).set();
-		ConfigurationCompositeBase.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.anchor(lnkDataProtection).right(100,-5).left(0,5).top(lblDataProtection,10).bottom(100,-5).width(100).height(120).set();
+		StateComposite.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
 
 		this.lnkDataProtection.addSelectionListener(new SelectionAdapter() {
 			@Override
