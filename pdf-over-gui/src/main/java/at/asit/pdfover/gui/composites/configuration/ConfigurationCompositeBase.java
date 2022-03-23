@@ -17,7 +17,6 @@ package at.asit.pdfover.gui.composites.configuration;
 
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;

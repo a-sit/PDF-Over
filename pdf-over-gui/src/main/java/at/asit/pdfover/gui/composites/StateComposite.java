@@ -64,7 +64,6 @@ public abstract class StateComposite extends Composite {
     	fD[0].setHeight(height);
 		Font font = new Font(c.getDisplay(), fD[0]);
     	c.setFont(font);
-		font.dispose();
     }
 
     public static void setFontStyle(Control c, int style)
@@ -73,7 +72,6 @@ public abstract class StateComposite extends Composite {
     	fD[0].setStyle(style);
 		Font font = new Font(c.getDisplay(), fD[0]);
     	c.setFont(font);
-		font.dispose();
     }
 
 	public static class AnchorSetter
