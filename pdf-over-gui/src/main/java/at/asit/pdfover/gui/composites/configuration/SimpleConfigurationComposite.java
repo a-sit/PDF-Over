@@ -361,9 +361,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(
-						SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile(),
-						SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()));
+				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
 			}
 		});
 
@@ -536,59 +534,33 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		log.debug("Selected Sign Locale: {}", selected); //$NON-NLS-1$
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
-		if (previous != null) {
-			Profile profile = Profile.values()[this.cmbSignatureProfiles.getSelectionIndex()];
-			String prev_default_note = profile.getDefaultSignatureBlockNote(previous);
-			if (this.txtSignatureNote.getText().equals(prev_default_note)) {
-				this.txtSignatureNote.setText(profile.getDefaultSignatureBlockNote(selected));
-				processSignatureNoteChanged();
-			}
-		}
+
+		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous))))
+			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, selected));
 	}
 
 
 	
-    void preformProfileSelectionChanged(Profile selected) {
-		log.debug("Signature Profile {} was selected", selected.name()); //$NON-NLS-1$
-    	this.configurationContainer.setSignatureProfile(selected);
-    	this.cmbSignatureProfiles.select(selected.ordinal());
+    void preformProfileSelectionChanged(Profile newProfile) {
+		log.debug("Signature Profile {} was selected", newProfile.name()); //$NON-NLS-1$
+		Profile oldProfile = this.configurationContainer.getSignatureProfile();
+    	this.configurationContainer.setSignatureProfile(newProfile);
+    	this.cmbSignatureProfiles.select(newProfile.ordinal());
 
-    	if (selected.equals(Profile.AMTSSIGNATURBLOCK) || selected.equals(Profile.INVISIBLE)){
+    	if (newProfile.equals(Profile.AMTSSIGNATURBLOCK) || newProfile.equals(Profile.INVISIBLE)){
 			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
 		}
     	setSignatureProfileSetting();
-		alignSignatureNoteTextToProfile(selected);
-
+		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
+			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
 	}
 
-	void alignSignatureNoteTextToProfile(Profile profile){
-
-		if (detectChanges(profile) == false){
-			this.txtSignatureNote.setText(getSignatureBlockNoteTextAccordingToProfile(profile, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()));
-			this.configurationContainer.setSignatureNote(
-					Messages.getString(getSignatureBlockNoteTextAccordingToProfile(profile, SimpleConfigurationComposite.this.configurationContainer.getSignatureLocale()))
-			);
-		}
-
-	}
-
-	boolean detectChanges(Profile profile){
-
-		String note = this.txtSignatureNote.getText();
-		note = note.replace("!","");
-		if (note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.AMTSSIGNATURBLOCK, configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.SIGNATURBLOCK_SMALL, configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.INVISIBLE, configurationContainer.getSignatureLocale())) ||
-				note.equals(getSignatureBlockNoteTextAccordingToProfile(Profile.BASE_LOGO, configurationContainer.getSignatureLocale()))){
-			return false;
-		}
-		return true;
-	}
-
-
-
-	String getSignatureBlockNoteTextAccordingToProfile(Profile profile, Locale signatureLocale){
-		return profile.getDefaultSignatureBlockNote(configurationContainer.getSignatureLocale());
+	String getDefaultSignatureBlockNoteTextFor(Profile profile, Locale locale){
+		if (profile == null)
+			profile = configurationContainer.getSignatureProfile();
+		if (locale == null)
+			locale = configurationContainer.getSignatureLocale();
+		return profile.getDefaultSignatureBlockNote(locale);
 	}
 
 	void setSignatureProfileSetting(){
