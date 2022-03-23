@@ -133,7 +133,7 @@ public class PlaceholderSelectionGui extends Dialog {
 		});
 		this.btnOk.setText("Ok"); //$NON-NLS-1$
 		
-		Label lbLabel = new Label(this.shlInfo, SWT.NONE);
+		Label lbLabel = new Label(this.shlInfo, SWT.WRAP);
 		lbLabel.setBounds(27, 10, 223, 41);
 		lbLabel.setText(Messages.getString("positioning.placeholder")); //$NON-NLS-1$
 
