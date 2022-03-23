@@ -121,41 +121,46 @@ public class OpenState extends State {
 					List<String> fields = SignatureFieldsAndPlaceHolderExtractor.findEmptySignatureFields(pddocument);
 
 					if (fields.size() > 0) {
+						while (true)
+						{
+							// create a dialog with ok and cancel buttons and a question
+							// icon
+							MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+									SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
+							dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
+							dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
 
-						// create a dialog with ok and cancel buttons and a question
-						// icon
-						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
-								SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
-						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
-
-						// open dialog and await user selection
-						if (SWT.YES == dialog.open()) {
-							
-							if (fields.size() == 1) {
-								addPlaceholderSelectionToConfig(fields.get(0));
-								this.setNextState(new BKUSelectionState(getStateMachine()));
-								return;
+							// open dialog and await user selection
+							int result = dialog.open();
+							if (result == SWT.YES) {
 								
-							} else if (fields.size() > 1) {
-
-								PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
-										getStateMachine().getGUIProvider().getMainShell(), 65570, "text", //$NON-NLS-1$
-										"select the fields", fields); //$NON-NLS-1$
-								int res = gui.open();
-								if (res != -1) {
-									getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
-
-									addPlaceholderSelectionToConfig(fields.get(res));
+								if (fields.size() == 1) {
+									addPlaceholderSelectionToConfig(fields.get(0));
 									this.setNextState(new BKUSelectionState(getStateMachine()));
 									return;
+									
+								} else if (fields.size() > 1) {
 
+									PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
+											getStateMachine().getGUIProvider().getMainShell(), 65570, "text", //$NON-NLS-1$
+											"select the fields", fields); //$NON-NLS-1$
+									int res = gui.open();
+									if (res != -1) {
+										getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+										addPlaceholderSelectionToConfig(fields.get(res));
+										this.setNextState(new BKUSelectionState(getStateMachine()));
+									}
+									else
+										continue;
 								}
-								getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
-							}
 
-						} else {
-							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+							} else if (result == SWT.NO) {
+								getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+							} else {
+								status.setDocument(null);
+								return;
+							}
+							break;
 						}
 					}
 					// second check if qr code placeholder search is enabled
