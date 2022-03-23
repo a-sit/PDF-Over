@@ -20,8 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -29,7 +27,6 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,12 +135,7 @@ public class BKUSelectionComposite extends StateComposite {
 	public void setKeystoreEnabled(boolean enabled) {
 		if (enabled) {
 			this.btnKS = new Button(this, SWT.NONE);
-			FormData fd_btnKS = new FormData();
-			fd_btnKS.top = new FormAttachment(this.btnCard, 10);
-			fd_btnKS.left = new FormAttachment(this.btnMobile, 0, SWT.LEFT);
-			fd_btnKS.right = new FormAttachment(this.btnCard, 0, SWT.RIGHT);
-
-			this.btnKS.setLayoutData(fd_btnKS);
+			StateComposite.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT).set();
 			this.btnKS.addSelectionListener(new KSSelectionListener());
 
 			reloadResources();
@@ -165,61 +157,47 @@ public class BKUSelectionComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		ClickableCanvas cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		FormData fd_cc_mobile = new FormData();
-		fd_cc_mobile.right = new FormAttachment(50, -5);
-		fd_cc_mobile.top = new FormAttachment(40, -20);
+		StateComposite.anchor(cc_mobile).right(50, -5).top(40, -20).set();
+		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
+		cc_mobile.setImage(mobile);
+		StateComposite.setFontHeight(cc_mobile, Constants.TEXT_SIZE_BUTTON);
+
 		cc_mobile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
 				setSelected(BKUs.MOBILE);
 			}
 		});
-		cc_mobile.setLayoutData(fd_cc_mobile);
-
-		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
-		cc_mobile.setImage(mobile);
-		FontData[] fD_cc_mobile = cc_mobile.getFont().getFontData();
-		fD_cc_mobile[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		cc_mobile.setFont(new Font(Display.getCurrent(), fD_cc_mobile[0]));
 
 		ClickableCanvas cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		FormData fd_cc_karte = new FormData();
-		fd_cc_karte.left = new FormAttachment(50, 5);
-		fd_cc_karte.top = new FormAttachment(40, -20);
+		StateComposite.anchor(cc_karte).left(50, 5).top(40, -20).set();
+		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
+		cc_karte.setImage(karte);
+		StateComposite.setFontHeight(cc_karte, Constants.TEXT_SIZE_BUTTON);
+
 		cc_karte.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
 				setSelected(BKUs.LOCAL);
 			}
 		});
-		cc_karte.setLayoutData(fd_cc_karte);
-
-		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
-
-		cc_karte.setImage(karte);
-		FontData[] fD_cc_karte = cc_mobile.getFont().getFontData();
-		fD_cc_karte[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		cc_mobile.setFont(new Font(Display.getCurrent(), fD_cc_karte[0]));
 
 		int mobilesize = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 
 		this.btnMobile = new Button(this, SWT.NONE);
 		FormData fd_btnMobile = new FormData();
 		fd_btnMobile.top = new FormAttachment(cc_mobile, 10);
-		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnMobile.right = new FormAttachment(50, -5);
-		//fd_btnMobile.width = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		this.btnMobile.setLayoutData(fd_btnMobile);
 		this.btnMobile.addSelectionListener(new MobileSelectionListener());
 
 		int btnmsize = this.btnMobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 
-		fd_btnMobile.width = (btnmsize > mobilesize) ? btnmsize : mobilesize;
+		fd_btnMobile.width = Math.max(btnmsize, mobilesize);
 
 		this.btnCard = new Button(this, SWT.NONE);
 		FormData fd_btnCard = new FormData();
 		fd_btnCard.top = new FormAttachment(cc_karte, 10);
-		//fd_btnMobile.left = new FormAttachment(btn_mobile, 0);
 		fd_btnCard.left = new FormAttachment(50, 5);
 		int cardsize = cc_karte.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 
@@ -228,10 +206,9 @@ public class BKUSelectionComposite extends StateComposite {
 
 		int btncsize = this.btnCard.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 
-		fd_btnCard.width = (btncsize > cardsize) ? btncsize : cardsize;
+		fd_btnCard.width = Math.max(btncsize, cardsize);
 
 		reloadResources();
-		//this.pack();
 	}
 
 	@Override
