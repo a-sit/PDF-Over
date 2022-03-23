@@ -62,6 +62,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lblDataProtection = new Label(this, SWT.NONE);
 		ConfigurationCompositeBase.anchor(lblDataProtection).top(lnkAbout, 15).right(100,-5).left(0,5).width(100).set();
 		ConfigurationCompositeBase.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
+		ConfigurationCompositeBase.setFontStyle(lblDataProtection, SWT.BOLD);
 
 		this.lnkDataProtection = new Link(this, SWT.NONE);
 		ConfigurationCompositeBase.anchor(lnkDataProtection).right(100,-5).left(0,5).top(lblDataProtection,10).bottom(100,-5).width(100).height(120).set();
