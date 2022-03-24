@@ -108,10 +108,8 @@ public class OpenState extends State {
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
 		if (config.getEnablePlaceholderUsage()) {
-			try {
+			try (PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument())) {
 				// - scan for placeholders
-				PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument());
-
 				boolean useSignatureFields = config.getUseSignatureFields();
 				boolean useMarker = config.getUseMarker();
 				log.debug("Placeholder usage enabled. Signature fields: {}, QR Markers: {}", useSignatureFields, useMarker);
