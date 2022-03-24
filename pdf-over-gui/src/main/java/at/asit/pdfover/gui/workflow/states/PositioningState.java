@@ -42,6 +42,7 @@ import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 
 import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.decrypt.UnsupportedEncryptionException;
 import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 /**
  * Decides where to position the signature block
@@ -80,15 +81,20 @@ public class PositioningState extends State {
 		try
 		{
 			pdf = new PDFFile(buf);
+			if (pdf.getNumPages() > 0)
+				pdf.getPage(1);
+			else
+				throw new IOException();
 		}
 		catch (PDFAuthenticationFailureException e) {
 			throw new IOException(Messages.getString("error.PDFPwdProtected"), e);
 		}
 		catch (IOException e) {
-			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
+			if (e.getCause() instanceof UnsupportedEncryptionException)
+				throw new IOException(Messages.getString("error.PDFProtected"));	
+			else
+				throw new IOException(Messages.getString("error.MayNotBeAPDF"), e);
 		}
-		if (pdf.getDefaultDecrypter().isEncryptionPresent())
-			throw new IOException(Messages.getString("error.PDFProtected")); //$NON-NLS-1$
 		return pdf;
 	}
 
