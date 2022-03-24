@@ -71,7 +71,7 @@ public class PositioningState extends State {
 
 	private PDFFile getPDFDocument() throws IOException {
 		PDFFile pdf = null;
-		RandomAccessFile rafile = new RandomAccessFile(getStateMachine().getStatus().getDocument(), "r"); //$NON-NLS-1$
+		RandomAccessFile rafile = new RandomAccessFile(getStateMachine().getStatus().getDocument(), "r");
 		FileChannel chan = rafile.getChannel();
 		ByteBuffer buf = chan
 				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
@@ -82,7 +82,7 @@ public class PositioningState extends State {
 			pdf = new PDFFile(buf);
 		}
 		catch (PDFAuthenticationFailureException e) {
-			throw new IOException(Messages.getString("error.PDFPwdProtected"), e); //$NON-NLS-1$
+			throw new IOException(Messages.getString("error.PDFPwdProtected"), e);
 		}
 		catch (IOException e) {
 			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e); //$NON-NLS-1$
@@ -97,7 +97,7 @@ public class PositioningState extends State {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  stateMachine.getStatus().getDocument()); //$NON-NLS-1$
+			log.debug("Displaying " +  stateMachine.getStatus().getDocument());
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
