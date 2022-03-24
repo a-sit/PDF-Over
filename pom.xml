@@ -196,7 +196,7 @@
 			<dependency>
 				<groupId>com.sun</groupId>
 				<artifactId>pdfview</artifactId>
-				<version>0.9.3-CyBot</version>
+				<version>1.0.5.1-katjas</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jpedal</groupId>
