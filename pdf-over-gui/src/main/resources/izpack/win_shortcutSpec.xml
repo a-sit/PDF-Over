@@ -14,7 +14,7 @@
      target="$INSTALL_PATH/scripts/pdf-over_win.bat"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
-     description="PDF-Over 4.1"
+     description="PDF-Over ${project.version}"
      iconFile="$INSTALL_PATH/icons/icon.ico"
      iconIndex="0"
      type="Application"
@@ -33,7 +33,7 @@
      target="$INSTALL_PATH/Uninstaller/Uninstaller.exe"
      commandLine=""
      workingDirectory="$INSTALL_PATH/Uninstaller"
-     description="PDF-Over 4.1 Uninstaller"
+     description="PDF-Over ${project.version} Uninstaller"
      type="Application"
      encoding="UTF-8"
      initialState="minimized">

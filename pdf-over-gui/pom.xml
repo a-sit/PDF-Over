@@ -277,6 +277,16 @@
 								</resource>
 								<resource>
 									<directory>src/main/resources/izpack</directory>
+									<excludes>
+										<exclude>*.xml</exclude>
+									</excludes>
+								</resource>
+								<resource>
+									<directory>src/main/resources/izpack</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>*.xml</include>
+									</includes>
 								</resource>
 							</resources>
 						</configuration>

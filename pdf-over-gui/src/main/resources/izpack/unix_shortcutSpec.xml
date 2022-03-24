@@ -15,7 +15,7 @@
      target="$INSTALL_PATH/scripts/pdf-over_linux.sh"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
-     description="PDF-Over 4.1"
+     description="PDF-Over ${project.version}"
      iconFile="$INSTALL_PATH/icons/icon.png"
      iconIndex="0"
      type="Application"
