@@ -294,11 +294,11 @@ public class ATrustHandler extends MobileBKUHandler {
 			status.setMobilePassword(null);
 		}
 
-		log.info("sessionID: " + sessionID); //$NON-NLS-1$
-		log.info("Vergleichswert: " + refVal); //$NON-NLS-1$
-		log.info("viewState: " + viewState); //$NON-NLS-1$
-		log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
-		log.info("signatureDataURL: " + signatureDataURL); //$NON-NLS-1$
+		log.debug("sessionID: " + sessionID);
+		log.debug("Vergleichswert: " + refVal);
+		log.debug("viewState: " + viewState);
+		log.debug("eventValidation: " + eventValidation);
+		log.debug("signatureDataURL: " + signatureDataURL);
 
 		status.setSessionID(sessionID);
 		status.setRefVal(refVal);
