@@ -426,10 +426,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	private void setEmblemFile(final String filename) throws Exception {
-		setEmblemFileInternal(filename, false);
-	}
-
 	private void setEmblemFileInternal(final String filename, boolean force)
 			throws Exception {
 		if (!force && this.configurationContainer.getEmblem() != null) {
@@ -494,7 +490,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	void processEmblemChanged(String filename) {
 		try {
-			setEmblemFile(filename);
+			setEmblemFileInternal(filename, false);
 		} catch (Exception ex) {
 			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
 			ErrorDialog dialog = new ErrorDialog(
