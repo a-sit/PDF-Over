@@ -170,12 +170,13 @@ public class OpenState extends State {
 
 						// create a dialog with ok and cancel buttons and a question icon
 						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
-								SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+								SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
 						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //$NON-NLS-1$
 						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //$NON-NLS-1$
 
 						// open dialog and await user selection
-						if (SWT.YES == dialog.open()) {
+						int result = dialog.open();
+						if (result == SWT.YES) {
 
 							// if the user chooses to use the signature placeholder
 							// - fill the position information so that we skip to
@@ -189,8 +190,11 @@ public class OpenState extends State {
 
 							getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
 
-						} else {
+						} else if (result == SWT.NO) {
 							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+						} else {
+							status.setDocument(null);
+							return;
 						}
 						// TODO: why does this use a different logic (via PositioningState) than the signature placeholders?
 					}
