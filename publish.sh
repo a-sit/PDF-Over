@@ -72,7 +72,7 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 	NAME=${names[$i]}
 	INSTALLER=setup_pdf-over_$NAME.jar
 	begin_phase "Building package [$PROFILE] as $INSTALLER..."
-	mvn install -P$PROFILE $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
+	mvn install -P$PROFILE -Dno-native-profile $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		end_phase "OK"

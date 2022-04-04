@@ -473,14 +473,16 @@
 	</properties>
 
 	<profiles>
-		<!-- Note: Build system profile has to come first! Else it overwrites the 
-			chosen profile -->
         <profile>
-			<id>linux-64</id>
+			<id>linux</id>
 			<activation>
 				<os>
-					<name>linux</name>
+					<family>linux</family>
 				</os>
+				<property> <!-- this is set by publish.sh; it prevents this profile from turning on automatically when we're building for another OS -->
+					<name>no-native-profile</name>
+					<value>!true</value>
+				</property>
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
@@ -495,6 +497,10 @@
 				<os>
 					<family>windows</family>
 				</os>
+				<property>
+					<name>no-native-profile</name>
+					<value>!true</value>
+				</property>
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
@@ -503,9 +509,6 @@
 				<target.name>windows</target.name>
 			</properties>
 		</profile>
-
-
-
 		<profile>
 			<id>mac</id>
 			<activation>
@@ -549,9 +552,13 @@
 			<id>mac-64-2</id>
 			<activation>
 				<os>
-					<name>mac os x</name>
+					<family>mac</family>
 					<arch>x86_64</arch>
 				</os>
+				<property>
+					<name>no-native-profile</name>
+					<value>!true</value>
+				</property>
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
@@ -559,12 +566,16 @@
 			</properties>
 		</profile>
         <profile>
-			<id>mac-64-3</id>
+			<id>mac-aarch64</id>
 			<activation>
 				<os>
-					<name>mac os x</name>
+					<family>mac</family>
 					<arch>aarch64</arch>
 				</os>
+				<property>
+					<name>no-native-profile</name>
+					<value>!true</value>
+				</property>
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.aarch64</swt.artifactId>
