@@ -318,7 +318,7 @@
 				<executions>
 					<execution>
 						<id>l4j-gui</id>
-						<phase>package</phase>
+						<phase>none</phase> <!-- overridden to "package" by windows profile -->
 						<goals>
 							<goal>launch4j</goal>
 						</goals>
@@ -353,7 +353,7 @@
 					</execution>
 					<execution>
 						<id>l4j-cli</id>
-						<phase>package</phase>
+						<phase>none</phase>
 						<goals>
 							<goal>launch4j</goal>
 						</goals>
@@ -388,7 +388,7 @@
 					</execution>
 					<execution>
 						<id>l4j-uninst</id>
-						<phase>package</phase>
+						<phase>none</phase>
 						<goals>
 							<goal>launch4j</goal>
 						</goals>
@@ -505,6 +505,29 @@
 				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>windows</target.name>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.akathist.maven.plugins.launch4j</groupId>
+							<artifactId>launch4j-maven-plugin</artifactId>
+							<version>2.1.1</version>
+							<executions>
+								<execution>
+									<id>l4j-gui</id>
+									<phase>package</phase>
+								</execution>
+								<execution>
+									<id>l4j-cli</id>
+									<phase>package</phase>
+								</execution>
+								<execution>
+									<id>l4j-uninst</id>
+									<phase>package</phase>
+								</execution>
+							</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>mac</id>
