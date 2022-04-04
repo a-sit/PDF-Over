@@ -513,45 +513,6 @@
 			<id>mac</id>
 			<activation>
 				<os>
-					<name>mac os x</name>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<target.name>mac</target.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>mac-2</id>
-			<activation>
-				<os>
-					<name>mac os x</name>
-					<arch>i386</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<target.name>mac</target.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>mac-64</id>
-			<activation>
-				<os>
-					<name>mac os x</name>
-					<arch>amd64</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<target.name>mac</target.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>mac-64-2</id>
-			<activation>
-				<os>
 					<family>mac</family>
 					<arch>x86_64</arch>
 				</os>
@@ -562,10 +523,13 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+				<bundled-jre.archiveName>OpenJDK11U-jre_x64_mac_hotspot_11.0.14.1_1.tar.gz</bundled-jre.archiveName>
+				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
         <profile>
+			<!-- this profile is not yet specified in publish.sh; there is no openjdk11 for aarch64, and SWT needs adding to internal mvn -->
 			<id>mac-aarch64</id>
 			<activation>
 				<os>
@@ -579,6 +543,8 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.cocoa.macosx.aarch64</swt.artifactId>
+				<bundled-jre.archiveName>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</bundled-jre.archiveName>
+				<bundled-jre.nameInArchive>jdk-17.0.2+8-jre</bundled-jre.nameInArchive>
 				<target.name>mac</target.name>
 			</properties>
 		</profile>
@@ -634,7 +600,11 @@
 		</profile>
 		<profile>
 			<id>ks-sign</id>
-			<!-- Activate this profile to sign the package using a java keystore -->
+			<activation>
+				<property>
+					<name>ks-file</name>
+				</property>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
