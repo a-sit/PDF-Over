@@ -61,6 +61,7 @@
 			<file src="scripts" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
+			<file src="jre/${bundled-jre.archiveName}" targetdir="$INSTALL_PATH/jre" os="windows" unpack="true" />
 			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="Uninstaller.exe" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
