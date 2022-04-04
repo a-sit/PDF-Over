@@ -504,7 +504,7 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
-				<bundled-jre.archiveName>OpenJDK11U-jre_x64_windows_hotspot_11.0.14.1_1</bundled-jre.archiveName>
+				<bundled-jre.archiveName>OpenJDK11U-jre_x64_windows_hotspot_11.0.14.1_1.zip</bundled-jre.archiveName>
 				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>windows</target.name>
 			</properties>
