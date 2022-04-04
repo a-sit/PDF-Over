@@ -486,8 +486,6 @@
 			</activation>
 			<properties>
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
-				<bundled-jre.archiveName>OpenJDK11U-jre_x64_linux_hotspot_11.0.14.1_1.tar.gz</bundled-jre.archiveName>
-				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>linux</target.name>
 			</properties>
 		</profile>
