@@ -58,20 +58,23 @@
 				<include name="lib/**" />
 			</updatecheck>
 			<file src="lib" targetdir="$INSTALL_PATH" />
-			<file src="scripts" targetdir="$INSTALL_PATH" />
+			<file src="scripts/pdf-over_linux.sh" targetdir="$INSTALL_PATH" os="unix" />
+			<file src="scripts/uninstall_linux.sh" targetdir="$INSTALL_PATH" os="unix" />
+			<file src="scripts/pdf-over_mac.sh" targetdir="$INSTALL_PATH" os="mac" />
+			<file src="scripts/postinstall_mac.sh" targetdir="$INSTALL_PATH" os="mac" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
 			<file src="jre/${bundled-jre.archiveName}" targetdir="$INSTALL_PATH/jre" os="windows" unpack="true" />
 			<file src="PDF-Over.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="PDF-Over-cli.exe" targetdir="$INSTALL_PATH" os="windows"/>
 			<file src="Uninstaller.exe" targetdir="$INSTALL_PATH/Uninstaller" os="windows"/>
-            <executable targetfile="$INSTALL_PATH/scripts/pdf-over_linux.sh"
+            <executable targetfile="$INSTALL_PATH/pdf-over_linux.sh"
 				os="unix" stage="never"></executable>
-			<executable targetfile="$INSTALL_PATH/scripts/uninstall_linux.sh"
+			<executable targetfile="$INSTALL_PATH/uninstall_linux.sh"
 				os="unix" stage="never"></executable>
-			<executable targetfile="$INSTALL_PATH/scripts/pdf-over_mac.sh"
+			<executable targetfile="$INSTALL_PATH/pdf-over_mac.sh"
 				os="mac" stage="never"></executable>
-			<executable targetfile="$INSTALL_PATH/scripts/postinstall_mac.sh"
+			<executable targetfile="$INSTALL_PATH/postinstall_mac.sh"
 				os="mac" stage="postinstall"></executable>
 		</pack>
 	</packs>
