@@ -18,4 +18,35 @@ build-windows:
       - "pdf-over-build/pdf-over_windows.zip"
     expire_in: 1 day # gitlab does not apply this to the latest successful run, only previous runs
 
+build-linux:
+  stage: build
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  tags:
+    - docker
+  script: 
+    - mvn -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Plinux -Dno-native-profile
+  artifacts:
+    name: "PDFOver (Linux) on $CI_COMMIT_REF_SLUG"
+    paths:
+      - "pdf-over-build/pdf-over_linux.jar"
+    expire_in: 1 day
+    
+build-mac:
+  stage: build
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  tags:
+    - docker
+  script: 
+    - mvn -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac -Dno-native-profile
+  artifacts:
+    name: "PDFOver (Mac) on $CI_COMMIT_REF_SLUG"
+    paths:
+      - "pdf-over-build/pdf-over_mac.zip"
+    expire_in: 1 day
 
