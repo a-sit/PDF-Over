@@ -11,6 +11,7 @@
 	<properties>
 		<izpack-standalone.version>4.3.5</izpack-standalone.version>
 		<project.maindir>${project.parent.basedir}</project.maindir>
+		<project.build.output-dir>${project.maindir}/pdf-over-build</project.build.output-dir>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
 		<swt.version>4.20</swt.version>
 	</properties>
@@ -127,6 +128,26 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${project.build.output-dir}</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
