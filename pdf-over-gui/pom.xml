@@ -8,6 +8,12 @@
 	</parent>
 	<artifactId>pdf-over-gui</artifactId>
 	<name>PDF-Over GUI</name>
+	<properties>
+		<izpack-standalone.version>4.3.5</izpack-standalone.version>
+		<project.maindir>${project.parent.basedir}</project.maindir>
+		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
+		<swt.version>4.20</swt.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -463,13 +469,6 @@
 			</resource>
 		</resources>
 	</build>
-
-	<properties>
-		<izpack-standalone.version>4.3.5</izpack-standalone.version>
-		<project.maindir>${project.basedir}/..</project.maindir>
-		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.20</swt.version>
-	</properties>
 
 	<profiles>
         <profile>
