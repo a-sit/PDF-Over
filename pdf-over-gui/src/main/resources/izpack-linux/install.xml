@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<installation version="1.0">
+
+	<info>
+		<appname>PDF-Over</appname>
+		<appversion>${project.version}</appversion>
+ 		<javaversion>1.8</javaversion>
+		<authors>
+			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
+		</authors>
+		<url>http://www.a-sit.at/</url>
+	</info>
+
+	<guiprefs resizable="yes" width="500" height="360">
+		<modifier key="useFlags" value="yes" />
+		<modifier key="langDisplayType" value="native" />
+	</guiprefs>
+
+	<locale>
+		<langpack iso3="eng" />
+		<langpack iso3="deu" />
+	</locale>
+
+	<resources>
+		<res id="shortcutSpec.xml" src="./unix_shortcutSpec.xml" />
+		<res id="JFrameIcon.png" src="icon16x16.png" />
+		<res id="customicons.xml" src="./customicons.xml" />
+		<res id="Installer.image" src="a-sit-icon.png" />
+		<res id="Installer.image.0" src="a-sit-icon.png" />
+	</resources>
+
+	<native type="izpack" name="ShellLink.dll" />
+	<native type="izpack" name="ShellLink_x64.dll" />
+
+	<variables>
+		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
+	</variables>
+
+	<panels>
+		<panel classname="HelloPanel" />
+		<panel classname="TargetPanel" />
+		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel" />
+		<panel classname="SimpleFinishPanel" />
+        <panel classname="ProcessPanel"/>
+	</panels>
+
+	<packs>
+		<pack name="main" required="yes">
+			<description>Main Installation</description>
+			<updatecheck>
+				<include name="lib/**" />
+			</updatecheck>
+			<file src="lib" targetdir="$INSTALL_PATH" />
+			<file src="pdf-over_linux.sh" targetdir="$INSTALL_PATH" />
+			<file src="uninstall_linux.sh" targetdir="$INSTALL_PATH" />
+			<file src="icons" targetdir="$INSTALL_PATH" />
+			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
+            <executable targetfile="$INSTALL_PATH/pdf-over_linux.sh" stage="never" />
+			<executable targetfile="$INSTALL_PATH/uninstall_linux.sh" stage="never" />
+		</pack>
+	</packs>
+    
+
+
+</installation>

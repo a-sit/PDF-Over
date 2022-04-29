@@ -214,11 +214,45 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>truezip-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>extract-jre</id>
+						<phase>package</phase> <!-- linux profile: none -->
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<fileset>
+								<directory>${project.basedir}/../jre-bundles/${bundled-jre.archiveName}/${bundled-jre.nameInArchive}</directory>
+								<outputDirectory>${staging.dir}/jre</outputDirectory>
+							</fileset>
+						</configuration>
+					</execution>
+					<execution>
+						<id>build-archive</id>
+						<phase>install</phase> <!-- linux profile: none -->
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<fileset>
+								<directory>${staging.dir}</directory>
+								<outputDirectory>${project.build.output-dir}/pdf-over_${target.name}.zip/</outputDirectory>
+							</fileset>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<executions>
 					<execution>
-						<phase>install</phase>
+						<id>add-manifest-to-izpack</id>
+						<phase>none</phase> <!-- linux profile: verify -->
 						<goals>
 							<goal>exec</goal>
 						</goals>
@@ -290,47 +324,34 @@
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
-									<includes>
-										<include>icons/*</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>src/main/resources</directory>
 									<filtering>true</filtering>
 									<includes>
-										<include>scripts/*</include>
 										<include>ReadMe.txt</include>
 									</includes>
 								</resource>
 								<resource>
-									<directory>src/main/resources/izpack</directory>
-									<excludes>
-										<exclude>*.xml</exclude>
-									</excludes>
-								</resource>
-								<resource>
-									<directory>src/main/resources/izpack</directory>
+									<directory>src/main/resources/scripts</directory>
 									<filtering>true</filtering>
 									<includes>
-										<include>*.xml</include>
+										<include>*${target.name}*</include>
 									</includes>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-jre</id>
-						<phase>package</phase>
+						<id>copy-icons</id>
+						<phase>validate</phase> <!-- windows profile: none -->
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${staging.dir}/jre</outputDirectory>
+							<outputDirectory>${staging.dir}</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}/../jre-bundles</directory>
+									<directory>src/main/resources</directory>
 									<includes>
-										<include>${bundled-jre.archiveName}</include>
+										<include>icons/*</include>
 									</includes>
 								</resource>
 							</resources>
@@ -363,7 +384,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre/${bundled-jre.nameInArchive}</path> 
+								<path>jre</path> 
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -450,39 +471,13 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.izpack</groupId>
-				<artifactId>izpack-maven-plugin</artifactId>
-				<version>1.0-alpha-5</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.izpack</groupId>
-						<artifactId>izpack-standalone-compiler</artifactId>
-						<version>${izpack-standalone.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<izpackBasedir>${staging.dir}</izpackBasedir>
-					<installerFile>${staging.dir}/setup.jar</installerFile>
-					<attach>false</attach>
-				</configuration>
-				<executions>
-					<execution>
-						<id>standard-installer</id>
-						<phase>package</phase>
-						<goals>
-							<goal>izpack</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>izpack/*</exclude>
+					<exclude>izpack-linux/*</exclude>
 					<exclude>scripts/*</exclude>
 					<exclude>ReadMe.txt</exclude>
 					<exclude>keystore.jks</exclude>
@@ -507,6 +502,110 @@
 				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
 				<target.name>linux</target.name>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.4.2</version>
+						<executions>
+							<execution>
+								<id>copy-izpack-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${staging.dir}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/resources/izpack-linux</directory>
+											<excludes>
+												<exclude>*.xml</exclude>
+											</excludes>
+										</resource>
+										<resource>
+											<directory>src/main/resources/izpack-linux</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.xml</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-result</id>
+								<phase>install</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.output-dir}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${staging.dir}</directory>
+											<includes>
+												<include>setup.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>truezip-maven-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>extract-jre</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>build-archive</id>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.izpack</groupId>
+						<artifactId>izpack-maven-plugin</artifactId>
+						<version>1.0-alpha-5</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.izpack</groupId>
+								<artifactId>izpack-standalone-compiler</artifactId>
+								<version>${izpack-standalone.version}</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<izpackBasedir>${staging.dir}</izpackBasedir>
+							<installerFile>${staging.dir}/setup.jar</installerFile>
+							<attach>false</attach>
+						</configuration>
+						<executions>
+							<execution>
+								<id>standard-installer</id>
+								<phase>package</phase>
+								<goals>
+									<goal>izpack</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>add-manifest-to-izpack</id>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>windows</id>
@@ -543,6 +642,16 @@
 							<execution>
 								<id>l4j-uninst</id>
 								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.4.2</version>
+						<executions>
+							<execution>
+								<id>copy-icons</id>
+								<phase>none</phase>
 							</execution>
 						</executions>
 					</plugin>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+	<!-- <skipIfNotSupported/>  -->
+  <programGroup defaultName="PDF-Over"
+  location="applications"/>
+
+  <shortcut
+     name="PDF-Over"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH/scripts/pdf-over_linux.sh"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH"
+     description="PDF-Over ${project.version}"
+     iconFile="$INSTALL_PATH/icons/icon.png"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="false"
+     KdeSubstUID="false"
+     initialState="normal">
+     <createForPack name="main"/>
+   </shortcut>
+
+</shortcuts>

@@ -57,8 +57,8 @@ else
 	end_phase "FAILED"
 fi
 
-profiles=( linux windows mac )
-names=( linux windows mac )
+profiles=( linux windows mac mac-aarch64 )
+names=( linux windows mac mac-aarch64 )
 if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
 	profiles=( $2 )
 	names=( $2 )
@@ -79,15 +79,6 @@ for (( i = 0 ; i < ${#names[@]} ; i++ )) do
 	else
 		end_phase "FAILED"
 		continue
-	fi
-
-	begin_phase "Copying Installer..."
-	cp "./pdf-over-gui/target/staging/$PROFILE/setup.jar" "$PUBLISH_DIR/$INSTALLER"
-	RETVAL=$?
-	if [ $RETVAL -eq 0 ]; then
-		end_phase "OK"
-	else
-		end_phase "FAILED"
 	fi
 done
 
