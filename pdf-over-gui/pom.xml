@@ -284,7 +284,7 @@
 					<workingDirectory>${staging.dir}</workingDirectory>
 					<arguments>
 						<argument>-ufm</argument>
-						<argument>setup.jar</argument>
+						<argument>pdf-over_linux.jar</argument>
 						<argument>ManifestEntries.mf</argument>
 					</arguments>
 				</configuration>
@@ -545,7 +545,7 @@
 										<resource>
 											<directory>${staging.dir}</directory>
 											<includes>
-												<include>setup.jar</include>
+												<include>pdf-over_linux.jar</include>
 											</includes>
 										</resource>
 									</resources>
@@ -580,7 +580,7 @@
 						</dependencies>
 						<configuration>
 							<izpackBasedir>${staging.dir}</izpackBasedir>
-							<installerFile>${staging.dir}/setup.jar</installerFile>
+							<installerFile>${staging.dir}/pdf-over_linux.jar</installerFile>
 							<attach>false</attach>
 						</configuration>
 						<executions>
