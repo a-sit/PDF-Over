@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.gui.utils.CertificateDownloadSource;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
@@ -262,8 +261,6 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	
 		// Call update to start processing ...
 		update();
-		
-		CertificateDownloadSource.getAcceptedCertificates(this.getConfigProvider());
 		
 			
 

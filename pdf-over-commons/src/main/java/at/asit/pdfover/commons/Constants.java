@@ -367,18 +367,6 @@ public class Constants {
 
 	/** Accepted certificate list resource */
 	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //$NON-NLS-1$
-
-	/** Accepted certificate list config */
-	public static final String RES_CERT_PATH_ADDED = CONFIG_DIRECTORY + "/certificates/"; //$NON-NLS-1$
-
-	/** Accepted certificate list resource */
-	public static final String RES_CERT_LIST_ADDED = RES_CERT_PATH_ADDED + "certificates.xml"; //$NON-NLS-1$
-
-	/** Download URL for accepted certificates */
-	
-	public static final String CERTIFICATE_DOWNLOAD_XML_URL = "https://www.buergerkarte.at/trust/"; //$NON-NLS-1$
-	
-	public static final String CERTIFICATE_XML_FILE = "certificates.xml"; //$NON-NLS-1$
 	
 	public static final String LABEL_TAN = "input_tan"; //$NON-NLS-1$
 	

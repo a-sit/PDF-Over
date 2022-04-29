@@ -15,8 +15,6 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
-import java.io.File;
-import java.io.FileInputStream;
 // Imports
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -133,52 +131,6 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 		catch (Exception e) {
 			e.toString();
-		}
-
-		File added_cert = new File(Constants.RES_CERT_LIST_ADDED);
-		
-		//check if the additional certificates.xml file exists//
-
-		if (added_cert.exists()) {
-			Node certificates_added = null;
-
-			Document doc_added = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(added_cert);
-
-			certificates_added = doc_added.getFirstChild();
-
-			NodeList certificates_added_list = certificates_added.getChildNodes();
-
-			//if exists, add trusted certificates to cert-Store
-			for (int i = 0; i < certificates_added_list.getLength(); i++) {
-				try {
-
-					Node certificateNode = certificates_added_list.item(i);
-
-					if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
-						continue; // Ignore dummy text node ..
-					}
-
-					if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
-						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
-						continue;
-					}
-
-					if (!certificateNode.getTextContent().equals("")) {
-						String certResource = Constants.RES_CERT_PATH_ADDED + certificateNode.getTextContent();
-
-						FileInputStream addedNode = new FileInputStream(certResource);
-
-						X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //$NON-NLS-1$
-								generateCertificate(addedNode);
-
-						myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
-
-						log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
-					}
-				} catch (Exception ex) {
-					log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
 		}
 
 		tmf.init(myKeyStore);
