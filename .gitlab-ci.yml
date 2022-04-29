@@ -2,9 +2,18 @@
 image: maven:3.8.1-openjdk-11
 
   
-build: 
+build-windows:
   stage: build
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
   tags:
     - docker
   script: 
-    - mvn clean compile -DskipTests=true
+    - mvn clean install -Pwindows -Dno-native-profile
+  artifacts:
+    name: "PDFOver (Windows) on $CI_COMMIT_REF_SLUG"
+    paths:
+      - "pdf-over-build/pdf-over_windows.zip"
+
