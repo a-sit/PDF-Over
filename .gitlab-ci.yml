@@ -16,4 +16,6 @@ build-windows:
     name: "PDFOver (Windows) on $CI_COMMIT_REF_SLUG"
     paths:
       - "pdf-over-build/pdf-over_windows.zip"
+    expire_in: 1 day # gitlab does not apply this to the latest successful run, only previous runs
+
 
