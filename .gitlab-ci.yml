@@ -11,7 +11,7 @@ build-windows:
   tags:
     - docker
   script: 
-    - mvn -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pwindows -Dno-native-profile
+    - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pwindows -Dno-native-profile
   artifacts:
     name: "PDFOver (Windows) on $CI_COMMIT_REF_SLUG"
     paths:
@@ -27,7 +27,7 @@ build-linux:
   tags:
     - docker
   script: 
-    - mvn -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Plinux -Dno-native-profile
+    - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Plinux -Dno-native-profile
   artifacts:
     name: "PDFOver (Linux) on $CI_COMMIT_REF_SLUG"
     paths:
@@ -43,7 +43,7 @@ build-mac:
   tags:
     - docker
   script: 
-    - mvn -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac -Dno-native-profile
+    - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac -Dno-native-profile
   artifacts:
     name: "PDFOver (Mac) on $CI_COMMIT_REF_SLUG"
     paths:
