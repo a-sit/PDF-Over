@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-Signer libraries</name>
 	<packaging>pom</packaging>
 	<properties>
-		<project.maindir>${project.basedir}/..</project.maindir>
+		<pdfover-build.root-dir>${project.basedir}/..</pdfover-build.root-dir>
 	</properties>
 	<modules>
 		<!--module>pdf-over-sigpdfas3</module-->

@@ -15,7 +15,7 @@ build-windows:
   artifacts:
     name: "PDFOver (Windows) on $CI_COMMIT_REF_SLUG"
     paths:
-      - "pdf-over-build/pdf-over_windows.zip"
+      - "pdf-over-build/*"
     expire_in: 1 day # gitlab does not apply this to the latest successful run, only previous runs
 
 build-linux:
@@ -31,7 +31,7 @@ build-linux:
   artifacts:
     name: "PDFOver (Linux) on $CI_COMMIT_REF_SLUG"
     paths:
-      - "pdf-over-build/pdf-over_linux.jar"
+      - "pdf-over-build/*"
     expire_in: 1 day
     
 build-mac:
@@ -47,7 +47,7 @@ build-mac:
   artifacts:
     name: "PDFOver (Mac) on $CI_COMMIT_REF_SLUG"
     paths:
-      - "pdf-over-build/pdf-over_mac.zip"
+      - "pdf-over-build/*"
     expire_in: 1 day
 
 build-mac-aarch64:
@@ -63,5 +63,5 @@ build-mac-aarch64:
   artifacts:
     name: "PDFOver (Mac M1) on $CI_COMMIT_REF_SLUG"
     paths:
-      - "pdf-over-build/pdf-over_mac-aarch64.zip"
+      - "pdf-over-build/*"
     expire_in: 1 day

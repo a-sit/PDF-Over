@@ -89,7 +89,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.maindir>${project.basedir}</project.maindir>
+		<pdfover-build.root-dir>${project.basedir}</pdfover-build.root-dir>
 	</properties>
 
 	<reporting>
@@ -229,7 +229,7 @@
 		</repository>
 		<repository>
 			<id>local-repo</id>
-			<url>file://${project.maindir}/repo</url>
+			<url>file://${pdfover-build.root-dir}/repo</url>
 		</repository>
 		<repository>
 			<id>internal-repo</id>

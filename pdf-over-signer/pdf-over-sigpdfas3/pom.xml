@@ -9,7 +9,7 @@
 	<artifactId>pdf-over-sigpdfas3</artifactId>
 	<name>PDF-Over PDF-AS Signer</name>
 	<properties>
-		<project.maindir>${project.basedir}/../..</project.maindir>
+		<pdfover-build.root-dir>${project.basedir}/../..</pdfover-build.root-dir>
 	</properties>
 	<dependencies>
 		<dependency>

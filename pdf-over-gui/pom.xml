@@ -9,23 +9,23 @@
 	<artifactId>pdf-over-gui</artifactId>
 	<name>PDF-Over GUI</name>
 	<properties>
-		<izpack-standalone.version>4.3.5</izpack-standalone.version>
-		<project.maindir>${project.basedir}${file.separator}..</project.maindir>
-		<project.build.output-dir>${project.maindir}/pdf-over-build</project.build.output-dir>
-		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.23</swt.version>
+		<pdfover-build.izpack-version>4.3.5</pdfover-build.izpack-version>
+		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
+		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
+		<pdfover-build.staging-dir>${project.build.directory}/staging/${target.name}</pdfover-build.staging-dir>
+		<pdfover-build.swt-version>4.23</pdfover-build.swt-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>${swt.artifactId}</artifactId>
-			<version>${swt.version}</version>
+			<version>${pdfover-build.swt-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.izpack</groupId>
 			<artifactId>izpack-standalone-compiler</artifactId>
-			<version>${izpack-standalone.version}</version>
+			<version>${pdfover-build.izpack-version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -141,7 +141,7 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>${project.build.output-dir}</directory>
+									<directory>${build.output-dir}</directory>
 								</fileset>
 							</filesets>
 						</configuration>
@@ -165,7 +165,7 @@
 							<mainClass>at.asit.pdfover.gui.Main</mainClass>
 						</manifest>
 					</archive>
-					<outputDirectory>${staging.dir}/lib</outputDirectory>
+					<outputDirectory>${pdfover-build.staging-dir}/lib</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -179,7 +179,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${staging.dir}/lib</outputDirectory>
+							<outputDirectory>${pdfover-build.staging-dir}/lib</outputDirectory>
 							<excludeTransitive>false</excludeTransitive>
 							<stripVersion>false</stripVersion>
 							<overWriteReleases>true</overWriteReleases>
@@ -201,10 +201,10 @@
 								<artifactItem>
 									<groupId>org.eclipse.swt</groupId>
 									<artifactId>${swt.artifactId}</artifactId>
-									<version>${swt.version}</version>
+									<version>${pdfover-build.swt-version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
-									<outputDirectory>${staging.dir}/lib</outputDirectory>
+									<outputDirectory>${pdfover-build.staging-dir}/lib</outputDirectory>
 									<destFileName>swt.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
@@ -226,7 +226,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<archiveDirectory>${staging.dir}</archiveDirectory>
+					<archiveDirectory>${pdfover-build.staging-dir}</archiveDirectory>
 					<includes>
 						<include>*.jar</include>
 					</includes>
@@ -246,7 +246,7 @@
 						<configuration>
 							<fileset>
 								<directory>${project.basedir}/../jre-bundles/${bundled-jre.archiveName}/${bundled-jre.nameInArchive}</directory>
-								<outputDirectory>${project.build.output-dir}/pdf-over_${target.name}.zip/jre</outputDirectory>
+								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
 							</fileset>
 						</configuration>
 					</execution>
@@ -258,8 +258,8 @@
 						</goals>
 						<configuration>
 							<fileset>
-								<directory>${staging.dir}</directory>
-								<outputDirectory>${project.build.output-dir}/pdf-over_${target.name}.zip/</outputDirectory>
+								<directory>${pdfover-build.staging-dir}</directory>
+								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/</outputDirectory>
 							</fileset>
 						</configuration>
 					</execution>
@@ -281,10 +281,10 @@
 				<configuration>
 					<!-- Add custom manifest entries to izpack installer jar -->
 					<executable>jar</executable>
-					<workingDirectory>${staging.dir}</workingDirectory>
+					<workingDirectory>${pdfover-build.staging-dir}</workingDirectory>
 					<arguments>
 						<argument>-ufm</argument>
-						<argument>pdf-over_linux.jar</argument>
+						<argument>${pdfover-build.output-dir}/${pdfover-build.output-filename}</argument>
 						<argument>ManifestEntries.mf</argument>
 					</arguments>
 				</configuration>
@@ -319,7 +319,7 @@
 						</goals>
 						<configuration>
 							<encoding>UTF-8</encoding>
-							<outputDirectory>${staging.dir}</outputDirectory>
+							<outputDirectory>${pdfover-build.staging-dir}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
@@ -345,7 +345,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${staging.dir}</outputDirectory>
+							<outputDirectory>${pdfover-build.staging-dir}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
@@ -373,7 +373,7 @@
 							<headerType>gui</headerType>
 							<dontWrapJar>true</dontWrapJar>
 							<jar>lib/${project.artifactId}-${project.version}.jar</jar>
-							<outfile>${staging.dir}/PDF-Over.exe</outfile>
+							<outfile>${pdfover-build.staging-dir}/PDF-Over.exe</outfile>
 							<errTitle>Error</errTitle>
 							<classPath>
 								<mainClass>at.asit.pdfover.gui.Main</mainClass>
@@ -408,7 +408,7 @@
 							<headerType>console</headerType>
 							<dontWrapJar>true</dontWrapJar>
 							<jar>lib/${project.artifactId}-${project.version}.jar</jar>
-							<outfile>${staging.dir}/PDF-Over-cli.exe</outfile>
+							<outfile>${pdfover-build.staging-dir}/PDF-Over-cli.exe</outfile>
 							<errTitle>Error</errTitle>
 							<classPath>
 								<mainClass>at.asit.pdfover.gui.Main</mainClass>
@@ -443,7 +443,7 @@
 							<headerType>gui</headerType>
 							<dontWrapJar>true</dontWrapJar>
 							<jar>uninstaller.jar</jar>
-							<outfile>${staging.dir}/Uninstaller.exe</outfile>
+							<outfile>${pdfover-build.staging-dir}/Uninstaller.exe</outfile>
 							<errTitle>Error</errTitle>
 							<classPath>
 								<mainClass>com.izforge.izpack.uninstaller.Uninstaller</mainClass>
@@ -515,7 +515,7 @@
 								</goals>
 								<configuration>
 									<encoding>UTF-8</encoding>
-									<outputDirectory>${staging.dir}</outputDirectory>
+									<outputDirectory>${pdfover-build.staging-dir}</outputDirectory>
 									<resources>
 										<resource>
 											<directory>src/main/resources/izpack-linux</directory>
@@ -528,24 +528,6 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.xml</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-result</id>
-								<phase>install</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.output-dir}</outputDirectory>
-									<resources>
-										<resource>
-											<directory>${staging.dir}</directory>
-											<includes>
-												<include>pdf-over_linux.jar</include>
 											</includes>
 										</resource>
 									</resources>
@@ -575,12 +557,12 @@
 							<dependency>
 								<groupId>org.codehaus.izpack</groupId>
 								<artifactId>izpack-standalone-compiler</artifactId>
-								<version>${izpack-standalone.version}</version>
+								<version>${pdfover-build.izpack-version}</version>
 							</dependency>
 						</dependencies>
 						<configuration>
-							<izpackBasedir>${staging.dir}</izpackBasedir>
-							<installerFile>${staging.dir}/pdf-over_linux.jar</installerFile>
+							<izpackBasedir>${pdfover-build.staging-dir}</izpackBasedir>
+							<installerFile>${pdfover-build.output-dir}/${pdfover-build.output-filename}</installerFile>
 							<attach>false</attach>
 						</configuration>
 						<executions>
@@ -622,6 +604,7 @@
 				<bundled-jre.archiveName>OpenJDK11U-jre_x64_windows_hotspot_11.0.14.1_1.zip</bundled-jre.archiveName>
 				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>windows</target.name>
+				<pdfover-build.output-filename>pdf-over_windows-x86_64.zip</pdfover-build.output-filename>
 			</properties>
 			<build>
 				<plugins>
@@ -674,6 +657,7 @@
 				<bundled-jre.archiveName>OpenJDK11U-jre_x64_mac_hotspot_11.0.14.1_1.tar.gz</bundled-jre.archiveName>
 				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
 				<target.name>mac</target.name>
+				<pdfover-build.output-filename>pdf-over_mac-x86_64.tar.gz</pdfover-build.output-filename>
 			</properties>
 		</profile>
         <profile>
@@ -693,6 +677,7 @@
 				<bundled-jre.archiveName>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</bundled-jre.archiveName>
 				<bundled-jre.nameInArchive>jdk-17.0.2+8-jre</bundled-jre.nameInArchive>
 				<target.name>mac-aarch64</target.name>
+				<pdfover-build.output-filename>pdf-over_mac-aarch64.tar.gz</pdfover-build.output-filename>
 			</properties>
 		</profile>
 
@@ -782,7 +767,7 @@
 		</repository>
         <repository>
 			<id>local-repo</id>
-			<url>file://${project.maindir}/repo</url>
+			<url>file://${pdfover-build.root-dir}/repo</url>
 		</repository>
 	</repositories>
 </project>
