@@ -383,7 +383,8 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre</path> 
+								<path>jre</path>
+								<bundledJre64Bit>true</bundledJre64Bit>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -418,7 +419,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre/${pdfover-build.bundled-jre.folder-in-archive}</path> 
+								<path>jre</path> 
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -453,7 +454,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre/${pdfover-build.bundled-jre.folder-in-archive}</path>
+								<path>jre</path>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -656,7 +657,7 @@
 			<properties>
 				<pdfover-build.swt-artifact-id>org.eclipse.swt.cocoa.macosx.x86_64</pdfover-build.swt-artifact-id>
 				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_x64_mac_hotspot_17.0.3_7.tar.gz</pdfover-build.bundled-jre.archive-filename>
-				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.3+7-jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.3+7-jre/Contents/Home</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.target-name>mac</pdfover-build.target-name>
 				<pdfover-build.output-filename>pdf-over_mac-x86_64.tar.gz</pdfover-build.output-filename>
 			</properties>
@@ -676,7 +677,7 @@
 			<properties>
 				<pdfover-build.swt-artifact-id>org.eclipse.swt.cocoa.macosx.aarch64</pdfover-build.swt-artifact-id>
 				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</pdfover-build.bundled-jre.archive-filename>
-				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.2+8-jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.2+8-jre/Contents/Home</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.target-name>mac-aarch64</pdfover-build.target-name>
 				<pdfover-build.output-filename>pdf-over_mac-aarch64.tar.gz</pdfover-build.output-filename>
 			</properties>
