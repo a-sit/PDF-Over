@@ -3,15 +3,9 @@
 #### CONFIGURE: ######
 PUBLISH_DIR="pdf-over-build"
 LOG_DIR="/tmp/pdfover_log"
-CODEBASE_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
-CONTEXT_URL="http:\/\/abyss.iaik.tugraz.at\/pdf-over\/"
-HOMEPAGE_URL="http:\/\/www.buergerkarte.at"
-RELEASE_FILE="Release.txt"
 
 #### DON'T CONFIGURE ####
 BASEDIR="`dirname $0`"
-
-VERSION=`grep -m1 "<version>" "$BASEDIR/pom.xml" | sed -e "s/[ \t]*<version>\(.*\)<\/version>/\1/"`
 
 TBOLDGRAY="\033[1;30m"
 TGREEN="\033[0;32m"
@@ -49,7 +43,7 @@ mkdir -p "$PUBLISH_DIR"
 mkdir -p "$LOG_DIR"
 
 begin_phase "Cleaning..."
-mvn clean > "$LOG_DIR/clean.log" 2>&1
+mvn -B clean > "$LOG_DIR/clean.log" 2>&1
 RETVAL=$?
 if [ $RETVAL -eq 0 ]; then
 	end_phase "OK"
@@ -58,82 +52,24 @@ else
 fi
 
 profiles=( linux windows mac mac-aarch64 )
-names=( linux windows mac mac-aarch64 )
 if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
 	profiles=( $2 )
-	names=( $2 )
 	shift
 	shift
 	MVN_PARAMS="$@"
 fi
 
-for (( i = 0 ; i < ${#names[@]} ; i++ )) do
+pids=()
+for (( i = 0 ; i < ${#profiles[@]} ; i++ )) do
 	PROFILE=${profiles[$i]}
-	NAME=${names[$i]}
-	INSTALLER=setup_pdf-over_$NAME.jar
-	begin_phase "Building package [$PROFILE] as $INSTALLER..."
-	mvn install -P$PROFILE -Dno-native-profile $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
+	begin_phase "Building profile [$PROFILE]..."
+	mvn -B install -P$PROFILE -Dno-native-profile $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
 	RETVAL=$?
-	if [ $RETVAL -eq 0 ]; then
+	if [ ${RETVAL} -eq 0 ]; then
 		end_phase "OK"
 	else
 		end_phase "FAILED"
-		continue
 	fi
 done
-
-begin_phase "Building JNLP..."
-cp ./pdf-over-gui/src/main/jnlp/pdf-over.jnlp "$PUBLISH_DIR/pdf-over.jnlp"
-RETVAL=$?
-if [ $RETVAL -ne 0 ]; then
-	end_phase "FAILED"
-else
-	sed -i "s/##CODEBASE_URL##/$CODEBASE_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
-	RETVAL=$?
-	if [ $RETVAL -ne 0 ]; then
-		end_phase "FAILED"
-	else
-		sed -i "s/##CONTEXT_URL##/$CONTEXT_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
-		RETVAL=$?
-		if [ $RETVAL -ne 0 ]; then
-			end_phase "FAILED"
-		else
-			sed -i "s/##HOMEPAGE_URL##/$HOMEPAGE_URL/g" "$PUBLISH_DIR/pdf-over.jnlp"
-			RETVAL=$?
-			if [ $RETVAL -ne 0 ]; then
-				end_phase "FAILED"
-			else
-				end_phase "OK"
-			fi
-		fi
-	fi
-fi
-
-begin_phase "Creating Release.txt..."
-echo $VERSION > "$PUBLISH_DIR/$RELEASE_FILE"
-RETVAL=$?
-if [ $RETVAL -ne 0 ]; then
-	end_phase "FAILED"
-else
-	end_phase "OK"
-fi
-
-begin_phase "Copying images..."
-cp -r ./pdf-over-gui/src/main/resources/icons "$PUBLISH_DIR"
-RETVAL=$?
-if [ $RETVAL -ne 0 ]; then
-	end_phase "FAILED"
-else
-	end_phase "OK"
-fi
-
-begin_phase "Building javadoc..."
-mvn javadoc:aggregate > "$LOG_DIR/javadoc.log" 2>&1 && cp -r target/site/apidocs/ "$PUBLISH_DIR"
-RETVAL=$?
-if [ $RETVAL -ne 0 ]; then
-	end_phase "FAILED"
-else
-	end_phase "OK"
-fi
 
 popd > /dev/null
