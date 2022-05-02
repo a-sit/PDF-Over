@@ -260,9 +260,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	public void start() {
 	
 		// Call update to start processing ...
-		update();
-		
-			
+		update();			
 
 		// if a user interaction is required we have a shell ...
 		Shell shell = nonCreatingGetShell();

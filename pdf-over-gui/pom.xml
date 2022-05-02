@@ -13,7 +13,7 @@
 		<project.maindir>${project.basedir}${file.separator}..</project.maindir>
 		<project.build.output-dir>${project.maindir}/pdf-over-build</project.build.output-dir>
 		<staging.dir>${project.build.directory}/staging/${target.name}</staging.dir>
-		<swt.version>4.20</swt.version>
+		<swt.version>4.23</swt.version>
 	</properties>
 
 	<dependencies>
