@@ -500,6 +500,7 @@
 			<properties>
 				<pdfover-build.swt-artifact-id>org.eclipse.swt.gtk.linux.x86_64</pdfover-build.swt-artifact-id>
 				<pdfover-build.target-name>linux</pdfover-build.target-name>
+				<pdfover-build.output-filename>pdf-over_linux-x86_64.jar</pdfover-build.output-filename>
 			</properties>
 			<build>
 				<plugins>
