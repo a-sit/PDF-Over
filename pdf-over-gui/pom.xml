@@ -238,19 +238,6 @@
 				<version>1.2</version>
 				<executions>
 					<execution>
-						<id>extract-jre</id>
-						<phase>package</phase> <!-- linux profile: none -->
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<fileset>
-								<directory>${project.basedir}/../jre-bundles/${pdfover-build.bundled-jre.archive-filename}/${pdfover-build.bundled-jre.folder-in-archive}</directory>
-								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
-							</fileset>
-						</configuration>
-					</execution>
-					<execution>
 						<id>build-archive</id>
 						<phase>install</phase> <!-- linux profile: none -->
 						<goals>
@@ -260,6 +247,20 @@
 							<fileset>
 								<directory>${pdfover-build.staging-dir}</directory>
 								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/</outputDirectory>
+							</fileset>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- this has to run strictly after build-archive; otherwise, the jre subfolder will be cleaned for .tar.gz (mac build) -->
+						<id>bundle-jre</id>
+						<phase>install</phase> <!-- linux profile: none -->
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<fileset>
+								<directory>${project.basedir}/../jre-bundles/${pdfover-build.bundled-jre.archive-filename}/${pdfover-build.bundled-jre.folder-in-archive}</directory>
+								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
 							</fileset>
 						</configuration>
 					</execution>
@@ -542,7 +543,7 @@
 						<version>1.2</version>
 						<executions>
 							<execution>
-								<id>extract-jre</id>
+								<id>bundle-jre</id>
 								<phase>none</phase>
 							</execution>
 							<execution>
