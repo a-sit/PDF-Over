@@ -246,7 +246,7 @@
 						<configuration>
 							<fileset>
 								<directory>${project.basedir}/../jre-bundles/${bundled-jre.archiveName}/${bundled-jre.nameInArchive}</directory>
-								<outputDirectory>${staging.dir}/jre</outputDirectory>
+								<outputDirectory>${project.build.output-dir}/pdf-over_${target.name}.zip/jre</outputDirectory>
 							</fileset>
 						</configuration>
 					</execution>
