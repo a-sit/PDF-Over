@@ -141,7 +141,7 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>${build.output-dir}</directory>
+									<directory>${pdfover-build.output-dir}</directory>
 								</fileset>
 							</filesets>
 						</configuration>
