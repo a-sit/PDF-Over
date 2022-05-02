@@ -677,7 +677,6 @@
 			</properties>
 		</profile>
         <profile>
-			<!-- this profile is not yet specified in publish.sh; there is no openjdk11 for aarch64, and SWT needs adding to internal mvn -->
 			<id>mac-aarch64</id>
 			<activation>
 				<os>

@@ -50,3 +50,18 @@ build-mac:
       - "pdf-over-build/pdf-over_mac.zip"
     expire_in: 1 day
 
+build-mac-aarch64:
+  stage: build
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  tags:
+    - docker
+  script: 
+    - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac-aarch64 -Dno-native-profile
+  artifacts:
+    name: "PDFOver (Mac M1) on $CI_COMMIT_REF_SLUG"
+    paths:
+      - "pdf-over-build/pdf-over_mac-aarch64.zip"
+    expire_in: 1 day
