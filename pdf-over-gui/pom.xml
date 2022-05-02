@@ -12,14 +12,14 @@
 		<pdfover-build.izpack-version>4.3.5</pdfover-build.izpack-version>
 		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
 		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
-		<pdfover-build.staging-dir>${project.build.directory}/staging/${target.name}</pdfover-build.staging-dir>
+		<pdfover-build.staging-dir>${project.build.directory}/staging/${pdfover-build.target-name}</pdfover-build.staging-dir>
 		<pdfover-build.swt-version>4.23</pdfover-build.swt-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
-			<artifactId>${swt.artifactId}</artifactId>
+			<artifactId>${pdfover-build.swt-artifact-id}</artifactId>
 			<version>${pdfover-build.swt-version}</version>
 		</dependency>
 		<dependency>
@@ -200,7 +200,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.eclipse.swt</groupId>
-									<artifactId>${swt.artifactId}</artifactId>
+									<artifactId>${pdfover-build.swt-artifact-id}</artifactId>
 									<version>${pdfover-build.swt-version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
@@ -245,7 +245,7 @@
 						</goals>
 						<configuration>
 							<fileset>
-								<directory>${project.basedir}/../jre-bundles/${bundled-jre.archiveName}/${bundled-jre.nameInArchive}</directory>
+								<directory>${project.basedir}/../jre-bundles/${pdfover-build.bundled-jre.archive-filename}/${pdfover-build.bundled-jre.folder-in-archive}</directory>
 								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
 							</fileset>
 						</configuration>
@@ -332,7 +332,7 @@
 									<directory>src/main/resources/scripts</directory>
 									<filtering>true</filtering>
 									<includes>
-										<include>*${target.name}*</include>
+										<include>*${pdfover-build.target-name}*</include>
 									</includes>
 								</resource>
 							</resources>
@@ -418,7 +418,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre/${bundled-jre.nameInArchive}</path> 
+								<path>jre/${pdfover-build.bundled-jre.folder-in-archive}</path> 
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -453,7 +453,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre/${bundled-jre.nameInArchive}</path>
+								<path>jre/${pdfover-build.bundled-jre.folder-in-archive}</path>
 							</jre>
 							<versionInfo>
 								<fileVersion>${version.exe}</fileVersion>
@@ -498,8 +498,8 @@
 				</property>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
-				<target.name>linux</target.name>
+				<pdfover-build.swt-artifact-id>org.eclipse.swt.gtk.linux.x86_64</pdfover-build.swt-artifact-id>
+				<pdfover-build.target-name>linux</pdfover-build.target-name>
 			</properties>
 			<build>
 				<plugins>
@@ -600,10 +600,10 @@
 				</property>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
-				<bundled-jre.archiveName>OpenJDK11U-jre_x64_windows_hotspot_11.0.14.1_1.zip</bundled-jre.archiveName>
-				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
-				<target.name>windows</target.name>
+				<pdfover-build.swt-artifact-id>org.eclipse.swt.win32.win32.x86_64</pdfover-build.swt-artifact-id>
+				<pdfover-build.bundled-jre.archive-filename>OpenJDK11U-jre_x64_windows_hotspot_11.0.14.1_1.zip</pdfover-build.bundled-jre.archive-filename>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-11.0.14.1+1-jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.target-name>windows</pdfover-build.target-name>
 				<pdfover-build.output-filename>pdf-over_windows-x86_64.zip</pdfover-build.output-filename>
 			</properties>
 			<build>
@@ -653,10 +653,10 @@
 				</property>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
-				<bundled-jre.archiveName>OpenJDK11U-jre_x64_mac_hotspot_11.0.14.1_1.tar.gz</bundled-jre.archiveName>
-				<bundled-jre.nameInArchive>jdk-11.0.14.1+1-jre</bundled-jre.nameInArchive>
-				<target.name>mac</target.name>
+				<pdfover-build.swt-artifact-id>org.eclipse.swt.cocoa.macosx.x86_64</pdfover-build.swt-artifact-id>
+				<pdfover-build.bundled-jre.archive-filename>OpenJDK11U-jre_x64_mac_hotspot_11.0.14.1_1.tar.gz</pdfover-build.bundled-jre.archive-filename>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-11.0.14.1+1-jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.target-name>mac</pdfover-build.target-name>
 				<pdfover-build.output-filename>pdf-over_mac-x86_64.tar.gz</pdfover-build.output-filename>
 			</properties>
 		</profile>
@@ -673,10 +673,10 @@
 				</property>
 			</activation>
 			<properties>
-				<swt.artifactId>org.eclipse.swt.cocoa.macosx.aarch64</swt.artifactId>
-				<bundled-jre.archiveName>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</bundled-jre.archiveName>
-				<bundled-jre.nameInArchive>jdk-17.0.2+8-jre</bundled-jre.nameInArchive>
-				<target.name>mac-aarch64</target.name>
+				<pdfover-build.swt-artifact-id>org.eclipse.swt.cocoa.macosx.aarch64</pdfover-build.swt-artifact-id>
+				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</pdfover-build.bundled-jre.archive-filename>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.2+8-jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.target-name>mac-aarch64</pdfover-build.target-name>
 				<pdfover-build.output-filename>pdf-over_mac-aarch64.tar.gz</pdfover-build.output-filename>
 			</properties>
 		</profile>
