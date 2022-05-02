@@ -251,7 +251,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<!-- this has to run strictly after build-archive; otherwise, the jre subfolder will be cleaned for .tar.gz (mac build) -->
 						<id>bundle-jre</id>
 						<phase>install</phase> <!-- linux profile: none -->
 						<goals>
@@ -660,7 +659,7 @@
 				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_x64_mac_hotspot_17.0.3_7.tar.gz</pdfover-build.bundled-jre.archive-filename>
 				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.3+7-jre/Contents/Home</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.os-name>mac</pdfover-build.os-name>
-				<pdfover-build.output-filename>pdf-over_mac-x86_64.tar.gz</pdfover-build.output-filename>
+				<pdfover-build.output-filename>pdf-over_mac-x86_64.zip</pdfover-build.output-filename>
 			</properties>
 		</profile>
         <profile>
@@ -680,7 +679,7 @@
 				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_aarch64_mac_hotspot_17.0.2_8.tar.gz</pdfover-build.bundled-jre.archive-filename>
 				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.2+8-jre/Contents/Home</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.os-name>mac</pdfover-build.os-name>
-				<pdfover-build.output-filename>pdf-over_mac-aarch64.tar.gz</pdfover-build.output-filename>
+				<pdfover-build.output-filename>pdf-over_mac-aarch64.zip</pdfover-build.output-filename>
 			</properties>
 		</profile>
 
