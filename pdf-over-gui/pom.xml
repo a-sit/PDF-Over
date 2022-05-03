@@ -244,23 +244,16 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<fileset>
-								<directory>${pdfover-build.staging-dir}</directory>
-								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/</outputDirectory>
-							</fileset>
-						</configuration>
-					</execution>
-					<execution>
-						<id>bundle-jre</id>
-						<phase>install</phase> <!-- linux profile: none -->
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<fileset>
-								<directory>${project.basedir}/../jre-bundles/${pdfover-build.bundled-jre.archive-filename}/${pdfover-build.bundled-jre.folder-in-archive}</directory>
-								<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
-							</fileset>
+							<filesets>
+								<fileset>
+									<directory>${pdfover-build.staging-dir}</directory>
+									<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/</outputDirectory>
+								</fileset>
+								<fileset>
+									<directory>${pdfover-build.root-dir}/jre-bundles/${pdfover-build.bundled-jre.archive-filename}/${pdfover-build.bundled-jre.folder-in-archive}</directory>
+									<outputDirectory>${pdfover-build.output-dir}/${pdfover-build.output-filename}/jre</outputDirectory>
+								</fileset>
+							</filesets>
 						</configuration>
 					</execution>
 				</executions>
@@ -541,10 +534,6 @@
 						<artifactId>truezip-maven-plugin</artifactId>
 						<version>1.2</version>
 						<executions>
-							<execution>
-								<id>bundle-jre</id>
-								<phase>none</phase>
-							</execution>
 							<execution>
 								<id>build-archive</id>
 								<phase>none</phase>
