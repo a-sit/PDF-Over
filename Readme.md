@@ -6,7 +6,6 @@
 ## Usage Notes
 
 - Inquiries to: software@egiz.gv.at
-- Important: The Linux installer requires Java 8 or Java 11.
 
 ## Release Notes 
 
