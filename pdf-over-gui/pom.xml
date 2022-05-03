@@ -283,19 +283,19 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<version>1.0</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<goal>execute</goal>
+							<goal>parse-version</goal>
 						</goals>
 						<configuration>
-							<source>
-								project.properties["version.exe"] = project.version.split("-")[0] + ".0";
-							</source>
+							<propertyPrefix>pdfover-build.version</propertyPrefix>
+							<!-- this produces: pdfover-build.version.majorVersion, pdfover-build.version.minorVersion, pdfover-build.version.incrementalVersion -->
+							<!-- see: http://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html -->
 						</configuration>
 					</execution>
 				</executions>
@@ -380,11 +380,11 @@
 								<bundledJre64Bit>true</bundledJre64Bit>
 							</jre>
 							<versionInfo>
-								<fileVersion>${version.exe}</fileVersion>
+								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
 								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over PDF signer</fileDescription>
 								<copyright>(C) 2012 A-SIT</copyright>
-								<productVersion>${version.exe}</productVersion>
+								<productVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</productVersion>
 								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>PDF-Over</internalName>
@@ -415,11 +415,11 @@
 								<path>jre</path> 
 							</jre>
 							<versionInfo>
-								<fileVersion>${version.exe}</fileVersion>
+								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
 								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over PDF signer CLI</fileDescription>
 								<copyright>(C) 2012 A-SIT</copyright>
-								<productVersion>${version.exe}</productVersion>
+								<productVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</productVersion>
 								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>PDF-Over-cli</internalName>
@@ -450,11 +450,11 @@
 								<path>jre</path>
 							</jre>
 							<versionInfo>
-								<fileVersion>${version.exe}</fileVersion>
+								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
 								<txtFileVersion>${project.version}</txtFileVersion>
 								<fileDescription>PDF-Over Uninstaller</fileDescription>
 								<copyright>A-SIT (Secure Information Technology Center - Austria)</copyright>
-								<productVersion>${version.exe}</productVersion>
+								<productVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</productVersion>
 								<txtProductVersion>${project.version}</txtProductVersion>
 								<productName>PDF-Over</productName>
 								<internalName>Uninstaller</internalName>
