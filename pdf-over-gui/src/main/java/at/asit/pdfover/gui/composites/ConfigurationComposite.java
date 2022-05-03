@@ -263,7 +263,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite.setLayout(this.compositeStack);
 		this.compositeStack.topControl = this.tabFolder;
 
-		getShell().setText(Constants.APP_NAME_VERSION);
+		getShell().setText(Constants.APP_NAME_VERSION + " [" + System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + "]");
 
 		this.doLayout();
 	}
