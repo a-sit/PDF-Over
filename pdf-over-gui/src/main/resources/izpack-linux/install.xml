@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<installation version="1.0">
+<izpack:installation version="5.0"
+                     xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
 
 	<info>
 		<appname>PDF-Over</appname>
@@ -10,9 +13,10 @@
 			<author name="A-SIT (Secure Information Technology Center - Austria)" email="" />
 		</authors>
 		<url>http://www.a-sit.at/</url>
+		<pack-compression-format>gz</pack-compression-format>
 	</info>
 
-	<guiprefs resizable="yes" width="500" height="360">
+	<guiprefs resizable="yes" width="700" height="360">
 		<modifier key="useFlags" value="yes" />
 		<modifier key="langDisplayType" value="native" />
 	</guiprefs>
@@ -30,9 +34,6 @@
 		<res id="Installer.image.0" src="a-sit-icon.png" />
 	</resources>
 
-	<native type="izpack" name="ShellLink.dll" />
-	<native type="izpack" name="ShellLink_x64.dll" />
-
 	<variables>
 		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
 	</variables>
@@ -41,10 +42,14 @@
 		<panel classname="HelloPanel" />
 		<panel classname="TargetPanel" />
 		<panel classname="InstallPanel" />
-		<panel classname="ShortcutPanel" />
+		<panel classname="ShortcutPanel" allowClose="true" />
 		<panel classname="SimpleFinishPanel" />
-        <panel classname="ProcessPanel"/>
 	</panels>
+
+	<natives> <!-- required to run installer on windows for debug -->
+		<native type="izpack" name="ShellLink.dll"/>
+		<native type="izpack" name="ShellLink_x64.dll"/>
+	</natives>
 
 	<packs>
 		<pack name="main" required="yes">
@@ -52,11 +57,13 @@
 			<updatecheck>
 				<include name="lib/**" />
 			</updatecheck>
-			<file src="lib" targetdir="$INSTALL_PATH" />
+			<fileset dir="lib" targetdir="$INSTALL_PATH/lib" />
 			<file src="pdf-over_linux.sh" targetdir="$INSTALL_PATH" />
 			<file src="uninstall_linux.sh" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
+
+			<!-- set executable bit, do not actually execute -->
             <executable targetfile="$INSTALL_PATH/pdf-over_linux.sh" stage="never" />
 			<executable targetfile="$INSTALL_PATH/uninstall_linux.sh" stage="never" />
 		</pack>
@@ -64,4 +71,4 @@
     
 
 
-</installation>
+</izpack:installation>

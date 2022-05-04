@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<shortcuts>
+<izpack:shortcuts version="5.0"
+                  xmlns:izpack="http://izpack.org/schema/shortcuts"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://izpack.org/schema/shortcuts http://izpack.org/schema/5.0/izpack-shortcuts-5.0.xsd">
 	<!-- <skipIfNotSupported/>  -->
   <programGroup defaultName="PDF-Over"
   location="applications"/>
@@ -12,7 +15,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH/scripts/pdf-over_linux.sh"
+     target="$INSTALL_PATH/pdf-over_linux.sh"
      commandLine=""
      workingDirectory="$INSTALL_PATH"
      description="PDF-Over ${project.version}"
@@ -26,4 +29,4 @@
      <createForPack name="main"/>
    </shortcut>
 
-</shortcuts>
+</izpack:shortcuts>

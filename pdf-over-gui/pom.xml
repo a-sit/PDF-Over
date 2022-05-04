@@ -9,7 +9,6 @@
 	<artifactId>pdf-over-gui</artifactId>
 	<name>PDF-Over GUI</name>
 	<properties>
-		<pdfover-build.izpack-version>4.3.5</pdfover-build.izpack-version>
 		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
 		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
 		<pdfover-build.staging-dir>${project.build.directory}/staging</pdfover-build.staging-dir>
@@ -21,12 +20,6 @@
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>${pdfover-build.swt-artifact-id}</artifactId>
 			<version>${pdfover-build.swt-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.izpack</groupId>
-			<artifactId>izpack-standalone-compiler</artifactId>
-			<version>${pdfover-build.izpack-version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -494,7 +487,8 @@
 			<properties>
 				<pdfover-build.swt-artifact-id>org.eclipse.swt.gtk.linux.x86_64</pdfover-build.swt-artifact-id>
 				<pdfover-build.os-name>linux</pdfover-build.os-name>
-				<pdfover-build.output-filename>pdf-over_linux-x86_64.jar</pdfover-build.output-filename>
+				<pdfover-build.output-filename-without-jar>pdf-over_linux-x86_64</pdfover-build.output-filename-without-jar>
+				<pdfover-build.output-filename>${pdfover-build.output-filename-without-jar}.jar</pdfover-build.output-filename>
 			</properties>
 			<build>
 				<plugins>
@@ -544,18 +538,14 @@
 					<plugin>
 						<groupId>org.codehaus.izpack</groupId>
 						<artifactId>izpack-maven-plugin</artifactId>
-						<version>1.0-alpha-5</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.codehaus.izpack</groupId>
-								<artifactId>izpack-standalone-compiler</artifactId>
-								<version>${pdfover-build.izpack-version}</version>
-							</dependency>
-						</dependencies>
+						<version>5.1.3</version>
 						<configuration>
-							<izpackBasedir>${pdfover-build.staging-dir}</izpackBasedir>
-							<installerFile>${pdfover-build.output-dir}/${pdfover-build.output-filename}</installerFile>
-							<attach>false</attach>
+							<baseDir>${pdfover-build.staging-dir}</baseDir>
+							<installFile>${pdfover-build.staging-dir}/install.xml</installFile>
+							<mkdirs>true</mkdirs>
+							<outputDirectory>${pdfover-build.output-dir}</outputDirectory>
+							<finalName>${pdfover-build.output-filename-without-jar}</finalName>
+							<enableAttachArtifact>false</enableAttachArtifact>
 						</configuration>
 						<executions>
 							<execution>
