@@ -69,6 +69,7 @@
 			<!-- set executable bit, do not actually execute -->
             <executable targetfile="$INSTALL_PATH/pdf-over_linux.sh" stage="never" />
 			<executable targetfile="$INSTALL_PATH/uninstall_linux.sh" stage="never" />
+			<executable targetfile="$INSTALL_PATH/jre/bin/java" stage="never" />
 		</pack>
 	</packs>
     
