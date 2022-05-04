@@ -486,6 +486,8 @@
 			</activation>
 			<properties>
 				<pdfover-build.swt-artifact-id>org.eclipse.swt.gtk.linux.x86_64</pdfover-build.swt-artifact-id>
+				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_x64_linux_hotspot_17.0.3_7.tar.gz</pdfover-build.bundled-jre.archive-filename>
+				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.3+7-jre</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.os-name>linux</pdfover-build.os-name>
 				<pdfover-build.output-filename-without-jar>pdf-over_linux-x86_64</pdfover-build.output-filename-without-jar>
 				<pdfover-build.output-filename>${pdfover-build.output-filename-without-jar}.jar</pdfover-build.output-filename>
@@ -506,6 +508,12 @@
 									<encoding>UTF-8</encoding>
 									<outputDirectory>${pdfover-build.staging-dir}</outputDirectory>
 									<resources>
+										<resource>
+											<directory>${pdfover-build.root-dir}/jre-bundles</directory>
+											<includes>
+												<include>${pdfover-build.bundled-jre.archive-filename}</include>
+											</includes>
+										</resource>
 										<resource>
 											<directory>src/main/resources/izpack-linux</directory>
 											<excludes>

@@ -58,6 +58,9 @@
 				<include name="lib/**" />
 			</updatecheck>
 			<fileset dir="lib" targetdir="$INSTALL_PATH/lib" />
+			<file src="${pdfover-build.bundled-jre.archive-filename}" targetdir="$INSTALL_PATH/jre" unpack="true">
+				<archivefileset dir="${pdfover-build.bundled-jre.folder-in-archive}" />
+			</file>
 			<file src="pdf-over_linux.sh" targetdir="$INSTALL_PATH" />
 			<file src="uninstall_linux.sh" targetdir="$INSTALL_PATH" />
 			<file src="icons" targetdir="$INSTALL_PATH" />
