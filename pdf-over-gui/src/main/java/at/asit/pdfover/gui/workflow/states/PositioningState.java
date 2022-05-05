@@ -66,16 +66,27 @@ public class PositioningState extends State {
 
 	private SignaturePosition previousPosition = null;
 
-	private File previousDocument = null;
 
+	private File loadedDocumentPath = null;
 	private PDFFile document = null;
 
-	private PDFFile getPDFDocument() throws IOException {
+	private void closePDFDocument() {
+		
+		if (this.document != null)
+		{
+			this.document = null;
+			System.gc(); /* try to get Java to close the mapped file... */
+		}
+		this.loadedDocumentPath = null;
+	}
+
+	private void openPDFDocument() throws IOException {
+		closePDFDocument();
+		File documentPath = getStateMachine().getStatus().getDocument();
 		PDFFile pdf = null;
-		RandomAccessFile rafile = new RandomAccessFile(getStateMachine().getStatus().getDocument(), "r");
+		RandomAccessFile rafile = new RandomAccessFile(documentPath, "r");
 		FileChannel chan = rafile.getChannel();
-		ByteBuffer buf = chan
-				.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
+		ByteBuffer buf = chan.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
 		chan.close();
 		rafile.close();
 		try
@@ -95,7 +106,8 @@ public class PositioningState extends State {
 			else
 				throw new IOException(Messages.getString("error.MayNotBeAPDF"), e);
 		}
-		return pdf;
+		this.document = pdf;
+		this.loadedDocumentPath = documentPath;
 	}
 
 	private PositioningComposite getPositioningComposite(PDFFile document) {
@@ -143,12 +155,10 @@ public class PositioningState extends State {
 		}
 
 		if ((this.document == null) ||
-				(this.previousDocument != getStateMachine().getStatus().getDocument())) {
-			this.document = null;
+				(this.loadedDocumentPath != getStateMachine().getStatus().getDocument())) {
 			log.debug("Checking PDF document for encryption"); //$NON-NLS-1$
 			try {
-				this.document = getPDFDocument();
-				this.previousDocument = getStateMachine().getStatus().getDocument();
+				openPDFDocument();
 			} catch (IOException e) { 
 				this.positionComposite = null;
 				log.error("Failed to display PDF document", e); //$NON-NLS-1$
@@ -203,6 +213,7 @@ public class PositioningState extends State {
 	public void cleanUp() {
 		if (this.positionComposite != null)
 			this.positionComposite.dispose();
+		closePDFDocument();
 	}
 
 	/* (non-Javadoc)

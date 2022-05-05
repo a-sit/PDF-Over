@@ -88,6 +88,9 @@ public class OpenState extends State {
 			status.setBKU(config.getDefaultBKU());
 			status.setDocument(null);
 			status.setSignaturePosition(config.getDefaultSignaturePosition());
+
+			/* ensure that files get closed */
+			status.getPreviousState().cleanUp();
 		}
 
 		if (status.getDocument() == null) {

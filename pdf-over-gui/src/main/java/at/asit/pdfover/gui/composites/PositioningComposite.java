@@ -176,16 +176,27 @@ public class PositioningComposite extends StateComposite {
 					PositioningComposite.this.frame.add(PositioningComposite.this.viewer, BorderLayout.CENTER);
 				}
 			});
-		} else
+		} else {
 			EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					PositioningComposite.this.viewer.setDocument(document);
 				}
 			});
-		this.numPages = document.getNumPages();
-		this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
-		showPage(this.numPages);
+		}
+
+		if (document != null)
+		{
+			this.numPages = document.getNumPages();
+			PositioningComposite.this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
+			showPage(this.numPages);
+		}
+	}
+
+	@Override
+	public void dispose() {
+		this.viewer.setDocument(null);
+		super.dispose();
 	}
 
 	/**

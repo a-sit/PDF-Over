@@ -129,8 +129,17 @@ public class SignaturePanel extends JPanel {
 	public void setDocument(PDFFile pdf) {
 		this.pdf = pdf;
 		this.sigPagePos = null;
-		this.numPages = pdf.getNumPages();
-		showPage(this.numPages);
+		if (pdf != null)
+		{
+			this.numPages = pdf.getNumPages();
+			showPage(this.numPages);
+		}
+		else
+		{
+			this.page = 0;
+			this.numPages = 0;
+			showPage(null);
+		}
 	}
 
 	/**
