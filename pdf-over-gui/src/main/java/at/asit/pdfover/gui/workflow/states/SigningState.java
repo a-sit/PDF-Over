@@ -59,7 +59,6 @@ public class SigningState extends State {
 				
 				status.setSignResult(signer.sign(status.getSigningState()));
 			} catch(Exception e) {
-				log.error("FinishSignThread: ", e); //$NON-NLS-1$
 				this.state.threadException = e;
 			} finally {
 				this.state.updateStateMachine();
@@ -117,6 +116,10 @@ public class SigningState extends State {
 				}
 					
 			}
+
+			// if we have gotten to this point, this is an actual exception
+			log.error("FinishSignThread: ", this.threadException);
+
 			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
 					message, BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
