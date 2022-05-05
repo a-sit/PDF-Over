@@ -11,7 +11,7 @@
 	<properties>
 		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
 		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
-		<pdfover-build.staging-dir>${project.build.directory}/staging</pdfover-build.staging-dir>
+		<pdfover-build.staging-dir>${project.build.directory}/staging/${pdfover-build.output-filename}</pdfover-build.staging-dir>
 		<pdfover-build.swt-version>4.23</pdfover-build.swt-version>
 	</properties>
 
@@ -405,7 +405,7 @@
 							<chdir>.</chdir>
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
-								<path>jre</path> 
+								<path>jre</path>
 							</jre>
 							<versionInfo>
 								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
