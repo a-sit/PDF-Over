@@ -461,10 +461,10 @@ public class MobileBKUState extends State {
 
 			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 			undecidedPolling();
-			long startTime = System.nanoTime();
+			long timeoutTime = System.nanoTime() + (300 * ((long)1e9));
 
 			while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
-					&& !waitingForAppcomposite.getIsDone() && !isTimout(startTime)) {
+					&& !waitingForAppcomposite.getIsDone() && (System.nanoTime() < timeoutTime)) {
 				if (!display.readAndDispatch()) {
 					display.sleep();
 				}
@@ -490,7 +490,7 @@ public class MobileBKUState extends State {
 			if (waitingForAppcomposite.getIsDone())
 				waitingForAppcomposite.setIsDone(false);
 
-			if (isTimout(startTime)){
+			if (!(System.nanoTime() < timeoutTime)) {
 				log.warn("The undecided polling got a timeout");
 				status.setQRCode(null);
 				status.setErrorMessage("Polling Timeout");
@@ -591,15 +591,6 @@ public class MobileBKUState extends State {
 	public boolean getSMSStatus() {		
 		
 		return this.getMobileBKUFingerprintComposite().isUserSMS(); 
-	}
-
-
-	private boolean isTimout(long startTime){
-		long NANOSEC_PER_SEC  = 1000l*1000*1000;
-		if ((System.nanoTime()-startTime)< 5*60*NANOSEC_PER_SEC){
-			return false;
-		}
-		return true;
 	}
 
 	/*

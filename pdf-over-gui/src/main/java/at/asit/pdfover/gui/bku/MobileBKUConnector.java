@@ -92,13 +92,13 @@ public class MobileBKUConnector implements BkuSlConnector {
 						// handle polling
 						this.state.showOpenAppMessageWithSMSandCancel();
 
-							if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
-								ATrustHandler aHandler = (ATrustHandler) handler;
-								String response = aHandler.postSMSRequest();
-								aHandler.handleCredentialsResponse(response);
-							} else if (handleErrorMessage()) {
-								throw new SignatureException(new IllegalStateException());
-							} 
+						if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
+							ATrustHandler aHandler = (ATrustHandler) handler;
+							String response = aHandler.postSMSRequest();
+							aHandler.handleCredentialsResponse(response);
+						} else if (handleErrorMessage()) {
+							throw new SignatureException(new IllegalStateException());
+						} 
 					} else {
 
 					    // Now we have received some data lets check it:
