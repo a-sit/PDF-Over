@@ -147,6 +147,7 @@
 					<version>2.5.2</version>
 					<configuration>
 						<preparationGoals></preparationGoals>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
 					<dependencies>
 						<dependency>
