@@ -1,0 +1,84 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "at.gv.egiz.pdfas",
+    "module": "sigs-pades",
+    "version": "4.2.1-snapshot",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.8.3",
+      "buildId": "p64czxgonrdlfnrjffin6iyvja"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "sigs-pades-4.2.1-snapshot.jar",
+          "url": "sigs-pades-4.2.1-snapshot.jar",
+          "size": 9890,
+          "sha512": "f7e4b79854c53fff13a5d480f8ce7a2542090e007e06ddbeed051c0472c758747a040ed3e54db2461b157b885b505e030985a3f141a39c9b2a1c8181795122a0",
+          "sha256": "8b28e509cecce136aaf73b13cd947904ee4514b4c28385aaacbed4a55ae8d566",
+          "sha1": "269c5075524fd20ec003313a61f02c67a92e2993",
+          "md5": "75c793a9be70d4d420cfad7ff3769aa3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "at.gv.egiz.pdfas",
+          "module": "pdf-as-lib",
+          "version": {
+            "requires": "4.2.1-snapshot"
+          }
+        },
+        {
+          "group": "at.gv.egiz.pdfas",
+          "module": "pdf-as-common",
+          "version": {
+            "requires": "4.2.1-snapshot"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-collections4",
+          "version": {
+            "requires": "4.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sigs-pades-4.2.1-snapshot.jar",
+          "url": "sigs-pades-4.2.1-snapshot.jar",
+          "size": 9890,
+          "sha512": "f7e4b79854c53fff13a5d480f8ce7a2542090e007e06ddbeed051c0472c758747a040ed3e54db2461b157b885b505e030985a3f141a39c9b2a1c8181795122a0",
+          "sha256": "8b28e509cecce136aaf73b13cd947904ee4514b4c28385aaacbed4a55ae8d566",
+          "sha1": "269c5075524fd20ec003313a61f02c67a92e2993",
+          "md5": "75c793a9be70d4d420cfad7ff3769aa3"
+        }
+      ]
+    }
+  ]
+}

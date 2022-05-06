@@ -2,29 +2,28 @@
 <metadata modelVersion="1.1.0">
   <groupId>at.gv.egiz.pdfas</groupId>
   <artifactId>pdf-as-common</artifactId>
-  <version>4.2.1-SNAPSHOT</version>
+  <version>4.2.1-snapshot</version>
   <versioning>
     <snapshot>
-      <timestamp>20220120.144859</timestamp>
-      <buildNumber>15</buildNumber>
+      <timestamp>20210813.114742</timestamp>
+      <buildNumber>1</buildNumber>
     </snapshot>
-    <lastUpdated>20220120144859</lastUpdated>
+    <lastUpdated>20210813114742</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>jar</extension>
-        <value>4.2.1-20220120.144859-15</value>
-        <updated>20220120144859</updated>
-      </snapshotVersion>
-      <snapshotVersion>
         <extension>pom</extension>
-        <value>4.2.1-20220120.144859-15</value>
-        <updated>20220120144859</updated>
+        <value>4.2.1-snapshot</value>
+        <updated>20210813114742</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>4.2.1-20220120.144859-15</value>
-        <updated>20220120144859</updated>
+        <value>4.2.1-snapshot</value>
+        <updated>20210813114742</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>4.2.1-snapshot</value>
+        <updated>20210813114742</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
