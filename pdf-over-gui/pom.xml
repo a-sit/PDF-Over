@@ -463,6 +463,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
+					<exclude>installer-mac/*</exclude>
 					<exclude>izpack-linux/*</exclude>
 					<exclude>scripts/*</exclude>
 					<exclude>ReadMe.txt</exclude>
@@ -649,6 +650,32 @@
 				<pdfover-build.os-name>mac</pdfover-build.os-name>
 				<pdfover-build.output-filename>pdf-over_mac-x86_64.zip</pdfover-build.output-filename>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.4.2</version>
+						<executions>
+							<execution>
+								<id>copy-mac-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${pdfover-build.staging-dir}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/resources/installer-mac</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
         <profile>
 			<id>mac-aarch64</id>
