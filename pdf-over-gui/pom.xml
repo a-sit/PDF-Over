@@ -420,41 +420,6 @@
 							</versionInfo>
 						</configuration>
 					</execution>
-					<execution>
-						<id>l4j-uninst</id>
-						<phase>none</phase>
-						<goals>
-							<goal>launch4j</goal>
-						</goals>
-						<configuration>
-							<headerType>gui</headerType>
-							<dontWrapJar>true</dontWrapJar>
-							<jar>uninstaller.jar</jar>
-							<outfile>${pdfover-build.staging-dir}/Uninstaller.exe</outfile>
-							<errTitle>Error</errTitle>
-							<classPath>
-								<mainClass>com.izforge.izpack.uninstaller.Uninstaller</mainClass>
-								<addDependencies>false</addDependencies>
-								<preCp>uninstaller.jar</preCp>
-							</classPath>
-							<chdir>.</chdir>
-							<icon>src/main/resources/icons/icon.ico</icon>
-							<jre>
-								<path>jre</path>
-							</jre>
-							<versionInfo>
-								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
-								<txtFileVersion>${project.version}</txtFileVersion>
-								<fileDescription>PDF-Over Uninstaller</fileDescription>
-								<copyright>A-SIT (Secure Information Technology Center - Austria)</copyright>
-								<productVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</productVersion>
-								<txtProductVersion>${project.version}</txtProductVersion>
-								<productName>PDF-Over</productName>
-								<internalName>Uninstaller</internalName>
-								<originalFilename>Uninstaller.exe</originalFilename>
-							</versionInfo>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>
