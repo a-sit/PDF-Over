@@ -778,9 +778,9 @@
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
     <ROW Registry="_" Root="0" Key="PDF-Over.pdf" Value="PDF-Over" Component_="_"/>
-    <ROW Registry="__1" Root="0" Key="PDF-Over.pdf\DefaultIcon" Value="&quot;[#PDFOver.exe_1]&quot;,1" Component_="__1"/>
+    <ROW Registry="__1" Root="0" Key="PDF-Over.pdf\DefaultIcon" Value="&quot;[#PDFOver.exe_1]&quot;,0" Component_="__1"/>
     <ROW Registry="__2" Root="0" Key="PDF-Over.pdf\shell\open\command" Value="&quot;[#PDFOver.exe_1]&quot; &quot;%1&quot;" Component_="__2"/>
-    <ROW Registry="__3" Root="0" Key="Applications\PDF-Over.exe\DefaultIcon" Value="&quot;[#PDFOver.exe_1]&quot;,1" Component_="__3"/>
+    <ROW Registry="__3" Root="0" Key="Applications\PDF-Over.exe\DefaultIcon" Value="&quot;[#PDFOver.exe_1]&quot;,0" Component_="__3"/>
     <ROW Registry="__4" Root="0" Key="Applications\PDF-Over.exe\shell\open\command" Value="&quot;[#PDFOver.exe_1]&quot; &quot;%1&quot;" Component_="__4"/>
     <ROW Registry="pdf_1" Root="0" Key="Applications\PDF-Over.exe\SupportedTypes" Name=".pdf" Component_="pdf"/>
   </COMPONENT>
