@@ -208,7 +208,9 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		try {
 			this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
 		} catch (InvalidNumberException e) {
-			throw new InvalidNumberException(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
+			// assume this is a username for ID-Austria
+			// todo: re-evaluate this (cf. #88)
+			this.mobileNumber = number;
 		}
 	}
 
