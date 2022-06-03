@@ -34,9 +34,9 @@
 			<version>${pdfover-build.pdfas-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>iaik</groupId>
-			<artifactId>iaik_jce_full_signed</artifactId>
-			<version>5.5</version>
+			<groupId>iaik.prod</groupId>
+			<artifactId>iaik_jce_full</artifactId>
+			<version>5.63_moa</version>
 		</dependency>
 		<dependency>
 			<groupId>iaik</groupId>
