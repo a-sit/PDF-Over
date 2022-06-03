@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.workflow.StateMachineImpl;
+import iaik.security.provider.IAIK;
 
 /**
  * Main entry point for production
@@ -53,6 +54,9 @@ public class Main {
 
 			// force loading the IAIK JCE
 			IAIK.addAsProvider();
+
+			// force keystore type (Adoptium JRE 17 still ships with JKS)
+			System.setProperty("javax.net.ssl.trustStoreType", "jks");
 
 			StateMachineImpl stateMachine = new StateMachineImpl(args);
 			
