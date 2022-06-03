@@ -50,7 +50,9 @@ public class Main {
 			if (!configDir.exists()) {
 				configDir.mkdir();
 			}
-			
+
+			// force loading the IAIK JCE
+			IAIK.addAsProvider();
 
 			StateMachineImpl stateMachine = new StateMachineImpl(args);
 			
