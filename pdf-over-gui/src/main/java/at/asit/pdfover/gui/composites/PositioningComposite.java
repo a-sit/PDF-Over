@@ -316,14 +316,13 @@ public class PositioningComposite extends StateComposite {
 				return;
 			this.lastEventTime = e.getWhen();
 
+			int change = e.isShiftDown() ? 5 : 1;
 			int newPage = PositioningComposite.this.currentPage;
 
 			if (e.getWheelRotation() < 0) {
-				if (PositioningComposite.this.currentPage > 1)
-					newPage--;
+				newPage = Math.max(1, newPage - change);
 			} else if (e.getWheelRotation() > 0) {
-				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
-					newPage++;
+				newPage = Math.min(newPage + change, PositioningComposite.this.numPages);
 			}
 
 			if (newPage != PositioningComposite.this.currentPage)
