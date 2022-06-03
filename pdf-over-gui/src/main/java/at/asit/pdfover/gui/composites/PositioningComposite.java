@@ -145,11 +145,11 @@ public class PositioningComposite extends StateComposite {
 					public void run() {
 						PositioningComposite.this.frame = SWT_AWT.new_Frame(PositioningComposite.this.mainArea);
 						PositioningComposite.this.frame.addKeyListener(PositioningComposite.this.keyListener);
+						// Workaround for Windows: Scrollbar always gets the event
+						if (!System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
+							PositioningComposite.this.frame.addMouseWheelListener(PositioningComposite.this.mouseListener);
 					}
 				});
-				// Workaround for Windows: Scrollbar always gets the event
-				if (!System.getProperty("os.name").toLowerCase().contains("windows")) //$NON-NLS-1$ //$NON-NLS-2$
-					PositioningComposite.this.frame.addMouseWheelListener(PositioningComposite.this.mouseListener);
 			}
 		});
 
@@ -320,10 +320,8 @@ public class PositioningComposite extends StateComposite {
 			int newPage = PositioningComposite.this.currentPage;
 
 			if (e.getWheelRotation() < 0) {
-				if (PositioningComposite.this.currentPage > 1) {
-					System.out.println("################## page " + newPage);
+				if (PositioningComposite.this.currentPage > 1)
 					newPage--;
-				}
 			} else if (e.getWheelRotation() > 0) {
 				if (PositioningComposite.this.currentPage < PositioningComposite.this.numPages)
 					newPage++;
