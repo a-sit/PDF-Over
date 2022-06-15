@@ -46,6 +46,9 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		try {
+			log.info("This is " + Constants.APP_NAME_VERSION + ", " +
+			  "running on " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + ", " +
+			  "powered by "+ System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + ".");
 			File configDir = new File(Constants.CONFIG_DIRECTORY);
 		
 			if (!configDir.exists()) {
