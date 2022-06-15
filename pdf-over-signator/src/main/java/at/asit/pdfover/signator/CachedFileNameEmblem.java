@@ -101,10 +101,9 @@ public class CachedFileNameEmblem implements Emblem {
 				if (reader.getFormatName().equals("JPEG")) {
 					try {
 						Metadata metadata = ImageMetadataReader.readMetadata(imgFile);
-
-						if(metadata != null) {
-							int orientation = metadata.getFirstDirectoryOfType(
-									ExifIFD0Directory.class).getInt(
+						ExifIFD0Directory metaDirectory = (metadata != null) ? metadata.getFirstDirectoryOfType(ExifIFD0Directory.class) : null;
+						if (metaDirectory != null) {
+							int orientation = metaDirectory.getInt(
 									ExifDirectoryBase.TAG_ORIENTATION);
 							if (orientation > 2) {
 								// rotate

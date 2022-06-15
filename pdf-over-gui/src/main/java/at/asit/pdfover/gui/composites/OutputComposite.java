@@ -313,7 +313,7 @@ public class OutputComposite extends StateComposite {
 						source.getByteArray().length);
 				outstream.close();
 			} catch (FileNotFoundException e) {
-				log.error("File not found", e); //$NON-NLS-1$
+				log.warn("Failed to open output file", e); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(getShell(),
 						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
 								targetFile.getName(), e.getLocalizedMessage()),
@@ -322,7 +322,7 @@ public class OutputComposite extends StateComposite {
 					return null;
 				retry = true;
 			} catch (IOException e) {
-				log.error("IO Error", e); //$NON-NLS-1$
+				log.error("I/O Error", e); //$NON-NLS-1$
 				ErrorDialog dialog = new ErrorDialog(getShell(),
 						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
 								targetFile.getName(), e.getLocalizedMessage()),
