@@ -62,7 +62,6 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
@@ -585,10 +584,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.setSignatureProfileSetting();
 	}
 
-	/**
-	 * @throws InvalidNumberException
-	 */
-	private void plainMobileNumberSetter() throws InvalidNumberException {
+	private void plainMobileNumberSetter() {
 		String number = this.txtMobileNumber.getText();
 		this.configurationContainer.setMobileNumber(number);
 		number = this.configurationContainer.getMobileNumber();
@@ -620,12 +616,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void initConfiguration(PersistentConfigProvider provider) {
-		try {
-			this.configurationContainer.setMobileNumber(
-					provider.getDefaultMobileNumberPersistent());
-		} catch (InvalidNumberException e) {
-			log.error("Failed to set mobile phone number!", e); //$NON-NLS-1$
-		}
+		this.configurationContainer.setMobileNumber(
+				provider.getDefaultMobileNumberPersistent());
 
 		try {
 			this.configurationContainer.setEmblem(

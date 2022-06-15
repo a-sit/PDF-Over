@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.commons.Messages;
@@ -568,19 +567,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultMobileNumber(String number) {
-		try {
-			if (number == null || number.trim().isEmpty()) {
-				this.configuration.setMobileNumber(STRING_EMPTY);
-			} else {
-				this.configuration.setMobileNumber(number);
-			}
-		} catch (InvalidNumberException e) {
-			log.error("Error setting mobile number", e); //$NON-NLS-1$
-			try {
-				this.configuration.setMobileNumber(STRING_EMPTY);
-			} catch (InvalidNumberException e1) {
-				// Ignore
-			}
+		if (number == null || number.trim().isEmpty()) {
+			this.configuration.setMobileNumber(STRING_EMPTY);
+		} else {
+			this.configuration.setMobileNumber(number);
 		}
 	}
 
@@ -589,19 +579,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultMobileNumberOverlay(String number) {
-		try {
-			if (number == null || number.trim().isEmpty()) {
-				this.configurationOverlay.setMobileNumber(STRING_EMPTY);
-			} else {
-				this.configurationOverlay.setMobileNumber(number);
-			}
-		} catch (InvalidNumberException e) {
-			log.error("Error setting mobile number", e); //$NON-NLS-1$
-			try {
-				this.configurationOverlay.setMobileNumber(STRING_EMPTY);
-			} catch (InvalidNumberException e1) {
-				// Ignore
-			}
+		if (number == null || number.trim().isEmpty()) {
+			this.configurationOverlay.setMobileNumber(STRING_EMPTY);
+		} else {
+			this.configurationOverlay.setMobileNumber(number);
 		}
 	}
 

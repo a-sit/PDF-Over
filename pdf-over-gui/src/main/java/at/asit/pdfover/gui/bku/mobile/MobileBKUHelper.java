@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.bku.BKUHelper;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.exceptions.PasswordTooLongException;
 import at.asit.pdfover.gui.exceptions.PasswordTooShortException;
@@ -201,10 +200,8 @@ public class MobileBKUHelper {
 	 * 
 	 * @param number
 	 * @return the normalized Phone number
-	 * @throws InvalidNumberException
 	 */
-	public static String normalizeMobileNumber(String number)
-			throws InvalidNumberException {
+	public static String normalizeMobileNumber(String number) {
 		// Verify number and normalize
 
 		number = number.replaceAll("\\s","");
@@ -212,12 +209,11 @@ public class MobileBKUHelper {
 		Pattern pattern = Pattern.compile(NUMBER_REGEX);
 		Matcher matcher = pattern.matcher(number);
 
-		if (!matcher.find()) {
-			throw new InvalidNumberException();
-		}
+		if (!matcher.find())
+			return number; /* might be an idA username, return unchanged */
 
 		if (matcher.groupCount() != 6) {
-			throw new InvalidNumberException();
+			return number;
 		}
 
 		String countryCode = matcher.group(1);

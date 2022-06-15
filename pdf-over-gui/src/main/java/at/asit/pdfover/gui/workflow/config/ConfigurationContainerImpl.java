@@ -32,9 +32,7 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
-import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -200,18 +198,12 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 * @see at.asit.pdfover.gui.composites.ConfigurationContainer#setNumber(java.lang.String)
 	 */
 	@Override
-	public void setMobileNumber(String number) throws InvalidNumberException {
+	public void setMobileNumber(String number) {
 		if(number == null || number.trim().isEmpty()) {
 			this.mobileNumber = null;
 			return;
 		}
-		try {
-			this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
-		} catch (InvalidNumberException e) {
-			// assume this is a username for ID-Austria
-			// todo: re-evaluate this (cf. #88)
-			this.mobileNumber = number;
-		}
+		this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
 	}
 
 

@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.Point;
 
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.exceptions.InvalidNumberException;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -53,9 +52,8 @@ public interface ConfigurationContainer {
 	/**
 	 * Sets the mobile phone number 
 	 * @param number the mobile phone number
-	 * @throws InvalidNumberException
 	 */
-	public void setMobileNumber(String number) throws InvalidNumberException;
+	public void setMobileNumber(String number);
 
 	/**
 	 * Gets the mobile phone number
