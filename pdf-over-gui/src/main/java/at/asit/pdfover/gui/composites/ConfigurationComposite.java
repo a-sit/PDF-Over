@@ -168,41 +168,31 @@ public class ConfigurationComposite extends StateComposite {
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.simpleTabItem.setText(Messages.getString("config.Simple")); //$NON-NLS-1$
 
-		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder,
-				SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.simpleTabItem.setControl(simpleCompositeScr);
-		this.simpleConfigComposite = new SimpleConfigurationComposite(
-				simpleCompositeScr, SWT.NONE, state,
-				this.configurationContainer);
-		simpleCompositeScr.setContent(this.simpleConfigComposite);
+		this.simpleConfigComposite = new SimpleConfigurationComposite(simpleCompositeScr, SWT.NONE, state, configurationContainer);
+		simpleCompositeScr.setContent(simpleConfigComposite);
 		simpleCompositeScr.setExpandHorizontal(true);
 		simpleCompositeScr.setExpandVertical(true);
-		simpleCompositeScr.setMinSize(this.simpleConfigComposite.computeSize(
-				SWT.DEFAULT, SWT.DEFAULT));
+		simpleCompositeScr.setMinSize(simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //$NON-NLS-1$
 
-		ScrolledComposite advancedCompositeScr = new ScrolledComposite(
-				this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite advancedCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.advancedTabItem.setControl(advancedCompositeScr);
-		this.advancedConfigComposite = new AdvancedConfigurationComposite(
-				advancedCompositeScr, SWT.NONE, state,
-				this.configurationContainer, this);
-		advancedCompositeScr.setContent(this.advancedConfigComposite);
+		this.advancedConfigComposite = new AdvancedConfigurationComposite(advancedCompositeScr, SWT.NONE, state, configurationContainer, this);
+		advancedCompositeScr.setContent(advancedConfigComposite);
 		advancedCompositeScr.setExpandHorizontal(true);
 		advancedCompositeScr.setExpandVertical(true);
-		advancedCompositeScr.setMinSize(this.advancedConfigComposite
-				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		advancedCompositeScr.setMinSize(advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //$NON-NLS-1$
 
-		ScrolledComposite aboutCompositeScr = new ScrolledComposite(
-				this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite aboutCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.aboutTabItem.setControl(aboutCompositeScr);
-		AboutComposite aboutConfigComposite = new AboutComposite(
-				aboutCompositeScr, SWT.NONE);
+		AboutComposite aboutConfigComposite = new AboutComposite(aboutCompositeScr, SWT.NONE);
 		aboutCompositeScr.setContent(aboutConfigComposite);
 		aboutCompositeScr.setExpandHorizontal(true);
 		aboutCompositeScr.setExpandVertical(true);
@@ -231,8 +221,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		FontData[] fD_btnSpeichern = this.btnSpeichern.getFont().getFontData();
 		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnSpeichern
-				.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
+		this.btnSpeichern.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
 
 		this.btnAbbrechen = new Button(this, SWT.NONE);
 		FormData fd_btnAbrechen = new FormData();
@@ -251,8 +240,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		FontData[] fD_btnAbbrechen = this.btnAbbrechen.getFont().getFontData();
 		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnAbbrechen
-				.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
+		this.btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
 
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 5);
