@@ -36,55 +36,55 @@ public class AboutComposite extends ConfigurationCompositeBase {
 
 		setLayout(new FormLayout());
 
-		this.lnkAbout = new Link(this, SWT.NONE);
-		StateComposite.anchor(lnkAbout).right(100,-5).left(0,5).top(0,5).width(100).set();
+		this.lnkAbout = new Link(this, SWT.WRAP);
+		StateComposite.anchor(lnkAbout).top(0,5).right(100,-5).left(0,5).set();
 		StateComposite.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
+
+		this.lblDataProtection = new Label(this, SWT.WRAP);
+		StateComposite.anchor(lblDataProtection).top(lnkAbout, 15).left(0,5).right(100,-5).set();
+		StateComposite.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
+		StateComposite.setFontStyle(lblDataProtection, SWT.BOLD);
+
+		this.lnkDataProtection = new Link(this, SWT.WRAP);
+		StateComposite.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5).set();
+		StateComposite.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
 
 		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					URI url = new URI(Messages.getString("config.LicenseURL")); //$NON-NLS-1$
-					log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
+					URI url = new URI(Messages.getString("config.LicenseURL"));
+					log.debug("Trying to open " + url.toString());
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(url);
 					} else {
-						log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						log.info("AWT Desktop is not supported on this platform");
 						Program.launch(url.toString());
 					}
 				} catch (IOException ex) {
-					log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					log.error("AboutComposite: ", ex);
 				} catch (URISyntaxException ex) {
-					log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					log.error("AboutComposite: ", ex);
 				}
 			}
 		});
-
-		this.lblDataProtection = new Label(this, SWT.NONE);
-		StateComposite.anchor(lblDataProtection).top(lnkAbout, 15).right(100,-5).left(0,5).width(100).set();
-		StateComposite.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
-		StateComposite.setFontStyle(lblDataProtection, SWT.BOLD);
-
-		this.lnkDataProtection = new Link(this, SWT.NONE);
-		StateComposite.anchor(lnkDataProtection).right(100,-5).left(0,5).top(lblDataProtection,10).bottom(100,-5).width(100).height(120).set();
-		StateComposite.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
 
 		this.lnkDataProtection.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					URI url = new URI(Messages.getString("config.DataProtectionURL")); //$NON-NLS-1$
-					log.debug("Trying to open " + url.toString()); //$NON-NLS-1$
+					URI url = new URI(Messages.getString("config.DataProtectionURL"));
+					log.debug("Trying to open " + url.toString());
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(url);
 					} else {
-						log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						log.info("AWT Desktop is not supported on this platform");
 						Program.launch(url.toString());
 					}
 				} catch (IOException ex) {
-					log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					log.error("AboutComposite: ", ex);
 				} catch (URISyntaxException ex) {
-					log.error("AboutComposite: ", ex); //$NON-NLS-1$
+					log.error("AboutComposite: ", ex);
 				}
 			}
 		});
@@ -108,8 +108,8 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	@Override
 	public void reloadResources() {
 		this.lnkAbout.setText(Messages.getString("config.AboutText")); //$NON-NLS-1$
-		this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
 		this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
+		this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
 	}
 
 
