@@ -1,6 +1,7 @@
 package at.asit.pdfover.gui.composites.configuration;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,6 +11,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -27,6 +29,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	private Link lnkAbout;
 	private Link lnkDataProtection;
 	private Label lblDataProtection;
+	private Button btnOpenLogDirectory;
 	/**
  * @param parent
  * @param style
@@ -48,6 +51,10 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkDataProtection = new Link(this, SWT.WRAP);
 		StateComposite.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5).set();
 		StateComposite.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
+
+		this.btnOpenLogDirectory = new Button(this, SWT.NONE);
+		StateComposite.anchor(btnOpenLogDirectory).bottom(100, -5).right(100, -5).set();
+		StateComposite.setFontHeight(btnOpenLogDirectory, Constants.TEXT_SIZE_BUTTON);
 
 		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -89,6 +96,19 @@ public class AboutComposite extends ConfigurationCompositeBase {
 			}
 		});
 
+		this.btnOpenLogDirectory.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					if (Desktop.isDesktopSupported())
+						Desktop.getDesktop().open(new File(Constants.CONFIG_DIRECTORY + File.separator + "logs"));
+				} catch (Exception ex) {
+					log.warn("Failed to open log directory: ", ex);
+				}
+			}
+		});
+
 		// Load localized strings
 		reloadResources();
 	}
@@ -110,6 +130,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkAbout.setText(Messages.getString("config.AboutText")); //$NON-NLS-1$
 		this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
 		this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
+		this.btnOpenLogDirectory.setText(Messages.getString("config.ShowLogDirectory"));
 	}
 
 

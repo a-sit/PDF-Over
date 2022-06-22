@@ -8,14 +8,14 @@
     </encoder>
   </appender>
   <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${user.home}/.pdf-over/pdf-over.log</file>
+    <file>${user.home}/.pdf-over/logs/pdf-over.log</file>
     <encoder>
       <charset>UTF-8</charset>
       <pattern>%-5p | %d | %t @ %c | %m%n</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <maxIndex>10</maxIndex>
-      <FileNamePattern>${user.home}/.pdf-over/pdf-over.log.%i</FileNamePattern>
+      <FileNamePattern>${user.home}/.pdf-over/logs/pdf-over.log.%i</FileNamePattern>
     </rollingPolicy>
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <MaxFileSize>100KB</MaxFileSize>
