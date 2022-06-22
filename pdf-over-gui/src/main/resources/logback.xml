@@ -13,9 +13,6 @@
       <charset>UTF-8</charset>
       <pattern>%-5p | %d | %t @ %c | %m%n</pattern>
     </encoder>
-    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>INFO</level>
-    </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <maxIndex>10</maxIndex>
       <FileNamePattern>${user.home}/.pdf-over/pdf-over.log.%i</FileNamePattern>
@@ -29,4 +26,5 @@
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="LOGFILE"/>
   </root>
+  <include file="${user.home}/.pdf-over/pdfover-logging.xml" optional="true" />
 </configuration>
