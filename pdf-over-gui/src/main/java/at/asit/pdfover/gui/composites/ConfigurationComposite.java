@@ -196,7 +196,11 @@ public class ConfigurationComposite extends StateComposite {
 		aboutCompositeScr.setContent(aboutConfigComposite);
 		aboutCompositeScr.setExpandHorizontal(true);
 		aboutCompositeScr.setExpandVertical(true);
-		aboutCompositeScr.setMinSize(aboutConfigComposite.computeSize(300, SWT.DEFAULT));
+		aboutCompositeScr.addListener(SWT.Resize, (event) -> {
+			int widthHint = aboutCompositeScr.getClientArea().width - 50; /* offset for scroll bar */
+			aboutCompositeScr.setMinSize(null);
+			aboutCompositeScr.setMinSize(aboutCompositeScr.computeSize(widthHint, SWT.DEFAULT));
+		});
 
 		this.tabFolder.setSelection(this.simpleTabItem);
 
