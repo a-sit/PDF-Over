@@ -113,7 +113,7 @@ public class MobileBKUHelper {
 			    found.contains(param + "=\"" + value + "\"")) //$NON-NLS-1$ //$NON-NLS-2$
 				return found;
 		}
-		log.error("extracting tag: not found!: " + tag + " (" + param + "='" + value + "')"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		log.info("extracting tag: not found!: " + tag + " (" + param + "='" + value + "')"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		throw new Exception("Tag not found! Mobile BKU site changed?"); //$NON-NLS-1$
 	}
 
