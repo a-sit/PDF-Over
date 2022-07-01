@@ -13,7 +13,7 @@
     <ROW Property="AI_SHORTCUTSREG" Value="0|0|0|0|"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
-    <ROW Property="ARPPRODUCTICON" Value="icon.exe" Type="8"/>
+    <ROW Property="ARPPRODUCTICON" Value="PDFOver.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="A-SIT (Secure Information Technology Center - Austria)"/>
     <ROW Property="ProductCode" Value="1033:{98CE25B9-3FA4-41BE-8BD5-2C85F197FDE9} 1031:{DC910D3F-5B36-495E-8411-5820086FF59D} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
@@ -741,7 +741,7 @@
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="icon.exe" SourcePath="..\..\..\..\AppData\Roaming\PDF-Over\icons\icon.ico" Index="0"/>
+    <ROW Name="PDFOver.exe" SourcePath="PDF-Over.exe" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
