@@ -26,5 +26,5 @@
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="LOGFILE"/>
   </root>
-  <include file="${user.home}/.pdf-over/pdfover-logging.xml" optional="true" />
+  <include file="${user.home}/.pdf-over-logging.xml" optional="true" />
 </configuration>
