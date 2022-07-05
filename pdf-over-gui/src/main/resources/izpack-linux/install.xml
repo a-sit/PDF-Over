@@ -58,12 +58,12 @@
 				<include name="lib/**" />
 			</updatecheck>
 			<fileset dir="lib" targetdir="$INSTALL_PATH/lib" />
+			<fileset dir="icons" targetdir="$INSTALL_PATH/icons" />
 			<file src="${pdfover-build.bundled-jre.archive-filename}" targetdir="$INSTALL_PATH/jre" unpack="true">
 				<archivefileset dir="${pdfover-build.bundled-jre.folder-in-archive}" />
 			</file>
 			<file src="pdf-over_linux.sh" targetdir="$INSTALL_PATH" />
 			<file src="uninstall_linux.sh" targetdir="$INSTALL_PATH" />
-			<file src="icons" targetdir="$INSTALL_PATH" />
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
 
 			<!-- set executable bit, do not actually execute -->
