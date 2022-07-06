@@ -28,11 +28,7 @@ import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
-import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -100,14 +96,14 @@ public class StateMachine implements GUIProvider {
 				this.status.setCurrentState(next);
 			} else {
 
-				if (this.mainWindow != null
-						&& !this.mainWindow.getShell().isDisposed()) {
-					log.debug("Allowing MainWindow to update its state for "
-							+ current);
+				if (this.mainWindow != null && !this.mainWindow.getShell().isDisposed()) {
+					log.debug("Allowing MainWindow to update its state for " + current);
 					current.updateMainWindowBehavior();
 					this.mainWindow.applyBehavior();
 					this.mainWindow.doLayout();
 				}
+				
+				// TODO: i really want this to be a return value from run()
 				next = current.nextState();
 				if (next == current) {
 					break;
