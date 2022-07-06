@@ -30,7 +30,7 @@ public class ProxyPassArgument extends Argument {
 	 * Constructor
 	 */
 	public ProxyPassArgument() {
-		super(new String[] {"-proxypass"}, "argument.help.proxypass"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-proxypass"}, "argument.help.proxypass"); // //
 	}
 
 	/**
@@ -50,19 +50,19 @@ public class ProxyPassArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String proxyPass = args[argOffset + 1];
-				
+
 				getConfiguration().setProxyPassOverlay(proxyPass);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Proxy password argument invalid!", ex); //$NON-NLS-1$
+			log.error("Proxy password argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.proxypass") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.proxypass") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.proxypass") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.proxypass") + this.getHelpText(), null); //
 	}
 
 }

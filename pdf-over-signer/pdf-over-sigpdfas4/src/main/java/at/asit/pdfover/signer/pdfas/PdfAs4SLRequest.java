@@ -37,8 +37,8 @@ public class PdfAs4SLRequest extends SLRequest {
 	/**
 	 * Default constructor
 	 * @param slRequest
-	 * @param signData 
-	 * @throws PdfAs4SLRequestException 
+	 * @param signData
+	 * @throws PdfAs4SLRequestException
 	 */
 	public PdfAs4SLRequest(String slRequest, byte[] signData) throws PdfAs4SLRequestException {
 		setRequest(slRequest);

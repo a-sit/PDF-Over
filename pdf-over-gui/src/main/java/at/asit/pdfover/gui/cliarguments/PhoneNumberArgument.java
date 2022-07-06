@@ -31,7 +31,7 @@ public class PhoneNumberArgument extends Argument {
 	 * Constructor
 	 */
 	public PhoneNumberArgument() {
-		super(new String[] {"-n" }, "argument.help.number"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-n" }, "argument.help.number"); // //
 	}
 
 
@@ -41,7 +41,7 @@ public class PhoneNumberArgument extends Argument {
 	private static final Logger log = LoggerFactory
 			.getLogger(PhoneNumberArgument.class);
 
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
@@ -56,19 +56,19 @@ public class PhoneNumberArgument extends Argument {
 				String number = args[argOffset + 1];
 
 				number = MobileBKUHelper.normalizeMobileNumber(number);
-				
+
 				getConfiguration().setDefaultMobileNumberOverlay(number);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Phone Number Argument invalid!", ex); //$NON-NLS-1$
+			log.error("Phone Number Argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.number") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.number") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.number") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.number") + this.getHelpText(), null); //
 	}
 
 }

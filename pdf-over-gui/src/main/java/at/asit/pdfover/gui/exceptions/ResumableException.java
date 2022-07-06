@@ -16,17 +16,17 @@
 package at.asit.pdfover.gui.exceptions;
 
 /**
- * 
+ *
  */
 public class ResumableException extends PDFOverGUIException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -607216270516492225L;
 
 	private int resumeIndex = 0;
-	
+
 	/**
 	 * Create a new resumable exception, thrown by a validator which can be ignored
 	 * @param msg Error message

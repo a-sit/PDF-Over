@@ -20,11 +20,11 @@ package at.asit.pdfover.gui.exceptions;
 import at.asit.pdfover.commons.Messages;
 
 /**
- * 
+ *
  */
 public class ATrustConnectionException extends Exception {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5826910929587650685L;
 
@@ -33,8 +33,8 @@ public class ATrustConnectionException extends Exception {
 	 * @param file
 	 */
 	public ATrustConnectionException() {
-		super(Messages.getString("error.ATrustConnection")); //$NON-NLS-1$
+		super(Messages.getString("error.ATrustConnection")); //
 	}
-	
-	
+
+
 }

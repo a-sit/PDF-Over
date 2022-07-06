@@ -54,7 +54,7 @@ public class KSState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui
 	 * .workflow.Workflow)
@@ -70,10 +70,10 @@ public class KSState extends State {
 			String file = config.getKeyStoreFile();
 			File f = new File(file);
 			if (!f.isFile()) {
-				log.error("Keystore not found"); //$NON-NLS-1$
+				log.error("Keystore not found"); //
 				ErrorDialog dialog = new ErrorDialog(
 						getStateMachine().getGUIProvider().getMainShell(),
-						String.format(Messages.getString("error.KeyStoreFileNotExist"), f.getName()), //$NON-NLS-1$
+						String.format(Messages.getString("error.KeyStoreFileNotExist"), f.getName()), //
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() != SWT.RETRY) {
 					//getStateMachine().exit();
@@ -88,25 +88,25 @@ public class KSState extends State {
 			if (storePass.isEmpty()) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
 						getStateMachine().getGUIProvider().getMainShell(),
-						Messages.getString("keystore_config.KeystoreStorePass"), //$NON-NLS-1$
-						Messages.getString("keystore.KeystoreStorePassEntry")); //$NON-NLS-1$
+						Messages.getString("keystore_config.KeystoreStorePass"), //
+						Messages.getString("keystore.KeystoreStorePassEntry")); //
 				storePass = pwd.open();
 			}
 			String keyPass = config.getKeyStoreKeyPass();
 			if (keyPass.isEmpty()) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
 						getStateMachine().getGUIProvider().getMainShell(),
-						Messages.getString("keystore_config.KeystoreKeyPass"), //$NON-NLS-1$
-						Messages.getString("keystore.KeystoreKeyPassEntry")); //$NON-NLS-1$
+						Messages.getString("keystore_config.KeystoreKeyPass"), //
+						Messages.getString("keystore.KeystoreKeyPassEntry")); //
 				keyPass = pwd.open();
 			}
 			String type = config.getKeyStoreType();
 			signingState.setKSSigner(file, alias, storePass, keyPass, type);
 		} catch (SignatureException e) {
-			log.error("Error loading keystore", e); //$NON-NLS-1$
+			log.error("Error loading keystore", e); //
 			ErrorDialog dialog = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.KeyStore"), //$NON-NLS-1$
+					Messages.getString("error.KeyStore"), //
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
 				//getStateMachine().exit();
@@ -123,7 +123,7 @@ public class KSState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
@@ -133,7 +133,7 @@ public class KSState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override

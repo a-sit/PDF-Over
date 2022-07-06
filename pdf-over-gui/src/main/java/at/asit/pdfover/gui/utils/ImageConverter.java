@@ -28,10 +28,10 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 
 /**
- * 
+ *
  */
 public class ImageConverter {
-	
+
 	/**
 	 * Convert Image Data to AWT Image
 	 * @param data
@@ -95,7 +95,7 @@ public class ImageConverter {
 
 	/**
 	 * Convert AWT Image to SWT Image
-	 * 
+	 *
 	 * @param bufferedImage
 	 * @return SWT Image data
 	 */

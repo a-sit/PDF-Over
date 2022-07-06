@@ -67,7 +67,7 @@ public class SignatureDimension {
 	public int getWidth() {
 		return this.width;
 	}
-	
+
 	/**
 	 * Sets the height for the dimension
 	 * @param height

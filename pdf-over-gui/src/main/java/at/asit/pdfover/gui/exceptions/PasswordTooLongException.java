@@ -20,18 +20,18 @@ import at.asit.pdfover.commons.Messages;
 // Imports
 
 /**
- * 
+ *
  */
 public class PasswordTooLongException extends InvalidPasswordException {
-	
+
 	/**
 	 * Constructor
 	 */
 	public PasswordTooLongException() {
-		super(Messages.getString("exception.PasswordTooLong")); //$NON-NLS-1$
+		super(Messages.getString("exception.PasswordTooLong")); //
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3268343884240608304L;
 

@@ -30,7 +30,7 @@ public class ProxyUserArgument extends Argument {
 	 * Constructor
 	 */
 	public ProxyUserArgument() {
-		super(new String[] {"-proxyuser"}, "argument.help.proxyuser"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-proxyuser"}, "argument.help.proxyuser"); // //
 	}
 
 	/**
@@ -50,19 +50,19 @@ public class ProxyUserArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String proxyUser = args[argOffset + 1];
-				
+
 				getConfiguration().setProxyUserOverlay(proxyUser);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Proxy username argument invalid!", ex); //$NON-NLS-1$
+			log.error("Proxy username argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), null); //
 	}
 
 }

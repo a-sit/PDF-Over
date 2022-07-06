@@ -80,7 +80,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>signaturePosition</tt>
-	 * 
+	 *
 	 * @return Returns the signaturePosition.
 	 */
 	public SignaturePosition getSignaturePosition() {
@@ -89,7 +89,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Setter of the property <tt>signaturePosition</tt>
-	 * 
+	 *
 	 * @param signaturePosition
 	 *            The signaturePosition to set.
 	 */
@@ -99,7 +99,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>signatureLanguage</tt>
-	 * 
+	 *
 	 * @return Returns the signatureLanguage.
 	 */
 	public String getSignatureLanguage() {
@@ -108,7 +108,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Setter of the property <tt>signatureLanguage</tt>
-	 * 
+	 *
 	 * @param signatureLanguage
 	 *            The signatureLanguage to set.
 	 */
@@ -118,7 +118,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>signaturePdfACompat</tt>
-	 * 
+	 *
 	 * @return Returns the PDF/A compatibility setting.
 	 */
 	public boolean getSignaturePdfACompat() {
@@ -127,7 +127,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Setter of the property <tt>signaturePdfACompat</tt>
-	 * 
+	 *
 	 * @param compat
 	 *            The the PDF/A compatibility setting to set.
 	 */
@@ -137,7 +137,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>keyIdentifier</tt>
-	 * 
+	 *
 	 * @return Returns the keyIdentifier.
 	 */
 	public String getKeyIdentifier() {
@@ -146,7 +146,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Setter of the property <tt>keyIdentifier</tt>
-	 * 
+	 *
 	 * @param keyIdentifier
 	 *            The keyIdentifier to set.
 	 */
@@ -156,7 +156,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Getter of the property <tt>documentSource</tt>
-	 * 
+	 *
 	 * @return Returns the documentSource.
 	 */
 	public DocumentSource getInputDocument() {
@@ -165,7 +165,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Setter of the property <tt>documentSource</tt>
-	 * 
+	 *
 	 * @param inputDocument
 	 *            The documentSource to set.
 	 */
@@ -175,21 +175,21 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Gets the Dimension to display the Placeholder
-	 * 
+	 *
 	 * @return the placeholder dimensions
 	 */
 	public abstract SignatureDimension getPlaceholderDimension();
 
 	/**
 	 * Gets the Placeholder image
-	 * 
+	 *
 	 * @return the placeholder image
 	 */
 	public abstract Image getPlaceholder();
 
 	/**
 	 * Gets the Emblem
-	 * 
+	 *
 	 * @return the Emblem
 	 */
 	public Emblem getEmblem() {
@@ -198,7 +198,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Sets the Emblem
-	 * 
+	 *
 	 * @param emblem
 	 *            The new Emblem
 	 */
@@ -208,7 +208,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Sets generic properties
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 */
@@ -216,7 +216,7 @@ public abstract class SignatureParameter {
 
 	/**
 	 * Gets generic properties
-	 * 
+	 *
 	 * @param key
 	 * @return associated value
 	 */

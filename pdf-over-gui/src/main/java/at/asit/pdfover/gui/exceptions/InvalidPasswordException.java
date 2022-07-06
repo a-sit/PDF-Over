@@ -21,13 +21,13 @@ package at.asit.pdfover.gui.exceptions;
 public abstract class InvalidPasswordException extends PDFOverGUIException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6735754648793405145L;
 
 	/**
-	 * Invalid Password 
-	 * @param msg 
+	 * Invalid Password
+	 * @param msg
 	 */
 	public InvalidPasswordException(String msg) {
 		super(msg);

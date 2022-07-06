@@ -42,21 +42,21 @@ public class Zipper {
 	private static final Logger log = LoggerFactory.getLogger(Zipper.class);
 
 	/**
-	 * Compresses the source path to Zip File output stream 
+	 * Compresses the source path to Zip File output stream
 	 * @param sourcePath
 	 * @param os
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void zip(String sourcePath, OutputStream os) throws IOException {
 		zip(sourcePath, os, false);
 	}
 
 		/**
-	 * Compresses the source path to Zip File output stream 
+	 * Compresses the source path to Zip File output stream
 	 * @param sourcePath
 	 * @param os
 	 * @param doDelete whether to delete content after compression
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void zip(String sourcePath, OutputStream os, boolean doDelete) throws IOException {
 		ZipOutputStream zos = new ZipOutputStream(os);
@@ -90,7 +90,7 @@ public class Zipper {
 	}
 
 	/**
-	 * Extracts Zip File input stream to target path 
+	 * Extracts Zip File input stream to target path
 	 * @param is
 	 * @param targetPath
 	 * @throws IOException
@@ -100,17 +100,17 @@ public class Zipper {
 		ZipEntry entry;
 		// while there are entries I process them
 		while ((entry = zis.getNextEntry()) != null) {
-			log.debug("entry: " + entry.getName() + ", "  //$NON-NLS-1$//$NON-NLS-2$
+			log.debug("entry: " + entry.getName() + ", "  ////
 					+ entry.getSize());
 			// consume all the data from this entry
 
 			if (entry.isDirectory()) {
-				log.debug("Extracting directory: " + entry.getName()); //$NON-NLS-1$
-				
+				log.debug("Extracting directory: " + entry.getName()); //
+
 				File nDir = new File(targetPath + File.separator + entry.getName());
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
-						throw new IOException("Failed to create dir: " + entry.getName()); //$NON-NLS-1$
+						throw new IOException("Failed to create dir: " + entry.getName()); //
 					}
 				}
 				continue;
@@ -121,7 +121,7 @@ public class Zipper {
 					new FileOutputStream(targetPath + File.separator + entry.getName()));
 			while ((len = zis.read(buffer)) >= 0)
 				out.write(buffer, 0, len);
-			
+
 			out.close();
 		}
 	}

@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 
 /**
- * 
+ *
  */
 public class BKUHelper {
 	/**
@@ -37,31 +37,31 @@ public class BKUHelper {
 
 	/* public static HttpClient getHttpClient(boolean useProxy) {
 	 HttpClient client = new HttpClient();
-	 client.getParams().setParameter("http.useragent", //$NON-NLS-1$
+	 client.getParams().setParameter("http.useragent", //
 	 Constants.USER_AGENT_STRING);
-	
+
 	  if (useProxy) {
-	 String host = System.getProperty("http.proxyHost"); //$NON-NLS-1$
-	 String port = System.getProperty("http.proxyPort"); //$NON-NLS-1$
+	 String host = System.getProperty("http.proxyHost"); //
+	 String port = System.getProperty("http.proxyPort"); //
 	 if (host != null && !host.isEmpty() &&
 	 port != null && !port.isEmpty()) {
 	 int p = Integer.parseInt(port);
 	 client.getHostConfiguration().setProxy(host, p);
-	 String user = System.getProperty("http.proxyUser"); //$NON-NLS-1$
-	 String pass = System.getProperty("http.proxyPassword"); //$NON-NLS-1$
+	 String user = System.getProperty("http.proxyUser"); //
+	 String pass = System.getProperty("http.proxyPassword"); //
 	 if (user != null && !user.isEmpty() && pass != null) {
 	 client.getState().setProxyCredentials(new AuthScope(host, p),
 	 new UsernamePasswordCredentials(user, pass));
 	 }
 	 }
 	 }
-	
+
 	 return client;
 	 }*/
 
 	/**
 	 * Get a HTTP Client instance
-	 * 
+	 *
 	 * @param useProxy
 	 *            whether to use a potentially set proxy
 	 * @return the HttpClient
@@ -69,20 +69,20 @@ public class BKUHelper {
 	@SuppressWarnings("deprecation")
 	public static HttpClient getHttpClient(boolean useProxy) {
 		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //$NON-NLS-1$
+		client.getParams().setParameter("http.useragent", //
 				Constants.USER_AGENT_STRING);
 
 
-		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY); //$NON-NLS-1$
+		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY); //
 
 		if (useProxy) {
-			String host = System.getProperty("http.proxyHost");//$NON-NLS-1$
-			String port = System.getProperty("http.proxyPort");//$NON-NLS-1$
+			String host = System.getProperty("http.proxyHost");//
+			String port = System.getProperty("http.proxyPort");//
 			if (host != null && !host.isEmpty() && port != null && !port.isEmpty()) {
 				int p = Integer.parseInt(port);
 				client.getHostConfiguration().setProxy(host, p);
-				String user = System.getProperty("http.proxyUser");//$NON-NLS-1$
-				String pass = System.getProperty("http.proxyPassword");//$NON-NLS-1$
+				String user = System.getProperty("http.proxyUser");//
+				String pass = System.getProperty("http.proxyPassword");//
 				if (user != null && !user.isEmpty() && pass != null) {
 					client.getState().setProxyCredentials(new AuthScope(host, p),
 							new UsernamePasswordCredentials(user, pass));
@@ -96,7 +96,7 @@ public class BKUHelper {
 
 	/**
 	 * Get a HTTP Client instance
-	 * 
+	 *
 	 * @return the HttpClient
 	 */
 	public static HttpClient getHttpClient() {

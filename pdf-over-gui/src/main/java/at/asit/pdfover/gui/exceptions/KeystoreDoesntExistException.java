@@ -24,7 +24,7 @@ import at.asit.pdfover.commons.Messages;
  */
 public class KeystoreDoesntExistException extends ResumableException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 8213496549933275086L;
 
@@ -33,6 +33,6 @@ public class KeystoreDoesntExistException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreDoesntExistException(final File keystore, int resumeIndex) {
-		super(String.format(Messages.getString("error.KeyStoreFileNotExist"), keystore.getPath()), resumeIndex); //$NON-NLS-1$
+		super(String.format(Messages.getString("error.KeyStoreFileNotExist"), keystore.getPath()), resumeIndex); //
 	}
 }

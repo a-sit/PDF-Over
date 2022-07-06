@@ -23,13 +23,13 @@ import org.slf4j.LoggerFactory;
  * Security Layer response
  */
 public class SLResponse {
-	
+
 	/**
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(SLResponse.class);
-	
+
 	private String response;
 	private String server;
 
@@ -59,7 +59,7 @@ public class SLResponse {
 
 	private String userAgent;
 	private String signaturLayout;
-	
+
 	/**
 	 * Create a new Security Layer response
 	 * @param response the SLResponse
@@ -73,7 +73,7 @@ public class SLResponse {
 		this.userAgent = userAgent;
 		this.signaturLayout = signaturLayout;
 	}
-	
+
 	/**
 	 * Get the Security Layer response text
 	 * @return the Security Layer response text

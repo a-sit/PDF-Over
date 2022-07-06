@@ -48,7 +48,7 @@ public class SLRequest {
 
 	/**
 	 * Gets the signature data for this request
-	 * 
+	 *
 	 * @return The document source
 	 */
 	public DocumentSource getSignatureData()
@@ -58,7 +58,7 @@ public class SLRequest {
 
 	/**
 	 * Gets the request String
-	 * 
+	 *
 	 * @return the request
 	 */
 	public String getRequest() {

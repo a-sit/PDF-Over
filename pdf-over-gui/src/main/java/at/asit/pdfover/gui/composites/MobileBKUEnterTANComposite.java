@@ -53,7 +53,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class MobileBKUEnterTANComposite extends StateComposite {
 
 	/**
-	 * 
+	 *
 	 */
 	private final class OkSelectionListener extends SelectionAdapter {
 		/**
@@ -74,19 +74,19 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 			if (tan.isEmpty()) {
 				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.NoTan")); //$NON-NLS-1$
+						.getString("error.NoTan")); //
 				return;
 			}
 
 			if (MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
 				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
+						.getString("error.EnteredReferenceValue")); //
 				return;
 			}
 
 			if (tan.length() > 6) {
 				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.TanTooLong")); //$NON-NLS-1$
+						.getString("error.TanTooLong")); //
 				return;
 			}
 
@@ -99,7 +99,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private final class CancelSelectionListener extends SelectionAdapter {
 		/**
@@ -171,12 +171,12 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	/**
 	 * Set how many tries are left
-	 * 
+	 *
 	 * @param tries
 	 */
 	public void setTries(int tries) {
-		this.lblTries.setText(tries == 1 ? Messages.getString("tanEnter.try") : //$NON-NLS-1$
-				String.format(Messages.getString("tanEnter.tries"), tries)); //$NON-NLS-1$
+		this.lblTries.setText(tries == 1 ? Messages.getString("tanEnter.try") : //
+				String.format(Messages.getString("tanEnter.tries"), tries)); //
 	}
 
 	/**
@@ -185,16 +185,16 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		if (errorMessage == null)
-			this.lblTries.setText(""); //$NON-NLS-1$
+			this.lblTries.setText(""); //
 		else
 			this.lblTries.setText(
-					Messages.getString("error.Title") + ": " + errorMessage); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("error.Title") + ": " + errorMessage); // //
 	}
 
 
 	/**
 	 * Sets the message
-	 * 
+	 *
 	 * @param msg
 	 */
 	public void setMessage(String msg) {
@@ -225,7 +225,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	public String getRefVal() {
 		return this.refVal;
 	}
-	
+
 	/**
 	 * Enables the submit button
 	 */
@@ -243,7 +243,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		if (this.refVal != null) {
 			this.lblRefVal.setText(this.refVal);
 		} else {
-			this.lblRefVal.setText(""); //$NON-NLS-1$
+			this.lblRefVal.setText(""); //
 		}
 
 	}
@@ -263,7 +263,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.tan = tan;
 
 		if (this.tan == null) {
-			this.txt_tan.setText(""); //$NON-NLS-1$
+			this.txt_tan.setText(""); //
 		} else {
 			this.txt_tan.setText(this.tan);
 		}
@@ -284,24 +284,24 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			try {
 				String signatureData = MobileBKUEnterTANComposite.this
 						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) { //$NON-NLS-1$
-					log.debug("Trying to open " + signatureData); //$NON-NLS-1$
+				if (signatureData != null && !signatureData.equals("")) { //
+					log.debug("Trying to open " + signatureData); //
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(new URI(signatureData));
 					} else {
-						log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						log.info("SWT Desktop is not supported on this platform"); //
 						Program.launch(signatureData);
 					}
 				}
 			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+				log.error("OpenSelectionListener: ", ex); //
 			}
 		}
 	}
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -341,7 +341,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblRefValLabel.bottom = new FormAttachment(50, -10);
 		this.lblRefValLabel.setLayoutData(fd_lblRefValLabel);
 		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
+				.getString("tanEnter.ReferenceValue")); //
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 
@@ -364,7 +364,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		// fd_lblRefVal.top = new FormAttachment(30, -15);
 		fd_lblRefVal.bottom = new FormAttachment(50, -10);
 		this.lblRefVal.setLayoutData(fd_lblRefVal);
-		this.lblRefVal.setText(""); //$NON-NLS-1$
+		this.lblRefVal.setText(""); //
 
 		this.lblTan = new Label(containerComposite, SWT.NATIVE);
 		this.lblTan.setAlignment(SWT.RIGHT);
@@ -374,7 +374,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblTan.top = new FormAttachment(50, 10);
 		// fd_lblTan.bottom = new FormAttachment(50, 15);
 		this.lblTan.setLayoutData(fd_lblTan);
-		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
+		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //
 
 		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
 		FormData fd_text = new FormData();
@@ -402,12 +402,12 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			public void modifyText(ModifyEvent e) {
 
 				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
-				//log.debug("Current TAN: " + text); //$NON-NLS-1$
+				//log.debug("Current TAN: " + text); //
 				if (text.length() > 3
 						&& MobileBKUEnterTANComposite.this.getRefVal()
 								.startsWith(text.trim())) {
 					MobileBKUEnterTANComposite.this.setMessage(Messages
-							.getString("error.EnteredReferenceValue")); //$NON-NLS-1$
+							.getString("error.EnteredReferenceValue")); //
 				}
 			}
 		});
@@ -420,8 +420,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		lnk_sig_data.setEnabled(true);
 		lnk_sig_data.setLayoutData(fd_lnk_data);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
-		lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //$NON-NLS-1$
-		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //$NON-NLS-1$
+		lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //
+		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
@@ -441,7 +441,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 
 		this.btn_ok.setLayoutData(fd_btn_ok);
-		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+		this.btn_ok.setText(Messages.getString("common.Ok")); //
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
 
 		FormData fd_btn_cancel = new FormData();
@@ -451,7 +451,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_btn_cancel.bottom = new FormAttachment(100, -20);
 
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 	}
 
@@ -462,7 +462,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -472,13 +472,13 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
-		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //$NON-NLS-1$
+				.getString("tanEnter.ReferenceValue")); //
+		this.lblTan.setText(Messages.getString("tanEnter.TAN")); //
 	}
 }

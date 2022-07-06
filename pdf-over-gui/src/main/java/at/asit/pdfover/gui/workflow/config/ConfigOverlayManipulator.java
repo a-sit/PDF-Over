@@ -20,7 +20,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * An interface for setting the configuration overlay
- * 
+ *
  * This overlay overrides the actual configuration but will not be saved
  */
 public interface ConfigOverlayManipulator {
@@ -131,10 +131,10 @@ public interface ConfigOverlayManipulator {
 	 * @param configurationFile
 	 */
 	public void setConfigurationFile(String configurationFile);
-	
+
 	/**
-	 * 
+	 *
 	 * @param profile
 	 */
-	public void setSignatureProfile(String profile); 
+	public void setSignatureProfile(String profile);
 }

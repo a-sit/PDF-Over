@@ -26,22 +26,22 @@ public class SignaturePosition {
 	 * The x value of the position
 	 */
 	protected float x = 0;
-	
+
 	/**
 	 * The y value of the position
 	 */
 	protected float y = 0;
-	
+
 	/**
 	 * The page value of the position
 	 */
 	protected int page = 0;
-	
+
 	/**
 	 * Whether automatic positioning is used
 	 */
 	protected boolean autoPositioning;
-	
+
 	/**
 	 * Default constructor
 	 * No position given, hence automatic positioning will be used
@@ -49,7 +49,7 @@ public class SignaturePosition {
 	public SignaturePosition() {
 		this.autoPositioning = true;
 	}
-	
+
 	/**
 	 * X - Y Constructor (Page = 0)
 	 * @param x The x value of the position
@@ -59,7 +59,7 @@ public class SignaturePosition {
 		this.autoPositioning = false;
 		setPosition(x, y);
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param x The x value of the signature position
@@ -71,7 +71,7 @@ public class SignaturePosition {
 		setPosition(x, y);
 		setPage(page);
 	}
-	
+
 	/**
 	 * Sets new position
 	 * @param x the new x value

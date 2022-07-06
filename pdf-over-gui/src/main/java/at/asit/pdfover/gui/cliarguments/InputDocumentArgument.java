@@ -33,7 +33,7 @@ public class InputDocumentArgument extends Argument {
 	 * Constructor
 	 */
 	public InputDocumentArgument() {
-		super(new String[] {"-i"}, "argument.help.input"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-i"}, "argument.help.input"); // //
 	}
 
 	/**
@@ -53,25 +53,25 @@ public class InputDocumentArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String signatureDocument = args[argOffset + 1];
-				
+
 				File signatureDocumentFile = new File(signatureDocument);
-				
+
 				if(!signatureDocumentFile.exists()) {
 					throw new FileNotFoundException(signatureDocument);
 				}
-				
+
 				getStatus().setDocument(signatureDocumentFile);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Document to sign argument invalid!", ex); //$NON-NLS-1$
+			log.error("Document to sign argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.input") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.input") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.input") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.input") + this.getHelpText(), null); //
 	}
 
 }

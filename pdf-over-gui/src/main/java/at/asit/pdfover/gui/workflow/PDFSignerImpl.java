@@ -24,7 +24,7 @@ import at.asit.pdfover.signator.Signator.Signers;
 import at.asit.pdfover.signator.Signer;
 
 /**
- * 
+ *
  */
 public class PDFSignerImpl implements PDFSigner {
 	/**
@@ -35,7 +35,7 @@ public class PDFSignerImpl implements PDFSigner {
 			.getLogger(PDFSignerImpl.class);
 
 	private Signers signer = Signator.Signers.PDFAS4;
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.PDFSigner#getPDFSignerType()
 	 */
@@ -57,7 +57,7 @@ public class PDFSignerImpl implements PDFSigner {
 	}
 
 	private Signer signerLib;
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.PDFSigner#getPDFSigner()
 	 */

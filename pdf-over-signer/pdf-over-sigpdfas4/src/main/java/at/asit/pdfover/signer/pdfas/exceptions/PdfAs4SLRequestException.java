@@ -16,11 +16,11 @@
 package at.asit.pdfover.signer.pdfas.exceptions;
 
 /**
- * 
+ *
  */
 public class PdfAs4SLRequestException extends Exception {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6855855001105199269L;
 

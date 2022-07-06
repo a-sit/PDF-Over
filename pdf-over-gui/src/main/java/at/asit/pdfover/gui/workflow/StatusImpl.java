@@ -29,7 +29,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;
 
 /**
- * 
+ *
  */
 public class StatusImpl implements Status {
 	/**
@@ -38,19 +38,19 @@ public class StatusImpl implements Status {
 	private static final Logger log = LoggerFactory.getLogger(StatusImpl.class);
 
 	private File document = null;
-	
+
 	private SignaturePosition signaturePosition = null;
-	
+
 	private BKUs bku = BKUs.NONE;
-	
+
 	private State currentState = null;
 
 	private State previousState = null;
 
 	private SigningState signingState = null;
-	
+
 	private SignResult signResult = null;
-	
+
 	private MainWindowBehavior behavior;
 
 	private boolean searchForPlacehoderSignature = false;
@@ -73,16 +73,16 @@ public class StatusImpl implements Status {
 	 */
 	public void setCurrentState(State currentState) {
 		//if (this.previousState == this.currentState)
-		//	log.error("Changing to same state? " + this.currentState); //$NON-NLS-1$
+		//	log.error("Changing to same state? " + this.currentState); //
 
 		if (this.previousState != null && !this.previousState.equals(currentState))
 		{
 			//Reference to previous state will be lost - perform cleanup
-			log.debug("Changing from " + this.currentState + " to " + currentState); //$NON-NLS-1$ //$NON-NLS-2$
-			log.debug("Cleaning up " + this.previousState); //$NON-NLS-1$
+			log.debug("Changing from " + this.currentState + " to " + currentState); // //
+			log.debug("Cleaning up " + this.previousState); //
 			this.previousState.cleanUp();
 		}
-			
+
 		this.previousState = this.currentState;
 		this.currentState = currentState;
 	}
@@ -110,7 +110,7 @@ public class StatusImpl implements Status {
 	public File getDocument() {
 		return this.document;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.Status#setSignaturePosition(at.asit.pdfover.signator.SignaturePosition)
 	 */
@@ -185,7 +185,7 @@ public class StatusImpl implements Status {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.Status#getConfiguration()
 	 */
 	@Override
@@ -195,7 +195,7 @@ public class StatusImpl implements Status {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.Status#setSearchForPlaceholderSignature(
 	 * boolean)

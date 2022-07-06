@@ -26,15 +26,15 @@ import at.asit.pdfover.commons.Messages;
  * CLI Argument to show the useage message
  */
 public class HelpArgument extends Argument {
-	
+
 	/**
 	 * Constructor
 	 */
 	public HelpArgument() {
-		super(new String[] {"-h", "-?", "--help" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				"argument.help.help"); //$NON-NLS-1$
+		super(new String[] {"-h", "-?", "--help" }, // // //
+				"argument.help.help"); //
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
@@ -43,29 +43,29 @@ public class HelpArgument extends Argument {
 			ArgumentHandler handler)
 			throws InitializationException {
 		Set<Argument> arguments = handler.getArguments();
-		
+
 		Iterator<Argument> argumentIterator = arguments.iterator();
-		
-		System.out.println(Messages.getString("argument.info.help")); //$NON-NLS-1$
-		
+
+		System.out.println(Messages.getString("argument.info.help")); //
+
 		while(argumentIterator.hasNext()) {
 			Argument argument = argumentIterator.next();
 			StringBuilder sb = new StringBuilder();
-			
+
 			for(int i = 0; i < argument.getCommandOptions().length; i++) {
 				sb.append(argument.getCommandOptions()[i]);
-				
+
 				if(i < argument.getCommandOptions().length -1) {
-					sb.append(", "); //$NON-NLS-1$
+					sb.append(", "); //
 				}
 			}
-			
-			System.out.println(sb.toString() + ":"); //$NON-NLS-1$
-			System.out.println("\t" + argument.getHelpText()); //$NON-NLS-1$
+
+			System.out.println(sb.toString() + ":"); //
+			System.out.println("\t" + argument.getHelpText()); //
 		}
-		
+
 		handler.setRequireExit(true);
-		
+
 		return argOffset;
 	}
 

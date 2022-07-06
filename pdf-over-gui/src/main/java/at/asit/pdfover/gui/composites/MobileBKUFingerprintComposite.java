@@ -48,7 +48,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class MobileBKUFingerprintComposite extends StateComposite {
 
 	/**
-	 * 
+	 *
 	 */
 	private final class SMSSelectionListener extends SelectionAdapter {
 		/**
@@ -69,7 +69,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private final class CancelSelectionListener extends SelectionAdapter {
 		/**
@@ -151,10 +151,10 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		if (errorMessage == null)
-			this.lblError.setText(""); //$NON-NLS-1$
+			this.lblError.setText(""); //
 		else
 			this.lblError.setText(
-					Messages.getString("error.Title") + ": " + errorMessage); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("error.Title") + ": " + errorMessage); // //
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		if (this.refVal != null) {
 			this.lblRefVal.setText(this.refVal);
 		} else {
-			this.lblRefVal.setText(""); //$NON-NLS-1$
+			this.lblRefVal.setText(""); //
 		}
 
 	}
@@ -219,24 +219,24 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 			try {
 				String signatureData = MobileBKUFingerprintComposite.this
 						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) { //$NON-NLS-1$
-					log.debug("Trying to open " + signatureData); //$NON-NLS-1$
+				if (signatureData != null && !signatureData.equals("")) { //
+					log.debug("Trying to open " + signatureData); //
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(new URI(signatureData));
 					} else {
-						log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						log.info("SWT Desktop is not supported on this platform"); //
 						Program.launch(signatureData);
 					}
 				}
 			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+				log.error("OpenSelectionListener: ", ex); //
 			}
 		}
 	}
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -297,7 +297,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		fd_lblRefVal.top = new FormAttachment(30, -10);
 		//fd_lblRefVal.bottom = new FormAttachment(50, -10);
 		this.lblRefVal.setLayoutData(fd_lblRefVal);
-		this.lblRefVal.setText("test"); //$NON-NLS-1$
+		this.lblRefVal.setText("test"); //
 
 		this.lblFPLabel = new Label(containerComposite, SWT.NATIVE);
 		this.lblFPLabel.setAlignment(SWT.LEFT);
@@ -355,7 +355,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -365,17 +365,17 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
-		this.lblFPLabel.setText(Messages.getString("tanEnter.FP")); //$NON-NLS-1$
-		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //$NON-NLS-1$
-		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //$NON-NLS-1$
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //$NON-NLS-1$
+				.getString("tanEnter.ReferenceValue")); //
+		this.lblFPLabel.setText(Messages.getString("tanEnter.FP")); //
+		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //
+		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
+		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //
 	}
 }

@@ -32,8 +32,8 @@ import at.knowcenter.wag.egov.egiz.pdf.TablePos;
  */
 public class PdfAs4Signer implements Signer {
 
-	
-	
+
+
 
 	/**
 	 * The template URL
@@ -135,7 +135,7 @@ public class PdfAs4Signer implements Signer {
 			pdfas.sign(param);
 
 			SignResultImpl result = new SignResultImpl();
-			
+
 			if (param.getSignaturePosition() != null) {
 				TablePos tp = new TablePos(param.getSignaturePosition());
 				SignaturePosition sp;

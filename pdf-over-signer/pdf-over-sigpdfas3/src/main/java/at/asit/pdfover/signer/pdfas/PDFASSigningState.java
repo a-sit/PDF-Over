@@ -33,12 +33,12 @@ public class PDFASSigningState implements SigningState {
 	 * The Signature Layer request
 	 */
 	protected SLRequest slrequest;
-	
+
 	/**
 	 * The PDF AS DataSink
 	 */
 	protected DataSink output;
-	
+
 	/**
 	 * Gets the DataSink
 	 * @return the datasink
@@ -59,7 +59,7 @@ public class PDFASSigningState implements SigningState {
 	 * The Signature Layer response
 	 */
 	protected SLResponse slresponse;
-	
+
 	@Override
 	public SLRequest getSignatureRequest() {
 		return this.slrequest;
@@ -77,7 +77,7 @@ public class PDFASSigningState implements SigningState {
 	public void setSignatureRequest(SLRequest request) {
 		this.slrequest = request;
 	}
-	
+
 	/**
 	 * Gets the SL Response
 	 * @return The SL Repsonse object
@@ -85,7 +85,7 @@ public class PDFASSigningState implements SigningState {
 	public SLResponse getSignatureResponse() {
 		return this.slresponse;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#hasSignatureResponse()
 	 */
@@ -93,11 +93,11 @@ public class PDFASSigningState implements SigningState {
 	public boolean hasSignatureResponse() {
 		return this.getSignatureResponse() != null;
 	}
-	
+
 	// ----------------------------------------
 	// PDF AS Specific stuff
 	// ----------------------------------------
-	
+
 	/**
 	 * signature detail information
 	 */
@@ -107,12 +107,12 @@ public class PDFASSigningState implements SigningState {
 	 * PDF - AS sign parameters
 	 */
 	protected at.gv.egiz.pdfas.api.sign.SignParameters signParameters;
-	
+
 	/**
-	 * Signature parameters 
+	 * Signature parameters
 	 */
 	protected PdfAsSignatureParameter pdfAsSignatureParameter;
-	
+
 	/**
 	 * Gets PDF - AS Signature Parameters
 	 * @return PdfAsSignatureParameter

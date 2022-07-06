@@ -47,7 +47,7 @@ public class BKUSelectionState extends State {
 	 **/
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(BKUSelectionState.class);
-	
+
 	private BKUSelectionComposite selectionComposite = null;
 
 	private BKUSelectionComposite getSelectionComposite() {
@@ -64,7 +64,7 @@ public class BKUSelectionState extends State {
 
 		return this.selectionComposite;
 	}
-	
+
 	@Override
 	public void run() {
 		Status status = getStateMachine().getStatus();
@@ -85,13 +85,13 @@ public class BKUSelectionState extends State {
 
 			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
-			
+
 			status.setBKU(selection.getSelected());
-		
+
 			if(status.getBKU() == BKUs.NONE) {
 				return;
 			}
-		} 
+		}
 		this.setNextState(new PrepareSigningState(getStateMachine()));
 	}
 

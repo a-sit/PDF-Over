@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class MainBarEndButton extends MainBarButton {
 	/**
@@ -44,7 +44,7 @@ public class MainBarEndButton extends MainBarButton {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt
 	 * .events.PaintEvent)
@@ -56,7 +56,7 @@ public class MainBarEndButton extends MainBarButton {
 
 		int split = 10;
 		int width = size.x - 1;
-		
+
 		e.gc.drawLine(0, 0, width, 0);
 		e.gc.drawLine(width, 0, width, height);
 		e.gc.drawLine(width, height, 0, height);
@@ -67,7 +67,7 @@ public class MainBarEndButton extends MainBarButton {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()
 	 */
 	@Override
@@ -87,7 +87,7 @@ public class MainBarEndButton extends MainBarButton {
 	}
 
 	/**
-	 * change the text position 
+	 * change the text position
 	 * @param positionX the position
 	 * @return the new position
 	 */

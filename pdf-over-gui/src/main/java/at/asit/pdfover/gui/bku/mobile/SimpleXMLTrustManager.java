@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
 import at.asit.pdfover.commons.Constants;
 
 /**
- * 
+ *
  */
 public class SimpleXMLTrustManager implements X509TrustManager {
 	/**
@@ -58,13 +58,13 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 	/**
 	 * Constructs the TrustManager
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public SimpleXMLTrustManager() throws Exception {
 		// create a "default" JSSE X509TrustManager.
 
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509"); //$NON-NLS-1$
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509"); //
 		tmf.init((KeyStore) null);
 
 		TrustManager tms[] = tmf.getTrustManagers();
@@ -94,8 +94,8 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		NodeList certificateList = certificates.getChildNodes();
 
 		try {
-			if (!certificates.getNodeName().equals("certificates")) { //$NON-NLS-1$
-				throw new Exception("Used certificates xml is invalid! no certificates node"); //$NON-NLS-1$
+			if (!certificates.getNodeName().equals("certificates")) { //
+				throw new Exception("Used certificates xml is invalid! no certificates node"); //
 			}
 
 			//add trusted certificates to certStore//
@@ -104,26 +104,26 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 					Node certificateNode = certificateList.item(i);
 
-					if (certificateNode.getNodeName().equals("#text")) { //$NON-NLS-1$
+					if (certificateNode.getNodeName().equals("#text")) { //
 						continue; // Ignore dummy text node ..
 					}
 
-					if (!certificateNode.getNodeName().equals("certificate")) { //$NON-NLS-1$
-						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //$NON-NLS-1$
+					if (!certificateNode.getNodeName().equals("certificate")) { //
+						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //
 						continue;
 					}
 
 					String certResource = Constants.RES_CERT_PATH + certificateNode.getTextContent();
 
-					X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //$NON-NLS-1$
+					X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //
 							generateCertificate(this.getClass().getResourceAsStream(certResource));
 
 					myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
 
-					log.debug("Loaded certificate : " + certResource); //$NON-NLS-1$
+					log.debug("Loaded certificate : " + certResource); //
 
 				} catch (Exception ex) {
-					log.error("Failed to load certificate [" + "]", ex); //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Failed to load certificate [" + "]", ex); // //
 				}
 			}
 
@@ -156,12 +156,12 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		 * Find some other way to initialize, or else we have to fail the
 		 * constructor.
 		 */
-		throw new Exception("Couldn't initialize ASITTrustManager"); //$NON-NLS-1$
+		throw new Exception("Couldn't initialize ASITTrustManager"); //
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.
 	 * X509Certificate[], java.lang.String)
@@ -174,7 +174,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			try {
 				this.sunJSSEX509TrustManager.checkClientTrusted(arg0, arg1);
 			} catch (CertificateException ex2) {
-				log.info("checkClientTrusted: ", ex2); //$NON-NLS-1$
+				log.info("checkClientTrusted: ", ex2); //
 				throw ex2;
 			}
 		}
@@ -182,7 +182,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * javax.net.ssl.X509TrustManager#checkServerTrusted(java.security.cert.
 	 * X509Certificate[], java.lang.String)
@@ -195,7 +195,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			try {
 				this.sunJSSEX509TrustManager.checkServerTrusted(arg0, arg1);
 			} catch (CertificateException ex2) {
-				log.info("checkServerTrusted: ", ex2); //$NON-NLS-1$
+				log.info("checkServerTrusted: ", ex2); //
 				throw ex2;
 			}
 		}
@@ -203,7 +203,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
 	 */
 	@Override

@@ -51,17 +51,17 @@ public class LocalBKUState extends State {
 	/**
 	 * HTTP Response server HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //
 
 	/**
 	 * HTTP Response user-agent HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //
 
 	/**
 	 * HTTP Response SignatureLayout HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //
 
 	Exception threadException = null;
 
@@ -71,8 +71,8 @@ public class LocalBKUState extends State {
 	/**
 	 * Null-Operation SL-Request
 	 */
-	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + //$NON-NLS-1$
-			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>"; //$NON-NLS-1$
+	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + //
+			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>"; //
 
 	/**
 	 * Constructor
@@ -83,14 +83,14 @@ public class LocalBKUState extends State {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private final class SignLocalBKUThread implements Runnable {
 
 		private LocalBKUState state;
 		private SigningState signingState;
 
-		
+
 		/**
 		 * @param localBKUState
 		 * @param signingState
@@ -109,7 +109,7 @@ public class LocalBKUState extends State {
 				PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
 				String sl_request = NULL_OPERATION_REQUEST;
-				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				method.addParameter("XMLRequest", sl_request); //
 				int returnCode = client.executeMethod(method);
 
 				String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
@@ -121,27 +121,27 @@ public class LocalBKUState extends State {
 				} else {
 					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 					if (server == null)
-						server = ""; //$NON-NLS-1$
+						server = ""; //
 					else
-						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")) //$NON-NLS-1$ //$NON-NLS-2$
+						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")) // //
 							LocalBKUState.this.useBase64Request = true;
 
 					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 					if (userAgent == null)
-						userAgent = ""; //$NON-NLS-1$
+						userAgent = ""; //
 					String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
 
-					log.debug("Server - UA: " + server + " - " + userAgent); //$NON-NLS-1$ //$NON-NLS-2$
+					log.debug("Server - UA: " + server + " - " + userAgent); // //
 
 					String response = method.getResponseBodyAsString();
-					log.debug("SL Response: " + response); //$NON-NLS-1$
+					log.debug("SL Response: " + response); //
 					SLResponse slResponse = new SLResponse(response, server,
 							userAgent, signatureLayout);
 					this.signingState.setSignatureResponse(slResponse);
 					this.signingState.setUseBase64Request(LocalBKUState.this.useBase64Request);
 				}
 			} catch (Exception e) {
-				log.error("SignLocalBKUThread: ", e); //$NON-NLS-1$
+				log.error("SignLocalBKUThread: ", e); //
 
 				this.state.threadException = e;
 			} finally {
@@ -164,7 +164,7 @@ public class LocalBKUState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui
 	 * .workflow.Workflow)
@@ -186,7 +186,7 @@ public class LocalBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.LocalBKU"), //$NON-NLS-1$
+					Messages.getString("error.LocalBKU"), //
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
 				//getStateMachine().exit();
@@ -204,7 +204,7 @@ public class LocalBKUState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
@@ -214,7 +214,7 @@ public class LocalBKUState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override

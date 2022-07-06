@@ -22,7 +22,7 @@ import at.asit.pdfover.commons.Messages;
  */
 public class KeystoreAliasNoKeyException extends ResumableException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4030764219866181859L;
 
@@ -31,6 +31,6 @@ public class KeystoreAliasNoKeyException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreAliasNoKeyException(final String alias, int resumeIndex) {
-		super(String.format(Messages.getString("error.KeyStoreAliasNoKey"), alias), resumeIndex); //$NON-NLS-1$
+		super(String.format(Messages.getString("error.KeyStoreAliasNoKey"), alias), resumeIndex); //
 	}
 }

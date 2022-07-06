@@ -28,19 +28,19 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 /**
- * 
+ *
  */
 public class ClickableCanvas extends Canvas {
-	
+
 	private Image image = null;
-	
+
 	/**
 	 * @param parent
 	 * @param style
 	 */
 	public ClickableCanvas(Composite parent, int style) {
 		super(parent, style);
-		
+
 		this.addPaintListener(new PaintListener() {
 
 			@Override
@@ -65,7 +65,7 @@ public class ClickableCanvas extends Canvas {
 
 	/**
 	 * Gets the image
-	 * 
+	 *
 	 * @return the image
 	 */
 	public Image getImage() {
@@ -74,7 +74,7 @@ public class ClickableCanvas extends Canvas {
 
 	/**
 	 * Sets the Image
-	 * 
+	 *
 	 * @param image
 	 *            the imgage to set
 	 */
@@ -84,7 +84,7 @@ public class ClickableCanvas extends Canvas {
 
 	/**
 	 * Main painting method
-	 * 
+	 *
 	 * @param e
 	 */
 	void paintControl(PaintEvent e) {
@@ -93,7 +93,7 @@ public class ClickableCanvas extends Canvas {
 
 	/**
 	 * Paint the text or image on the button
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void paintText(PaintEvent e) {
@@ -103,9 +103,9 @@ public class ClickableCanvas extends Canvas {
 		// e.gc.fillGradientRectangle(0, 1, width, height / 4, true);
 
 		if (this.image != null) {
-			
+
 			//log.debug("Width: " + width + " Height: " + height);
-			
+
 			int w = 0;
 			Image tmp = null;
 			if(this.image.getImageData().width < width) {
@@ -116,7 +116,7 @@ public class ClickableCanvas extends Canvas {
 			} else {
 				tmp = new Image(getDisplay(), this.image.getImageData());
 			}
-			
+
 			e.gc.drawImage(tmp, w, w);
 		}
 

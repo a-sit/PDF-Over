@@ -19,7 +19,7 @@ package at.asit.pdfover.gui.workflow.states;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
 /**
- * Base state class 
+ * Base state class
  */
 public abstract class State {
 
@@ -38,7 +38,7 @@ public abstract class State {
 		this.stateMachine = stateMachine;
 		this.nextState = this;
 	}
-	
+
 	/**
 	 * Gets the next logical state or null if this their is no state transition
 	 * @return the next state (or null)
@@ -46,7 +46,7 @@ public abstract class State {
 	public State nextState() {
 		return this.nextState;
 	}
-	
+
 	/**
 	 * Sets the next logical state
 	 * @param state
@@ -54,7 +54,7 @@ public abstract class State {
 	protected void setNextState(State state) {
 		this.nextState = state;
 	}
-	
+
 	/**
 	 * Perform main logic for this state
 	 */
@@ -84,7 +84,7 @@ public abstract class State {
 
 	/**
 	 * Update the main window behavior of this state if necessary
-	 * Should update this.stateMachine.getStatus().getBehavior() 
+	 * Should update this.stateMachine.getStatus().getBehavior()
 	 */
 	public abstract void updateMainWindowBehavior();
 }

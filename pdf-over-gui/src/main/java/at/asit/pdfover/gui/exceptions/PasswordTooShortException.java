@@ -20,19 +20,19 @@ import at.asit.pdfover.commons.Messages;
 // Imports
 
 /**
- * 
+ *
  */
 public class PasswordTooShortException extends InvalidPasswordException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3015765967751806169L;
-	
+
 	/**
 	 * Constructor
 	 */
 	public PasswordTooShortException() {
-		super(Messages.getString("exception.PasswordTooShort")); //$NON-NLS-1$
+		super(Messages.getString("exception.PasswordTooShort")); //
 	}
 
 }

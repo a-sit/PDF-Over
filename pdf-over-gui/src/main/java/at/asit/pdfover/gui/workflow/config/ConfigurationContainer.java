@@ -50,7 +50,7 @@ public interface ConfigurationContainer {
 	public String getMobileNumber();
 
 	/**
-	 * Sets the mobile phone number 
+	 * Sets the mobile phone number
 	 * @param number the mobile phone number
 	 */
 	public void setMobileNumber(String number);
@@ -62,7 +62,7 @@ public interface ConfigurationContainer {
 	public String getMobilePassword();
 
 	/**
-	 * Sets the mobile phone password 
+	 * Sets the mobile phone password
 	 * @param password the mobile phone password
 	 */
 	public void setMobilePassword(String password);
@@ -81,18 +81,18 @@ public interface ConfigurationContainer {
 
 	/**
 	 * Gets the proxy port
-	 * 
+	 *
 	 * if port is -1 no port is selected
-	 * 
+	 *
 	 * @return the proxy port
 	 */
 	public int getProxyPort();
 
 	/**
 	 * Sets the proxy port
-	 * 
+	 *
 	 * set to -1 for no port
-	 * 
+	 *
 	 * @param port the proxy port
 	 * @throws InvalidPortException
 	 */
@@ -153,7 +153,7 @@ public interface ConfigurationContainer {
 	public BKUs getDefaultBKU();
 
 	/**
-	 * Sets the default BKU 
+	 * Sets the default BKU
 	 * @param defaultBKU the default BKU
 	 */
 	public void setDefaultBKU(BKUs defaultBKU);
@@ -301,7 +301,7 @@ public interface ConfigurationContainer {
 	 * @param alias the keystore alias
 	 */
 	public void setKeyStoreAlias(String alias);
-	
+
 	/**
 	 * Gets the keystore store password
 	 * @return the keystore store password
@@ -362,7 +362,7 @@ public interface ConfigurationContainer {
 	 */
 	public void setSkipFinish(boolean skipFinish);
 
-	
+
 	/**
 	 * Gets theCertificate-Download URL
 	 * @return the Certificate-Download URL
@@ -370,7 +370,7 @@ public interface ConfigurationContainer {
 	public String getDownloadURL();
 
 
-	
+
 	/**
 	 * Gets whether to use an existing signature marker.
 	 *
@@ -385,37 +385,37 @@ public interface ConfigurationContainer {
 	 *            whether to use an existing signature marker
 	 */
 	public void setUseMarker(boolean useMarker);
-	
-	
+
+
 	/***
 	 * Extension to the standard use marker implementation
 	 * @param useFields
 	 */
 	public void setUseSignatureFields(boolean useFields);
-	
-	
+
+
 	/**
 	 * @return if the usage of signatureFields is enabled
 	 */
 	public boolean getUseSignatureFields();
-	
+
 	/**
 	 * @param bool
 	 */
 	public void setEnablePlaceholderUsage(boolean bool);
-	
+
 	/**
 	 * @return boolean
 	 */
 	public boolean getEnablePlaceholderUsage();
-	
-	
+
+
 	/**
 	 * @param profile set the selected profile
 	 */
 	public void setSignatureProfile(Profile profile);
-	
-	
+
+
 	/**
 	 * @return selected signature profile as string
 	 */

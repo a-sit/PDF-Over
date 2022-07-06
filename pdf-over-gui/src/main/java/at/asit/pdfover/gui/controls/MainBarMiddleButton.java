@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class MainBarMiddleButton extends MainBarButton {
 	/**
@@ -47,14 +47,14 @@ public class MainBarMiddleButton extends MainBarButton {
 	 */
 	@Override
 	protected void paintButton(PaintEvent e) {
-		
+
 		Point size = this.getSize();
-	
+
 		int height = size.y - 3;
 
 		int split = SplitFactor;
 		int width = size.x - split;
-		
+
 		e.gc.drawLine(0, 0, width, 0);
 		e.gc.drawLine(width, 0, width+split, (height) / 2);
 		e.gc.drawLine(width+split, (height) / 2, width, height);
@@ -64,7 +64,7 @@ public class MainBarMiddleButton extends MainBarButton {
 
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()
 	 */
@@ -75,17 +75,17 @@ public class MainBarMiddleButton extends MainBarButton {
 		int height = size.y - 2;
 
 		int split = SplitFactor;
-		
+
 		int width = size.x - split;
 
 		Region reg = new Region();
-		reg.add(new int[] { 
-				0, 0, 
-				width, 0, 
+		reg.add(new int[] {
+				0, 0,
+				width, 0,
 				width + split, (height) / 2,
-				width, height, 
-				0, height, 
-				0+split, (height) / 2, 
+				width, height,
+				0, height,
+				0+split, (height) / 2,
 				0, 0 });
 
 		return reg;

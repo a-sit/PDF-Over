@@ -17,7 +17,7 @@ package at.asit.pdfover.signator;
 
 /**
  * Enumeration of available BKU types
- * 
+ *
  */
 public enum BKUs {
 	/** Local BKU */

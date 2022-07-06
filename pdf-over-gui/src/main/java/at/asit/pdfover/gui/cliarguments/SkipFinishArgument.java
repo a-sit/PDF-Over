@@ -25,12 +25,12 @@ public class SkipFinishArgument extends Argument {
 	 * Constructor
 	 */
 	public SkipFinishArgument() {
-		super(new String[] { "-s" }, "argument.help.skipfinish"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] { "-s" }, "argument.help.skipfinish"); // //
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang
 	 * .String[], int, at.asit.pdfover.gui.workflow.StateMachine,

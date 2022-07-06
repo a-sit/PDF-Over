@@ -14,7 +14,7 @@
     <icon kind="default" href="icons/icon.png" width="96" height="96"/>
     <offline-allowed/>
   </information>
-  
+
   <security>
     <all-permissions/>
   </security>

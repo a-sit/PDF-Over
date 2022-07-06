@@ -48,16 +48,16 @@ public class OutputState extends State {
 		if (this.outputComposite == null) {
 			this.outputComposite = getStateMachine().getGUIProvider()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
-			
+
 			ConfigProvider config = getStateMachine().getConfigProvider();
 			Status status = getStateMachine().getStatus();
-			
-			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp"); //$NON-NLS-1$
-			
+
+			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp"); //
+
 			if(!tmpDir.exists()) {
 				tmpDir.mkdir();
 			}
-			
+
 			this.outputComposite.setOutputDir(config.getDefaultOutputFolder());
 			this.outputComposite.setSaveFilePostFix(config.getSaveFilePostFix());
 			this.outputComposite.setTempDir(tmpDir.getAbsolutePath());
@@ -83,7 +83,7 @@ public class OutputState extends State {
 
 		if (status.getSignResult() == null) {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL); //$NON-NLS-1$
+					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL); //
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new PrepareSigningState(getStateMachine()));
 			} else {
@@ -100,21 +100,21 @@ public class OutputState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
 	public void cleanUp() {
-		
+
 		getStateMachine().getStatus().setSignResult(null);
-		
+
 		if (this.outputComposite != null)
 			this.outputComposite.dispose();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override

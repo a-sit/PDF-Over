@@ -75,15 +75,15 @@ public class MobileBKUState extends State {
 				this.status = new IAIKStatus(provider);
 				this.handler = new IAIKHandler(this, stateMachine.getGUIProvider().getMainShell());
 				break;
-			
+
 			default:
 				throw new RuntimeException("Unexpected mobileBKUType");
 		}
 	}
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
-	
-	WaitingForAppComposite waitingForAppComposite = null;	
+
+	WaitingForAppComposite waitingForAppComposite = null;
 	WaitingForAppComposite getWaitingForAppComposite() {
 		if (this.waitingForAppComposite == null) {
 			this.waitingForAppComposite = getStateMachine().getGUIProvider()
@@ -92,7 +92,7 @@ public class MobileBKUState extends State {
 
 		return this.waitingForAppComposite;
 	}
-	
+
 	WaitingComposite waitingComposite = null;
 	WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
@@ -159,22 +159,22 @@ public class MobileBKUState extends State {
 
 	/**
 	 * Display an error message
-	 * 
+	 *
 	 * @param e
 	 *            the exception
 	 */
 	public void displayError(Exception e) {
-		String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+		String message = Messages.getString("error.Unexpected"); //
 		log.error(message, e);
 		String errormsg = e.getLocalizedMessage();
 		if (errormsg != null && !errormsg.isEmpty())
-			message += ": " + errormsg; //$NON-NLS-1$
+			message += ": " + errormsg; //
 		displayError(message);
 	}
 
 	/**
 	 * Display an error message
-	 * 
+	 *
 	 * @param message
 	 *            the error message
 	 */
@@ -205,7 +205,7 @@ public class MobileBKUState extends State {
 			public void run() {
 				MobileBKUEnterNumberComposite ui = MobileBKUState.this
 						.getMobileBKUEnterNumberComposite();
-	
+
 				if (!ui.userAck) {
 					// We need number and password => show UI!
 					if (mobileStatus.errorMessage != null
@@ -214,7 +214,7 @@ public class MobileBKUState extends State {
 						ui.setErrorMessage(mobileStatus.errorMessage);
 						mobileStatus.errorMessage = null;
 					} else if (mobileStatus instanceof ATrustStatus) {
-						ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //$NON-NLS-1$
+						ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //
 					}
 
 					if (ui.getMobileNumber() == null
@@ -231,7 +231,7 @@ public class MobileBKUState extends State {
 					ui.enableButton();
 					getStateMachine().getGUIProvider().display(ui);
 
-					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 					while (!ui.userAck && !ui.userCancel) {
 						if (!display.readAndDispatch()) {
 							display.sleep();
@@ -241,7 +241,7 @@ public class MobileBKUState extends State {
 
 				if (ui.userCancel) {
 					ui.userCancel = false;
-					mobileStatus.errorMessage = "cancel"; //$NON-NLS-1$
+					mobileStatus.errorMessage = "cancel"; //
 					return;
 				}
 
@@ -270,7 +270,7 @@ public class MobileBKUState extends State {
 			public void run() {
 				MobileBKUEnterTANComposite tan = MobileBKUState.this
 						.getMobileBKUEnterTANComposite();
-		
+
 				if (!tan.isUserAck()) {
 					// we need the TAN
 					tan.setRefVal(mobileStatus.refVal);
@@ -280,13 +280,13 @@ public class MobileBKUState extends State {
 							&& mobileStatus.tanTries > 0) {
 						// show warning message x tries left!
 						// overrides error message
-		
+
 						tan.setTries(mobileStatus.tanTries);
 					}
 					tan.enableButton();
 					getStateMachine().getGUIProvider().display(tan);
 
-					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
+					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 					while (!tan.isUserAck() && !tan.isUserCancel()) {
 						if (!display.readAndDispatch()) {
 							display.sleep();
@@ -321,14 +321,14 @@ public class MobileBKUState extends State {
 
 		final Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				// ping signature page to see if code has been scanned
 				try {
 					String resp = handler.getSignaturePage();
 					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp); //$NON-NLS-1$
+						log.debug("Signature page response: " + resp); //
 						getMobileBKUQRComposite().setDone(true);
 						Display display = getStateMachine().getGUIProvider().
 								getMainShell().getDisplay();
@@ -337,7 +337,7 @@ public class MobileBKUState extends State {
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
-					log.error("Error getting signature page", e); //$NON-NLS-1$
+					log.error("Error getting signature page", e); //
 				}
 			}
 		}, 0, 5000);
@@ -351,7 +351,7 @@ public class MobileBKUState extends State {
 			InputStream qrcode = handler.getQRCode();
 			if (qrcode == null) {
 				MobileBKUState.this.threadException = new Exception(
-						Messages.getString("error.FailedToLoadQRCode")); //$NON-NLS-1$
+						Messages.getString("error.FailedToLoadQRCode")); //
 			}
 			qr.setQR(qrcode);
 			getStateMachine().getGUIProvider().display(qr);
@@ -396,9 +396,9 @@ public class MobileBKUState extends State {
 				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingForAppComposite());
 			}
 		});
-		
+
 	}
-	
+
 	/**
 	 *  This composite notifies the user to open the signature-app
 	 */
@@ -472,8 +472,8 @@ public class MobileBKUState extends State {
 	}
 
 	/**
-	 *  when fingerprint or faceid is selected in the app 
-	 *  this information is shown 
+	 *  when fingerprint or faceid is selected in the app
+	 *  this information is shown
 	 */
 	public void showFingerPrintInformation() {
 		final ATrustStatus status = (ATrustStatus) this.status;
@@ -481,14 +481,14 @@ public class MobileBKUState extends State {
 
 		Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				// ping signature page to see if code has been scanned
 				try {
 					String resp = handler.getSignaturePage();
 					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp); //$NON-NLS-1$
+						log.debug("Signature page response: " + resp); //
 						getMobileBKUFingerprintComposite().setDone(true);
 						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 						display.wake();
@@ -496,7 +496,7 @@ public class MobileBKUState extends State {
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
-					log.error("Error getting signature page", e); //$NON-NLS-1$
+					log.error("Error getting signature page", e); //
 				}
 			}
 		}, 0, 5000);
@@ -539,14 +539,14 @@ public class MobileBKUState extends State {
 	/**
 	 * @return a boolean true if the user has pressed the sms tan button
 	 */
-	public boolean getSMSStatus() {		
-		
-		return this.getMobileBKUFingerprintComposite().isUserSMS(); 
+	public boolean getSMSStatus() {
+
+		return this.getMobileBKUFingerprintComposite().isUserSMS();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.WorkflowState#update(at.asit.pdfover.gui
 	 * .workflow.Workflow)
@@ -556,15 +556,15 @@ public class MobileBKUState extends State {
 		this.signingState = getStateMachine().getStatus().getSigningState();
 
 		this.signingState.setBKUConnector(new MobileBKUConnector(this));
-		log.debug("Setting base64 request to " + this.handler.useBase64Request()); //$NON-NLS-1$
+		log.debug("Setting base64 request to " + this.handler.useBase64Request()); //
 		this.signingState.setUseBase64Request(this.handler.useBase64Request());
 
 		if (this.threadException != null) {
-			String message = Messages.getString("error.Unexpected"); //$NON-NLS-1$
+			String message = Messages.getString("error.Unexpected"); //
 			log.error(message, this.threadException);
 			String errormsg = this.threadException.getLocalizedMessage();
 			if (errormsg != null && !errormsg.isEmpty())
-				message += ": " + errormsg; //$NON-NLS-1$
+				message += ": " + errormsg; //
 			ErrorDialog error = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
 					message, BUTTONS.OK);
@@ -583,7 +583,7 @@ public class MobileBKUState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#cleanUp()
 	 */
 	@Override
@@ -600,7 +600,7 @@ public class MobileBKUState extends State {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.states.State#setMainWindowBehavior()
 	 */
 	@Override

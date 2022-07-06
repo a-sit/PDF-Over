@@ -22,18 +22,18 @@ import java.io.File;
 import at.asit.pdfover.commons.Messages;
 
 /**
- * 
+ *
  */
 public class OutputfolderNotADirectoryException extends PDFOverGUIException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3270628002264772405L;
-	
+
 	/**
 	 * @param folder The file
 	 */
 	public OutputfolderNotADirectoryException(File folder) {
-		super(String.format(Messages.getString("exception.PathNotDirectory"), folder.getAbsolutePath())); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.PathNotDirectory"), folder.getAbsolutePath())); //
 	}
 }

@@ -23,10 +23,10 @@ package at.asit.pdfover.signator;
 public class SignatureException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 711578398780816710L;
-	
+
 
 	/**
 	 * Empty constructor
@@ -42,7 +42,7 @@ public class SignatureException extends Exception {
 	public SignatureException(Throwable cause) {
 		super(cause);
 	}
-	
+
 	/**
 	 * Constructor with message
 	 * @param msg the message

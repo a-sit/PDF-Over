@@ -1,7 +1,7 @@
 
 image: maven:3.8.5-openjdk-17
 
-  
+
 build-windows:
   stage: build
   cache:
@@ -10,7 +10,7 @@ build-windows:
       - .m2/repository
   tags:
     - docker
-  script: 
+  script:
     - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pwindows -Dno-native-profile
   artifacts:
     name: "PDFOver (Windows) on $CI_COMMIT_REF_SLUG"
@@ -26,14 +26,14 @@ build-linux:
       - .m2/repository
   tags:
     - docker
-  script: 
+  script:
     - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Plinux -Dno-native-profile
   artifacts:
     name: "PDFOver (Linux) on $CI_COMMIT_REF_SLUG"
     paths:
       - "pdf-over-build/*"
     expire_in: 1 day
-    
+
 build-mac:
   stage: build
   cache:
@@ -42,7 +42,7 @@ build-mac:
       - .m2/repository
   tags:
     - docker
-  script: 
+  script:
     - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac -Dno-native-profile
   artifacts:
     name: "PDFOver (Mac) on $CI_COMMIT_REF_SLUG"
@@ -58,7 +58,7 @@ build-mac-aarch64:
       - .m2/repository
   tags:
     - docker
-  script: 
+  script:
     - mvn -B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository clean install -Pmac-aarch64 -Dno-native-profile
   artifacts:
     name: "PDFOver (Mac M1) on $CI_COMMIT_REF_SLUG"

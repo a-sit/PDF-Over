@@ -28,12 +28,12 @@ public class BKUArgument extends Argument {
 	 */
 	public BKUArgument() {
 		super(
-				new String[] { "-b" }, "argument.help.bku"); //$NON-NLS-1$ //$NON-NLS-2$
+				new String[] { "-b" }, "argument.help.bku"); // //
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang
 	 * .String[], int, at.asit.pdfover.gui.workflow.StateMachine,
@@ -49,16 +49,16 @@ public class BKUArgument extends Argument {
 				BKUs argumentValue = BKUs.valueOf(args[argOffset + 1]);
 
 				getConfiguration().setDefaultBKUOverlay(argumentValue);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
 			throw new InitializationException(
-					Messages.getString("argument.invalid.bku") + this.getHelpText(), ex);  //$NON-NLS-1$
+					Messages.getString("argument.invalid.bku") + this.getHelpText(), ex);  //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.bku") + this.getHelpText(), null);  //$NON-NLS-1$
+				Messages.getString("argument.invalid.bku") + this.getHelpText(), null);  //
 	}
 
 }

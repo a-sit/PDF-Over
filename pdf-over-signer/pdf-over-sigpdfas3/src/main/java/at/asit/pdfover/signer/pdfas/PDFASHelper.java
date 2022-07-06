@@ -32,12 +32,12 @@ public class PDFASHelper {
 	 * PDF AS Object
 	 */
 	private static PdfAs pdfAs = null;
-	
+
 	/**
 	 * Internal Pdf AS Object
 	 */
 	private static PdfAsInternal pdfAsInternal = null;
-	
+
 	/**
 	 * Creates PDF AS Object
 	 * @return
@@ -48,7 +48,7 @@ public class PDFASHelper {
 		System.setProperty("pdf-as.work-dir", getWorkDir());
 		return new at.gv.egiz.pdfas.impl.api.PdfAsObject();
 	}
-	
+
 	/**
 	 * Provides the working directory
 	 * @return the working directory
@@ -56,7 +56,7 @@ public class PDFASHelper {
 	public static String getWorkDir() {
 		return System.getProperty("user.home") + "/.pdf-over";
 	}
-	
+
 	/**
 	 * Creates a PDF-AS Internal object
 	 * @return the PDF-AS Internal object
@@ -65,7 +65,7 @@ public class PDFASHelper {
 	private static PdfAsInternal createPdfAsInternal() throws PdfAsException {
 		return new at.gv.egiz.pdfas.impl.api.internal.PdfAsInternalObject();
 	}
-	
+
 	/**
 	 * Gets PDF-AS Object
 	 * @return the PDF-AS Object
@@ -81,7 +81,7 @@ public class PDFASHelper {
 		}
 		return pdfAs;
 	}
-	
+
 	/**
 	 * Gets PDF-AS Internal object
 	 * @return the PDF-AS Internal object

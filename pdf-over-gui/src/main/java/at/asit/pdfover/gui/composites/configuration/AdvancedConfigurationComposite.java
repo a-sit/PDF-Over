@@ -62,7 +62,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Composite for advanced configuration
- * 
+ *
  * Contains the simple configuration composite
  */
 public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
@@ -301,10 +301,10 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 				dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
 
 				// Change the title bar text
-				dlg.setText(Messages.getString("advanced_config.OutputFolder.Dialog_Title")); //$NON-NLS-1$
+				dlg.setText(Messages.getString("advanced_config.OutputFolder.Dialog_Title")); //
 
 				// Customizable message displayed in the dialog
-				dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog")); //$NON-NLS-1$
+				dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog")); //
 
 				// Calling open() will open and run the dialog.
 				// It will return the selected directory, or
@@ -393,12 +393,12 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		Composite compProxyHostContainer = new Composite(this.grpProxy, SWT.NONE);
 		compProxyHostContainer.setLayout(new FormLayout());
 		compProxyHostContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		
+
 		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
 		StateComposite.anchor(txtProxyHost).right(100,-42).top(0).left(0,5).set();
 		StateComposite.setFontHeight(txtProxyHost, Constants.TEXT_SIZE_NORMAL);
 
-		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //$NON-NLS-1$
+		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, ""); //
 		StateComposite.anchor(proxyHostErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
 		this.proxyHostErrorMarker.setVisible(false);
 
@@ -433,7 +433,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //$NON-NLS-1$
+		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, ""); //
 		StateComposite.anchor(txtProxyPortErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
 		this.txtProxyPortErrorMarker.setVisible(false);
 
@@ -449,14 +449,14 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	private void performPostFixChanged(String postfix) {
 
-		log.debug("Save file postfix changed to : {}", postfix); //$NON-NLS-1$
+		log.debug("Save file postfix changed to : {}", postfix); //
 		this.configurationContainer.setSaveFilePostFix(postfix);
 		AdvancedConfigurationComposite.this.txtSaveFilePostFix.setText(postfix);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
 	 */
@@ -466,25 +466,25 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void performOutputFolderChanged(String foldername) {
-		log.debug("Selected Output folder: {}", foldername); //$NON-NLS-1$
+		log.debug("Selected Output folder: {}", foldername); //
 		this.configurationContainer.setOutputFolder(foldername);
 		AdvancedConfigurationComposite.this.txtOutputFolder.setText(foldername);
 	}
 
 	int getBKUElementIndex(BKUs bku) {
-		String lookup = "BKU." + bku.toString(); //$NON-NLS-1$
+		String lookup = "BKU." + bku.toString(); //
 		String bkuName = Messages.getString(lookup);
 
 		int i = this.bkuStrings.indexOf(bkuName);
 		if (i == -1) {
-			log.warn("NO BKU match for {}", bkuName); //$NON-NLS-1$
+			log.warn("NO BKU match for {}", bkuName); //
 			return 0;
 		}
 		return i;
 	}
 
 	void performBKUSelectionChanged(BKUs selected) {
-		log.debug("Selected BKU: {}", selected); //$NON-NLS-1$
+		log.debug("Selected BKU: {}", selected); //
 		this.configurationContainer.setDefaultBKU(selected);
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
 	}
@@ -494,8 +494,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			BKUs bkuvalue = resolveBKU(selected);
 			this.performBKUSelectionChanged(bkuvalue);
 		} catch (Exception ex) {
-			log.error("Failed to parse BKU value: {} {}", selected, ex); //$NON-NLS-1$
-			ErrorDialog dialog = new ErrorDialog(getShell(), Messages.getString("error.InvalidBKU"), BUTTONS.OK); //$NON-NLS-1$
+			log.error("Failed to parse BKU value: {} {}", selected, ex); //
+			ErrorDialog dialog = new ErrorDialog(getShell(), Messages.getString("error.InvalidBKU"), BUTTONS.OK); //
 			dialog.open();
 		}
 	}
@@ -504,7 +504,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		int blen = BKUs.values().length;
 
 		for (int i = 0; i < blen; i++) {
-			String lookup = "BKU." + BKUs.values()[i].toString(); //$NON-NLS-1$
+			String lookup = "BKU." + BKUs.values()[i].toString(); //
 			if (Messages.getString(lookup).equals(localizedBKU)) {
 				return BKUs.values()[i];
 			}
@@ -516,23 +516,23 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: {} IDX: {}", locale, i); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("Locale: {} IDX: {}", locale, i); // //
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for {}", locale); //$NON-NLS-1$
+		log.warn("NO Locale match for {}", locale); //
 		return 0;
 	}
 
 	void performLocaleSelectionChanged(Locale selected) {
-		log.debug("Selected Locale: {}", selected); //$NON-NLS-1$
+		log.debug("Selected Locale: {}", selected); //
 		this.configurationContainer.setLocale(selected);
 		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
 	}
 
 	void performPositionSelection(boolean automatic) {
-		log.debug("Selected Position: {}", automatic); //$NON-NLS-1$
+		log.debug("Selected Position: {}", automatic); //
 		SignaturePosition pos = automatic ? new SignaturePosition() : null;
 		this.configurationContainer.setDefaultSignaturePosition(pos);
 		this.btnAutomatischePositionierung.setSelection(automatic);
@@ -596,7 +596,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		} catch (Exception ex) {
 			this.proxyHostErrorMarker.setVisible(true);
 			this.proxyHostErrorMarker.setToolTipText(ex.getMessage());
-			log.error("processProxyHost: ", ex); //$NON-NLS-1$
+			log.error("processProxyHost: ", ex); //
 		}
 	}
 
@@ -615,7 +615,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		} catch (Exception ex) {
 			this.txtProxyPortErrorMarker.setVisible(true);
 			this.txtProxyPortErrorMarker.setToolTipText(ex.getMessage());
-			log.error("processProxyPort: ", ex); //$NON-NLS-1$
+			log.error("processProxyPort: ", ex); //
 		}
 	}
 
@@ -639,7 +639,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -649,7 +649,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(
 	 * at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
@@ -677,7 +677,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		try {
 			this.configurationContainer.setProxyPort(provider.getProxyPortPersistent());
 		} catch (InvalidPortException e) {
-			log.error("Failed to set proxy port!", e); //$NON-NLS-1$
+			log.error("Failed to set proxy port!", e); //
 		}
 		this.configurationContainer.setProxyUser(provider.getProxyUserPersistent());
 		this.configurationContainer.setProxyPass(provider.getProxyPassPersistent());
@@ -686,7 +686,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#loadConfiguration()
 	 */
@@ -730,7 +730,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/**
 	 * @param profile
-	 * 
+	 *
 	 */
 	public void performSetSignatureProfile(Profile profile) {
 		switch (profile) {
@@ -748,7 +748,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(
 	 * at.asit.pdfover.gui.workflow.config.ConfigManipulator,
@@ -779,8 +779,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		if (hostOld != null && !hostOld.isEmpty() && (hostNew == null || hostNew.isEmpty())) {
 			// Proxy has been removed, let's clear the system properties
 			// Otherwise, the proxy settings wouldn't get removed
-			System.clearProperty("http.proxyHost"); //$NON-NLS-1$
-			System.clearProperty("https.proxyHost"); //$NON-NLS-1$
+			System.clearProperty("http.proxyHost"); //
+			System.clearProperty("https.proxyHost"); //
 		}
 		store.setProxyHost(hostNew);
 
@@ -788,8 +788,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		int portNew = this.configurationContainer.getProxyPort();
 		if (portOld != -1 && portNew == -1) {
 			// cf. above
-			System.clearProperty("http.proxyPort"); //$NON-NLS-1$
-			System.clearProperty("https.proxyPort"); //$NON-NLS-1$
+			System.clearProperty("http.proxyPort"); //
+			System.clearProperty("https.proxyPort"); //
 		}
 		store.setProxyPort(portNew);
 
@@ -797,8 +797,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		String userNew = this.configurationContainer.getProxyUser();
 		if (userOld != null && !userOld.isEmpty() && (userNew == null || userNew.isEmpty())) {
 			// cf. above
-			System.clearProperty("http.proxyUser"); //$NON-NLS-1$
-			System.clearProperty("https.proxyUser"); //$NON-NLS-1$
+			System.clearProperty("http.proxyUser"); //
+			System.clearProperty("https.proxyUser"); //
 		}
 		store.setProxyUser(userNew);
 
@@ -806,15 +806,15 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		String passNew = this.configurationContainer.getProxyPass();
 		if (passOld != null && passNew == null) {
 			// cf. above
-			System.clearProperty("http.proxyPassword"); //$NON-NLS-1$
-			System.clearProperty("https.proxyPassword"); //$NON-NLS-1$
+			System.clearProperty("http.proxyPassword"); //
+			System.clearProperty("https.proxyPassword"); //
 		}
 		store.setProxyPass(passNew);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#validateSettings()
 	 */
@@ -851,62 +851,62 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
 	public void reloadResources() {
-		this.grpSignatur.setText(Messages.getString("advanced_config.Signature_Title")); //$NON-NLS-1$
-		this.btnAutomatischePositionierung.setText(Messages.getString("advanced_config.AutoPosition")); //$NON-NLS-1$
-		this.btnAutomatischePositionierung.setToolTipText(Messages.getString("advanced_config.AutoPosition_ToolTip")); //$NON-NLS-1$
-		this.grpPlaceholder.setText(Messages.getString("advanced_config.Placeholder_Title")); //$NON-NLS-1$
-		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker")); //$NON-NLS-1$
-		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //$NON-NLS-1$
-		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields")); //$NON-NLS-1$
-		this.btnSignatureFieldsUsage.setToolTipText(Messages.getString("advanced_config.UseSignatureFields_ToolTip")); //$NON-NLS-1$
+		this.grpSignatur.setText(Messages.getString("advanced_config.Signature_Title")); //
+		this.btnAutomatischePositionierung.setText(Messages.getString("advanced_config.AutoPosition")); //
+		this.btnAutomatischePositionierung.setToolTipText(Messages.getString("advanced_config.AutoPosition_ToolTip")); //
+		this.grpPlaceholder.setText(Messages.getString("advanced_config.Placeholder_Title")); //
+		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker")); //
+		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip")); //
+		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields")); //
+		this.btnSignatureFieldsUsage.setToolTipText(Messages.getString("advanced_config.UseSignatureFields_ToolTip")); //
 		this.btnEnablePlaceholderUsage.setText(Messages.getString("advanced_config.Placeholder_Enabled"));
-		this.btnPdfACompat.setText(Messages.getString("advanced_config.PdfACompat")); //$NON-NLS-1$
-		this.btnPdfACompat.setToolTipText(Messages.getString("advanced_config.PdfACompat_ToolTip")); //$NON-NLS-1$
-		this.lblTransparenz.setText(Messages.getString("advanced_config.SigPHTransparency")); //$NON-NLS-1$
-		this.lblTransparenzLinks.setText(Messages.getString("advanced_config.SigPHTransparencyMin")); //$NON-NLS-1$
-		this.lblTransparenzRechts.setText(Messages.getString("advanced_config.SigPHTransparencyMax")); //$NON-NLS-1$
-		this.sclTransparenz.setToolTipText(Messages.getString("advanced_config.SigPHTransparencyTooltip")); //$NON-NLS-1$
+		this.btnPdfACompat.setText(Messages.getString("advanced_config.PdfACompat")); //
+		this.btnPdfACompat.setToolTipText(Messages.getString("advanced_config.PdfACompat_ToolTip")); //
+		this.lblTransparenz.setText(Messages.getString("advanced_config.SigPHTransparency")); //
+		this.lblTransparenzLinks.setText(Messages.getString("advanced_config.SigPHTransparencyMin")); //
+		this.lblTransparenzRechts.setText(Messages.getString("advanced_config.SigPHTransparencyMax")); //
+		this.sclTransparenz.setToolTipText(Messages.getString("advanced_config.SigPHTransparencyTooltip")); //
 
-		this.grpBkuAuswahl.setText(Messages.getString("advanced_config.BKUSelection_Title")); //$NON-NLS-1$
-		this.cmbBKUAuswahl.setToolTipText(Messages.getString("advanced_config.BKUSelection_ToolTip")); //$NON-NLS-1$
-		this.btnKeystoreEnabled.setText(Messages.getString("advanced_config.KeystoreEnabled")); //$NON-NLS-1$
-		this.btnKeystoreEnabled.setToolTipText(Messages.getString("advanced_config.KeystoreEnabled_ToolTip")); //$NON-NLS-1$
+		this.grpBkuAuswahl.setText(Messages.getString("advanced_config.BKUSelection_Title")); //
+		this.cmbBKUAuswahl.setToolTipText(Messages.getString("advanced_config.BKUSelection_ToolTip")); //
+		this.btnKeystoreEnabled.setText(Messages.getString("advanced_config.KeystoreEnabled")); //
+		this.btnKeystoreEnabled.setToolTipText(Messages.getString("advanced_config.KeystoreEnabled_ToolTip")); //
 
-		this.grpSpeicherort.setText(Messages.getString("advanced_config.OutputFolder_Title")); //$NON-NLS-1$
-		this.lblDefaultOutputFolder.setText(Messages.getString("advanced_config.OutputFolder")); //$NON-NLS-1$
-		this.txtOutputFolder.setToolTipText(Messages.getString("advanced_config.OutputFolder_ToolTip")); //$NON-NLS-1$
-		this.btnBrowse.setText(Messages.getString("common.browse")); //$NON-NLS-1$
+		this.grpSpeicherort.setText(Messages.getString("advanced_config.OutputFolder_Title")); //
+		this.lblDefaultOutputFolder.setText(Messages.getString("advanced_config.OutputFolder")); //
+		this.txtOutputFolder.setToolTipText(Messages.getString("advanced_config.OutputFolder_ToolTip")); //
+		this.btnBrowse.setText(Messages.getString("common.browse")); //
 
-		this.grpLocaleAuswahl.setText(Messages.getString("advanced_config.LocaleSelection_Title")); //$NON-NLS-1$
-		this.cmbLocaleAuswahl.setToolTipText(Messages.getString("advanced_config.LocaleSelection_ToolTip")); //$NON-NLS-1$
+		this.grpLocaleAuswahl.setText(Messages.getString("advanced_config.LocaleSelection_Title")); //
+		this.cmbLocaleAuswahl.setToolTipText(Messages.getString("advanced_config.LocaleSelection_ToolTip")); //
 
-		this.grpUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck_Title")); //$NON-NLS-1$
-		this.btnUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck")); //$NON-NLS-1$
-		this.btnUpdateCheck.setToolTipText(Messages.getString("advanced_config.UpdateCheck_ToolTip")); //$NON-NLS-1$
+		this.grpUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck_Title")); //
+		this.btnUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck")); //
+		this.btnUpdateCheck.setToolTipText(Messages.getString("advanced_config.UpdateCheck_ToolTip")); //
 
-		this.grpProxy.setText(Messages.getString("advanced_config.Proxy_Title")); //$NON-NLS-1$
-		this.lblProxyHost.setText(Messages.getString("advanced_config.ProxyHost")); //$NON-NLS-1$
-		this.txtProxyHost.setToolTipText(Messages.getString("advanced_config.ProxyHost_ToolTip")); //$NON-NLS-1$
-		this.txtProxyHost.setMessage(Messages.getString("advanced_config.ProxyHost_Template")); //$NON-NLS-1$
-		this.lblProxyPort.setText(Messages.getString("advanced_config.ProxyPort")); //$NON-NLS-1$
-		this.txtProxyPort.setToolTipText(Messages.getString("advanced_config.ProxyPort_ToolTip")); //$NON-NLS-1$
-		this.txtProxyPort.setMessage(Messages.getString("advanced_config.ProxyPort_Template")); //$NON-NLS-1$
+		this.grpProxy.setText(Messages.getString("advanced_config.Proxy_Title")); //
+		this.lblProxyHost.setText(Messages.getString("advanced_config.ProxyHost")); //
+		this.txtProxyHost.setToolTipText(Messages.getString("advanced_config.ProxyHost_ToolTip")); //
+		this.txtProxyHost.setMessage(Messages.getString("advanced_config.ProxyHost_Template")); //
+		this.lblProxyPort.setText(Messages.getString("advanced_config.ProxyPort")); //
+		this.txtProxyPort.setToolTipText(Messages.getString("advanced_config.ProxyPort_ToolTip")); //
+		this.txtProxyPort.setMessage(Messages.getString("advanced_config.ProxyPort_Template")); //
 		// this.lblProxyUser.setText(Messages.getString("advanced_config.ProxyUser"));
-		// //$NON-NLS-1$
+		// //
 		// this.txtProxyUser.setToolTipText(Messages
-		// .getString("advanced_config.ProxyUser_ToolTip")); //$NON-NLS-1$
+		// .getString("advanced_config.ProxyUser_ToolTip")); //
 		// this.txtProxyUser.setMessage(Messages
-		// .getString("advanced_config.ProxyUser_Template")); //$NON-NLS-1$
+		// .getString("advanced_config.ProxyUser_Template")); //
 		// this.lblProxyPass.setText(Messages.getString("advanced_config.ProxyPass"));
-		// //$NON-NLS-1$
+		// //
 		// this.txtProxyPass.setToolTipText(Messages
-		// .getString("advanced_config.ProxyPass_ToolTip")); //$NON-NLS-1$
+		// .getString("advanced_config.ProxyPass_ToolTip")); //
 		// this.txtProxyPass.setMessage(Messages
-		// .getString("advanced_config.ProxyPass_Template")); //$NON-NLS-1$
+		// .getString("advanced_config.ProxyPass_Template")); //
 	}
 }

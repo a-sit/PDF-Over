@@ -65,7 +65,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	/**
 	 * Gets the PDFAS Positioning
-	 * 
+	 *
 	 * @return SignaturePositioning
 	 * @throws PDFDocumentException
 	 */
@@ -95,7 +95,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	/**
 	 * Gets PDF - AS specific data source
-	 * 
+	 *
 	 * @return ByteArrayPDFASDataSource
 	 */
 	public DataSource getPDFASDataSource() {
@@ -161,14 +161,14 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholder()
 	 */
 	@Override
 	public Image getPlaceholder() {
 
 		try {
-			Image logo = null; 
+			Image logo = null;
 			try {
 			if (this.getEmblem() != null
 					&& this.getEmblem().getFileName() != null
@@ -176,29 +176,29 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 							.exists()) {
 				logo = ImageIO.read(new File(this.getEmblem()
 						.getFileName()));
-				
-			} 
+
+			}
 			}
 			catch(Exception e) {
 				log.error("Failed to get emblem ...", e);
 			}
-			
+
 			Image img = null;
 			String lang = getSignatureLanguage();
 			if (lang != null && lang.equals("en")) {
 				img = ImageIO.read(PdfAsSignatureParameter.class
 						.getResourceAsStream("/img/sign_prev_en.png"));
-				
+
 				if(logo != null) {
 					logo = logo.getScaledInstance(141, 140,
 							Image.SCALE_SMOOTH);
 					img.getGraphics().drawImage(logo, 6, 115, null);
 				}
-				
+
 			} else {
 				img = ImageIO.read(PdfAsSignatureParameter.class
 						.getResourceAsStream("/img/sign_prev_de.png"));
-				
+
 				if(logo != null) {
 					logo = logo.getScaledInstance(141, 140,
 							Image.SCALE_SMOOTH);
@@ -211,13 +211,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 					getPlaceholderDimension().getHeight(),
 					BufferedImage.TYPE_INT_RGB);
 		}
-		
+
 //		Try to render signature block - disabled for now (just use images)
 //
 //		try {
 //			PDFASHelper.getPdfAs();
 //
-//			
+//
 //			float width = getPlaceholderDimension().getWidth() * PLACEHOLDER_SCALE;
 //			float height = getPlaceholderDimension().getHeight() * PLACEHOLDER_SCALE;
 //
@@ -231,13 +231,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //					height, (int)width, timage.getGraphics());
 //			timage.flush();
 //			float mheight = 0;
-//			
+//
 //			for(int i = 0; i < heights.length; i++) {
 //				mheight += heights[i];
 //			}
-//		
+//
 //			this.height = (int) (mheight / PLACEHOLDER_SCALE);
-//			
+//
 //			log.info("Width: " + width + " Height: " + height + " HShould: " + mheight);
 //			BufferedImage image = new BufferedImage((int) width, (int) mheight,
 //					BufferedImage.TYPE_INT_RGB);
@@ -277,10 +277,10 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //		sign_obj.setKZ(BinarySignator_1_1_0.MY_ID);
 //		return sign_obj.getAbstractTable();
 //	}
-//	
+//
 //	/**
 //	 * used for debugging ..
-//	 * 
+//	 *
 //	 * @param image
 //	 * @param ext
 //	 */
@@ -351,7 +351,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //							(int) (colWidths[j] * perUnit), rsize);
 //
 //					String[] lines = getLines(entry.getValue().toString(), (int)(colWidths[j] * perUnit), g.getFontMetrics(), (int) style.getPadding()  * PLACEHOLDER_SCALE);
-//					
+//
 //					for(int i = 0; i < lines.length; i++) {
 //						g.drawString(lines[i].toString(), (int) (xoff
 //								+ offset + padding / PLACEHOLDER_SCALE), (int) (yoff + padding
@@ -393,7 +393,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //					// Table
 //
 //					int colWidth = (int) (colWidths[j] * perUnit);
-//					
+//
 //					float[] cheights = this.getTableHeights(
 //							(Table) entry.getValue(), style, rsize, colWidth, g);
 //
@@ -432,7 +432,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //
 //	/**
 //	 * extracts the value font
-//	 * 
+//	 *
 //	 * @param style
 //	 *            the table style
 //	 * @return the value font
@@ -453,10 +453,10 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //	private static String[] getLines(String text, int width, FontMetrics fmetric, int padding) {
 //		String currentline = text;
 //		int averageCharWi = fmetric.charWidth('c');
-//		
+//
 //		int max_line_chars = (width - padding) / (averageCharWi);
 //		ArrayList<String> lines = new ArrayList<String>();
-//		
+//
 //		while(currentline.length() > max_line_chars) {
 //			int cutidx = currentline.substring(0, max_line_chars).lastIndexOf(' ');
 //			if(cutidx < 1)  {
@@ -469,33 +469,33 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //			currentline = currentline.substring(cutidx);
 //		}
 //		lines.add(currentline);
-//		
-//		
+//
+//
 //		String[] arrline = new String[lines.size()];
 //		for(int i = 0; i < lines.size(); i++) {
 //			arrline[i] = lines.get(i);
 //		}
-//		
+//
 //		//log.debug(text + " needs " + lines.size() + " lines");
-//		
+//
 //		return arrline;
 //	}
-//	
+//
 //	@SuppressWarnings("rawtypes")
 //	private float[] getTableHeights(Table table, Style parentstyle, float height, int width, Graphics g) {
 //		ArrayList rows = table.getRows();
 //		float[] sizes = new float[rows.size()];
 //		Style style = parentstyle;
 //		if (table.getStyle() != null) {
-//			style = table.getStyle(); 
+//			style = table.getStyle();
 //		}
 //		Font font = PdfAsSignatureParameter.getFont(style);
 //		g.setFont(font);
-//		
+//
 //		float total_height = this.getTableHeight(table, parentstyle, width, g);
 //
 //		float perUnit = height / total_height;
-//		
+//
 //		this.perUnitHeight = perUnit;
 //
 //		float[] colWidths = table.getColsRelativeWith();
@@ -505,7 +505,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //			sum += colWidths[i];
 //		}
 //
-//		float perUnitWidth = width / sum;		
+//		float perUnitWidth = width / sum;
 //
 //		for (int i = 0; i < rows.size(); i++) {
 //			Object robj = rows.get(i);
@@ -516,16 +516,16 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //				Entry entry = (Entry) cols.get(j);
 //				if (entry.getType() == 0 || entry.getType() == 1) {
 //					int colWidth = (int) (colWidths[j] * perUnitWidth);
-//					
+//
 //					float trsize = getLines(entry.getValue().toString(), colWidth, g.getFontMetrics(), (int) style.getPadding()  * PLACEHOLDER_SCALE).length * g.getFontMetrics().getHeight() + (style.getPadding()  * PLACEHOLDER_SCALE * 2);
-//					
+//
 //					if (rsize < trsize) {
 //						rsize = trsize;
 //					}
 //				} else if (entry.getType() == 3) {
-//					
+//
 //					int colWidth = (int) (colWidths[j] * perUnitWidth);
-//					
+//
 //					tsize = this
 //							.getTableHeight((Table) entry.getValue(), style, colWidth, g);
 //					if (rsize < tsize) {
@@ -547,7 +547,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //			style = table.getStyle();
 //		}
 //		float size = 0;
-//		
+//
 //		float[] colWidths = table.getColsRelativeWith();
 //		float sum = 0;
 //
@@ -556,7 +556,7 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //		}
 //
 //		float perUnitWidth = width / sum;
-//		
+//
 //		for (int i = 0; i < rows.size(); i++) {
 //			Object robj = rows.get(i);
 //			ArrayList cols = (ArrayList) robj;
@@ -566,13 +566,13 @@ public class PdfAsSignatureParameter extends SignatureParameter {
 //				Entry entry = (Entry) cols.get(j);
 //				if (entry.getType() == 0 || entry.getType() == 1) {
 //					int colWidth = (int) (colWidths[j] * perUnitWidth);
-//					
+//
 //					float trsize = getLines(entry.getValue().toString(), colWidth, g.getFontMetrics(), (int) style.getPadding()  * PLACEHOLDER_SCALE).length * g.getFontMetrics().getHeight() + (style.getPadding()  * PLACEHOLDER_SCALE * 2);
-//					
+//
 //					if (rsize < trsize) {
 //						rsize = trsize;
 //					}
-//					
+//
 //					/*if (rsize < ((style.getPadding() * PLACEHOLDER_SCALE * 2) + fontSize)) {
 //						rsize = ((style.getPadding() * PLACEHOLDER_SCALE * 2) + fontSize);
 //					}*/

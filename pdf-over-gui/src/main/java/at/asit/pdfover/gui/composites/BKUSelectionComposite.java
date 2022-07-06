@@ -40,14 +40,14 @@ import at.asit.pdfover.signator.BKUs;
  * Composite for BKU selection
  */
 public class BKUSelectionComposite extends StateComposite {
-	
+
 	/**
 	 * Margin for button
 	 */
 	public static final int btnMargin = 2;
-	
+
 	/**
-	 * Listener for local bku selection 
+	 * Listener for local bku selection
 	 */
 	private final class LocalSelectionListener extends SelectionAdapter {
 		/**
@@ -58,13 +58,13 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to LOCAL"); //$NON-NLS-1$
+			log.debug("Setting BKU to LOCAL"); //
 			setSelected(BKUs.LOCAL);
 		}
 	}
-	
+
 	/**
-	 * Listener for mobile bku selection 
+	 * Listener for mobile bku selection
 	 */
 	private final class MobileSelectionListener extends SelectionAdapter {
 		/**
@@ -75,13 +75,13 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to MOBILE"); //$NON-NLS-1$
+			log.debug("Setting BKU to MOBILE"); //
 			setSelected(BKUs.MOBILE);
 		}
 	}
 
 	/**
-	 * Listener for keystore selection 
+	 * Listener for keystore selection
 	 */
 	private final class KSSelectionListener extends SelectionAdapter {
 		/**
@@ -92,7 +92,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to KS"); //$NON-NLS-1$
+			log.debug("Setting BKU to KS"); //
 			setSelected(BKUs.KS);
 		}
 	}
@@ -149,7 +149,7 @@ public class BKUSelectionComposite extends StateComposite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
-	 * @param state 
+	 * @param state
 	 */
 	public BKUSelectionComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
@@ -229,9 +229,9 @@ public class BKUSelectionComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //$NON-NLS-1$
-		this.btnCard.setText(Messages.getString("bku_selection.card")); //$NON-NLS-1$
+		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //
+		this.btnCard.setText(Messages.getString("bku_selection.card")); //
 		if (this.btnKS != null)
-			this.btnKS.setText(Messages.getString("bku_selection.ks")); //$NON-NLS-1$
+			this.btnKS.setText(Messages.getString("bku_selection.ks")); //
 	}
 }

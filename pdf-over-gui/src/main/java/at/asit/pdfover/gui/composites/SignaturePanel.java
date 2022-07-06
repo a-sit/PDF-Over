@@ -42,7 +42,7 @@ import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
 /**
- * 
+ *
  */
 public class SignaturePanel extends JPanel {
 	/**
@@ -146,7 +146,7 @@ public class SignaturePanel extends JPanel {
 	 * Set the signature placeholder image
 	 * @param placeholder signature placeholder
 	 * @param width width of the placeholder in page space
-	 * @param height height of the placeholder in page space 
+	 * @param height height of the placeholder in page space
 	 * @param transparency transparency of the signature placeholder (0 - 255)
 	 */
 	public void setSignaturePlaceholder(Image placeholder, int width, int height, int transparency) {
@@ -175,7 +175,7 @@ public class SignaturePanel extends JPanel {
 
 	/**
 	 * Add and display a new page at the end of the document
-	 * 
+	 *
 	 * This page has the same dimensions as the old last page
 	 */
 	public void addNewLastPage() {
@@ -224,7 +224,7 @@ public class SignaturePanel extends JPanel {
 
 	/**
 	 * Stop the generation of any previous page, and draw the new one.
-	 * 
+	 *
 	 * @param page the PDFPage to draw.
 	 */
 	private synchronized void showPage(PDFPage page) {
@@ -290,7 +290,7 @@ public class SignaturePanel extends JPanel {
 			try {
 				this.currentXform = this.currentXform.createInverse();
 			} catch (NoninvertibleTransformException nte) {
-				log.error("Error inverting page transform!", nte); //$NON-NLS-1$
+				log.error("Error inverting page transform!", nte); //
 			}
 
 			if (this.sigPagePos == null)
@@ -319,7 +319,7 @@ public class SignaturePanel extends JPanel {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if (this.currentImage == null) {
 			g.setColor(Color.black);
-			g.drawString(Messages.getString("error.SignaturePanel.NoPage"), getWidth() / 2 - 30, //$NON-NLS-1$
+			g.drawString(Messages.getString("error.SignaturePanel.NoPage"), getWidth() / 2 - 30, //
 					getHeight() / 2);
 			if (this.currentPage != null) {
 				showPage(this.currentPage);
@@ -366,7 +366,7 @@ public class SignaturePanel extends JPanel {
 						g_phs.drawImage(placeholder, 0, 0, null);
 
 						// Draw grey "Signature" overlay
-						String overlay = Messages.getString("positioning.signature"); //$NON-NLS-1$
+						String overlay = Messages.getString("positioning.signature"); //
 						// Voodoo to get overlay font scale
 						float scale = (((float) this.sigScreenWidth) / this.sigPlaceholder.getWidth(null)) * 150;
 						g_phs.setFont(getFont().deriveFont(scale));
@@ -399,7 +399,7 @@ public class SignaturePanel extends JPanel {
 					showPage(this.currentPage);
 				}
 				g.setColor(Color.black);
-				g.drawString(Messages.getString("error.SignaturePanel.NoRender"), getWidth() / 2 - 30, //$NON-NLS-1$
+				g.drawString(Messages.getString("error.SignaturePanel.NoRender"), getWidth() / 2 - 30, //
 						getHeight() / 2);
 			}
 		}
@@ -408,7 +408,7 @@ public class SignaturePanel extends JPanel {
 	/**
 	 * Handles notification of the fact that some part of the image changed.
 	 * Repaints that portion.
-	 * 
+	 *
 	 * @return true if more updates are desired.
 	 */
 	@Override

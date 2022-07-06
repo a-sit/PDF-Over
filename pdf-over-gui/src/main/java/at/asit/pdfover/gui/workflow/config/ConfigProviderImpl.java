@@ -59,7 +59,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	/**
 	 * An empty property entry
 	 */
-	private static final String STRING_EMPTY = ""; //$NON-NLS-1$
+	private static final String STRING_EMPTY = ""; //
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
@@ -79,7 +79,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigProvider#loadConfiguration(java.io
 	 * .InputStream)
@@ -110,13 +110,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setSaveFilePostFix(postFix);
 
 		String localeString = config.getProperty(Constants.CFG_LOCALE);
-		
+
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
 		if (targetLocale != null)
 			setLocale(targetLocale);
 
 		String signatureLocaleString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
-		
+
 		Locale signatureTargetLocale = LocaleSerializer.parseFromString(signatureLocaleString);
 		if (signatureTargetLocale != null)
 			setSignatureLocale(signatureTargetLocale);
@@ -124,15 +124,15 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		String useMarker = config.getProperty(Constants.CFG_USE_MARKER);
 		if (useMarker != null)
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
-		
+
 		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
 		if (useSignatureFields != null)
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
-		
+
 		String enablePlaceholder = config.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
 		if (enablePlaceholder != null)
 			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
-		
+
 		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
 		if (signatureProfile != null)
 		{
@@ -143,7 +143,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configurationOverlay.setSignatureProfile(profile);
 			}
 		}
-		
+
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
 			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
@@ -162,7 +162,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configuration.setMobileBKUType(MobileBKUs.valueOf(
 						bkuType.trim().toUpperCase()));
 			} catch (IllegalArgumentException e) {
-				log.error("Invalid BKU type: " + bkuType); //$NON-NLS-1$
+				log.error("Invalid BKU type: " + bkuType); //
 				this.configuration.setMobileBKUType(DEFAULT_MOBILE_BKU_TYPE);
 			}
 		}
@@ -179,7 +179,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			if (port > 0 && port <= 0xFFFF)
 				setProxyPort(port);
 			else
-				log.warn("Proxy port is out of range!: " + port); //$NON-NLS-1$
+				log.warn("Proxy port is out of range!: " + port); //
 		}
 
 		// Set Default BKU
@@ -189,10 +189,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			try {
 				defaultBKU = BKUs.valueOf(bkuString);
 			} catch (IllegalArgumentException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Invalid BKU config value " + bkuString + " using none!"); // //
 				defaultBKU = BKUs.NONE;
 			} catch (NullPointerException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Invalid BKU config value " + bkuString + " using none!"); // //
 				defaultBKU = BKUs.NONE;
 			}
 		}
@@ -205,7 +205,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			try {
 				transparency = Integer.parseInt(trans);
 			} catch (NumberFormatException e) {
-				log.debug("Couldn't parse placeholder transparency", e); //$NON-NLS-1$
+				log.debug("Couldn't parse placeholder transparency", e); //
 				// ignore parsing exception
 			}
 		}
@@ -226,7 +226,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				width = Integer.parseInt(size.substring(0, pos).trim());
 				height = Integer.parseInt(size.substring(pos + 1).trim());
 			} catch (NumberFormatException e) {
-				log.debug("Couldn't parse main window size", e); //$NON-NLS-1$
+				log.debug("Couldn't parse main window size", e); //
 				// ignore parsing exception
 			}
 		}
@@ -257,7 +257,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 							position = new SignaturePosition(x, y, p);
 						} catch (NumberFormatException ex) {
 							log.error(
-									"Signature Position read from config failed: Not a valid number", ex); //$NON-NLS-1$
+									"Signature Position read from config failed: Not a valid number", ex); //
 						}
 					} else if (matcher.group(5) != null) {
 						// we have format auto
@@ -273,10 +273,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 						position = new SignaturePosition(x, y);
 					}
 				} else {
-					log.error("Signature Position read from config failed: wrong group Count!"); //$NON-NLS-1$
+					log.error("Signature Position read from config failed: wrong group Count!"); //
 				}
 			} else {
-				log.error("Signature Position read from config failed: not matching string"); //$NON-NLS-1$
+				log.error("Signature Position read from config failed: not matching string"); //
 			}
 		}
 		setDefaultSignaturePosition(position);
@@ -300,7 +300,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigManipulator#saveCurrentConfiguration()
 	 */
@@ -338,7 +338,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				Integer.toString(getPlaceholderTransparency()));
 
 		Point size = this.configuration.getMainWindowSize();
-		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //$NON-NLS-1$
+		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //
 
 		Locale configLocale = getLocale();
 		if(configLocale != null) {
@@ -352,11 +352,11 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (getUseMarker())
 			props.setProperty(Constants.CFG_USE_MARKER, Constants.TRUE);
-		
+
 		if (getUseSignatureFields()) {
 			props.setProperty(Constants.CFG_USE_SIGNATURE_FIELDS, Constants.TRUE);
 		}
-		
+
 		if (getEnablePlaceholderUsage()) {
 			props.setProperty(Constants.CFG_ENABLE_PLACEHOLDER, Constants.TRUE);
 		}
@@ -366,12 +366,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		SignaturePosition pos = getDefaultSignaturePositionPersistent();
 		if (pos == null) {
-			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //$NON-NLS-1$
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //
 		} else if (pos.useAutoPositioning()) {
-			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto"); //$NON-NLS-1$
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto"); //
 		} else {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION,
-					String.format((Locale) null, "x=%f;y=%f;p=%d", //$NON-NLS-1$
+					String.format((Locale) null, "x=%f;y=%f;p=%d", //
 							pos.getX(), pos.getY(), pos.getPage()));
 		}
 
@@ -409,21 +409,21 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		if (!getUpdateCheck())
 			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
-		
+
 		props.setProperty(Constants.SIGNATURE_PROFILE, getSignatureProfile());
-		
+
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
 
-		props.store(outputstream, "Configuration file was generated!"); //$NON-NLS-1$
+		props.store(outputstream, "Configuration file was generated!"); //
 
-		log.info("Configuration file saved to " + configFile.getAbsolutePath()); //$NON-NLS-1$
+		log.info("Configuration file saved to " + configFile.getAbsolutePath()); //
 	}
 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
 	 */
@@ -434,7 +434,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setConfigurationFile(java
 	 * .lang.String)
@@ -446,7 +446,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationFile()
 	 */
 	@Override
@@ -456,7 +456,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the default bku type
-	 * 
+	 *
 	 * @param bku
 	 *            the bku type
 	 */
@@ -471,12 +471,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setDefaultBKUOverlay(BKUs bku) {
 		this.configurationOverlay.setDefaultBKU(bku);
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultBKU()
 	 */
 	@Override
@@ -497,7 +497,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the default signature position
-	 * 
+	 *
 	 * @param signaturePosition
 	 *            the default signature position
 	 */
@@ -517,7 +517,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultSignaturePosition()
 	 */
@@ -539,7 +539,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the signature placeholder transparency
-	 * 
+	 *
 	 * @param transparency
 	 *            the signature placeholder transparency
 	 */
@@ -550,7 +550,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigProvider#getPlaceholderTransparency()
 	 */
@@ -561,7 +561,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the default mobile number
-	 * 
+	 *
 	 * @param number
 	 *            the default mobile number
 	 */
@@ -588,7 +588,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultMobileNumber()
 	 */
 	@Override
@@ -612,7 +612,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the default mobile password
-	 * 
+	 *
 	 * @param password
 	 *            the default password
 	 */
@@ -639,7 +639,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultPassword()
 	 */
 	@Override
@@ -663,7 +663,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the default emblem
-	 * 
+	 *
 	 * @param emblem
 	 *            the default emblem
 	 */
@@ -676,7 +676,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configuration.setEmblem(emblem);
 			}
 		} catch (InvalidEmblemFile e) {
-			log.error("Error setting emblem file", e); //$NON-NLS-1$
+			log.error("Error setting emblem file", e); //
 			try {
 				this.configuration.setEmblem(STRING_EMPTY);
 			} catch (InvalidEmblemFile e1) {
@@ -697,7 +697,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configurationOverlay.setEmblem(emblem);
 			}
 		} catch (InvalidEmblemFile e) {
-			log.error("Error setting emblem file", e); //$NON-NLS-1$
+			log.error("Error setting emblem file", e); //
 			try {
 				this.configurationOverlay.setEmblem(STRING_EMPTY);
 			} catch (InvalidEmblemFile e1) {
@@ -708,7 +708,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultEmblem()
 	 */
 	@Override
@@ -729,7 +729,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			emblem = STRING_EMPTY;
 		return emblem;
 	}
-	
+
 	/*@Override
 	public String getDownloadURL() {
 		return Constants.CERTIFICATE_DOWNLOAD_XML_URL;
@@ -737,7 +737,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the proxy host
-	 * 
+	 *
 	 * @param host
 	 *            the proxy host
 	 */
@@ -764,7 +764,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getProxyHost()
 	 */
 	@Override
@@ -788,7 +788,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the proxy port
-	 * 
+	 *
 	 * @param port
 	 *            the proxy port
 	 */
@@ -797,7 +797,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		try {
 			this.configuration.setProxyPort(port);
 		} catch (InvalidPortException e) {
-			log.error("Error setting proxy port" , e); //$NON-NLS-1$
+			log.error("Error setting proxy port" , e); //
 			// ignore
 		}
 	}
@@ -810,14 +810,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		try {
 			this.configurationOverlay.setProxyPort(port);
 		} catch (InvalidPortException e) {
-			log.error("Error setting proxy port" , e); //$NON-NLS-1$
+			log.error("Error setting proxy port" , e); //
 			// ignore
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getProxyPort()
 	 */
 	@Override
@@ -838,7 +838,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the proxy username
-	 * 
+	 *
 	 * @param user
 	 *            the proxy username
 	 */
@@ -887,7 +887,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/**
 	 * Sets the proxy password
-	 * 
+	 *
 	 * @param pass
 	 *            the proxy password
 	 */
@@ -936,7 +936,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setDefaultOutputFolder
 	 * (java.lang.String)
@@ -964,7 +964,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultOutputFolder()
 	 */
 	@Override
@@ -988,7 +988,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
 	 */
 	@Override
@@ -1015,7 +1015,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setSignatureNote(java.
 	 * lang.String)
@@ -1031,7 +1031,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureNote()
 	 */
 	@Override
@@ -1424,14 +1424,14 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getUseMarker()
 	 */
 	@Override
 	public boolean getUseMarker() {
 		return this.configurationOverlay.getUseMarker();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getUseSignatureFields()
 	 */
@@ -1439,13 +1439,13 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public boolean getUseSignatureFields() {
 		return this.configurationOverlay.getUseSignatureFields();
 	}
-	
-	
-	
+
+
+
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setUseMarker(
 	 * boolean)
 	 */
@@ -1460,7 +1460,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configurationOverlay.setUseSignatureFields(useFields);
 		if (useFields) setUseMarker(false);
 	}
-	
+
 	@Override
 	public void setSignatureProfile(String profile) {
 		this.configurationOverlay.setSignatureProfile(Profile.getProfile(profile));
@@ -1480,18 +1480,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	public String getSignatureProfile() {
 		return this.configurationOverlay.getSignatureProfile().name();
 	}
-	
-	
+
+
 	@Override
 	public void setEnablePlaceholderUsage(boolean bool) {
 		this.configurationOverlay.setEnablePlaceholderUsage(bool);
 	}
-	
+
 	@Override
 	public boolean getEnablePlaceholderUsage() {
 		return this.configurationOverlay.getEnablePlaceholderUsage();
 	}
-	
-	
-	
+
+
+
 }

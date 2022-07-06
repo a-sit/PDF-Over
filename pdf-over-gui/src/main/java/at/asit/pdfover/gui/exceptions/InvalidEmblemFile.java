@@ -21,11 +21,11 @@ import java.io.File;
 import at.asit.pdfover.commons.Messages;
 
 /**
- * 
+ *
  */
 public class InvalidEmblemFile extends PDFOverGUIException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5826910929131650685L;
 
@@ -34,15 +34,15 @@ public class InvalidEmblemFile extends PDFOverGUIException {
 	 * @param file
 	 */
 	public InvalidEmblemFile(final File file) {
-		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath())); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath())); //
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param file
-	 * @param reason 
+	 * @param reason
 	 */
 	public InvalidEmblemFile(final File file, Throwable reason) {
-		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath()), reason); //$NON-NLS-1$
+		super(String.format(Messages.getString("exception.InvalidEmblemFile"), file.getAbsolutePath()), reason); //
 	}
 }

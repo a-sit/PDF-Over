@@ -50,7 +50,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class MobileBKUQRComposite extends StateComposite {
 
 	/**
-	 * 
+	 *
 	 */
 	private final class SMSSelectionListener extends SelectionAdapter {
 		/**
@@ -71,7 +71,7 @@ public class MobileBKUQRComposite extends StateComposite {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private final class CancelSelectionListener extends SelectionAdapter {
 		/**
@@ -155,10 +155,10 @@ public class MobileBKUQRComposite extends StateComposite {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		if (errorMessage == null)
-			this.lblError.setText(""); //$NON-NLS-1$
+			this.lblError.setText(""); //
 		else
 			this.lblError.setText(
-					Messages.getString("error.Title") + ": " + errorMessage); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("error.Title") + ": " + errorMessage); // //
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		if (this.refVal != null) {
 			this.lblRefVal.setText(this.refVal);
 		} else {
-			this.lblRefVal.setText(""); //$NON-NLS-1$
+			this.lblRefVal.setText(""); //
 		}
 
 	}
@@ -213,7 +213,7 @@ public class MobileBKUQRComposite extends StateComposite {
 	 */
 	public void setQR(InputStream qrcode) {
 		if (qrcode == null) {
-			setErrorMessage(Messages.getString("error.FailedToLoadQRCode")); //$NON-NLS-1$
+			setErrorMessage(Messages.getString("error.FailedToLoadQRCode")); //
 			return;
 		}
 		Image qr = new Image(Display.getCurrent(), qrcode);
@@ -235,24 +235,24 @@ public class MobileBKUQRComposite extends StateComposite {
 			try {
 				String signatureData = MobileBKUQRComposite.this
 						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) { //$NON-NLS-1$
-					log.debug("Trying to open " + signatureData); //$NON-NLS-1$
+				if (signatureData != null && !signatureData.equals("")) { //
+					log.debug("Trying to open " + signatureData); //
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(new URI(signatureData));
 					} else {
-						log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+						log.info("SWT Desktop is not supported on this platform"); //
 						Program.launch(signatureData);
 					}
 				}
 			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+				log.error("OpenSelectionListener: ", ex); //
 			}
 		}
 	}
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -313,7 +313,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		fd_lblRefVal.top = new FormAttachment(30, -10);
 		//fd_lblRefVal.bottom = new FormAttachment(50, -10);
 		this.lblRefVal.setLayoutData(fd_lblRefVal);
-		this.lblRefVal.setText(""); //$NON-NLS-1$
+		this.lblRefVal.setText(""); //
 
 		this.lblQRLabel = new Label(containerComposite, SWT.NATIVE);
 		this.lblQRLabel.setAlignment(SWT.RIGHT);
@@ -379,7 +379,7 @@ public class MobileBKUQRComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -389,17 +389,17 @@ public class MobileBKUQRComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue")); //$NON-NLS-1$
-		this.lblQRLabel.setText(Messages.getString("tanEnter.QR")); //$NON-NLS-1$
-		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //$NON-NLS-1$
-		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //$NON-NLS-1$
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //$NON-NLS-1$
+				.getString("tanEnter.ReferenceValue")); //
+		this.lblQRLabel.setText(Messages.getString("tanEnter.QR")); //
+		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //
+		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
+		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //
 	}
 }

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 
 /**
- * 
+ *
  */
 public class ErrorMarker extends Label {
 
@@ -53,7 +53,7 @@ public class ErrorMarker extends Label {
 	public ErrorMarker(Composite parent, int style,
 			String message) {
 		super(parent, style);
-		
+
 		InputStream stream = this.getClass().getResourceAsStream(Constants.RES_IMG_ERROR);
 
 		this.errorImg = new Image(getDisplay(), new ImageData(stream));

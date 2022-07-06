@@ -36,9 +36,9 @@ public class ConfigFileArgument extends Argument {
 	 * Constructor
 	 */
 	public ConfigFileArgument() {
-		super(new String[] {"-c"}, "argument.help.config"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-c"}, "argument.help.config"); // //
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)
 	 */
@@ -50,19 +50,19 @@ public class ConfigFileArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String configFile = args[argOffset + 1];
-				
+
 				getConfiguration().setConfigurationFile(configFile);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Configuration File Argument invalid!", ex); //$NON-NLS-1$
+			log.error("Configuration File Argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.config") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.config") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.config") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.config") + this.getHelpText(), null); //
 	}
 
 }

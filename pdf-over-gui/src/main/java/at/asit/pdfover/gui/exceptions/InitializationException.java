@@ -16,14 +16,14 @@
 package at.asit.pdfover.gui.exceptions;
 
 /**
- * 
+ *
  */
 public class InitializationException extends PDFOverGUIException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 433744698649684034L;
-	
+
 	/**
 	 * @param msg
 	 * @param cause
@@ -31,5 +31,5 @@ public class InitializationException extends PDFOverGUIException {
 	public InitializationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
-	
+
 }

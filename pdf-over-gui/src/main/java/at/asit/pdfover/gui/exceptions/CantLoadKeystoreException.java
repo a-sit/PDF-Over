@@ -22,7 +22,7 @@ import at.asit.pdfover.commons.Messages;
  */
 public class CantLoadKeystoreException extends ResumableException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 7554121273052104624L;
 
@@ -31,6 +31,6 @@ public class CantLoadKeystoreException extends ResumableException {
 	 * @param cause The original exception
 	 */
 	public CantLoadKeystoreException(Throwable cause, int resumeIndex) {
-		super(Messages.getString("error.KeyStore"), cause, resumeIndex); //$NON-NLS-1$
+		super(Messages.getString("error.KeyStore"), cause, resumeIndex); //
 	}
 }

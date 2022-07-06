@@ -38,12 +38,12 @@ import at.asit.pdfover.signator.Signer;
 public class SigningState extends State {
 
 	/**
-	 * 
+	 *
 	 */
 	private final class FinishSignThread implements Runnable {
-		
+
 		private SigningState state;
-		
+
 		/**
 		 * @param signingState
 		 */
@@ -56,7 +56,7 @@ public class SigningState extends State {
 			try {
 				Signer signer = this.state.getStateMachine().getPDFSigner().getPDFSigner();
 				Status status = this.state.getStateMachine().getStatus();
-				
+
 				status.setSignResult(signer.sign(status.getSigningState()));
 			} catch(Exception e) {
 				this.state.threadException = e;
@@ -77,20 +77,20 @@ public class SigningState extends State {
 	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(SigningState.class);
-	
+
 	Exception threadException = null;
-	
+
 	@Override
 	public void run() {
 		Status status = getStateMachine().getStatus();
-		
-		if(status.getSignResult() == null && 
+
+		if(status.getSignResult() == null &&
 			this.threadException == null) {
 			Thread t = new Thread(new FinishSignThread(this));
 			t.start();
 			return;
 		}
-		
+
 		if(this.threadException != null) {
 			// workaround for PDF-AS nullpointerexception intercepting our IllegalStateException
 			// cf. issue #52
@@ -102,19 +102,19 @@ public class SigningState extends State {
 					this.threadException = new SignatureException(new IllegalStateException());
 			}
 
-			String message = Messages.getString("error.Signatur"); //$NON-NLS-1$
+			String message = Messages.getString("error.Signatur"); //
 			if (this.threadException instanceof SignatureException) {
 				Throwable cause = this.threadException;
 				while (cause.getCause() != null)
 					cause = cause.getCause();
 				if (cause instanceof ConnectException)
-					message += ": " + cause.getMessage(); //$NON-NLS-1$
+					message += ": " + cause.getMessage(); //
 				if (cause instanceof IllegalStateException) {
 					// Dummy exception - don't display error, go back to BKU Selection
 					this.setNextState(new BKUSelectionState(getStateMachine()));
 					return;
 				}
-					
+
 			}
 
 			// if we have gotten to this point, this is an actual exception

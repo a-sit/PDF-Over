@@ -22,7 +22,7 @@ import at.asit.pdfover.commons.Messages;
  */
 public class KeystoreKeyPasswordException extends ResumableException {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 7734648200275150410L;
 
@@ -30,6 +30,6 @@ public class KeystoreKeyPasswordException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreKeyPasswordException(int resumeIndex) {
-		super(Messages.getString("error.KeyStoreKeyPass"), resumeIndex); //$NON-NLS-1$
+		super(Messages.getString("error.KeyStoreKeyPass"), resumeIndex); //
 	}
 }

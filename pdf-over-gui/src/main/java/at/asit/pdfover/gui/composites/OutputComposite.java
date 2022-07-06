@@ -82,7 +82,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 *            The parent composite
 	 * @param style
@@ -156,7 +156,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Sets the input file
-	 * 
+	 *
 	 * @param inputFile
 	 *            the input file
 	 */
@@ -166,7 +166,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Gets the input file
-	 * 
+	 *
 	 * @return the input file
 	 */
 	public File getInputFile() {
@@ -182,7 +182,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Gets the signed document
-	 * 
+	 *
 	 * @return the signed document
 	 */
 	public DocumentSource getSignedDocument() {
@@ -191,7 +191,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Sets the signed document
-	 * 
+	 *
 	 * @param signedDocument
 	 *            the signed document
 	 */
@@ -226,7 +226,7 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * Saves the signed document.
-	 * 
+	 *
 	 * If user has a default output directory set, try to save there.
 	 * If not (or if directory unavailable), ask user for location.
 	 */
@@ -254,17 +254,17 @@ public class OutputComposite extends StateComposite {
 
 			FileDialog save = new FileDialog(this.getShell(),
 					SWT.SAVE | SWT.NATIVE);
-			save.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
-			save.setFilterNames(new String[] { 
-					Messages.getString("common.PDFExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.AllExtension_Description")}); //$NON-NLS-1$
+			save.setFilterExtensions(new String[] { "*.pdf", "*" }); // //
+			save.setFilterNames(new String[] {
+					Messages.getString("common.PDFExtension_Description"), //
+					Messages.getString("common.AllExtension_Description")}); //
 			save.setFilterPath(inputFolder.getAbsolutePath());
 			save.setFileName(proposedName);
 
 			outputFileName = save.open();
 			inputFolder = null;
 		}
-		log.debug("Trying to save to '" + outputFileName + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("Trying to save to '" + outputFileName + "'"); // //
 
 		this.outputFile = saveResultAsFile(inputFolder, outputFileName);
 		this.saveFailed = (this.outputFile == null);
@@ -279,7 +279,7 @@ public class OutputComposite extends StateComposite {
 	 * Save the signed document under the given filename
 	 * @param inputFolder the Folder the original document is located at
 	 * @param target the filename to save the document as
-	 * 
+	 *
 	 * @return saved File (or null if unsuccessful)
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -293,8 +293,8 @@ public class OutputComposite extends StateComposite {
 			targetFile = new File(inputFolder, target);
 
 		if (targetFile.exists()) {
-			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"), //$NON-NLS-1$
-					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //$NON-NLS-1$
+			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"), //
+					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)
 			{
@@ -313,18 +313,18 @@ public class OutputComposite extends StateComposite {
 						source.getByteArray().length);
 				outstream.close();
 			} catch (FileNotFoundException e) {
-				log.warn("Failed to open output file", e); //$NON-NLS-1$
+				log.warn("Failed to open output file", e); //
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
+						String.format(Messages.getString("output.save_failed"), //
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
 					return null;
 				retry = true;
 			} catch (IOException e) {
-				log.error("I/O Error", e); //$NON-NLS-1$
+				log.error("I/O Error", e); //
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"), //$NON-NLS-1$
+						String.format(Messages.getString("output.save_failed"), //
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
@@ -335,8 +335,8 @@ public class OutputComposite extends StateComposite {
 
 		if (!targetFile.exists())
 		{
-			log.error("Tried to save file " + targetFile.getName() + //$NON-NLS-1$
-					", but it doesn't exist"); //$NON-NLS-1$
+			log.error("Tried to save file " + targetFile.getName() + //
+					", but it doesn't exist"); //
 			return null;
 		}
 		return targetFile;
@@ -369,7 +369,7 @@ public class OutputComposite extends StateComposite {
 			try {
 				OutputComposite.this.saveDocument();
 			} catch (Exception ex) {
-				log.error("SaveSelectionListener: ", ex); //$NON-NLS-1$
+				log.error("SaveSelectionListener: ", ex); //
 			}
 		}
 	}
@@ -396,22 +396,22 @@ public class OutputComposite extends StateComposite {
 				// Normalize filename
 				File f = new File(FilenameUtils.normalize(
 						OutputComposite.this.outputFile.getAbsolutePath()));
-				log.debug("Trying to open " + f.toString()); //$NON-NLS-1$
-				// work around for the case of Linux and Java version 8 
+				log.debug("Trying to open " + f.toString()); //
+				// work around for the case of Linux and Java version 8
 				if (isSpecialCase()) {
-					reReloadResources(f.toString()); 
+					reReloadResources(f.toString());
 					return;
 				}
 				else if (Desktop.isDesktopSupported()) {
 					Desktop.getDesktop().open(f);
 				} else {
-					log.info("AWT Desktop is not supported on this platform"); //$NON-NLS-1$
+					log.info("AWT Desktop is not supported on this platform"); //
 					Program.launch(f.getAbsolutePath());
 				}
 			} catch (IOException ex) {
-				log.error("OpenSelectionListener: ", ex); //$NON-NLS-1$
+				log.error("OpenSelectionListener: ", ex); //
 				ErrorDialog error = new ErrorDialog(getShell(),
-						String.format(Messages.getString("error.FailedToOpenDocument"), //$NON-NLS-1$
+						String.format(Messages.getString("error.FailedToOpenDocument"), //
 								ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
 				if (error.open() == SWT.RETRY)
 					widgetSelected(e);
@@ -426,7 +426,7 @@ public class OutputComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -437,63 +437,63 @@ public class OutputComposite extends StateComposite {
 
 	/**
 	 * @return true when linux and java version <= 8
-	 * 
+	 *
 	 */
 	public boolean isSpecialCase() {
 
 		boolean isSCase = false;
 		try {
-			String os = System.getProperty("os.name").toLowerCase(); //$NON-NLS-1$
-			if (os.contains("linux")) { //$NON-NLS-1$
-				String version = System.getProperty("java.version"); //$NON-NLS-1$
-				if (version.contains(".")) { //$NON-NLS-1$
-					String[] parts = version.split("\\."); //$NON-NLS-1$
+			String os = System.getProperty("os.name").toLowerCase(); //
+			if (os.contains("linux")) { //
+				String version = System.getProperty("java.version"); //
+				if (version.contains(".")) { //
+					String[] parts = version.split("\\."); //
 					isSCase = Integer.valueOf(parts[0]) <= 8 ? true : false;
 				} else {
 					isSCase = Integer.valueOf(version) <= 8 ? true : false;
 				}
 			}
 		} catch (Exception e) {
-			log.debug("Error: " + e.getMessage()); //$NON-NLS-1$
+			log.debug("Error: " + e.getMessage()); //
 			isSCase = false;
 		}
 		return isSCase;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override
 	public void reloadResources() {
 		this.lbl_success_message.setText(Messages
-				.getString("output.success_message")); //$NON-NLS-1$
+				.getString("output.success_message")); //
 		if (this.outputFile == null) {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message")); //$NON-NLS-1$
+					.getString("output.link_save_message")); //
 		} else {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_open_message")); //$NON-NLS-1$
+					.getString("output.link_open_message")); //
 		}
-		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		this.btn_save.setText(Messages.getString("common.Save")); //
 	}
-	
+
 	/**
 	 * @param str
 	 */
 	public void reReloadResources(String str) {
-		this.lbl_success_message.setText(Messages.getString("output.success_message")); //$NON-NLS-1$
+		this.lbl_success_message.setText(Messages.getString("output.success_message")); //
 		if (this.outputFile == null) {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message")); //$NON-NLS-1$
+					.getString("output.link_save_message")); //
 		} else {
-			String str2 = "File location: " + str; //$NON-NLS-1$
+			String str2 = "File location: " + str; //
 			this.lbl_success_message.setText(str2);
-			this.lnk_saved_file.setText(""); //$NON-NLS-1$
+			this.lnk_saved_file.setText(""); //
 		}
-		this.btn_save.setText(Messages.getString("common.Save")); //$NON-NLS-1$
+		this.btn_save.setText(Messages.getString("common.Save")); //
 	}
-	
-	
-	
+
+
+
 }

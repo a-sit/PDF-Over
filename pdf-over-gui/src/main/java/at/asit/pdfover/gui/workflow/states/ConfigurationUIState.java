@@ -27,7 +27,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 
 /**
- * 
+ *
  */
 public class ConfigurationUIState extends State {
 	/**
@@ -37,8 +37,8 @@ public class ConfigurationUIState extends State {
 	private static final Logger log = LoggerFactory
 			.getLogger(ConfigurationUIState.class);
 
-	
-	
+
+
 	private ConfigurationComposite configurationComposite = null;
 
 	private ConfigurationComposite getConfigurationComposite() {
@@ -52,7 +52,7 @@ public class ConfigurationUIState extends State {
 
 		return this.configurationComposite;
 	}
-	
+
 	/**
 	 * @param stateMachine
 	 */
@@ -69,7 +69,7 @@ public class ConfigurationUIState extends State {
 		Status status = getStateMachine().getStatus();
 
 		ConfigurationComposite config = this.getConfigurationComposite();
-		
+
 		getStateMachine().getGUIProvider().display(config);
 
 		if(config.isUserDone())

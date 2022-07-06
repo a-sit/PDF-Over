@@ -72,7 +72,7 @@ import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * 
+ *
  */
 public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
@@ -105,12 +105,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	protected String logoFile = null;
 	protected Image sigPreview = null;
 	protected Image logo = null;
-	
+
 	protected final Group grpSignatureProfile;
 	protected final Combo cmbSignatureProfiles;
 
 
-	
+
 
 	/**
 	 * @param parent
@@ -162,7 +162,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		StateComposite.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5).set();
 		this.grpSignatureProfile.setLayout(new FormLayout());
 		StateComposite.setFontHeight(grpSignatureProfile, Constants.TEXT_SIZE_NORMAL);
-		
+
 		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
 		StateComposite.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
 		StateComposite.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
@@ -233,7 +233,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error("File: {} does not exist!", files[0]); //$NON-NLS-1$//$NON-NLS-2$
+							log.error("File: {} does not exist!", files[0]); ////
 							return;
 						}
 						processEmblemChanged(file.getAbsolutePath());
@@ -392,11 +392,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private final class ImageFileBrowser extends SelectionAdapter {
 		/**
-		 * 
+		 *
 		 */
 		public ImageFileBrowser() {
 			// Nothing to do
@@ -407,13 +407,13 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			FileDialog dialog = new FileDialog(
 					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
 			dialog.setFilterExtensions(new String[] {
-					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" }); // // // // //
 			dialog.setFilterNames(new String[] {
-					Messages.getString("common.ImageExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.JPGExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.PNGExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.GIFExtension_Description"), //$NON-NLS-1$
-					Messages.getString("common.AllExtension_Description") }); //$NON-NLS-1$
+					Messages.getString("common.ImageExtension_Description"), //
+					Messages.getString("common.JPGExtension_Description"), //
+					Messages.getString("common.PNGExtension_Description"), //
+					Messages.getString("common.GIFExtension_Description"), //
+					Messages.getString("common.AllExtension_Description") }); //
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -447,9 +447,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			if (this.signer != null) {
 				SignatureParameter param = this.signer.getPDFSigner().newParameter();
 				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
-					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //$NON-NLS-1$
+					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //
 				}
-	
+
 				param.setSignatureLanguage(this.configurationContainer.getSignatureLocale().getLanguage());
 				param.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
 				if (image != null && !image.trim().isEmpty()) {
@@ -461,7 +461,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 			}
 		} catch (Exception e) {
-			log.error("Failed to load image for display...", e); //$NON-NLS-1
+			log.error("Failed to load image for display...", e);
 		}
 
 		if (img != null) {
@@ -477,7 +477,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 						ImageConverter.convertToSWT(CachedFileNameEmblem.fixImage(
 								ImageIO.read(imgFile), imgFile)));
 			} catch (IOException e) {
-				log.error("Error reading image", e); //$NON-NLS-1$
+				log.error("Error reading image", e); //
 			}
 		} else {
 			this.logo = null;
@@ -491,10 +491,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		try {
 			setEmblemFileInternal(filename, false);
 		} catch (Exception ex) {
-			log.error("processEmblemChanged: ", ex); //$NON-NLS-1$
+			log.error("processEmblemChanged: ", ex); //
 			ErrorDialog dialog = new ErrorDialog(
 					getShell(),
-					Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //$NON-NLS-1$
+					Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //
 			dialog.open();
 		}
 	}
@@ -506,8 +506,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		} catch (Exception ex) {
 			this.txtMobileNumberErrorMarker.setVisible(true);
 			this.txtMobileNumberErrorMarker.setToolTipText(Messages
-					.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
-			log.error("processNumberChanged: ", ex); //$NON-NLS-1$
+					.getString("error.InvalidPhoneNumber")); //
+			log.error("processNumberChanged: ", ex); //
 			this.redraw();
 			this.doLayout();
 		}
@@ -516,17 +516,17 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: {} IDX: {}",locale, i); //$NON-NLS-1$ //$NON-NLS-2$
+				log.debug("Locale: {} IDX: {}",locale, i); // //
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for {}", locale); //$NON-NLS-1$
+		log.warn("NO Locale match for {}", locale); //
 		return 0;
 	}
 
 	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
-		log.debug("Selected Sign Locale: {}", selected); //$NON-NLS-1$
+		log.debug("Selected Sign Locale: {}", selected); //
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 
@@ -535,9 +535,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 
-	
+
     void preformProfileSelectionChanged(Profile newProfile) {
-		log.debug("Signature Profile {} was selected", newProfile.name()); //$NON-NLS-1$
+		log.debug("Signature Profile {} was selected", newProfile.name()); //
 		Profile oldProfile = this.configurationContainer.getSignatureProfile();
     	this.configurationContainer.setSignatureProfile(newProfile);
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
@@ -574,7 +574,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
 	 */
@@ -589,7 +589,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationContainer.setMobileNumber(number);
 		number = this.configurationContainer.getMobileNumber();
 		if (number == null) {
-			this.txtMobileNumber.setText(""); //$NON-NLS-1$
+			this.txtMobileNumber.setText(""); //
 			return;
 		}
 		this.txtMobileNumber.setText(number);
@@ -602,7 +602,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -623,7 +623,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.configurationContainer.setEmblem(
 					provider.getDefaultEmblemPersistent());
 		} catch (InvalidEmblemFile e) {
-			log.error("Failed to set emblem!", e); //$NON-NLS-1$
+			log.error("Failed to set emblem!", e); //
 		}
 
 		this.configurationContainer.setSignatureLocale(
@@ -653,10 +653,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				setEmblemFileInternal(emblemFile, true);
 				this.btnClearImage.setSelection(true);
 			} catch (Exception e1) {
-				log.error("Failed to load emblem: ", e1); //$NON-NLS-1$
+				log.error("Failed to load emblem: ", e1); //
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //$NON-NLS-1$
+						Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //
 				dialog.open();
 			}
 		}
@@ -670,9 +670,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.setVisibleImage();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale(), null);
-		
+
 		this.preformProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -688,7 +688,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		store.setSignatureLocale(this.configurationContainer.getSignatureLocale());
 
 		store.setSignatureNote(this.configurationContainer.getSignatureNote());
-		
+
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 
@@ -696,7 +696,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#validateSettings
 	 * ()
@@ -717,7 +717,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override

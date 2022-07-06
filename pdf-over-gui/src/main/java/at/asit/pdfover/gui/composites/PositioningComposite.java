@@ -73,7 +73,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -91,7 +91,7 @@ public class PositioningComposite extends StateComposite {
 		this.bottomBar.setLayout(new FormLayout());
 
 		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
-		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
+		this.btnSign.setText(Messages.getString("positioning.sign")); //
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
 		fd_btnSign.top = new FormAttachment(0);
@@ -105,7 +105,7 @@ public class PositioningComposite extends StateComposite {
 		});
 
 		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
-		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
 		FormData fd_btnNewPage = new FormData();
 		fd_btnNewPage.right = new FormAttachment(this.btnSign);
 		fd_btnNewPage.top = new FormAttachment(0);
@@ -157,7 +157,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Set the PDF Document to display
-	 * 
+	 *
 	 * @param document
 	 *            document to display
 	 */
@@ -224,7 +224,7 @@ public class PositioningComposite extends StateComposite {
 	/**
 	 * Set the signature placeholder image Must be called _after_
 	 * displayDocument
-	 * 
+	 *
 	 * @param placeholder
 	 *            signature placeholder
 	 * @param width
@@ -350,21 +350,21 @@ public class PositioningComposite extends StateComposite {
 				if ((previousPage > numPages) && (currentPage <= numPages)) {
 					// Was on new page
 					PositioningComposite.this.btnNewPage.setText(
-							Messages.getString("positioning.newPage")); //$NON-NLS-1$
+							Messages.getString("positioning.newPage")); //
 					PositioningComposite.this.btnNewPage.setSelection(false);
 					PositioningComposite.this.bottomBar.layout();
 					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
 				} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 					// Go to new page
 					PositioningComposite.this.btnNewPage.setText(
-							Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
+							Messages.getString("positioning.removeNewPage")); //
 					PositioningComposite.this.btnNewPage.setSelection(true);
 					PositioningComposite.this.bottomBar.layout();
 					PositioningComposite.this.scrollbar.setMaximum(numPages + 2);
 				}
 				PositioningComposite.this.scrollbar.setSelection(currentPage);
 				PositioningComposite.this.lblPage.setText(String.format(
-						Messages.getString("positioning.page"), currentPage, numPages)); //$NON-NLS-1$
+						Messages.getString("positioning.page"), currentPage, numPages)); //
 			}
 		});
 		EventQueue.invokeLater(new Runnable() {
@@ -382,7 +382,7 @@ public class PositioningComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
 	 */
 	@Override
@@ -393,7 +393,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Translate the signature placeholder position
-	 * 
+	 *
 	 * @param sigXOffset
 	 *            signature placeholder horizontal position offset
 	 * @param sigYOffset
@@ -411,7 +411,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Set the signature position and continue to the next state
-	 * 
+	 *
 	 * @param position
 	 *            the signature position
 	 */
@@ -427,7 +427,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Set the signature position
-	 * 
+	 *
 	 * @param x
 	 *            the horizontal signature position
 	 * @param y
@@ -443,7 +443,7 @@ public class PositioningComposite extends StateComposite {
 
 	/**
 	 * Get the signature position
-	 * 
+	 *
 	 * @return the signature position
 	 */
 	public SignaturePosition getPosition() {
@@ -456,11 +456,11 @@ public class PositioningComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		if (this.currentPage <= this.numPages)
-			this.btnNewPage.setText(Messages.getString("positioning.newPage")); //$NON-NLS-1$
+			this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
 		else
-			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //$NON-NLS-1$
-		this.btnSign.setText(Messages.getString("positioning.sign")); //$NON-NLS-1$
-		this.lblPage.setText(String.format(Messages.getString("positioning.page"), //$NON-NLS-1$
+			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //
+		this.btnSign.setText(Messages.getString("positioning.sign")); //
+		this.lblPage.setText(String.format(Messages.getString("positioning.page"), //
 				this.currentPage, this.numPages));
 	}
 }

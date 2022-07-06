@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Label;
 
 
 /**
- * 
+ *
  */
 public class PlaceholderSelectionGui extends Dialog {
 	/**
@@ -45,27 +45,27 @@ public class PlaceholderSelectionGui extends Dialog {
 	private static final Logger log = LoggerFactory.getLogger(PlaceholderSelectionGui.class);
 	protected Object result;
 	protected Shell shlInfo;
-	protected Combo placeholderNameDropDown; 
-	protected String lblString; 
+	protected Combo placeholderNameDropDown;
+	protected String lblString;
 	protected List<String> placeholderList;
 	private Button btnCancel;
 	private Button btnOk;
-	protected int returnValue; 
-	 
+	protected int returnValue;
+
 
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
-	 * @param text 
-	 * @param lblString 
-	 * @param placeholderList 
+	 * @param text
+	 * @param lblString
+	 * @param placeholderList
 	 */
 	public PlaceholderSelectionGui(Shell parent, int style, String text, String lblString, List<String> placeholderList) {
 		super(parent, style);
 		setText(text);
-		this.lblString = lblString; 
-		this.placeholderList = placeholderList; 
+		this.lblString = lblString;
+		this.placeholderList = placeholderList;
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class PlaceholderSelectionGui extends Dialog {
 		}
 		return this.returnValue;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -99,48 +99,48 @@ public class PlaceholderSelectionGui extends Dialog {
 	private void createContents() {
 		this.shlInfo = new Shell(getParent(), getStyle());
 		this.shlInfo.setSize(290, 195);
-		this.shlInfo.setText("Info"); //$NON-NLS-1$
+		this.shlInfo.setText("Info"); //
 		this.shlInfo.setLayout(null);
-		
+
 		this.placeholderNameDropDown = new Combo(this.shlInfo, SWT.NONE);
 		this.placeholderNameDropDown.setBounds(27, 77, 223, 23);
 		addDropDownEntries(this.placeholderList);
 		this.placeholderNameDropDown.select(0);
-		
+
 		this.btnCancel = new Button(this.shlInfo, SWT.NONE);
 		this.btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-			    
+
+
 				PlaceholderSelectionGui.this.returnValue = -1;
 				PlaceholderSelectionGui.this.shlInfo.dispose();
-			    
+
 			}
 		});
 		this.btnCancel.setBounds(175, 118, 75, 25);
-		this.btnCancel.setText("Cancel"); //$NON-NLS-1$
-		
+		this.btnCancel.setText("Cancel"); //
+
 		this.btnOk = new Button(this.shlInfo, SWT.NONE);
 		this.btnOk.setBounds(94, 118, 75, 25);
 		this.btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				PlaceholderSelectionGui.this.returnValue = PlaceholderSelectionGui.this.placeholderNameDropDown.getSelectionIndex(); 
+
+				PlaceholderSelectionGui.this.returnValue = PlaceholderSelectionGui.this.placeholderNameDropDown.getSelectionIndex();
 				PlaceholderSelectionGui.this.shlInfo.dispose();
 			}
 		});
-		this.btnOk.setText("Ok"); //$NON-NLS-1$
-		
+		this.btnOk.setText("Ok"); //
+
 		Label lbLabel = new Label(this.shlInfo, SWT.WRAP);
 		lbLabel.setBounds(27, 10, 223, 41);
-		lbLabel.setText(Messages.getString("positioning.placeholder")); //$NON-NLS-1$
+		lbLabel.setText(Messages.getString("positioning.placeholder")); //
 
 	}
-	
+
 	/**
-	 * @param list 
+	 * @param list
 	 * @param Filling up the placeholder drop down list
 	 */
 	public void addDropDownEntries(List<String> list) {
@@ -148,14 +148,14 @@ public class PlaceholderSelectionGui extends Dialog {
 			this.placeholderNameDropDown.add(name);
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected void close() {
 		this.close();
 	}
-	
+
 	@Override
 	protected void checkSubclass() {
 	    //  allow subclass

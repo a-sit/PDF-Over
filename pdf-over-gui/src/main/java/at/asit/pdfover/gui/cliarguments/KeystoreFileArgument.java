@@ -33,7 +33,7 @@ public class KeystoreFileArgument extends Argument {
 	 * Constructor
 	 */
 	public KeystoreFileArgument() {
-		super(new String[] {"-ks"}, "argument.help.keystorefile"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-ks"}, "argument.help.keystorefile"); // //
 	}
 
 	/**
@@ -53,24 +53,24 @@ public class KeystoreFileArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String ksFile = args[argOffset + 1];
-				
+
 				File ks = new File(ksFile);
 				if(!ks.exists() || !ks.isFile())
 					throw new KeystoreDoesntExistException(ks, 0);
-				
+
 				getConfiguration().setKeyStoreFileOverlay(ksFile);
 				getConfiguration().setKeyStoreEnabledOverlay(true);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Keystore file argument invalid!", ex); //$NON-NLS-1$
+			log.error("Keystore file argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.keystorefile") + this.getHelpText(), null); //
 	}
 
 }

@@ -79,14 +79,14 @@ public abstract class MobileBKUHandler {
 			sl_request = request.getRequest();
 			if (useBase64Request())
 			{
-				post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				post.addParameter("XMLRequest", sl_request); //
 			} else {
 				StringPart xmlpart = new StringPart(
-						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+						"XMLRequest", sl_request, "UTF-8"); // //
 
-				FilePart filepart = new FilePart("fileupload", //$NON-NLS-1$
+				FilePart filepart = new FilePart("fileupload", //
 						new FileUploadSource(request.getSignatureData()),
-						"application/pdf", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+						"application/pdf", "UTF-8"); // //
 
 				Part[] parts = { xmlpart, filepart };
 
@@ -95,9 +95,9 @@ public abstract class MobileBKUHandler {
 			}
 		} else {
 			sl_request = request.getRequest();
-			post.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+			post.addParameter("XMLRequest", sl_request); //
 		}
-		log.trace("SL Request: " + sl_request); //$NON-NLS-1$
+		log.trace("SL Request: " + sl_request); //
 
 		state.status.baseURL = MobileBKUHelper.stripQueryString(mobileBKUUrl);
 
@@ -176,21 +176,21 @@ public abstract class MobileBKUHandler {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				post.getRequestEntity().writeRequest(os);
 				req = os.toString();
-				if (req.contains("passwort=")) //$NON-NLS-1$
-					req = req.replaceAll("passwort=[^&]*", "passwort=******"); //$NON-NLS-1$ //$NON-NLS-2$
-				if (req.contains(":pwd=")) //$NON-NLS-1$
-					req = req.replaceAll(":pwd=[^&]*", ":pwd=******"); //$NON-NLS-1$ //$NON-NLS-2$
+				if (req.contains("passwort=")) //
+					req = req.replaceAll("passwort=[^&]*", "passwort=******"); // //
+				if (req.contains(":pwd=")) //
+					req = req.replaceAll(":pwd=[^&]*", ":pwd=******"); // //
 				os.close();
 			} else {
-				req = post.getRequestEntity().getContentLength() + " bytes"; //$NON-NLS-1$
+				req = post.getRequestEntity().getContentLength() + " bytes"; //
 			}
-			log.debug("Posting to " + post.getURI() + ": " + req); //$NON-NLS-1$ //$NON-NLS-2$
+			log.debug("Posting to " + post.getURI() + ": " + req); // //
 		}
 		int returnCode = client.executeMethod(post);
 
 		String redirectLocation = null;
 		GetMethod get = null;
-		
+
 
 		String responseData = null;
 
@@ -202,12 +202,12 @@ public abstract class MobileBKUHandler {
 			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
 				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
 
-				Header locationHeader = post.getResponseHeader("location"); //$NON-NLS-1$
+				Header locationHeader = post.getResponseHeader("location"); //
 				if (locationHeader != null) {
 					redirectLocation = locationHeader.getValue();
 				} else {
 					throw new IOException(
-							"Got HTTP 302 but no location to follow!"); //$NON-NLS-1$
+							"Got HTTP 302 but no location to follow!"); //
 				}
 			} else if (returnCode == HttpStatus.SC_OK) {
 				if (get != null) {
@@ -225,12 +225,12 @@ public abstract class MobileBKUHandler {
 						server = serverHeader.getValue();
 				}
 				redirectLocation = null;
-				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //$NON-NLS-1$
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //
 				Pattern pat = Pattern.compile(p);
 				Matcher m = pat.matcher(responseData);
 				if (m.find()) {
 					String content = m.group(1);
-					int start = content.indexOf("URL="); //$NON-NLS-1$
+					int start = content.indexOf("URL="); //
 					if (start != -1) {
 						start += 9;
 						redirectLocation  = content.substring(start, content.length() - 5);
@@ -244,7 +244,7 @@ public abstract class MobileBKUHandler {
 			if (redirectLocation != null) {
 				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(post.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
-				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
+				log.debug("Redirected to " + redirectLocation); //
 				get = new GetMethod(redirectLocation);
 				get.setFollowRedirects(true);
 				returnCode = client.executeMethod(get);
@@ -253,7 +253,7 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server); //$NON-NLS-1$
+			log.info("Server: " + server); //
 
 		return responseData;
 	}
@@ -266,7 +266,7 @@ public abstract class MobileBKUHandler {
 	 * @throws IOException IO error
 	 */
 	protected String executeGet(HttpClient client, GetMethod get) throws IOException {
-		log.debug("Getting " + get.getURI()); //$NON-NLS-1$
+		log.debug("Getting " + get.getURI()); //
 
 		int returnCode = client.executeMethod(get);
 
@@ -284,12 +284,12 @@ public abstract class MobileBKUHandler {
 			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
 				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
 
-				Header locationHeader = get.getResponseHeader("location"); //$NON-NLS-1$
+				Header locationHeader = get.getResponseHeader("location"); //
 				if (locationHeader != null) {
 					redirectLocation = locationHeader.getValue();
 				} else {
 					throw new IOException(
-							"Got HTTP 302 but no location to follow!"); //$NON-NLS-1$
+							"Got HTTP 302 but no location to follow!"); //
 				}
 			} else if (returnCode == HttpStatus.SC_OK) {
 				if (get2 != null) {
@@ -307,12 +307,12 @@ public abstract class MobileBKUHandler {
 						server = serverHeader.getValue();
 				}
 				redirectLocation = null;
-				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //$NON-NLS-1$
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //
 				Pattern pat = Pattern.compile(p);
 				Matcher m = pat.matcher(responseData);
 				if (m.find()) {
 					String content = m.group(1);
-					int start = content.indexOf("URL="); //$NON-NLS-1$
+					int start = content.indexOf("URL="); //
 					if (start != -1) {
 						start += 9;
 						redirectLocation  = content.substring(start, content.length() - 5);
@@ -326,7 +326,7 @@ public abstract class MobileBKUHandler {
 			if (redirectLocation != null) {
 				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(get.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
-				log.debug("Redirected to " + redirectLocation); //$NON-NLS-1$
+				log.debug("Redirected to " + redirectLocation); //
 				get2 = new GetMethod(redirectLocation);
 				get2.setFollowRedirects(true);
 				returnCode = client.executeMethod(get2);
@@ -335,11 +335,11 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server); //$NON-NLS-1$
+			log.info("Server: " + server); //
 
 		return responseData;
 	}
-	
+
 	/**
 	 * @param responseData
 	 */

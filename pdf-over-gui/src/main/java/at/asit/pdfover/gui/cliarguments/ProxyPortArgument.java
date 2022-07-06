@@ -31,7 +31,7 @@ public class ProxyPortArgument extends Argument {
 	 * Constructor
 	 */
 	public ProxyPortArgument() {
-		super(new String[] {"-proxyport"}, "argument.help.proxyport"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-proxyport"}, "argument.help.proxyport"); // //
 	}
 
 	/**
@@ -51,25 +51,25 @@ public class ProxyPortArgument extends Argument {
 			if (args.length > argOffset + 1) {
 
 				String proxyPortString = args[argOffset + 1];
-				
+
 				int port = Integer.parseInt(proxyPortString);
-				
+
 				if(port <= 0 || port > 0xFFFF) {
 					throw new InvalidPortException(port);
 				}
-				
+
 				getConfiguration().setProxyPortOverlay(port);
-				
+
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Proxy port argument invalid!", ex); //$NON-NLS-1$
+			log.error("Proxy port argument invalid!", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.proxyport") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.proxyport") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.proxyport") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.proxyport") + this.getHelpText(), null); //
 	}
 
 }

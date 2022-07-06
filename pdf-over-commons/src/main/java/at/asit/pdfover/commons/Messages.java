@@ -30,18 +30,18 @@ import org.slf4j.LoggerFactory;
  * Localizes string messages for PDFOver GUI
  */
 public class Messages {
-	
+
 	/**
 	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(Messages.class);
-	
-	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //$NON-NLS-1$
+
+	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //
 
 	private static HashMap<Locale, ResourceBundle> bundles = new HashMap<>();
 
 	private static Locale currentLocale = getDefaultLocale();
-	
+
 	private Messages() {
 	}
 
@@ -65,20 +65,20 @@ public class Messages {
 	public static void setLocale(Locale locale) {
 		currentLocale = locale;
 	}
-	
+
 	private static ResourceBundle getBundle(Locale locale) {
 		if(!bundles.containsKey(locale)) {
-			log.debug("Loading resource bundle for {}", locale); //$NON-NLS-1$
+			log.debug("Loading resource bundle for {}", locale); //
 			ResourceBundle tmp = null;
 			try {
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME, locale);
-				log.debug("Received bundle for {}", tmp.getLocale()); //$NON-NLS-1$
+				log.debug("Received bundle for {}", tmp.getLocale()); //
 			} catch(Exception e) {
-				log.error("NO RESOURCE BUNDLE FOR {} {}", locale, e); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR {} {}", locale, e); //
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			if(tmp == null) {
-				log.error("NO RESOURCE BUNDLE FOR {}", locale); //$NON-NLS-1$
+				log.error("NO RESOURCE BUNDLE FOR {}", locale); //
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			bundles.put(locale, tmp);
@@ -86,7 +86,7 @@ public class Messages {
 		}
 		return bundles.get(locale);
 	}
-	
+
 	/**
 	 * Gets the localized message
 	 * @param key
@@ -95,7 +95,7 @@ public class Messages {
 	public static String getString(String key) {
 		return getString(key, currentLocale);
 	}
-	
+
 	/**
 	 * Gets the localized message
 	 * @param key the key
@@ -105,7 +105,7 @@ public class Messages {
 	public static String getString(String key, Locale locale) {
 		try {
 			String value = getBundle(locale).getString(key);
-			
+
 			/* DIRTY HACK: this recognizes java 8 ("1.8") and older; these versions read .properties files as ISO-8859-1 instead of UTF-8 */
 			if (System.getProperty("java.version").startsWith("1."))
 				try { value = new String(value.getBytes("ISO-8859-1"), "UTF-8"); } catch (UnsupportedEncodingException e) {}

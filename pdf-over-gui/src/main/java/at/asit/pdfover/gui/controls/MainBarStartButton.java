@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class MainBarStartButton extends MainBarButton {
 	/**
@@ -56,52 +56,52 @@ public class MainBarStartButton extends MainBarButton {
 
 		Region left_reg = new Region();
 		left_reg.add(new int[] { 0, 0, factor, factor, factor, height-factor, 0, height, 0, 0 });
-		
+
 		Region right1_reg = new Region();
-		right1_reg.add(new int[] { width, 0, 
-				width - factor, factor, 
+		right1_reg.add(new int[] { width, 0,
+				width - factor, factor,
 				width - factor, height-factor, width, height, width, 0 });
-		
+
 		Region top_reg = new Region();
-		top_reg.add(new int[] { 
-				0, 0, 
-				factor, factor, 
-				width - factor, factor, 
-				width, 0, 
+		top_reg.add(new int[] {
+				0, 0,
+				factor, factor,
+				width - factor, factor,
+				width, 0,
 				0, 0 });
-		
+
 		Region bottom_reg = new Region();
-		bottom_reg.add(new int[] { 
-				0, height, 
-				factor, height-factor, 
-				width - factor, height-factor, 
+		bottom_reg.add(new int[] {
+				0, height,
+				factor, height-factor,
+				width - factor, height-factor,
 				width, height, 0, height });
-		
+
 		e.gc.setClipping(top_reg);
-		
-		//TOP 
+
+		//TOP
 		 e.gc.fillGradientRectangle(0, 0, width, factor, true);
-		 
+
 		 e.gc.setClipping(bottom_reg);
-		 
-		 //BOTTOM 
+
+		 //BOTTOM
 		 e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
 		  true);
-		
+
 		 e.gc.setClipping(left_reg);
-		 
+
 		// LEFT
 		e.gc.fillGradientRectangle(0, 0, factor, height, false);
 
-		
+
 		e.gc.setClipping(right1_reg);
 		// RIGTH
 		e.gc.fillGradientRectangle(width, 0, -1 * factor, height,
 				false);
-		
+
 		e.gc.setClipping((Region)null);*/
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt.events.PaintEvent)
 	 */
@@ -114,7 +114,7 @@ public class MainBarStartButton extends MainBarButton {
 
 		int split = SplitFactor;
 		int width = size.x - split;
-		
+
 		e.gc.drawLine(0, 0, width, 0);
 		e.gc.drawLine(width, 0, width + split, (height) / 2);
 		e.gc.drawLine(width + split, (height) / 2, width, height);
@@ -142,9 +142,9 @@ public class MainBarStartButton extends MainBarButton {
 		return reg;
 	}
 
-	
+
 	/**
-	 * change the text position 
+	 * change the text position
 	 * @param positionX the position
 	 * @return the new position
 	 */

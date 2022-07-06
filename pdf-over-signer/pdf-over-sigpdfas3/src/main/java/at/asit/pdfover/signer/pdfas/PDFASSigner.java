@@ -80,7 +80,7 @@ public class PDFASSigner implements Signer {
 				params.setProfileOverrideValue("SIG_LABEL", parameter
 						.getEmblem().getFileName());
 			}
-			
+
 			if(parameter.getProperty("SIG_NOTE") != null) {
 				params.setProfileOverrideValue("SIG_NOTE", parameter.getProperty("SIG_NOTE"));
 			}

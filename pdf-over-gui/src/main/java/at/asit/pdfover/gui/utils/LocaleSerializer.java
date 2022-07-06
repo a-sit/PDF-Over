@@ -19,7 +19,7 @@ package at.asit.pdfover.gui.utils;
 import java.util.Locale;
 
 /**
- * 
+ *
  */
 public class LocaleSerializer {
 	/**
@@ -28,11 +28,11 @@ public class LocaleSerializer {
 	 * @return the locale
 	 */
 	public static Locale parseFromString(String localeString) {
-		
+
 		if(localeString == null || localeString.isEmpty()) {
 			return null;
 		}
-		
+
 		Locale targetLocale = null;
 		Locale[] locale = Locale.getAvailableLocales();
 		for(int i = 0; i < locale.length; i++) {

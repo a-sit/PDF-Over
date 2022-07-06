@@ -19,7 +19,7 @@ package at.asit.pdfover.signator;
  * The state of the pdf signing library
  */
 public interface SigningState {
-	
+
 	/**
 	 * Gets the Security Layer Request to create the signature
 	 * @return The Signature Request

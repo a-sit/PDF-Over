@@ -36,8 +36,8 @@ public class PDFASSLRequest extends SLRequest {
 	/**
 	 * Default constructor
 	 * @param slRequest
-	 * @param signData 
-	 * @throws PDFASSLRequestException 
+	 * @param signData
+	 * @throws PDFASSLRequestException
 	 */
 	public PDFASSLRequest(String slRequest, byte[] signData) throws PDFASSLRequestException {
 		if(!slRequest.contains(PDFASSigner.LOC_REF)) {

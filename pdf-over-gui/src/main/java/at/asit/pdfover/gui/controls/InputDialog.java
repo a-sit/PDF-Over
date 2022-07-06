@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import at.asit.pdfover.commons.Messages;
 
 /**
- * 
+ *
  */
 public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 	/**
@@ -134,7 +134,7 @@ public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 		data.horizontalSpan = 2;
 		text.setLayoutData(data);
 		Button ok = new Button(shell, SWT.PUSH);
-		ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+		ok.setText(Messages.getString("common.Ok")); //
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
 		ok.addSelectionListener(new SelectionAdapter() {
@@ -145,7 +145,7 @@ public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 			}
 		});
 		Button cancel = new Button(shell, SWT.PUSH);
-		cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		cancel.setText(Messages.getString("common.Cancel")); //
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
 		cancel.addSelectionListener(new SelectionAdapter() {

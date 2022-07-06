@@ -59,10 +59,10 @@ public class DataSourceSelectComposite extends StateComposite {
 	public void openFileDialog() {
 		FileDialog dialog = new FileDialog(
 				DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-		dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); //$NON-NLS-1$ //$NON-NLS-2$
+		dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); // //
 		dialog.setFilterNames(new String[] {
-				Messages.getString("common.PDFExtension_Description"),  //$NON-NLS-1$
-				Messages.getString("common.AllExtension_Description") }); //$NON-NLS-1$
+				Messages.getString("common.PDFExtension_Description"),  //
+				Messages.getString("common.AllExtension_Description") }); //
 		String fileName = dialog.open();
 		File file = null;
 		if (fileName != null) {
@@ -102,7 +102,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	/**
 	 * Sets the selected file and calls update to the workflow
-	 * 
+	 *
 	 * @param selected
 	 */
 	protected void setSelected(File selected) {
@@ -112,7 +112,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	/**
 	 * Gets the selected file
-	 * 
+	 *
 	 * @return the selected file
 	 */
 	public File getSelected() {
@@ -124,13 +124,13 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.borderColor = this.activeBorder;
 		this.redrawDrop();
 	}
-	
+
 	void MarkDragLeave() {
 		this.backgroundColor = this.inactiveBackground;
 		this.borderColor = this.inactiveBorder;
 		this.redrawDrop();
 	}
-	
+
 	void redrawDrop() {
 		this.lbl_drag.setBackground(this.backgroundColor);
 		this.lbl_drag2.setBackground(this.backgroundColor);
@@ -138,17 +138,17 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.drop_area.redraw();
 		this.drop_area.layout(true, true);
 	}
-	
+
 	Color activeBackground;
 	Color inactiveBackground;
 	Color inactiveBorder;
 	Color activeBorder;
 	Color borderColor;
 	Color backgroundColor;
-	
+
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -162,7 +162,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.activeBorder = Constants.MAINBAR_ACTIVE_BACK_DARK;
 		this.backgroundColor = this.inactiveBackground;
 		this.borderColor = Constants.DROP_BORDER_COLOR;
-		
+
 		this.setLayout(new FormLayout());
 
 		// Color back = new Color(Display.getCurrent(), 77, 190, 250);
@@ -175,28 +175,28 @@ public class DataSourceSelectComposite extends StateComposite {
 		fd_drop_area.bottom = new FormAttachment(100, -30);
 		this.drop_area.setLayoutData(fd_drop_area);
 		this.drop_area.setLayout(new FormLayout());
-		
+
 		this.drop_area.addPaintListener(new PaintListener() {
-			
+
 			@Override
 			public void paintControl(PaintEvent e) {
 				Rectangle clientArea = DataSourceSelectComposite.this
 						.drop_area.getClientArea();
-				
+
 				//e.gc.setForeground(new Color(getDisplay(),0x6B, 0xA5, 0xD9));
 				e.gc.setForeground(DataSourceSelectComposite.this.borderColor);
 				e.gc.setLineWidth(3);
 				e.gc.setLineStyle(SWT.LINE_DASH);
 				e.gc.setBackground(DataSourceSelectComposite.this.backgroundColor);
-				e.gc.fillRoundRectangle(clientArea.x, 
-						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
+				e.gc.fillRoundRectangle(clientArea.x,
+						clientArea.y, clientArea.width - 2, clientArea.height - 2,
 						10, 10);
-				e.gc.drawRoundRectangle(clientArea.x, 
-						clientArea.y, clientArea.width - 2, clientArea.height - 2, 
+				e.gc.drawRoundRectangle(clientArea.x,
+						clientArea.y, clientArea.width - 2, clientArea.height - 2,
 						10, 10);
 			}
 		});
-		
+
 		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
 		Transfer[] types = new Transfer[] { fileTransfer };
@@ -207,7 +207,7 @@ public class DataSourceSelectComposite extends StateComposite {
 			public void drop(DropTargetEvent event) {
 				if (fileTransfer.isSupportedType(event.currentDataType)) {
 					if (event.data == null) {
-						log.error("Dropped file name was null"); //$NON-NLS-1$
+						log.error("Dropped file name was null"); //
 						return;
 					}
 					String[] files = (String[]) event.data;
@@ -215,7 +215,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error(String.format(Messages.getString("error.FileNotExist"), files[0])); //$NON-NLS-1$
+							log.error(String.format(Messages.getString("error.FileNotExist"), files[0])); //
 							return;
 						}
 						DataSourceSelectComposite.this.setSelected(file);
@@ -253,7 +253,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		});
 
 		this.lbl_drag2 = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
-		
+
 		this.lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
 		this.fd_lbl_drag = new FormData();
 		this.fd_lbl_drag.left = new FormAttachment(0, 10);
@@ -264,10 +264,10 @@ public class DataSourceSelectComposite extends StateComposite {
 		FontData[] fD = this.lbl_drag.getFont().getFontData();
 		fD[0].setHeight(Constants.TEXT_SIZE_BIG);
 		this.lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
+		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //
 		this.lbl_drag.setAlignment(SWT.CENTER);
-		
-		
+
+
 		this.fd_lbl_drag2 = new FormData();
 		this.fd_lbl_drag2.left = new FormAttachment(0, 10);
 		this.fd_lbl_drag2.right = new FormAttachment(100, -10);
@@ -278,16 +278,16 @@ public class DataSourceSelectComposite extends StateComposite {
 		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
 		this.lbl_drag2.setText(Messages
-				.getString("dataSourceSelection.DropLabel2")); //$NON-NLS-1$
+				.getString("dataSourceSelection.DropLabel2")); //
 		this.lbl_drag2.setAlignment(SWT.CENTER);
-		
+
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //$NON-NLS-1$
-		
+		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //
+
 		FontData[] fD_open = this.btn_open.getFont().getFontData();
 		fD_open[0].setHeight(Constants.TEXT_SIZE_BUTTON);
 		this.btn_open.setFont(new Font(Display.getCurrent(), fD_open[0]));
-		
+
 		/*
 		lbl_drag.addListener(SWT.Resize, new Listener() {
 
@@ -297,7 +297,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						50, -1 * (lbl_drag.getSize().y / 2));
 				DataSourceSelectComposite.this.fd_lbl_drag.left = new FormAttachment(
 						50, -1 * (lbl_drag.getSize().x / 2));
-				
+
 				Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 				DataSourceSelectComposite.this.fd_btn_open.top = new FormAttachment(
 						50, (lbl_drag.getSize().y / 2) + 10);
@@ -343,7 +343,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
 	 */
 	@Override
@@ -357,8 +357,8 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //$NON-NLS-1$
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //$NON-NLS-1$
-		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //$NON-NLS-1$
+		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //
+		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //
+		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //
 	}
 }

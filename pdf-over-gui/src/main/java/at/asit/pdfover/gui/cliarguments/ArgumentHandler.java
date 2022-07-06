@@ -45,7 +45,7 @@ public class ArgumentHandler {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param stateMachine
 	 */
 	public ArgumentHandler(StateMachine stateMachine) {
@@ -54,7 +54,7 @@ public class ArgumentHandler {
 
 	/**
 	 * Gets available Arguments
-	 * 
+	 *
 	 * @return the list of available arguments
 	 */
 	public Set<Argument> getArguments() {
@@ -63,7 +63,7 @@ public class ArgumentHandler {
 
 	/**
 	 * Adds a CLIArgument to the handler
-	 * 
+	 *
 	 * @param cliArgument the CLIArgument subclass to add
 	 */
 	public void addCLIArgument(Class<? extends Argument> cliArgument) {
@@ -84,13 +84,13 @@ public class ArgumentHandler {
 				this.cliArguments.put(commandOptions[i], arg);
 			}
 		} catch (Exception e) {
-			log.error("Error instantiating CLI argument" , e); //$NON-NLS-1$
+			log.error("Error instantiating CLI argument" , e); //
 		}
 	}
 
 	/**
 	 * Handle CLI Arguments
-	 * 
+	 *
 	 * @param args
 	 * @throws InitializationException
 	 */
@@ -101,8 +101,8 @@ public class ArgumentHandler {
 				i = this.cliArguments.get(args[i]).handleArgument(args, i, this);
 			} else {
 				// Assume we got the document we want to sign
-				if (this.cliArguments.containsKey("-i")) { //$NON-NLS-1$
-					i = this.cliArguments.get("-i").handleArgument(args, i-1, this); //$NON-NLS-1$
+				if (this.cliArguments.containsKey("-i")) { //
+					i = this.cliArguments.get("-i").handleArgument(args, i-1, this); //
 				}
 			}
 		}
@@ -110,7 +110,7 @@ public class ArgumentHandler {
 
 	/**
 	 * Set by a cli argument if it wants the program to exit
-	 * 
+	 *
 	 * @param requireExit
 	 */
 	public void setRequireExit(boolean requireExit) {
@@ -119,7 +119,7 @@ public class ArgumentHandler {
 
 	/**
 	 * Checks if one argument required the program to exit immediately
-	 * 
+	 *
 	 * @return true or false
 	 */
 	public boolean doesRequireExit() {

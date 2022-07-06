@@ -131,19 +131,19 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/** Whether to skip the output state */
 	protected boolean skipFinish = false;
-	
+
 	/** Default Download URL for certificates*/
 	protected String downloadURL = null;
-	
+
 	/** describes if the placeholder search is enabled */
-	protected boolean enabledPlaceholderUsage = false; 
-	
+	protected boolean enabledPlaceholderUsage = false;
+
 	/** Whether to use an existing signature marker. */
 	protected boolean useMarker = false;
 
 	/** Either QR-Code or signature fields as marker */
-	protected boolean useSignatureFields = false; 
-	
+	protected boolean useSignatureFields = false;
+
 	/**	The Signature Profile */
 	protected Profile signatureProfile = null;
 
@@ -649,15 +649,15 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		this.skipFinish = skipFinish;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setDownloadURL(java.lang.String)
-	 
+
 	@Override
 	public void setDownloadURL(String downloadURL) {
 		this.downloadURL = downloadURL;
-		
-		
+
+
 	}*/
 
 	/* (non-Javadoc)
@@ -667,10 +667,10 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	public String getDownloadURL() {
 		return this.downloadURL;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.config.ConfigurationContainer#getUseMarker()
 	 */
@@ -681,7 +681,7 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.config.ConfigurationContainer#setUseMarker(
 	 * boolean)
@@ -691,16 +691,16 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 		this.useMarker = useMarker;
 		if (useMarker) setUseSignatureFields(false);
 	}
-	
-	
+
+
 	@Override
 	public void setUseSignatureFields(boolean useFields) {
 		this.useSignatureFields  = useFields;
 		if (useFields) setUseMarker(false);
 	}
 
-	
-	
+
+
 	@Override
 	public boolean getUseSignatureFields() {
 		return this.useSignatureFields;
@@ -711,8 +711,8 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	 */
 	@Override
 	public void setEnablePlaceholderUsage(boolean bool) {
-		this.enabledPlaceholderUsage = bool; 
-		
+		this.enabledPlaceholderUsage = bool;
+
 	}
 
 	/* (non-Javadoc)
@@ -722,14 +722,14 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	public boolean getEnablePlaceholderUsage() {
 		return this.enabledPlaceholderUsage;
 	}
-	
-	
-	@Override 
+
+
+	@Override
 	public Profile getSignatureProfile() {
 		if (this.signatureProfile == null) {
 			this.signatureProfile = Profile.SIGNATURBLOCK_SMALL;
 		}
-		return this.signatureProfile; 
+		return this.signatureProfile;
 	}
 
     @Override
@@ -747,5 +747,5 @@ public class ConfigurationContainerImpl implements ConfigurationContainer {
 	public void setSignatureProfile(Profile profile) {
 		this.signatureProfile = profile;
 	}
- 	
+
 }

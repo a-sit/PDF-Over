@@ -25,7 +25,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * An interface for reading the persistent configuration
- * 
+ *
  * This reads the configuration that will be saved
  */
 public interface PersistentConfigProvider {
@@ -79,7 +79,7 @@ public interface PersistentConfigProvider {
 
 	/**
 	 * Gets the default output folder for signed documents
-	 * @return the default output folder 
+	 * @return the default output folder
 	 */
 	public String getDefaultOutputFolderPersistent();
 
@@ -180,29 +180,29 @@ public interface PersistentConfigProvider {
 	 * @return the configured MainWindow size
 	 */
 	public Point getMainWindowSize();
-	
+
 	/**
 	 * Gets whether to use an existing singature marker.
 	 *
 	 * @return whether to use an existing singature marker
 	 */
 	public boolean getUseMarker();
-	
+
 	/**
 	 * Gets whether to use an existing signature fields.
 	 *
 	 * @return boolean
 	 */
 	public boolean getUseSignatureFields();
-	
+
 	/**
 	 * @return
 	 */
 	public boolean getEnablePlaceholderUsage();
-	
+
 	/***
-	 * 
-	 * @return the signature profile 
+	 *
+	 * @return the signature profile
 	 */
 	public String getSignatureProfile();
 

@@ -22,7 +22,7 @@ import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- * 
+ *
  */
 public interface StateMachine {
 	/**
@@ -54,29 +54,29 @@ public interface StateMachine {
 	 * @return the PDF Signer
 	 */
 	public PDFSigner getPDFSigner();
-	
+
 	/**
 	 * Get the Status
 	 * @return the Status
 	 */
 	public Status getStatus();
-	
+
 	/**
 	 * Gets the GUI provider
 	 * @return the GUI provider
 	 */
 	public GUIProvider getGUIProvider();
-	
+
 	/**
 	 * Jump to specific state
-	 * 
+	 *
 	 * Sets the state machine state this method should be used to let the user jump
 	 * around between states. This Method also resets certain properties defined
 	 * by later states then the target state.
-	 * 
+	 *
 	 * Example: Usually the MainWindow allows the user to jump to the states:
 	 * DataSourceSelectionState, PositioningState and BKUSelectionState
-	 * 
+	 *
 	 * @param state the state to jump to
 	 */
 	public void jumpToState(State state);
@@ -86,7 +86,7 @@ public interface StateMachine {
 	 * Calls the next state.
 	 */
 	public void update();
-	
+
 	/**
 	 * Update state machine from other thread
 	 * Calls the next state within the main thread
@@ -97,10 +97,10 @@ public interface StateMachine {
 	 * Exit state machine execution
 	 */
 	public void exit();
-	
+
 	/**
 	 * Gets the command line arguments
-	 * 
+	 *
 	 * @return the command line arguments
 	 */
 	public String[] getCmdArgs();

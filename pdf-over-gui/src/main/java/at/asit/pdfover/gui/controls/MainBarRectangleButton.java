@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class MainBarRectangleButton extends MainBarButton {
 
@@ -71,7 +71,7 @@ public class MainBarRectangleButton extends MainBarButton {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt
 	 * .events.PaintEvent)
@@ -103,55 +103,55 @@ public class MainBarRectangleButton extends MainBarButton {
 
 		Region left_reg = new Region();
 		left_reg.add(new int[] { 0, 0, factor, factor, factor, height-factor, 0, height, 0, 0 });
-		
+
 		Region right_reg = new Region();
-		right_reg.add(new int[] { width, 0, 
-				width - factor, factor, 
+		right_reg.add(new int[] { width, 0,
+				width - factor, factor,
 				width - factor, height-factor, width, height, width, 0 });
-		
+
 		Region top_reg = new Region();
-		top_reg.add(new int[] { 
-				0, 0, 
-				factor, factor, 
-				width - factor, factor, 
-				width, 0, 
+		top_reg.add(new int[] {
+				0, 0,
+				factor, factor,
+				width - factor, factor,
+				width, 0,
 				0, 0 });
-		
+
 		Region bottom_reg = new Region();
-		bottom_reg.add(new int[] { 
-				0, height, 
-				factor, height-factor, 
-				width - factor, height-factor, 
+		bottom_reg.add(new int[] {
+				0, height,
+				factor, height-factor,
+				width - factor, height-factor,
 				width, height, 0, height });
-		
+
 		e.gc.setClipping(top_reg);
-		
-		//TOP 
+
+		//TOP
 		 e.gc.fillGradientRectangle(0, 0, width, factor, true);
-		 
+
 		 e.gc.setClipping(bottom_reg);
-		 
-		 //BOTTOM 
+
+		 //BOTTOM
 		 e.gc.fillGradientRectangle(0, height, width, -1 * (factor),
 		  true);
-		
+
 		 e.gc.setClipping(left_reg);
-		 
+
 		// LEFT
 		e.gc.fillGradientRectangle(0, 0, factor, height, false);
 
-		
+
 		e.gc.setClipping(right_reg);
 		// RIGTH
 		e.gc.fillGradientRectangle(width, 0, -1 * factor, height,
 				false);
-		
+
 		e.gc.setClipping((Region)null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#getCustomRegion()
 	 */
 	@Override

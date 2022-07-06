@@ -18,13 +18,13 @@ package at.asit.pdfover.signator;
 // Imports
 
 /**
- * 
+ *
  */
 public interface BkuSlConnector {
 	/**
 	 * @param request
 	 * @return SL Response
-	 * @throws SignatureException 
+	 * @throws SignatureException
 	 */
 	public SLResponse handleSLRequest(SLRequest request) throws SignatureException;
 }

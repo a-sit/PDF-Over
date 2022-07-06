@@ -32,7 +32,7 @@ public class InvisibleProfile extends Argument {
 	 * Constructor
 	 */
 	public InvisibleProfile() {
-		super(new String[] {"-v"}, "argument.help.vis"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] {"-v"}, "argument.help.vis"); // //
 	}
 
 	/**
@@ -50,21 +50,21 @@ public class InvisibleProfile extends Argument {
 			throws InitializationException {
 		try {
 			log.info("Set Profile Invisible");
-			
+
 			if (args.length > argOffset + 1) {
 				PdfAs4SignatureParameter.PROFILE_VISIBILITY=false;
 				log.debug("We are setting the profile visibility to false");
-				return argOffset + 1;	
+				return argOffset + 1;
 			}
-			
+
 		} catch (Exception ex) {
-			log.error("Signature Profile Visibilty Error", ex); //$NON-NLS-1$
+			log.error("Signature Profile Visibilty Error", ex); //
 			throw new InitializationException(
-					Messages.getString("argument.invalid.vis") + this.getHelpText(), ex); //$NON-NLS-1$
+					Messages.getString("argument.invalid.vis") + this.getHelpText(), ex); //
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.vis") + this.getHelpText(), null); //$NON-NLS-1$
+				Messages.getString("argument.invalid.vis") + this.getHelpText(), null); //
 	}
 
 }

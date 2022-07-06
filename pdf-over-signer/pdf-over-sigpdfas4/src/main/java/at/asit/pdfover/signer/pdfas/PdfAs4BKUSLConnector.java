@@ -40,7 +40,7 @@ import at.gv.egiz.sl.util.RequestPackage;
 import at.gv.egiz.sl.util.SLMarschaller;
 
 /**
- * 
+ *
  */
 public class PdfAs4BKUSLConnector extends BaseSLConnector {
 	/**

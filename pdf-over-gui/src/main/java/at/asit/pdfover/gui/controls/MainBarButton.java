@@ -36,15 +36,15 @@ import at.asit.pdfover.commons.Constants;
  * Main Bar Button implementation
  */
 public abstract class MainBarButton extends Canvas {
-	
+
 	/**
 	 * If borders are drawn with a gradient effect this sets the size
 	 */
 	public static final int GradientFactor = 5;
-	
+
 	/**
 	 * Number of pixel of the altitude of the triangle representing the arrow within the button shapes
-	 * 
+	 *
 	 * This should be a multiple of 2!
 	 */
 	public static final int SplitFactor = 10;
@@ -66,7 +66,7 @@ public abstract class MainBarButton extends Canvas {
 
 	private Color inactiveText = null;
 
-	private String text = ""; //$NON-NLS-1$
+	private String text = ""; //
 
 	private boolean active = true;
 
@@ -167,11 +167,11 @@ public abstract class MainBarButton extends Canvas {
 	public void setBorderColor(Color borderColor) {
 		this.borderColor = borderColor;
 	}
-	
+
 
 	/**
 	 * Gets the image
-	 * 
+	 *
 	 * @return the image
 	 */
 	public Image getImage() {
@@ -180,7 +180,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Sets the Image
-	 * 
+	 *
 	 * @param image
 	 *            the imgage to set
 	 */
@@ -190,7 +190,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Sets if this button is active
-	 * 
+	 *
 	 * @param active
 	 *            the active state
 	 */
@@ -206,7 +206,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Gets if this button is active
-	 * 
+	 *
 	 * @return the active state
 	 */
 	public boolean getActive() {
@@ -215,7 +215,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Gets the button text
-	 * 
+	 *
 	 * @return the text
 	 */
 	public String getText() {
@@ -224,7 +224,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Sets the text for the button
-	 * 
+	 *
 	 * @param text
 	 *            the text to set
 	 */
@@ -234,7 +234,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Paint 3D style borders
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void paintBackground(PaintEvent e) {
@@ -242,14 +242,14 @@ public abstract class MainBarButton extends Canvas {
 		int height = size.y - 4;
 
 		int width = size.x;
-		
+
 		e.gc.setForeground(this.activeBackground1);
 		e.gc.setBackground(this.activeBackground);
-		
+
 		e.gc.fillGradientRectangle(0, height, width, -1 * height, true);
-		
+
 		//e.gc.setBackground(activeBackground);
-		
+
 		// LEFT
 		// e.gc.fillGradientRectangle(0, 0, factor, height, false);
 
@@ -261,20 +261,20 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Main painting method
-	 * 
+	 *
 	 * @param e
 	 */
 	void paintControl(PaintEvent e) {
 		Color forecurrent = e.gc.getForeground();
 		Color backcurrent = e.gc.getBackground();
-		
+
 		e.gc.setForeground(getBorderColor());
 		if(this.getActive()) {
 			this.paintBackground(e);
 		}
 
 		e.gc.setForeground(getBorderColor());
-		
+
 		this.paintButton(e);
 
 		e.gc.setForeground(forecurrent);
@@ -285,7 +285,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * paint the inner button
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void paintButton(PaintEvent e) {
@@ -294,7 +294,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Paint the text or image on the button
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void paintText(PaintEvent e) {
@@ -331,9 +331,9 @@ public abstract class MainBarButton extends Canvas {
 
 			e.gc.setForeground(current);
 		} else {
-			
+
 			//log.debug("Width: " + width + " Height: " + height);
-			
+
 			int w = 0;
 			Image tmp = null;
 			if(this.image.getImageData().width < width) {
@@ -344,7 +344,7 @@ public abstract class MainBarButton extends Canvas {
 			} else {
 				tmp = new Image(getDisplay(), this.image.getImageData());
 			}
-			
+
 			e.gc.drawImage(tmp, w, w);
 		}
 
@@ -352,7 +352,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * change the text position
-	 * 
+	 *
 	 * @param positionX
 	 *            the position
 	 * @return the new position
@@ -363,7 +363,7 @@ public abstract class MainBarButton extends Canvas {
 
 	/**
 	 * Gets the region of the button
-	 * 
+	 *
 	 * @return the button region
 	 */
 	protected abstract Region getCustomRegion();

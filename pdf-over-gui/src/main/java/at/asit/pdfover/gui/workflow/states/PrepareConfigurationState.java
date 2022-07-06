@@ -114,7 +114,7 @@ public class PrepareConfigurationState extends State {
 						new FileInputStream(
 								getStateMachine().getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
-				log.info("Loaded config from file : " + filename); //$NON-NLS-1$
+				log.info("Loaded config from file : " + filename); //
 			} catch (FileNotFoundException ex) {
 				if (filename.equals(Constants.DEFAULT_CONFIG_FILENAME)) {
 					// we only check for resource config file if it is the
@@ -125,7 +125,7 @@ public class PrepareConfigurationState extends State {
 						getStateMachine().getConfigProvider()
 								.loadConfiguration(is);
 
-						log.info("Loaded config from resource : " + filename); //$NON-NLS-1$
+						log.info("Loaded config from resource : " + filename); //
 					} catch (Exception eex) {
 						throw ex;
 					}
@@ -136,7 +136,7 @@ public class PrepareConfigurationState extends State {
 
 		} catch (IOException ex) {
 			throw new InitializationException(
-					"Failed to read configuration from config file", ex); //$NON-NLS-1$
+					"Failed to read configuration from config file", ex); //
 		}
 	}
 
@@ -150,7 +150,7 @@ public class PrepareConfigurationState extends State {
 		String note = config.getSignatureNote();
 		Locale loc = config.getSignatureLocale();
 
-		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //$NON-NLS-1$
+		String note_old = Messages.getString("simple_config.Note_Default_Old", loc); //
 		if (note.equals(note_old))
 			resetSignatureNoteField(config);
 	}
@@ -189,9 +189,9 @@ public class PrepareConfigurationState extends State {
 			}
 		} catch (Exception e) {
 			log.error(
-					"Failed to write PDF Over config file to config directory", e); //$NON-NLS-1$
+					"Failed to write PDF Over config file to config directory", e); //
 			throw new InitializationException(
-					"Failed to write PDF Over config file to config directory", //$NON-NLS-1$
+					"Failed to write PDF Over config file to config directory", //
 					e);
 		} finally {
 			if (pdfOverConfig != null) {
@@ -199,7 +199,7 @@ public class PrepareConfigurationState extends State {
 					pdfOverConfig.close();
 				} catch (IOException e) {
 					log.warn(
-							"Failed to close File stream for PDFOver config", e); //$NON-NLS-1$
+							"Failed to close File stream for PDFOver config", e); //
 				}
 			}
 
@@ -208,7 +208,7 @@ public class PrepareConfigurationState extends State {
 					inputStream.close();
 				} catch (IOException e) {
 					log.warn(
-							"Failed to close Resource stream for PDFOver config", e); //$NON-NLS-1$
+							"Failed to close Resource stream for PDFOver config", e); //
 				}
 			}
 		}
@@ -229,17 +229,17 @@ public class PrepareConfigurationState extends State {
 			String filename = getStateMachine().getConfigProvider().getConfigurationDirectory()
 					+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
 			pdfOverConfig = new FileOutputStream(filename);
-	
+
 			while ((byteCount = inputStream.read(buffer)) >= 0) {
 				pdfOverConfig.write(buffer, 0, byteCount);
 			}
-	
+
 			PropertyConfigurator.configureAndWatch(filename);
 		} catch (Exception e) {
 			log.error(
-					"Failed to write log4j config file to config directory", e); //$NON-NLS-1$
+					"Failed to write log4j config file to config directory", e); //
 			throw new InitializationException(
-					"Failed to write log4j config file to config directory", //$NON-NLS-1$
+					"Failed to write log4j config file to config directory", //
 					e);
 		} finally {
 			if (pdfOverConfig != null) {
@@ -247,16 +247,16 @@ public class PrepareConfigurationState extends State {
 					pdfOverConfig.close();
 				} catch (IOException e) {
 					log.warn(
-							"Failed to close File stream for log4j config", e); //$NON-NLS-1$
+							"Failed to close File stream for log4j config", e); //
 				}
 			}
-	
+
 			if (inputStream != null) {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
 					log.warn(
-							"Failed to close Resource stream for log4j config", e); //$NON-NLS-1$
+							"Failed to close Resource stream for log4j config", e); //
 				}
 			}
 		}*/
@@ -269,9 +269,9 @@ public class PrepareConfigurationState extends State {
 			Zipper.unzip(is, configDir.getAbsolutePath());
 		} catch (IOException e) {
 			log.error(
-					"Failed to create local configuration directory!", e); //$NON-NLS-1$
+					"Failed to create local configuration directory!", e); //
 			throw new InitializationException(
-					"Failed to create local configuration directory!", //$NON-NLS-1$
+					"Failed to create local configuration directory!", //
 					e);
 		}
 	}
@@ -280,14 +280,14 @@ public class PrepareConfigurationState extends State {
 		File versionFile = new File(configDir, Constants.CONFIG_VERSION_FILENAME);
 		try {
 			BufferedWriter versionWriter = new BufferedWriter(new FileWriter(versionFile));
-			String version = Constants.APP_VERSION == null ? "Unknown" : Constants.APP_VERSION; //$NON-NLS-1$
+			String version = Constants.APP_VERSION == null ? "Unknown" : Constants.APP_VERSION; //
 			versionWriter.write(version);
 			versionWriter.close();
 		} catch (IOException e) {
 			log.error(
-					"Failed to create configuration version file!", e); //$NON-NLS-1$
+					"Failed to create configuration version file!", e); //
 			throw new InitializationException(
-					"Failed to create configuration version file!", //$NON-NLS-1$
+					"Failed to create configuration version file!", //
 					e);
 		}
 	}
@@ -295,16 +295,16 @@ public class PrepareConfigurationState extends State {
 	private void initializeConfig() throws InitializationException {
 		initializeFromConfigurationFile(getStateMachine()
 				.getConfigProvider().getConfigurationFile());
-		
+
 		resetSignatureNoteField(getStateMachine().getConfigProvider());
-		
+
 		try {
 			getStateMachine().getConfigManipulator().saveCurrentConfiguration();
 		} catch (IOException e) {
 			log.error(
-					"Failed to set local configuration signature note!", e); //$NON-NLS-1$
+					"Failed to set local configuration signature note!", e); //
 			throw new InitializationException(
-					"Failed to set local configuration signature note!", //$NON-NLS-1$
+					"Failed to set local configuration signature note!", //
 					e);
 		}
 	}
@@ -312,7 +312,7 @@ public class PrepareConfigurationState extends State {
 	private void createConfiguration(File configDir) throws InitializationException {
 		boolean allOK = false;
 
-		log.info("Creating configuration directory"); //$NON-NLS-1$
+		log.info("Creating configuration directory"); //
 		if (!configDir.exists()) {
 			configDir.mkdir();
 		}
@@ -345,14 +345,14 @@ public class PrepareConfigurationState extends State {
 				String version;
 				while ((version = versionReader.readLine()) != null) {
 					version = version.trim();
-					if (version.length() > 0 && !version.startsWith("#")) { //$NON-NLS-1$
-						log.trace("configuration version from " + versionFile //$NON-NLS-1$
-								+ ": " + version); //$NON-NLS-1$
+					if (version.length() > 0 && !version.startsWith("#")) { //
+						log.trace("configuration version from " + versionFile //
+								+ ": " + version); //
 						return version;
 					}
 				}
 			} catch (IOException ex) {
-				log.error("failed to read configuration version from " //$NON-NLS-1$
+				log.error("failed to read configuration version from " //
 						+ versionFile, ex);
 			} finally {
 				try {
@@ -362,7 +362,7 @@ public class PrepareConfigurationState extends State {
 				}
 			}
 		}
-		log.debug("unknown configuration version"); //$NON-NLS-1$
+		log.debug("unknown configuration version"); //
 		return null;
 	}
 
@@ -373,24 +373,24 @@ public class PrepareConfigurationState extends State {
 	 */
 	private void backupAndCreatePdfAsConfiguration(File configDir) throws InitializationException {
 		try {
-			File backup = File.createTempFile(Constants.PDF_AS_CONFIG_BACKUP_FILENAME, ".zip"); //$NON-NLS-1$
+			File backup = File.createTempFile(Constants.PDF_AS_CONFIG_BACKUP_FILENAME, ".zip"); //
 			OutputStream os = new FileOutputStream(backup);
-			Zipper.zip(configDir + FILE_SEPARATOR + "cfg", os, true); //$NON-NLS-1$
+			Zipper.zip(configDir + FILE_SEPARATOR + "cfg", os, true); //
 			os.close();
 			unzipPdfAsConfig(configDir);
-			File b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + ".zip"); //$NON-NLS-1$
+			File b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + ".zip"); //
 			int i = 1;
 			while (b.exists()) {
-				b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + i++ + ".zip"); //$NON-NLS-1$
+				b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + i++ + ".zip"); //
 			}
 			backup.renameTo(b);
 			updateVersionFile(configDir);
 		} catch (FileNotFoundException e) {
-			log.error("Backup file not found", e); //$NON-NLS-1$
-			throw new InitializationException("Backup file not found", e); //$NON-NLS-1$
+			log.error("Backup file not found", e); //
+			throw new InitializationException("Backup file not found", e); //
 		} catch (IOException e) {
-			log.error("Error creating configuration backup", e); //$NON-NLS-1$
-			throw new InitializationException("Error creating configuration backup", e); //$NON-NLS-1$
+			log.error("Error creating configuration backup", e); //
+			throw new InitializationException("Error creating configuration backup", e); //
 		}
 	}
 
@@ -405,10 +405,10 @@ public class PrepareConfigurationState extends State {
 			File configDir = new File(cDir);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
-				log.debug("Creating configuration file"); //$NON-NLS-1$
+				log.debug("Creating configuration file"); //
 				createConfiguration(configDir);
 			} else {
-				log.debug("Configuration directory exists!"); //$NON-NLS-1$
+				log.debug("Configuration directory exists!"); //
 				// Check PDF-AS config version
 				File versionFile = new File(configDir, Constants.CONFIG_VERSION_FILENAME);
 				String configVersion = getVersion(versionFile);
@@ -422,9 +422,9 @@ public class PrepareConfigurationState extends State {
 				initializeFromArguments(stateMachine.getCmdArgs(),
 						this.configFileHandler);
 			} catch (InitializationException e) {
-				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
+				log.error("Error in cmd line arguments: ", e); //
 				ErrorDialog error = new ErrorDialog(gui.getMainShell(),
-						Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+						Messages.getString("error.CmdLineArgs") + "\n" + // //
 						e.getMessage(),
 						BUTTONS.OK);
 				error.open();
@@ -440,18 +440,18 @@ public class PrepareConfigurationState extends State {
 				initializeFromArguments(stateMachine.getCmdArgs(),
 						this.handler);
 			} catch (InitializationException e) {
-				log.error("Error in cmd line arguments: ", e); //$NON-NLS-1$
+				log.error("Error in cmd line arguments: ", e); //
 				ErrorDialog error;
-				
+
 				if (e.getCause() instanceof FileNotFoundException) {
 					error = new ErrorDialog(gui.getMainShell(),
 						String.format(
-								Messages.getString("error.FileNotExist"), //$NON-NLS-1$
+								Messages.getString("error.FileNotExist"), //
 								e.getCause().getMessage()),
 						BUTTONS.OK);
 				} else {
 					error = new ErrorDialog(gui.getMainShell(),
-							Messages.getString("error.CmdLineArgs") + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+							Messages.getString("error.CmdLineArgs") + "\n" + // //
 							e.getMessage(),
 							BUTTONS.OK);
 				}
@@ -471,7 +471,7 @@ public class PrepareConfigurationState extends State {
 							final String version = method.getResponseBodyAsString().trim();
 							if (!VersionComparator.before(Constants.APP_VERSION, version))
 								return;
-														
+
 							// wait 500ms before invoke the GUI message, because GUI had to be started from
 							// main thread
 							try {Thread.sleep(500); } catch (InterruptedException e1) { }
@@ -480,8 +480,8 @@ public class PrepareConfigurationState extends State {
 								@Override
 								public void run() {
 									Dialog info = new Dialog(gui.getMainShell(),
-											Messages.getString("version_check.UpdateTitle"), //$NON-NLS-1$
-											String.format(Messages.getString("version_check.UpdateText"), //$NON-NLS-1$
+											Messages.getString("version_check.UpdateTitle"), //
+											String.format(Messages.getString("version_check.UpdateText"), //
 													version),
 											BUTTONS.OK_CANCEL, ICON.INFORMATION);
 										if (info.open() == SWT.OK)
@@ -490,17 +490,17 @@ public class PrepareConfigurationState extends State {
 												try {
 													Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
 												} catch (Exception e) {
-													log.error("Error opening update location ", e); //$NON-NLS-1$
+													log.error("Error opening update location ", e); //
 												}
 											} else {
-												log.info("SWT Desktop is not supported on this platform"); //$NON-NLS-1$
+												log.info("SWT Desktop is not supported on this platform"); //
 												Program.launch(Constants.UPDATE_URL);
 											}
 										}
 								}
 							});
 						} catch (Exception e) {
-							log.error("Error downloading update information: ", e); //$NON-NLS-1$
+							log.error("Error downloading update information: ", e); //
 						}
 					}
 				}).start();
@@ -520,10 +520,10 @@ public class PrepareConfigurationState extends State {
 			setNextState(new OpenState(stateMachine));
 
 		} catch (InitializationException e) {
-			log.error("Failed to initialize: ", e); //$NON-NLS-1$
+			log.error("Failed to initialize: ", e); //
 			ErrorDialog error = new ErrorDialog(getStateMachine()
 					.getGUIProvider().getMainShell(),
-					Messages.getString("error.Initialization"), //$NON-NLS-1$
+					Messages.getString("error.Initialization"), //
 					BUTTONS.OK);
 			// error.setException(e);
 			// setNextState(error);

@@ -19,7 +19,7 @@ package at.asit.pdfover.gui.utils;
 import java.util.Comparator;
 
 /**
- * 
+ *
  */
 public class VersionComparator implements Comparator<String> {
 	/* (non-Javadoc)
@@ -27,8 +27,8 @@ public class VersionComparator implements Comparator<String> {
 	 */
 	@Override
 	public int compare(String v1, String v2) {
-		String[] v1Parts = v1.split("\\.|-"); //$NON-NLS-1$
-		String[] v2Parts = v2.split("\\.|-"); //$NON-NLS-1$
+		String[] v1Parts = v1.split("\\.|-"); //
+		String[] v2Parts = v2.split("\\.|-"); //
 
 		int length = Math.max(v1Parts.length, v2Parts.length);
 		for (int i = 0; i < length; ++i) {
@@ -37,7 +37,7 @@ public class VersionComparator implements Comparator<String> {
 				if (i < v1Parts.length)
 					v1Part = Integer.parseInt(v1Parts[i]);
 			} catch (NumberFormatException e) {
-				if (v1Parts[i].equals("SNAPSHOT")) //$NON-NLS-1$
+				if (v1Parts[i].equals("SNAPSHOT")) //
 					v1Part = Integer.MAX_VALUE;
 			}
 
@@ -46,7 +46,7 @@ public class VersionComparator implements Comparator<String> {
 				if (i < v2Parts.length)
 					v2Part = Integer.parseInt(v2Parts[i]);
 			} catch (NumberFormatException e) {
-				if (v2Parts[i].equals("SNAPSHOT")) //$NON-NLS-1$
+				if (v2Parts[i].equals("SNAPSHOT")) //
 					v2Part = Integer.MAX_VALUE;
 			}
 

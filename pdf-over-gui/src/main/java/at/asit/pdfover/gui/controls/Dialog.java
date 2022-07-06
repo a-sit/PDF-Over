@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 public class Dialog {
 
 	private MessageBox box;
-	
+
 	/**
 	 * Message box buttons
 	 */
@@ -42,7 +42,7 @@ public class Dialog {
 		/** Display yes and no buttons */
 		YES_NO
 	};
-	
+
 	/**
 	 * Message box icon
 	 */
@@ -58,7 +58,7 @@ public class Dialog {
 		/** Working icon */
 		WORKING
 	};
-	
+
 	/**
 	 * @param parent The parent shell
 	 * @param title The dialog title
@@ -114,7 +114,7 @@ public class Dialog {
 
 	/**
 	 * Open error dialog
-	 * 
+	 *
 	 * @return SWT.OK | SWT.IGNORE | SWT.ABORT | SWT.RETRY | SWT.CANCEL
 	 */
 	public int open() {

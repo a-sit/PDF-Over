@@ -20,7 +20,7 @@ package at.asit.pdfover.signator;
  * This class should be extended to support libraries such as PDF-AS or PADES.
  */
 public interface Signer {
-	
+
 	/**
 	 * Prepare a signature
 	 * Defines signature parameters, the pdf library prepares the pdf document to sign and
@@ -30,7 +30,7 @@ public interface Signer {
 	 * @throws SignatureException
 	 */
 	public SigningState prepare(SignatureParameter parameter) throws SignatureException;
-	
+
 	/**
 	 * Adds the signature to the document.
 	 * The SL Response has to be set in the state
@@ -39,7 +39,7 @@ public interface Signer {
 	 * @throws SignatureException
 	 */
 	public SignResult sign(SigningState state) throws SignatureException;
-	
+
 	/**
 	 * Creates new signing profile
 	 * @return The new Profile

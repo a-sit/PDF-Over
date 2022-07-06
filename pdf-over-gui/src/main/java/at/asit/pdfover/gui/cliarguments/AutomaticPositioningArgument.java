@@ -26,12 +26,12 @@ public class AutomaticPositioningArgument extends Argument {
 	 * Constructor
 	 */
 	public AutomaticPositioningArgument() {
-		super(new String[] { "-a" }, "argument.help.autopos"); //$NON-NLS-1$ //$NON-NLS-2$
+		super(new String[] { "-a" }, "argument.help.autopos"); // //
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang
 	 * .String[], int, at.asit.pdfover.gui.workflow.StateMachine,

@@ -56,7 +56,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param cmdLineArgs
 	 */
 	public StateMachineImpl(String[] cmdLineArgs) {
@@ -72,7 +72,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * This method should be used to let the user jump
 	 * around between states. This Method also resets certain properties defined
 	 * by later states then state
-	 * 
+	 *
 	 * @param state
 	 */
 	@Override
@@ -92,9 +92,9 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			try {
 				current.run();
 			} catch (Exception e) {
-				log.error("StateMachine update: ", e); //$NON-NLS-1$
-				ErrorDialog errorState = new ErrorDialog(this.getMainShell(), 
-						Messages.getString("error.Unexpected"), BUTTONS.OK); //$NON-NLS-1$
+				log.error("StateMachine update: ", e); //
+				ErrorDialog errorState = new ErrorDialog(this.getMainShell(),
+						Messages.getString("error.Unexpected"), BUTTONS.OK); //
 				//errorState.setException(e);
 				//jumpToState(errorState);
 				errorState.open();
@@ -109,7 +109,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 				if (this.mainWindow != null
 						&& !this.mainWindow.getShell().isDisposed()) {
-					log.debug("Allowing MainWindow to update its state for " //$NON-NLS-1$
+					log.debug("Allowing MainWindow to update its state for " //
 							+ current);
 					current.updateMainWindowBehavior();
 					this.mainWindow.applyBehavior();
@@ -121,13 +121,13 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 				}
 
 				if (next == null) {
-					log.info("Next state is null -> exit"); //$NON-NLS-1$
+					log.info("Next state is null -> exit"); //
 					this.status.setCurrentState(next);
 					break;
 				}
 
-				log.debug("Changing state from: " //$NON-NLS-1$
-						+ current + " to " //$NON-NLS-1$
+				log.debug("Changing state from: " //
+						+ current + " to " //
 						+ next.toString());
 				this.status.setCurrentState(next);
 			}
@@ -159,7 +159,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * at.asit.pdfover.gui.workflow.StateMachine#display(org.eclipse.swt.widgets
 	 * .Composite)
@@ -184,7 +184,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			this.shell.open();
 			this.shell.layout();
 		} catch (Exception e) {
-			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage()); //$NON-NLS-1$
+			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage()); //
 			this.display = null;
 			this.mainWindow = null;
 			this.shell = null;
@@ -195,7 +195,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * Gets the Shell for drawing the ui
-	 * 
+	 *
 	 * @return Composite
 	 */
 	public synchronized Composite getComposite() {
@@ -217,7 +217,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 					Composite.class, int.class, State.class);
 			composite = constructor.newInstance(getComposite(), style, state);
 		} catch (Exception e) {
-			log.error("Could not create Composite for Class " //$NON-NLS-1$
+			log.error("Could not create Composite for Class " //
 					+ compositeClass.getName(), e);
 		}
 		return composite;
@@ -225,7 +225,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * Only returns a shell if one was already created ...
-	 * 
+	 *
 	 * @return
 	 */
 	private Shell nonCreatingGetShell() {
@@ -247,7 +247,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * Only returns a shell if one was already created ...
-	 * 
+	 *
 	 * @return
 	 */
 	private Display nonCreatingGetDisplay() {
@@ -258,9 +258,9 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 	 * Workflow main entrance point
 	 */
 	public void start() {
-	
+
 		// Call update to start processing ...
-		update();			
+		update();
 
 		// if a user interaction is required we have a shell ...
 		Shell shell = nonCreatingGetShell();
@@ -352,7 +352,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * sets the command line arguments
-	 * 
+	 *
 	 * @param cmdLineArgs
 	 */
 	private void setCmdLineArgs(String[] cmdLineArgs) {
@@ -361,7 +361,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 	/**
 	 * Gets the command line arguments
-	 * 
+	 *
 	 * @return the command line arguments
 	 */
 	@Override
@@ -377,7 +377,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 		if(this.shell == null) {
 			this.createMainWindow();
 		}
-		
+
 		return this.shell;
 	}
 

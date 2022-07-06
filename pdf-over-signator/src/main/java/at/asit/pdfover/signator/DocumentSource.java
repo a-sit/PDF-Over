@@ -26,7 +26,7 @@ public interface DocumentSource {
 	/**
 	 * Gets the InputStream for this Document
 	 * @return InputStream for the document
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public InputStream getInputStream() throws IOException;
 

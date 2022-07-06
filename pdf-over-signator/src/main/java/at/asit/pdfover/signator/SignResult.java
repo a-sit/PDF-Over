@@ -22,12 +22,12 @@ import java.security.cert.X509Certificate;
  */
 public interface SignResult {
 
-	/** 
+	/**
 	 * Getter of the property <tt>signaturePosition</tt>
 	 * @return  Returns the signaturePosition.
 	 */
 	public SignaturePosition getSignaturePosition();
-	
+
 	/**
 	 * Gets the signed Document
 	 * @return  Returns the documentSource.

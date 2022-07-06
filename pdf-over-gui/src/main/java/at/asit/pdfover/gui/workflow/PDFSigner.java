@@ -20,7 +20,7 @@ import at.asit.pdfover.signator.Signator;
 import at.asit.pdfover.signator.Signer;
 
 /**
- * 
+ *
  */
 public interface PDFSigner {
 	/**
@@ -28,13 +28,13 @@ public interface PDFSigner {
 	 * @return the signer type
 	 */
 	public Signator.Signers getUsedPDFSignerLibrary();
-	
+
 	/**
 	 * Set PDF Signer Type
 	 * @param signer the signer type
 	 */
 	public void setUsedPDFSignerLibrary(Signator.Signers signer);
-	
+
 	/**
 	 * Gets the currently used PDF Signer
 	 * @return the pdf signer

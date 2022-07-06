@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class FileNameEmblem implements Emblem {
 	/**
@@ -31,7 +31,7 @@ public class FileNameEmblem implements Emblem {
 			.getLogger(FileNameEmblem.class);
 
 	private String fileName = null;
-	
+
 	/**
 	 * Constructor
 	 * @param filename
@@ -39,7 +39,7 @@ public class FileNameEmblem implements Emblem {
 	public FileNameEmblem(String filename) {
 		this.fileName = filename;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.Emblem#getFileName()
 	 */

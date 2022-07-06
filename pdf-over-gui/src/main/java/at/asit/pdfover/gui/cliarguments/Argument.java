@@ -23,7 +23,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
 
 /**
  * CLI Argument base class
- * 
+ *
  * Implementing arguments have to be registered in PrepareConfigurationState
  */
 public abstract class Argument {
@@ -86,9 +86,9 @@ public abstract class Argument {
 
 	/**
 	 * Set the command option in format: -...
-	 * 
+	 *
 	 * Examples: -h
-	 * 
+	 *
 	 * @param value
 	 */
 	protected void setCommandOptions(String[] value) {
@@ -97,7 +97,7 @@ public abstract class Argument {
 
 	/**
 	 * Get the command option
-	 * 
+	 *
 	 * Examples: -h
 	 * @return the command option
 	 */
@@ -107,25 +107,25 @@ public abstract class Argument {
 
 	/**
 	 * Invokes the argument to set stuff within the stateMachine
-	 * 
+	 *
 	 * It should return the offset within the args array where the last used argument of this Argument was used.
-	 * 
+	 *
 	 * Example:
 	 * args[] = { "-h", "-b", "LOCAL" }
-	 * 
+	 *
 	 * Help Argument call:
 	 *     offset = 0
 	 *     returns 0
-	 *     
+	 *
 	 * BKU Argument call:
 	 *     offset = 1
 	 *     returns 2
-	 * 
+	 *
 	 * @param args
 	 * @param argOffset
-	 * @param handler 
+	 * @param handler
 	 * @return returns the argumentOffset ending the section of this Argument
-	 * @throws InitializationException 
+	 * @throws InitializationException
 	 */
 	public abstract int handleArgument(String[] args, int argOffset, ArgumentHandler handler) throws InitializationException;
 }

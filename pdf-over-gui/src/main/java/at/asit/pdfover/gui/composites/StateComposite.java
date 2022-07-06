@@ -37,7 +37,7 @@ public abstract class StateComposite extends Composite {
 
 	/**
 	 * The base class for state composites
-	 * 
+	 *
 	 * @param parent The parent Composite
 	 * @param style The Composite style
 	 * @param state The current State
@@ -49,10 +49,10 @@ public abstract class StateComposite extends Composite {
 
 	/**
 	 * Performs layout for all children in composite
-	 * (SWT layout(...) only layouts children no grandchildren!) 
+	 * (SWT layout(...) only layouts children no grandchildren!)
 	 */
 	public abstract void doLayout();
-	
+
 	/**
 	 * Reloads the localizeable resources
 	 */
@@ -79,32 +79,32 @@ public abstract class StateComposite extends Composite {
     	private final Control c;
     	private final FormData fd = new FormData();
     	public AnchorSetter(Control c) { this.c = c; }
-    
+
     	public void set() { this.c.setLayoutData(this.fd); }
-    
+
     	public AnchorSetter height(int h) { fd.height = h; return this; }
     	public AnchorSetter width(int w) { fd.width = w; return this; }
-    
+
     	public AnchorSetter top(FormAttachment a) { fd.top = a; return this; }
     	public AnchorSetter left(FormAttachment a) { fd.left = a; return this; }
     	public AnchorSetter right(FormAttachment a) { fd.right = a; return this; }
     	public AnchorSetter bottom(FormAttachment a) { fd.bottom = a; return this; }
-    
+
 		public AnchorSetter top(Control control, int offset, int alignment) { return top(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter top(Control control, int offset) { return top(new FormAttachment(control, offset)); }
     	public AnchorSetter top(int num, int offset) { return top(new FormAttachment(num, offset)); }
     	public AnchorSetter top(int num) { return top(new FormAttachment(num)); }
-		
+
 		public AnchorSetter left(Control control, int offset, int alignment) { return left(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter left(Control control, int offset) { return left(new FormAttachment(control, offset)); }
     	public AnchorSetter left(int num, int offset) { return left(new FormAttachment(num, offset)); }
     	public AnchorSetter left(int num) { return left(new FormAttachment(num)); }
-    
+
 		public AnchorSetter right(Control control, int offset, int alignment) { return right(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter right(Control control, int offset) { return right(new FormAttachment(control, offset)); }
     	public AnchorSetter right(int num, int offset) { return right(new FormAttachment(num, offset)); }
     	public AnchorSetter right(int num) { return right(new FormAttachment(num)); }
-    
+
 		public AnchorSetter bottom(Control control, int offset, int alignment) { return bottom(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter bottom(Control control, int offset) { return bottom(new FormAttachment(control, offset)); }
     	public AnchorSetter bottom(int num, int offset) { return bottom(new FormAttachment(num, offset)); }

@@ -28,19 +28,19 @@ public class MainWindowBehavior {
 	 * Enabled buttons map
 	 */
 	protected Map<Buttons, Boolean> buttonsEnabled;
-	
+
 	/**
 	 * active buttons map
 	 */
 	protected Map<Buttons, Boolean> buttonsActive;
-	
+
 	/**
 	 * Main bar visible
 	 */
 	protected boolean mainBarVisible;
 
 	/**
-	 * 
+	 *
 	 */
 	public MainWindowBehavior() {
 		this.buttonsActive = new EnumMap<MainWindow.Buttons, Boolean>(MainWindow.Buttons.class);

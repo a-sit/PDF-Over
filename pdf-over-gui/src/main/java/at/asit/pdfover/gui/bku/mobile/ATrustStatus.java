@@ -41,12 +41,12 @@ public class ATrustStatus extends MobileBKUStatus {
 	public String qrCodeURL = null;
 	public boolean tanField = false;
 	public boolean isAPPTan = false;
-	public String viewStateGenerator; 
-	public String dynAttrPhoneNumber; 
-	public String dynAttrPassword; 
-	public String dynAttrBtnId; 
-	public String dynAttrTan; 
-	public String dynAttrSignButton; 
+	public String viewStateGenerator;
+	public String dynAttrPhoneNumber;
+	public String dynAttrPassword;
+	public String dynAttrBtnId;
+	public String dynAttrTan;
+	public String dynAttrSignButton;
 	public boolean isSMSTan = false;
 
 	/**

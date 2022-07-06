@@ -36,7 +36,7 @@ import at.asit.pdfover.commons.Messages;
  * This code does not require the Cocoa SWT JAR in order to be compiled as it
  * uses reflection to access the Cocoa specific API methods. Use SWT Listeners
  * instead in order to use this class in SWT only applications.
- * 
+ *
  * </p>
  * <p>
  * This code was influenced by the <a
@@ -85,9 +85,9 @@ public class CocoaUIEnhancer {
 
 		/**
 		 * Will be called on 32bit SWT.
-		 * @param id 
-		 * @param sel 
-		 * @param arg0 
+		 * @param id
+		 * @param sel
+		 * @param arg0
 		 * @return x
 		 */
 		@SuppressWarnings("unused")
@@ -97,26 +97,26 @@ public class CocoaUIEnhancer {
 
 		/**
 		 * Will be called on 64bit SWT.
-		 * @param id 
-		 * @param sel 
-		 * @param arg0 
+		 * @param id
+		 * @param sel
+		 * @param arg0
 		 * @return x
 		 */
 		public long actionProc(final long id, final long sel, final long arg0) {
 			if (sel == sel_aboutMenuItemSelected_) {
 				if (log.isDebugEnabled()) {
-					log.debug("[MenuHookObject - actionProc] : About"); //$NON-NLS-1$
+					log.debug("[MenuHookObject - actionProc] : About"); //
 					this.about.handleEvent(null);
 				}
 			} else if (sel == sel_preferencesMenuItemSelected_) {
 				if (log.isDebugEnabled()) {
-					log.debug("[MenuHookObject - actionProc] : Preferences"); //$NON-NLS-1$
+					log.debug("[MenuHookObject - actionProc] : Preferences"); //
 				}
 				this.pref.handleEvent(null);
 
 			} else {
 				if (log.isDebugEnabled()) {
-					log.debug("[MenuHookObject - actionProc] : Unknow selection!"); //$NON-NLS-1$
+					log.debug("[MenuHookObject - actionProc] : Unknow selection!"); //
 				}
 			}
 			// Return value is not used.
@@ -138,7 +138,7 @@ public class CocoaUIEnhancer {
 	/**
 	 * Hook the given Listener to the Mac OS X application Quit menu and the
 	 * IActions to the About and Preferences menus.
-	 * 
+	 *
 	 * @param display
 	 *            The Display to use.
 	 * @param quitListener
@@ -173,29 +173,29 @@ public class CocoaUIEnhancer {
 		display.disposeExec(new Runnable() {
 			@Override
 			public void run() {
-				CocoaUIEnhancer.invoke(proc3Args, "dispose"); //$NON-NLS-1$
+				CocoaUIEnhancer.invoke(proc3Args, "dispose"); //
 			}
 		});
 	}
 
 	private static void initialize(final Object callbackObject) throws Exception {
 
-		final Class<?> osCls = classForName("org.eclipse.swt.internal.cocoa.OS"); //$NON-NLS-1$
+		final Class<?> osCls = classForName("org.eclipse.swt.internal.cocoa.OS"); //
 
 		// Register names in objective-c.
 		if (sel_toolbarButtonClicked_ == 0) {
-			// sel_toolbarButtonClicked_ = registerName( osCls, "toolbarButtonClicked:" ); //$NON-NLS-1$
+			// sel_toolbarButtonClicked_ = registerName( osCls, "toolbarButtonClicked:" ); //
 			sel_preferencesMenuItemSelected_ = registerName(osCls,
-					"preferencesMenuItemSelected:"); //$NON-NLS-1$
+					"preferencesMenuItemSelected:"); //
 			sel_aboutMenuItemSelected_ = registerName(osCls,
-					"aboutMenuItemSelected:"); //$NON-NLS-1$
+					"aboutMenuItemSelected:"); //
 		}
 
 		// Create an SWT Callback object that will invoke the actionProc method
 		// of our internal
 		// callbackObject.
-		proc3Args = new Callback(callbackObject, "actionProc", 3); //$NON-NLS-1$
-		final Method getAddress = Callback.class.getMethod("getAddress", //$NON-NLS-1$
+		proc3Args = new Callback(callbackObject, "actionProc", 3); //
+		final Method getAddress = Callback.class.getMethod("getAddress", //
 				new Class[0]);
 		Object object = getAddress.invoke(proc3Args, (Object[]) null);
 		final long proc3 = convertToLong(object);
@@ -203,64 +203,64 @@ public class CocoaUIEnhancer {
 			SWT.error(SWT.ERROR_NO_MORE_CALLBACKS);
 		}
 
-		final Class<?> nsmenuCls = classForName("org.eclipse.swt.internal.cocoa.NSMenu"); //$NON-NLS-1$
-		final Class<?> nsmenuitemCls = classForName("org.eclipse.swt.internal.cocoa.NSMenuItem"); //$NON-NLS-1$
-		final Class<?> nsstringCls = classForName("org.eclipse.swt.internal.cocoa.NSString"); //$NON-NLS-1$
-		final Class<?> nsapplicationCls = classForName("org.eclipse.swt.internal.cocoa.NSApplication"); //$NON-NLS-1$
+		final Class<?> nsmenuCls = classForName("org.eclipse.swt.internal.cocoa.NSMenu"); //
+		final Class<?> nsmenuitemCls = classForName("org.eclipse.swt.internal.cocoa.NSMenuItem"); //
+		final Class<?> nsstringCls = classForName("org.eclipse.swt.internal.cocoa.NSString"); //
+		final Class<?> nsapplicationCls = classForName("org.eclipse.swt.internal.cocoa.NSApplication"); //
 
 		// Instead of creating a new delegate class in objective-c,
 		// just use the current SWTApplicationDelegate. An instance of this
 		// is a field of the Cocoa Display object and is already the target
 		// for the menuItems. So just get this class and add the new methods
 		// to it.
-		object = invoke(osCls, "objc_lookUpClass", //$NON-NLS-1$
-				new Object[] { "SWTApplicationDelegate" }); //$NON-NLS-1$
+		object = invoke(osCls, "objc_lookUpClass", //
+				new Object[] { "SWTApplicationDelegate" }); //
 		final long cls = convertToLong(object);
 
 		// Add the action callbacks for Preferences and About menu items.
-		invoke(osCls, "class_addMethod", new Object[] { wrapPointer(cls), //$NON-NLS-1$
+		invoke(osCls, "class_addMethod", new Object[] { wrapPointer(cls), //
 				wrapPointer(sel_preferencesMenuItemSelected_),
-				wrapPointer(proc3), "@:@" }); //$NON-NLS-1$
-		invoke(osCls, "class_addMethod", new Object[] { wrapPointer(cls), //$NON-NLS-1$
+				wrapPointer(proc3), "@:@" }); //
+		invoke(osCls, "class_addMethod", new Object[] { wrapPointer(cls), //
 				wrapPointer(sel_aboutMenuItemSelected_), wrapPointer(proc3),
-				"@:@" }); //$NON-NLS-1$
+				"@:@" }); //
 
 		// Get the Mac OS X Application menu.
 		final Object sharedApplication = invoke(nsapplicationCls,
-				"sharedApplication"); //$NON-NLS-1$
-		final Object mainMenu = invoke(sharedApplication, "mainMenu"); //$NON-NLS-1$
-		final Object mainMenuItem = invoke(nsmenuCls, mainMenu, "itemAtIndex", //$NON-NLS-1$
+				"sharedApplication"); //
+		final Object mainMenu = invoke(sharedApplication, "mainMenu"); //
+		final Object mainMenuItem = invoke(nsmenuCls, mainMenu, "itemAtIndex", //
 				new Object[] { wrapPointer(0) });
-		final Object appMenu = invoke(mainMenuItem, "submenu"); //$NON-NLS-1$
+		final Object appMenu = invoke(mainMenuItem, "submenu"); //
 
 		// Create the About <application-name> menu command
-		final Object aboutMenuItem = invoke(nsmenuCls, appMenu, "itemAtIndex", //$NON-NLS-1$
+		final Object aboutMenuItem = invoke(nsmenuCls, appMenu, "itemAtIndex", //
 				new Object[] { wrapPointer(kAboutMenuItem) });
-		final Object nsStrAbout = invoke(nsstringCls, "stringWith", //$NON-NLS-1$
-				new Object[] { String.format(Messages.getString("main.about"), Constants.APP_NAME) }); //$NON-NLS-1$
-		invoke(nsmenuitemCls, aboutMenuItem, "setTitle", //$NON-NLS-1$
+		final Object nsStrAbout = invoke(nsstringCls, "stringWith", //
+				new Object[] { String.format(Messages.getString("main.about"), Constants.APP_NAME) }); //
+		invoke(nsmenuitemCls, aboutMenuItem, "setTitle", //
 				new Object[] { nsStrAbout });
 		// Rename the quit action.
 		final Object quitMenuItem = invoke(nsmenuCls, appMenu,
-				"itemAtIndex", new Object[] { wrapPointer(kQuitMenuItem) }); //$NON-NLS-1$
-		final Object nsStrQuit = invoke(nsstringCls, "stringWith", //$NON-NLS-1$
-				new Object[] { String.format(Messages.getString("main.quit"), Constants.APP_NAME) }); //$NON-NLS-1$
-		invoke(nsmenuitemCls, quitMenuItem, "setTitle", //$NON-NLS-1$
+				"itemAtIndex", new Object[] { wrapPointer(kQuitMenuItem) }); //
+		final Object nsStrQuit = invoke(nsstringCls, "stringWith", //
+				new Object[] { String.format(Messages.getString("main.quit"), Constants.APP_NAME) }); //
+		invoke(nsmenuitemCls, quitMenuItem, "setTitle", //
 				new Object[] { nsStrQuit });
 
 		// Rename the hide action.
 		final Object hideMenuItem = invoke(nsmenuCls, appMenu,
-				"itemAtIndex", //$NON-NLS-1$
+				"itemAtIndex", //
 				new Object[] { wrapPointer(kHideApplicationMenuItem) });
-		final Object nsStrHide = invoke(nsstringCls, "stringWith", //$NON-NLS-1$
-				new Object[] { String.format(Messages.getString("main.hide"), Constants.APP_NAME) }); //$NON-NLS-1$
-		invoke(nsmenuitemCls, hideMenuItem, "setTitle", //$NON-NLS-1$
+		final Object nsStrHide = invoke(nsstringCls, "stringWith", //
+				new Object[] { String.format(Messages.getString("main.hide"), Constants.APP_NAME) }); //
+		invoke(nsmenuitemCls, hideMenuItem, "setTitle", //
 				new Object[] { nsStrHide });
 
 		// Enable the Preferences menuItem.
-		final Object prefMenuItem = invoke(nsmenuCls, appMenu, "itemAtIndex", //$NON-NLS-1$
+		final Object prefMenuItem = invoke(nsmenuCls, appMenu, "itemAtIndex", //
 				new Object[] { wrapPointer(kPreferencesMenuItem) });
-		invoke(nsmenuitemCls, prefMenuItem, "setEnabled", new Object[] { true }); //$NON-NLS-1$
+		invoke(nsmenuitemCls, prefMenuItem, "setEnabled", new Object[] { true }); //
 
 		// Set the action to execute when the About or Preferences menuItem is
 		// invoked.
@@ -270,15 +270,15 @@ public class CocoaUIEnhancer {
 		// and we have registerd the new selectors on it. So just set the new
 		// action to invoke the
 		// selector.
-		invoke(nsmenuitemCls, prefMenuItem, "setAction", //$NON-NLS-1$
+		invoke(nsmenuitemCls, prefMenuItem, "setAction", //
 				new Object[] { wrapPointer(sel_preferencesMenuItemSelected_) });
-		invoke(nsmenuitemCls, aboutMenuItem, "setAction", //$NON-NLS-1$
+		invoke(nsmenuitemCls, aboutMenuItem, "setAction", //
 				new Object[] { wrapPointer(sel_aboutMenuItemSelected_) });
 	}
 
 	private static long registerName(final Class<?> osCls, final String name)
 			throws IllegalArgumentException, SecurityException {
-		final Object object = invoke(osCls, "sel_registerName", //$NON-NLS-1$
+		final Object object = invoke(osCls, "sel_registerName", //
 				new Object[] { name });
 		return convertToLong(object);
 	}

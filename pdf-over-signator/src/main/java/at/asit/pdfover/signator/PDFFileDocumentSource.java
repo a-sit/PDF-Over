@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class PDFFileDocumentSource implements DocumentSource {
 	/**
@@ -35,11 +35,11 @@ public class PDFFileDocumentSource implements DocumentSource {
 			.getLogger(PDFFileDocumentSource.class);
 
 	private File file;
-	
+
 	private byte[] data = null;
-	
+
 	private int len = 0;
-	
+
 	/**
 	 * Default constructor
 	 * @param file
@@ -47,7 +47,7 @@ public class PDFFileDocumentSource implements DocumentSource {
 	public PDFFileDocumentSource(File file) {
 		this.file = file;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.DocumentSource#getInputStream()
 	 */

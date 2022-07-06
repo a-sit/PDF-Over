@@ -45,7 +45,7 @@ public interface Status {
 	 * @param position the position
 	 */
 	public void setSignaturePosition(SignaturePosition position);
-	
+
 	/**
 	 * Gets the signature position
 	 * @return the signature position
@@ -57,13 +57,13 @@ public interface Status {
 	 * @param bku the selected BKU
 	 */
 	public void setBKU(BKUs bku);
-	
+
 	/**
 	 * Gets the selected BKU
 	 * @return the selected BKU
 	 */
 	public BKUs getBKU();
-	
+
 	/**
 	 * Gets the current state
 	 * @return the current state
@@ -81,25 +81,25 @@ public interface Status {
 	 * @return the previous State
 	 */
 	public State getPreviousState();
-	
+
 	/**
 	 * Gets the signing state
 	 * @return the signing state
 	 */
 	public SigningState getSigningState();
-	
+
 	/**
 	 * Sets the signing state
 	 * @param state the signing state
 	 */
 	public void setSigningState(SigningState state);
-	
+
 	/**
 	 * Sets the sign result
 	 * @param signResult
 	 */
 	public void setSignResult(SignResult signResult);
-	
+
 	/**
 	 * Gets the sign Result
 	 * @return the sign result

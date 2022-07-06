@@ -24,7 +24,7 @@ import org.apache.commons.httpclient.methods.multipart.PartSource;
 import at.asit.pdfover.signator.DocumentSource;
 
 /**
- * 
+ *
  */
 public class FileUploadSource implements PartSource {
 
@@ -32,7 +32,7 @@ public class FileUploadSource implements PartSource {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param source
 	 *            the source
 	 */
@@ -47,7 +47,7 @@ public class FileUploadSource implements PartSource {
 
 	@Override
 	public String getFileName() {
-		return "sign.pdf"; //$NON-NLS-1$
+		return "sign.pdf"; //
 	}
 
 	@Override

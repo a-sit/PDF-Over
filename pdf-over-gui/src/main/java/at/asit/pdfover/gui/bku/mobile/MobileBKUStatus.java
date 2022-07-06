@@ -18,7 +18,7 @@ package at.asit.pdfover.gui.bku.mobile;
 import org.apache.commons.httpclient.Cookie;
 
 /**
- * 
+ *
  */
 public abstract class MobileBKUStatus {
 	public String sessionID;

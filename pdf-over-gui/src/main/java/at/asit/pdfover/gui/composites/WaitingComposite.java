@@ -28,7 +28,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- * 
+ *
  */
 public class WaitingComposite extends StateComposite {
 	private Label lbl_description;
@@ -37,12 +37,12 @@ public class WaitingComposite extends StateComposite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
-	 * @param state 
+	 * @param state
 	 */
 	public WaitingComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 		setLayout(new FormLayout());
-		
+
 		this.lbl_description = new Label(this, SWT.NATIVE);
 		FormData fd_lbl_description = new FormData();
 		fd_lbl_description.bottom = new FormAttachment(50, -10);
@@ -50,8 +50,8 @@ public class WaitingComposite extends StateComposite {
 		fd_lbl_description.right = new FormAttachment(100, -10);
 		this.lbl_description.setLayoutData(fd_lbl_description);
 		this.lbl_description.setAlignment(SWT.CENTER);
-		this.lbl_description.setText(Messages.getString("waiting.message")); //$NON-NLS-1$
-		
+		this.lbl_description.setText(Messages.getString("waiting.message")); //
+
 		ProgressBar progressBar = new ProgressBar(this, SWT.HORIZONTAL | SWT.INDETERMINATE);
 		FormData fd_progressBar = new FormData();
 		fd_progressBar.top = new FormAttachment(50, +10);
@@ -79,6 +79,6 @@ public class WaitingComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_description.setText(Messages.getString("waiting.message")); //$NON-NLS-1$
+		this.lbl_description.setText(Messages.getString("waiting.message")); //
 	}
 }

@@ -171,28 +171,28 @@ public interface ConfigManipulator {
 	 */
 	public void saveCurrentConfiguration() throws IOException;
 
-	
+
 	/**
 	 * Sets whether to use an existing signaturemarker.
 	 * QR-Code only
-	 * 
+	 *
 	 * @param useMarker
 	 *            whether to use an existing signaturemarker
 	 */
 	public void setUseMarker(boolean useMarker);
-	
+
 
 	/**
-	 * Sets the use of signature fields as signature marker 
+	 * Sets the use of signature fields as signature marker
 	 * @param useFields
 	 */
 	public void setUseSignatureFields(boolean useFields);
-	
+
 	/**
 	 * @param bool
 	 */
 	public void setEnablePlaceholderUsage(boolean bool);
-	
+
 	/**
 	 * @return
 	 */
@@ -204,7 +204,7 @@ public interface ConfigManipulator {
 	public void setSignatureProfile(String profile);
 
 	public void setSaveFilePostFix(String postFix);
-	
+
 }
 
 

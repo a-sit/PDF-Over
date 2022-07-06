@@ -41,7 +41,7 @@ public class Main {
 
 	/**
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 
@@ -50,7 +50,7 @@ public class Main {
 			  "running on " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + ", " +
 			  "powered by "+ System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + ".");
 			File configDir = new File(Constants.CONFIG_DIRECTORY);
-		
+
 			if (!configDir.exists()) {
 				configDir.mkdir();
 			}
@@ -62,19 +62,19 @@ public class Main {
 			System.setProperty("javax.net.ssl.trustStoreType", "jks");
 
 			StateMachineImpl stateMachine = new StateMachineImpl(args);
-			
-			log.debug("Starting stateMachine ..."); //$NON-NLS-1$
+
+			log.debug("Starting stateMachine ..."); //
 			stateMachine.start();
-			
-			
-			log.debug("Ended stateMachine ..."); //$NON-NLS-1$
+
+
+			log.debug("Ended stateMachine ..."); //
 		}
 		catch (Throwable e) {
-			
-			log.error("Unhandled error", e); //$NON-NLS-1$
-			
+
+			log.error("Unhandled error", e); //
+
 			JOptionPane.showMessageDialog(null,
-					"Error occured " + e.getMessage(), //$NON-NLS-1$
+					"Error occured " + e.getMessage(), //
 					null, JOptionPane.ERROR_MESSAGE);
 		}
 

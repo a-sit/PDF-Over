@@ -50,7 +50,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			.getLogger(MobileBKUEnterNumberComposite.class);
 
 	/**
-	 * 
+	 *
 	 */
 	private final SelectionListener okListener = new SelectionAdapter() {
 		@Override
@@ -58,13 +58,13 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			if(!MobileBKUEnterNumberComposite.this.btn_ok.isEnabled()) {
 				return;
 			}
-			
+
 			try {
 				String number = MobileBKUEnterNumberComposite.this.txt_number
 						.getText();
 
 				number = number.replaceAll("\\s","");
-				
+
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
 				MobileBKUEnterNumberComposite.this.mobileNumber = number;
@@ -78,17 +78,17 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				MobileBKUEnterNumberComposite.this.userAck = true;
 
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
-				
+
 			} catch(InvalidPasswordException ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
+				log.error("Validating input for Mobile BKU failed!", ex); //
 				MobileBKUEnterNumberComposite.this
 				.setErrorMessage(ex.getMessage());
 				MobileBKUEnterNumberComposite.this.txt_password.setFocus();
 			}
 			catch (Exception ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //$NON-NLS-1$
+				log.error("Validating input for Mobile BKU failed!", ex); //
 				MobileBKUEnterNumberComposite.this
-						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //$NON-NLS-1$
+						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //
 				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
@@ -96,7 +96,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	private final SelectionListener cancelListener = new SelectionAdapter() {
 		@Override
@@ -144,13 +144,13 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		if (this.errorMessage != null) {
 			this.lbl_error.setText(this.errorMessage);
 		} else {
-			this.lbl_error.setText(""); //$NON-NLS-1$
+			this.lbl_error.setText(""); //
 		}
 	}
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param state
@@ -179,8 +179,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		fd_containerComposite.left = new FormAttachment(50, -200);
 		fd_containerComposite.right = new FormAttachment(50, 200);
 		containerComposite.setLayoutData(fd_containerComposite);
-		
-		
+
+
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
 		FormData fd_number = new FormData();
 		fd_number.bottom = new FormAttachment(50, -10);
@@ -189,20 +189,20 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_number.setLayoutData(fd_number);
 		this.txt_number.setEditable(true);
 
-		
+
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
-		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
+		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //
 		FormData fd_lbl_number = new FormData();
 		fd_lbl_number.bottom = new FormAttachment(50, -10);
 		fd_lbl_number.right = new FormAttachment(50, -10);
 		this.lbl_number.setLayoutData(fd_lbl_number);
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-		
+
 		ImageData data = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
-		Image mobile = new Image(getDisplay(), data); 
-		
+		Image mobile = new Image(getDisplay(), data);
+
 		FormData fd_lbl_image = new FormData();
 		fd_lbl_image.top = new FormAttachment(20, -1 * (data.width / 2));
 		fd_lbl_image.bottom = new FormAttachment(20, data.width / 2);
@@ -210,8 +210,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		fd_lbl_image.width = data.width;
 		lbl_image.setLayoutData(fd_lbl_image);
 		lbl_image.setImage(mobile);
-		
-		
+
+
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD
 				| SWT.BORDER | SWT.NATIVE);
 		FormData fd_password = new FormData();
@@ -223,14 +223,14 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_password.setAlignment(SWT.RIGHT);
-		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
+		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //
 		FormData fd_lbl_password = new FormData();
 		fd_lbl_password.top = new FormAttachment(50, 10);
 		fd_lbl_password.right = new FormAttachment(50, -10);
 		this.lbl_password.setLayoutData(fd_lbl_password);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+		this.btn_ok.setText(Messages.getString("common.Ok")); //
 		FormData fd_btn_ok = new FormData();
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 		fd_btn_ok.right = new FormAttachment(100, -20);
@@ -238,19 +238,19 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //$NON-NLS-1$
+		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
 		FormData fd_btn_cancel = new FormData();
 		fd_btn_cancel.bottom = new FormAttachment(100, -20);
 		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -10);
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
-		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE ); 
+		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
 		FormData fd_lbl_error = new FormData();
-		fd_lbl_error.top = new FormAttachment(87, -15);   
-		fd_lbl_error.bottom = new FormAttachment(103, -20); 
+		fd_lbl_error.top = new FormAttachment(87, -15);
+		fd_lbl_error.bottom = new FormAttachment(103, -20);
 		fd_lbl_error.left = new FormAttachment(5, 0);
-		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10); 
+		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10);
 		this.lbl_error.setLayoutData(fd_lbl_error);
 
 	}
@@ -266,10 +266,10 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	public void enableButton() {
 		this.btn_ok.setEnabled(true);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
@@ -295,7 +295,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			this.txt_number.setText(this.mobileNumber);
 			this.txt_password.setFocus();
 		} else {
-			this.txt_number.setText(""); //$NON-NLS-1$
+			this.txt_number.setText(""); //
 		}
 	}
 
@@ -305,7 +305,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	public String getMobilePassword() {
 		return this.mobilePassword;
 	}
-	
+
 
 
 	/**
@@ -318,7 +318,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		if (this.mobilePassword != null) {
 			this.txt_password.setText(this.mobilePassword);
 		} else {
-			this.txt_password.setText(""); //$NON-NLS-1$
+			this.txt_password.setText(""); //
 		}
 	}
 
@@ -327,9 +327,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //$NON-NLS-1$
-		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //$NON-NLS-1$
-		this.btn_ok.setText(Messages.getString("common.Ok")); //$NON-NLS-1$
+		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //
+		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //
+		this.btn_ok.setText(Messages.getString("common.Ok")); //
 	}
 
 }

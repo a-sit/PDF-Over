@@ -39,7 +39,7 @@ import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;
 
 /**
- * 
+ *
  */
 public class SignaturePlaceholderCache {
 	/**
@@ -49,12 +49,12 @@ public class SignaturePlaceholderCache {
 			.getLogger(SignaturePlaceholderCache.class);
 
 	private static void saveImage(BufferedImage image, String fileDir, String fileName, String fileExt) throws IOException {
-		File file = new File(fileDir, fileName + "." + fileExt); //$NON-NLS-1$
+		File file = new File(fileDir, fileName + "." + fileExt); //
 		ImageIO.write(image, fileExt, file); // ignore returned boolean
 	}
 
 	private static Image loadImage(String fileDir, String fileName, String fileExt) throws IOException {
-		return ImageIO.read(new File(fileDir, fileName + "." + fileExt)); //$NON-NLS-1$
+		return ImageIO.read(new File(fileDir, fileName + "." + fileExt)); //
 	}
 
 	/**
@@ -65,19 +65,19 @@ public class SignaturePlaceholderCache {
 	public static Image getPlaceholder(SignatureParameter param) {
 		final String fileDir = Constants.CONFIG_DIRECTORY;
 		final String imgFileName = Constants.PLACEHOLDER_CACHE_FILENAME;
-		final String imgFileExt = "png"; //$NON-NLS-1$
+		final String imgFileExt = "png"; //
 		final String propFileName = Constants.PLACEHOLDER_CACHE_PROPS_FILENAME;
 
-		final String sigLangProp = "LANG"; //$NON-NLS-1$
-		final String sigEmblProp = "EMBL"; //$NON-NLS-1$
-		final String sigEHshProp = "EHSH"; //$NON-NLS-1$
-		final String sigPdfAProp = "PDFA"; //$NON-NLS-1$
-		final String sigNoteProp = "NOTE"; //$NON-NLS-1$
-		final String sigProfProp = "PROF"; //$NON-NLS-1$
+		final String sigLangProp = "LANG"; //
+		final String sigEmblProp = "EMBL"; //
+		final String sigEHshProp = "EHSH"; //
+		final String sigPdfAProp = "PDFA"; //
+		final String sigNoteProp = "NOTE"; //
+		final String sigProfProp = "PROF"; //
 
 		String sigLang = param.getSignatureLanguage();
-		String sigEmbl = ""; //$NON-NLS-1$
-		String sigEHsh = ""; //$NON-NLS-1$
+		String sigEmbl = ""; //
+		String sigEHsh = ""; //
 		if (param.getEmblem() != null) {
 			Emblem embl = param.getEmblem();
 			if (embl instanceof CachedFileNameEmblem) {
@@ -88,9 +88,9 @@ public class SignaturePlaceholderCache {
 			}
 		}
 		String sigPdfA = param.getSignaturePdfACompat() ? Constants.TRUE : Constants.FALSE;
-		String sigNote = param.getProperty("SIG_NOTE"); //$NON-NLS-1$
+		String sigNote = param.getProperty("SIG_NOTE"); //
 		if (sigNote == null)
-			sigNote = ""; //$NON-NLS-1$
+			sigNote = ""; //
 		String profile = param.getSignatureProfile();
 		if (profile == null){
 			// set default value
@@ -107,18 +107,18 @@ public class SignaturePlaceholderCache {
 			    sigNote.equals(sigProps.getProperty(sigNoteProp)) &&
 			    sigPdfA.equals(sigProps.getProperty(sigPdfAProp)) &&
 				profile.equals(sigProps.getProperty(sigProfProp))) {
-				log.debug("Placeholder cache hit"); //$NON-NLS-1$
+				log.debug("Placeholder cache hit"); //
 				return loadImage(fileDir, imgFileName, imgFileExt);
 			}
-			log.debug("Placeholder cache miss (" + //$NON-NLS-1$
-					sigLang + "|" + sigProps.getProperty(sigLangProp) + " - " +//$NON-NLS-1$ //$NON-NLS-2$
-					sigEmbl + "|" + sigProps.getProperty(sigEmblProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
-					sigEHsh + "|" + sigProps.getProperty(sigEHshProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
-					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
-					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + " - " + //$NON-NLS-1$ //$NON-NLS-2$
+			log.debug("Placeholder cache miss (" + //
+					sigLang + "|" + sigProps.getProperty(sigLangProp) + " - " +// //
+					sigEmbl + "|" + sigProps.getProperty(sigEmblProp) + " - " + // //
+					sigEHsh + "|" + sigProps.getProperty(sigEHshProp) + " - " + // //
+					sigNote + "|" + sigProps.getProperty(sigNoteProp) + " - " + // //
+					sigPdfA + "|" + sigProps.getProperty(sigPdfAProp) + " - " + // //
 					profile + "|" + sigProps.getProperty(sigProfProp) + ")");
 		} catch (Exception e) {
-			log.warn("Can't load signature Placeholder", e); //$NON-NLS-1$
+			log.warn("Can't load signature Placeholder", e); //
 		}
 
 		// create new cache
@@ -135,7 +135,7 @@ public class SignaturePlaceholderCache {
 			saveImage((BufferedImage) img, fileDir, imgFileName, imgFileExt);
 			return img;
 		} catch (IOException e) {
-			log.error("Can't save signature Placeholder", e); //$NON-NLS-1$
+			log.error("Can't save signature Placeholder", e); //
 			return param.getPlaceholder();
 		}
 	}

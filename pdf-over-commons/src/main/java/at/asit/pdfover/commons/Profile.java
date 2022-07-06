@@ -4,9 +4,9 @@ import java.util.Locale;
 
 public enum Profile {
 
-    SIGNATURBLOCK_SMALL,  //$NON-NLS-1$
-    AMTSSIGNATURBLOCK,  //$NON-NLS-1$
-    BASE_LOGO, //$NON-NLS-1$
+    SIGNATURBLOCK_SMALL,  //
+    AMTSSIGNATURBLOCK,  //
+    BASE_LOGO, //
     INVISIBLE;
 
     public static int length = Profile.values().length;

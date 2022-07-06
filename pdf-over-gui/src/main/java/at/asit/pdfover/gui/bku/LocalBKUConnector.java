@@ -39,7 +39,7 @@ import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
 
 /**
- * 
+ *
  */
 public class LocalBKUConnector implements BkuSlConnector {
 	/**
@@ -51,17 +51,17 @@ public class LocalBKUConnector implements BkuSlConnector {
 	/**
 	 * HTTP Response server HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //
 
 	/**
 	 * HTTP Response user-agent HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //
 
 	/**
 	 * HTTP Response SignatureLayout HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //$NON-NLS-1$
+	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
@@ -74,12 +74,12 @@ public class LocalBKUConnector implements BkuSlConnector {
 
 			String sl_request = request.getRequest();
 			if (request.getSignatureData() == null) {
-				method.addParameter("XMLRequest", sl_request); //$NON-NLS-1$
+				method.addParameter("XMLRequest", sl_request); //
 			} else {
 				StringPart xmlpart = new StringPart(
-						"XMLRequest", sl_request, "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+						"XMLRequest", sl_request, "UTF-8"); // //
 
-				FilePart filepart = new FilePart("fileupload",	//$NON-NLS-1$
+				FilePart filepart = new FilePart("fileupload",	//
 						new FileUploadSource(request.getSignatureData()));
 
 				Part[] parts = { xmlpart, filepart };
@@ -87,7 +87,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 				method.setRequestEntity(new MultipartRequestEntity(parts, method
 						.getParams()));
 			}
-			log.trace("SL REQUEST: " + sl_request); //$NON-NLS-1$
+			log.trace("SL REQUEST: " + sl_request); //
 
 			int returnCode = client.executeMethod(method);
 
@@ -95,25 +95,25 @@ public class LocalBKUConnector implements BkuSlConnector {
 				throw new HttpException(
 						method.getResponseBodyAsString());
 			}
-				
+
 			String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 			if (server == null)
-				server = ""; //$NON-NLS-1$
+				server = ""; //
 			String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 			if (userAgent == null)
-				userAgent = ""; //$NON-NLS-1$
+				userAgent = ""; //
 			String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
 
 			String response = method.getResponseBodyAsString();
-			log.debug("SL Response: " + response); //$NON-NLS-1$
+			log.debug("SL Response: " + response); //
 			SLResponse slResponse = new SLResponse(response, server,
 					userAgent, signatureLayout);
 			return slResponse;
 		} catch (HttpException e) {
-			log.error("LocalBKUConnector: ", e); //$NON-NLS-1$
+			log.error("LocalBKUConnector: ", e); //
 			throw new SignatureException(e);
 		} catch (IOException e) {
-			log.error("LocalBKUConnector: ", e); //$NON-NLS-1$
+			log.error("LocalBKUConnector: ", e); //
 			throw new SignatureException(e);
 		}
 	}

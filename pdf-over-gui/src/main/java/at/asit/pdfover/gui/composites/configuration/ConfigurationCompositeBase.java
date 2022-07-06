@@ -29,17 +29,17 @@ import at.asit.pdfover.gui.workflow.states.State;
  * Base class for configuration composites
  */
 public abstract class ConfigurationCompositeBase extends StateComposite {
-	
+
 	/**
 	 * the configuration container
 	 */
 	protected ConfigurationContainer configurationContainer;
-	
+
 	/**
 	 * The PDF Signer used to produce signature block preview
 	 */
 	protected PDFSigner signer;
-	
+
 	/**
 	 * @return the signer
 	 */
@@ -64,7 +64,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	 * @param parent
 	 * @param style
 	 * @param state
-	 * @param configuration 
+	 * @param configuration
 	 */
 	public ConfigurationCompositeBase(Composite parent, int style, State state, ConfigurationContainer configuration) {
 		super(parent, style, state);
@@ -92,12 +92,12 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	/**
 	 * Called before exit.
 	 * The method validates every setting in the configuration before exit
-	 * 
+	 *
 	 * There might be settings when the user can decide to ignore a validation exception
 	 * (for example the Outputfolder validation)
 	 * In this case, the validator throws a ResumableException, which includes the
 	 * validator index to resume from (should the user choose to ignore the error)
-	 * 
+	 *
 	 * @param resumeFrom Resume from this validator index (initially 0)
 	 * @throws Exception
 	 */

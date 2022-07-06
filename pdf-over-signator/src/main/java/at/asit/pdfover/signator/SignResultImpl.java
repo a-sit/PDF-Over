@@ -49,7 +49,7 @@ public class SignResultImpl implements SignResult {
 	public void setSignerCertificate(X509Certificate x509Certificate) {
 		this.certificate = x509Certificate;
 	}
-	
+
 	/**
 	 * Set the signature position
 	 * @param postion the signature position

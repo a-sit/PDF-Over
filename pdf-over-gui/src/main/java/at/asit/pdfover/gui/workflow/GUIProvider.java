@@ -22,7 +22,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 
 
 /**
- * 
+ *
  */
 public interface GUIProvider {
 	/**
@@ -39,13 +39,13 @@ public interface GUIProvider {
 	 * @param composite the composite
 	 */
 	public void display(final Composite composite);
-	
+
 	/**
 	 * Gets the main window shell
 	 * @return the main window shell
 	 */
 	public Shell getMainShell();
-	
+
 	/**
 	 * Reloads the resources on active gui components
 	 */

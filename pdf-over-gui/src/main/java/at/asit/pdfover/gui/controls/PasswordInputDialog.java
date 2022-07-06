@@ -20,7 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * 
+ *
  */
 public class PasswordInputDialog extends InputDialog {
 
