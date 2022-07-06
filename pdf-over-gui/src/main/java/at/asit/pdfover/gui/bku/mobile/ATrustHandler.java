@@ -172,23 +172,20 @@ public class ATrustHandler extends MobileBKUHandler {
 			log.info(notice);
 
 			if (!expiryNoticeDisplayed) {
-				Display.getDefault().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING); // //
-						if (d.open() == SWT.YES) {
-							log.debug("Trying to open " + ACTIVATION_URL); //
-							if (Desktop.isDesktopSupported()) {
-								try {
-									Desktop.getDesktop().browse(new URI(ACTIVATION_URL));
-									return;
-								} catch (Exception e) {
-									log.debug("Error opening URL", e); //
-								}
+				Display.getDefault().syncExec(()->  {
+					Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING); // //
+					if (d.open() == SWT.YES) {
+						log.debug("Trying to open " + ACTIVATION_URL); //
+						if (Desktop.isDesktopSupported()) {
+							try {
+								Desktop.getDesktop().browse(new URI(ACTIVATION_URL));
+								return;
+							} catch (Exception e) {
+								log.debug("Error opening URL", e); //
 							}
-							log.info("SWT Desktop is not supported on this platform"); //
-							Program.launch(ACTIVATION_URL);
 						}
+						log.info("SWT Desktop is not supported on this platform"); //
+						Program.launch(ACTIVATION_URL);
 					}
 				});
 				expiryNoticeDisplayed = true;
@@ -353,21 +350,18 @@ public class ATrustHandler extends MobileBKUHandler {
 
 			if (getStatus().tanTries <= 0) {
 				getStatus().errorMessage = null;
-				Display.getDefault().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"), //
-								Messages.getString("mobileBKU.tan_tries_exceeded"), //
-								BUTTONS.OK_CANCEL, ICON.QUESTION);
+				Display.getDefault().syncExec(() -> {
+					Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"), //
+							Messages.getString("mobileBKU.tan_tries_exceeded"), //
+							BUTTONS.OK_CANCEL, ICON.QUESTION);
 
-						// TODO: THIS IS A COLOSSAL HACK
-						if (dialog.open() == SWT.CANCEL) {
-							// Go back to BKU Selection
-							getStatus().tanTries = -1;
-						} else {
-							// Start signature process over
-							getStatus().tanTries = -2;
-						}
+					// TODO: THIS IS A COLOSSAL HACK
+					if (dialog.open() == SWT.CANCEL) {
+						// Go back to BKU Selection
+						getStatus().tanTries = -1;
+					} else {
+						// Start signature process over
+						getStatus().tanTries = -2;
 					}
 				});
 			}

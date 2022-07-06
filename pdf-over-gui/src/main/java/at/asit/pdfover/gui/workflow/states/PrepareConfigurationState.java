@@ -461,47 +461,41 @@ public class PrepareConfigurationState extends State {
 
 			// Check for updates
 			if (config.getUpdateCheck() && Constants.APP_VERSION != null) {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						HttpClient client = (HttpClient) BKUHelper.getHttpClient();
-						GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
-						try {
-							client.executeMethod(method);
-							final String version = method.getResponseBodyAsString().trim();
-							if (!VersionComparator.before(Constants.APP_VERSION, version))
-								return;
+				new Thread(() -> {
+					HttpClient client = (HttpClient) BKUHelper.getHttpClient();
+					GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
+					try {
+						client.executeMethod(method);
+						final String version = method.getResponseBodyAsString().trim();
+						if (!VersionComparator.before(Constants.APP_VERSION, version))
+							return;
 
-							// wait 500ms before invoke the GUI message, because GUI had to be started from
-							// main thread
-							try {Thread.sleep(500); } catch (InterruptedException e1) { }
-							// invoke GUI message in main thread
-							gui.getMainShell().getDisplay().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									Dialog info = new Dialog(gui.getMainShell(),
-											Messages.getString("version_check.UpdateTitle"), //
-											String.format(Messages.getString("version_check.UpdateText"), //
-													version),
-											BUTTONS.OK_CANCEL, ICON.INFORMATION);
-										if (info.open() == SWT.OK)
-										{
-											if (Desktop.isDesktopSupported()) {
-												try {
-													Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
-												} catch (Exception e) {
-													log.error("Error opening update location ", e); //
-												}
-											} else {
-												log.info("SWT Desktop is not supported on this platform"); //
-												Program.launch(Constants.UPDATE_URL);
-											}
-										}
+						// wait 500ms before invoke the GUI message, because GUI had to be started from
+						// main thread
+						try {Thread.sleep(500); } catch (InterruptedException e1) { }
+						// invoke GUI message in main thread
+						gui.getMainShell().getDisplay().asyncExec(() -> {
+							Dialog info = new Dialog(gui.getMainShell(),
+									Messages.getString("version_check.UpdateTitle"), //
+									String.format(Messages.getString("version_check.UpdateText"), version),
+									BUTTONS.OK_CANCEL, ICON.INFORMATION);
+
+							if (info.open() == SWT.OK)
+							{
+								if (Desktop.isDesktopSupported()) {
+									try {
+										Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
+									} catch (Exception e) {
+										log.error("Error opening update location ", e); //
+									}
+								} else {
+									log.info("SWT Desktop is not supported on this platform"); //
+									Program.launch(Constants.UPDATE_URL);
 								}
-							});
-						} catch (Exception e) {
-							log.error("Error downloading update information: ", e); //
-						}
+							}
+						});
+					} catch (Exception e) {
+						log.error("Error downloading update information: ", e); //
 					}
 				}).start();
 			}

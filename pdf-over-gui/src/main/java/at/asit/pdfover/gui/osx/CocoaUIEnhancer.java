@@ -170,11 +170,8 @@ public class CocoaUIEnhancer {
 		}
 
 		// Schedule disposal of callback object
-		display.disposeExec(new Runnable() {
-			@Override
-			public void run() {
-				CocoaUIEnhancer.invoke(proc3Args, "dispose"); //
-			}
+		display.disposeExec(() -> {
+			CocoaUIEnhancer.invoke(proc3Args, "dispose"); //
 		});
 	}
 

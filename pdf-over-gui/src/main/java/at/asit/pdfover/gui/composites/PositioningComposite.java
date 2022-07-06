@@ -137,18 +137,12 @@ public class PositioningComposite extends StateComposite {
 		this.mainArea.setLayoutData(fd_mainArea);
 		this.scrollbar = this.mainArea.getVerticalBar();
 
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				getDisplay().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						PositioningComposite.this.frame = SWT_AWT.new_Frame(PositioningComposite.this.mainArea);
-						PositioningComposite.this.frame.addKeyListener(PositioningComposite.this.keyListener);
-						PositioningComposite.this.frame.addMouseWheelListener(PositioningComposite.this.mouseListener);
-					}
-				});
-			}
+		EventQueue.invokeLater(() -> {
+			getDisplay().syncExec(() -> {
+				this.frame = SWT_AWT.new_Frame(this.mainArea);
+				this.frame.addKeyListener(this.keyListener);
+				this.frame.addMouseWheelListener(this.mouseListener);
+			});
 		});
 
 		this.scrollbar.addSelectionListener(this.selectionListener);
@@ -163,30 +157,24 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public void displayDocument(final PDFFile document) {
 		if (this.viewer == null) {
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					PositioningComposite.this.viewer = new SignaturePanel(document);
-					PositioningComposite.this.viewer.setSignaturePlaceholderBorderColor(new Color(
-							Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
-							Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
-							Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
-					PositioningComposite.this.frame.add(PositioningComposite.this.viewer, BorderLayout.CENTER);
-				}
+			EventQueue.invokeLater(() -> {
+				this.viewer = new SignaturePanel(document);
+				this.viewer.setSignaturePlaceholderBorderColor(new Color(
+						Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
+						Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
+						Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
+				this.frame.add(this.viewer, BorderLayout.CENTER);
 			});
 		} else {
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					PositioningComposite.this.viewer.setDocument(document);
-				}
+			EventQueue.invokeLater(() -> {
+				this.viewer.setDocument(document);
 			});
 		}
 
 		if (document != null)
 		{
 			this.numPages = document.getNumPages();
-			PositioningComposite.this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
+			this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 			showPage(this.numPages);
 		}
 	}
@@ -201,22 +189,16 @@ public class PositioningComposite extends StateComposite {
 	 * Request focus (to enable keyboard input)
 	 */
 	public void requestFocus() {
-		getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				if (!PositioningComposite.this.isDisposed() && !PositioningComposite.this.mainArea.isDisposed()) {
-					PositioningComposite.this.mainArea.setFocus();
-					EventQueue.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							if (!PositioningComposite.this.isDisposed()) {
-								if(!PositioningComposite.this.frame.hasFocus()) {
-									PositioningComposite.this.frame.requestFocus();
-								}
-							}
+		getDisplay().asyncExec(() -> {
+			if (!this.isDisposed() && !this.mainArea.isDisposed()) {
+				this.mainArea.setFocus();
+				EventQueue.invokeLater(() -> {
+					if (!this.isDisposed()) {
+						if (!this.frame.hasFocus()) {
+							this.frame.requestFocus();
 						}
-					});
-				}
+					}
+				});
 			}
 		});
 	}
@@ -236,13 +218,10 @@ public class PositioningComposite extends StateComposite {
 	 */
 	public void setPlaceholder(final Image placeholder, final int width, final int height,
 			final int transparency) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				if (PositioningComposite.this.viewer == null)
-					return;
-				PositioningComposite.this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
-			}
+		EventQueue.invokeLater(() -> {
+			if (this.viewer == null)
+				return;
+			this.viewer.setSignaturePlaceholder(placeholder, width, height, transparency);
 		});
 	}
 
@@ -342,36 +321,27 @@ public class PositioningComposite extends StateComposite {
 	void showPage(final int page) {
 		final int previousPage = this.currentPage;
 		this.currentPage = page;
-		getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				int currentPage = PositioningComposite.this.currentPage;
-				int numPages = PositioningComposite.this.numPages;
-				if ((previousPage > numPages) && (currentPage <= numPages)) {
-					// Was on new page
-					PositioningComposite.this.btnNewPage.setText(
-							Messages.getString("positioning.newPage")); //
-					PositioningComposite.this.btnNewPage.setSelection(false);
-					PositioningComposite.this.bottomBar.layout();
-					PositioningComposite.this.scrollbar.setMaximum(numPages + 1);
-				} else if ((previousPage <= numPages) && (currentPage > numPages)) {
-					// Go to new page
-					PositioningComposite.this.btnNewPage.setText(
-							Messages.getString("positioning.removeNewPage")); //
-					PositioningComposite.this.btnNewPage.setSelection(true);
-					PositioningComposite.this.bottomBar.layout();
-					PositioningComposite.this.scrollbar.setMaximum(numPages + 2);
-				}
-				PositioningComposite.this.scrollbar.setSelection(currentPage);
-				PositioningComposite.this.lblPage.setText(String.format(
-						Messages.getString("positioning.page"), currentPage, numPages)); //
+		getDisplay().asyncExec(() -> {
+			int currentPage = this.currentPage;
+			int numPages = this.numPages;
+			if ((previousPage > numPages) && (currentPage <= numPages)) {
+				// Was on new page
+				this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
+				this.btnNewPage.setSelection(false);
+				this.bottomBar.layout();
+				this.scrollbar.setMaximum(numPages + 1);
+			} else if ((previousPage <= numPages) && (currentPage > numPages)) {
+				// Go to new page
+				this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //
+				this.btnNewPage.setSelection(true);
+				this.bottomBar.layout();
+				this.scrollbar.setMaximum(numPages + 2);
 			}
+			this.scrollbar.setSelection(currentPage);
+			this.lblPage.setText(String.format(Messages.getString("positioning.page"), currentPage, numPages)); //
 		});
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				PositioningComposite.this.viewer.showPage(page);
-			}
+		EventQueue.invokeLater(() -> {
+			PositioningComposite.this.viewer.showPage(page);
 		});
 	}
 
@@ -400,12 +370,8 @@ public class PositioningComposite extends StateComposite {
 	 *            signature placeholder vertical position offset
 	 */
 	public void translateSignaturePosition(final int sigXOffset, final int sigYOffset) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				PositioningComposite.this.viewer.translateSignaturePosition(sigXOffset,
-						sigYOffset);
-			}
+		EventQueue.invokeLater(() -> {
+			this.viewer.translateSignaturePosition(sigXOffset, sigYOffset);
 		});
 	}
 

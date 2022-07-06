@@ -180,13 +180,9 @@ public class MobileBKUState extends State {
 	 */
 	public void displayError(final String message) {
 		log.error(message);
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider()
-						.getMainShell(), message, BUTTONS.OK);
-				error.open();
-			}
+		Display.getDefault().syncExec(() -> {
+			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(), message, BUTTONS.OK);
+			error.open();
 		});
 	}
 
@@ -200,62 +196,57 @@ public class MobileBKUState extends State {
 		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
 			return;
 
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				MobileBKUEnterNumberComposite ui = MobileBKUState.this
-						.getMobileBKUEnterNumberComposite();
+		Display.getDefault().syncExec(() -> {
+			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
 
-				if (!ui.userAck) {
-					// We need number and password => show UI!
-					if (mobileStatus.errorMessage != null
-							&& !mobileStatus.errorMessage.isEmpty()) {
-						// set possible error message
-						ui.setErrorMessage(mobileStatus.errorMessage);
-						mobileStatus.errorMessage = null;
-					} else if (mobileStatus instanceof ATrustStatus) {
-						ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //
-					}
-
-					if (ui.getMobileNumber() == null
-							|| ui.getMobileNumber().isEmpty()) {
-						// set possible phone number
-						ui.setMobileNumber(mobileStatus.phoneNumber);
-					}
-
-					if (ui.getMobilePassword() == null
-							|| ui.getMobilePassword().isEmpty()) {
-						// set possible password
-						ui.setMobilePassword(mobileStatus.mobilePassword);
-					}
-					ui.enableButton();
-					getStateMachine().getGUIProvider().display(ui);
-
-					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
-					while (!ui.userAck && !ui.userCancel) {
-						if (!display.readAndDispatch()) {
-							display.sleep();
-						}
-					}
+			if (!ui.userAck) {
+				// We need number and password => show UI!
+				if (mobileStatus.errorMessage != null
+						&& !mobileStatus.errorMessage.isEmpty()) {
+					// set possible error message
+					ui.setErrorMessage(mobileStatus.errorMessage);
+					mobileStatus.errorMessage = null;
+				} else if (mobileStatus instanceof ATrustStatus) {
+					ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //
 				}
 
-				if (ui.userCancel) {
-					ui.userCancel = false;
-					mobileStatus.errorMessage = "cancel"; //
-					return;
+				if (ui.getMobileNumber() == null
+						|| ui.getMobileNumber().isEmpty()) {
+					// set possible phone number
+					ui.setMobileNumber(mobileStatus.phoneNumber);
 				}
 
-				// user hit ok
-				ui.userAck = false;
+				if (ui.getMobilePassword() == null
+						|| ui.getMobilePassword().isEmpty()) {
+					// set possible password
+					ui.setMobilePassword(mobileStatus.mobilePassword);
+				}
+				ui.enableButton();
+				getStateMachine().getGUIProvider().display(ui);
 
-				// get number and password from UI
-				mobileStatus.phoneNumber = ui.getMobileNumber();
-				mobileStatus.mobilePassword = ui.getMobilePassword();
-
-				// show waiting composite
-				getStateMachine().getGUIProvider().display(
-						MobileBKUState.this.getWaitingComposite());
+				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+				while (!ui.userAck && !ui.userCancel) {
+					if (!display.readAndDispatch()) {
+						display.sleep();
+					}
+				}
 			}
+
+			if (ui.userCancel) {
+				ui.userCancel = false;
+				mobileStatus.errorMessage = "cancel"; //
+				return;
+			}
+
+			// user hit ok
+			ui.userAck = false;
+
+			// get number and password from UI
+			mobileStatus.phoneNumber = ui.getMobileNumber();
+			mobileStatus.mobilePassword = ui.getMobilePassword();
+
+			// show waiting composite
+			getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
 		});
 	}
 
@@ -265,50 +256,45 @@ public class MobileBKUState extends State {
 	public void checkTAN() {
 		final MobileBKUStatus mobileStatus = this.status;
 
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				MobileBKUEnterTANComposite tan = MobileBKUState.this
-						.getMobileBKUEnterTANComposite();
+		Display.getDefault().syncExec(() -> {
+			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
 
-				if (!tan.isUserAck()) {
-					// we need the TAN
-					tan.setRefVal(mobileStatus.refVal);
-					tan.setSignatureData(mobileStatus.signatureDataURL);
-					tan.setErrorMessage(mobileStatus.errorMessage);
-					if (mobileStatus.tanTries < mobileStatus.getMaxTanTries()
-							&& mobileStatus.tanTries > 0) {
-						// show warning message x tries left!
-						// overrides error message
+			if (!tan.isUserAck()) {
+				// we need the TAN
+				tan.setRefVal(mobileStatus.refVal);
+				tan.setSignatureData(mobileStatus.signatureDataURL);
+				tan.setErrorMessage(mobileStatus.errorMessage);
+				if (mobileStatus.tanTries < mobileStatus.getMaxTanTries()
+						&& mobileStatus.tanTries > 0) {
+					// show warning message x tries left!
+					// overrides error message
 
-						tan.setTries(mobileStatus.tanTries);
-					}
-					tan.enableButton();
-					getStateMachine().getGUIProvider().display(tan);
+					tan.setTries(mobileStatus.tanTries);
+				}
+				tan.enableButton();
+				getStateMachine().getGUIProvider().display(tan);
 
-					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
-					while (!tan.isUserAck() && !tan.isUserCancel()) {
-						if (!display.readAndDispatch()) {
-							display.sleep();
-						}
+				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+				while (!tan.isUserAck() && !tan.isUserCancel()) {
+					if (!display.readAndDispatch()) {
+						display.sleep();
 					}
 				}
-
-				if (tan.isUserCancel()) {
-					tan.setUserCancel(false);
-					mobileStatus.errorMessage = "cancel";
-					return;
-				}
-
-				// user hit ok!
-				tan.setUserAck(false);
-
-				mobileStatus.tan = tan.getTan();
-
-				// show waiting composite
-				getStateMachine().getGUIProvider().display(
-						MobileBKUState.this.getWaitingComposite());
 			}
+
+			if (tan.isUserCancel()) {
+				tan.setUserCancel(false);
+				mobileStatus.errorMessage = "cancel";
+				return;
+			}
+
+			// user hit ok!
+			tan.setUserAck(false);
+
+			mobileStatus.tan = tan.getTan();
+
+			// show waiting composite
+			getStateMachine().getGUIProvider().display(getWaitingComposite());
 		});
 	}
 
@@ -321,7 +307,6 @@ public class MobileBKUState extends State {
 
 		final Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
-
 			@Override
 			public void run() {
 				// ping signature page to see if code has been scanned
@@ -390,11 +375,8 @@ public class MobileBKUState extends State {
 	 *  This composite notifies the user to open the signature-app
 	 */
 	public void showOpenAppMessage() {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingForAppComposite());
-			}
+		Display.getDefault().syncExec(() -> {
+			getStateMachine().getGUIProvider().display(this.getWaitingForAppComposite());
 		});
 
 	}

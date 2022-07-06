@@ -315,20 +315,17 @@ public class IAIKHandler extends MobileBKUHandler {
 				executePost(client, post);
 			} catch (Exception e) {
 				// Assume that wrong TAN was entered too many times
-				Display.getDefault().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						Dialog dialog = new Dialog(IAIKHandler.this.shell, Messages.getString("common.warning"), //
-								Messages.getString("mobileBKU.tan_tries_exceeded"), //
-								BUTTONS.OK_CANCEL, ICON.QUESTION);
-						// TODO: ALSO A COLOSSAL HACK HERE
-						if (dialog.open() == SWT.CANCEL) {
-							// Go back to BKU Selection
-							status.tanTries = -1;
-						} else {
-							// Start signature process over
-							status.tanTries = -2;
-						}
+				Display.getDefault().syncExec(() -> {
+					Dialog dialog = new Dialog(IAIKHandler.this.shell, Messages.getString("common.warning"), //
+							Messages.getString("mobileBKU.tan_tries_exceeded"), //
+							BUTTONS.OK_CANCEL, ICON.QUESTION);
+					// TODO: ALSO A COLOSSAL HACK HERE
+					if (dialog.open() == SWT.CANCEL) {
+						// Go back to BKU Selection
+						status.tanTries = -1;
+					} else {
+						// Start signature process over
+						status.tanTries = -2;
 					}
 				});
 			}
