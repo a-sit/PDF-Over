@@ -46,7 +46,7 @@ public class StateMachine implements GUIProvider {
 
 	private Status status;
 
-	private PDFSignerImpl pdfSigner;
+	private PDFSigner pdfSigner;
 
 	private ConfigProviderImpl configProvider;
 
@@ -58,7 +58,7 @@ public class StateMachine implements GUIProvider {
 	public StateMachine(String[] cmdLineArgs) {
 		this.status = new Status();
 		this.status.setCurrentState(new PrepareConfigurationState(this));
-		this.pdfSigner = new PDFSignerImpl();
+		this.pdfSigner = new PDFSigner();
 		this.configProvider = new ConfigProviderImpl();
 		setCmdLineArgs(cmdLineArgs);
 	}

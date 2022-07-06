@@ -16,28 +16,44 @@
 package at.asit.pdfover.gui.workflow;
 
 // Imports
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.asit.pdfover.signator.Signator;
+import at.asit.pdfover.signator.Signator.Signers;
 import at.asit.pdfover.signator.Signer;
 
 /**
  *
  */
-public interface PDFSigner {
+public class PDFSigner {
 	/**
-	 * Gets the PDF Signer Type
-	 * @return the signer type
-	 */
-	public Signator.Signers getUsedPDFSignerLibrary();
+	 * SLF4J Logger instance
+	 **/
+	@SuppressWarnings("unused")
+	private static final Logger log = LoggerFactory.getLogger(PDFSigner.class);
 
-	/**
-	 * Set PDF Signer Type
-	 * @param signer the signer type
-	 */
-	public void setUsedPDFSignerLibrary(Signator.Signers signer);
+	private Signers signer = Signator.Signers.PDFAS4;
 
-	/**
-	 * Gets the currently used PDF Signer
-	 * @return the pdf signer
-	 */
-	public Signer getPDFSigner();
+	public Signers getUsedPDFSignerLibrary() {
+		return this.signer;
+	}
+
+	public void setUsedPDFSignerLibrary(Signers signer) {
+		if(signer != this.signer) {
+			// TYPE CHANGE remove cached signer!
+			this.signerLib = null;
+		}
+		this.signer = signer;
+	}
+
+	private Signer signerLib;
+
+	public Signer getPDFSigner() {
+		if(this.signerLib == null) {
+			this.signerLib = Signator.getSigner(getUsedPDFSignerLibrary());
+		}
+		return this.signerLib;
+	}
+
 }
