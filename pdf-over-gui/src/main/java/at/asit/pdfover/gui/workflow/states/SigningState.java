@@ -98,7 +98,7 @@ public class SigningState extends State {
 			if (status.getPreviousState() instanceof MobileBKUState)
 			{
 				String mobileBkuError = ((MobileBKUState)status.getPreviousState()).status.errorMessage;
-				if ((mobileBkuError != null) && mobileBkuError.equals("cancel"))
+				if ("cancel".equals(mobileBkuError))
 					this.threadException = new SignatureException(new IllegalStateException());
 			}
 

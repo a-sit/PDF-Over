@@ -246,7 +246,7 @@ public class MobileBKUState extends State {
 			mobileStatus.mobilePassword = ui.getMobilePassword();
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
 		});
 	}
 
@@ -335,8 +335,7 @@ public class MobileBKUState extends State {
 			qr.setErrorMessage(status.errorMessage);
 			InputStream qrcode = handler.getQRCode();
 			if (qrcode == null) {
-				MobileBKUState.this.threadException = new Exception(
-						Messages.getString("error.FailedToLoadQRCode"));
+				this.threadException = new Exception(Messages.getString("error.FailedToLoadQRCode"));
 			}
 			qr.setQR(qrcode);
 			getStateMachine().getGUIProvider().display(qr);
@@ -365,20 +364,8 @@ public class MobileBKUState extends State {
 				qr.setDone(false);
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(
-					MobileBKUState.this.getWaitingComposite());
+			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
 		});
-	}
-
-
-	/**
-	 *  This composite notifies the user to open the signature-app
-	 */
-	public void showOpenAppMessage() {
-		Display.getDefault().syncExec(() -> {
-			getStateMachine().getGUIProvider().display(this.getWaitingForAppComposite());
-		});
-
 	}
 
 	/**
@@ -389,7 +376,7 @@ public class MobileBKUState extends State {
 		final ATrustStatus status = (ATrustStatus) this.status;
 
 		Display.getDefault().syncExec(() -> {
-			WaitingForAppComposite waitingForAppcomposite = MobileBKUState.this.getWaitingForAppComposite();
+			WaitingForAppComposite waitingForAppcomposite = this.getWaitingForAppComposite();
 			getStateMachine().getGUIProvider().display(waitingForAppcomposite);
 
 			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
@@ -415,7 +402,7 @@ public class MobileBKUState extends State {
 				status.errorMessage = "sms";
 				status.isSMSTan = true;
 				// show waiting composite
-				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
+				getStateMachine().getGUIProvider().display(this.getWaitingComposite());
 				return;
 
 			}
@@ -513,8 +500,7 @@ public class MobileBKUState extends State {
 				fingerprintComposite.setDone(false);
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(
-					MobileBKUState.this.getWaitingComposite());
+			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
 		});
 	}
 

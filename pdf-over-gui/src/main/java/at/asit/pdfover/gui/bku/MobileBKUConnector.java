@@ -80,8 +80,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 				// Check if credentials are available, get them from user if not
 				this.state.checkCredentials();
 
-				if (this.state.status.errorMessage != null &&
-						this.state.status.errorMessage.equals("cancel"))
+				if ("cancel".equals(this.state.status.errorMessage))
 					throw new SignatureException(new IllegalStateException());
 
 				// Post credentials
@@ -129,8 +128,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					ATrustHandler aHandler = (ATrustHandler) handler;
 					if (aStatus.qrCodeURL != null) {
 						this.state.showQR();
-						if (this.state.status.errorMessage != null &&
-								this.state.status.errorMessage.equals("cancel"))
+						if ("cancel".equals(this.state.status.errorMessage))
 							throw new SignatureException(new IllegalStateException());
 						if (aStatus.qrCodeURL == null) {
 							try {
@@ -150,8 +148,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 						try {
 
 							this.state.showFingerPrintInformation();
-							if (this.state.status.errorMessage != null &&
-									this.state.status.errorMessage.equals("cancel"))
+							if ("cancel".equals(this.state.status.errorMessage))
 								throw new SignatureException(new IllegalStateException());
 						} catch (Exception ex) {
 							log.error("Error in PostCredentialsThread", ex);
@@ -182,9 +179,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					// Get TAN
 					this.state.checkTAN();
 
-
-					if (this.state.status.errorMessage != null &&
-							this.state.status.errorMessage.equals("cancel"))
+					if ("cancel".equals(this.state.status.errorMessage))
 						throw new SignatureException(new IllegalStateException());
 
 					// Post TAN
@@ -212,8 +207,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	private boolean consumeCancelError() {
 
 		if (this.state.status instanceof ATrustStatus) {
-			if (this.state.status.errorMessage != null &&
-				this.state.status.errorMessage.equals("cancel")) {
+			if ("cancel".equals(this.state.status.errorMessage)) {
 					this.state.status.errorMessage = null;
 					return true;
 			}
