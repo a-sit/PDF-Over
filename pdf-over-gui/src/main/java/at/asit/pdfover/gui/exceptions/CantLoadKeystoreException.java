@@ -31,6 +31,6 @@ public class CantLoadKeystoreException extends ResumableException {
 	 * @param cause The original exception
 	 */
 	public CantLoadKeystoreException(Throwable cause, int resumeIndex) {
-		super(Messages.getString("error.KeyStore"), cause, resumeIndex); //
+		super(Messages.getString("error.KeyStore"), cause, resumeIndex);
 	}
 }

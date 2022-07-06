@@ -132,7 +132,7 @@ public class MainWindow {
 	 */
 	public void setTopControl(Control ctrl) {
 		if(ctrl != null)
-			log.debug("Top control: " + ctrl.toString()); //
+			log.debug("Top control: " + ctrl.toString());
 		this.stack.topControl = ctrl;
 		this.doLayout();
 	}
@@ -178,19 +178,19 @@ public class MainWindow {
 	 * Reload the localization
 	 */
 	public void reloadLocalization() {
-		this.btn_config.setText(Messages.getString("main.configuration")); //
-		this.btn_config.setToolTipText(Messages.getString("main.configuration")); //
-		this.btn_open.setText(Messages.getString("common.open")); //
-		this.btn_open.setToolTipText(Messages.getString("common.open")); //
+		this.btn_config.setText(Messages.getString("main.configuration"));
+		this.btn_config.setToolTipText(Messages.getString("main.configuration"));
+		this.btn_open.setText(Messages.getString("common.open"));
+		this.btn_open.setToolTipText(Messages.getString("common.open"));
 
-		this.btn_position.setText(Messages.getString("main.position")); //
-		this.btn_position.setToolTipText(Messages.getString("main.position")); //
+		this.btn_position.setText(Messages.getString("main.position"));
+		this.btn_position.setToolTipText(Messages.getString("main.position"));
 
-		this.btn_sign.setText(Messages.getString("main.signature")); //
-		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //
+		this.btn_sign.setText(Messages.getString("main.signature"));
+		this.btn_sign.setToolTipText(Messages.getString("main.signature"));
 
-		this.btn_end.setText(Messages.getString("main.done")); //
-		this.btn_end.setToolTipText(Messages.getString("main.done")); //
+		this.btn_end.setText(Messages.getString("main.done"));
+		this.btn_end.setToolTipText(Messages.getString("main.done"));
 
 		Control ctrl = this.stack.topControl;
 		if (ctrl instanceof StateComposite) {
@@ -207,8 +207,8 @@ public class MainWindow {
 	protected void createContents() {
 		this.shell = new Shell();
 		getShell().setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
-		if (System.getProperty("os.name").toLowerCase().contains("mac")) { // //
-			if (System.getProperty("os.name").contains("OS X")) { // //
+		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+			if (System.getProperty("os.name").contains("OS X")) {
 				hookupOSXMenu();
 			}
 		}
@@ -222,7 +222,7 @@ public class MainWindow {
 					bounds.y + (bounds.height - main.height) / 2);
 		}
 		catch (SWTError e) {
-			log.debug("Cannot get display", e); //
+			log.debug("Cannot get display", e);
 		}
 		Display.setAppVersion(Constants.APP_VERSION);
 		getShell().setText(Constants.APP_NAME);
@@ -230,12 +230,12 @@ public class MainWindow {
 		getShell().addShellListener(new ShellAdapter() {
 			@Override
 			public void shellClosed(ShellEvent e) {
-				log.debug("Closing main window"); //
+				log.debug("Closing main window");
 				MainWindow.this.stateMachine.getConfigManipulator().setMainWindowSize(getShell().getSize());
 				try {
 					MainWindow.this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
 				} catch (IOException e1) {
-					log.error("Error saving configuration", e); //
+					log.error("Error saving configuration", e);
 				}
 			}
 		});
@@ -263,9 +263,9 @@ public class MainWindow {
 		fd_btn_config.top = new FormAttachment(0);
 		fd_btn_config.left = new FormAttachment(0);
 		this.btn_config.setLayoutData(fd_btn_config);
-		this.btn_config.setText(Messages.getString("main.configuration")); //
+		this.btn_config.setText(Messages.getString("main.configuration"));
 		this.btn_config
-				.setToolTipText(Messages.getString("main.configuration")); //
+				.setToolTipText(Messages.getString("main.configuration"));
 		this.btn_config.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -299,8 +299,8 @@ public class MainWindow {
 		fd_btn_open.top = new FormAttachment(0);
 		fd_btn_open.bottom = new FormAttachment(100);
 		this.btn_open.setLayoutData(fd_btn_open);
-		this.btn_open.setText(Messages.getString("common.open")); //
-		this.btn_open.setToolTipText(Messages.getString("common.open")); //
+		this.btn_open.setText(Messages.getString("common.open"));
+		this.btn_open.setToolTipText(Messages.getString("common.open"));
 		this.btn_open.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -323,8 +323,8 @@ public class MainWindow {
 		fd_btn_position.top = new FormAttachment(0);
 		fd_btn_position.bottom = new FormAttachment(100);
 		this.btn_position.setLayoutData(fd_btn_position);
-		this.btn_position.setText(Messages.getString("main.position")); //
-		this.btn_position.setToolTipText(Messages.getString("main.position")); //
+		this.btn_position.setText(Messages.getString("main.position"));
+		this.btn_position.setToolTipText(Messages.getString("main.position"));
 		this.btn_position.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -342,8 +342,8 @@ public class MainWindow {
 		fd_btn_sign.top = new FormAttachment(0);
 		fd_btn_sign.bottom = new FormAttachment(100);
 		this.btn_sign.setLayoutData(fd_btn_sign);
-		this.btn_sign.setText(Messages.getString("main.signature")); //
-		this.btn_sign.setToolTipText(Messages.getString("main.signature")); //
+		this.btn_sign.setText(Messages.getString("main.signature"));
+		this.btn_sign.setToolTipText(Messages.getString("main.signature"));
 		this.btn_sign.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -361,8 +361,8 @@ public class MainWindow {
 		fd_btn_end.top = new FormAttachment(0);
 		fd_btn_end.bottom = new FormAttachment(100);
 		this.btn_end.setLayoutData(fd_btn_end);
-		this.btn_end.setText(Messages.getString("main.done")); //
-		this.btn_end.setToolTipText(Messages.getString("main.done")); //
+		this.btn_end.setText(Messages.getString("main.done"));
+		this.btn_end.setToolTipText(Messages.getString("main.done"));
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);
 
 		this.container = new Composite(getShell(), SWT.RESIZE);
@@ -380,7 +380,7 @@ public class MainWindow {
 	 * Hook up SWT menu under OS X
 	 */
 	private void hookupOSXMenu() {
-		log.debug("Hooking up OS X menu"); //
+		log.debug("Hooking up OS X menu");
 		CocoaUIEnhancer.hookApplicationMenu(getShell().getDisplay(), new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
@@ -390,7 +390,7 @@ public class MainWindow {
 			@Override
 			public void handleEvent(Event arg0) {
 				Dialog dialog = new Dialog(getShell(),
-						String.format(Messages.getString("main.about"), Constants.APP_NAME), //
+						String.format(Messages.getString("main.about"), Constants.APP_NAME),
 						Constants.APP_NAME_VERSION, BUTTONS.OK, ICON.INFORMATION);
 				dialog.open();
 			}
@@ -410,7 +410,7 @@ public class MainWindow {
 		MainWindowBehavior behavior = this.stateMachine.getStatus()
 				.getBehavior();
 
-		log.debug("Updating MainWindow state for : " //
+		log.debug("Updating MainWindow state for : "
 				+ this.stateMachine.getStatus().getCurrentState().toString());
 
 		for (Buttons button : Buttons.values()) {

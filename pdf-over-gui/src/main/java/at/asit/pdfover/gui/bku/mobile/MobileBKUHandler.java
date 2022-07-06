@@ -79,14 +79,14 @@ public abstract class MobileBKUHandler {
 			sl_request = request.getRequest();
 			if (useBase64Request())
 			{
-				post.addParameter("XMLRequest", sl_request); //
+				post.addParameter("XMLRequest", sl_request);
 			} else {
 				StringPart xmlpart = new StringPart(
-						"XMLRequest", sl_request, "UTF-8"); // //
+						"XMLRequest", sl_request, "UTF-8");
 
-				FilePart filepart = new FilePart("fileupload", //
+				FilePart filepart = new FilePart("fileupload",
 						new FileUploadSource(request.getSignatureData()),
-						"application/pdf", "UTF-8"); // //
+						"application/pdf", "UTF-8");
 
 				Part[] parts = { xmlpart, filepart };
 
@@ -95,9 +95,9 @@ public abstract class MobileBKUHandler {
 			}
 		} else {
 			sl_request = request.getRequest();
-			post.addParameter("XMLRequest", sl_request); //
+			post.addParameter("XMLRequest", sl_request);
 		}
-		log.trace("SL Request: " + sl_request); //
+		log.trace("SL Request: " + sl_request);
 
 		state.status.baseURL = MobileBKUHelper.stripQueryString(mobileBKUUrl);
 
@@ -176,15 +176,15 @@ public abstract class MobileBKUHandler {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				post.getRequestEntity().writeRequest(os);
 				req = os.toString();
-				if (req.contains("passwort=")) //
-					req = req.replaceAll("passwort=[^&]*", "passwort=******"); // //
-				if (req.contains(":pwd=")) //
-					req = req.replaceAll(":pwd=[^&]*", ":pwd=******"); // //
+				if (req.contains("passwort="))
+					req = req.replaceAll("passwort=[^&]*", "passwort=******");
+				if (req.contains(":pwd="))
+					req = req.replaceAll(":pwd=[^&]*", ":pwd=******");
 				os.close();
 			} else {
-				req = post.getRequestEntity().getContentLength() + " bytes"; //
+				req = post.getRequestEntity().getContentLength() + " bytes";
 			}
-			log.debug("Posting to " + post.getURI() + ": " + req); // //
+			log.debug("Posting to " + post.getURI() + ": " + req);
 		}
 		int returnCode = client.executeMethod(post);
 
@@ -202,12 +202,12 @@ public abstract class MobileBKUHandler {
 			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
 				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
 
-				Header locationHeader = post.getResponseHeader("location"); //
+				Header locationHeader = post.getResponseHeader("location");
 				if (locationHeader != null) {
 					redirectLocation = locationHeader.getValue();
 				} else {
 					throw new IOException(
-							"Got HTTP 302 but no location to follow!"); //
+							"Got HTTP 302 but no location to follow!");
 				}
 			} else if (returnCode == HttpStatus.SC_OK) {
 				if (get != null) {
@@ -225,12 +225,12 @@ public abstract class MobileBKUHandler {
 						server = serverHeader.getValue();
 				}
 				redirectLocation = null;
-				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\"";
 				Pattern pat = Pattern.compile(p);
 				Matcher m = pat.matcher(responseData);
 				if (m.find()) {
 					String content = m.group(1);
-					int start = content.indexOf("URL="); //
+					int start = content.indexOf("URL=");
 					if (start != -1) {
 						start += 9;
 						redirectLocation  = content.substring(start, content.length() - 5);
@@ -244,7 +244,7 @@ public abstract class MobileBKUHandler {
 			if (redirectLocation != null) {
 				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(post.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
-				log.debug("Redirected to " + redirectLocation); //
+				log.debug("Redirected to " + redirectLocation);
 				get = new GetMethod(redirectLocation);
 				get.setFollowRedirects(true);
 				returnCode = client.executeMethod(get);
@@ -253,7 +253,7 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server); //
+			log.info("Server: " + server);
 
 		return responseData;
 	}
@@ -266,7 +266,7 @@ public abstract class MobileBKUHandler {
 	 * @throws IOException IO error
 	 */
 	protected String executeGet(HttpClient client, GetMethod get) throws IOException {
-		log.debug("Getting " + get.getURI()); //
+		log.debug("Getting " + get.getURI());
 
 		int returnCode = client.executeMethod(get);
 
@@ -284,12 +284,12 @@ public abstract class MobileBKUHandler {
 			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
 				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
 
-				Header locationHeader = get.getResponseHeader("location"); //
+				Header locationHeader = get.getResponseHeader("location");
 				if (locationHeader != null) {
 					redirectLocation = locationHeader.getValue();
 				} else {
 					throw new IOException(
-							"Got HTTP 302 but no location to follow!"); //
+							"Got HTTP 302 but no location to follow!");
 				}
 			} else if (returnCode == HttpStatus.SC_OK) {
 				if (get2 != null) {
@@ -307,12 +307,12 @@ public abstract class MobileBKUHandler {
 						server = serverHeader.getValue();
 				}
 				redirectLocation = null;
-				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\""; //
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\"";
 				Pattern pat = Pattern.compile(p);
 				Matcher m = pat.matcher(responseData);
 				if (m.find()) {
 					String content = m.group(1);
-					int start = content.indexOf("URL="); //
+					int start = content.indexOf("URL=");
 					if (start != -1) {
 						start += 9;
 						redirectLocation  = content.substring(start, content.length() - 5);
@@ -326,7 +326,7 @@ public abstract class MobileBKUHandler {
 			if (redirectLocation != null) {
 				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(get.getURI().toString()));
 				redirectLocation = getStatus().ensureSessionID(redirectLocation);
-				log.debug("Redirected to " + redirectLocation); //
+				log.debug("Redirected to " + redirectLocation);
 				get2 = new GetMethod(redirectLocation);
 				get2.setFollowRedirects(true);
 				returnCode = client.executeMethod(get2);
@@ -335,7 +335,7 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server); //
+			log.info("Server: " + server);
 
 		return responseData;
 	}

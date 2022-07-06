@@ -75,7 +75,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 	private static boolean expiryNoticeDisplayed = false;
 
-	private static final String ACTIVATION_URL = "https://www.handy-signatur.at/"; //
+	private static final String ACTIVATION_URL = "https://www.handy-signatur.at/";
 
 	private boolean useBase64 = false;
 
@@ -86,26 +86,26 @@ public class ATrustHandler extends MobileBKUHandler {
 	public void handleSLRequestResponse(String responseData) throws Exception {
 		ATrustStatus status = getStatus();
 
-		if (responseData.contains("<sl:ErrorResponse")) { //
+		if (responseData.contains("<sl:ErrorResponse")) {
 			String errorCode = MobileBKUHelper.extractSubstring(responseData,
-					"<sl:ErrorCode>", "</sl:ErrorCode>"); // //
+					"<sl:ErrorCode>", "</sl:ErrorCode>");
 			String errorMsg = MobileBKUHelper.extractSubstring(responseData,
-					"<sl:Info>", "</sl:Info>"); // //
-			throw new Exception("Error from mobile BKU: " + //
-					errorCode + " - " + errorMsg); //
+					"<sl:Info>", "</sl:Info>");
+			throw new Exception("Error from mobile BKU: " +
+					errorCode + " - " + errorMsg);
 		}
 
 		// Extract infos:
 		String sessionID = MobileBKUHelper.extractSubstring(responseData,
-				"identification.aspx?sid=", "\""); // //
+				"identification.aspx?sid=", "\"");
 
 		String viewState = MobileBKUHelper.extractValueFromTagWithParam(
-				responseData, "", "id", "__VIEWSTATE", "value"); // // // //
+				responseData, "", "id", "__VIEWSTATE", "value");
 
 		String eventValidation = MobileBKUHelper.extractValueFromTagWithParam(
-				responseData, "", "id", "__EVENTVALIDATION", "value"); // // // //
+				responseData, "", "id", "__EVENTVALIDATION", "value");
 
-		String viewstateGenerator = MobileBKUHelper.extractValueFromTagWithParamOptional(responseData, "", "id", "__VIEWSTATEGENERATOR", "value"); // // // //
+		String viewstateGenerator = MobileBKUHelper.extractValueFromTagWithParamOptional(responseData, "", "id", "__VIEWSTATEGENERATOR", "value");
 
 		String dynamicAttrPhonenumber = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_PHONE_NUMBER);
 		String dynamicAttrPassword = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_PASS);
@@ -113,9 +113,9 @@ public class ATrustHandler extends MobileBKUHandler {
 		String dynamicAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 
 
-		log.info("sessionID: " + sessionID); //
-		log.info("viewState: " + viewState); //
-		log.info("eventValidation: " + eventValidation); //
+		log.info("sessionID: " + sessionID);
+		log.info("viewState: " + viewState);
+		log.info("eventValidation: " + eventValidation);
 
 		status.sessionID = sessionID;
 		status.viewState = viewState;
@@ -137,11 +137,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-		PostMethod post = new PostMethod(status.baseURL + "/identification.aspx?sid=" + status.sessionID); //
-		post.getParams().setContentCharset("utf-8"); //
-		post.addParameter("__VIEWSTATE", status.viewState); //
-		post.addParameter("__VIEWSTATEGENERATOR", status.viewStateGenerator); //
-		post.addParameter("__EVENTVALIDATION", status.eventValidation); //
+		PostMethod post = new PostMethod(status.baseURL + "/identification.aspx?sid=" + status.sessionID);
+		post.getParams().setContentCharset("utf-8");
+		post.addParameter("__VIEWSTATE", status.viewState);
+		post.addParameter("__VIEWSTATEGENERATOR", status.viewStateGenerator);
+		post.addParameter("__EVENTVALIDATION", status.eventValidation);
 		post.addParameter(status.dynAttrPhoneNumber, status.phoneNumber);
 		post.addParameter(status.dynAttrPassword, status.mobilePassword);
 		post.addParameter(status.dynAttrBtnId, "Identifizieren");
@@ -164,124 +164,124 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		status.errorMessage = null;
 
-		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //
+		if (responseData.contains("ExpiresInfo.aspx?sid=")) {
 			// Certificate expiration interstitial - skip
-			String notice = Messages.getString("mobileBKU.notice") + " " + // //
-					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2")) // // //
-					.replaceAll("\\<.*?\\>", ""); // //
+			String notice = Messages.getString("mobileBKU.notice") + " " +
+					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2"))
+					.replaceAll("\\<.*?\\>", "");
 			log.info(notice);
 
 			if (!expiryNoticeDisplayed) {
 				Display.getDefault().syncExec(()->  {
-					Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING); // //
+					Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING);
 					if (d.open() == SWT.YES) {
-						log.debug("Trying to open " + ACTIVATION_URL); //
+						log.debug("Trying to open " + ACTIVATION_URL);
 						if (Desktop.isDesktopSupported()) {
 							try {
 								Desktop.getDesktop().browse(new URI(ACTIVATION_URL));
 								return;
 							} catch (Exception e) {
-								log.debug("Error opening URL", e); //
+								log.debug("Error opening URL", e);
 							}
 						}
-						log.info("SWT Desktop is not supported on this platform"); //
+						log.info("SWT Desktop is not supported on this platform");
 						Program.launch(ACTIVATION_URL);
 					}
 				});
 				expiryNoticeDisplayed = true;
 			}
 
-			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "ExpiresInfo.aspx?sid=", "\""); // //
-			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); // // // //
-			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); // // // //
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "ExpiresInfo.aspx?sid=", "\"");
+			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
+			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value");
 
 			// Post again to skip
 			MobileBKUHelper.registerTrustedSocketFactory();
 			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-			PostMethod post = new PostMethod(status.baseURL + "/ExpiresInfo.aspx?sid=" + t_sessionID); //
-			post.getParams().setContentCharset("utf-8"); //
-			post.addParameter("__VIEWSTATE", t_viewState); //
-			post.addParameter("__EVENTVALIDATION", t_eventValidation); //
-			post.addParameter("Button_Next", "Weiter"); // //
+			PostMethod post = new PostMethod(status.baseURL + "/ExpiresInfo.aspx?sid=" + t_sessionID);
+			post.getParams().setContentCharset("utf-8");
+			post.addParameter("__VIEWSTATE", t_viewState);
+			post.addParameter("__EVENTVALIDATION", t_eventValidation);
+			post.addParameter("Button_Next", "Weiter");
 
 			responseData = executePost(client, post);
-			log.trace("Response from mobile BKU: " + responseData); //
-		} else if (responseData.contains("tanAppInfo.aspx?sid=")) { //
+			log.trace("Response from mobile BKU: " + responseData);
+		} else if (responseData.contains("tanAppInfo.aspx?sid=")) {
 			// App info interstitial - skip
-			log.info("Skipping tan app interstitial"); //
+			log.info("Skipping tan app interstitial");
 
-			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "tanAppInfo.aspx?sid=", "\""); // //
-			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); // // // //
-			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); // // // //
+			String t_sessionID = MobileBKUHelper.extractSubstring(responseData, "tanAppInfo.aspx?sid=", "\"");
+			String t_viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
+			String t_eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value");
 
 			// Post again to skip
 			MobileBKUHelper.registerTrustedSocketFactory();
 			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-			PostMethod post = new PostMethod(status.baseURL + "/tanAppInfo.aspx?sid=" + t_sessionID); //
-			post.getParams().setContentCharset("utf-8"); //
-			post.addParameter("__VIEWSTATE", t_viewState); //
-			post.addParameter("__EVENTVALIDATION", t_eventValidation); //
-			post.addParameter("NextBtn", "Weiter"); // //
+			PostMethod post = new PostMethod(status.baseURL + "/tanAppInfo.aspx?sid=" + t_sessionID);
+			post.getParams().setContentCharset("utf-8");
+			post.addParameter("__VIEWSTATE", t_viewState);
+			post.addParameter("__EVENTVALIDATION", t_eventValidation);
+			post.addParameter("NextBtn", "Weiter");
 
 			responseData = executePost(client, post);
-			log.trace("Response from mobile BKU: " + responseData); //
+			log.trace("Response from mobile BKU: " + responseData);
 		}
 
-		if (responseData.contains("signature.aspx?sid=")) { //
+		if (responseData.contains("signature.aspx?sid=")) {
 			// credentials ok! TAN entry
-			log.debug("Credentials accepted - TAN required"); //
-			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\""); // //
-			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); // // // //
-			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); // // // //
-			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>"); // //
-			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" + //
-					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'"); // //
+			log.debug("Credentials accepted - TAN required");
+			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\"");
+			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
+			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value");
+			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");
+			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" +
+					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'");
 			try {
-				String qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); // // // //
-				log.debug("QR Code found: " + qrCode); //
+				String qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src");
+				log.debug("QR Code found: " + qrCode);
 				status.qrCodeURL = qrCode;
 			} catch (Exception e) {
-				log.debug("No QR Code found"); //
+				log.debug("No QR Code found");
 			}
 			try {
-				String tanTextTan = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); // // // //
+				String tanTextTan = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for");
 				status.tanField = tanTextTan.equals("input_tan");
 				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			} catch (Exception e) {
-				log.debug("No tan field found"); //
+				log.debug("No tan field found");
 			}
 			try {
-				String tanTextTan = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); // // //
+				String tanTextTan = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan");
 				status.isAPPTan = !tanTextTan.toLowerCase().contains("sms");
 				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			}catch (Exception e) {
-				log.debug("No text_tan tag"); //
+				log.debug("No text_tan tag");
 			}
 
-		} else if (responseData.contains("sl:InfoboxReadResponse")) { //
+		} else if (responseData.contains("sl:InfoboxReadResponse")) {
 			// credentials ok! InfoboxReadResponse
-			log.debug("Credentials accepted - Response given"); //
+			log.debug("Credentials accepted - Response given");
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().server, null, null));
 			return;
-		} else if (responseData.contains("undecided.aspx?sid=")) { //
+		} else if (responseData.contains("undecided.aspx?sid=")) {
 			// skip intermediate page
-			log.debug("Page Undecided"); //
+			log.debug("Page Undecided");
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().server, null, null));
-			status.errorMessage = "waiting..."; //
+			status.errorMessage = "waiting...";
 			return;
 		}else {
 			// error page
 			// extract error text!
 			try {
-				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass"); // //  //
+				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass");
 				status.errorMessage = errorMessage;
 			} catch (Exception e) {
-				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " + // // //
-						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>")); // //
+				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " +
+						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>"));
 			}
 
 			// force UI again!
@@ -313,14 +313,14 @@ public class ATrustHandler extends MobileBKUHandler {
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		PostMethod post = new PostMethod(status.baseURL
-				+ "/signature.aspx?sid=" + status.sessionID); //
-		post.getParams().setContentCharset("utf-8"); //
-		post.addParameter("__VIEWSTATE", status.viewState); //
+				+ "/signature.aspx?sid=" + status.sessionID);
+		post.getParams().setContentCharset("utf-8");
+		post.addParameter("__VIEWSTATE", status.viewState);
 		post.addParameter(
-				"__EVENTVALIDATION", status.eventValidation); //
+				"__EVENTVALIDATION", status.eventValidation);
 		post.addParameter(status.dynAttrTan, status.tan);
 		post.addParameter(status.dynAttrSignButton, "Signieren");
-		post.addParameter("Button1", "Identifizieren"); // //
+		post.addParameter("Button1", "Identifizieren");
 
 		return executePost(client, post);
 	}
@@ -331,8 +331,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	@Override
 	public void handleTANResponse(String responseData) {
 		getStatus().errorMessage = null;
-		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //
-		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //
+		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") ||
+		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
 			getSigningState().setSignatureResponse(
@@ -340,19 +340,19 @@ public class ATrustHandler extends MobileBKUHandler {
 		} else {
 			try {
 				String tries = MobileBKUHelper.extractSubstring(
-						responseData, "Sie haben noch", "Versuch"); // //
+						responseData, "Sie haben noch", "Versuch");
 				getStatus().tanTries = Integer.parseInt(tries.trim());
 				getStatus().errorMessage = "mobileBKU.wrong_tan";
 			} catch (Exception e) {
 				getStatus().tanTries = (getStatus().tanTries - 1);
-				log.debug("Error parsing TAN response", e); //
+				log.debug("Error parsing TAN response", e);
 			}
 
 			if (getStatus().tanTries <= 0) {
 				getStatus().errorMessage = null;
 				Display.getDefault().syncExec(() -> {
-					Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"), //
-							Messages.getString("mobileBKU.tan_tries_exceeded"), //
+					Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"),
+							Messages.getString("mobileBKU.tan_tries_exceeded"),
 							BUTTONS.OK_CANCEL, ICON.QUESTION);
 
 					// TODO: THIS IS A COLOSSAL HACK
@@ -381,7 +381,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		GetMethod get = new GetMethod(status.baseURL
 				+ "/sendsms.aspx?sid=" + status.sessionID);
-		get.getParams().setContentCharset("utf-8"); //
+		get.getParams().setContentCharset("utf-8");
 
 		return executeGet(client, get);
 	}
@@ -401,17 +401,17 @@ public class ATrustHandler extends MobileBKUHandler {
 		GetMethod get = new GetMethod(status.baseURL + "/" + status.qrCodeURL);
 
 		try {
-			log.debug("Getting " + get.getURI()); //
+			log.debug("Getting " + get.getURI());
 			int returnCode = client.executeMethod(get);
 
 			if (returnCode != HttpStatus.SC_OK) {
-				log.error("Error getting QR code"); //
+				log.error("Error getting QR code");
 				return null;
 			}
 
 			return get.getResponseBodyAsStream();
 		} catch (Exception e) {
-			log.error("Error getting QR code", e); //
+			log.error("Error getting QR code", e);
 			return null;
 		}
 	}
@@ -430,7 +430,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		//TODO check
 		//String baseURL = "https://www.a-trust.at/mobile/https-security-layer-request";
 		GetMethod get = new GetMethod(status.baseURL
-				+ "/signature.aspx?sid=" + status.sessionID); //
+				+ "/signature.aspx?sid=" + status.sessionID);
 
 		return executeGet(client, get);
 	}
@@ -442,8 +442,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	public Boolean handleWaitforAppResponse(String responseData) {
 
 		getStatus().errorMessage = null;
-		if (!responseData.toLowerCase().contains("Bitte starten Sie Ihre Handy-Signatur App!".toLowerCase())/* ||  //
-		    responseData.toLowerCase().contains("TAN (Handy-Signatur App)".toLowerCase())*/) { //
+		if (!responseData.toLowerCase().contains("Bitte starten Sie Ihre Handy-Signatur App!".toLowerCase())/* ||
+		    responseData.toLowerCase().contains("TAN (Handy-Signatur App)".toLowerCase())*/) {
 
 			return true;
 		}
@@ -457,8 +457,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	public boolean handleQRResponse(String responseData) {
 		getStatus().errorMessage = null;
-		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //
-		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //
+		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") ||
+		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
 			getSigningState().setSignatureResponse(
@@ -493,7 +493,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		String isReady = null;
 		Status serverStatus = null;
 		int waits = 0;
-		final String ERROR = "Error: Server is not responding"; //
+		final String ERROR = "Error: Server is not responding";
 		HttpClient client;
 		try {
 			do {
@@ -511,7 +511,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				int returnValue = client.executeMethod(get);
 				InputStream in = new BufferedInputStream(get.getResponseBodyAsStream());
 
-				isReady = IOUtils.toString(in, "utf-8"); //
+				isReady = IOUtils.toString(in, "utf-8");
 				serverStatus = new Status(isReady);
 
 				if (serverStatus.isFin()) {
@@ -528,11 +528,11 @@ public class ATrustHandler extends MobileBKUHandler {
 			}
 			//else error
 			status.errorMessage = "Server reponded ERROR during polling";
-			log.error("Server reponded ERROR during polling"); //
+			log.error("Server reponded ERROR during polling");
 			throw new ATrustConnectionException();
 
 		} catch (Exception e) {
-			log.error("handle polling failed" + e.getMessage()); //
+			log.error("handle polling failed" + e.getMessage());
 			throw new ATrustConnectionException();
 		}
 	}

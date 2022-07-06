@@ -105,12 +105,12 @@ public class Zipper {
 			// consume all the data from this entry
 
 			if (entry.isDirectory()) {
-				log.debug("Extracting directory: " + entry.getName()); //
+				log.debug("Extracting directory: " + entry.getName());
 
 				File nDir = new File(targetPath + File.separator + entry.getName());
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
-						throw new IOException("Failed to create dir: " + entry.getName()); //
+						throw new IOException("Failed to create dir: " + entry.getName());
 					}
 				}
 				continue;

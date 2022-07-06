@@ -30,7 +30,7 @@ public class ProxyUserArgument extends Argument {
 	 * Constructor
 	 */
 	public ProxyUserArgument() {
-		super(new String[] {"-proxyuser"}, "argument.help.proxyuser"); // //
+		super(new String[] {"-proxyuser"}, "argument.help.proxyuser");
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class ProxyUserArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Proxy username argument invalid!", ex); //
+			log.error("Proxy username argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.proxyuser") + this.getHelpText(), null);
 	}
 
 }

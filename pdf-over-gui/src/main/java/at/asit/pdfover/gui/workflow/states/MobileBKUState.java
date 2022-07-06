@@ -164,11 +164,11 @@ public class MobileBKUState extends State {
 	 *            the exception
 	 */
 	public void displayError(Exception e) {
-		String message = Messages.getString("error.Unexpected"); //
+		String message = Messages.getString("error.Unexpected");
 		log.error(message, e);
 		String errormsg = e.getLocalizedMessage();
 		if (errormsg != null && !errormsg.isEmpty())
-			message += ": " + errormsg; //
+			message += ": " + errormsg;
 		displayError(message);
 	}
 
@@ -207,7 +207,7 @@ public class MobileBKUState extends State {
 					ui.setErrorMessage(mobileStatus.errorMessage);
 					mobileStatus.errorMessage = null;
 				} else if (mobileStatus instanceof ATrustStatus) {
-					ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //
+					ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer"));
 				}
 
 				if (ui.getMobileNumber() == null
@@ -234,7 +234,7 @@ public class MobileBKUState extends State {
 
 			if (ui.userCancel) {
 				ui.userCancel = false;
-				mobileStatus.errorMessage = "cancel"; //
+				mobileStatus.errorMessage = "cancel";
 				return;
 			}
 
@@ -313,7 +313,7 @@ public class MobileBKUState extends State {
 				try {
 					String resp = handler.getSignaturePage();
 					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp); //
+						log.debug("Signature page response: " + resp);
 						getMobileBKUQRComposite().setDone(true);
 						Display display = getStateMachine().getGUIProvider().
 								getMainShell().getDisplay();
@@ -322,7 +322,7 @@ public class MobileBKUState extends State {
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
-					log.error("Error getting signature page", e); //
+					log.error("Error getting signature page", e);
 				}
 			}
 		}, 0, 5000);
@@ -336,7 +336,7 @@ public class MobileBKUState extends State {
 			InputStream qrcode = handler.getQRCode();
 			if (qrcode == null) {
 				MobileBKUState.this.threadException = new Exception(
-						Messages.getString("error.FailedToLoadQRCode")); //
+						Messages.getString("error.FailedToLoadQRCode"));
 			}
 			qr.setQR(qrcode);
 			getStateMachine().getGUIProvider().display(qr);
@@ -470,7 +470,7 @@ public class MobileBKUState extends State {
 				try {
 					String resp = handler.getSignaturePage();
 					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp); //
+						log.debug("Signature page response: " + resp);
 						getMobileBKUFingerprintComposite().setDone(true);
 						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
 						display.wake();
@@ -478,7 +478,7 @@ public class MobileBKUState extends State {
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
-					log.error("Error getting signature page", e); //
+					log.error("Error getting signature page", e);
 				}
 			}
 		}, 0, 5000);
@@ -538,15 +538,15 @@ public class MobileBKUState extends State {
 		this.signingState = getStateMachine().getStatus().getSigningState();
 
 		this.signingState.setBKUConnector(new MobileBKUConnector(this));
-		log.debug("Setting base64 request to " + this.handler.useBase64Request()); //
+		log.debug("Setting base64 request to " + this.handler.useBase64Request());
 		this.signingState.setUseBase64Request(this.handler.useBase64Request());
 
 		if (this.threadException != null) {
-			String message = Messages.getString("error.Unexpected"); //
+			String message = Messages.getString("error.Unexpected");
 			log.error(message, this.threadException);
 			String errormsg = this.threadException.getLocalizedMessage();
 			if (errormsg != null && !errormsg.isEmpty())
-				message += ": " + errormsg; //
+				message += ": " + errormsg;
 			ErrorDialog error = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
 					message, BUTTONS.OK);

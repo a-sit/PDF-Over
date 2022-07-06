@@ -80,15 +80,15 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
 
 			} catch(InvalidPasswordException ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //
+				log.error("Validating input for Mobile BKU failed!", ex);
 				MobileBKUEnterNumberComposite.this
 				.setErrorMessage(ex.getMessage());
 				MobileBKUEnterNumberComposite.this.txt_password.setFocus();
 			}
 			catch (Exception ex) {
-				log.error("Validating input for Mobile BKU failed!", ex); //
+				log.error("Validating input for Mobile BKU failed!", ex);
 				MobileBKUEnterNumberComposite.this
-						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber")); //
+						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber"));
 				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
@@ -144,7 +144,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		if (this.errorMessage != null) {
 			this.lbl_error.setText(this.errorMessage);
 		} else {
-			this.lbl_error.setText(""); //
+			this.lbl_error.setText("");
 		}
 	}
 
@@ -192,7 +192,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
-		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //
+		this.lbl_number.setText(Messages.getString("mobileBKU.number"));
 		FormData fd_lbl_number = new FormData();
 		fd_lbl_number.bottom = new FormAttachment(50, -10);
 		fd_lbl_number.right = new FormAttachment(50, -10);
@@ -223,14 +223,14 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_password.setAlignment(SWT.RIGHT);
-		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //
+		this.lbl_password.setText(Messages.getString("mobileBKU.password"));
 		FormData fd_lbl_password = new FormData();
 		fd_lbl_password.top = new FormAttachment(50, 10);
 		fd_lbl_password.right = new FormAttachment(50, -10);
 		this.lbl_password.setLayoutData(fd_lbl_password);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-		this.btn_ok.setText(Messages.getString("common.Ok")); //
+		this.btn_ok.setText(Messages.getString("common.Ok"));
 		FormData fd_btn_ok = new FormData();
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 		fd_btn_ok.right = new FormAttachment(100, -20);
@@ -238,7 +238,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
+		this.btn_cancel.setText(Messages.getString("common.Cancel"));
 		FormData fd_btn_cancel = new FormData();
 		fd_btn_cancel.bottom = new FormAttachment(100, -20);
 		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -10);
@@ -295,7 +295,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			this.txt_number.setText(this.mobileNumber);
 			this.txt_password.setFocus();
 		} else {
-			this.txt_number.setText(""); //
+			this.txt_number.setText("");
 		}
 	}
 
@@ -318,7 +318,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		if (this.mobilePassword != null) {
 			this.txt_password.setText(this.mobilePassword);
 		} else {
-			this.txt_password.setText(""); //
+			this.txt_password.setText("");
 		}
 	}
 
@@ -327,9 +327,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_number.setText(Messages.getString("mobileBKU.number")); //
-		this.lbl_password.setText(Messages.getString("mobileBKU.password")); //
-		this.btn_ok.setText(Messages.getString("common.Ok")); //
+		this.lbl_number.setText(Messages.getString("mobileBKU.number"));
+		this.lbl_password.setText(Messages.getString("mobileBKU.password"));
+		this.btn_ok.setText(Messages.getString("common.Ok"));
 	}
 
 }

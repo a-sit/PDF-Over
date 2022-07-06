@@ -59,7 +59,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	/**
 	 * An empty property entry
 	 */
-	private static final String STRING_EMPTY = ""; //
+	private static final String STRING_EMPTY = "";
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
@@ -162,7 +162,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configuration.setMobileBKUType(MobileBKUs.valueOf(
 						bkuType.trim().toUpperCase()));
 			} catch (IllegalArgumentException e) {
-				log.error("Invalid BKU type: " + bkuType); //
+				log.error("Invalid BKU type: " + bkuType);
 				this.configuration.setMobileBKUType(DEFAULT_MOBILE_BKU_TYPE);
 			}
 		}
@@ -179,7 +179,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			if (port > 0 && port <= 0xFFFF)
 				setProxyPort(port);
 			else
-				log.warn("Proxy port is out of range!: " + port); //
+				log.warn("Proxy port is out of range!: " + port);
 		}
 
 		// Set Default BKU
@@ -189,10 +189,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			try {
 				defaultBKU = BKUs.valueOf(bkuString);
 			} catch (IllegalArgumentException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); // //
+				log.error("Invalid BKU config value " + bkuString + " using none!");
 				defaultBKU = BKUs.NONE;
 			} catch (NullPointerException ex) {
-				log.error("Invalid BKU config value " + bkuString + " using none!"); // //
+				log.error("Invalid BKU config value " + bkuString + " using none!");
 				defaultBKU = BKUs.NONE;
 			}
 		}
@@ -205,7 +205,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			try {
 				transparency = Integer.parseInt(trans);
 			} catch (NumberFormatException e) {
-				log.debug("Couldn't parse placeholder transparency", e); //
+				log.debug("Couldn't parse placeholder transparency", e);
 				// ignore parsing exception
 			}
 		}
@@ -226,7 +226,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				width = Integer.parseInt(size.substring(0, pos).trim());
 				height = Integer.parseInt(size.substring(pos + 1).trim());
 			} catch (NumberFormatException e) {
-				log.debug("Couldn't parse main window size", e); //
+				log.debug("Couldn't parse main window size", e);
 				// ignore parsing exception
 			}
 		}
@@ -257,7 +257,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 							position = new SignaturePosition(x, y, p);
 						} catch (NumberFormatException ex) {
 							log.error(
-									"Signature Position read from config failed: Not a valid number", ex); //
+									"Signature Position read from config failed: Not a valid number", ex);
 						}
 					} else if (matcher.group(5) != null) {
 						// we have format auto
@@ -273,10 +273,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 						position = new SignaturePosition(x, y);
 					}
 				} else {
-					log.error("Signature Position read from config failed: wrong group Count!"); //
+					log.error("Signature Position read from config failed: wrong group Count!");
 				}
 			} else {
-				log.error("Signature Position read from config failed: not matching string"); //
+				log.error("Signature Position read from config failed: not matching string");
 			}
 		}
 		setDefaultSignaturePosition(position);
@@ -338,7 +338,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				Integer.toString(getPlaceholderTransparency()));
 
 		Point size = this.configuration.getMainWindowSize();
-		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y); //
+		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y);
 
 		Locale configLocale = getLocale();
 		if(configLocale != null) {
@@ -366,12 +366,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		SignaturePosition pos = getDefaultSignaturePositionPersistent();
 		if (pos == null) {
-			props.setProperty(Constants.CFG_SIGNATURE_POSITION, ""); //
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "");
 		} else if (pos.useAutoPositioning()) {
-			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto"); //
+			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto");
 		} else {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION,
-					String.format((Locale) null, "x=%f;y=%f;p=%d", //
+					String.format((Locale) null, "x=%f;y=%f;p=%d",
 							pos.getX(), pos.getY(), pos.getPage()));
 		}
 
@@ -415,9 +415,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
 
-		props.store(outputstream, "Configuration file was generated!"); //
+		props.store(outputstream, "Configuration file was generated!");
 
-		log.info("Configuration file saved to " + configFile.getAbsolutePath()); //
+		log.info("Configuration file saved to " + configFile.getAbsolutePath());
 	}
 
 
@@ -676,7 +676,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configuration.setEmblem(emblem);
 			}
 		} catch (InvalidEmblemFile e) {
-			log.error("Error setting emblem file", e); //
+			log.error("Error setting emblem file", e);
 			try {
 				this.configuration.setEmblem(STRING_EMPTY);
 			} catch (InvalidEmblemFile e1) {
@@ -697,7 +697,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				this.configurationOverlay.setEmblem(emblem);
 			}
 		} catch (InvalidEmblemFile e) {
-			log.error("Error setting emblem file", e); //
+			log.error("Error setting emblem file", e);
 			try {
 				this.configurationOverlay.setEmblem(STRING_EMPTY);
 			} catch (InvalidEmblemFile e1) {
@@ -797,7 +797,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		try {
 			this.configuration.setProxyPort(port);
 		} catch (InvalidPortException e) {
-			log.error("Error setting proxy port" , e); //
+			log.error("Error setting proxy port" , e);
 			// ignore
 		}
 	}
@@ -810,7 +810,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		try {
 			this.configurationOverlay.setProxyPort(port);
 		} catch (InvalidPortException e) {
-			log.error("Error setting proxy port" , e); //
+			log.error("Error setting proxy port" , e);
 			// ignore
 		}
 	}

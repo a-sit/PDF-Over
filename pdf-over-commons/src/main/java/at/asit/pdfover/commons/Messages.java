@@ -36,7 +36,7 @@ public class Messages {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(Messages.class);
 
-	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages"; //
+	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages";
 
 	private static HashMap<Locale, ResourceBundle> bundles = new HashMap<>();
 
@@ -68,17 +68,17 @@ public class Messages {
 
 	private static ResourceBundle getBundle(Locale locale) {
 		if(!bundles.containsKey(locale)) {
-			log.debug("Loading resource bundle for {}", locale); //
+			log.debug("Loading resource bundle for {}", locale);
 			ResourceBundle tmp = null;
 			try {
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME, locale);
-				log.debug("Received bundle for {}", tmp.getLocale()); //
+				log.debug("Received bundle for {}", tmp.getLocale());
 			} catch(Exception e) {
-				log.error("NO RESOURCE BUNDLE FOR {} {}", locale, e); //
+				log.error("NO RESOURCE BUNDLE FOR {} {}", locale, e);
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			if(tmp == null) {
-				log.error("NO RESOURCE BUNDLE FOR {}", locale); //
+				log.error("NO RESOURCE BUNDLE FOR {}", locale);
 				tmp = ResourceBundle.getBundle(BUNDLE_NAME);
 			}
 			bundles.put(locale, tmp);

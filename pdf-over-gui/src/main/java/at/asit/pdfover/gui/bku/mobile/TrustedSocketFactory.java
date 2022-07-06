@@ -49,15 +49,15 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			.getLogger(TrustedSocketFactory.class);
 
 	private static final String ENABLED_CS[] = {
-		"TLS_RSA_WITH_AES_128_CBC_SHA",  //
-		"SSL_RSA_WITH_RC4_128_SHA",      //
-		"SSL_RSA_WITH_3DES_EDE_CBC_SHA", //
-		"SSL_RSA_WITH_RC4_128_MD5"       //
+		"TLS_RSA_WITH_AES_128_CBC_SHA",
+		"SSL_RSA_WITH_RC4_128_SHA",
+		"SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+		"SSL_RSA_WITH_RC4_128_MD5"
 	};
 
 	private static SSLSocketFactory getFactory() throws NoSuchAlgorithmException,
 			KeyManagementException, Exception {
-		SSLContext sslContext = SSLContext.getInstance("TLS"); //
+		SSLContext sslContext = SSLContext.getInstance("TLS");
 		sslContext.init(null, new TrustManager[] { new SimpleXMLTrustManager() },
 				new java.security.SecureRandom());
 
@@ -80,14 +80,14 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex); //
+			log.error("TrustedSocketFactory: ", ex);
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex);
 			}
 		}
 	}
@@ -108,14 +108,14 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex); //
+			log.error("TrustedSocketFactory: ", ex);
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			UnknownHostException, ConnectTimeoutException {
 		try {
 			if (params == null) {
-				throw new IllegalArgumentException("Parameters may not be null"); //
+				throw new IllegalArgumentException("Parameters may not be null");
 			}
 			int timeout = params.getConnectionTimeout();
 			SSLSocket sslSocket = null;
@@ -154,14 +154,14 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex); //
+			log.error("TrustedSocketFactory: ", ex);
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex);
 			}
 		}
 	}
@@ -177,14 +177,14 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 			sslSocket.setEnabledCipherSuites(ENABLED_CS);
 			return sslSocket;
 		} catch (Exception ex) {
-			log.error("TrustedSocketFactory: ", ex); //
+			log.error("TrustedSocketFactory: ", ex);
 			if (ex instanceof IOException) {
 				throw (IOException) ex;
 			} else if (ex instanceof UnknownHostException) {
 				throw (UnknownHostException) ex;
 			} else {
 				throw new IOException(
-						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex); //
+						Messages.getString("TrustedSocketFactory.FailedToCreateSecureConnection"), ex);
 			}
 		}
 	}

@@ -63,18 +63,18 @@ public class Main {
 
 			StateMachineImpl stateMachine = new StateMachineImpl(args);
 
-			log.debug("Starting stateMachine ..."); //
+			log.debug("Starting stateMachine ...");
 			stateMachine.start();
 
 
-			log.debug("Ended stateMachine ..."); //
+			log.debug("Ended stateMachine ...");
 		}
 		catch (Throwable e) {
 
-			log.error("Unhandled error", e); //
+			log.error("Unhandled error", e);
 
 			JOptionPane.showMessageDialog(null,
-					"Error occured " + e.getMessage(), //
+					"Error occured " + e.getMessage(),
 					null, JOptionPane.ERROR_MESSAGE);
 		}
 

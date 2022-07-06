@@ -25,7 +25,7 @@ public class SkipFinishArgument extends Argument {
 	 * Constructor
 	 */
 	public SkipFinishArgument() {
-		super(new String[] { "-s" }, "argument.help.skipfinish"); // //
+		super(new String[] { "-s" }, "argument.help.skipfinish");
 	}
 
 	/*

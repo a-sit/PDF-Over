@@ -127,7 +127,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lnkAbout.setText(Messages.getString("config.AboutText")); //
+		this.lnkAbout.setText(Messages.getString("config.AboutText"));
 		this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
 		this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
 		this.btnOpenLogDirectory.setText(Messages.getString("config.ShowLogDirectory"));

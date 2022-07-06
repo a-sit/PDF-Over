@@ -26,7 +26,7 @@ public class AutomaticPositioningArgument extends Argument {
 	 * Constructor
 	 */
 	public AutomaticPositioningArgument() {
-		super(new String[] { "-a" }, "argument.help.autopos"); // //
+		super(new String[] { "-a" }, "argument.help.autopos");
 	}
 
 	/*

@@ -33,7 +33,7 @@ public class ATrustConnectionException extends Exception {
 	 * @param file
 	 */
 	public ATrustConnectionException() {
-		super(Messages.getString("error.ATrustConnection")); //
+		super(Messages.getString("error.ATrustConnection"));
 	}
 
 

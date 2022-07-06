@@ -28,7 +28,7 @@ public class BKUArgument extends Argument {
 	 */
 	public BKUArgument() {
 		super(
-				new String[] { "-b" }, "argument.help.bku"); // //
+				new String[] { "-b" }, "argument.help.bku");
 	}
 
 	/*
@@ -54,11 +54,11 @@ public class BKUArgument extends Argument {
 			}
 		} catch (Exception ex) {
 			throw new InitializationException(
-					Messages.getString("argument.invalid.bku") + this.getHelpText(), ex);  //
+					Messages.getString("argument.invalid.bku") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.bku") + this.getHelpText(), null);  //
+				Messages.getString("argument.invalid.bku") + this.getHelpText(), null);
 	}
 
 }

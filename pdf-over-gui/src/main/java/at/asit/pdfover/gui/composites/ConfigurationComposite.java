@@ -166,7 +166,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.simpleTabItem.setText(Messages.getString("config.Simple")); //
+		this.simpleTabItem.setText(Messages.getString("config.Simple"));
 
 		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.simpleTabItem.setControl(simpleCompositeScr);
@@ -177,7 +177,7 @@ public class ConfigurationComposite extends StateComposite {
 		simpleCompositeScr.setMinSize(simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //
+		this.advancedTabItem.setText(Messages.getString("config.Advanced"));
 
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.advancedTabItem.setControl(advancedCompositeScr);
@@ -188,7 +188,7 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setMinSize(advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //
+		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME));
 
 		ScrolledComposite aboutCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.aboutTabItem.setControl(aboutCompositeScr);
@@ -219,7 +219,7 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		});
-		this.btnSpeichern.setText(Messages.getString("common.Save")); //
+		this.btnSpeichern.setText(Messages.getString("common.Save"));
 		getShell().setDefaultButton(this.btnSpeichern);
 
 		FontData[] fD_btnSpeichern = this.btnSpeichern.getFont().getFontData();
@@ -231,7 +231,7 @@ public class ConfigurationComposite extends StateComposite {
 		fd_btnAbrechen.right = new FormAttachment(this.btnSpeichern, -10);
 		fd_btnAbrechen.bottom = new FormAttachment(this.btnSpeichern, 0, SWT.BOTTOM);
 		this.btnAbbrechen.setLayoutData(fd_btnAbrechen);
-		this.btnAbbrechen.setText(Messages.getString("common.Cancel")); //
+		this.btnAbbrechen.setText(Messages.getString("common.Cancel"));
 		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -287,7 +287,7 @@ public class ConfigurationComposite extends StateComposite {
 	public void keystoreEnabled(boolean enabled) {
 		if (enabled && this.keystoreConfigComposite == null) {
 			this.keystoreTabItem = new TabItem(this.tabFolder, SWT.NONE, 2);
-			this.keystoreTabItem.setText(Messages.getString("config.Keystore")); //
+			this.keystoreTabItem.setText(Messages.getString("config.Keystore"));
 
 			ScrolledComposite keystoreCompositeScr = new ScrolledComposite(
 					this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -351,7 +351,7 @@ public class ConfigurationComposite extends StateComposite {
 					redo = false;
 					status = true;
 				} catch (ResumableException e) {
-					log.error("Settings validation failed!", e); //
+					log.error("Settings validation failed!", e);
 					ErrorDialog dialog = new ErrorDialog(getShell(),
 							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 					int rc = dialog.open();
@@ -380,7 +380,7 @@ public class ConfigurationComposite extends StateComposite {
 					redo = false;
 					status = true;
 				} catch (ResumableException e) {
-					log.error("Settings validation failed!", e); //
+					log.error("Settings validation failed!", e);
 					ErrorDialog dialog = new ErrorDialog(getShell(),
 							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 					int rc = dialog.open();
@@ -410,7 +410,7 @@ public class ConfigurationComposite extends StateComposite {
 						redo = false;
 						status = true;
 					} catch (ResumableException e) {
-						log.error("Settings validation failed!", e); //
+						log.error("Settings validation failed!", e);
 						ErrorDialog dialog = new ErrorDialog(getShell(),
 								e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 						int rc = dialog.open();
@@ -429,10 +429,10 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		} catch (Exception e) {
-			log.error("Settings validation failed!", e); //
+			log.error("Settings validation failed!", e);
 			String message = e.getMessage();
 			if (message == null)
-				message = Messages.getString("error.Unexpected"); //
+				message = Messages.getString("error.Unexpected");
 			ErrorDialog dialog = new ErrorDialog(getShell(), message,
 					BUTTONS.OK);
 			dialog.open();
@@ -461,9 +461,9 @@ public class ConfigurationComposite extends StateComposite {
 				redo = false;
 				status = true;
 			} catch (IOException e) {
-				log.error("Failed to save configuration to file!", e); //
+				log.error("Failed to save configuration to file!", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						Messages.getString("error.FailedToSaveSettings"), BUTTONS.RETRY_CANCEL); //
+						Messages.getString("error.FailedToSaveSettings"), BUTTONS.RETRY_CANCEL);
 				redo = (dialog.open() == SWT.RETRY);
 
 				// return false;
@@ -509,10 +509,10 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.simpleTabItem.setText(Messages.getString("config.Simple")); //
-		this.advancedTabItem.setText(Messages.getString("config.Advanced")); //
-		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME)); //
-		this.btnSpeichern.setText(Messages.getString("common.Save")); //
-		this.btnAbbrechen.setText(Messages.getString("common.Cancel")); //
+		this.simpleTabItem.setText(Messages.getString("config.Simple"));
+		this.advancedTabItem.setText(Messages.getString("config.Advanced"));
+		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME));
+		this.btnSpeichern.setText(Messages.getString("common.Save"));
+		this.btnAbbrechen.setText(Messages.getString("common.Cancel"));
 	}
 }

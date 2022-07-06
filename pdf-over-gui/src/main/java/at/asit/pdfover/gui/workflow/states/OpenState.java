@@ -67,7 +67,7 @@ public class OpenState extends State {
 	 **/
 	private static final Logger log = LoggerFactory
 			.getLogger(OpenState.class);
-	private static final String advancedConfig = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties"; //
+	private static final String advancedConfig = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties";
 
 	private DataSourceSelectComposite selectionComposite = null;
 
@@ -106,7 +106,7 @@ public class OpenState extends State {
 				return;
 			}
 		}
-		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath()); //
+		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath());
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
@@ -128,8 +128,8 @@ public class OpenState extends State {
 							// icon
 							MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
 									SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
-							dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //
-							dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //
+							dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
+							dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
 
 							// open dialog and await user selection
 							int result = dialog.open();
@@ -143,8 +143,8 @@ public class OpenState extends State {
 								} else if (fields.size() > 1) {
 
 									PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
-											getStateMachine().getGUIProvider().getMainShell(), 65570, "text", //
-											"select the fields", fields); //
+											getStateMachine().getGUIProvider().getMainShell(), 65570, "text",
+											"select the fields", fields);
 									int res = gui.open();
 									if (res != -1) {
 										getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
@@ -174,8 +174,8 @@ public class OpenState extends State {
 						// create a dialog with ok and cancel buttons and a question icon
 						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
 								SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
-						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle")); //
-						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText")); //
+						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
+						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
 
 						// open dialog and await user selection
 						int result = dialog.open();

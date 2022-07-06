@@ -30,7 +30,7 @@ public class ErrorDialog extends Dialog {
 	 * @param button The buttons to be shown
 	 */
 	public ErrorDialog(Shell parent, String message, BUTTONS button) {
-		super(parent, Messages.getString("error.Title"), //
+		super(parent, Messages.getString("error.Title"),
 				message, button, ICON.ERROR);
 	}
 }

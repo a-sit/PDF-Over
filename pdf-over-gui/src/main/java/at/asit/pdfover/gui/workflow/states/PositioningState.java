@@ -124,7 +124,7 @@ public class PositioningState extends State {
 		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
-			param.setProperty("SIG_NOTE", config.getSignatureNote()); //
+			param.setProperty("SIG_NOTE", config.getSignatureNote());
 		}
 
 		param.setSignatureLanguage(config.getSignatureLocale().getLanguage());
@@ -156,15 +156,15 @@ public class PositioningState extends State {
 
 		if ((this.document == null) ||
 				(this.loadedDocumentPath != getStateMachine().getStatus().getDocument())) {
-			log.debug("Checking PDF document for encryption"); //
+			log.debug("Checking PDF document for encryption");
 			try {
 				openPDFDocument();
 			} catch (IOException e) {
 				this.positionComposite = null;
-				log.error("Failed to display PDF document", e); //
+				log.error("Failed to display PDF document", e);
 				String message = e.getLocalizedMessage();
 				if (message == null)
-					message = Messages.getString("error.IOError"); //
+					message = Messages.getString("error.IOError");
 				ErrorDialog dialog = new ErrorDialog(
 						getStateMachine().getGUIProvider().getMainShell(),
 						message, BUTTONS.RETRY_CANCEL);
@@ -182,10 +182,10 @@ public class PositioningState extends State {
 			try {
 				position = this.getPositioningComposite(this.document);
 			} catch(Exception ex) {
-				log.error("Failed to create composite (probably a mac...)", ex); //
+				log.error("Failed to create composite (probably a mac...)", ex);
 				ErrorDialog dialog = new ErrorDialog(
 						getStateMachine().getGUIProvider().getMainShell(),
-						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK); //
+						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK);
 				dialog.open();
 				status.setSignaturePosition(new SignaturePosition());
 				this.setNextState(new BKUSelectionState(getStateMachine()));

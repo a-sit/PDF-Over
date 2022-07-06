@@ -51,17 +51,17 @@ public class LocalBKUState extends State {
 	/**
 	 * HTTP Response server HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //
+	public final static String BKU_RESPONSE_HEADER_SERVER = "server";
 
 	/**
 	 * HTTP Response user-agent HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //
+	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent";
 
 	/**
 	 * HTTP Response SignatureLayout HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //
+	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout";
 
 	Exception threadException = null;
 
@@ -71,8 +71,8 @@ public class LocalBKUState extends State {
 	/**
 	 * Null-Operation SL-Request
 	 */
-	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + //
-			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>"; //
+	private final static String NULL_OPERATION_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+			"<sl:NullOperationRequest xmlns:sl=\"http://www.buergerkarte.at/namespaces/securitylayer/1.2#\"/>";
 
 	/**
 	 * Constructor
@@ -109,7 +109,7 @@ public class LocalBKUState extends State {
 				PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
 				String sl_request = NULL_OPERATION_REQUEST;
-				method.addParameter("XMLRequest", sl_request); //
+				method.addParameter("XMLRequest", sl_request);
 				int returnCode = client.executeMethod(method);
 
 				String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
@@ -121,27 +121,27 @@ public class LocalBKUState extends State {
 				} else {
 					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 					if (server == null)
-						server = ""; //
+						server = "";
 					else
-						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")) // //
+						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer"))
 							LocalBKUState.this.useBase64Request = true;
 
 					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 					if (userAgent == null)
-						userAgent = ""; //
+						userAgent = "";
 					String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
 
-					log.debug("Server - UA: " + server + " - " + userAgent); // //
+					log.debug("Server - UA: " + server + " - " + userAgent);
 
 					String response = method.getResponseBodyAsString();
-					log.debug("SL Response: " + response); //
+					log.debug("SL Response: " + response);
 					SLResponse slResponse = new SLResponse(response, server,
 							userAgent, signatureLayout);
 					this.signingState.setSignatureResponse(slResponse);
 					this.signingState.setUseBase64Request(LocalBKUState.this.useBase64Request);
 				}
 			} catch (Exception e) {
-				log.error("SignLocalBKUThread: ", e); //
+				log.error("SignLocalBKUThread: ", e);
 
 				this.state.threadException = e;
 			} finally {
@@ -186,7 +186,7 @@ public class LocalBKUState extends State {
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
 					getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.LocalBKU"), //
+					Messages.getString("error.LocalBKU"),
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
 				//getStateMachine().exit();

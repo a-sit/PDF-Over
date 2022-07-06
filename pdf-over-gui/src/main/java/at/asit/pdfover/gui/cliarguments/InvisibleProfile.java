@@ -32,7 +32,7 @@ public class InvisibleProfile extends Argument {
 	 * Constructor
 	 */
 	public InvisibleProfile() {
-		super(new String[] {"-v"}, "argument.help.vis"); // //
+		super(new String[] {"-v"}, "argument.help.vis");
 	}
 
 	/**
@@ -58,13 +58,13 @@ public class InvisibleProfile extends Argument {
 			}
 
 		} catch (Exception ex) {
-			log.error("Signature Profile Visibilty Error", ex); //
+			log.error("Signature Profile Visibilty Error", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.vis") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.vis") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.vis") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.vis") + this.getHelpText(), null);
 	}
 
 }

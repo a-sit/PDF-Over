@@ -32,7 +32,7 @@ public interface ConfigProvider {
 	/**
 	 * RegEx for parsing signature position
 	 */
-	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))"; //
+	public static final String SIGN_POS_REGEX = "(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))";
 
 	/**
 	 * Loads the configuration from a configuration file

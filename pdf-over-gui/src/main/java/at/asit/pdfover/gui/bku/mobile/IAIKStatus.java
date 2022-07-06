@@ -56,11 +56,11 @@ public class IAIKStatus extends MobileBKUStatus {
 	@Override
 	public String ensureSessionID(String url)
 	{
-		if (url.contains("jsessionid=")) //
+		if (url.contains("jsessionid="))
 			return url;
 
 		if (this.sessionID != null)
-			url += ";jsessionid=" + this.sessionID; //
+			url += ";jsessionid=" + this.sessionID;
 		return url;
 	}
 }

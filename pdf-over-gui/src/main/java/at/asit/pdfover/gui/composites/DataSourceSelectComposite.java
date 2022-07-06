@@ -59,10 +59,10 @@ public class DataSourceSelectComposite extends StateComposite {
 	public void openFileDialog() {
 		FileDialog dialog = new FileDialog(
 				DataSourceSelectComposite.this.getShell(), SWT.OPEN);
-		dialog.setFilterExtensions(new String[] { "*.pdf", "*" }); // //
+		dialog.setFilterExtensions(new String[] { "*.pdf", "*" });
 		dialog.setFilterNames(new String[] {
-				Messages.getString("common.PDFExtension_Description"),  //
-				Messages.getString("common.AllExtension_Description") }); //
+				Messages.getString("common.PDFExtension_Description"),
+				Messages.getString("common.AllExtension_Description") });
 		String fileName = dialog.open();
 		File file = null;
 		if (fileName != null) {
@@ -207,7 +207,7 @@ public class DataSourceSelectComposite extends StateComposite {
 			public void drop(DropTargetEvent event) {
 				if (fileTransfer.isSupportedType(event.currentDataType)) {
 					if (event.data == null) {
-						log.error("Dropped file name was null"); //
+						log.error("Dropped file name was null");
 						return;
 					}
 					String[] files = (String[]) event.data;
@@ -215,7 +215,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						// Only taking first file ...
 						File file = new File(files[0]);
 						if (!file.exists()) {
-							log.error(String.format(Messages.getString("error.FileNotExist"), files[0])); //
+							log.error(String.format(Messages.getString("error.FileNotExist"), files[0]));
 							return;
 						}
 						DataSourceSelectComposite.this.setSelected(file);
@@ -264,7 +264,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		FontData[] fD = this.lbl_drag.getFont().getFontData();
 		fD[0].setHeight(Constants.TEXT_SIZE_BIG);
 		this.lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //
+		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel"));
 		this.lbl_drag.setAlignment(SWT.CENTER);
 
 
@@ -278,11 +278,11 @@ public class DataSourceSelectComposite extends StateComposite {
 		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
 		this.lbl_drag2.setText(Messages
-				.getString("dataSourceSelection.DropLabel2")); //
+				.getString("dataSourceSelection.DropLabel2"));
 		this.lbl_drag2.setAlignment(SWT.CENTER);
 
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //
+		this.btn_open.setText(Messages.getString("dataSourceSelection.browse"));
 
 		FontData[] fD_open = this.btn_open.getFont().getFontData();
 		fD_open[0].setHeight(Constants.TEXT_SIZE_BUTTON);
@@ -357,8 +357,8 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel")); //
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse")); //
-		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2")); //
+		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel"));
+		this.btn_open.setText(Messages.getString("dataSourceSelection.browse"));
+		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2"));
 	}
 }

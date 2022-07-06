@@ -36,7 +36,7 @@ public class ConfigFileArgument extends Argument {
 	 * Constructor
 	 */
 	public ConfigFileArgument() {
-		super(new String[] {"-c"}, "argument.help.config"); // //
+		super(new String[] {"-c"}, "argument.help.config");
 	}
 
 	/* (non-Javadoc)
@@ -56,13 +56,13 @@ public class ConfigFileArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Configuration File Argument invalid!", ex); //
+			log.error("Configuration File Argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.config") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.config") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.config") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.config") + this.getHelpText(), null);
 	}
 
 }

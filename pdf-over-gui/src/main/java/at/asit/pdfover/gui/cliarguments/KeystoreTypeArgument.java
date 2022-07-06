@@ -30,7 +30,7 @@ public class KeystoreTypeArgument extends Argument {
 	 * Constructor
 	 */
 	public KeystoreTypeArgument() {
-		super(new String[] {"-kstype"}, "argument.help.keystoretype"); // //
+		super(new String[] {"-kstype"}, "argument.help.keystoretype");
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class KeystoreTypeArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Keystore type argument invalid!", ex); //
+			log.error("Keystore type argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.keystoretype") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.keystoretype") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.keystoretype") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.keystoretype") + this.getHelpText(), null);
 	}
 
 }

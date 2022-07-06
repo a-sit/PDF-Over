@@ -33,7 +33,7 @@ public class EmblemArgument extends Argument {
 	 * Constructor
 	 */
 	public EmblemArgument() {
-		super(new String[] {"-e"}, "argument.help.emblem"); // //
+		super(new String[] {"-e"}, "argument.help.emblem");
 	}
 
 	/**
@@ -65,13 +65,13 @@ public class EmblemArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Emblem argument invalid!", ex); //
+			log.error("Emblem argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.emblem") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.emblem") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.emblem") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.emblem") + this.getHelpText(), null);
 	}
 
 }

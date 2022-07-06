@@ -58,7 +58,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to LOCAL"); //
+			log.debug("Setting BKU to LOCAL");
 			setSelected(BKUs.LOCAL);
 		}
 	}
@@ -75,7 +75,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to MOBILE"); //
+			log.debug("Setting BKU to MOBILE");
 			setSelected(BKUs.MOBILE);
 		}
 	}
@@ -92,7 +92,7 @@ public class BKUSelectionComposite extends StateComposite {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to KS"); //
+			log.debug("Setting BKU to KS");
 			setSelected(BKUs.KS);
 		}
 	}
@@ -229,9 +229,9 @@ public class BKUSelectionComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.btnMobile.setText(Messages.getString("bku_selection.mobile")); //
-		this.btnCard.setText(Messages.getString("bku_selection.card")); //
+		this.btnMobile.setText(Messages.getString("bku_selection.mobile"));
+		this.btnCard.setText(Messages.getString("bku_selection.card"));
 		if (this.btnKS != null)
-			this.btnKS.setText(Messages.getString("bku_selection.ks")); //
+			this.btnKS.setText(Messages.getString("bku_selection.ks"));
 	}
 }

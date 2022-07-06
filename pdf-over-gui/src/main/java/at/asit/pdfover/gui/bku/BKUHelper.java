@@ -37,18 +37,18 @@ public class BKUHelper {
 
 	/* public static HttpClient getHttpClient(boolean useProxy) {
 	 HttpClient client = new HttpClient();
-	 client.getParams().setParameter("http.useragent", //
+	 client.getParams().setParameter("http.useragent",
 	 Constants.USER_AGENT_STRING);
 
 	  if (useProxy) {
-	 String host = System.getProperty("http.proxyHost"); //
-	 String port = System.getProperty("http.proxyPort"); //
+	 String host = System.getProperty("http.proxyHost");
+	 String port = System.getProperty("http.proxyPort");
 	 if (host != null && !host.isEmpty() &&
 	 port != null && !port.isEmpty()) {
 	 int p = Integer.parseInt(port);
 	 client.getHostConfiguration().setProxy(host, p);
-	 String user = System.getProperty("http.proxyUser"); //
-	 String pass = System.getProperty("http.proxyPassword"); //
+	 String user = System.getProperty("http.proxyUser");
+	 String pass = System.getProperty("http.proxyPassword");
 	 if (user != null && !user.isEmpty() && pass != null) {
 	 client.getState().setProxyCredentials(new AuthScope(host, p),
 	 new UsernamePasswordCredentials(user, pass));
@@ -69,11 +69,11 @@ public class BKUHelper {
 	@SuppressWarnings("deprecation")
 	public static HttpClient getHttpClient(boolean useProxy) {
 		HttpClient client = new HttpClient();
-		client.getParams().setParameter("http.useragent", //
+		client.getParams().setParameter("http.useragent",
 				Constants.USER_AGENT_STRING);
 
 
-		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY); //
+		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY);
 
 		if (useProxy) {
 			String host = System.getProperty("http.proxyHost");//

@@ -66,11 +66,11 @@ public class MobileBKUConnector implements BkuSlConnector {
 				String responseData = handler.postSLRequest(this.state.getURL(), request);
 
 				// Now we have received some data lets check it:
-				log.trace("Response from mobile BKU: " + responseData); //
+				log.trace("Response from mobile BKU: " + responseData);
 
 				handler.handleSLRequestResponse(responseData);
 			} catch (Exception ex) {
-				log.error("Error in PostSLRequestThread", ex); //
+				log.error("Error in PostSLRequestThread", ex);
 				this.state.threadException = ex;
 				this.state.displayError(ex);
 				throw new SignatureException(ex);
@@ -81,14 +81,14 @@ public class MobileBKUConnector implements BkuSlConnector {
 				this.state.checkCredentials();
 
 				if (this.state.status.errorMessage != null &&
-						this.state.status.errorMessage.equals("cancel")) //
+						this.state.status.errorMessage.equals("cancel"))
 					throw new SignatureException(new IllegalStateException());
 
 				// Post credentials
 				try {
 					String responseData = handler.postCredentials();
 
-					if (responseData.contains("undecided.aspx?sid=")) { //
+					if (responseData.contains("undecided.aspx?sid=")) {
 						// handle polling
 						this.state.showOpenAppMessageWithSMSandCancel();
 
@@ -102,12 +102,12 @@ public class MobileBKUConnector implements BkuSlConnector {
 					} else {
 
 					    // Now we have received some data lets check it:
-						log.trace("Response from mobile BKU: " + responseData); //
+						log.trace("Response from mobile BKU: " + responseData);
 						handler.handleCredentialsResponse(responseData);
 					}
 
 				} catch (Exception ex) {
-					log.error("Error in PostCredentialsThread", ex); //
+					log.error("Error in PostCredentialsThread", ex);
 					this.state.threadException = new IllegalStateException();
 					throw new SignatureException(new IllegalStateException());
 				}
@@ -130,15 +130,15 @@ public class MobileBKUConnector implements BkuSlConnector {
 					if (aStatus.qrCodeURL != null) {
 						this.state.showQR();
 						if (this.state.status.errorMessage != null &&
-								this.state.status.errorMessage.equals("cancel")) //
+								this.state.status.errorMessage.equals("cancel"))
 							throw new SignatureException(new IllegalStateException());
 						if (aStatus.qrCodeURL == null) {
 							try {
 								String response = aHandler.postSMSRequest();
-								log.trace("Response from mobile BKU: " + response); //
+								log.trace("Response from mobile BKU: " + response);
 								handler.handleCredentialsResponse(response);
 							} catch (Exception ex) {
-								log.error("Error in PostCredentialsThread", ex); //
+								log.error("Error in PostCredentialsThread", ex);
 								this.state.threadException = new IllegalStateException();
 								throw new SignatureException(new IllegalStateException());
 							}
@@ -151,10 +151,10 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 							this.state.showFingerPrintInformation();
 							if (this.state.status.errorMessage != null &&
-									this.state.status.errorMessage.equals("cancel")) //
+									this.state.status.errorMessage.equals("cancel"))
 								throw new SignatureException(new IllegalStateException());
 						} catch (Exception ex) {
-							log.error("Error in PostCredentialsThread", ex); //
+							log.error("Error in PostCredentialsThread", ex);
 							this.state.threadException = new IllegalStateException();
 							//this.state.displayError(ex);
 							throw new SignatureException(new IllegalStateException());
@@ -166,7 +166,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 								response = aHandler.postSMSRequest();
 								handler.handleCredentialsResponse(response);
 							} catch (Exception e) {
-								log.error("Error in PostCredentialsThread", e); //
+								log.error("Error in PostCredentialsThread", e);
 								this.state.threadException = e;
 								this.state.displayError(e);
 								throw new SignatureException(e);
@@ -184,18 +184,18 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 
 					if (this.state.status.errorMessage != null &&
-							this.state.status.errorMessage.equals("cancel")) //
+							this.state.status.errorMessage.equals("cancel"))
 						throw new SignatureException(new IllegalStateException());
 
 					// Post TAN
 					try {
 						responseData = handler.postTAN();
-						log.trace("Response from mobile BKU: " + responseData); //
+						log.trace("Response from mobile BKU: " + responseData);
 
 						// Now we have received some data lets check it:
 						handler.handleTANResponse(responseData);
 					} catch (Exception ex) {
-						log.error("Error in PostTanThread", ex); //
+						log.error("Error in PostTanThread", ex);
 						this.state.threadException = ex;
 						this.state.displayError(ex);
 						throw new SignatureException(ex);
@@ -213,7 +213,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 
 		if (this.state.status instanceof ATrustStatus) {
 			if (this.state.status.errorMessage != null &&
-				this.state.status.errorMessage.equals("cancel")) { //
+				this.state.status.errorMessage.equals("cancel")) {
 					this.state.status.errorMessage = null;
 					return true;
 			}

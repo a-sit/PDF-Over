@@ -254,17 +254,17 @@ public class OutputComposite extends StateComposite {
 
 			FileDialog save = new FileDialog(this.getShell(),
 					SWT.SAVE | SWT.NATIVE);
-			save.setFilterExtensions(new String[] { "*.pdf", "*" }); // //
+			save.setFilterExtensions(new String[] { "*.pdf", "*" });
 			save.setFilterNames(new String[] {
-					Messages.getString("common.PDFExtension_Description"), //
-					Messages.getString("common.AllExtension_Description")}); //
+					Messages.getString("common.PDFExtension_Description"),
+					Messages.getString("common.AllExtension_Description")});
 			save.setFilterPath(inputFolder.getAbsolutePath());
 			save.setFileName(proposedName);
 
 			outputFileName = save.open();
 			inputFolder = null;
 		}
-		log.debug("Trying to save to '" + outputFileName + "'"); // //
+		log.debug("Trying to save to '" + outputFileName + "'");
 
 		this.outputFile = saveResultAsFile(inputFolder, outputFileName);
 		this.saveFailed = (this.outputFile == null);
@@ -293,8 +293,8 @@ public class OutputComposite extends StateComposite {
 			targetFile = new File(inputFolder, target);
 
 		if (targetFile.exists()) {
-			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"), //
-					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()), //
+			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"),
+					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()),
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)
 			{
@@ -313,18 +313,18 @@ public class OutputComposite extends StateComposite {
 						source.getByteArray().length);
 				outstream.close();
 			} catch (FileNotFoundException e) {
-				log.warn("Failed to open output file", e); //
+				log.warn("Failed to open output file", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"), //
+						String.format(Messages.getString("output.save_failed"),
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
 					return null;
 				retry = true;
 			} catch (IOException e) {
-				log.error("I/O Error", e); //
+				log.error("I/O Error", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"), //
+						String.format(Messages.getString("output.save_failed"),
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
@@ -335,8 +335,8 @@ public class OutputComposite extends StateComposite {
 
 		if (!targetFile.exists())
 		{
-			log.error("Tried to save file " + targetFile.getName() + //
-					", but it doesn't exist"); //
+			log.error("Tried to save file " + targetFile.getName() +
+					", but it doesn't exist");
 			return null;
 		}
 		return targetFile;
@@ -369,7 +369,7 @@ public class OutputComposite extends StateComposite {
 			try {
 				OutputComposite.this.saveDocument();
 			} catch (Exception ex) {
-				log.error("SaveSelectionListener: ", ex); //
+				log.error("SaveSelectionListener: ", ex);
 			}
 		}
 	}
@@ -396,7 +396,7 @@ public class OutputComposite extends StateComposite {
 				// Normalize filename
 				File f = new File(FilenameUtils.normalize(
 						OutputComposite.this.outputFile.getAbsolutePath()));
-				log.debug("Trying to open " + f.toString()); //
+				log.debug("Trying to open " + f.toString());
 				// work around for the case of Linux and Java version 8
 				if (isSpecialCase()) {
 					reReloadResources(f.toString());
@@ -405,13 +405,13 @@ public class OutputComposite extends StateComposite {
 				else if (Desktop.isDesktopSupported()) {
 					Desktop.getDesktop().open(f);
 				} else {
-					log.info("AWT Desktop is not supported on this platform"); //
+					log.info("AWT Desktop is not supported on this platform");
 					Program.launch(f.getAbsolutePath());
 				}
 			} catch (IOException ex) {
-				log.error("OpenSelectionListener: ", ex); //
+				log.error("OpenSelectionListener: ", ex);
 				ErrorDialog error = new ErrorDialog(getShell(),
-						String.format(Messages.getString("error.FailedToOpenDocument"), //
+						String.format(Messages.getString("error.FailedToOpenDocument"),
 								ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
 				if (error.open() == SWT.RETRY)
 					widgetSelected(e);
@@ -443,18 +443,18 @@ public class OutputComposite extends StateComposite {
 
 		boolean isSCase = false;
 		try {
-			String os = System.getProperty("os.name").toLowerCase(); //
-			if (os.contains("linux")) { //
-				String version = System.getProperty("java.version"); //
-				if (version.contains(".")) { //
-					String[] parts = version.split("\\."); //
+			String os = System.getProperty("os.name").toLowerCase();
+			if (os.contains("linux")) {
+				String version = System.getProperty("java.version");
+				if (version.contains(".")) {
+					String[] parts = version.split("\\.");
 					isSCase = Integer.valueOf(parts[0]) <= 8 ? true : false;
 				} else {
 					isSCase = Integer.valueOf(version) <= 8 ? true : false;
 				}
 			}
 		} catch (Exception e) {
-			log.debug("Error: " + e.getMessage()); //
+			log.debug("Error: " + e.getMessage());
 			isSCase = false;
 		}
 		return isSCase;
@@ -467,31 +467,31 @@ public class OutputComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		this.lbl_success_message.setText(Messages
-				.getString("output.success_message")); //
+				.getString("output.success_message"));
 		if (this.outputFile == null) {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message")); //
+					.getString("output.link_save_message"));
 		} else {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_open_message")); //
+					.getString("output.link_open_message"));
 		}
-		this.btn_save.setText(Messages.getString("common.Save")); //
+		this.btn_save.setText(Messages.getString("common.Save"));
 	}
 
 	/**
 	 * @param str
 	 */
 	public void reReloadResources(String str) {
-		this.lbl_success_message.setText(Messages.getString("output.success_message")); //
+		this.lbl_success_message.setText(Messages.getString("output.success_message"));
 		if (this.outputFile == null) {
 			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message")); //
+					.getString("output.link_save_message"));
 		} else {
-			String str2 = "File location: " + str; //
+			String str2 = "File location: " + str;
 			this.lbl_success_message.setText(str2);
-			this.lnk_saved_file.setText(""); //
+			this.lnk_saved_file.setText("");
 		}
-		this.btn_save.setText(Messages.getString("common.Save")); //
+		this.btn_save.setText(Messages.getString("common.Save"));
 	}
 
 

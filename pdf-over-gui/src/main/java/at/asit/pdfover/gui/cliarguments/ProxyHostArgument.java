@@ -30,7 +30,7 @@ public class ProxyHostArgument extends Argument {
 	 * Constructor
 	 */
 	public ProxyHostArgument() {
-		super(new String[] {"-proxy"}, "argument.help.proxyhost"); // //
+		super(new String[] {"-proxy"}, "argument.help.proxyhost");
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class ProxyHostArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Proxy host argument invalid!", ex); //
+			log.error("Proxy host argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.proxyhost") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.proxyhost") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.proxyhost") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.proxyhost") + this.getHelpText(), null);
 	}
 
 }

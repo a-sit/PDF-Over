@@ -34,7 +34,7 @@ public class Constants {
 	static private final Logger log = LoggerFactory.getLogger(Constants.class);
 
 	/** Application name */
-	public static final String APP_NAME = "PDF-Over"; //
+	public static final String APP_NAME = "PDF-Over";
 
 	/** Application version */
 	public static final String APP_VERSION;
@@ -52,9 +52,9 @@ public class Constants {
 	}
 
 	/** Application name + version */
-	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION); //
+	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION);
 
-	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE"; //
+	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE";
     public static final String DEFAULT_POSTFIX = "_signed";
 
     static {
@@ -65,7 +65,7 @@ public class Constants {
 	/**
 	 *
 	 */
-	public static final String SIGNATURE_FIELD_NAME_CONF = "signature_field_name"; //
+	public static final String SIGNATURE_FIELD_NAME_CONF = "signature_field_name";
 
 	/** Current display - used for Colors */
 	private static Display display = Display.getCurrent();
@@ -74,39 +74,39 @@ public class Constants {
 	public static final Locale[] SUPPORTED_LOCALES = { Locale.GERMAN, Locale.ENGLISH };
 
 	/** Configuration directory */
-	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over"; // //
+	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over";
 
 	/** The default configuration file name */
-	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config"; //
+	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config";
 
 	/** The configuration version file name */
-	public static final String CONFIG_VERSION_FILENAME = ".version"; //
+	public static final String CONFIG_VERSION_FILENAME = ".version";
 
 	/** The signature placeholder cache file name */
-	public static final String PLACEHOLDER_CACHE_FILENAME = ".placeholder"; //
+	public static final String PLACEHOLDER_CACHE_FILENAME = ".placeholder";
 
 	/** The signature placeholder cache properties file name */
-	public static final String PLACEHOLDER_CACHE_PROPS_FILENAME = ".placeholder.properties"; //
+	public static final String PLACEHOLDER_CACHE_PROPS_FILENAME = ".placeholder.properties";
 
 	/**
 	 * The minimum PDF-AS configuration version (older ones will be backed up
 	 * and updated
 	 */
-	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.2.1-snapshot"; //
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.2.1-snapshot";
 
 	/** The configuration backup filename */
-	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup"; //
+	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup";
 
 	/** File suffix for the signed document */
-	public final static String SIGNED_SUFFIX = "_signed"; //
+	public final static String SIGNED_SUFFIX = "_signed";
 
 	/** Local BKU URL */
-	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request"; //
+	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request";
 
 	/** Default Mobile BKU URL */
 	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile/https-security-layer-request/default.aspx";
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx"; //
-	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx"; //
+	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx";
+	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
 
 	/** Default signature placeholder transparency */
 	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
@@ -115,24 +115,24 @@ public class Constants {
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	/** PDF-Over User Agent string */
-	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION); // //
+	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION);
 
 	/** Current release file */
-	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt"; //
+	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt";
 
 	/** Update URL */
-	public static final String UPDATE_URL = "https://technology.a-sit.at/en/pdf-over/"; //
+	public static final String UPDATE_URL = "https://technology.a-sit.at/en/pdf-over/";
 
 	/** True */
-	public static final String TRUE = "true"; //
+	public static final String TRUE = "true";
 
 	/** False */
-	public static final String FALSE = "false"; //
+	public static final String FALSE = "false";
 
 	/* Configuration parameters */
 
 	/** The bku config parameter */
-	public static final String CFG_BKU = "BKU"; //
+	public static final String CFG_BKU = "BKU";
 
 	/**
 	 * The value for the Signature position in the configuration file values for
@@ -142,93 +142,93 @@ public class Constants {
 	 *
 	 * vx:= float value vy:= float value vp:= integer value
 	 */
-	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION"; //
+	public static final String CFG_SIGNATURE_POSITION = "SIGNATURE_POSITION";
 
 	/** The use marker parameter (true/false) */
-	public static final String CFG_USE_MARKER = "USE_MARKER"; //
+	public static final String CFG_USE_MARKER = "USE_MARKER";
 
 	/** The use of signature fields instead of QR codes */
-	public static final String CFG_USE_SIGNATURE_FIELDS = "USE_FIELDS";  //
+	public static final String CFG_USE_SIGNATURE_FIELDS = "USE_FIELDS";
 
 	/** */
-	public static final String CFG_ENABLE_PLACEHOLDER = "USE_PLACEHOLDER_SEARCH"; //
+	public static final String CFG_ENABLE_PLACEHOLDER = "USE_PLACEHOLDER_SEARCH";
 
 	/** The signature placeholder transparency config parameter (0-255) */
-	public static final String CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY"; //
+	public static final String CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY = "SIGNATURE_PLACEHOLDER_TRANSPARENCY";
 
 	/** The mobile number config parameter */
-	public static final String CFG_MOBILE_NUMBER = "MOBILE_NUMBER"; //
+	public static final String CFG_MOBILE_NUMBER = "MOBILE_NUMBER";
 
 	/** The signature note config parameter */
-	public static final String CFG_SIGNATURE_NOTE = "SIGNATURE_NOTE"; //
+	public static final String CFG_SIGNATURE_NOTE = "SIGNATURE_NOTE";
 
 	/** The signature locale config parameter */
-	public static final String CFG_SIGNATURE_LOCALE = "SIGNLOCALE"; //
+	public static final String CFG_SIGNATURE_LOCALE = "SIGNLOCALE";
 
 	/** The PDF/A-compatibility config parameter */
-	public static final String CFG_SIGNATURE_PDFA_COMPAT = "SIGNATURE_PDFA_COMPAT"; //
+	public static final String CFG_SIGNATURE_PDFA_COMPAT = "SIGNATURE_PDFA_COMPAT";
 
 	/** Mobile bku url config parameter */
-	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL"; //
+	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL";
 
 	/** Mobile bku type config parameter */
-	public static final String CFG_MOBILE_BKU_TYPE = "MOBILE_BKU_TYPE"; //
+	public static final String CFG_MOBILE_BKU_TYPE = "MOBILE_BKU_TYPE";
 
 	/** Mobile bku BASE64 config parameter */
-	public static final String CFG_MOBILE_BKU_BASE64 = "MOBILE_BKU_BASE64"; //
+	public static final String CFG_MOBILE_BKU_BASE64 = "MOBILE_BKU_BASE64";
 
 	/** KeyStore enabled config parameter */
-	public static final String CFG_KEYSTORE_ENABLED = "KEYSTORE_ENABLED"; //
+	public static final String CFG_KEYSTORE_ENABLED = "KEYSTORE_ENABLED";
 
 	/** KeyStore file config parameter */
-	public static final String CFG_KEYSTORE_FILE = "KEYSTORE_FILE"; //
+	public static final String CFG_KEYSTORE_FILE = "KEYSTORE_FILE";
 
 	/** KeyStore type config parameter */
-	public static final String CFG_KEYSTORE_TYPE = "KEYSTORE_TYPE"; //
+	public static final String CFG_KEYSTORE_TYPE = "KEYSTORE_TYPE";
 
 	/** KeyStore alias config parameter */
-	public static final String CFG_KEYSTORE_ALIAS = "KEYSTORE_ALIAS"; //
+	public static final String CFG_KEYSTORE_ALIAS = "KEYSTORE_ALIAS";
 
 	/** KeyStore store password config parameter */
-	public static final String CFG_KEYSTORE_STOREPASS = "KEYSTORE_STOREPASS"; //
+	public static final String CFG_KEYSTORE_STOREPASS = "KEYSTORE_STOREPASS";
 
 	/** KeyStore key password config parameter */
-	public static final String CFG_KEYSTORE_KEYPASS = "KEYSTORE_KEYPASS"; //
+	public static final String CFG_KEYSTORE_KEYPASS = "KEYSTORE_KEYPASS";
 
 	/** The emblem config parameter */
-	public static final String CFG_EMBLEM = "EMBLEM"; //
+	public static final String CFG_EMBLEM = "EMBLEM";
 
 	/** The locale config parameter */
-	public static final String CFG_LOCALE = "LOCALE"; //
+	public static final String CFG_LOCALE = "LOCALE";
 
 	/** The update check config parameter */
-	public static final String CFG_UPDATE_CHECK = "UPDATE_CHECK"; //
+	public static final String CFG_UPDATE_CHECK = "UPDATE_CHECK";
 
 	/** The proxy host config parameter */
-	public static final String CFG_PROXY_HOST = "PROXY_HOST"; //
+	public static final String CFG_PROXY_HOST = "PROXY_HOST";
 
 	/** The proxy port config parameter */
-	public static final String CFG_PROXY_PORT = "PROXY_PORT"; //
+	public static final String CFG_PROXY_PORT = "PROXY_PORT";
 
 	/** The proxy username config parameter */
-	public static final String CFG_PROXY_USER = "PROXY_USER"; //
+	public static final String CFG_PROXY_USER = "PROXY_USER";
 
 	/** The proxy password config parameter */
-	public static final String CFG_PROXY_PASS = "PROXY_PASS"; //
+	public static final String CFG_PROXY_PASS = "PROXY_PASS";
 
 	/** The output folder config parameter */
-	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER"; //
+	public static final String CFG_OUTPUT_FOLDER = "OUTPUT_FOLDER";
 
 	public static final String CFG_POSTFIX = "SAVE_FILE_POSTFIX";
 
 	/** The main window size (Format: width,height) */
-	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE"; //
+	public static final String CFG_MAINWINDOW_SIZE = "MAINWINDOW_SIZE";
 
 	/** The theme */
-	public static final String CFG_THEME = "THEME"; //
+	public static final String CFG_THEME = "THEME";
 
 	/** Download URL for accepted Certificates*/
-	public static final String CFG_DOWNLOAD_URL="DOWNLOAD_URL"; //
+	public static final String CFG_DOWNLOAD_URL="DOWNLOAD_URL";
 
 	/* Theme constants */
 
@@ -329,7 +329,7 @@ public class Constants {
 	/* Resources */
 
 	/** Shell icon resource */
-	public static final String RES_ICON = "/icons/icon.png"; //
+	public static final String RES_ICON = "/icons/icon.png";
 
 	/** Config image resource */
 	public static final String RES_IMG_CONFIG = getResImgConfig();
@@ -338,44 +338,44 @@ public class Constants {
 		switch (THEME) {
 		default:
 		case DEFAULT:
-			return "/img/config.png"; //
+			return "/img/config.png";
 		case GEMPLUSH:
-			return "/img/config_p.png"; //
+			return "/img/config_p.png";
 		}
 	}
 
 	/** Config inactive image resource */
-	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png"; //
+	public static final String RES_IMG_CONFIG_DISABLED = "/img/config_disabled.png";
 
 	/** Error image resource */
-	public static final String RES_IMG_ERROR = "/img/error.png"; //
+	public static final String RES_IMG_ERROR = "/img/error.png";
 
 	/** Card image resource */
-	public static final String RES_IMG_CARD = "/img/karte.png"; //
+	public static final String RES_IMG_CARD = "/img/karte.png";
 
 	/** Mobile phone image resource */
-	public static final String RES_IMG_MOBILE = "/img/handy.png"; //
+	public static final String RES_IMG_MOBILE = "/img/handy.png";
 
 	/** Package resource path */
-	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/"; //
+	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/";
 
 	/** Zipped configuration resource */
-	public static final String RES_CFG_ZIP = "/cfg/PDFASConfig.zip"; //
+	public static final String RES_CFG_ZIP = "/cfg/PDFASConfig.zip";
 
 	/** Accepted certificate resource path */
-	public static final String RES_CERT_PATH = "/certificates/"; //
+	public static final String RES_CERT_PATH = "/certificates/";
 
 	/** Accepted certificate list resource */
-	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml"; //
+	public static final String RES_CERT_LIST = RES_CERT_PATH + "certificates.xml";
 
-	public static final String LABEL_TAN = "input_tan"; //
+	public static final String LABEL_TAN = "input_tan";
 
-	public static final String LABEL_SIGN_BTN = "SignButton"; //
+	public static final String LABEL_SIGN_BTN = "SignButton";
 
-	public static final String LABEL_PHONE_NUMBER = "handynummer"; //
+	public static final String LABEL_PHONE_NUMBER = "handynummer";
 
-	public static final String LABEL_SIGN_PASS = "signaturpasswort"; //
+	public static final String LABEL_SIGN_PASS = "signaturpasswort";
 
-	public static final String LABEL_BTN_IDF = "Button_Identification"; //
+	public static final String LABEL_BTN_IDF = "Button_Identification";
 
 }

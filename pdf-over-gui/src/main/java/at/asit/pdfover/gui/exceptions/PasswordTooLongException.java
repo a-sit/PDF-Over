@@ -28,7 +28,7 @@ public class PasswordTooLongException extends InvalidPasswordException {
 	 * Constructor
 	 */
 	public PasswordTooLongException() {
-		super(Messages.getString("exception.PasswordTooLong")); //
+		super(Messages.getString("exception.PasswordTooLong"));
 	}
 	/**
 	 *

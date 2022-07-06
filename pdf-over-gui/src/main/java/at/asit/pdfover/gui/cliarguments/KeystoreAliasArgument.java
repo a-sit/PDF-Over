@@ -30,7 +30,7 @@ public class KeystoreAliasArgument extends Argument {
 	 * Constructor
 	 */
 	public KeystoreAliasArgument() {
-		super(new String[] {"-ksalias"}, "argument.help.keystorealias"); // //
+		super(new String[] {"-ksalias"}, "argument.help.keystorealias");
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class KeystoreAliasArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Keystore alias argument invalid!", ex); //
+			log.error("Keystore alias argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.keystorealias") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.keystorealias") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.keystorealias") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.keystorealias") + this.getHelpText(), null);
 	}
 
 }

@@ -102,13 +102,13 @@ public class SigningState extends State {
 					this.threadException = new SignatureException(new IllegalStateException());
 			}
 
-			String message = Messages.getString("error.Signatur"); //
+			String message = Messages.getString("error.Signatur");
 			if (this.threadException instanceof SignatureException) {
 				Throwable cause = this.threadException;
 				while (cause.getCause() != null)
 					cause = cause.getCause();
 				if (cause instanceof ConnectException)
-					message += ": " + cause.getMessage(); //
+					message += ": " + cause.getMessage();
 				if (cause instanceof IllegalStateException) {
 					// Dummy exception - don't display error, go back to BKU Selection
 					this.setNextState(new BKUSelectionState(getStateMachine()));

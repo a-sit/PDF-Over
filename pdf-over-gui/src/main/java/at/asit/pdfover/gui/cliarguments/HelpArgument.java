@@ -31,8 +31,8 @@ public class HelpArgument extends Argument {
 	 * Constructor
 	 */
 	public HelpArgument() {
-		super(new String[] {"-h", "-?", "--help" }, // // //
-				"argument.help.help"); //
+		super(new String[] {"-h", "-?", "--help" },
+				"argument.help.help");
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +46,7 @@ public class HelpArgument extends Argument {
 
 		Iterator<Argument> argumentIterator = arguments.iterator();
 
-		System.out.println(Messages.getString("argument.info.help")); //
+		System.out.println(Messages.getString("argument.info.help"));
 
 		while(argumentIterator.hasNext()) {
 			Argument argument = argumentIterator.next();
@@ -56,12 +56,12 @@ public class HelpArgument extends Argument {
 				sb.append(argument.getCommandOptions()[i]);
 
 				if(i < argument.getCommandOptions().length -1) {
-					sb.append(", "); //
+					sb.append(", ");
 				}
 			}
 
-			System.out.println(sb.toString() + ":"); //
-			System.out.println("\t" + argument.getHelpText()); //
+			System.out.println(sb.toString() + ":");
+			System.out.println("\t" + argument.getHelpText());
 		}
 
 		handler.setRequireExit(true);

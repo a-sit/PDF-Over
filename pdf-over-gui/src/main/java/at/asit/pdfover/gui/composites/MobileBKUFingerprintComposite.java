@@ -151,10 +151,10 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		if (errorMessage == null)
-			this.lblError.setText(""); //
+			this.lblError.setText("");
 		else
 			this.lblError.setText(
-					Messages.getString("error.Title") + ": " + errorMessage); // //
+					Messages.getString("error.Title") + ": " + errorMessage);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		if (this.refVal != null) {
 			this.lblRefVal.setText(this.refVal);
 		} else {
-			this.lblRefVal.setText(""); //
+			this.lblRefVal.setText("");
 		}
 
 	}
@@ -219,17 +219,17 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 			try {
 				String signatureData = MobileBKUFingerprintComposite.this
 						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) { //
-					log.debug("Trying to open " + signatureData); //
+				if (signatureData != null && !signatureData.equals("")) {
+					log.debug("Trying to open " + signatureData);
 					if (Desktop.isDesktopSupported()) {
 						Desktop.getDesktop().browse(new URI(signatureData));
 					} else {
-						log.info("SWT Desktop is not supported on this platform"); //
+						log.info("SWT Desktop is not supported on this platform");
 						Program.launch(signatureData);
 					}
 				}
 			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex); //
+				log.error("OpenSelectionListener: ", ex);
 			}
 		}
 	}
@@ -297,7 +297,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		fd_lblRefVal.top = new FormAttachment(30, -10);
 		//fd_lblRefVal.bottom = new FormAttachment(50, -10);
 		this.lblRefVal.setLayoutData(fd_lblRefVal);
-		this.lblRefVal.setText("test"); //
+		this.lblRefVal.setText("test");
 
 		this.lblFPLabel = new Label(containerComposite, SWT.NATIVE);
 		this.lblFPLabel.setAlignment(SWT.LEFT);
@@ -371,11 +371,11 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue")); //
-		this.lblFPLabel.setText(Messages.getString("tanEnter.FP")); //
-		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show")); //
-		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip")); //
-		this.btn_cancel.setText(Messages.getString("common.Cancel")); //
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS")); //
+				.getString("tanEnter.ReferenceValue"));
+		this.lblFPLabel.setText(Messages.getString("tanEnter.FP"));
+		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show"));
+		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
+		this.btn_cancel.setText(Messages.getString("common.Cancel"));
+		this.btn_sms.setText(Messages.getString("tanEnter.SMS"));
 	}
 }

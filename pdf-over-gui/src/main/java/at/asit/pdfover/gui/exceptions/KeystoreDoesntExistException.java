@@ -33,6 +33,6 @@ public class KeystoreDoesntExistException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreDoesntExistException(final File keystore, int resumeIndex) {
-		super(String.format(Messages.getString("error.KeyStoreFileNotExist"), keystore.getPath()), resumeIndex); //
+		super(String.format(Messages.getString("error.KeyStoreFileNotExist"), keystore.getPath()), resumeIndex);
 	}
 }

@@ -54,13 +54,13 @@ public class CachedFileNameEmblem implements Emblem {
 	private static final Logger log = LoggerFactory
 			.getLogger(CachedFileNameEmblem.class);
 
-	private final String fileDir = System.getProperty("user.home") + File.separator + ".pdf-over"; // //
-	private final String imgFileName = ".emblem"; //
-	private final String imgFileExt = "png"; //
-	private final String propFileName = ".emblem.properties"; //
+	private final String fileDir = System.getProperty("user.home") + File.separator + ".pdf-over";
+	private final String imgFileName = ".emblem";
+	private final String imgFileExt = "png";
+	private final String propFileName = ".emblem.properties";
 
-	private final String imgProp = "IMG"; //
-	private final String hshProp = "HSH"; //
+	private final String imgProp = "IMG";
+	private final String hshProp = "HSH";
 	private final int maxWidth  = 480;
 	private final int maxHeight = 600;
 
@@ -186,7 +186,7 @@ public class CachedFileNameEmblem implements Emblem {
 		BufferedImage result = img;
 		if (width != owidth || height == oheight) {
 			//scale image
-			log.debug("Scaling emblem: " + owidth + "x" + oheight + " to " + width + "x" + height); // // // //
+			log.debug("Scaling emblem: " + owidth + "x" + oheight + " to " + width + "x" + height);
 			result = new BufferedImage(width, height, img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType());
 			Graphics2D g = result.createGraphics();
 			g.drawImage(img, 0, 0, width, height, null);
@@ -202,7 +202,7 @@ public class CachedFileNameEmblem implements Emblem {
 	public String getFileName() {
 		String emblemImg = this.fileName;
 		String emblemHsh = null;
-		String cachedEmblemFileName = this.fileDir + File.separator + this.imgFileName + "." + this.imgFileExt; //
+		String cachedEmblemFileName = this.fileDir + File.separator + this.imgFileName + "." + this.imgFileExt;
 
 		if (emblemImg == null || !(new File(emblemImg).exists()))
 			return null;
@@ -215,13 +215,13 @@ public class CachedFileNameEmblem implements Emblem {
 			if (emblemImg.equals(emblemProps.getProperty(this.imgProp))) {
 				emblemHsh = getFileHash(emblemImg);
 				if (emblemHsh.equals(emblemProps.getProperty(this.hshProp))) {
-					log.debug("Emblem cache hit: " + cachedEmblemFileName); //
-					return cachedEmblemFileName; //
+					log.debug("Emblem cache hit: " + cachedEmblemFileName);
+					return cachedEmblemFileName;
 				}
 			}
-			log.debug("Emblem cache miss"); //
+			log.debug("Emblem cache miss");
 		} catch (Exception e) {
-			log.warn("Can't load emblem cache", e); //
+			log.warn("Can't load emblem cache", e);
 		}
 
 		try {
@@ -236,12 +236,12 @@ public class CachedFileNameEmblem implements Emblem {
 			img = fixImage(img, imgFile);
 			img = scaleImage(img, this.maxWidth, this.maxHeight);
 
-			File file = new File(this.fileDir, this.imgFileName + "." + this.imgFileExt); //
+			File file = new File(this.fileDir, this.imgFileName + "." + this.imgFileExt);
 			ImageIO.write(img, this.imgFileExt, file); // ignore returned boolean
 			OutputStream out = new FileOutputStream(new File(this.fileDir, this.propFileName));
 			emblemProps.store(out, null);
 		} catch (IOException e) {
-			log.error("Can't save emblem cache", e); //
+			log.error("Can't save emblem cache", e);
 			return this.fileName;
 		}
 		return cachedEmblemFileName;
@@ -261,12 +261,12 @@ public class CachedFileNameEmblem implements Emblem {
 	 */
 	public String getOriginalFileHash() {
 		if (this.fileName == null || !(new File(this.fileName).exists()))
-			return ""; //
+			return "";
 		try {
 			return getFileHash(this.fileName);
 		} catch (IOException e) {
 			log.debug("Error getting file hash", e);
-			return ""; //
+			return "";
 		}
 	}
 }

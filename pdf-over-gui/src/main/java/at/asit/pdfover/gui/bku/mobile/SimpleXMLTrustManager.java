@@ -64,7 +64,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 	public SimpleXMLTrustManager() throws Exception {
 		// create a "default" JSSE X509TrustManager.
 
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509"); //
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
 		tmf.init((KeyStore) null);
 
 		TrustManager tms[] = tmf.getTrustManagers();
@@ -94,8 +94,8 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		NodeList certificateList = certificates.getChildNodes();
 
 		try {
-			if (!certificates.getNodeName().equals("certificates")) { //
-				throw new Exception("Used certificates xml is invalid! no certificates node"); //
+			if (!certificates.getNodeName().equals("certificates")) {
+				throw new Exception("Used certificates xml is invalid! no certificates node");
 			}
 
 			//add trusted certificates to certStore//
@@ -104,26 +104,26 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 
 					Node certificateNode = certificateList.item(i);
 
-					if (certificateNode.getNodeName().equals("#text")) { //
+					if (certificateNode.getNodeName().equals("#text")) {
 						continue; // Ignore dummy text node ..
 					}
 
-					if (!certificateNode.getNodeName().equals("certificate")) { //
-						log.warn("Ignoring XML node: " + certificateNode.getNodeName()); //
+					if (!certificateNode.getNodeName().equals("certificate")) {
+						log.warn("Ignoring XML node: " + certificateNode.getNodeName());
 						continue;
 					}
 
 					String certResource = Constants.RES_CERT_PATH + certificateNode.getTextContent();
 
-					X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509"). //
+					X509Certificate cert = (X509Certificate) CertificateFactory.getInstance("X509").
 							generateCertificate(this.getClass().getResourceAsStream(certResource));
 
 					myKeyStore.setCertificateEntry(certificateNode.getTextContent(), cert);
 
-					log.debug("Loaded certificate : " + certResource); //
+					log.debug("Loaded certificate : " + certResource);
 
 				} catch (Exception ex) {
-					log.error("Failed to load certificate [" + "]", ex); // //
+					log.error("Failed to load certificate [" + "]", ex);
 				}
 			}
 
@@ -156,7 +156,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 		 * Find some other way to initialize, or else we have to fail the
 		 * constructor.
 		 */
-		throw new Exception("Couldn't initialize ASITTrustManager"); //
+		throw new Exception("Couldn't initialize ASITTrustManager");
 	}
 
 	/*
@@ -174,7 +174,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			try {
 				this.sunJSSEX509TrustManager.checkClientTrusted(arg0, arg1);
 			} catch (CertificateException ex2) {
-				log.info("checkClientTrusted: ", ex2); //
+				log.info("checkClientTrusted: ", ex2);
 				throw ex2;
 			}
 		}
@@ -195,7 +195,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 			try {
 				this.sunJSSEX509TrustManager.checkServerTrusted(arg0, arg1);
 			} catch (CertificateException ex2) {
-				log.info("checkServerTrusted: ", ex2); //
+				log.info("checkServerTrusted: ", ex2);
 				throw ex2;
 			}
 		}

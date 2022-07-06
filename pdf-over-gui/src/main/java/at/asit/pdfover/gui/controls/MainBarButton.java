@@ -66,7 +66,7 @@ public abstract class MainBarButton extends Canvas {
 
 	private Color inactiveText = null;
 
-	private String text = ""; //
+	private String text = "";
 
 	private boolean active = true;
 

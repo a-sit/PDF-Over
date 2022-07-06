@@ -51,17 +51,17 @@ public class LocalBKUConnector implements BkuSlConnector {
 	/**
 	 * HTTP Response server HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SERVER = "server"; //
+	public final static String BKU_RESPONSE_HEADER_SERVER = "server";
 
 	/**
 	 * HTTP Response user-agent HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent"; //
+	public final static String BKU_RESPONSE_HEADER_USERAGENT = "user-agent";
 
 	/**
 	 * HTTP Response SignatureLayout HEADER
 	 */
-	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout"; //
+	public final static String BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT = "SignatureLayout";
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
@@ -74,12 +74,12 @@ public class LocalBKUConnector implements BkuSlConnector {
 
 			String sl_request = request.getRequest();
 			if (request.getSignatureData() == null) {
-				method.addParameter("XMLRequest", sl_request); //
+				method.addParameter("XMLRequest", sl_request);
 			} else {
 				StringPart xmlpart = new StringPart(
-						"XMLRequest", sl_request, "UTF-8"); // //
+						"XMLRequest", sl_request, "UTF-8");
 
-				FilePart filepart = new FilePart("fileupload",	//
+				FilePart filepart = new FilePart("fileupload",
 						new FileUploadSource(request.getSignatureData()));
 
 				Part[] parts = { xmlpart, filepart };
@@ -87,7 +87,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 				method.setRequestEntity(new MultipartRequestEntity(parts, method
 						.getParams()));
 			}
-			log.trace("SL REQUEST: " + sl_request); //
+			log.trace("SL REQUEST: " + sl_request);
 
 			int returnCode = client.executeMethod(method);
 
@@ -98,22 +98,22 @@ public class LocalBKUConnector implements BkuSlConnector {
 
 			String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
 			if (server == null)
-				server = ""; //
+				server = "";
 			String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
 			if (userAgent == null)
-				userAgent = ""; //
+				userAgent = "";
 			String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
 
 			String response = method.getResponseBodyAsString();
-			log.debug("SL Response: " + response); //
+			log.debug("SL Response: " + response);
 			SLResponse slResponse = new SLResponse(response, server,
 					userAgent, signatureLayout);
 			return slResponse;
 		} catch (HttpException e) {
-			log.error("LocalBKUConnector: ", e); //
+			log.error("LocalBKUConnector: ", e);
 			throw new SignatureException(e);
 		} catch (IOException e) {
-			log.error("LocalBKUConnector: ", e); //
+			log.error("LocalBKUConnector: ", e);
 			throw new SignatureException(e);
 		}
 	}

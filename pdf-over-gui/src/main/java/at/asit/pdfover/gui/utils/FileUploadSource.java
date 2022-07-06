@@ -47,7 +47,7 @@ public class FileUploadSource implements PartSource {
 
 	@Override
 	public String getFileName() {
-		return "sign.pdf"; //
+		return "sign.pdf";
 	}
 
 	@Override

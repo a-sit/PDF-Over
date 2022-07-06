@@ -52,7 +52,7 @@ public class OutputState extends State {
 			ConfigProvider config = getStateMachine().getConfigProvider();
 			Status status = getStateMachine().getStatus();
 
-			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp"); //
+			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp");
 
 			if(!tmpDir.exists()) {
 				tmpDir.mkdir();
@@ -83,7 +83,7 @@ public class OutputState extends State {
 
 		if (status.getSignResult() == null) {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
-					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL); //
+					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new PrepareSigningState(getStateMachine()));
 			} else {

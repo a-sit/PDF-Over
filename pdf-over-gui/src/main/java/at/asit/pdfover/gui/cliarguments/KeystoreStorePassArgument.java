@@ -30,7 +30,7 @@ public class KeystoreStorePassArgument extends Argument {
 	 * Constructor
 	 */
 	public KeystoreStorePassArgument() {
-		super(new String[] {"-kspass"}, "argument.help.keystorestorepass"); // //
+		super(new String[] {"-kspass"}, "argument.help.keystorestorepass");
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class KeystoreStorePassArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Keystore password argument invalid!", ex); //
+			log.error("Keystore password argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.keystorestorepass") + this.getHelpText(), null);
 	}
 
 }

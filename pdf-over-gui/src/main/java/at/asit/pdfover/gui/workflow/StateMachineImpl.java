@@ -92,9 +92,9 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			try {
 				current.run();
 			} catch (Exception e) {
-				log.error("StateMachine update: ", e); //
+				log.error("StateMachine update: ", e);
 				ErrorDialog errorState = new ErrorDialog(this.getMainShell(),
-						Messages.getString("error.Unexpected"), BUTTONS.OK); //
+						Messages.getString("error.Unexpected"), BUTTONS.OK);
 				//errorState.setException(e);
 				//jumpToState(errorState);
 				errorState.open();
@@ -109,7 +109,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 
 				if (this.mainWindow != null
 						&& !this.mainWindow.getShell().isDisposed()) {
-					log.debug("Allowing MainWindow to update its state for " //
+					log.debug("Allowing MainWindow to update its state for "
 							+ current);
 					current.updateMainWindowBehavior();
 					this.mainWindow.applyBehavior();
@@ -121,13 +121,13 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 				}
 
 				if (next == null) {
-					log.info("Next state is null -> exit"); //
+					log.info("Next state is null -> exit");
 					this.status.setCurrentState(next);
 					break;
 				}
 
-				log.debug("Changing state from: " //
-						+ current + " to " //
+				log.debug("Changing state from: "
+						+ current + " to "
 						+ next.toString());
 				this.status.setCurrentState(next);
 			}
@@ -181,7 +181,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 			this.shell.open();
 			this.shell.layout();
 		} catch (Exception e) {
-			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage()); //
+			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage());
 			this.display = null;
 			this.mainWindow = null;
 			this.shell = null;
@@ -214,7 +214,7 @@ public class StateMachineImpl implements StateMachine, GUIProvider {
 					Composite.class, int.class, State.class);
 			composite = constructor.newInstance(getComposite(), style, state);
 		} catch (Exception e) {
-			log.error("Could not create Composite for Class " //
+			log.error("Could not create Composite for Class "
 					+ compositeClass.getName(), e);
 		}
 		return composite;

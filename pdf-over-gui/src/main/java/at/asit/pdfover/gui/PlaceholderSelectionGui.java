@@ -99,7 +99,7 @@ public class PlaceholderSelectionGui extends Dialog {
 	private void createContents() {
 		this.shlInfo = new Shell(getParent(), getStyle());
 		this.shlInfo.setSize(290, 195);
-		this.shlInfo.setText("Info"); //
+		this.shlInfo.setText("Info");
 		this.shlInfo.setLayout(null);
 
 		this.placeholderNameDropDown = new Combo(this.shlInfo, SWT.NONE);
@@ -119,7 +119,7 @@ public class PlaceholderSelectionGui extends Dialog {
 			}
 		});
 		this.btnCancel.setBounds(175, 118, 75, 25);
-		this.btnCancel.setText("Cancel"); //
+		this.btnCancel.setText("Cancel");
 
 		this.btnOk = new Button(this.shlInfo, SWT.NONE);
 		this.btnOk.setBounds(94, 118, 75, 25);
@@ -131,11 +131,11 @@ public class PlaceholderSelectionGui extends Dialog {
 				PlaceholderSelectionGui.this.shlInfo.dispose();
 			}
 		});
-		this.btnOk.setText("Ok"); //
+		this.btnOk.setText("Ok");
 
 		Label lbLabel = new Label(this.shlInfo, SWT.WRAP);
 		lbLabel.setBounds(27, 10, 223, 41);
-		lbLabel.setText(Messages.getString("positioning.placeholder")); //
+		lbLabel.setText(Messages.getString("positioning.placeholder"));
 
 	}
 

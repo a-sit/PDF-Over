@@ -31,7 +31,7 @@ public class PasswordArgument extends Argument {
 	 * Constructor
 	 */
 	public PasswordArgument() {
-		super(new String[] {"-p"}, "argument.help.password"); // //
+		super(new String[] {"-p"}, "argument.help.password");
 	}
 
 	/**
@@ -59,13 +59,13 @@ public class PasswordArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Mobile BKU password argument invalid!", ex); //
+			log.error("Mobile BKU password argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.password") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.password") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.password") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.password") + this.getHelpText(), null);
 	}
 
 }

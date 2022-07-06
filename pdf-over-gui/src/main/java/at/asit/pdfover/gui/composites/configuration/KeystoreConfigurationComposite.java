@@ -174,12 +174,12 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				FileDialog dialog = new FileDialog(
 						KeystoreConfigurationComposite.this.getShell(), SWT.OPEN);
 				dialog.setFilterExtensions(new String[] {
-						"*.p12;*.pkcs12;*.pfx;*.ks;*.jks", "*.p12;*.pkcs12;*.pfx;", "*.ks;*.jks*.", "*" }); // // // //
+						"*.p12;*.pkcs12;*.pfx;*.ks;*.jks", "*.p12;*.pkcs12;*.pfx;", "*.ks;*.jks*.", "*" });
 				dialog.setFilterNames(new String[] {
-						Messages.getString("common.KeystoreExtension_Description"), //
-						Messages.getString("common.PKCS12Extension_Description"), //
-						Messages.getString("common.KSExtension_Description"), //
-						Messages.getString("common.AllExtension_Description") }); //
+						Messages.getString("common.KeystoreExtension_Description"),
+						Messages.getString("common.PKCS12Extension_Description"),
+						Messages.getString("common.KSExtension_Description"),
+						Messages.getString("common.AllExtension_Description") });
 				String fileName = dialog.open();
 				File file = null;
 				if (fileName != null) {
@@ -217,24 +217,24 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				try {
 					loadKeystore();
 				} catch (KeyStoreException ex) {
-					log.error("Error loading keystore", ex); //
-					showErrorDialog(Messages.getString("error.KeyStore")); //
+					log.error("Error loading keystore", ex);
+					showErrorDialog(Messages.getString("error.KeyStore"));
 				} catch (FileNotFoundException ex) {
-					log.error("Error loading keystore", ex); //
+					log.error("Error loading keystore", ex);
 					showErrorDialog(String.format(Messages.getString(
-							"error.KeyStoreFileNotExist"), f.getName())); //
+							"error.KeyStoreFileNotExist"), f.getName()));
 				} catch (NoSuchAlgorithmException ex) {
-					log.error("Error loading keystore", ex); //
-					showErrorDialog(Messages.getString("error.KeyStore")); //
+					log.error("Error loading keystore", ex);
+					showErrorDialog(Messages.getString("error.KeyStore"));
 				} catch (CertificateException ex) {
-					log.error("Error loading keystore", ex); //
-					showErrorDialog(Messages.getString("error.KeyStore")); //
+					log.error("Error loading keystore", ex);
+					showErrorDialog(Messages.getString("error.KeyStore"));
 				} catch (IOException ex) {
-					log.error("Error loading keystore", ex); //
-					showErrorDialog(Messages.getString("error.KeyStore")); //
+					log.error("Error loading keystore", ex);
+					showErrorDialog(Messages.getString("error.KeyStore"));
 				} catch (NullPointerException ex) {
-					log.error("Error loading keystore - NPE?", ex); //
-					showErrorDialog(Messages.getString("error.KeyStore")); //
+					log.error("Error loading keystore - NPE?", ex);
+					showErrorDialog(Messages.getString("error.KeyStore"));
 				}
 			}
 		});
@@ -292,29 +292,29 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 
 	private void initKeystoreTypes() {
 		this.keystoreTypes = new HashMap<String, String>();
-		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_PKCS12"), "PKCS12"); // //
-		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_JKS"), "JCEKS"); // //
+		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_PKCS12"), "PKCS12");
+		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_JKS"), "JCEKS");
 	}
 
 	/**
 	 * @param fileName
 	 */
 	protected void performKeystoreFileChanged(String fileName) {
-		log.debug("Selected keystore file: " + fileName); //
+		log.debug("Selected keystore file: " + fileName);
 		this.configurationContainer.setKeyStoreFile(fileName);
 		KeystoreConfigurationComposite.this.txtKeystoreFile.setText(fileName);
 		int i = fileName.lastIndexOf('.');
 		if (i > 0) {
 			String ext = fileName.substring(i+1);
 			if (
-					ext.equalsIgnoreCase("p12") || //
-					ext.equalsIgnoreCase("pkcs12") || //
-					ext.equalsIgnoreCase("pfx")) //
-				performKeystoreTypeChanged("PKCS12"); //
+					ext.equalsIgnoreCase("p12") ||
+					ext.equalsIgnoreCase("pkcs12") ||
+					ext.equalsIgnoreCase("pfx"))
+				performKeystoreTypeChanged("PKCS12");
 			else if (
-					ext.equalsIgnoreCase("ks") || //
-					ext.equalsIgnoreCase("jks")) //
-				performKeystoreTypeChanged("JCEKS"); //
+					ext.equalsIgnoreCase("ks") ||
+					ext.equalsIgnoreCase("jks"))
+				performKeystoreTypeChanged("JCEKS");
 		}
 	}
 
@@ -322,7 +322,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 * @param type
 	 */
 	protected void performKeystoreTypeChanged(String type) {
-		log.debug("Selected keystore type: " + type); //
+		log.debug("Selected keystore type: " + type);
 		this.configurationContainer.setKeyStoreType(type);
 		for (int i = 0; i < this.cmbKeystoreType.getItemCount(); ++i) {
 			if (this.keystoreTypes.get(this.cmbKeystoreType.getItem(i)).equals(type)) {
@@ -336,7 +336,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 * @param storepass
 	 */
 	protected void performKeystoreStorePassChanged(String storepass) {
-		log.debug("Changed keystore store password"); //
+		log.debug("Changed keystore store password");
 		this.configurationContainer.setKeyStoreStorePass(storepass);
 		this.txtKeystoreStorePass.setText(storepass);
 	}
@@ -345,7 +345,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 * @param alias
 	 */
 	protected void performKeystoreAliasChanged(String alias) {
-		log.debug("Selected keystore alias: " + alias); //
+		log.debug("Selected keystore alias: " + alias);
 		this.configurationContainer.setKeyStoreAlias(alias);
 		this.cmbKeystoreAlias.setText(alias);
 	}
@@ -354,7 +354,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 * @param keypass
 	 */
 	protected void performKeystoreKeyPassChanged(String keypass) {
-		log.debug("Changed keystore key password"); //
+		log.debug("Changed keystore key password");
 		this.configurationContainer.setKeyStoreKeyPass(keypass);
 		this.txtKeystoreKeyPass.setText(keypass);
 	}
@@ -412,7 +412,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			if (ksf.exists())
 				loadKeystore();
 		} catch (Exception e) {
-			log.error("Error loading keystore", e); //
+			log.error("Error loading keystore", e);
 		}
 		performKeystoreAliasChanged(config.getKeyStoreAlias());
 		performKeystoreKeyPassChanged(config.getKeyStoreKeyPass());
@@ -483,19 +483,19 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.grpKeystore.setText(Messages.getString("keystore_config.Keystore_Title")); //
-		this.lblKeystoreFile.setText(Messages.getString("keystore_config.KeystoreFile")); //
-		this.btnBrowse.setText(Messages.getString("common.browse")); //
-		this.txtKeystoreFile.setToolTipText(Messages.getString("keystore_config.KeystoreFile_ToolTip")); //
-		this.lblKeystoreType.setText(Messages.getString("keystore_config.KeystoreType")); //
+		this.grpKeystore.setText(Messages.getString("keystore_config.Keystore_Title"));
+		this.lblKeystoreFile.setText(Messages.getString("keystore_config.KeystoreFile"));
+		this.btnBrowse.setText(Messages.getString("common.browse"));
+		this.txtKeystoreFile.setToolTipText(Messages.getString("keystore_config.KeystoreFile_ToolTip"));
+		this.lblKeystoreType.setText(Messages.getString("keystore_config.KeystoreType"));
 		initKeystoreTypes();
 		this.cmbKeystoreType.setItems(this.keystoreTypes.keySet().toArray(new String[0]));
-		this.lblKeystoreStorePass.setText(Messages.getString("keystore_config.KeystoreStorePass")); //
-		this.txtKeystoreStorePass.setToolTipText(Messages.getString("keystore_config.KeystoreStorePass_ToolTip")); //
-		this.btnLoad.setText(Messages.getString("keystore_config.Load")); //
-		this.btnLoad.setToolTipText(Messages.getString("keystore_config.Load_ToolTip")); //
-		this.lblKeystoreAlias.setText(Messages.getString("keystore_config.KeystoreAlias")); //
-		this.lblKeystoreKeyPass.setText(Messages.getString("keystore_config.KeystoreKeyPass")); //
-		this.txtKeystoreKeyPass.setToolTipText(Messages.getString("keystore_config.KeystoreKeyPass_ToolTip")); //
+		this.lblKeystoreStorePass.setText(Messages.getString("keystore_config.KeystoreStorePass"));
+		this.txtKeystoreStorePass.setToolTipText(Messages.getString("keystore_config.KeystoreStorePass_ToolTip"));
+		this.btnLoad.setText(Messages.getString("keystore_config.Load"));
+		this.btnLoad.setToolTipText(Messages.getString("keystore_config.Load_ToolTip"));
+		this.lblKeystoreAlias.setText(Messages.getString("keystore_config.KeystoreAlias"));
+		this.lblKeystoreKeyPass.setText(Messages.getString("keystore_config.KeystoreKeyPass"));
+		this.txtKeystoreKeyPass.setToolTipText(Messages.getString("keystore_config.KeystoreKeyPass_ToolTip"));
 	}
 }

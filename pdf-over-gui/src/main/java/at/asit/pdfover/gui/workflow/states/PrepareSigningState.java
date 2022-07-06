@@ -80,33 +80,33 @@ public class PrepareSigningState extends State {
 				final String proxyPass = configuration.getProxyPass();
 
 				if (proxyHost != null && !proxyHost.isEmpty()) {
-					log.debug("Setting proxy host to " + proxyHost); //
-					System.setProperty("http.proxyHost", proxyHost); //
-					System.setProperty("https.proxyHost", proxyHost); //
+					log.debug("Setting proxy host to " + proxyHost);
+					System.setProperty("http.proxyHost", proxyHost);
+					System.setProperty("https.proxyHost", proxyHost);
 				}
 
 				if (proxyPort > 0 && proxyPort <= 0xFFFF) {
 					String port = Integer.toString(proxyPort);
-					log.debug("Setting proxy port to " + port); //
-					System.setProperty("http.proxyPort", port); //
-					System.setProperty("https.proxyPort", port); //
+					log.debug("Setting proxy port to " + port);
+					System.setProperty("http.proxyPort", port);
+					System.setProperty("https.proxyPort", port);
 				}
 
 				if (proxyUser != null && !proxyUser.isEmpty()) {
-					log.debug("Setting proxy username to " + proxyUser); //
-					System.setProperty("http.proxyUser", proxyUser); //
-					System.setProperty("https.proxyUser", proxyUser); //
+					log.debug("Setting proxy username to " + proxyUser);
+					System.setProperty("http.proxyUser", proxyUser);
+					System.setProperty("https.proxyUser", proxyUser);
 				}
 
 				if (proxyPass != null) {
-					log.debug("Setting proxy password"); //
-					System.setProperty("http.proxyPassword", proxyPass); //
-					System.setProperty("https.proxyPassword", proxyPass); //
+					log.debug("Setting proxy password");
+					System.setProperty("http.proxyPassword", proxyPass);
+					System.setProperty("https.proxyPassword", proxyPass);
 				}
 
 				if (proxyUser != null && !proxyUser.isEmpty() &&
 					proxyPass != null && !proxyPass.isEmpty()) {
-					log.debug("Enabling proxy authentication"); //
+					log.debug("Enabling proxy authentication");
 					Authenticator.setDefault(new Authenticator() {
 						/* (non-Javadoc)
 						 * @see java.net.Authenticator#getPasswordAuthentication()
@@ -153,7 +153,7 @@ public class PrepareSigningState extends State {
 				if (configuration.getSignatureNote() != null
 						&& !configuration.getSignatureNote().isEmpty()) {
 					this.state.signatureParameter.setProperty(
-							"SIG_NOTE", configuration.getSignatureNote()); //
+							"SIG_NOTE", configuration.getSignatureNote());
 				}
 
 				this.state.signatureParameter
@@ -172,7 +172,7 @@ public class PrepareSigningState extends State {
 						.prepare(this.state.signatureParameter);
 
 			} catch (Exception e) {
-				log.error("PrepareDocumentThread: ", e); //
+				log.error("PrepareDocumentThread: ", e);
 				this.state.threadException = e;
 			} finally {
 				this.state.updateStateMachine();
@@ -228,7 +228,7 @@ public class PrepareSigningState extends State {
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(getStateMachine()
 					.getGUIProvider().getMainShell(),
-					Messages.getString("error.PrepareDocument"), //
+					Messages.getString("error.PrepareDocument"),
 					BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if (error.open() == SWT.RETRY) {
@@ -249,7 +249,7 @@ public class PrepareSigningState extends State {
 		} else if (status.getBKU() == BKUs.KS) {
 			this.setNextState(new KSState(getStateMachine()));
 		} else {
-			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!"); //
+			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");
 			this.setNextState(new BKUSelectionState(getStateMachine()));
 		}
 	}

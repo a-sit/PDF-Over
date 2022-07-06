@@ -32,7 +32,7 @@ public class InvalidPortException extends PDFOverGUIException {
 	 * @param port invalid port number
 	 */
 	public InvalidPortException(int port) {
-		super(String.format(Messages.getString("exception.InvalidPort"), Integer.toString(port), 1, 0xffff)); //
+		super(String.format(Messages.getString("exception.InvalidPort"), Integer.toString(port), 1, 0xffff));
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class InvalidPortException extends PDFOverGUIException {
 	 * @param portString invalid port string
 	 */
 	public InvalidPortException(String portString, Throwable source) {
-		super(String.format(Messages.getString("exception.InvalidPort"), portString, 1, 0xffff), source); //
+		super(String.format(Messages.getString("exception.InvalidPort"), portString, 1, 0xffff), source);
 	}
 }

@@ -91,7 +91,7 @@ public class PositioningComposite extends StateComposite {
 		this.bottomBar.setLayout(new FormLayout());
 
 		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
-		this.btnSign.setText(Messages.getString("positioning.sign")); //
+		this.btnSign.setText(Messages.getString("positioning.sign"));
 		FormData fd_btnSign = new FormData();
 		fd_btnSign.right = new FormAttachment(100);
 		fd_btnSign.top = new FormAttachment(0);
@@ -105,7 +105,7 @@ public class PositioningComposite extends StateComposite {
 		});
 
 		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
-		this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
+		this.btnNewPage.setText(Messages.getString("positioning.newPage"));
 		FormData fd_btnNewPage = new FormData();
 		fd_btnNewPage.right = new FormAttachment(this.btnSign);
 		fd_btnNewPage.top = new FormAttachment(0);
@@ -326,19 +326,19 @@ public class PositioningComposite extends StateComposite {
 			int numPages = this.numPages;
 			if ((previousPage > numPages) && (currentPage <= numPages)) {
 				// Was on new page
-				this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
+				this.btnNewPage.setText(Messages.getString("positioning.newPage"));
 				this.btnNewPage.setSelection(false);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 1);
 			} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 				// Go to new page
-				this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //
+				this.btnNewPage.setText(Messages.getString("positioning.removeNewPage"));
 				this.btnNewPage.setSelection(true);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 2);
 			}
 			this.scrollbar.setSelection(currentPage);
-			this.lblPage.setText(String.format(Messages.getString("positioning.page"), currentPage, numPages)); //
+			this.lblPage.setText(String.format(Messages.getString("positioning.page"), currentPage, numPages));
 		});
 		EventQueue.invokeLater(() -> {
 			PositioningComposite.this.viewer.showPage(page);
@@ -422,11 +422,11 @@ public class PositioningComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		if (this.currentPage <= this.numPages)
-			this.btnNewPage.setText(Messages.getString("positioning.newPage")); //
+			this.btnNewPage.setText(Messages.getString("positioning.newPage"));
 		else
-			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage")); //
-		this.btnSign.setText(Messages.getString("positioning.sign")); //
-		this.lblPage.setText(String.format(Messages.getString("positioning.page"), //
+			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage"));
+		this.btnSign.setText(Messages.getString("positioning.sign"));
+		this.lblPage.setText(String.format(Messages.getString("positioning.page"),
 				this.currentPage, this.numPages));
 	}
 }

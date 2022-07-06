@@ -31,7 +31,7 @@ public class PhoneNumberArgument extends Argument {
 	 * Constructor
 	 */
 	public PhoneNumberArgument() {
-		super(new String[] {"-n" }, "argument.help.number"); // //
+		super(new String[] {"-n" }, "argument.help.number");
 	}
 
 
@@ -62,13 +62,13 @@ public class PhoneNumberArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Phone Number Argument invalid!", ex); //
+			log.error("Phone Number Argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.number") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.number") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.number") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.number") + this.getHelpText(), null);
 	}
 
 }

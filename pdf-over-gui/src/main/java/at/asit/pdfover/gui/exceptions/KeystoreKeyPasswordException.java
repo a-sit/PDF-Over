@@ -30,6 +30,6 @@ public class KeystoreKeyPasswordException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreKeyPasswordException(int resumeIndex) {
-		super(Messages.getString("error.KeyStoreKeyPass"), resumeIndex); //
+		super(Messages.getString("error.KeyStoreKeyPass"), resumeIndex);
 	}
 }

@@ -84,7 +84,7 @@ public class ArgumentHandler {
 				this.cliArguments.put(commandOptions[i], arg);
 			}
 		} catch (Exception e) {
-			log.error("Error instantiating CLI argument" , e); //
+			log.error("Error instantiating CLI argument" , e);
 		}
 	}
 
@@ -101,8 +101,8 @@ public class ArgumentHandler {
 				i = this.cliArguments.get(args[i]).handleArgument(args, i, this);
 			} else {
 				// Assume we got the document we want to sign
-				if (this.cliArguments.containsKey("-i")) { //
-					i = this.cliArguments.get("-i").handleArgument(args, i-1, this); //
+				if (this.cliArguments.containsKey("-i")) {
+					i = this.cliArguments.get("-i").handleArgument(args, i-1, this);
 				}
 			}
 		}

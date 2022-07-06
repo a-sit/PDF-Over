@@ -52,7 +52,7 @@ public class MobileBKUHelper {
 	 * +(countryCode)99999999999 00(countryCode)99999999999 099999999999
 	 * 1030199999999999 (A-Trust Test bku)
 	 */
-	private static final String NUMBER_REGEX = "^((\\+[\\d]{2})|(00[\\d]{2})|(0)|(10301))([1-9][\\d]+)$"; //
+	private static final String NUMBER_REGEX = "^((\\+[\\d]{2})|(00[\\d]{2})|(0)|(10301))([1-9][\\d]+)$";
 
 	/**
 	 * Extracts a substring from data starting after start and ending with end
@@ -77,10 +77,10 @@ public class MobileBKUHelper {
 				return data.substring(startidx, endidx);
 			}
 			log.error("extracting substring: end not valid!: " + start + " ... " + end); ////
-			throw new Exception("End string not available! Mobile BKU site changed?"); //
+			throw new Exception("End string not available! Mobile BKU site changed?");
 		}
 		log.error("extracting substring: start not valid!: " + start + " ... " + end); ////
-		throw new Exception("Start string not available! Mobile BKU site changed?"); //
+		throw new Exception("Start string not available! Mobile BKU site changed?");
 	}
 
 	/**
@@ -105,16 +105,16 @@ public class MobileBKUHelper {
 		while ((startidx = data.indexOf(start, endidx)) != -1) {
 			endidx = data.indexOf('>', startidx);
 			if (endidx == -1) {
-				log.error("extracting tag: unterminated tag! " + tag + " (" + param + "=" + value + ")"); //// // //
-				throw new Exception("Tag not found! Mobile BKU site changed?"); //
+				log.error("extracting tag: unterminated tag! " + tag + " (" + param + "=" + value + ")"); ////
+				throw new Exception("Tag not found! Mobile BKU site changed?");
 			}
 			String found = data.substring(startidx, endidx + 1);
-			if (found.contains(param + "='" + value + "'") || // //
-			    found.contains(param + "=\"" + value + "\"")) // //
+			if (found.contains(param + "='" + value + "'") ||
+			    found.contains(param + "=\"" + value + "\""))
 				return found;
 		}
-		log.info("extracting tag: not found!: " + tag + " (" + param + "='" + value + "')"); //// // //
-		throw new Exception("Tag not found! Mobile BKU site changed?"); //
+		log.info("extracting tag: not found!: " + tag + " (" + param + "='" + value + "')"); ////
+		throw new Exception("Tag not found! Mobile BKU site changed?");
 	}
 
 	/**
@@ -139,14 +139,14 @@ public class MobileBKUHelper {
 		String found = extractTagWithParam(data, tag, param, value);
 		int startidx = found.indexOf(returnparam + '=');
 		if (startidx == -1) {
-			log.error("extracting tag: param not found! " + tag + " (" + param + "=" + value + ") - " + returnparam); //// // //
-			throw new Exception("Tag not found! Mobile BKU site changed?"); //
+			log.error("extracting tag: param not found! " + tag + " (" + param + "=" + value + ") - " + returnparam); ////
+			throw new Exception("Tag not found! Mobile BKU site changed?");
 		}
 		startidx += returnparam.length() + 1;
 		int endidx = found.indexOf(found.charAt(startidx), startidx + 1);
 		if (endidx == -1) {
-			log.error("extracting tag: unterminated param value! " + tag + " (" + param + "=" + value + ") - " + returnparam); //// // //
-			throw new Exception("Tag not found! Mobile BKU site changed?"); //
+			log.error("extracting tag: unterminated param value! " + tag + " (" + param + "=" + value + ") - " + returnparam); ////
+			throw new Exception("Tag not found! Mobile BKU site changed?");
 		}
 		return found.substring(startidx + 1, endidx);
 	}
@@ -187,10 +187,10 @@ public class MobileBKUHelper {
 			String param, String value) throws Exception {
 		String found = extractTagWithParam(data, tag, param, value);
 		int startidx = data.indexOf(found) + found.length();
-		int endidx = data.indexOf("</" + tag + ">", startidx); // //
+		int endidx = data.indexOf("</" + tag + ">", startidx);
 		if (endidx == -1) {
-			log.error("extracting tag: closing tag not found! " + tag + " (" + param + "=" + value + ")"); //// // //
-			throw new Exception("Tag not found! Mobile BKU site changed?"); //
+			log.error("extracting tag: closing tag not found! " + tag + " (" + param + "=" + value + ")"); ////
+			throw new Exception("Tag not found! Mobile BKU site changed?");
 		}
 		return data.substring(startidx, endidx);
 	}
@@ -220,15 +220,15 @@ public class MobileBKUHelper {
 
 		String normalNumber = matcher.group(6);
 
-		if (countryCode.equals("10301")) { //
+		if (countryCode.equals("10301")) {
 			// A-Trust Testnumber! Don't change
 			return number;
 		}
 
-		countryCode = countryCode.replace("00", "+"); // //
+		countryCode = countryCode.replace("00", "+");
 
-		if (countryCode.equals("0")) { //
-			countryCode = "+43"; //
+		if (countryCode.equals("0")) {
+			countryCode = "+43";
 		}
 
 		return countryCode + normalNumber;
@@ -272,14 +272,14 @@ public class MobileBKUHelper {
 	 * @return the fully qualified URL
 	 */
 	public static String getQualifiedURL(String fragment, URL base) {
-		if (fragment.startsWith("http:") || fragment.startsWith("https:")) // //
+		if (fragment.startsWith("http:") || fragment.startsWith("https:"))
 			return fragment;
 		int p = base.getPort();
-		String port = ((p != -1) && (p != base.getDefaultPort())) ? ":" + p : ""; // //
-		if (fragment.startsWith("/")) { //
-			return base.getProtocol() + "://" + base.getHost() + port + fragment; //
+		String port = ((p != -1) && (p != base.getDefaultPort())) ? ":" + p : "";
+		if (fragment.startsWith("/")) {
+			return base.getProtocol() + "://" + base.getHost() + port + fragment;
 		}
-		return stripQueryString(base.toString()) + "/" + fragment; //
+		return stripQueryString(base.toString()) + "/" + fragment;
 	}
 
 	/**
@@ -287,8 +287,8 @@ public class MobileBKUHelper {
 	 */
 	@SuppressWarnings("deprecation")
 	public static void registerTrustedSocketFactory() {
-		Protocol.registerProtocol("https", //
-				new Protocol("https", new TrustedSocketFactory(), 443)); //
+		Protocol.registerProtocol("https",
+				new Protocol("https", new TrustedSocketFactory(), 443));
 	}
 
 	/**

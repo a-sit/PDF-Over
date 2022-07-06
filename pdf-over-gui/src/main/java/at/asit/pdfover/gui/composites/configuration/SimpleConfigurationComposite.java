@@ -407,13 +407,13 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			FileDialog dialog = new FileDialog(
 					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
 			dialog.setFilterExtensions(new String[] {
-					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" }); // // // // //
+					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" });
 			dialog.setFilterNames(new String[] {
-					Messages.getString("common.ImageExtension_Description"), //
-					Messages.getString("common.JPGExtension_Description"), //
-					Messages.getString("common.PNGExtension_Description"), //
-					Messages.getString("common.GIFExtension_Description"), //
-					Messages.getString("common.AllExtension_Description") }); //
+					Messages.getString("common.ImageExtension_Description"),
+					Messages.getString("common.JPGExtension_Description"),
+					Messages.getString("common.PNGExtension_Description"),
+					Messages.getString("common.GIFExtension_Description"),
+					Messages.getString("common.AllExtension_Description") });
 			String fileName = dialog.open();
 			File file = null;
 			if (fileName != null) {
@@ -447,7 +447,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			if (this.signer != null) {
 				SignatureParameter param = this.signer.getPDFSigner().newParameter();
 				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
-					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote()); //
+					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote());
 				}
 
 				param.setSignatureLanguage(this.configurationContainer.getSignatureLocale().getLanguage());
@@ -477,7 +477,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 						ImageConverter.convertToSWT(CachedFileNameEmblem.fixImage(
 								ImageIO.read(imgFile), imgFile)));
 			} catch (IOException e) {
-				log.error("Error reading image", e); //
+				log.error("Error reading image", e);
 			}
 		} else {
 			this.logo = null;
@@ -491,10 +491,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		try {
 			setEmblemFileInternal(filename, false);
 		} catch (Exception ex) {
-			log.error("processEmblemChanged: ", ex); //
+			log.error("processEmblemChanged: ", ex);
 			ErrorDialog dialog = new ErrorDialog(
 					getShell(),
-					Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //
+					Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK);
 			dialog.open();
 		}
 	}
@@ -506,8 +506,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		} catch (Exception ex) {
 			this.txtMobileNumberErrorMarker.setVisible(true);
 			this.txtMobileNumberErrorMarker.setToolTipText(Messages
-					.getString("error.InvalidPhoneNumber")); //
-			log.error("processNumberChanged: ", ex); //
+					.getString("error.InvalidPhoneNumber"));
+			log.error("processNumberChanged: ", ex);
 			this.redraw();
 			this.doLayout();
 		}
@@ -516,17 +516,17 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	int getLocaleElementIndex(Locale locale) {
 		for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
 			if (Constants.SUPPORTED_LOCALES[i].equals(locale)) {
-				log.debug("Locale: {} IDX: {}",locale, i); // //
+				log.debug("Locale: {} IDX: {}",locale, i);
 				return i;
 			}
 		}
 
-		log.warn("NO Locale match for {}", locale); //
+		log.warn("NO Locale match for {}", locale);
 		return 0;
 	}
 
 	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
-		log.debug("Selected Sign Locale: {}", selected); //
+		log.debug("Selected Sign Locale: {}", selected);
 		this.configurationContainer.setSignatureLocale(selected);
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 
@@ -537,7 +537,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 
     void preformProfileSelectionChanged(Profile newProfile) {
-		log.debug("Signature Profile {} was selected", newProfile.name()); //
+		log.debug("Signature Profile {} was selected", newProfile.name());
 		Profile oldProfile = this.configurationContainer.getSignatureProfile();
     	this.configurationContainer.setSignatureProfile(newProfile);
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
@@ -589,7 +589,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationContainer.setMobileNumber(number);
 		number = this.configurationContainer.getMobileNumber();
 		if (number == null) {
-			this.txtMobileNumber.setText(""); //
+			this.txtMobileNumber.setText("");
 			return;
 		}
 		this.txtMobileNumber.setText(number);
@@ -623,7 +623,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.configurationContainer.setEmblem(
 					provider.getDefaultEmblemPersistent());
 		} catch (InvalidEmblemFile e) {
-			log.error("Failed to set emblem!", e); //
+			log.error("Failed to set emblem!", e);
 		}
 
 		this.configurationContainer.setSignatureLocale(
@@ -653,10 +653,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				setEmblemFileInternal(emblemFile, true);
 				this.btnClearImage.setSelection(true);
 			} catch (Exception e1) {
-				log.error("Failed to load emblem: ", e1); //
+				log.error("Failed to load emblem: ", e1);
 				ErrorDialog dialog = new ErrorDialog(
 						getShell(),
-						Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK); //
+						Messages.getString("error.FailedToLoadEmblem"), BUTTONS.OK);
 				dialog.open();
 			}
 		}

@@ -73,13 +73,13 @@ public class StatusImpl implements Status {
 	 */
 	public void setCurrentState(State currentState) {
 		//if (this.previousState == this.currentState)
-		//	log.error("Changing to same state? " + this.currentState); //
+		//	log.error("Changing to same state? " + this.currentState);
 
 		if (this.previousState != null && !this.previousState.equals(currentState))
 		{
 			//Reference to previous state will be lost - perform cleanup
-			log.debug("Changing from " + this.currentState + " to " + currentState); // //
-			log.debug("Cleaning up " + this.previousState); //
+			log.debug("Changing from " + this.currentState + " to " + currentState);
+			log.debug("Cleaning up " + this.previousState);
 			this.previousState.cleanUp();
 		}
 

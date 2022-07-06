@@ -30,7 +30,7 @@ public class OutputFolderArgument extends Argument {
 	 * Constructor
 	 */
 	public OutputFolderArgument() {
-		super(new String[] {"-o"}, "argument.help.output"); // //
+		super(new String[] {"-o"}, "argument.help.output");
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class OutputFolderArgument extends Argument {
 //					throw new FileNotFoundException(outputFolder);
 //				}
 //				if(!outputFolderDir.isDirectory()) {
-//					throw new IOException(outputFolderDir + Messages.getString("argument.error.output")); //
+//					throw new IOException(outputFolderDir + Messages.getString("argument.error.output"));
 //				}
 
 				getConfiguration().setDefaultOutputFolderOverlay(outputFolder);
@@ -63,13 +63,13 @@ public class OutputFolderArgument extends Argument {
 				return argOffset + 1;
 			}
 		} catch (Exception ex) {
-			log.error("Output folder argument invalid!", ex); //
+			log.error("Output folder argument invalid!", ex);
 			throw new InitializationException(
-					Messages.getString("argument.invalid.output") + this.getHelpText(), ex); //
+					Messages.getString("argument.invalid.output") + this.getHelpText(), ex);
 		}
 
 		throw new InitializationException(
-				Messages.getString("argument.invalid.output") + this.getHelpText(), null); //
+				Messages.getString("argument.invalid.output") + this.getHelpText(), null);
 	}
 
 }

@@ -32,7 +32,7 @@ public class PasswordTooShortException extends InvalidPasswordException {
 	 * Constructor
 	 */
 	public PasswordTooShortException() {
-		super(Messages.getString("exception.PasswordTooShort")); //
+		super(Messages.getString("exception.PasswordTooShort"));
 	}
 
 }
