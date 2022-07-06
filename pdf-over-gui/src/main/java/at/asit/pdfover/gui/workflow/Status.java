@@ -15,7 +15,11 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+// Imports
 import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -24,100 +28,104 @@ import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;
 
-/**
- * Interface for persistent status of state machine
- */
-public interface Status {
-	/**
-	 * Sets the document
-	 * @param document the document
-	 */
-	public void setDocument(File document);
+public class Status {
+	private static final Logger log = LoggerFactory.getLogger(Status.class);
 
-	/**
-	 * Gets the document
-	 * @return the document
-	 */
-	public File getDocument();
+	private File document = null;
 
-	/**
-	 * Sets the signature position
-	 * @param position the position
-	 */
-	public void setSignaturePosition(SignaturePosition position);
+	private SignaturePosition signaturePosition = null;
 
-	/**
-	 * Gets the signature position
-	 * @return the signature position
-	 */
-	public SignaturePosition getSignaturePosition();
+	private BKUs bku = BKUs.NONE;
 
-	/**
-	 * Sets the selected BKU
-	 * @param bku the selected BKU
-	 */
-	public void setBKU(BKUs bku);
+	private State currentState = null;
 
-	/**
-	 * Gets the selected BKU
-	 * @return the selected BKU
-	 */
-	public BKUs getBKU();
+	private State previousState = null;
 
-	/**
-	 * Gets the current state
-	 * @return the current state
-	 */
-	public State getCurrentState();
+	private SigningState signingState = null;
 
-	/**
-	 * Gets the main window behavior
-	 * @return the main window behavior
-	 */
-	public MainWindowBehavior getBehavior();
+	private SignResult signResult = null;
 
-	/**
-	 * Gets the previous State
-	 * @return the previous State
-	 */
-	public State getPreviousState();
+	private MainWindowBehavior behavior;
 
-	/**
-	 * Gets the signing state
-	 * @return the signing state
-	 */
-	public SigningState getSigningState();
+	private boolean searchForPlacehoderSignature = false;
 
-	/**
-	 * Sets the signing state
-	 * @param state the signing state
-	 */
-	public void setSigningState(SigningState state);
+	public Status() {
+		this.behavior = new MainWindowBehavior();
+	}
 
-	/**
-	 * Sets the sign result
-	 * @param signResult
-	 */
-	public void setSignResult(SignResult signResult);
+	public State getCurrentState() {
+		return this.currentState;
+	}
 
-	/**
-	 * Gets the sign Result
-	 * @return the sign result
-	 */
-	public SignResult getSignResult();
+	public void setCurrentState(State currentState) {
+		//if (this.previousState == this.currentState)
+		//	log.error("Changing to same state? " + this.currentState);
 
-	/**
-	 * Checks if search for placeholder signature-flag is on.
-	 *
-	 * @return true, if is search for placeholder signature
-	 */
-	public boolean isSearchForPlaceholderSignature();
+		if (this.previousState != this.currentState)
+		{
+			//Reference to previous state will be lost - perform cleanup
+			log.debug("Changing from " + this.currentState + " to " + currentState); //
+			log.debug("Cleaning up " + this.previousState);
+			this.previousState.cleanUp();
+		}
 
-	/**
-	 * Sets the search for placeholder signature-flag.
-	 *
-	 * @param value
-	 *            the new search for placeholder signature
-	 */
-	public void setSearchForPlaceholderSignature(boolean value);
+		this.previousState = this.currentState;
+		this.currentState = currentState;
+	}
+
+	public State getPreviousState() {
+		return this.previousState;
+	}
+
+	public void setDocument(File document) {
+		this.document = document;
+	}
+
+	public File getDocument() {
+		return this.document;
+	}
+
+	public void setSignaturePosition(SignaturePosition position) {
+		this.signaturePosition = position;
+	}
+
+	public SignaturePosition getSignaturePosition() {
+		return this.signaturePosition;
+	}
+
+	public void setBKU(BKUs bku) {
+		this.bku = bku;
+	}
+
+	public BKUs getBKU() {
+		return this.bku;
+	}
+
+	public MainWindowBehavior getBehavior() {
+		return this.behavior;
+	}
+
+	public SigningState getSigningState() {
+		return this.signingState;
+	}
+
+	public void setSigningState(SigningState state) {
+		this.signingState = state;
+	}
+
+	public void setSignResult(SignResult signResult) {
+		this.signResult = signResult;
+	}
+
+	public SignResult getSignResult() {
+		return this.signResult;
+	}
+
+	public boolean isSearchForPlaceholderSignature() {
+		return this.searchForPlacehoderSignature;
+	}
+
+	public void setSearchForPlaceholderSignature(boolean value) {
+		this.searchForPlacehoderSignature = value;
+	}
 }
