@@ -112,7 +112,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	/**
 	 * @return the QR code
 	 */
-	public String getQRCode() {
+	public String getQRCodeURL() {
 		return this.qrcode;
 	}
 
@@ -120,7 +120,7 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	 * @param qrcode
 	 *            the QR code to set
 	 */
-	public void setQRCode(String qrcode) {
+	public void setQRCodeURL(String qrcode) {
 		this.qrcode = qrcode;
 	}
 	

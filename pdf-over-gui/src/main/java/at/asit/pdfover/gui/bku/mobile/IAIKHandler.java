@@ -336,7 +336,7 @@ public class IAIKHandler extends MobileBKUHandler {
 
 	@Override
 	public IAIKStatus getStatus() {
-		return (IAIKStatus) getState().getStatus();
+		return (IAIKStatus) state.status;
 	}
 
 	private String getRedirect(HttpClient client, String redirectURL) throws HttpException, IOException {

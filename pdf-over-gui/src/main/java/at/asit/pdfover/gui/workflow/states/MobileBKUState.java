@@ -53,9 +53,15 @@ import at.asit.pdfover.signator.SigningState;
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
  */
 public class MobileBKUState extends State {
-	/**
-	 * @param stateMachine
-	 */
+	static final Logger log = LoggerFactory.getLogger(MobileBKUState.class);
+
+	SigningState signingState;
+
+	Exception threadException = null;
+
+	public final MobileBKUStatus status;
+	public final MobileBKUHandler handler;
+
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
 		ConfigProvider provider = stateMachine.getConfigProvider();
@@ -72,37 +78,15 @@ public class MobileBKUState extends State {
 				this.handler = new IAIKHandler(this,
 				stateMachine.getGUIProvider().getMainShell());
 				break;
+			
+			default:
+				throw new RuntimeException("Unexpected mobileBKUType");
 		}
-
 	}
 
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUState.class);
-
-	SigningState signingState;
-
-	Exception threadException = null;
-
-	MobileBKUStatus status = null;
-
-	MobileBKUHandler handler = null;
-
-	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
-
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
-
-	MobileBKUQRComposite mobileBKUQRComposite = null;
 	
-	MobileBKUFingerprintComposite mobileBKUFingerprintComposite = null;
-
-	WaitingComposite waitingComposite = null;
-	
-	WaitingForAppComposite waitingForAppComposite = null;
-
-	
+	WaitingForAppComposite waitingForAppComposite = null;	
 	WaitingForAppComposite getWaitingForAppComposite() {
 		if (this.waitingForAppComposite == null) {
 			this.waitingForAppComposite = getStateMachine().getGUIProvider()
@@ -112,6 +96,7 @@ public class MobileBKUState extends State {
 		return this.waitingForAppComposite;
 	}
 	
+	WaitingComposite waitingComposite = null;
 	WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
 			this.waitingComposite = getStateMachine().getGUIProvider()
@@ -123,64 +108,41 @@ public class MobileBKUState extends State {
 
 	MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
 		if (this.mobileBKUEnterTANComposite == null) {
-			this.mobileBKUEnterTANComposite = getStateMachine()
-					.getGUIProvider().createComposite(
-							MobileBKUEnterTANComposite.class, SWT.RESIZE, this);
+			this.mobileBKUEnterTANComposite = getStateMachine().getGUIProvider()
+					.createComposite(MobileBKUEnterTANComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUEnterTANComposite;
 	}
 
+	MobileBKUQRComposite mobileBKUQRComposite = null;
 	MobileBKUQRComposite getMobileBKUQRComposite() {
 		if (this.mobileBKUQRComposite == null) {
-			this.mobileBKUQRComposite = getStateMachine()
-					.getGUIProvider().createComposite(
-							MobileBKUQRComposite.class, SWT.RESIZE, this);
+			this.mobileBKUQRComposite = getStateMachine().getGUIProvider()
+					.createComposite(MobileBKUQRComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUQRComposite;
 	}
 
+	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
 	MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
 		if (this.mobileBKUEnterNumberComposite == null) {
-			this.mobileBKUEnterNumberComposite = getStateMachine()
-					.getGUIProvider().createComposite(
-							MobileBKUEnterNumberComposite.class, SWT.RESIZE,
-							this);
+			this.mobileBKUEnterNumberComposite = getStateMachine().getGUIProvider()
+						.createComposite(MobileBKUEnterNumberComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUEnterNumberComposite;
 	}
-	
-	
 
-
+	MobileBKUFingerprintComposite mobileBKUFingerprintComposite = null;
 	MobileBKUFingerprintComposite getMobileBKUFingerprintComposite() {
 		if (this.mobileBKUFingerprintComposite == null) {
-			this.mobileBKUFingerprintComposite = getStateMachine()
-					.getGUIProvider().createComposite(
-							MobileBKUFingerprintComposite.class, SWT.RESIZE,
-							this);
+			this.mobileBKUFingerprintComposite = getStateMachine().getGUIProvider()
+						.createComposite(MobileBKUFingerprintComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUFingerprintComposite;
-	}
-	
-	
-	/**
-	 * Get the MobileBKUStatus
-	 * @return the MobileBKUStatus
-	 */
-	public MobileBKUStatus getStatus() {
-		return this.status;
-	}
-
-	/**
-	 * Get the MobileBKUHandler
-	 * @return the MobileBKUHandler
-	 */
-	public MobileBKUHandler getHandler() {
-		return this.handler;
 	}
 
 	/**
@@ -243,7 +205,7 @@ public class MobileBKUState extends State {
 	 * Make sure phone number and password are set in the MobileBKUStatus
 	 */
 	public void checkCredentials() {
-		final MobileBKUStatus mobileStatus = this.getStatus();
+		final MobileBKUStatus mobileStatus = this.status;
 		// check if we have everything we need!
 		if (mobileStatus.getPhoneNumber() != null && !mobileStatus.getPhoneNumber().isEmpty() &&
 		    mobileStatus.getMobilePassword() != null && !mobileStatus.getMobilePassword().isEmpty())
@@ -312,7 +274,7 @@ public class MobileBKUState extends State {
 	 * Make sure TAN is set in the MobileBKUStatus
 	 */
 	public void checkTAN() {
-		final MobileBKUStatus mobileStatus = this.getStatus();
+		final MobileBKUStatus mobileStatus = this.status;
 
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
@@ -365,8 +327,8 @@ public class MobileBKUState extends State {
 	 * Show QR code
 	 */
 	public void showQR() {
-		final ATrustStatus status = (ATrustStatus) this.getStatus();
-		final ATrustHandler handler = (ATrustHandler) this.getHandler();
+		final ATrustStatus status = (ATrustStatus) this.status;
+		final ATrustHandler handler = (ATrustHandler) this.handler;
 
 		final Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
@@ -422,7 +384,7 @@ public class MobileBKUState extends State {
 
 			if (qr.isUserSMS()) {
 				qr.setUserSMS(false);
-				status.setQRCode(null);
+				status.setQRCodeURL(null);
 			}
 
 			if (qr.isDone())
@@ -453,7 +415,7 @@ public class MobileBKUState extends State {
 	 */
 	public void showOpenAppMessageWithSMSandCancel() throws SignatureException {
 
-		final ATrustStatus status = (ATrustStatus) this.getStatus();
+		final ATrustStatus status = (ATrustStatus) this.status;
 
 		Display.getDefault().syncExec(() -> {
 			WaitingForAppComposite waitingForAppcomposite = MobileBKUState.this.getWaitingForAppComposite();
@@ -477,7 +439,7 @@ public class MobileBKUState extends State {
 			}
 
 			if (waitingForAppcomposite.getUserSMS()) {
-				status.setQRCode(null);
+				status.setQRCodeURL(null);
 				waitingForAppcomposite.setUserSMS(false);
 				status.setErrorMessage("sms"); //$NON-NLS-1$
 				status.setSmsTan(true);
@@ -492,7 +454,7 @@ public class MobileBKUState extends State {
 
 			if (!(System.nanoTime() < timeoutTime)) {
 				log.warn("The undecided polling got a timeout");
-				status.setQRCode(null);
+				status.setQRCodeURL(null);
 				status.setErrorMessage("Polling Timeout");
 
 
@@ -501,7 +463,7 @@ public class MobileBKUState extends State {
 	}
 
 	private void undecidedPolling(){
-		final ATrustHandler handler = (ATrustHandler) this.getHandler();
+		final ATrustHandler handler = (ATrustHandler) this.handler;
 
 		Thread pollingThread = new Thread(() -> {
 			try {
@@ -525,8 +487,8 @@ public class MobileBKUState extends State {
 	 *  this information is shown 
 	 */
 	public void showFingerPrintInformation() {
-		final ATrustStatus status = (ATrustStatus) this.getStatus();
-		final ATrustHandler handler = (ATrustHandler) this.getHandler();
+		final ATrustStatus status = (ATrustStatus) this.status;
+		final ATrustHandler handler = (ATrustHandler) this.handler;
 
 		Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
@@ -573,7 +535,7 @@ public class MobileBKUState extends State {
 
 			if (fingerprintComposite.isUserSMS()) {
 //					fingerprintComposite.setUserSMS(false);
-				status.setQRCode(null);
+				status.setQRCodeURL(null);
 			}
 
 			if (fingerprintComposite.isDone())

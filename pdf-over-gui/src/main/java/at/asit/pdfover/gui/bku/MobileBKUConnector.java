@@ -58,7 +58,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 		PdfAs4SigningState signingState = (PdfAs4SigningState) this.state.getSigningState();
 		signingState.setSignatureRequest(request);
 
-		MobileBKUHandler handler = this.state.getHandler();
+		MobileBKUHandler handler = this.state.handler;
 
 		do {
 			// Post SL Request
@@ -80,8 +80,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 				// Check if credentials are available, get them from user if not
 				this.state.checkCredentials();
 
-				if (this.state.getStatus().getErrorMessage() != null &&
-						this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+				if (this.state.status.getErrorMessage() != null &&
+						this.state.status.getErrorMessage().equals("cancel")) //$NON-NLS-1$
 					throw new SignatureException(new IllegalStateException());
 
 				// Post credentials
@@ -92,7 +92,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 						// handle polling
 						this.state.showOpenAppMessageWithSMSandCancel();
 
-						if (((ATrustStatus) this.state.getStatus()).isSmsTan()) {
+						if (((ATrustStatus) this.state.status).isSmsTan()) {
 							ATrustHandler aHandler = (ATrustHandler) handler;
 							String response = aHandler.postSMSRequest();
 							aHandler.handleCredentialsResponse(response);
@@ -111,7 +111,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 					this.state.setThreadException(new IllegalStateException());
 					throw new SignatureException(new IllegalStateException());
 				}
-			} while(this.state.getStatus().getErrorMessage() != null);
+			} while(this.state.status.getErrorMessage() != null);
 	
 			// Check if response is already available
 			if (signingState.hasSignatureResponse()) {
@@ -121,18 +121,18 @@ public class MobileBKUConnector implements BkuSlConnector {
 			}
 	
 			do {
-				MobileBKUStatus status = this.state.getStatus();
+				MobileBKUStatus status = this.state.status;
 				boolean enterTAN = true;
 				String responseData = null;
 				if (status instanceof ATrustStatus) {
 					ATrustStatus aStatus = (ATrustStatus) status;
 					ATrustHandler aHandler = (ATrustHandler) handler;
-					if (aStatus.getQRCode() != null) {
+					if (aStatus.getQRCodeURL() != null) {
 						this.state.showQR();
-						if (this.state.getStatus().getErrorMessage() != null &&
-								this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+						if (this.state.status.getErrorMessage() != null &&
+								this.state.status.getErrorMessage().equals("cancel")) //$NON-NLS-1$
 							throw new SignatureException(new IllegalStateException());
-						if (aStatus.getQRCode() == null) {
+						if (aStatus.getQRCodeURL() == null) {
 							try {
 								String response = aHandler.postSMSRequest();
 								log.trace("Response from mobile BKU: " + response); //$NON-NLS-1$
@@ -150,8 +150,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 						try {
 							 
 							this.state.showFingerPrintInformation();
-							if (this.state.getStatus().getErrorMessage() != null &&
-									this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+							if (this.state.status.getErrorMessage() != null &&
+									this.state.status.getErrorMessage().equals("cancel")) //$NON-NLS-1$
 								throw new SignatureException(new IllegalStateException());
 						} catch (Exception ex) {
 							log.error("Error in PostCredentialsThread", ex); //$NON-NLS-1$
@@ -183,8 +183,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 					this.state.checkTAN();
 					
 
-					if (this.state.getStatus().getErrorMessage() != null &&
-							this.state.getStatus().getErrorMessage().equals("cancel")) //$NON-NLS-1$
+					if (this.state.status.getErrorMessage() != null &&
+							this.state.status.getErrorMessage().equals("cancel")) //$NON-NLS-1$
 						throw new SignatureException(new IllegalStateException());
 
 					// Post TAN
@@ -201,21 +201,21 @@ public class MobileBKUConnector implements BkuSlConnector {
 						throw new SignatureException(ex);
 					}
 				}
-			} while (this.state.getStatus().getErrorMessage() != null);
-			if (this.state.getStatus().getTanTries() == -1)
+			} while (this.state.status.getErrorMessage() != null);
+			if (this.state.status.getTanTries() == -1)
 				throw new SignatureException(new IllegalStateException());
-		} while (this.state.getStatus().getTanTries() == -2);
+		} while (this.state.status.getTanTries() == -2);
 
 		return signingState.getSignatureResponse();
 	}	
 	
 	private boolean handleErrorMessage() {
 		
-		if (this.state.getStatus() instanceof ATrustStatus) {
-			ATrustStatus aStatus = (ATrustStatus)this.state.getStatus() ; 
+		if (this.state.status instanceof ATrustStatus) {
+			ATrustStatus aStatus = (ATrustStatus)this.state.status ; 
 			if (aStatus.getErrorMessage() != null && 
 				aStatus.getErrorMessage().equals("cancel")) { //$NON-NLS-1$
-					((ATrustStatus)this.state.getStatus()).setErrorMessage(null);
+					((ATrustStatus)this.state.status).setErrorMessage(null);
 					return true;
 			}
 		}

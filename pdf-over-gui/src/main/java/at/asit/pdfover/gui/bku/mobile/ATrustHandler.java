@@ -247,7 +247,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			try {
 				qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				log.debug("QR Code found: " + qrCode); //$NON-NLS-1$
-				status.setQRCode(qrCode);
+				status.setQRCodeURL(qrCode);
 			} catch (Exception e) {
 				log.debug("No QR Code found"); //$NON-NLS-1$
 			}
@@ -406,7 +406,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
 		GetMethod get = new GetMethod(status.getBaseURL() + "/" + //$NON-NLS-1$
-				status.getQRCode());
+				status.getQRCodeURL());
 
 		try {
 			log.debug("Getting " + get.getURI()); //$NON-NLS-1$
@@ -478,7 +478,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 	@Override
 	public ATrustStatus getStatus() {
-		return (ATrustStatus) getState().getStatus();
+		return (ATrustStatus) state.status;
 	}
 
 	/* (non-Javadoc)

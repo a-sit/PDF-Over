@@ -51,7 +51,7 @@ public abstract class MobileBKUHandler {
 	static final Logger log = LoggerFactory
 			.getLogger(MobileBKUHandler.class);
 
-	private MobileBKUState state;
+	public final MobileBKUState state;
 
 	/**
 	 * Constructor
@@ -99,7 +99,7 @@ public abstract class MobileBKUHandler {
 		}
 		log.trace("SL Request: " + sl_request); //$NON-NLS-1$
 
-		getState().getStatus().setBaseURL(
+		state.status.setBaseURL(
 				MobileBKUHelper.stripQueryString(mobileBKUUrl));
 
 		return executePost(client, post);
@@ -142,19 +142,11 @@ public abstract class MobileBKUHandler {
 	public abstract void handleTANResponse(String responseData) throws Exception;
 
 	/**
-	 * Get the MobileBKUState
-	 * @return the MobileBKUState
-	 */
-	protected MobileBKUState getState() {
-		return this.state;
-	}
-
-	/**
 	 * Get the MobileBKUStatus
 	 * @return the MobileBKUStatus
 	 */
 	protected MobileBKUStatus getStatus() {
-		return this.state.getStatus();
+		return this.state.status;
 	}
 
 	/**
@@ -162,7 +154,7 @@ public abstract class MobileBKUHandler {
 	 * @return the SigningState
 	 */
 	protected SigningState getSigningState() {
-		return getState().getSigningState();
+		return state.getSigningState();
 	}
 
 	/**
