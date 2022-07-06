@@ -303,11 +303,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer
-						.getSignatureLocale();
-				Locale selectedLocale = Constants.
-						SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang
-						                  .getSelectionIndex()];
+				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
+				Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
 				if (!currentLocale.equals(selectedLocale)) {
 					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
 				}
@@ -446,12 +443,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		try {
 			if (this.signer != null) {
 				SignatureParameter param = this.signer.getPDFSigner().newParameter();
-				if(this.configurationContainer.getSignatureNote() != null && !this.configurationContainer.getSignatureNote().isEmpty()) {
-					param.setProperty("SIG_NOTE", this.configurationContainer.getSignatureNote());
+				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
+					param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 				}
 
-				param.setSignatureLanguage(this.configurationContainer.getSignatureLocale().getLanguage());
-				param.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
+				param.setSignatureLanguage(this.configurationContainer.signatureLocale.getLanguage());
+				param.setSignaturePdfACompat(this.configurationContainer.signaturePDFACompat);
 				if (image != null && !image.trim().isEmpty()) {
 					logo = new ImageData(image);
 					param.setEmblem(new CachedFileNameEmblem(image));
@@ -527,7 +524,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	void performSignatureLangSelectionChanged(Locale selected, Locale previous) {
 		log.debug("Selected Sign Locale: {}", selected);
-		this.configurationContainer.setSignatureLocale(selected);
+		this.configurationContainer.signatureLocale = selected;
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 
 		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous))))
@@ -543,7 +540,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
 
     	if (newProfile.equals(Profile.AMTSSIGNATURBLOCK) || newProfile.equals(Profile.INVISIBLE)){
-			this.configurationContainer.setDefaultSignaturePosition(new SignaturePosition());
+			this.configurationContainer.defaultSignaturePosition = new SignaturePosition();
 		}
     	setSignatureProfileSetting();
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
@@ -554,7 +551,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		if (profile == null)
 			profile = configurationContainer.getSignatureProfile();
 		if (locale == null)
-			locale = configurationContainer.getSignatureLocale();
+			locale = configurationContainer.signatureLocale;
 		return profile.getDefaultSignatureBlockNote(locale);
 	}
 
@@ -597,7 +594,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	void processSignatureNoteChanged() {
 		String note = this.txtSignatureNote.getText();
-		this.configurationContainer.setSignatureNote(note);
+		this.configurationContainer.signatureNote = note;
 	}
 
 	/*
@@ -626,11 +623,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			log.error("Failed to set emblem!", e);
 		}
 
-		this.configurationContainer.setSignatureLocale(
-				provider.getSignatureLocale());
-
-		this.configurationContainer.setSignatureNote(
-				provider.getSignatureNote());
+		this.configurationContainer.signatureLocale = provider.getSignatureLocale();
+		this.configurationContainer.signatureNote = provider.getSignatureNote();
 	}
 
 	/*
@@ -661,7 +655,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		}
 
-		String note = this.configurationContainer.getSignatureNote();
+		String note = this.configurationContainer.signatureNote;
 
 		if (note != null) {
 			this.txtSignatureNote.setText(note);
@@ -669,7 +663,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.setVisibleImage();
 
-		this.performSignatureLangSelectionChanged(this.configurationContainer.getSignatureLocale(), null);
+		this.performSignatureLangSelectionChanged(this.configurationContainer.signatureLocale, null);
 
 		this.preformProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
 
@@ -679,16 +673,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
 	 */
 	@Override
-	public void storeConfiguration(ConfigManipulator store,
-			PersistentConfigProvider provider) {
+	public void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider) {
 		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
-
 		store.setDefaultEmblem(this.configurationContainer.getEmblem());
-
-		store.setSignatureLocale(this.configurationContainer.getSignatureLocale());
-
-		store.setSignatureNote(this.configurationContainer.getSignatureNote());
-
+		store.setSignatureLocale(this.configurationContainer.signatureLocale);
+		store.setSignatureNote(this.configurationContainer.signatureNote);
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 
@@ -704,14 +693,14 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {
 		switch (resumeFrom) {
-		case 0:
-			this.plainMobileNumberSetter();
-			// Fall through
-		case 1:
-			this.processSignatureNoteChanged();
-			break;
-		default:
-				//Fall through
+			case 0:
+				this.plainMobileNumberSetter();
+				// Fall through
+			case 1:
+				this.processSignatureNoteChanged();
+				break;
+			default:
+				break;
 		}
 	}
 

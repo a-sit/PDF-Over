@@ -247,7 +247,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int selectionIndex = getBKUElementIndex(
-						AdvancedConfigurationComposite.this.configurationContainer.getDefaultBKU());
+						AdvancedConfigurationComposite.this.configurationContainer.defaultBKU);
 				if (AdvancedConfigurationComposite.this.cmbBKUAuswahl.getSelectionIndex() != selectionIndex) {
 					selectionIndex = AdvancedConfigurationComposite.this.cmbBKUAuswahl.getSelectionIndex();
 					performBKUSelectionChanged(
@@ -348,7 +348,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer.getLocale();
+				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer.locale;
 				Locale selectedLocale = Constants.SUPPORTED_LOCALES[AdvancedConfigurationComposite.this.cmbLocaleAuswahl
 						.getSelectionIndex()];
 				if (!currentLocale.equals(selectedLocale)) {
@@ -450,7 +450,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	private void performPostFixChanged(String postfix) {
 
 		log.debug("Save file postfix changed to : {}", postfix);
-		this.configurationContainer.setSaveFilePostFix(postfix);
+		this.configurationContainer.saveFilePostFix = postfix;
 		AdvancedConfigurationComposite.this.txtSaveFilePostFix.setText(postfix);
 	}
 
@@ -467,7 +467,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	void performOutputFolderChanged(String foldername) {
 		log.debug("Selected Output folder: {}", foldername);
-		this.configurationContainer.setOutputFolder(foldername);
+		this.configurationContainer.outputFolder = foldername;
 		AdvancedConfigurationComposite.this.txtOutputFolder.setText(foldername);
 	}
 
@@ -485,7 +485,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	void performBKUSelectionChanged(BKUs selected) {
 		log.debug("Selected BKU: {}", selected);
-		this.configurationContainer.setDefaultBKU(selected);
+		this.configurationContainer.defaultBKU = selected;
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
 	}
 
@@ -527,14 +527,14 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	void performLocaleSelectionChanged(Locale selected) {
 		log.debug("Selected Locale: {}", selected);
-		this.configurationContainer.setLocale(selected);
+		this.configurationContainer.locale = selected;
 		this.cmbLocaleAuswahl.select(this.getLocaleElementIndex(selected));
 	}
 
 	void performPositionSelection(boolean automatic) {
 		log.debug("Selected Position: {}", automatic);
 		SignaturePosition pos = automatic ? new SignaturePosition() : null;
-		this.configurationContainer.setDefaultSignaturePosition(pos);
+		this.configurationContainer.defaultSignaturePosition = pos;
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
@@ -551,17 +551,17 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	void performEnableUsePlaceholder(boolean enable) {
 		this.btnPlatzhalterVerwenden.setEnabled(enable);
 		this.btnSignatureFieldsUsage.setEnabled(enable);
-		this.configurationContainer.setEnablePlaceholderUsage(enable);
+		this.configurationContainer.enabledPlaceholderUsage = enable;
 		this.btnEnablePlaceholderUsage.setSelection(enable);
 	}
 
 	void performPdfACompatSelection(boolean compat) {
-		this.configurationContainer.setSignaturePdfACompat(compat);
+		this.configurationContainer.signaturePDFACompat = compat;
 		this.btnPdfACompat.setSelection(compat);
 	}
 
 	void performKeystoreEnabledSelection(boolean enabled) {
-		this.configurationContainer.setKeyStoreEnabled(enabled);
+		this.configurationContainer.keystoreEnabled = enabled;
 		this.btnKeystoreEnabled.setSelection(enabled);
 		this.configurationComposite.keystoreEnabled(enabled);
 
@@ -581,11 +581,11 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void performPlaceholderTransparency(int transparency) {
-		this.configurationContainer.setPlaceholderTransparency(transparency);
+		this.configurationContainer.placeholderTransparency = transparency;
 	}
 
 	void performUpdateCheckSelection(boolean checkUpdate) {
-		this.configurationContainer.setUpdateCheck(checkUpdate);
+		this.configurationContainer.updateCheck = checkUpdate;
 		this.btnUpdateCheck.setSelection(checkUpdate);
 	}
 
@@ -605,7 +605,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	private void plainProxyHostSetter() {
 		String host = this.txtProxyHost.getText();
-		this.configurationContainer.setProxyHost(host);
+		this.configurationContainer.proxyHost = host;
 	}
 
 	void processProxyPortChanged() {
@@ -656,31 +656,31 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void initConfiguration(PersistentConfigProvider provider) {
-		this.configurationContainer.setDefaultSignaturePosition(provider.getDefaultSignaturePositionPersistent());
+		this.configurationContainer.defaultSignaturePosition = provider.getDefaultSignaturePositionPersistent();
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
-		this.configurationContainer.setEnablePlaceholderUsage(provider.getEnablePlaceholderUsage());
-		this.configurationContainer.setSignaturePdfACompat(provider.getSignaturePdfACompat());
-		this.configurationContainer.setPlaceholderTransparency(provider.getPlaceholderTransparency());
+		this.configurationContainer.enabledPlaceholderUsage = provider.getEnablePlaceholderUsage();
+		this.configurationContainer.signaturePDFACompat = provider.getSignaturePdfACompat();
+		this.configurationContainer.placeholderTransparency = provider.getPlaceholderTransparency();
 
-		this.configurationContainer.setDefaultBKU(provider.getDefaultBKUPersistent());
-		this.configurationContainer.setKeyStoreEnabled(provider.getKeyStoreEnabledPersistent());
+		this.configurationContainer.defaultBKU = provider.getDefaultBKUPersistent();
+		this.configurationContainer.keystoreEnabled = provider.getKeyStoreEnabledPersistent();
 
-		this.configurationContainer.setOutputFolder(provider.getDefaultOutputFolderPersistent());
-		this.configurationContainer.setSaveFilePostFix(provider.getSaveFilePostFix());
+		this.configurationContainer.outputFolder = provider.getDefaultOutputFolderPersistent();
+		this.configurationContainer.saveFilePostFix = provider.getSaveFilePostFix();
 
-		this.configurationContainer.setLocale(provider.getLocale());
+		this.configurationContainer.locale = provider.getLocale();
 
-		this.configurationContainer.setUpdateCheck(provider.getUpdateCheck());
+		this.configurationContainer.updateCheck = provider.getUpdateCheck();
 
-		this.configurationContainer.setProxyHost(provider.getProxyHostPersistent());
+		this.configurationContainer.proxyHost = provider.getProxyHostPersistent();
 		try {
 			this.configurationContainer.setProxyPort(provider.getProxyPortPersistent());
 		} catch (InvalidPortException e) {
 			log.error("Failed to set proxy port!", e);
 		}
-		this.configurationContainer.setProxyUser(provider.getProxyUserPersistent());
-		this.configurationContainer.setProxyPass(provider.getProxyPassPersistent());
+		this.configurationContainer.proxyUser = provider.getProxyUserPersistent();
+		this.configurationContainer.proxyPass = provider.getProxyPassPersistent();
 		this.configurationContainer.setSignatureProfile(Profile.getProfile(provider.getSignatureProfile()));
 	}
 
@@ -693,27 +693,27 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void loadConfiguration() {
 		// load advanced settings
-		performBKUSelectionChanged(this.configurationContainer.getDefaultBKU());
-		String outputFolder = this.configurationContainer.getOutputFolder();
+		performBKUSelectionChanged(this.configurationContainer.defaultBKU);
+		String outputFolder = this.configurationContainer.outputFolder;
 		if (outputFolder != null) {
 			performOutputFolderChanged(outputFolder);
 		}
-		String postFix = this.configurationContainer.getSaveFilePostFix();
+		String postFix = this.configurationContainer.saveFilePostFix;
 		if (postFix != null) {
 			performPostFixChanged(postFix);
 		} else {
 			performPostFixChanged(Constants.DEFAULT_POSTFIX);
 		}
-		SignaturePosition pos = this.configurationContainer.getDefaultSignaturePosition();
+		SignaturePosition pos = this.configurationContainer.defaultSignaturePosition;
 		performPositionSelection(pos != null && pos.useAutoPositioning());
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
-		performEnableUsePlaceholder(this.configurationContainer.getEnablePlaceholderUsage());
-		this.sclTransparenz.setSelection(this.configurationContainer.getPlaceholderTransparency());
-		performLocaleSelectionChanged(this.configurationContainer.getLocale());
-		performPdfACompatSelection(this.configurationContainer.getSignaturePdfACompat());
-		performKeystoreEnabledSelection(this.configurationContainer.getKeyStoreEnabled());
-		performUpdateCheckSelection(this.configurationContainer.getUpdateCheck());
+		performEnableUsePlaceholder(this.configurationContainer.enabledPlaceholderUsage);
+		this.sclTransparenz.setSelection(this.configurationContainer.placeholderTransparency);
+		performLocaleSelectionChanged(this.configurationContainer.locale);
+		performPdfACompatSelection(this.configurationContainer.signaturePDFACompat);
+		performKeystoreEnabledSelection(this.configurationContainer.keystoreEnabled);
+		performUpdateCheckSelection(this.configurationContainer.updateCheck);
 		performSetSignatureProfile(this.configurationContainer.getSignatureProfile());
 
 		int port = this.configurationContainer.getProxyPort();
@@ -721,7 +721,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtProxyPort.setText(Integer.toString(port));
 		}
 
-		String host = this.configurationContainer.getProxyHost();
+		String host = this.configurationContainer.proxyHost;
 		if (host != null) {
 			this.txtProxyHost.setText(host);
 		}
@@ -756,26 +756,26 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider) {
-		store.setDefaultSignaturePosition(this.configurationContainer.getDefaultSignaturePosition());
+		store.setDefaultSignaturePosition(this.configurationContainer.defaultSignaturePosition);
 		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
-		store.setEnablePlaceholderUsage(this.configurationContainer.getEnablePlaceholderUsage());
-		store.setSignaturePdfACompat(this.configurationContainer.getSignaturePdfACompat());
-		store.setPlaceholderTransparency(this.configurationContainer.getPlaceholderTransparency());
+		store.setEnablePlaceholderUsage(this.configurationContainer.enabledPlaceholderUsage);
+		store.setSignaturePdfACompat(this.configurationContainer.signaturePDFACompat);
+		store.setPlaceholderTransparency(this.configurationContainer.placeholderTransparency);
 
-		store.setDefaultBKU(this.configurationContainer.getDefaultBKU());
-		store.setKeyStoreEnabled(this.configurationContainer.getKeyStoreEnabled());
+		store.setDefaultBKU(this.configurationContainer.defaultBKU);
+		store.setKeyStoreEnabled(this.configurationContainer.keystoreEnabled);
 
-		store.setDefaultOutputFolder(this.configurationContainer.getOutputFolder());
-		store.setSaveFilePostFix(this.configurationContainer.getSaveFilePostFix());
-		store.setLocale(this.configurationContainer.getLocale());
+		store.setDefaultOutputFolder(this.configurationContainer.outputFolder);
+		store.setSaveFilePostFix(this.configurationContainer.saveFilePostFix);
+		store.setLocale(this.configurationContainer.locale);
 
-		store.setUpdateCheck(this.configurationContainer.getUpdateCheck());
+		store.setUpdateCheck(this.configurationContainer.updateCheck);
 
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		String hostOld = provider.getProxyHostPersistent();
-		String hostNew = this.configurationContainer.getProxyHost();
+		String hostNew = this.configurationContainer.proxyHost;
 		if (hostOld != null && !hostOld.isEmpty() && (hostNew == null || hostNew.isEmpty())) {
 			// Proxy has been removed, let's clear the system properties
 			// Otherwise, the proxy settings wouldn't get removed
@@ -794,7 +794,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		store.setProxyPort(portNew);
 
 		String userOld = provider.getProxyUserPersistent();
-		String userNew = this.configurationContainer.getProxyUser();
+		String userNew = this.configurationContainer.proxyUser;
 		if (userOld != null && !userOld.isEmpty() && (userNew == null || userNew.isEmpty())) {
 			// cf. above
 			System.clearProperty("http.proxyUser");
@@ -803,7 +803,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		store.setProxyUser(userNew);
 
 		String passOld = provider.getProxyPassPersistent();
-		String passNew = this.configurationContainer.getProxyPass();
+		String passNew = this.configurationContainer.proxyPass;
 		if (passOld != null && passNew == null) {
 			// cf. above
 			System.clearProperty("http.proxyPassword");
@@ -821,7 +821,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void validateSettings(int resumeIndex) throws Exception {
 
-		String foldername = this.configurationContainer.getOutputFolder();
+		String foldername = this.configurationContainer.outputFolder;
 
 		switch (resumeIndex) {
 		case 0:

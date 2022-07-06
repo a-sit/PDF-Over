@@ -73,8 +73,8 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 * Constructor
 	 */
 	public ConfigProviderImpl() {
-		this.configuration = new ConfigurationContainerImpl();
-		this.configurationOverlay = new ConfigurationContainerImpl();
+		this.configuration = new ConfigurationContainer();
+		this.configurationOverlay = new ConfigurationContainer();
 	}
 
 	/*
@@ -150,7 +150,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 		String bkuUrl = config.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		if (bkuUrl != null && !bkuUrl.isEmpty())
-			this.configuration.setMobileBKUURL(bkuUrl);
+			this.configuration.mobileBKUURL = bkuUrl;
 
 		String bkuType = config
 				.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
@@ -159,17 +159,16 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		{
 			try
 			{
-				this.configuration.setMobileBKUType(MobileBKUs.valueOf(
-						bkuType.trim().toUpperCase()));
+				this.configuration.mobileBKUType = MobileBKUs.valueOf(bkuType.trim().toUpperCase());
 			} catch (IllegalArgumentException e) {
 				log.error("Invalid BKU type: " + bkuType);
-				this.configuration.setMobileBKUType(DEFAULT_MOBILE_BKU_TYPE);
+				this.configuration.mobileBKUType = DEFAULT_MOBILE_BKU_TYPE;
 			}
 		}
 
 		String useBase64 = config.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
 		if (useBase64 != null)
-			this.configuration.setMobileBKUBase64(useBase64.equalsIgnoreCase(Constants.TRUE));
+			this.configuration.mobileBKUBase64 = useBase64.equalsIgnoreCase(Constants.TRUE);
 
 		String proxyPortString = config.getProperty(Constants.CFG_PROXY_PORT);
 		if (proxyPortString != null && !proxyPortString.trim().isEmpty())
@@ -230,7 +229,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 				// ignore parsing exception
 			}
 		}
-		this.configuration.setMainWindowSize(new Point(width, height));
+		this.configuration.mainWindowSize = new Point(width, height);
 
 		// Set Signature Position
 		String signaturePosition = config.getProperty(Constants.CFG_SIGNATURE_POSITION);
@@ -337,7 +336,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
 				Integer.toString(getPlaceholderTransparency()));
 
-		Point size = this.configuration.getMainWindowSize();
+		Point size = this.configuration.mainWindowSize;
 		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y);
 
 		Locale configLocale = getLocale();
@@ -462,7 +461,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultBKU(BKUs bku) {
-		this.configuration.setDefaultBKU(bku);
+		this.configuration.defaultBKU = bku;
 	}
 
 	/* (non-Javadoc)
@@ -470,7 +469,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultBKUOverlay(BKUs bku) {
-		this.configurationOverlay.setDefaultBKU(bku);
+		this.configurationOverlay.defaultBKU = bku;
 
 	}
 
@@ -481,7 +480,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public BKUs getDefaultBKU() {
-		BKUs bku = this.configurationOverlay.getDefaultBKU();
+		BKUs bku = this.configurationOverlay.defaultBKU;
 		if (bku == BKUs.NONE)
 			bku = getDefaultBKUPersistent();
 		return bku;
@@ -492,7 +491,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public BKUs getDefaultBKUPersistent() {
-		return this.configuration.getDefaultBKU();
+		return this.configuration.defaultBKU;
 	}
 
 	/**
@@ -503,7 +502,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
-		this.configuration.setDefaultSignaturePosition(signaturePosition);
+		this.configuration.defaultSignaturePosition = signaturePosition;
 	}
 
 
@@ -512,7 +511,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setDefaultSignaturePositionOverlay(SignaturePosition signaturePosition) {
-		this.configurationOverlay.setDefaultSignaturePosition(signaturePosition);
+		this.configurationOverlay.defaultSignaturePosition = signaturePosition;
 	}
 
 	/*
@@ -523,7 +522,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public SignaturePosition getDefaultSignaturePosition() {
-		SignaturePosition position = this.configurationOverlay.getDefaultSignaturePosition();
+		SignaturePosition position = this.configurationOverlay.defaultSignaturePosition;
 		if (position == null)
 			position = getDefaultSignaturePositionPersistent();
 		return position;
@@ -534,7 +533,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public SignaturePosition getDefaultSignaturePositionPersistent() {
-		return this.configuration.getDefaultSignaturePosition();
+		return this.configuration.defaultSignaturePosition;
 	}
 
 	/**
@@ -545,7 +544,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setPlaceholderTransparency(int transparency) {
-		this.configuration.setPlaceholderTransparency(transparency);
+		this.configuration.placeholderTransparency = transparency;
 	}
 
 	/*
@@ -556,7 +555,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public int getPlaceholderTransparency() {
-		return this.configuration.getPlaceholderTransparency();
+		return this.configuration.placeholderTransparency;
 	}
 
 	/**
@@ -619,9 +618,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setDefaultMobilePassword(String password) {
 		if (password == null || password.trim().isEmpty()) {
-			this.configuration.setMobilePassword(STRING_EMPTY);
+			this.configuration.mobilePassword = STRING_EMPTY;
 		} else {
-			this.configuration.setMobilePassword(password);
+			this.configuration.mobilePassword = password;
 		}
 	}
 
@@ -631,9 +630,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setDefaultMobilePasswordOverlay(String password) {
 		if (password == null || password.trim().isEmpty()) {
-			this.configurationOverlay.setMobilePassword(STRING_EMPTY);
+			this.configurationOverlay.mobilePassword = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setMobilePassword(password);
+			this.configurationOverlay.mobilePassword = password;
 		}
 	}
 
@@ -644,7 +643,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultMobilePassword() {
-		String password = this.configurationOverlay.getMobilePassword();
+		String password = this.configurationOverlay.mobilePassword;
 		if (password == null)
 			password = getDefaultMobilePasswordPersistent();
 		return password;
@@ -655,7 +654,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultMobilePasswordPersistent() {
-		String password = this.configuration.getMobilePassword();
+		String password = this.configuration.mobilePassword;
 		if (password == null)
 			password = STRING_EMPTY;
 		return password;
@@ -744,9 +743,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyHost(String host) {
 		if (host == null || host.trim().isEmpty()) {
-			this.configuration.setProxyHost(STRING_EMPTY);
+			this.configuration.proxyHost = STRING_EMPTY;
 		} else {
-			this.configuration.setProxyHost(host);
+			this.configuration.proxyHost = host;
 		}
 	}
 
@@ -756,9 +755,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyHostOverlay(String host) {
 		if (host == null || host.trim().isEmpty()) {
-			this.configurationOverlay.setProxyHost(STRING_EMPTY);
+			this.configurationOverlay.proxyHost = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setProxyHost(host);
+			this.configurationOverlay.proxyHost = host;
 		}
 	}
 
@@ -769,7 +768,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyHost() {
-		String host = this.configurationOverlay.getProxyHost();
+		String host = this.configurationOverlay.proxyHost;
 		if (host == null)
 			host = getProxyHostPersistent();
 		return host;
@@ -780,7 +779,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyHostPersistent() {
-		String host = this.configuration.getProxyHost();
+		String host = this.configuration.proxyHost;
 		if (host == null)
 			host = STRING_EMPTY;
 		return host;
@@ -845,9 +844,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyUser(String user) {
 		if (user == null || user.trim().isEmpty()) {
-			this.configuration.setProxyUser(STRING_EMPTY);
+			this.configuration.proxyUser = STRING_EMPTY;
 		} else {
-			this.configuration.setProxyUser(user);
+			this.configuration.proxyUser = user;
 		}
 	}
 
@@ -857,9 +856,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyUserOverlay(String user) {
 		if (user == null || user.trim().isEmpty()) {
-			this.configurationOverlay.setProxyUser(STRING_EMPTY);
+			this.configurationOverlay.proxyUser = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setProxyUser(user);
+			this.configurationOverlay.proxyUser = user;
 		}
 	}
 
@@ -868,7 +867,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyUser() {
-		String user = this.configurationOverlay.getProxyUser();
+		String user = this.configurationOverlay.proxyUser;
 		if (user == null)
 			user = getProxyUserPersistent();
 		return user;
@@ -879,7 +878,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyUserPersistent() {
-		String user = this.configuration.getProxyUser();
+		String user = this.configuration.proxyUser;
 		if (user == null)
 			user = STRING_EMPTY;
 		return user;
@@ -894,9 +893,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyPass(String pass) {
 		if (pass == null || pass.trim().isEmpty()) {
-			this.configuration.setProxyPass(STRING_EMPTY);
+			this.configuration.proxyPass = STRING_EMPTY;
 		} else {
-			this.configuration.setProxyPass(pass);
+			this.configuration.proxyPass = pass;
 		}
 	}
 
@@ -906,9 +905,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setProxyPassOverlay(String pass) {
 		if (pass == null || pass.trim().isEmpty()) {
-			this.configurationOverlay.setProxyPass(STRING_EMPTY);
+			this.configurationOverlay.proxyPass = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setProxyPass(pass);
+			this.configurationOverlay.proxyPass = pass;
 		}
 	}
 
@@ -917,7 +916,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyPass() {
-		String pass = this.configurationOverlay.getProxyPass();
+		String pass = this.configurationOverlay.proxyPass;
 		if (pass == null)
 			pass = getProxyPassPersistent();
 		return pass;
@@ -928,7 +927,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getProxyPassPersistent() {
-		String pass = this.configuration.getProxyPass();
+		String pass = this.configuration.proxyPass;
 		if (pass == null)
 			pass = STRING_EMPTY;
 		return pass;
@@ -944,9 +943,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setDefaultOutputFolder(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
-			this.configuration.setOutputFolder(STRING_EMPTY);
+			this.configuration.outputFolder = STRING_EMPTY;
 		} else {
-			this.configuration.setOutputFolder(outputFolder);
+			this.configuration.outputFolder = outputFolder;
 		}
 	}
 
@@ -956,9 +955,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setDefaultOutputFolderOverlay(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
-			this.configurationOverlay.setOutputFolder(STRING_EMPTY);
+			this.configurationOverlay.outputFolder = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setOutputFolder(outputFolder);
+			this.configurationOverlay.outputFolder = outputFolder;
 		}
 	}
 
@@ -969,7 +968,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultOutputFolder() {
-		String outputFolder = this.configurationOverlay.getOutputFolder();
+		String outputFolder = this.configurationOverlay.outputFolder;
 		if (outputFolder == null)
 			outputFolder = getDefaultOutputFolderPersistent();
 		return outputFolder;
@@ -980,7 +979,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getDefaultOutputFolderPersistent() {
-		String outputFolder = this.configuration.getOutputFolder();
+		String outputFolder = this.configuration.outputFolder;
 		if (outputFolder == null)
 			outputFolder = STRING_EMPTY;
 		return outputFolder;
@@ -993,7 +992,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getMobileBKUURL() {
-		return this.configuration.getMobileBKUURL();
+		return this.configuration.mobileBKUURL;
 	}
 
 	/* (non-Javadoc)
@@ -1001,7 +1000,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public MobileBKUs getMobileBKUType() {
-		return this.configuration.getMobileBKUType();
+		return this.configuration.mobileBKUType;
 	}
 
 
@@ -1010,7 +1009,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public boolean getMobileBKUBase64() {
-		return this.configuration.getMobileBKUBase64();
+		return this.configuration.mobileBKUBase64;
 	}
 
 	/*
@@ -1023,9 +1022,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setSignatureNote(String note) {
 		if (note == null || note.trim().isEmpty()) {
-			this.configuration.setSignatureNote(STRING_EMPTY);
+			this.configuration.signatureNote = STRING_EMPTY;
 		} else {
-			this.configuration.setSignatureNote(note);
+			this.configuration.signatureNote = note;
 		}
 	}
 
@@ -1036,7 +1035,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getSignatureNote() {
-		String note = this.configuration.getSignatureNote();
+		String note = this.configuration.signatureNote;
 		if (note == null)
 			note = STRING_EMPTY;
 		return note;
@@ -1048,9 +1047,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setLocale(Locale locale) {
 		if(locale == null) {
-			this.configuration.setLocale(Messages.getDefaultLocale());
+			this.configuration.locale = Messages.getDefaultLocale();
 		} else {
-			this.configuration.setLocale(locale);
+			this.configuration.locale = locale;
 			Locale.setDefault(locale);
 			Messages.setLocale(locale);
 		}
@@ -1061,7 +1060,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Locale getLocale() {
-		Locale locale = this.configuration.getLocale();
+		Locale locale = this.configuration.locale;
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
 		return locale;
@@ -1073,9 +1072,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setSignatureLocale(Locale locale) {
 		if(locale == null) {
-			this.configuration.setSignatureLocale(Messages.getDefaultLocale());
+			this.configuration.signatureLocale = Messages.getDefaultLocale();
 		} else {
-			this.configuration.setSignatureLocale(locale);
+			this.configuration.signatureLocale = locale;
 		}
 	}
 
@@ -1084,7 +1083,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Locale getSignatureLocale() {
-		Locale locale = this.configuration.getSignatureLocale();
+		Locale locale = this.configuration.signatureLocale;
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
 		return locale;
@@ -1095,7 +1094,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setSignaturePdfACompat(boolean compat) {
-		this.configuration.setSignaturePdfACompat(compat);
+		this.configuration.signaturePDFACompat = compat;
 	}
 
 	/* (non-Javadoc)
@@ -1103,7 +1102,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public boolean getSignaturePdfACompat() {
-		return this.configuration.getSignaturePdfACompat();
+		return this.configuration.signaturePDFACompat;
 	}
 
 	/* (non-Javadoc)
@@ -1111,7 +1110,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setKeyStoreEnabled(Boolean enabled) {
-		this.configuration.setKeyStoreEnabled(enabled);
+		this.configuration.keystoreEnabled = enabled;
 	}
 
 	/* (non-Javadoc)
@@ -1119,7 +1118,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setKeyStoreEnabledOverlay(Boolean enabled) {
-		this.configurationOverlay.setKeyStoreEnabled(enabled);
+		this.configurationOverlay.keystoreEnabled = enabled;
 	}
 
 	/* (non-Javadoc)
@@ -1127,7 +1126,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Boolean getKeyStoreEnabled() {
-		Boolean enabled = this.configurationOverlay.getKeyStoreEnabled();
+		Boolean enabled = this.configurationOverlay.keystoreEnabled;
 		if (enabled == null)
 			enabled = getKeyStoreEnabledPersistent();
 		return enabled;
@@ -1138,7 +1137,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Boolean getKeyStoreEnabledPersistent() {
-		Boolean enabled = this.configuration.getKeyStoreEnabled();
+		Boolean enabled = this.configuration.keystoreEnabled;
 		if (enabled == null)
 			enabled = false;
 		return enabled;
@@ -1150,9 +1149,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreFile(String file) {
 		if (file == null || file.trim().isEmpty()) {
-			this.configuration.setKeyStoreFile(STRING_EMPTY);
+			this.configuration.keystoreFile = STRING_EMPTY;
 		} else {
-			this.configuration.setKeyStoreFile(file);
+			this.configuration.keystoreFile = file;
 		}
 	}
 
@@ -1162,9 +1161,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreFileOverlay(String file) {
 		if (file == null || file.trim().isEmpty()) {
-			this.configurationOverlay.setKeyStoreFile(STRING_EMPTY);
+			this.configurationOverlay.keystoreFile = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setKeyStoreFile(file);
+			this.configurationOverlay.keystoreFile = file;
 		}
 	}
 
@@ -1173,7 +1172,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreFile() {
-		String file = this.configurationOverlay.getKeyStoreFile();
+		String file = this.configurationOverlay.keystoreFile;
 		if (file == null)
 			file = getKeyStoreFilePersistent();
 		return file;
@@ -1184,7 +1183,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreFilePersistent() {
-		String file = this.configuration.getKeyStoreFile();
+		String file = this.configuration.keystoreFile;
 		if (file == null)
 			file = STRING_EMPTY;
 		return file;
@@ -1196,9 +1195,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreType(String type) {
 		if (type == null || type.trim().isEmpty()) {
-			this.configuration.setKeyStoreType(STRING_EMPTY);
+			this.configuration.keystoreType = STRING_EMPTY;
 		} else {
-			this.configuration.setKeyStoreType(type);
+			this.configuration.keystoreType = type;
 		}
 	}
 
@@ -1208,9 +1207,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreTypeOverlay(String type) {
 		if (type == null || type.trim().isEmpty()) {
-			this.configurationOverlay.setKeyStoreType(STRING_EMPTY);
+			this.configurationOverlay.keystoreType = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setKeyStoreType(type);
+			this.configurationOverlay.keystoreType = type;
 		}
 	}
 
@@ -1219,7 +1218,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreType() {
-		String type = this.configurationOverlay.getKeyStoreType();
+		String type = this.configurationOverlay.keystoreType;
 		if (type == null)
 			type = getKeyStoreTypePersistent();
 		return type;
@@ -1230,7 +1229,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreTypePersistent() {
-		String type = this.configuration.getKeyStoreType();
+		String type = this.configuration.keystoreType;
 		if (type == null)
 			type = STRING_EMPTY;
 		return type;
@@ -1242,9 +1241,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreAlias(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
-			this.configuration.setKeyStoreAlias(STRING_EMPTY);
+			this.configuration.keystoreAlias = STRING_EMPTY;
 		} else {
-			this.configuration.setKeyStoreAlias(alias);
+			this.configuration.keystoreAlias = alias;
 		}
 	}
 
@@ -1254,9 +1253,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreAliasOverlay(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
-			this.configurationOverlay.setKeyStoreAlias(STRING_EMPTY);
+			this.configurationOverlay.keystoreAlias = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setKeyStoreAlias(alias);
+			this.configurationOverlay.keystoreAlias = alias;
 		}
 	}
 
@@ -1265,7 +1264,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreAlias() {
-		String alias = this.configurationOverlay.getKeyStoreAlias();
+		String alias = this.configurationOverlay.keystoreAlias;
 		if (alias == null)
 			alias = getKeyStoreAliasPersistent();
 		return alias;
@@ -1276,7 +1275,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreAliasPersistent() {
-		String alias = this.configuration.getKeyStoreAlias();
+		String alias = this.configuration.keystoreAlias;
 		if (alias == null)
 			alias = STRING_EMPTY;
 		return alias;
@@ -1288,9 +1287,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreStorePass(String storePass) {
 		if (storePass == null || storePass.trim().isEmpty()) {
-			this.configuration.setKeyStoreStorePass(STRING_EMPTY);
+			this.configuration.keystoreStorePass = STRING_EMPTY;
 		} else {
-			this.configuration.setKeyStoreStorePass(storePass);
+			this.configuration.keystoreStorePass = storePass;
 		}
 	}
 
@@ -1300,9 +1299,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreStorePassOverlay(String storePass) {
 		if (storePass == null || storePass.trim().isEmpty()) {
-			this.configurationOverlay.setKeyStoreStorePass(STRING_EMPTY);
+			this.configurationOverlay.keystoreStorePass = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setKeyStoreStorePass(storePass);
+			this.configurationOverlay.keystoreStorePass = storePass;
 		}
 	}
 
@@ -1311,7 +1310,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreStorePass() {
-		String storePass = this.configurationOverlay.getKeyStoreStorePass();
+		String storePass = this.configurationOverlay.keystoreStorePass;
 		if (storePass != null)
 			return storePass;
 		return getKeyStoreStorePassPersistent();
@@ -1322,7 +1321,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreStorePassPersistent() {
-		String storePass = this.configuration.getKeyStoreStorePass();
+		String storePass = this.configuration.keystoreStorePass;
 		if (storePass == null)
 			storePass = STRING_EMPTY;
 		return storePass;
@@ -1334,9 +1333,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreKeyPass(String keyPass) {
 		if (keyPass == null || keyPass.trim().isEmpty()) {
-			this.configuration.setKeyStoreKeyPass(STRING_EMPTY);
+			this.configuration.keystoreKeyPass = STRING_EMPTY;
 		} else {
-			this.configuration.setKeyStoreKeyPass(keyPass);
+			this.configuration.keystoreKeyPass = keyPass;
 		}
 	}
 
@@ -1346,9 +1345,9 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	@Override
 	public void setKeyStoreKeyPassOverlay(String keyPass) {
 		if (keyPass == null || keyPass.trim().isEmpty()) {
-			this.configurationOverlay.setKeyStoreKeyPass(STRING_EMPTY);
+			this.configurationOverlay.keystoreKeyPass = STRING_EMPTY;
 		} else {
-			this.configurationOverlay.setKeyStoreKeyPass(keyPass);
+			this.configurationOverlay.keystoreKeyPass = keyPass;
 		}
 	}
 
@@ -1357,7 +1356,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreKeyPass() {
-		String keyPass = this.configurationOverlay.getKeyStoreKeyPass();
+		String keyPass = this.configurationOverlay.keystoreKeyPass;
 		if (keyPass != null)
 			return keyPass;
 		return getKeyStoreKeyPassPersistent();
@@ -1368,7 +1367,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public String getKeyStoreKeyPassPersistent() {
-		String keyPass = this.configuration.getKeyStoreKeyPass();
+		String keyPass = this.configuration.keystoreKeyPass;
 		if (keyPass == null)
 			keyPass = STRING_EMPTY;
 		return keyPass;
@@ -1379,7 +1378,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setUpdateCheck(boolean checkUpdate) {
-		this.configuration.setUpdateCheck(checkUpdate);
+		this.configuration.updateCheck = checkUpdate;
 	}
 
 	/* (non-Javadoc)
@@ -1387,7 +1386,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public boolean getUpdateCheck() {
-		return this.configuration.getUpdateCheck();
+		return this.configuration.updateCheck;
 	}
 
 	/* (non-Javadoc)
@@ -1395,7 +1394,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setMainWindowSize(Point size) {
-		this.configuration.setMainWindowSize(size);
+		this.configuration.mainWindowSize = size;
 	}
 
 	/* (non-Javadoc)
@@ -1403,7 +1402,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public Point getMainWindowSize() {
-		return this.configuration.getMainWindowSize();
+		return this.configuration.mainWindowSize;
 	}
 
 	/* (non-Javadoc)
@@ -1411,7 +1410,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public boolean getSkipFinish() {
-		return this.configurationOverlay.getSkipFinish();
+		return this.configurationOverlay.skipFinish;
 	}
 
 	/* (non-Javadoc)
@@ -1419,7 +1418,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	 */
 	@Override
 	public void setSkipFinishOverlay(boolean skipFinish) {
-		this.configurationOverlay.setSkipFinish(skipFinish);
+		this.configurationOverlay.skipFinish = skipFinish;
 	}
 
 	/*
@@ -1468,12 +1467,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
     @Override
     public void setSaveFilePostFix(String postFix) {
-        this.configurationOverlay.setSaveFilePostFix(postFix);
+        this.configurationOverlay.saveFilePostFix = postFix;
     }
 
     @Override
 	public String getSaveFilePostFix(){
-		return this.configurationOverlay.getSaveFilePostFix();
+		return this.configurationOverlay.saveFilePostFix;
 	}
 
     @Override
@@ -1484,12 +1483,12 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 
 	@Override
 	public void setEnablePlaceholderUsage(boolean bool) {
-		this.configurationOverlay.setEnablePlaceholderUsage(bool);
+		this.configurationOverlay.enabledPlaceholderUsage = bool;
 	}
 
 	@Override
 	public boolean getEnablePlaceholderUsage() {
-		return this.configurationOverlay.getEnablePlaceholderUsage();
+		return this.configurationOverlay.enabledPlaceholderUsage;
 	}
 
 

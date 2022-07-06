@@ -44,7 +44,6 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainerImpl;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -97,7 +96,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * configuration container Keeps state for current configuration changes
 	 */
-	ConfigurationContainer configurationContainer = new ConfigurationContainerImpl();
+	ConfigurationContainer configurationContainer = new ConfigurationContainer();
 
 	/**
 	 * The stack layout

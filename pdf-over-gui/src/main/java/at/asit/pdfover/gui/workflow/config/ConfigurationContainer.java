@@ -15,11 +15,21 @@
  */
 package at.asit.pdfover.gui.workflow.config;
 
+// Imports
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Locale;
 
 import at.asit.pdfover.commons.Profile;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
@@ -27,402 +37,158 @@ import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
- * Configuration container
+ * Implementation of the configuration container
  */
-public interface ConfigurationContainer {
+public class ConfigurationContainer {
 	/**
-	 * Gets the configured emblem
-	 * @return the configured emblem
-	 */
-	public String getEmblem();
-
-	/**
-	 * Sets the emblem
-	 * @param emblem the emblem
-	 * @throws InvalidEmblemFile
-	 */
-	public void setEmblem(String emblem) throws InvalidEmblemFile;
-
-	/**
-	 * Gets the mobile phone number
-	 * @return the mobile phone number
-	 */
-	public String getMobileNumber();
-
-	/**
-	 * Sets the mobile phone number
-	 * @param number the mobile phone number
-	 */
-	public void setMobileNumber(String number);
-
-	/**
-	 * Gets the mobile phone number
-	 * @return the mobile phone number
-	 */
-	public String getMobilePassword();
-
-	/**
-	 * Sets the mobile phone password
-	 * @param password the mobile phone password
-	 */
-	public void setMobilePassword(String password);
-
-	/**
-	 * Gets the proxy host
-	 * @return the proxy host
-	 */
-	public String getProxyHost();
-
-	/**
-	 * Sets the proxy host
-	 * @param host the proxy host
-	 */
-	public void setProxyHost(String host);
-
-	/**
-	 * Gets the proxy port
-	 *
-	 * if port is -1 no port is selected
-	 *
-	 * @return the proxy port
-	 */
-	public int getProxyPort();
-
-	/**
-	 * Sets the proxy port
-	 *
-	 * set to -1 for no port
-	 *
-	 * @param port the proxy port
-	 * @throws InvalidPortException
-	 */
-	public void setProxyPort(int port) throws InvalidPortException;
-
-	/**
-	 * Gets the proxy username
-	 * @return the proxy username
-	 */
-	public String getProxyUser();
-
-	/**
-	 * Sets the proxy username
-	 * @param user the proxy username
-	 */
-	public void setProxyUser(String user);
-
-	/**
-	 * Gets the proxy password
-	 * @return the proxy password
-	 */
-	public String getProxyPass();
-
-	/**
-	 * Sets the proxy password
-	 * @param pass the proxy password
-	 */
-	public void setProxyPass(String pass);
-
-	/**
-	 * Gets the signature note
-	 * @return the signature note
-	 */
-	public String getSignatureNote();
-
-	/**
-	 * Sets the signature note
-	 * @param note the signature note
-	 */
-	public void setSignatureNote(String note);
-
-	/**
-	 * Gets the transparency of the placeholder
-	 * @return transparency of the placeholder (0-255)
-	 */
-	public int getPlaceholderTransparency();
-
-	/**
-	 * Sets the transparency of the placeholder
-	 * @param transparency transparency of the placeholder (0-255)
-	 */
-	public void setPlaceholderTransparency(int transparency);
-
-	/**
-	 * Gets the default BKU
-	 * @return the default BKU
-	 */
-	public BKUs getDefaultBKU();
-
-	/**
-	 * Sets the default BKU
-	 * @param defaultBKU the default BKU
-	 */
-	public void setDefaultBKU(BKUs defaultBKU);
-
-	/**
-	 * Gets the default output folder
-	 * @return the default output folder
-	 */
-	public String getOutputFolder();
-
-	/**
-	 * Sets the default output folder
-	 * @param folder the default output folder
-	 */
-	public void setOutputFolder(String folder);
-
-	/**
-	 * Gets the locale
-	 * @return the locale
-	 */
-	public Locale getLocale();
-
-	/**
-	 * Sets the locale
-	 * @param locale the locale
-	 */
-	public void setLocale(Locale locale);
-
-	/**
-	 * Gets the signature locale
-	 * @return the signature locale
-	 */
-	public Locale getSignatureLocale();
-
-	/**
-	 * Sets the signature locale
-	 * @param locale the signature locale
-	 */
-	public void setSignatureLocale(Locale locale);
-
-	/**
-	 * Gets the signature PDF/A compatibility setting
-	 * @return the signature PDF/A compatibility setting
-	 */
-	public boolean getSignaturePdfACompat();
-
-	/**
-	 * Sets the signature PDF/A compatibility setting
-	 * @param compat the signature PDF/A compatibility setting
-	 */
-	public void setSignaturePdfACompat(boolean compat);
-
-	/**
-	 * Gets the mobile BKU URL
-	 * @return the mobile BKU URL
-	 */
-	public String getMobileBKUURL();
-
-	/**
-	 * Sets the mobile BKU URL
-	 * @param bkuUrl the mobile BKU URL
-	 */
-	public void setMobileBKUURL(String bkuUrl);
-
-	/**
-	 * Gets the mobile BKU type
-	 * @return the mobile BKU type
-	 */
-	public MobileBKUs getMobileBKUType();
-
-	/**
-	 * Sets the mobile BKU type
-	 * @param bkuType the mobile BKU type
-	 */
-	public void setMobileBKUType(MobileBKUs bkuType);
-
-	/**
-	 * Gets the mobile BKU BASE64 setting
-	 * @return the mobile BKU BASE64 setting
-	 */
-	public boolean getMobileBKUBase64();
-
-	/**
-	 * Sets the mobile BKU BASE64 setting
-	 * @param useBase64 the mobile BKU BASE64 setting
-	 */
-	public void setMobileBKUBase64(boolean useBase64);
-
-	/**
-	 * Gets the default signature position
-	 * @return the default signature position
-	 */
-	public SignaturePosition getDefaultSignaturePosition();
-
-	/**
-	 * Sets the default signature position
-	 * @param signaturePosition the default signature position
-	 */
-	public void setDefaultSignaturePosition(SignaturePosition signaturePosition);
-
-	/**
-	 * Gets whether keystore signing is enabled
-	 * @return whether keystore signing is enabled
-	 */
-	public Boolean getKeyStoreEnabled();
-
-	/**
-	 * Sets whether keystore signing is enabled
-	 * @param enabled whether keystore signing is enabled
-	 */
-	public void setKeyStoreEnabled(Boolean enabled);
-
-	/**
-	 * Gets the keystore file
-	 * @return the keystore file
-	 */
-	public String getKeyStoreFile();
-
-	/**
-	 * Sets the keystore file
-	 * @param file the keystore file
-	 */
-	public void setKeyStoreFile(String file);
-
-	/**
-	 * Gets the keystore type
-	 * @return the keystore type
-	 */
-	public String getKeyStoreType();
-
-	/**
-	 * Sets the keystore type
-	 * @param type the keystore type
-	 */
-	public void setKeyStoreType(String type);
-
-	/**
-	 * Gets the keystore alias
-	 * @return the keystore alias
-	 */
-	public String getKeyStoreAlias();
-
-	/**
-	 * Sets the keystore alias
-	 * @param alias the keystore alias
-	 */
-	public void setKeyStoreAlias(String alias);
-
-	/**
-	 * Gets the keystore store password
-	 * @return the keystore store password
-	 */
-	public String getKeyStoreStorePass();
-
-	/**
-	 * Sets the keystore store password
-	 * @param storePass the keystore store password
-	 */
-	public void setKeyStoreStorePass(String storePass);
-
-	/**
-	 * Gets the keystore key password
-	 * @return the keystore key password
-	 */
-	public String getKeyStoreKeyPass();
-
-	/**
-	 * Sets the keystore key password
-	 * @param keyPass the keystore key password
-	 */
-	public void setKeyStoreKeyPass(String keyPass);
-
-	/**
-	 * Gets whether to automatically check for application updates
-	 * @return whether to automatically check for application updates
-	 */
-	public boolean getUpdateCheck();
-
-	/**
-	 * Sets whether to automatically check for application updates
-	 * @param checkUpdate whether to automatically check for application updates
-	 */
-	public void setUpdateCheck(boolean checkUpdate);
-
-	/**
-	 * Gets the main window size
-	 * @return the main window size
-	 */
-	public Point getMainWindowSize();
-
-	/**
-	 * Sets the main window size
-	 * @param size the main window size
-	 */
-	public void setMainWindowSize(Point size);
-
-	/**
-	 * Gets whether to skip the finish screen
-	 * @return whether to skip the finish screen
-	 */
-	public boolean getSkipFinish();
-
-	/**
-	 * Sets whether to skip the finish screen
-	 * @param skipFinish whether to skip the finish screen
-	 */
-	public void setSkipFinish(boolean skipFinish);
-
-
-	/**
-	 * Gets theCertificate-Download URL
-	 * @return the Certificate-Download URL
-	 */
-	public String getDownloadURL();
-
-
-
-	/**
-	 * Gets whether to use an existing signature marker.
-	 *
-	 * @return whether to use an existing signature marker
-	 */
-	public boolean getUseMarker();
-
-	/**
-	 * Sets whether to use an existing signature marker.
-	 *
-	 * @param useMarker
-	 *            whether to use an existing signature marker
-	 */
-	public void setUseMarker(boolean useMarker);
-
-
-	/***
-	 * Extension to the standard use marker implementation
-	 * @param useFields
-	 */
-	public void setUseSignatureFields(boolean useFields);
-
-
-	/**
-	 * @return if the usage of signatureFields is enabled
-	 */
-	public boolean getUseSignatureFields();
-
-	/**
-	 * @param bool
-	 */
-	public void setEnablePlaceholderUsage(boolean bool);
-
-	/**
-	 * @return boolean
-	 */
-	public boolean getEnablePlaceholderUsage();
-
-
-	/**
-	 * @param profile set the selected profile
-	 */
-	public void setSignatureProfile(Profile profile);
-
-
-	/**
-	 * @return selected signature profile as string
-	 */
-	public Profile getSignatureProfile();
-
-
-	public void setSaveFilePostFix(String postFix);
-
-	public String getSaveFilePostFix();
+	 * SLF4J Logger instance
+	 **/
+	@SuppressWarnings("unused")
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationContainer.class);
+
+	/** the emblem File */
+	protected String emblemFile = null;
+	public String getEmblem() { return this.emblemFile; }
+	public void setEmblem(String emblemFile) throws InvalidEmblemFile {
+		if (emblemFile == null || emblemFile.trim().isEmpty()) {
+			// Ok to set no file ...
+		} else {
+			File imageFile = new File(emblemFile);
+			if (!imageFile.exists()) {
+				throw new InvalidEmblemFile(imageFile,
+						new FileNotFoundException(emblemFile));
+			}
+
+			try {
+				Image img = new Image(Display.getDefault(), new ImageData(
+						emblemFile));
+
+				img.dispose();
+			} catch (Exception ex) {
+				throw new InvalidEmblemFile(imageFile, ex);
+			}
+		}
+
+		this.emblemFile = emblemFile;
+	}
+
+	/** The mobile phone number */
+	protected String mobileNumber = null;
+	public String getMobileNumber() { return this.mobileNumber; }
+	public void setMobileNumber(String number) {
+		if(number == null || number.trim().isEmpty()) {
+			this.mobileNumber = null;
+			return;
+		}
+		this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
+	}
+
+	/** The mobile phone password */
+	public String mobilePassword = null;
+
+	/** Holds the proxy host */
+	public String proxyHost = null;
+
+	/** Holds the proxy port number */
+	protected int proxyPort = -1;
+	public int getProxyPort() { return this.proxyPort; }
+	public void setProxyPort(int port) throws InvalidPortException {
+		if(port > 0 && port <= 0xFFFF) {
+			this.proxyPort = port;
+			return;
+		}
+		if(port == -1) {
+			this.proxyPort = -1;
+			return;
+		}
+		throw new InvalidPortException(port);
+	}
+
+	/** Holds the proxy username */
+	public String proxyUser = null;
+
+	/** Holds the proxy password */
+	public String proxyPass = null;
+
+	/** Holds the transparency of the signature placeholder */
+	public int placeholderTransparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
+
+	/** Holds the default BKU to use */
+	public BKUs defaultBKU = BKUs.NONE;
+
+	/** Holds the output folder */
+	public String outputFolder = null;
+
+	/** Holds the signatureNote */
+	public String signatureNote = null;
+
+	/** Holds the locale */
+	public Locale locale = null;
+	
+	/** Holds the signature locale */
+	public Locale signatureLocale = null;
+
+	/** Holds the PDF/A compatibility setting */
+	public boolean signaturePDFACompat = false;
+
+	/** Holds the mobile BKU URL */
+	public String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
+
+	/** Holds the mobile BKU type */
+	public MobileBKUs mobileBKUType = ConfigProviderImpl.DEFAULT_MOBILE_BKU_TYPE;
+
+	/** Holds the mobile BKU BASE64 setting */
+	protected boolean mobileBKUBase64 = false;
+
+	/** Holds the default signature position */
+	public SignaturePosition defaultSignaturePosition = null;
+
+	/** Keystore signing options */
+	public Boolean keystoreEnabled = null;
+	public String keystoreFile = null;
+	public String keystoreType = null;
+	public String keystoreAlias = null;
+	public String keystoreStorePass = null;
+	public String keystoreKeyPass = null;
+
+	/** Whether to automatically check for updates */
+	public boolean updateCheck = true;
+
+	/** Holds the main window size */
+	public Point mainWindowSize = null;
+
+	/** Whether to skip the output state */
+	public boolean skipFinish = false;
+
+	/** Whether to use an existing signature marker. */
+	protected boolean useMarker = false;
+	public boolean getUseMarker() { return this.useMarker; }
+	public void setUseMarker(boolean useMarker) {
+		this.useMarker = useMarker;
+		if (useMarker) setUseSignatureFields(false);
+	}
+
+	/** Either QR-Code or signature fields as marker */
+	protected boolean useSignatureFields = false;
+	public boolean getUseSignatureFields() { return this.useSignatureFields; }
+	public void setUseSignatureFields(boolean useFields) {
+		this.useSignatureFields  = useFields;
+		if (useFields) setUseMarker(false);
+	}
+
+	/** describes if the placeholder search is enabled */
+	public boolean enabledPlaceholderUsage = false;
+
+	/**	The Signature Profile */
+	protected Profile signatureProfile = null;
+	public Profile getSignatureProfile() {
+		if (this.signatureProfile == null) {
+			this.signatureProfile = Profile.SIGNATURBLOCK_SMALL;
+		}
+		return this.signatureProfile;
+	}
+	public void setSignatureProfile(Profile profile) { this.signatureProfile = profile; }
+
+	public String saveFilePostFix = "_signed";
+
 }

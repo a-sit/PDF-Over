@@ -213,7 +213,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				File f = new File(KeystoreConfigurationComposite.this
-						.configurationContainer.getKeyStoreFile());
+						.configurationContainer.keystoreFile);
 				try {
 					loadKeystore();
 				} catch (KeyStoreException ex) {
@@ -280,10 +280,10 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		ConfigurationContainer config =
 				KeystoreConfigurationComposite.this.configurationContainer;
-		File f = new File(config.getKeyStoreFile());
-		this.ks = KeyStore.getInstance(config.getKeyStoreType());
+		File f = new File(config.keystoreFile);
+		this.ks = KeyStore.getInstance(config.keystoreType);
 		FileInputStream fis = new FileInputStream(f);
-		this.ks.load(fis, config.getKeyStoreStorePass().toCharArray());
+		this.ks.load(fis, config.keystoreStorePass.toCharArray());
 		this.cmbKeystoreAlias.remove(0, this.cmbKeystoreAlias.getItemCount()-1);
 		Enumeration<String> aliases = this.ks.aliases();
 		while (aliases.hasMoreElements())
@@ -301,7 +301,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	protected void performKeystoreFileChanged(String fileName) {
 		log.debug("Selected keystore file: " + fileName);
-		this.configurationContainer.setKeyStoreFile(fileName);
+		this.configurationContainer.keystoreFile = fileName;
 		KeystoreConfigurationComposite.this.txtKeystoreFile.setText(fileName);
 		int i = fileName.lastIndexOf('.');
 		if (i > 0) {
@@ -323,7 +323,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	protected void performKeystoreTypeChanged(String type) {
 		log.debug("Selected keystore type: " + type);
-		this.configurationContainer.setKeyStoreType(type);
+		this.configurationContainer.keystoreType = type;
 		for (int i = 0; i < this.cmbKeystoreType.getItemCount(); ++i) {
 			if (this.keystoreTypes.get(this.cmbKeystoreType.getItem(i)).equals(type)) {
 				this.cmbKeystoreType.select(i);
@@ -337,7 +337,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	protected void performKeystoreStorePassChanged(String storepass) {
 		log.debug("Changed keystore store password");
-		this.configurationContainer.setKeyStoreStorePass(storepass);
+		this.configurationContainer.keystoreStorePass = storepass;
 		this.txtKeystoreStorePass.setText(storepass);
 	}
 
@@ -346,7 +346,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	protected void performKeystoreAliasChanged(String alias) {
 		log.debug("Selected keystore alias: " + alias);
-		this.configurationContainer.setKeyStoreAlias(alias);
+		this.configurationContainer.keystoreAlias = alias;
 		this.cmbKeystoreAlias.setText(alias);
 	}
 
@@ -355,7 +355,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	protected void performKeystoreKeyPassChanged(String keypass) {
 		log.debug("Changed keystore key password");
-		this.configurationContainer.setKeyStoreKeyPass(keypass);
+		this.configurationContainer.keystoreKeyPass = keypass;
 		this.txtKeystoreKeyPass.setText(keypass);
 	}
 
@@ -387,11 +387,11 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void initConfiguration(PersistentConfigProvider provider) {
 		ConfigurationContainer config = this.configurationContainer;
-		config.setKeyStoreFile(provider.getKeyStoreFilePersistent());
-		config.setKeyStoreType(provider.getKeyStoreTypePersistent());
-		config.setKeyStoreAlias(provider.getKeyStoreAliasPersistent());
-		config.setKeyStoreStorePass(provider.getKeyStoreStorePassPersistent());
-		config.setKeyStoreKeyPass(provider.getKeyStoreKeyPassPersistent());
+		config.keystoreFile = provider.getKeyStoreFilePersistent();
+		config.keystoreType = provider.getKeyStoreTypePersistent();
+		config.keystoreAlias = provider.getKeyStoreAliasPersistent();
+		config.keystoreStorePass = provider.getKeyStoreStorePassPersistent();
+		config.keystoreKeyPass = provider.getKeyStoreKeyPassPersistent();
 	}
 
 	/*
@@ -403,10 +403,10 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
 		ConfigurationContainer config = this.configurationContainer;
-		String ks = config.getKeyStoreFile();
+		String ks = config.keystoreFile;
 		performKeystoreFileChanged(ks);
-		performKeystoreTypeChanged(config.getKeyStoreType());
-		performKeystoreStorePassChanged(config.getKeyStoreStorePass());
+		performKeystoreTypeChanged(config.keystoreType);
+		performKeystoreStorePassChanged(config.keystoreStorePass);
 		try {
 			File ksf = new File(ks);
 			if (ksf.exists())
@@ -414,8 +414,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		} catch (Exception e) {
 			log.error("Error loading keystore", e);
 		}
-		performKeystoreAliasChanged(config.getKeyStoreAlias());
-		performKeystoreKeyPassChanged(config.getKeyStoreKeyPass());
+		performKeystoreAliasChanged(config.keystoreAlias);
+		performKeystoreKeyPassChanged(config.keystoreKeyPass);
 	}
 
 	/* (non-Javadoc)
@@ -425,11 +425,11 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	public void storeConfiguration(ConfigManipulator store,
 			PersistentConfigProvider provider) {
 		ConfigurationContainer config = this.configurationContainer;
-		store.setKeyStoreFile(config.getKeyStoreFile());
-		store.setKeyStoreType(config.getKeyStoreType());
-		store.setKeyStoreAlias(config.getKeyStoreAlias());
-		store.setKeyStoreStorePass(config.getKeyStoreStorePass());
-		store.setKeyStoreKeyPass(config.getKeyStoreKeyPass());
+		store.setKeyStoreFile(config.keystoreFile);
+		store.setKeyStoreType(config.keystoreType);
+		store.setKeyStoreAlias(config.keystoreAlias);
+		store.setKeyStoreStorePass(config.keystoreStorePass);
+		store.setKeyStoreKeyPass(config.keystoreKeyPass);
 	}
 
 	/*
@@ -444,7 +444,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		ConfigurationContainer config = this.configurationContainer;
 		switch (resumeFrom) {
 		case 0:
-			String fname = config.getKeyStoreFile();
+			String fname = config.keystoreFile;
 			if (fname.isEmpty())
 				break; //no checks required
 			File f = new File(fname);
@@ -459,7 +459,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			}
 			// Fall through
 		case 2:
-			String alias = config.getKeyStoreAlias();
+			String alias = config.keystoreAlias;
 			if (!this.ks.containsAlias(alias))
 				throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
 			if (!this.ks.isKeyEntry(alias))
@@ -467,8 +467,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			// Fall through
 		case 3:
 			try {
-				alias = config.getKeyStoreAlias();
-				String keypass = config.getKeyStoreKeyPass();
+				alias = config.keystoreAlias;
+				String keypass = config.keystoreKeyPass;
 				this.ks.getKey(alias, keypass.toCharArray());
 			} catch (Exception e) {
 				throw new KeystoreKeyPasswordException(4);
