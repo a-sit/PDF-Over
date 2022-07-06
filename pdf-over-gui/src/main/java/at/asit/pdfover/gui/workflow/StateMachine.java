@@ -15,93 +15,301 @@
  */
 package at.asit.pdfover.gui.workflow;
 
+//Imports
+import java.lang.reflect.Constructor;
+
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import at.asit.pdfover.gui.MainWindow;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
+import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
- *
+ * Workflow holds logical state of signing process and updates the current
+ * logical state
  */
-public interface StateMachine {
-	/**
-	 * Get the ConfigProvider
-	 * @return the ConfigProvider
-	 */
-	public ConfigProvider getConfigProvider();
+public class StateMachine implements GUIProvider {
+
+	private static final Logger log = LoggerFactory.getLogger(StateMachine.class);
+
+	private Status status;
+
+	private PDFSignerImpl pdfSigner;
+
+	private ConfigProviderImpl configProvider;
 
 	/**
-	 * Get the PersistentConfigProvider
-	 * @return the PersistentConfigProvider
-	 */
-	public PersistentConfigProvider getPersistentConfigProvider();
-
-	/**
-	 * Gets the Config Manipulator
-	 * @return the config manipulator
-	 */
-	public ConfigManipulator getConfigManipulator();
-
-	/**
-	 * Gets the Config Overlay Manipulator
-	 * @return the config overlay manipulator
-	 */
-	public ConfigOverlayManipulator getConfigOverlayManipulator();
-
-	/**
-	 * Get the PDF Signer
-	 * @return the PDF Signer
-	 */
-	public PDFSigner getPDFSigner();
-
-	/**
-	 * Get the Status
-	 * @return the Status
-	 */
-	public Status getStatus();
-
-	/**
-	 * Gets the GUI provider
-	 * @return the GUI provider
-	 */
-	public GUIProvider getGUIProvider();
-
-	/**
-	 * Jump to specific state
+	 * Default constructor
 	 *
-	 * Sets the state machine state this method should be used to let the user jump
+	 * @param cmdLineArgs
+	 */
+	public StateMachine(String[] cmdLineArgs) {
+		this.status = new Status();
+		this.status.setCurrentState(new PrepareConfigurationState(this));
+		this.pdfSigner = new PDFSignerImpl();
+		this.configProvider = new ConfigProviderImpl();
+		setCmdLineArgs(cmdLineArgs);
+	}
+
+	/**
+	 * Sets the workflow state
+	 * This method should be used to let the user jump
 	 * around between states. This Method also resets certain properties defined
-	 * by later states then the target state.
+	 * by later states then state
 	 *
-	 * Example: Usually the MainWindow allows the user to jump to the states:
-	 * DataSourceSelectionState, PositioningState and BKUSelectionState
+	 * @param state
+	 */
+	public void jumpToState(State state) {
+		this.status.setCurrentState(state);
+		this.invokeUpdate();
+	}
+
+	/**
+	 * Update workflow logic and let state machine do its job...
+	 */
+	public synchronized void update() {
+		State next = null;
+		while (this.status.getCurrentState() != null) {
+			State current = this.status.getCurrentState();
+			try {
+				current.run();
+			} catch (Exception e) {
+				log.error("StateMachine update: ", e);
+				ErrorDialog errorState = new ErrorDialog(this.getMainShell(),
+						Messages.getString("error.Unexpected"), BUTTONS.OK);
+				//errorState.setException(e);
+				//jumpToState(errorState);
+				errorState.open();
+				this.exit();
+			}
+
+			if (this.exit) {
+				// exit request ignore
+				next = null;
+				this.status.setCurrentState(next);
+			} else {
+
+				if (this.mainWindow != null
+						&& !this.mainWindow.getShell().isDisposed()) {
+					log.debug("Allowing MainWindow to update its state for "
+							+ current);
+					current.updateMainWindowBehavior();
+					this.mainWindow.applyBehavior();
+					this.mainWindow.doLayout();
+				}
+				next = current.nextState();
+				if (next == current) {
+					break;
+				}
+
+				if (next == null) {
+					log.info("Next state is null -> exit");
+					this.status.setCurrentState(next);
+					break;
+				}
+
+				log.debug("Changing state from: "
+						+ current + " to "
+						+ next.toString());
+				this.status.setCurrentState(next);
+			}
+		}
+	}
+
+	/**
+	 * Invoke Update in UI (Main) Thread
+	 */
+	public void invokeUpdate() {
+		if (this.display != null) {
+			this.display.asyncExec(() -> {
+				this.update();
+			});
+		}
+	}
+
+	private Display display = null;
+
+	private Shell shell = null;
+
+	private Composite container = null;
+
+	private MainWindow mainWindow = null;
+
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @param state the state to jump to
+	 * @see
+	 * at.asit.pdfover.gui.workflow.StateMachine#display(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
-	public void jumpToState(State state);
+	public void display(Composite composite) {
+		this.mainWindow.setTopControl(composite);
+	}
+
+	private void createMainWindow() {
+		try {
+
+			this.display = Display.getDefault();
+
+			this.mainWindow = new MainWindow(this);
+			this.mainWindow.open();
+
+			this.shell = this.mainWindow.getShell();
+
+			this.container = this.mainWindow.getContainer();
+
+			this.shell.open();
+			this.shell.layout();
+		} catch (Exception e) {
+			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage());
+			this.display = null;
+			this.mainWindow = null;
+			this.shell = null;
+			this.container = null;
+			throw e;
+		}
+	}
 
 	/**
-	 * Update state machine
-	 * Calls the next state.
-	 */
-	public void update();
-
-	/**
-	 * Update state machine from other thread
-	 * Calls the next state within the main thread
-	 */
-	public void invokeUpdate();
-
-	/**
-	 * Exit state machine execution
-	 */
-	public void exit();
-
-	/**
-	 * Gets the command line arguments
+	 * Gets the Shell for drawing the ui
 	 *
-	 * @return the command line arguments
+	 * @return Composite
 	 */
-	public String[] getCmdArgs();
+	public synchronized Composite getComposite() {
+		// Main window will be built on first call
+		// returns SWT Composite container for states to draw their GUI
+
+		if (this.container == null) {
+			this.createMainWindow();
+		}
+
+		return this.container;
+	}
+
+	public <T> T createComposite(Class<T> compositeClass, int style, State state) {
+		T composite = null;
+		try {
+			Constructor<T> constructor = compositeClass.getDeclaredConstructor(
+					Composite.class, int.class, State.class);
+			composite = constructor.newInstance(getComposite(), style, state);
+		} catch (Exception e) {
+			log.error("Could not create Composite for Class "
+					+ compositeClass.getName(), e);
+		}
+		return composite;
+	}
+
+	/**
+	 * Only returns a shell if one was already created ...
+	 *
+	 * @return
+	 */
+	private Shell nonCreatingGetShell() {
+		return this.shell;
+	}
+
+	private boolean exit = false;
+
+	/**
+	 * Exists the Workflow
+	 */
+	public void exit() {
+		this.exit = true;
+		if (this.shell != null) {
+			this.shell.dispose();
+		}
+	}
+
+	/**
+	 * Only returns a shell if one was already created ...
+	 *
+	 * @return
+	 */
+	private Display nonCreatingGetDisplay() {
+		return this.display;
+	}
+
+	/**
+	 * Workflow main entrance point
+	 */
+	public void start() {
+
+		// Call update to start processing ...
+		update();
+
+		// if a user interaction is required we have a shell ...
+		Shell shell = nonCreatingGetShell();
+		Display display = nonCreatingGetDisplay();
+
+		if (this.status.getCurrentState() == null) {
+			if (shell != null) {
+				this.shell.dispose();
+			}
+		}
+
+		if (shell != null && display != null) {
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+			display.dispose();
+		}
+	}
+	public ConfigProvider getConfigProvider() {
+		return this.configProvider;
+	}
+	public PersistentConfigProvider getPersistentConfigProvider() {
+		return this.configProvider;
+	}
+	public ConfigManipulator getConfigManipulator() {
+		return this.configProvider;
+	}
+	public ConfigOverlayManipulator getConfigOverlayManipulator() {
+		return this.configProvider;
+	}
+	public Status getStatus() {
+		return this.status;
+	}
+
+	public PDFSigner getPDFSigner() {
+		return this.pdfSigner;
+	}
+
+	public GUIProvider getGUIProvider() {
+		return this;
+	}
+
+	private String[] cmdLineArgs = new String[] {};
+	private void setCmdLineArgs(String[] cmdLineArgs) {
+		this.cmdLineArgs = cmdLineArgs;
+	}
+	public String[] getCmdArgs() {
+		return this.cmdLineArgs;
+	}
+
+
+	public synchronized Shell getMainShell() {
+		if(this.shell == null) {
+			this.createMainWindow();
+		}
+
+		return this.shell;
+	}
+
+	public void reloadResources() {
+		this.mainWindow.reloadLocalization();
+	}
 }

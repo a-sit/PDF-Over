@@ -22,10 +22,11 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.gui.workflow.StateMachine;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.StateMachineImpl;
 import iaik.security.provider.IAIK;
 
 /**
@@ -61,12 +62,8 @@ public class Main {
 			// force keystore type (Adoptium JRE 17 still ships with JKS)
 			System.setProperty("javax.net.ssl.trustStoreType", "jks");
 
-			StateMachineImpl stateMachine = new StateMachineImpl(args);
-
 			log.debug("Starting stateMachine ...");
-			stateMachine.start();
-
-
+			(new StateMachine(args)).start();
 			log.debug("Ended stateMachine ...");
 		}
 		catch (Throwable e) {
