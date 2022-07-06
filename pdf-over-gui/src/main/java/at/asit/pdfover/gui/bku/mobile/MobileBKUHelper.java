@@ -20,9 +20,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

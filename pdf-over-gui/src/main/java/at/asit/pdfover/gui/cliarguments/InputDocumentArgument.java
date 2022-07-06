@@ -60,7 +60,7 @@ public class InputDocumentArgument extends Argument {
 					throw new FileNotFoundException(signatureDocument);
 				}
 
-				getStatus().setDocument(signatureDocumentFile);
+				getStatus().document = signatureDocumentFile;
 
 				return argOffset + 1;
 			}

@@ -57,7 +57,7 @@ public class SigningState extends State {
 				Signer signer = this.state.getStateMachine().getPDFSigner().getPDFSigner();
 				Status status = this.state.getStateMachine().getStatus();
 
-				status.setSignResult(signer.sign(status.getSigningState()));
+				status.signResult = signer.sign(status.signingState);
 			} catch(Exception e) {
 				this.state.threadException = e;
 			} finally {
@@ -84,7 +84,7 @@ public class SigningState extends State {
 	public void run() {
 		Status status = getStateMachine().getStatus();
 
-		if(status.getSignResult() == null &&
+		if(status.signResult == null &&
 			this.threadException == null) {
 			Thread t = new Thread(new FinishSignThread(this));
 			t.start();
@@ -147,8 +147,7 @@ public class SigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

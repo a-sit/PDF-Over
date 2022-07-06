@@ -85,33 +85,33 @@ public class OpenState extends State {
 		Status status = getStateMachine().getStatus();
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {
-			status.setBKU(config.getDefaultBKU());
-			status.setDocument(null);
-			status.setSignaturePosition(config.getDefaultSignaturePosition());
+			status.bku = config.getDefaultBKU();
+			status.document = null;
+			status.signaturePosition = config.getDefaultSignaturePosition();
 
 			/* ensure that files get closed */
 			status.getPreviousState().cleanUp();
 		}
 
-		if (status.getDocument() == null) {
+		if (status.document == null) {
 			DataSourceSelectComposite selection = this.getSelectionComposite();
 
 			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
 
-			status.setDocument(selection.getSelected());
+			status.document = selection.getSelected();
 
-			if (status.getDocument() == null) {
+			if (status.document == null) {
 				// Not selected yet
 				return;
 			}
 		}
-		log.debug("Got Datasource: " + getStateMachine().getStatus().getDocument().getAbsolutePath());
+		log.debug("Got Datasource: " + getStateMachine().getStatus().document.getAbsolutePath());
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
 		if (config.getEnablePlaceholderUsage()) {
-			try (PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().getDocument())) {
+			try (PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().document)) {
 				// - scan for placeholders
 				boolean useSignatureFields = config.getUseSignatureFields();
 				boolean useMarker = config.getUseMarker();
@@ -147,7 +147,7 @@ public class OpenState extends State {
 											"select the fields", fields);
 									int res = gui.open();
 									if (res != -1) {
-										getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+										getStateMachine().getStatus().searchForPlacehoderSignature = true;
 										addPlaceholderSelectionToConfig(fields.get(res));
 										this.setNextState(new BKUSelectionState(getStateMachine()));
 									}
@@ -156,9 +156,9 @@ public class OpenState extends State {
 								}
 
 							} else if (result == SWT.NO) {
-								getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+								getStateMachine().getStatus().searchForPlacehoderSignature = false;
 							} else {
-								status.setDocument(null);
+								status.document = null;
 								return;
 							}
 							break;
@@ -185,18 +185,17 @@ public class OpenState extends State {
 							// - fill the position information so that we skip to
 							// the
 							// next stages without breaking stuff
-							SignaturePosition position = new SignaturePosition(
+							status.signaturePosition = new SignaturePosition(
 									signaturePlaceholderData.getTablePos().getPosX(),
 									signaturePlaceholderData.getTablePos().getPosY(),
 									signaturePlaceholderData.getTablePos().getPage());
-							status.setSignaturePosition(position);
 
-							getStateMachine().getStatus().setSearchForPlaceholderSignature(true);
+							getStateMachine().getStatus().searchForPlacehoderSignature = true;
 
 						} else if (result == SWT.NO) {
-							getStateMachine().getStatus().setSearchForPlaceholderSignature(false);
+							getStateMachine().getStatus().searchForPlacehoderSignature = false;
 						} else {
-							status.setDocument(null);
+							status.document = null;
 							return;
 						}
 						// TODO: why does this use a different logic (via PositioningState) than the signature placeholders?
@@ -257,7 +256,7 @@ public class OpenState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

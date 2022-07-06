@@ -96,7 +96,7 @@ public class ConfigurationUIState extends State {
 	@Override
 	public void updateMainWindowBehavior() {
 		// Leave the state as it is
-		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.setEnabled(Buttons.CONFIG, false);
 		behavior.setMainBarVisible(false);
 	}

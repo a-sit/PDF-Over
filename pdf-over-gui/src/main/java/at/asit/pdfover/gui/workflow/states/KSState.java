@@ -63,7 +63,7 @@ public class KSState extends State {
 	public void run() {
 		Status status = getStateMachine().getStatus();
 
-		SigningState signingState = status.getSigningState();
+		SigningState signingState = status.signingState;
 		ConfigProvider config = getStateMachine().getConfigProvider();
 
 		try {
@@ -138,8 +138,7 @@ public class KSState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

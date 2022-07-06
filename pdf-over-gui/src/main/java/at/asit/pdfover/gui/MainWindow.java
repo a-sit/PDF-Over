@@ -396,7 +396,7 @@ public class MainWindow {
 			},
 			/* preferencesListener */
 			(Event arg0) -> {
-				if (MainWindow.this.stateMachine.getStatus().getBehavior().getEnabled(Buttons.CONFIG))
+				if (MainWindow.this.stateMachine.getStatus().behavior.getEnabled(Buttons.CONFIG))
 					MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(MainWindow.this.stateMachine));
 			}
 		);
@@ -406,8 +406,7 @@ public class MainWindow {
 	 * Update MainWindow to fit new status
 	 */
 	public void applyBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = this.stateMachine.getStatus().behavior;
 
 		log.debug("Updating MainWindow state for : "
 				+ this.stateMachine.getStatus().getCurrentState().toString());

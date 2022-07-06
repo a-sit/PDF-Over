@@ -32,7 +32,6 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigProvider;
-import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -134,20 +133,14 @@ public class PrepareSigningState extends State {
 							.newParameter();
 				}
 
-				this.state.signatureParameter
-						.setInputDocument(new PDFFileDocumentSource(status
-								.getDocument()));
-				this.state.signatureParameter.setSignatureDevice(status
-						.getBKU());
-				if (status.getSignaturePosition() != null ) {
-					this.state.signatureParameter.setSignaturePosition(status
-						.getSignaturePosition());
+				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.document));
+				this.state.signatureParameter.setSignatureDevice(status.bku);
+				if (status.signaturePosition != null) {
+					this.state.signatureParameter.setSignaturePosition(status.signaturePosition);
 				}
 
-				if (configuration.getDefaultEmblem() != null
-						&& !configuration.getDefaultEmblem().isEmpty()) {
-					this.state.signatureParameter.setEmblem(new CachedFileNameEmblem(
-							configuration.getDefaultEmblem()));
+				if (configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().isEmpty()) {
+					this.state.signatureParameter.setEmblem(new CachedFileNameEmblem(configuration.getDefaultEmblem()));
 				}
 
 				if (configuration.getSignatureNote() != null
@@ -156,20 +149,15 @@ public class PrepareSigningState extends State {
 							"SIG_NOTE", configuration.getSignatureNote());
 				}
 
-				this.state.signatureParameter
-						.setSearchForPlaceholderSignatures(getStateMachine().getStatus().isSearchForPlaceholderSignature());
+				this.state.signatureParameter.setSearchForPlaceholderSignatures(getStateMachine().getStatus().searchForPlacehoderSignature);
 
-				this.state.signatureParameter
-						.setSignatureLanguage(configuration.getSignatureLocale()
-								.getLanguage());
+				this.state.signatureParameter.setSignatureLanguage(configuration.getSignatureLocale().getLanguage());
 
-				this.state.signatureParameter
-						.setSignaturePdfACompat(configuration.getSignaturePdfACompat());
+				this.state.signatureParameter.setSignaturePdfACompat(configuration.getSignaturePdfACompat());
 
 				this.state.signatureParameter.setSignatureProfile(configuration.getSignatureProfile());
 
-				this.state.signingState = this.state.signer
-						.prepare(this.state.signatureParameter);
+				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
 
 			} catch (Exception e) {
 				log.error("PrepareDocumentThread: ", e);
@@ -240,17 +228,22 @@ public class PrepareSigningState extends State {
 		}
 
 		// We got the Request set it into status and move on to next state ...
-		status.setSigningState(this.signingState);
+		status.signingState = this.signingState;
 
-		if (status.getBKU() == BKUs.LOCAL) {
-			this.setNextState(new LocalBKUState(getStateMachine()));
-		} else if (status.getBKU() == BKUs.MOBILE) {
-			this.setNextState(new MobileBKUState(getStateMachine()));
-		} else if (status.getBKU() == BKUs.KS) {
-			this.setNextState(new KSState(getStateMachine()));
-		} else {
-			log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");
-			this.setNextState(new BKUSelectionState(getStateMachine()));
+		switch (status.bku)
+		{
+			case LOCAL:
+				this.setNextState(new LocalBKUState(getStateMachine()));
+				break;
+			case MOBILE:
+				this.setNextState(new MobileBKUState(getStateMachine()));
+				break;
+			case KS:
+				this.setNextState(new KSState(getStateMachine()));
+				break;
+			default:
+				log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");
+				this.setNextState(new BKUSelectionState(getStateMachine()));
 		}
 	}
 
@@ -270,8 +263,7 @@ public class PrepareSigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

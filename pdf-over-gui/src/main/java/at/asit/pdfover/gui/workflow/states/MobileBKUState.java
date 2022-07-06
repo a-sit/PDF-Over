@@ -521,7 +521,7 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void run() {
-		this.signingState = getStateMachine().getStatus().getSigningState();
+		this.signingState = getStateMachine().getStatus().signingState;
 
 		this.signingState.setBKUConnector(new MobileBKUConnector(this));
 		log.debug("Setting base64 request to " + this.handler.useBase64Request());
@@ -573,8 +573,7 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

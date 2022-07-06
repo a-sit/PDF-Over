@@ -61,10 +61,9 @@ public class OutputState extends State {
 			this.outputComposite.setOutputDir(config.getDefaultOutputFolder());
 			this.outputComposite.setSaveFilePostFix(config.getSaveFilePostFix());
 			this.outputComposite.setTempDir(tmpDir.getAbsolutePath());
-			this.outputComposite.setInputFile(status.getDocument());
+			this.outputComposite.setInputFile(status.document);
 
-			this.outputComposite.setSignedDocument(status.getSignResult()
-					.getSignedDocument());
+			this.outputComposite.setSignedDocument(status.signResult.getSignedDocument());
 
 			// Save signed document
 			this.outputComposite.saveDocument();
@@ -81,7 +80,7 @@ public class OutputState extends State {
 	public void run() {
 		Status status = getStateMachine().getStatus();
 
-		if (status.getSignResult() == null) {
+		if (status.signResult == null) {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
 					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);
 			if(error.open() == SWT.RETRY) {
@@ -106,7 +105,7 @@ public class OutputState extends State {
 	@Override
 	public void cleanUp() {
 
-		getStateMachine().getStatus().setSignResult(null);
+		getStateMachine().getStatus().signResult = null;
 
 		if (this.outputComposite != null)
 			this.outputComposite.dispose();
@@ -119,8 +118,7 @@ public class OutputState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

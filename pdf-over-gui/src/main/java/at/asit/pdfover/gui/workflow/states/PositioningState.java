@@ -82,7 +82,7 @@ public class PositioningState extends State {
 
 	private void openPDFDocument() throws IOException {
 		closePDFDocument();
-		File documentPath = getStateMachine().getStatus().getDocument();
+		File documentPath = getStateMachine().getStatus().document;
 		PDFFile pdf = null;
 		RandomAccessFile rafile = new RandomAccessFile(documentPath, "r");
 		FileChannel chan = rafile.getChannel();
@@ -115,7 +115,7 @@ public class PositioningState extends State {
 		if (this.positionComposite == null) {
 			this.positionComposite =
 					stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  stateMachine.getStatus().getDocument());
+			log.debug("Displaying " +  stateMachine.getStatus().document);
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
@@ -150,12 +150,12 @@ public class PositioningState extends State {
 		if (!(status.getPreviousState() instanceof PositioningState) &&
 			!(status.getPreviousState() instanceof OpenState))
 		{
-			this.previousPosition = status.getSignaturePosition();
-			status.setSignaturePosition(null);
+			this.previousPosition = status.signaturePosition;
+			status.signaturePosition = null;
 		}
 
 		if ((this.document == null) ||
-				(this.loadedDocumentPath != getStateMachine().getStatus().getDocument())) {
+				(this.loadedDocumentPath != getStateMachine().getStatus().document)) {
 			log.debug("Checking PDF document for encryption");
 			try {
 				openPDFDocument();
@@ -177,7 +177,7 @@ public class PositioningState extends State {
 			}
 		}
 
-		if (status.getSignaturePosition() == null) {
+		if (status.signaturePosition == null) {
 			PositioningComposite position = null;
 			try {
 				position = this.getPositioningComposite(this.document);
@@ -187,16 +187,16 @@ public class PositioningState extends State {
 						getStateMachine().getGUIProvider().getMainShell(),
 						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK);
 				dialog.open();
-				status.setSignaturePosition(new SignaturePosition());
+				status.signaturePosition = new SignaturePosition();
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
 			}
 
 			getStateMachine().getGUIProvider().display(position);
 
-			status.setSignaturePosition(position.getPosition());
+			status.signaturePosition = position.getPosition();
 
-			if(status.getSignaturePosition() != null) {
+			if(status.signaturePosition != null) {
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 			}
 
@@ -221,7 +221,7 @@ public class PositioningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

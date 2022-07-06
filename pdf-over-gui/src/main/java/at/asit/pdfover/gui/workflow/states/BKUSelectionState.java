@@ -74,21 +74,21 @@ public class BKUSelectionState extends State {
 		  (previousState instanceof PositioningState) ||
 		  (previousState instanceof BKUSelectionState)
 		)) {
-			status.setBKU(BKUs.NONE);
+			status.bku = BKUs.NONE;
 		} else if(!(status.getPreviousState() instanceof BKUSelectionState)) {
 			ConfigProvider config = getStateMachine().getConfigProvider();
-			status.setBKU(config.getDefaultBKU());
+			status.bku = config.getDefaultBKU();
 		}
 
-		if(status.getBKU() == BKUs.NONE) {
+		if(status.bku == BKUs.NONE) {
 			BKUSelectionComposite selection = this.getSelectionComposite();
 
 			getStateMachine().getGUIProvider().display(selection);
 			selection.layout();
 
-			status.setBKU(selection.getSelected());
+			status.bku = selection.getSelected();
 
-			if(status.getBKU() == BKUs.NONE) {
+			if(status.bku == BKUs.NONE) {
 				return;
 			}
 		}
@@ -109,7 +109,7 @@ public class BKUSelectionState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

@@ -173,7 +173,7 @@ public class LocalBKUState extends State {
 	public void run() {
 		Status status = getStateMachine().getStatus();
 
-		SigningState signingState = status.getSigningState();
+		SigningState signingState = status.signingState;
 
 		if (!signingState.hasSignatureResponse()
 				&& this.threadException == null) {
@@ -219,8 +219,7 @@ public class LocalBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus()
-				.getBehavior();
+		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

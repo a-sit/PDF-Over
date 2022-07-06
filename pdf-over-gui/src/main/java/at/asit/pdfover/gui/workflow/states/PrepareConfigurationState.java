@@ -506,10 +506,8 @@ public class PrepareConfigurationState extends State {
 
 			// Create PDF Signer
 			Status status = stateMachine.getStatus();
-			status.setBKU(getStateMachine().getConfigProvider().getDefaultBKU());
-
-			status.setSignaturePosition(getStateMachine().getConfigProvider()
-							.getDefaultSignaturePosition());
+			status.bku = getStateMachine().getConfigProvider().getDefaultBKU();
+			status.signaturePosition = getStateMachine().getConfigProvider().getDefaultSignaturePosition();
 
 			setNextState(new OpenState(stateMachine));
 
