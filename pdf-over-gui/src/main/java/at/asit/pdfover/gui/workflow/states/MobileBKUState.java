@@ -57,7 +57,7 @@ public class MobileBKUState extends State {
 
 	SigningState signingState;
 
-	Exception threadException = null;
+	public Exception threadException = null;
 
 	public final MobileBKUStatus status;
 	public final MobileBKUHandler handler;
@@ -68,15 +68,12 @@ public class MobileBKUState extends State {
 		switch(provider.getMobileBKUType()) {
 			case A_TRUST:
 				this.status = new ATrustStatus(provider);
-				this.handler = new ATrustHandler(this,
-						stateMachine.getGUIProvider().getMainShell(),
-						provider.getMobileBKUBase64());
+				this.handler = new ATrustHandler(this, stateMachine.getGUIProvider().getMainShell(), provider.getMobileBKUBase64());
 				break;
 
 			case IAIK:
 				this.status = new IAIKStatus(provider);
-				this.handler = new IAIKHandler(this,
-				stateMachine.getGUIProvider().getMainShell());
+				this.handler = new IAIKHandler(this, stateMachine.getGUIProvider().getMainShell());
 				break;
 			
 			default:
@@ -129,7 +126,7 @@ public class MobileBKUState extends State {
 	MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
 		if (this.mobileBKUEnterNumberComposite == null) {
 			this.mobileBKUEnterNumberComposite = getStateMachine().getGUIProvider()
-						.createComposite(MobileBKUEnterNumberComposite.class, SWT.RESIZE, this);
+					.createComposite(MobileBKUEnterNumberComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUEnterNumberComposite;
@@ -139,7 +136,7 @@ public class MobileBKUState extends State {
 	MobileBKUFingerprintComposite getMobileBKUFingerprintComposite() {
 		if (this.mobileBKUFingerprintComposite == null) {
 			this.mobileBKUFingerprintComposite = getStateMachine().getGUIProvider()
-						.createComposite(MobileBKUFingerprintComposite.class, SWT.RESIZE, this);
+					.createComposite(MobileBKUFingerprintComposite.class, SWT.RESIZE, this);
 		}
 
 		return this.mobileBKUFingerprintComposite;
@@ -158,14 +155,6 @@ public class MobileBKUState extends State {
 	 */
 	public SigningState getSigningState() {
 		return this.signingState;
-	}
-
-	/**
-	 * @param threadException
-	 *            the threadException to set
-	 */
-	public void setThreadException(Exception threadException) {
-		this.threadException = threadException;
 	}
 
 	/**
@@ -207,8 +196,8 @@ public class MobileBKUState extends State {
 	public void checkCredentials() {
 		final MobileBKUStatus mobileStatus = this.status;
 		// check if we have everything we need!
-		if (mobileStatus.getPhoneNumber() != null && !mobileStatus.getPhoneNumber().isEmpty() &&
-		    mobileStatus.getMobilePassword() != null && !mobileStatus.getMobilePassword().isEmpty())
+		if (mobileStatus.phoneNumber != null && !mobileStatus.phoneNumber.isEmpty() &&
+		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
 			return;
 
 		Display.getDefault().syncExec(new Runnable() {
@@ -217,13 +206,13 @@ public class MobileBKUState extends State {
 				MobileBKUEnterNumberComposite ui = MobileBKUState.this
 						.getMobileBKUEnterNumberComposite();
 	
-				if (!ui.isUserAck()) {
+				if (!ui.userAck) {
 					// We need number and password => show UI!
-					if (mobileStatus.getErrorMessage() != null
-							&& !mobileStatus.getErrorMessage().isEmpty()) {
+					if (mobileStatus.errorMessage != null
+							&& !mobileStatus.errorMessage.isEmpty()) {
 						// set possible error message
-						ui.setErrorMessage(mobileStatus.getErrorMessage());
-						mobileStatus.setErrorMessage(null);
+						ui.setErrorMessage(mobileStatus.errorMessage);
+						mobileStatus.errorMessage = null;
 					} else if (mobileStatus instanceof ATrustStatus) {
 						ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer")); //$NON-NLS-1$
 					}
@@ -231,37 +220,37 @@ public class MobileBKUState extends State {
 					if (ui.getMobileNumber() == null
 							|| ui.getMobileNumber().isEmpty()) {
 						// set possible phone number
-						ui.setMobileNumber(mobileStatus.getPhoneNumber());
+						ui.setMobileNumber(mobileStatus.phoneNumber);
 					}
 
 					if (ui.getMobilePassword() == null
 							|| ui.getMobilePassword().isEmpty()) {
 						// set possible password
-						ui.setMobilePassword(mobileStatus.getMobilePassword());
+						ui.setMobilePassword(mobileStatus.mobilePassword);
 					}
 					ui.enableButton();
 					getStateMachine().getGUIProvider().display(ui);
 
 					Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay(); 
-					while (!ui.isUserAck() && !ui.isUserCancel()) {
+					while (!ui.userAck && !ui.userCancel) {
 						if (!display.readAndDispatch()) {
 							display.sleep();
 						}
 					}
 				}
 
-				if (ui.isUserCancel()) {
-					ui.setUserCancel(false);
-					mobileStatus.setErrorMessage("cancel"); //$NON-NLS-1$
+				if (ui.userCancel) {
+					ui.userCancel = false;
+					mobileStatus.errorMessage = "cancel"; //$NON-NLS-1$
 					return;
 				}
 
 				// user hit ok
-				ui.setUserAck(false);
+				ui.userAck = false;
 
 				// get number and password from UI
-				mobileStatus.setPhoneNumber(ui.getMobileNumber());
-				mobileStatus.setMobilePassword(ui.getMobilePassword());
+				mobileStatus.phoneNumber = ui.getMobileNumber();
+				mobileStatus.mobilePassword = ui.getMobilePassword();
 
 				// show waiting composite
 				getStateMachine().getGUIProvider().display(
@@ -284,15 +273,15 @@ public class MobileBKUState extends State {
 		
 				if (!tan.isUserAck()) {
 					// we need the TAN
-					tan.setRefVal(mobileStatus.getRefVal());
-					tan.setSignatureData(mobileStatus.getSignatureDataURL());
-					tan.setErrorMessage(mobileStatus.getErrorMessage());
-					if (mobileStatus.getTanTries() < mobileStatus.getMaxTanTries()
-							&& mobileStatus.getTanTries() > 0) {
+					tan.setRefVal(mobileStatus.refVal);
+					tan.setSignatureData(mobileStatus.signatureDataURL);
+					tan.setErrorMessage(mobileStatus.errorMessage);
+					if (mobileStatus.tanTries < mobileStatus.getMaxTanTries()
+							&& mobileStatus.tanTries > 0) {
 						// show warning message x tries left!
 						// overrides error message
 		
-						tan.setTries(mobileStatus.getTanTries());
+						tan.setTries(mobileStatus.tanTries);
 					}
 					tan.enableButton();
 					getStateMachine().getGUIProvider().display(tan);
@@ -307,14 +296,14 @@ public class MobileBKUState extends State {
 
 				if (tan.isUserCancel()) {
 					tan.setUserCancel(false);
-					mobileStatus.setErrorMessage("cancel"); //$NON-NLS-1$
+					mobileStatus.errorMessage = "cancel";
 					return;
 				}
 
 				// user hit ok!
 				tan.setUserAck(false);
 
-				mobileStatus.setTan(tan.getTan());
+				mobileStatus.tan = tan.getTan();
 
 				// show waiting composite
 				getStateMachine().getGUIProvider().display(
@@ -356,9 +345,9 @@ public class MobileBKUState extends State {
 		Display.getDefault().syncExec(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
-			qr.setRefVal(status.getRefVal());
-			qr.setSignatureData(status.getSignatureDataURL());
-			qr.setErrorMessage(status.getErrorMessage());
+			qr.setRefVal(status.refVal);
+			qr.setSignatureData(status.signatureDataURL);
+			qr.setErrorMessage(status.errorMessage);
 			InputStream qrcode = handler.getQRCode();
 			if (qrcode == null) {
 				MobileBKUState.this.threadException = new Exception(
@@ -378,13 +367,13 @@ public class MobileBKUState extends State {
 
 			if (qr.isUserCancel()) {
 				qr.setUserCancel(false);
-				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				status.errorMessage = "cancel";
 				return;
 			}
 
 			if (qr.isUserSMS()) {
 				qr.setUserSMS(false);
-				status.setQRCodeURL(null);
+				status.qrCodeURL = null;
 			}
 
 			if (qr.isDone())
@@ -434,15 +423,15 @@ public class MobileBKUState extends State {
 
 			if (waitingForAppcomposite.getUserCancel()) {
 				waitingForAppcomposite.setUserCancel(false);
-				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				status.errorMessage = "cancel";
 				return;
 			}
 
 			if (waitingForAppcomposite.getUserSMS()) {
-				status.setQRCodeURL(null);
+				status.qrCodeURL = null;
 				waitingForAppcomposite.setUserSMS(false);
-				status.setErrorMessage("sms"); //$NON-NLS-1$
-				status.setSmsTan(true);
+				status.errorMessage = "sms";
+				status.isSMSTan = true;
 				// show waiting composite
 				getStateMachine().getGUIProvider().display(MobileBKUState.this.getWaitingComposite());
 				return;
@@ -454,8 +443,8 @@ public class MobileBKUState extends State {
 
 			if (!(System.nanoTime() < timeoutTime)) {
 				log.warn("The undecided polling got a timeout");
-				status.setQRCodeURL(null);
-				status.setErrorMessage("Polling Timeout");
+				status.qrCodeURL = null;
+				status.errorMessage = "Polling Timeout";
 
 
 			}
@@ -514,9 +503,9 @@ public class MobileBKUState extends State {
 		Display.getDefault().syncExec(() -> {
 			MobileBKUFingerprintComposite fingerprintComposite = getMobileBKUFingerprintComposite();
 
-			fingerprintComposite.setRefVal(status.getRefVal());
-			fingerprintComposite.setSignatureData(status.getSignatureDataURL());
-			fingerprintComposite.setErrorMessage(status.getErrorMessage());
+			fingerprintComposite.setRefVal(status.refVal);
+			fingerprintComposite.setSignatureData(status.signatureDataURL);
+			fingerprintComposite.setErrorMessage(status.errorMessage);
 			getStateMachine().getGUIProvider().display(fingerprintComposite);
 
 			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
@@ -529,13 +518,13 @@ public class MobileBKUState extends State {
 
 			if (fingerprintComposite.isUserCancel()) {
 				fingerprintComposite.setUserCancel(false);
-				status.setErrorMessage("cancel"); //$NON-NLS-1$
+				status.errorMessage = "cancel";
 				return;
 			}
 
 			if (fingerprintComposite.isUserSMS()) {
 //					fingerprintComposite.setUserSMS(false);
-				status.setQRCodeURL(null);
+				status.qrCodeURL = null;
 			}
 
 			if (fingerprintComposite.isDone())

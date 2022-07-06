@@ -117,14 +117,14 @@ public class ATrustHandler extends MobileBKUHandler {
 		log.info("viewState: " + viewState); //$NON-NLS-1$
 		log.info("eventValidation: " + eventValidation); //$NON-NLS-1$
 
-		status.setSessionID(sessionID);
-		status.setViewstate(viewState);
-		status.setEventvalidation(eventValidation);
-		if (viewstateGenerator != null ) { status.setViewStateGenerator(viewstateGenerator); }
-		status.setDynAttrPhonenumber(dynamicAttrPhonenumber);
-		status.setDynAttrPassword(dynamicAttrPassword);
-		status.setDynAttrBtnId(dynamicAttrButtonId);
-		status.setDynAttrTan(dynamicAttrTan);
+		status.sessionID = sessionID;
+		status.viewState = viewState;
+		status.eventValidation = eventValidation;
+		if (viewstateGenerator != null ) { status.viewStateGenerator = viewstateGenerator; }
+		status.dynAttrPhoneNumber = dynamicAttrPhonenumber;
+		status.dynAttrPassword = dynamicAttrPassword;
+		status.dynAttrBtnId = dynamicAttrButtonId;
+		status.dynAttrTan = dynamicAttrTan;
 	}
 
 	/* (non-Javadoc)
@@ -137,14 +137,14 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-		PostMethod post = new PostMethod(status.getBaseURL() + "/identification.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		PostMethod post = new PostMethod(status.baseURL + "/identification.aspx?sid=" + status.sessionID); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATEGENERATOR", status.getViewstateGenerator() ); //$NON-NLS-1$
-		post.addParameter("__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrPhonenumber(), status.getPhoneNumber()); 
-		post.addParameter(status.getDynAttrPassword(), status.getMobilePassword()); 
-		post.addParameter(status.getDynAttrBtnId(), "Identifizieren"); //$NON-NLS-1$ 
+		post.addParameter("__VIEWSTATE", status.viewState); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATEGENERATOR", status.viewStateGenerator); //$NON-NLS-1$
+		post.addParameter("__EVENTVALIDATION", status.eventValidation); //$NON-NLS-1$
+		post.addParameter(status.dynAttrPhoneNumber, status.phoneNumber); 
+		post.addParameter(status.dynAttrPassword, status.mobilePassword); 
+		post.addParameter(status.dynAttrBtnId, "Identifizieren"); //$NON-NLS-1$ 
 
 		return executePost(client, post);
 	}
@@ -155,17 +155,17 @@ public class ATrustHandler extends MobileBKUHandler {
 	@Override
 	public void handleCredentialsResponse(String responseData) throws Exception {
 		ATrustStatus status = getStatus();
-		String viewState = status.getViewstate();
-		String eventValidation = status.getEventvalidation();
-		String sessionID = status.getSessionID();
+		String viewState = status.viewState;
+		String eventValidation = status.eventValidation;
+		String sessionID = status.sessionID;
 		String refVal = null;
 		String signatureDataURL = null;
 		String qrCode = null;
 		String tanField = null;
 		String tanTextTan = null;
-		String viewstateGenerator = status.getViewstateGenerator();
+		String viewstateGenerator = status.viewStateGenerator;
 
-		status.setErrorMessage(null);
+		status.errorMessage = null;
 
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) { //$NON-NLS-1$
 			// Certificate expiration interstitial - skip
@@ -205,7 +205,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			MobileBKUHelper.registerTrustedSocketFactory();
 			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-			PostMethod post = new PostMethod(status.getBaseURL() + "/ExpiresInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
+			PostMethod post = new PostMethod(status.baseURL + "/ExpiresInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
 			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 			post.addParameter("__VIEWSTATE", t_viewState); //$NON-NLS-1$
 			post.addParameter("__EVENTVALIDATION", t_eventValidation); //$NON-NLS-1$
@@ -225,7 +225,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			MobileBKUHelper.registerTrustedSocketFactory();
 			HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-			PostMethod post = new PostMethod(status.getBaseURL() + "/tanAppInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
+			PostMethod post = new PostMethod(status.baseURL + "/tanAppInfo.aspx?sid=" + t_sessionID); //$NON-NLS-1$
 			post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 			post.addParameter("__VIEWSTATE", t_viewState); //$NON-NLS-1$
 			post.addParameter("__EVENTVALIDATION", t_eventValidation); //$NON-NLS-1$
@@ -242,28 +242,28 @@ public class ATrustHandler extends MobileBKUHandler {
 			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>"); //$NON-NLS-1$ //$NON-NLS-2$
-			signatureDataURL = status.getBaseURL() + "/ShowSigobj.aspx" + //$NON-NLS-1$
+			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" + //$NON-NLS-1$
 					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'"); //$NON-NLS-1$ //$NON-NLS-2$
 			try {
 				qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				log.debug("QR Code found: " + qrCode); //$NON-NLS-1$
-				status.setQRCodeURL(qrCode);
+				status.qrCodeURL = qrCode;
 			} catch (Exception e) {
 				log.debug("No QR Code found"); //$NON-NLS-1$
 			}
 			try {
 				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				status.setTanField(tanField);
-				status.setDynAttrTan(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN));
-				status.setDynAttrSignButton(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
+				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
+				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			} catch (Exception e) {
 				log.debug("No tan field found"); //$NON-NLS-1$
 			}
 			try {
 				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				status.setIsAPPTan(tanTextTan);
-				status.setDynAttrTan(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN));
-				status.setDynAttrSignButton(MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN));
+				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
+				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			}catch (Exception e) {
 				log.debug("No text_tan tag"); //$NON-NLS-1$
 			}
@@ -271,27 +271,27 @@ public class ATrustHandler extends MobileBKUHandler {
 		} else if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
 			log.debug("Credentials accepted - Response given"); //$NON-NLS-1$
-			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
+			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().server, null, null));
 			return;
 		} else if (responseData.contains("undecided.aspx?sid=")) { //$NON-NLS-1$
 			// skip intermediate page 
 			log.debug("Page Undecided"); //$NON-NLS-1$
-			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().getServer(), null, null));
-			status.setErrorMessage("waiting..."); //$NON-NLS-1$
+			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().server, null, null));
+			status.errorMessage = "waiting..."; //$NON-NLS-1$
 			return; 
 		}else {
 			// error page
 			// extract error text!
 			try {
 				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass"); //$NON-NLS-1$ //$NON-NLS-2$  //$NON-NLS-3$
-				status.setErrorMessage(errorMessage);
+				status.errorMessage = errorMessage;
 			} catch (Exception e) {
 				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			// force UI again!
-			status.setMobilePassword(null);
+			status.mobilePassword = null;
 		}
 
 		log.debug("sessionID: " + sessionID);
@@ -300,12 +300,12 @@ public class ATrustHandler extends MobileBKUHandler {
 		log.debug("eventValidation: " + eventValidation);
 		log.debug("signatureDataURL: " + signatureDataURL);
 
-		status.setSessionID(sessionID);
-		status.setRefVal(refVal);
-		status.setViewstate(viewState);
-		status.setEventvalidation(eventValidation);
-		status.setSignatureDataURL(signatureDataURL);
-		status.setViewStateGenerator(viewstateGenerator);
+		status.sessionID = sessionID;
+		status.refVal = refVal;
+		status.viewState = viewState;
+		status.eventValidation = eventValidation;
+		status.signatureDataURL = signatureDataURL;
+		status.viewStateGenerator = viewstateGenerator;
 	}
 
 	/* (non-Javadoc)
@@ -318,14 +318,14 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 	
-		PostMethod post = new PostMethod(status.getBaseURL()
-				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		PostMethod post = new PostMethod(status.baseURL
+				+ "/signature.aspx?sid=" + status.sessionID); //$NON-NLS-1$
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("__VIEWSTATE", status.getViewstate()); //$NON-NLS-1$
+		post.addParameter("__VIEWSTATE", status.viewState); //$NON-NLS-1$
 		post.addParameter(
-				"__EVENTVALIDATION", status.getEventvalidation()); //$NON-NLS-1$
-		post.addParameter(status.getDynAttrTan(), status.getTan()); 
-		post.addParameter(status.getDynAttrSignButton(), "Signieren"); //$NON-NLS-1$ 
+				"__EVENTVALIDATION", status.eventValidation); //$NON-NLS-1$
+		post.addParameter(status.dynAttrTan, status.tan); 
+		post.addParameter(status.dynAttrSignButton, "Signieren"); //$NON-NLS-1$ 
 		post.addParameter("Button1", "Identifizieren"); //$NON-NLS-1$ //$NON-NLS-2$
 	
 		return executePost(client, post);
@@ -336,38 +336,40 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	@Override
 	public void handleTANResponse(String responseData) {
-		getStatus().setErrorMessage(null);
+		getStatus().errorMessage = null;
 		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //$NON-NLS-1$
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 			// success !!
 			
 			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, getStatus().getServer(), null, null));
+					new SLResponse(responseData, getStatus().server, null, null));
 		} else {
 			try {
 				String tries = MobileBKUHelper.extractSubstring(
 						responseData, "Sie haben noch", "Versuch"); //$NON-NLS-1$ //$NON-NLS-2$
-				getStatus().setTanTries(Integer.parseInt(tries.trim()));
-				getStatus().setErrorMessage("mobileBKU.wrong_tan"); //$NON-NLS-1$
+				getStatus().tanTries = Integer.parseInt(tries.trim());
+				getStatus().errorMessage = "mobileBKU.wrong_tan";
 			} catch (Exception e) {
-				getStatus().setTanTries(getStatus().getTanTries() - 1);
+				getStatus().tanTries = (getStatus().tanTries - 1);
 				log.debug("Error parsing TAN response", e); //$NON-NLS-1$
 			}
 
-			if (getStatus().getTanTries() <= 0) {
-				getStatus().setErrorMessage(null);
+			if (getStatus().tanTries <= 0) {
+				getStatus().errorMessage = null;
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
 						Dialog dialog = new Dialog(ATrustHandler.this.shell, Messages.getString("common.warning"), //$NON-NLS-1$
 								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
 								BUTTONS.OK_CANCEL, ICON.QUESTION);
+						
+						// TODO: THIS IS A COLOSSAL HACK
 						if (dialog.open() == SWT.CANCEL) {
 							// Go back to BKU Selection
-							getStatus().setTanTries(-1);
+							getStatus().tanTries = -1;
 						} else {
 							// Start signature process over
-							getStatus().setTanTries(-2);
+							getStatus().tanTries = -2;
 						}
 					}
 				});
@@ -386,8 +388,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-		GetMethod get = new GetMethod(status.getBaseURL()
-				+ "/sendsms.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		GetMethod get = new GetMethod(status.baseURL
+				+ "/sendsms.aspx?sid=" + status.sessionID);
 		get.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 
 		return executeGet(client, get);
@@ -405,8 +407,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 
-		GetMethod get = new GetMethod(status.getBaseURL() + "/" + //$NON-NLS-1$
-				status.getQRCodeURL());
+		GetMethod get = new GetMethod(status.baseURL + "/" + status.qrCodeURL);
 
 		try {
 			log.debug("Getting " + get.getURI()); //$NON-NLS-1$
@@ -437,8 +438,8 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		//TODO check
 		//String baseURL = "https://www.a-trust.at/mobile/https-security-layer-request";
-		GetMethod get = new GetMethod(status.getBaseURL()
-				+ "/signature.aspx?sid=" + status.getSessionID()); //$NON-NLS-1$
+		GetMethod get = new GetMethod(status.baseURL
+				+ "/signature.aspx?sid=" + status.sessionID); //$NON-NLS-1$
 
 		return executeGet(client, get);
 	}
@@ -449,7 +450,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 */
 	public Boolean handleWaitforAppResponse(String responseData) {
 		
-		getStatus().setErrorMessage(null); 
+		getStatus().errorMessage = null;
 		if (!responseData.toLowerCase().contains("Bitte starten Sie Ihre Handy-Signatur App!".toLowerCase())/* ||  //$NON-NLS-1$
 		    responseData.toLowerCase().contains("TAN (Handy-Signatur App)".toLowerCase())*/) { //$NON-NLS-1$
 
@@ -464,13 +465,13 @@ public class ATrustHandler extends MobileBKUHandler {
 	 * @return whether a SL response was received
 	 */
 	public boolean handleQRResponse(String responseData) {
-		getStatus().setErrorMessage(null);
+		getStatus().errorMessage = null;
 		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") || //$NON-NLS-1$
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 			// success !!
 
 			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, getStatus().getServer(), null, null));
+					new SLResponse(responseData, getStatus().server, null, null));
 			return true;
 		}
 		return false;
@@ -506,10 +507,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		try {
 			do {
 				client = MobileBKUHelper.getHttpClient(getStatus());
-				String uri = status.getBaseURL()  + "/UndecidedPolling.aspx?sid=" + status.getSessionID();
+				String uri = status.baseURL  + "/UndecidedPolling.aspx?sid=" + status.sessionID;
 				GetMethod get = new GetMethod(uri);
-
-				status.getBaseURL();
 
 				//client.setTimeout(35000);
 				//client.setConnectionTimeout(35000);
@@ -537,7 +536,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				return true; 
 			}
 			//else error
-			status.setErrorMessage("Server reponded ERROR during polling"); //$NON-NLS-1$
+			status.errorMessage = "Server reponded ERROR during polling";
 			log.error("Server reponded ERROR during polling"); //$NON-NLS-1$
 			throw new ATrustConnectionException();
 

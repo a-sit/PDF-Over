@@ -75,7 +75,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 				MobileBKUHelper.validatePassword(password);
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
-				MobileBKUEnterNumberComposite.this.setUserAck(true);
+				MobileBKUEnterNumberComposite.this.userAck = true;
 
 				MobileBKUEnterNumberComposite.this.btn_ok.setEnabled(false);
 				
@@ -101,7 +101,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	private final SelectionListener cancelListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MobileBKUEnterNumberComposite.this.setUserCancel(true);
+			MobileBKUEnterNumberComposite.this.userCancel = true;
 		}
 	};
 
@@ -116,38 +116,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 	String errorMessage = null;
 
-	boolean userAck = false;
-	boolean userCancel = false;
-
-	/**
-	 * @return the userAck
-	 */
-	public boolean isUserAck() {
-		return this.userAck;
-	}
-
-	/**
-	 * @param userAck
-	 *            the userAck to set
-	 */
-	public void setUserAck(boolean userAck) {
-		this.userAck = userAck;
-	}
-
-	/**
-	 * @return the userCancel
-	 */
-	public boolean isUserCancel() {
-		return this.userCancel;
-	}
-
-	/**
-	 * @param userCancel
-	 *            the userCancel to set
-	 */
-	public void setUserCancel(boolean userCancel) {
-		this.userCancel = userCancel;
-	}
+	public boolean userAck = false;
+	public boolean userCancel = false;
 
 
 	private Label lbl_error;

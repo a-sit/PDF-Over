@@ -297,16 +297,7 @@ public class MobileBKUHelper {
 	 * @return the HttpClient
 	 */
 	public static HttpClient getHttpClient(MobileBKUStatus status) {
-		HttpClient client = BKUHelper.getHttpClient(true);
-		Cookie[] cookies = status.getCookies();
-		if (cookies != null) {
-			HttpState state = new HttpState();
-			for (Cookie cookie : cookies) {
-				state.addCookie(cookie);
-			}
-			client.setState(state);
-		}
-		return client;
+		return BKUHelper.getHttpClient(true);
 	}
 	
 	/***

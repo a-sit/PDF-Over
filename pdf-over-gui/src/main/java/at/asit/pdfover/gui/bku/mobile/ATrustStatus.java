@@ -25,7 +25,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 /**
  * A-Trust MobileBKUStatus implementation
  */
-public class ATrustStatus extends AbstractMobileBKUStatusImpl {
+public class ATrustStatus extends MobileBKUStatus {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -36,40 +36,26 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
 
-	private String viewstate;
-	private String eventvalidation;
-	private String qrcode = null;
+	public String viewState;
+	public String eventValidation;
+	public String qrCodeURL = null;
 	private boolean tanField = false;
 	private boolean isAPPTan = false;
-	private String viewstateGenerator; 
-	private String dynAttrPhonenumber; 
-	private String dynAttrPassword; 
-	private String dynAttrBtnId; 
-	private String dynAttrTan; 
-	private String dynAttrSignButton; 
-	private boolean smsTan = false;
+	public String viewStateGenerator; 
+	public String dynAttrPhoneNumber; 
+	public String dynAttrPassword; 
+	public String dynAttrBtnId; 
+	public String dynAttrTan; 
+	public String dynAttrSignButton; 
+	public boolean isSMSTan = false;
 
 	/**
 	 * Constructor
 	 * @param provider the ConfigProvider
 	 */
 	public ATrustStatus(ConfigProvider provider) {
-		setPhoneNumber(provider.getDefaultMobileNumber());
-		setMobilePassword(provider.getDefaultMobilePassword());
-	}
-
-	/**
-	 * @return the dynAttrTan
-	 */
-	public String getDynAttrTan() {
-		return this.dynAttrTan;
-	}
-
-	/**
-	 * @param dynAttrTan the dynAttrTan to set
-	 */
-	public void setDynAttrTan(String dynAttrTan) {
-		this.dynAttrTan = dynAttrTan;
+		this.phoneNumber = provider.getDefaultMobileNumber();
+		this.mobilePassword = provider.getDefaultMobilePassword();
 	}
 
 	/* (non-Javadoc)
@@ -78,50 +64,6 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	@Override
 	public int getMaxTanTries() {
 		return MOBILE_MAX_TAN_TRIES;
-	}
-
-	/**
-	 * @return the viewstate
-	 */
-	public String getViewstate() {
-		return this.viewstate;
-	}
-
-	/**
-	 * @param viewstate
-	 *            the viewstate to set
-	 */
-	public void setViewstate(String viewstate) {
-		this.viewstate = viewstate;
-	}
-
-	/**
-	 * @return the eventvalidation
-	 */
-	public String getEventvalidation() {
-		return this.eventvalidation;
-	}
-
-	/**
-	 * @param eventvalidation the eventvalidation to set
-	 */
-	public void setEventvalidation(String eventvalidation) {
-		this.eventvalidation = eventvalidation;
-	}
-
-	/**
-	 * @return the QR code
-	 */
-	public String getQRCodeURL() {
-		return this.qrcode;
-	}
-
-	/**
-	 * @param qrcode
-	 *            the QR code to set
-	 */
-	public void setQRCodeURL(String qrcode) {
-		this.qrcode = qrcode;
 	}
 	
 	/**
@@ -151,108 +93,9 @@ public class ATrustStatus extends AbstractMobileBKUStatusImpl {
 	public boolean getIsAPPTan() {
 		return this.isAPPTan;
 	}
-	
-	/**
-	 * @param viewstateGenerator
-	 */
-	public void setViewStateGenerator(String viewstateGenerator) {
-		this.viewstateGenerator = viewstateGenerator; 
-	}
-	
-	/**
-	 * @return
-	 */
-	public String getViewstateGenerator() {
-		return this.viewstateGenerator;
-	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#parseCookies(org.apache.commons.httpclient.Cookie[])
-	 */
 	@Override
-	public void parseCookies(Cookie[] cookies) {
-		//not needed yet
+	public String ensureSessionID(String url) {
+		return url;
 	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#getCookies()
-	 */
-	@Override
-	public Cookie[] getCookies() {
-		//not needed yet
-		return null;
-	}
-	
-	
-	
-	/**
-	 * @return the dynAttrPhonenumber
-	 */
-	public String getDynAttrPhonenumber() {
-		return this.dynAttrPhonenumber;
-	}
-
-	/**
-	 * @param dynAttrPhonenumber the dynAttrPhonenumber to set
-	 */
-	public void setDynAttrPhonenumber(String dynAttrPhonenumber) {
-		this.dynAttrPhonenumber = dynAttrPhonenumber;
-	}
-
-	/**
-	 * @return the dynAttrPassword
-	 */
-	public String getDynAttrPassword() {
-		return this.dynAttrPassword;
-	}
-
-	/**
-	 * @param dynAttrPassword the dynAttrPassword to set
-	 */
-	public void setDynAttrPassword(String dynAttrPassword) {
-		this.dynAttrPassword = dynAttrPassword;
-	}
-
-	/**
-	 * @return the dynAttrBtnId
-	 */
-	public String getDynAttrBtnId() {
-		return this.dynAttrBtnId;
-	}
-
-	/**
-	 * @param dynAttrBtnId the dynAttrBtnId to set
-	 */
-	public void setDynAttrBtnId(String dynAttrBtnId) {
-		this.dynAttrBtnId = dynAttrBtnId;
-	}
-
-	/**
-	 * @return the dynAttrSignButton
-	 */
-	public String getDynAttrSignButton() {
-		return this.dynAttrSignButton;
-	}
-
-	/**
-	 * @param dynAttrSignButton the dynAttrSignButton to set
-	 */
-	public void setDynAttrSignButton(String dynAttrSignButton) {
-		this.dynAttrSignButton = dynAttrSignButton;
-	}
-
-	/**
-	 * @return the smsTan
-	 */
-	public boolean isSmsTan() {
-		return this.smsTan;
-	}
-
-	/**
-	 * @param smsTan the smsTan to set
-	 */
-	public void setSmsTan(boolean smsTan) {
-		this.smsTan = smsTan;
-	}
-
 }

@@ -20,135 +20,28 @@ import org.apache.commons.httpclient.Cookie;
 /**
  * 
  */
-public interface MobileBKUStatus {
-	/**
-	 * @return the identification_url
-	 */
-	public String getSessionID();
-
-	/**
-	 * @param sessionID the identification_url to set
-	 */
-	public void setSessionID(String sessionID);
-
-	/**
-	 * @return the phoneNumber
-	 */
-	public String getPhoneNumber();
-
-	/**
-	 * @param phoneNumber the phoneNumber to set
-	 */
-	public void setPhoneNumber(String phoneNumber);
-
-	/**
-	 * @return the mobilePassword
-	 */
-	public String getMobilePassword();
-
-	/**
-	 * @param mobilePassword the mobilePassword to set
-	 */
-	public void setMobilePassword(String mobilePassword);
-
-	/**
-	 * @return the reference value
-	 */
-	public String getRefVal();
-
-	/**
-	 * @param refVal the reference value to set
-	 */
-	public void setRefVal(String refVal);
-
-	/**
-	 * @return the tan
-	 */
-	public String getTan();
-
-	/**
-	 * @param tan the tan to set
-	 */
-	public void setTan(String tan);
+public abstract class MobileBKUStatus {
+	public String sessionID;
+	public String phoneNumber;
+	public String mobilePassword;
+	public String baseURL;
+	public String refVal;
+	public String errorMessage;
+	public String tan;
+	public String server;
+	public String signatureDataURL;
+	public int tanTries = getMaxTanTries();
 
 	/**
 	 * Get maximum number of TAN tries
 	 * @return the maximum number of TAN tries
 	 */
-	public int getMaxTanTries();
-
-	/**
-	 * Get number of TAN tries left
-	 * @return the number of TAN tries left
-	 */
-	public int getTanTries();
-
-	/**
-	 * Set number of TAN tries left
-	 * @param tries the number of TAN tries left
-	 */
-	public void setTanTries(int tries);
-
-	/**
-	 * @return the errorMessage
-	 */
-	public String getErrorMessage();
-
-	/**
-	 * @param errorMessage the errorMessage to set
-	 */
-	public void setErrorMessage(String errorMessage);
-
-	/**
-	 * @return the baseURL
-	 */
-	public String getBaseURL();
-
-	/**
-	 * @param baseURL 
-	 */
-	public void setBaseURL(String baseURL);
-
-	/**
-	 * Return the SL request server
-	 * @return the SL request server
-	 */
-	public String getServer();
-
-	/**
-	 * Set the SL request server
-	 * @param server the SL request server
-	 */
-	public void setServer(String server);
-
-	/**
-	 * Get the signature data URL
-	 * @return the signature data URL
-	 */
-	public String getSignatureDataURL();
-
-	/**
-	 * Set the signature data URL
-	 * @param signatureDataURL the signature data URL
-	 */
-	public void setSignatureDataURL(String signatureDataURL);
-
-	/**
-	 * Parse the cookies set by the SL request server
-	 * @param cookies the cookies
-	 */
-	void parseCookies(Cookie[] cookies);
-
-	/**
-	 * Get the cookies to set during a request to the SL server
-	 * @return the cookies to set
-	 */
-	public Cookie[] getCookies();
+	public abstract int getMaxTanTries();
 
 	/**
 	 * Ensure that given URL contains a session ID (if necessary)
 	 * @param url URL to check for session ID
 	 * @return resulting URL
 	 */
-	public String ensureSessionID(String url);
+	public abstract String ensureSessionID(String url);
 }

@@ -99,8 +99,7 @@ public abstract class MobileBKUHandler {
 		}
 		log.trace("SL Request: " + sl_request); //$NON-NLS-1$
 
-		state.status.setBaseURL(
-				MobileBKUHelper.stripQueryString(mobileBKUUrl));
+		state.status.baseURL = MobileBKUHelper.stripQueryString(mobileBKUUrl);
 
 		return executePost(client, post);
 	}
@@ -252,11 +251,9 @@ public abstract class MobileBKUHandler {
 			}
 		} while (redirectLocation != null);
 
-		getStatus().setServer(server);
+		getStatus().server = server;
 		if (server != null)
 			log.info("Server: " + server); //$NON-NLS-1$
-
-		getStatus().parseCookies(client.getState().getCookies());
 
 		return responseData;
 	}
@@ -336,11 +333,9 @@ public abstract class MobileBKUHandler {
 			}
 		} while (redirectLocation != null);
 
-		getStatus().setServer(server);
+		getStatus().server = server;
 		if (server != null)
 			log.info("Server: " + server); //$NON-NLS-1$
-
-		getStatus().parseCookies(client.getState().getCookies());
 
 		return responseData;
 	}

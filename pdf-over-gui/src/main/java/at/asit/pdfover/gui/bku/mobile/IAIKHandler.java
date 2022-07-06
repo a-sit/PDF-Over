@@ -69,7 +69,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		// Extract infos:
 		String credentialURL = MobileBKUHelper.extractValueFromTagWithParam(responseData,
 				"form", "name", "userCredLogon", "action"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		URL baseURL = new URL(status.getBaseURL());
+		URL baseURL = new URL(status.baseURL);
 		credentialURL = MobileBKUHelper.getQualifiedURL(credentialURL, baseURL);
 
 		String viewState = MobileBKUHelper.extractValueFromTagWithParam(
@@ -80,16 +80,16 @@ public class IAIKHandler extends MobileBKUHandler {
 		if (si != -1)
 			sessionID = credentialURL.substring(si + 11);
 		else
-			sessionID = status.getSessionID();
+			sessionID = status.sessionID;
 
 		log.info("credentialURL: " + credentialURL); //$NON-NLS-1$
 		log.info("sessionID: " + sessionID); //$NON-NLS-1$
 		log.info("viewState: " + viewState); //$NON-NLS-1$
 
-		status.setBaseURL(credentialURL);
+		status.baseURL = credentialURL;
 		if (sessionID != null)
-			status.setSessionID(sessionID);
-		status.setViewState(viewState);
+			status.sessionID = sessionID;
+		status.viewState = viewState;
 	}
 
 	/* (non-Javadoc)
@@ -102,11 +102,11 @@ public class IAIKHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(status);
 
-		PostMethod post = new PostMethod(status.ensureSessionID(status.getBaseURL()));
+		PostMethod post = new PostMethod(status.ensureSessionID(status.baseURL));
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("javax.faces.ViewState", status.getViewState()); //$NON-NLS-1$
-		post.addParameter("userCredLogon:phoneNr", status.getPhoneNumber()); //$NON-NLS-1$
-		post.addParameter("userCredLogon:pwd", status.getMobilePassword()); //$NON-NLS-1$
+		post.addParameter("javax.faces.ViewState", status.viewState);
+		post.addParameter("userCredLogon:phoneNr", status.phoneNumber);
+		post.addParameter("userCredLogon:pwd", status.mobilePassword);
 		post.addParameter("userCredLogon:logonButton", "userCredLogon:logonButton"); //$NON-NLS-1$ //$NON-NLS-2$
 		post.addParameter("javax.faces.partial.ajax", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		post.addParameter("javax.faces.source", "userCredLogon:logonButton"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -128,7 +128,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		String refVal = null;
 		String signatureDataURL = null;
 
-		status.setErrorMessage(null);
+		status.errorMessage = null;
 
 		if (!responseData.contains("redirection_url")) { //$NON-NLS-1$
 			// Assume that an error occurred
@@ -139,10 +139,10 @@ public class IAIKHandler extends MobileBKUHandler {
 			} catch (Exception e) {
 				errorMessage = Messages.getString("error.Unexpected"); //$NON-NLS-1$
 			}
-			status.setErrorMessage(errorMessage);
+			status.errorMessage = errorMessage;
 
 			// force UI again!
-			status.setMobilePassword(null);
+			status.mobilePassword = null;
 			return;
 		}
 
@@ -151,7 +151,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		String redirectURL = MobileBKUHelper.extractSubstring(responseData,
 				"\"redirection_url\":\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 
-		URL baseURL = new URL(status.getBaseURL());
+		URL baseURL = new URL(status.baseURL);
 		redirectURL = MobileBKUHelper.getQualifiedURL(redirectURL, baseURL);
 		redirectURL = status.ensureSessionID(redirectURL);
 
@@ -160,7 +160,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		if (responseData.contains("sl:InfoboxReadResponse")) { //$NON-NLS-1$
 			// credentials ok! InfoboxReadResponse
 			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, status.getServer(), null, null));
+					new SLResponse(responseData, status.server, null, null));
 			return;
 		}
 		
@@ -184,9 +184,9 @@ public class IAIKHandler extends MobileBKUHandler {
 			if (errorMessage.contains("<br />")) //$NON-NLS-1$
 				errorMessage = errorMessage.substring(0, errorMessage.indexOf("<br />")); //$NON-NLS-1$
 			errorMessage.replace("\n", " "); //$NON-NLS-1$ //$NON-NLS-2$
-			status.setErrorMessage(errorMessage);
+			status.errorMessage = errorMessage;
 
-			status.setMobilePassword(null);
+			status.mobilePassword = null;
 			return;
 		}
 
@@ -195,7 +195,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		
 		String viewState = MobileBKUHelper.extractValueFromTagWithParam(
 				responseData, "input", "name", "javax.faces.ViewState", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		status.setViewState(viewState);
+		status.viewState = viewState;
 
 		if (!responseData.contains("tanCodeLogon.jsf")) { //$NON-NLS-1$
 			// Assume that we need to confirm reference value dialog
@@ -210,22 +210,22 @@ public class IAIKHandler extends MobileBKUHandler {
 			post.addParameter("javax.faces.partial.execute", "@all"); //$NON-NLS-1$ //$NON-NLS-2$
 			post.addParameter("j_idt5:yesButton", "j_idt5:yesButton"); //$NON-NLS-1$ //$NON-NLS-2$
 			post.addParameter("j_idt5", "j_idt5"); //$NON-NLS-1$ //$NON-NLS-2$
-			post.addParameter("javax.faces.ViewState", status.getViewState()); //$NON-NLS-1$
+			post.addParameter("javax.faces.ViewState", status.viewState); //$NON-NLS-1$
 			responseData = executePost(client, post);
 
 			log.debug("Response: " + responseData); //$NON-NLS-1$
 			if (responseData.contains("/error")) { //$NON-NLS-1$
 				// Error response - try again
 				String errorMessage = Messages.getString("error.Unexpected"); //$NON-NLS-1$
-				status.setErrorMessage(errorMessage);
+				status.errorMessage = errorMessage;
 
-				status.setMobilePassword(null);
+				status.mobilePassword = null;
 				return;
 			}
 
 			redirectURL = MobileBKUHelper.extractSubstring(responseData,
 					"redirect url=\"", "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			baseURL = new URL(status.getBaseURL());
+			baseURL = new URL(status.baseURL);
 			redirectURL = MobileBKUHelper.getQualifiedURL(redirectURL, baseURL);
 			redirectURL = status.ensureSessionID(redirectURL);
 
@@ -233,19 +233,19 @@ public class IAIKHandler extends MobileBKUHandler {
 
 			viewState = MobileBKUHelper.extractValueFromTagWithParam(
 					responseData, "input", "name", "javax.faces.ViewState", "value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			status.setViewState(viewState);
+			status.viewState = viewState;
 		}
 
-		signatureDataURL = status.getBaseURL();
+		signatureDataURL = status.baseURL;
 		signatureDataURL = signatureDataURL.substring(0, signatureDataURL.lastIndexOf('/') + 1);
 		signatureDataURL += "viewer.jsf" + //$NON-NLS-1$
 				MobileBKUHelper.extractSubstring(responseData, "viewer.jsf", "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		signatureDataURL += (signatureDataURL.contains("?") ? "&" : "?") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				"pdfoversessionid=" + status.getSessionID(); //$NON-NLS-1$
+				"pdfoversessionid=" + status.sessionID; //$NON-NLS-1$
 
 		String tanURL = MobileBKUHelper.extractValueFromTagWithParam(responseData,
 				"form", "name", "tanCodeLogon", "action"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		baseURL = new URL(status.getBaseURL());
+		baseURL = new URL(status.baseURL);
 		tanURL = MobileBKUHelper.getQualifiedURL(tanURL, baseURL);
 		tanURL = status.ensureSessionID(tanURL);
 
@@ -254,9 +254,9 @@ public class IAIKHandler extends MobileBKUHandler {
 		log.debug("tanURL: " + tanURL); //$NON-NLS-1$
 		log.debug("viewState: " + viewState); //$NON-NLS-1$
 
-		status.setRefVal(refVal);
-		status.setSignatureDataURL(signatureDataURL);
-		status.setBaseURL(tanURL);
+		status.refVal = refVal;
+		status.signatureDataURL = signatureDataURL;
+		status.baseURL = tanURL;
 	}
 
 	/* (non-Javadoc)
@@ -269,13 +269,13 @@ public class IAIKHandler extends MobileBKUHandler {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(status);
 
-		PostMethod post = new PostMethod(status.getBaseURL());
+		PostMethod post = new PostMethod(status.baseURL);
 		post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
-		post.addParameter("javax.faces.ViewState", status.getViewState()); //$NON-NLS-1$
+		post.addParameter("javax.faces.ViewState", status.viewState); //$NON-NLS-1$
 		post.addParameter("tanCodeLogon", "tanCodeLogon"); //$NON-NLS-1$ //$NON-NLS-2$
 		post.addParameter("tanCodeLogon:signButton", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		post.addParameter("tanCodeLogon:authCode", status.getTan()); //$NON-NLS-1$
-		post.addParameter("referenceValue", status.getRefVal()); //$NON-NLS-1$
+		post.addParameter("tanCodeLogon:authCode", status.tan); //$NON-NLS-1$
+		post.addParameter("referenceValue", status.refVal); //$NON-NLS-1$
 
 		return executePost(client, post);
 	}
@@ -286,23 +286,23 @@ public class IAIKHandler extends MobileBKUHandler {
 	@Override
 	public void handleTANResponse(String responseData) throws Exception {
 		final IAIKStatus status = getStatus();
-		status.setErrorMessage(null);
+		status.errorMessage = null;
 		if (responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) { //$NON-NLS-1$
 			// success
 			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, status.getServer(), null, null));
+					new SLResponse(responseData, status.server, null, null));
 		} else {
 			try {
 				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(
 						responseData, "p", "class", "ui-messages-error ui-messages-error-signing"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				status.setErrorMessage(errorMessage);
+				status.errorMessage = errorMessage;
 				log.error(errorMessage);
 
 				//Go back to TAN entry
 				MobileBKUHelper.registerTrustedSocketFactory();
 				HttpClient client = MobileBKUHelper.getHttpClient(status);
 
-				PostMethod post = new PostMethod(status.getBaseURL());
+				PostMethod post = new PostMethod(status.baseURL);
 				post.getParams().setContentCharset("utf-8"); //$NON-NLS-1$
 				post.addParameter("javax.faces.partial.ajax", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 				post.addParameter("javax.faces.source", "tanCodeLogon:backbutton"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -310,7 +310,7 @@ public class IAIKHandler extends MobileBKUHandler {
 				post.addParameter("javax.faces.partial.render", "tanCodeLogon:tanCodeLogonPanel"); //$NON-NLS-1$ //$NON-NLS-2$
 				post.addParameter("tanCodeLogon:backbutton", "tanCodeLogon:backbutton"); //$NON-NLS-1$ //$NON-NLS-2$
 				post.addParameter("tanCodeLogon", "tanCodeLogon"); //$NON-NLS-1$ //$NON-NLS-2$
-				post.addParameter("javax.faces.ViewState", status.getViewState()); //$NON-NLS-1$
+				post.addParameter("javax.faces.ViewState", status.viewState); //$NON-NLS-1$
 
 				executePost(client, post);
 			} catch (Exception e) {
@@ -321,12 +321,13 @@ public class IAIKHandler extends MobileBKUHandler {
 						Dialog dialog = new Dialog(IAIKHandler.this.shell, Messages.getString("common.warning"), //$NON-NLS-1$
 								Messages.getString("mobileBKU.tan_tries_exceeded"), //$NON-NLS-1$
 								BUTTONS.OK_CANCEL, ICON.QUESTION);
+						// TODO: ALSO A COLOSSAL HACK HERE
 						if (dialog.open() == SWT.CANCEL) {
 							// Go back to BKU Selection
-							status.setTanTries(-1);
+							status.tanTries = -1;
 						} else {
 							// Start signature process over
-							status.setTanTries(-2);
+							status.tanTries = -2;
 						}
 					}
 				});

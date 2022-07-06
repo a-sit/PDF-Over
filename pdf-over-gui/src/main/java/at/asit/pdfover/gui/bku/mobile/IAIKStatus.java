@@ -25,7 +25,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 /**
  * IAIK MobileBKUStatus implementation
  */
-public class IAIKStatus extends AbstractMobileBKUStatusImpl {
+public class IAIKStatus extends MobileBKUStatus {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -34,15 +34,15 @@ public class IAIKStatus extends AbstractMobileBKUStatusImpl {
 	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
 
-	private String viewState;
+	public String viewState;
 
 	/**
 	 * Constructor
 	 * @param provider the ConfigProvider
 	 */
 	public IAIKStatus(ConfigProvider provider) {
-		setPhoneNumber(provider.getDefaultMobileNumber());
-		setMobilePassword(provider.getDefaultMobilePassword());
+		this.phoneNumber = provider.getDefaultMobileNumber();
+		this.mobilePassword = provider.getDefaultMobilePassword();
 	}
 
 	/* (non-Javadoc)
@@ -53,53 +53,14 @@ public class IAIKStatus extends AbstractMobileBKUStatusImpl {
 		return MOBILE_MAX_TAN_TRIES;
 	}
 
-	/**
-	 * @return the viewstate
-	 */
-	public String getViewState() {
-		return this.viewState;
-	}
-
-	/**
-	 * @param viewState
-	 *            the viewState to set
-	 */
-	public void setViewState(String viewState) {
-		this.viewState = viewState;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#parseCookies(org.apache.commons.httpclient.Cookie[])
-	 */
-	@Override
-	public void parseCookies(Cookie[] cookies) {
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("JSESSIONID")) { //$NON-NLS-1$
-				log.debug("Got session ID: " + cookie.toExternalForm()); //$NON-NLS-1$
-				setSessionID(cookie.getValue());
-			}
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUStatus#getCookies()
-	 */
-	@Override
-	public Cookie[] getCookies() {
-		// Currently not used
-		return null;
-	}
-
 	@Override
 	public String ensureSessionID(String url)
 	{
 		if (url.contains("jsessionid=")) //$NON-NLS-1$
 			return url;
 
-		String sid = getSessionID();
-		if (sid != null)
-			url += ";jsessionid=" + sid; //$NON-NLS-1$
+		if (this.sessionID != null)
+			url += ";jsessionid=" + this.sessionID; //$NON-NLS-1$
 		return url;
 	}
 }
