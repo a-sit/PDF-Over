@@ -160,9 +160,6 @@ public class ATrustHandler extends MobileBKUHandler {
 		String sessionID = status.sessionID;
 		String refVal = null;
 		String signatureDataURL = null;
-		String qrCode = null;
-		String tanField = null;
-		String tanTextTan = null;
 		String viewstateGenerator = status.viewStateGenerator;
 
 		status.errorMessage = null;
@@ -245,23 +242,23 @@ public class ATrustHandler extends MobileBKUHandler {
 			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" + //$NON-NLS-1$
 					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'"); //$NON-NLS-1$ //$NON-NLS-2$
 			try {
-				qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				String qrCode = MobileBKUHelper.extractValueFromTagWithParam(responseData, "img", "class", "qrcode", "src"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				log.debug("QR Code found: " + qrCode); //$NON-NLS-1$
 				status.qrCodeURL = qrCode;
 			} catch (Exception e) {
 				log.debug("No QR Code found"); //$NON-NLS-1$
 			}
 			try {
-				tanField = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				status.setTanField(tanField);
+				String tanTextTan = MobileBKUHelper.extractValueFromTagWithParam(responseData, "label", "id", "label_for_input_tan", "for"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				status.tanField = tanTextTan.equals("input_tan");
 				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			} catch (Exception e) {
 				log.debug("No tan field found"); //$NON-NLS-1$
 			}
 			try {
-				tanTextTan = tanField = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				status.setIsAPPTan(tanTextTan);
+				String tanTextTan = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "text_tan"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				status.isAPPTan = !tanTextTan.toLowerCase().contains("sms");
 				status.dynAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 				status.dynAttrSignButton = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_SIGN_BTN);
 			}catch (Exception e) {

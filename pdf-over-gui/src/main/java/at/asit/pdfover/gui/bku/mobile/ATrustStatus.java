@@ -39,8 +39,8 @@ public class ATrustStatus extends MobileBKUStatus {
 	public String viewState;
 	public String eventValidation;
 	public String qrCodeURL = null;
-	private boolean tanField = false;
-	private boolean isAPPTan = false;
+	public boolean tanField = false;
+	public boolean isAPPTan = false;
 	public String viewStateGenerator; 
 	public String dynAttrPhoneNumber; 
 	public String dynAttrPassword; 
@@ -64,34 +64,6 @@ public class ATrustStatus extends MobileBKUStatus {
 	@Override
 	public int getMaxTanTries() {
 		return MOBILE_MAX_TAN_TRIES;
-	}
-	
-	/**
-	 * @param tanField
-	 */
-	public void setTanField(String tanField) {
-		this.tanField = tanField.equals("input_tan"); //$NON-NLS-1$
-	}
-	
-	/**
-	 * @return boolean if response contained tan field
-	 */
-	public boolean getTanField() {
-		return this.tanField;
-	}
-	
-	/**
-	 * @param tanString the tan string from the response
-	 */
-	public void setIsAPPTan(String tanString) {
-		this.isAPPTan = !tanString.toLowerCase().contains("sms"); //$NON-NLS-1$
-	}
-	
-	/**
-	 * @return true if the user receives the tan via app
-	 */
-	public boolean getIsAPPTan() {
-		return this.isAPPTan;
 	}
 
 	@Override

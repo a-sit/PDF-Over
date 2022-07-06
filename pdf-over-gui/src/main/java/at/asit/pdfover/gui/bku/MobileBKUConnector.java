@@ -146,7 +146,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 							enterTAN = false;
 						}
 					} 
-					if (enterTAN && !aStatus.getTanField()) {
+					if (enterTAN && !aStatus.tanField) {
 						try {
 							 
 							this.state.showFingerPrintInformation();
