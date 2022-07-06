@@ -110,9 +110,9 @@ public class PrepareConfigurationState extends State {
 		try {
 
 			try {
-				getStateMachine().getConfigProvider().loadConfiguration(
+				getStateMachine().configProvider.loadConfiguration(
 						new FileInputStream(
-								getStateMachine().getConfigProvider().getConfigurationDirectory() + FILE_SEPARATOR + filename));
+								getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
 				log.info("Loaded config from file : " + filename);
 			} catch (FileNotFoundException ex) {
@@ -122,7 +122,7 @@ public class PrepareConfigurationState extends State {
 					try {
 						InputStream is = getClass().getResourceAsStream(
 								Constants.RES_PKG_PATH + filename);
-						getStateMachine().getConfigProvider()
+						getStateMachine().configProvider
 								.loadConfiguration(is);
 
 						log.info("Loaded config from resource : " + filename);
@@ -144,7 +144,7 @@ public class PrepareConfigurationState extends State {
 	 * Update configuration values as necessary
 	 */
 	private void updateConfiguration() {
-		ConfigProvider config = getStateMachine().getConfigProvider();
+		ConfigProvider config = getStateMachine().configProvider;
 
 		//Update signature note if old default is used
 		String note = config.getSignatureNote();
@@ -156,7 +156,7 @@ public class PrepareConfigurationState extends State {
 	}
 
 	private void resetSignatureNoteField(ConfigProvider config){
-		getStateMachine().getConfigManipulator().setSignatureNote(
+		getStateMachine().configProvider.setSignatureNote(
 			Profile.getProfile(config.getSignatureProfile()).getDefaultSignatureBlockNote(config.getLocale())
 		);
 	}
@@ -181,7 +181,7 @@ public class PrepareConfigurationState extends State {
 			inputStream = getClass().getResourceAsStream(
 					Constants.RES_PKG_PATH + Constants.DEFAULT_CONFIG_FILENAME);
 			pdfOverConfig = new FileOutputStream(
-					getStateMachine().getConfigProvider().getConfigurationDirectory() +
+					getStateMachine().configProvider.getConfigurationDirectory() +
 					FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
 
 			while ((byteCount = inputStream.read(buffer)) >= 0) {
@@ -226,7 +226,7 @@ public class PrepareConfigurationState extends State {
 		try {
 			inputStream = getClass().getResourceAsStream(
 					Constants.RES_PKG_PATH + Constants.DEFAULT_LOG4J_FILENAME);
-			String filename = getStateMachine().getConfigProvider().getConfigurationDirectory()
+			String filename = getStateMachine().configProvider.getConfigurationDirectory()
 					+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
 			pdfOverConfig = new FileOutputStream(filename);
 
@@ -294,12 +294,12 @@ public class PrepareConfigurationState extends State {
 
 	private void initializeConfig() throws InitializationException {
 		initializeFromConfigurationFile(getStateMachine()
-				.getConfigProvider().getConfigurationFile());
+				.configProvider.getConfigurationFile());
 
-		resetSignatureNoteField(getStateMachine().getConfigProvider());
+		resetSignatureNoteField(getStateMachine().configProvider);
 
 		try {
-			getStateMachine().getConfigManipulator().saveCurrentConfiguration();
+			getStateMachine().configProvider.saveCurrentConfiguration();
 		} catch (IOException e) {
 			log.error(
 					"Failed to set local configuration signature note!", e);
@@ -399,8 +399,8 @@ public class PrepareConfigurationState extends State {
 		// Read config file
 		try {
 			StateMachine stateMachine = getStateMachine();
-			ConfigProvider config = stateMachine.getConfigProvider();
-			final GUIProvider gui = stateMachine.getGUIProvider();
+			ConfigProvider config = stateMachine.configProvider;
+			final GUIProvider gui = stateMachine;
 			String cDir = config.getConfigurationDirectory();
 			File configDir = new File(cDir);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);
@@ -419,8 +419,7 @@ public class PrepareConfigurationState extends State {
 
 			// Read cli arguments for config file first
 			try {
-				initializeFromArguments(stateMachine.getCmdArgs(),
-						this.configFileHandler);
+				initializeFromArguments(stateMachine.cmdLineArgs, this.configFileHandler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e);
 				ErrorDialog error = new ErrorDialog(gui.getMainShell(),
@@ -437,8 +436,7 @@ public class PrepareConfigurationState extends State {
 
 			// Read cli arguments
 			try {
-				initializeFromArguments(stateMachine.getCmdArgs(),
-						this.handler);
+				initializeFromArguments(stateMachine.cmdLineArgs, this.handler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e);
 				ErrorDialog error;
@@ -501,20 +499,20 @@ public class PrepareConfigurationState extends State {
 			}
 
 			// Set usedSignerLib ...
-			stateMachine.getPDFSigner().setUsedPDFSignerLibrary(
+			stateMachine.pdfSigner.setUsedPDFSignerLibrary(
 					Signator.Signers.PDFAS4);
 
 			// Create PDF Signer
-			Status status = stateMachine.getStatus();
-			status.bku = getStateMachine().getConfigProvider().getDefaultBKU();
-			status.signaturePosition = getStateMachine().getConfigProvider().getDefaultSignaturePosition();
+			Status status = stateMachine.status;
+			status.bku = getStateMachine().configProvider.getDefaultBKU();
+			status.signaturePosition = getStateMachine().configProvider.getDefaultSignaturePosition();
 
 			setNextState(new OpenState(stateMachine));
 
 		} catch (InitializationException e) {
 			log.error("Failed to initialize: ", e);
 			ErrorDialog error = new ErrorDialog(getStateMachine()
-					.getGUIProvider().getMainShell(),
+					.getMainShell(),
 					Messages.getString("error.Initialization"),
 					BUTTONS.OK);
 			// error.setException(e);

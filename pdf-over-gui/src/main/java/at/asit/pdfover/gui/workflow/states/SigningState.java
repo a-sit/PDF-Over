@@ -54,8 +54,8 @@ public class SigningState extends State {
 		@Override
 		public void run() {
 			try {
-				Signer signer = this.state.getStateMachine().getPDFSigner().getPDFSigner();
-				Status status = this.state.getStateMachine().getStatus();
+				Signer signer = this.state.getStateMachine().pdfSigner.getPDFSigner();
+				Status status = this.state.getStateMachine().status;
 
 				status.signResult = signer.sign(status.signingState);
 			} catch(Exception e) {
@@ -82,7 +82,7 @@ public class SigningState extends State {
 
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		if(status.signResult == null &&
 			this.threadException == null) {
@@ -120,7 +120,7 @@ public class SigningState extends State {
 			// if we have gotten to this point, this is an actual exception
 			log.error("FinishSignThread: ", this.threadException);
 
-			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(),
 					message, BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
 			if(error.open() == SWT.RETRY) {
@@ -147,7 +147,7 @@ public class SigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

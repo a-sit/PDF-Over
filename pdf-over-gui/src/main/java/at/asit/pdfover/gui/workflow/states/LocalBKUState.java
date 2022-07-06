@@ -171,7 +171,7 @@ public class LocalBKUState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		SigningState signingState = status.signingState;
 
@@ -185,7 +185,7 @@ public class LocalBKUState extends State {
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(
-					getStateMachine().getGUIProvider().getMainShell(),
+					getStateMachine().getMainShell(),
 					Messages.getString("error.LocalBKU"),
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
@@ -219,7 +219,7 @@ public class LocalBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

@@ -64,16 +64,16 @@ public class MobileBKUState extends State {
 
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		ConfigProvider provider = stateMachine.getConfigProvider();
+		ConfigProvider provider = stateMachine.configProvider;
 		switch(provider.getMobileBKUType()) {
 			case A_TRUST:
 				this.status = new ATrustStatus(provider);
-				this.handler = new ATrustHandler(this, stateMachine.getGUIProvider().getMainShell(), provider.getMobileBKUBase64());
+				this.handler = new ATrustHandler(this, stateMachine.getMainShell(), provider.getMobileBKUBase64());
 				break;
 
 			case IAIK:
 				this.status = new IAIKStatus(provider);
-				this.handler = new IAIKHandler(this, stateMachine.getGUIProvider().getMainShell());
+				this.handler = new IAIKHandler(this, stateMachine.getMainShell());
 				break;
 
 			default:
@@ -86,7 +86,7 @@ public class MobileBKUState extends State {
 	WaitingForAppComposite waitingForAppComposite = null;
 	WaitingForAppComposite getWaitingForAppComposite() {
 		if (this.waitingForAppComposite == null) {
-			this.waitingForAppComposite = getStateMachine().getGUIProvider()
+			this.waitingForAppComposite = getStateMachine()
 					.createComposite(WaitingForAppComposite.class, SWT.RESIZE, this);
 		}
 
@@ -96,7 +96,7 @@ public class MobileBKUState extends State {
 	WaitingComposite waitingComposite = null;
 	WaitingComposite getWaitingComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite = getStateMachine().getGUIProvider()
+			this.waitingComposite = getStateMachine()
 					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
@@ -105,7 +105,7 @@ public class MobileBKUState extends State {
 
 	MobileBKUEnterTANComposite getMobileBKUEnterTANComposite() {
 		if (this.mobileBKUEnterTANComposite == null) {
-			this.mobileBKUEnterTANComposite = getStateMachine().getGUIProvider()
+			this.mobileBKUEnterTANComposite = getStateMachine()
 					.createComposite(MobileBKUEnterTANComposite.class, SWT.RESIZE, this);
 		}
 
@@ -115,7 +115,7 @@ public class MobileBKUState extends State {
 	MobileBKUQRComposite mobileBKUQRComposite = null;
 	MobileBKUQRComposite getMobileBKUQRComposite() {
 		if (this.mobileBKUQRComposite == null) {
-			this.mobileBKUQRComposite = getStateMachine().getGUIProvider()
+			this.mobileBKUQRComposite = getStateMachine()
 					.createComposite(MobileBKUQRComposite.class, SWT.RESIZE, this);
 		}
 
@@ -125,7 +125,7 @@ public class MobileBKUState extends State {
 	MobileBKUEnterNumberComposite mobileBKUEnterNumberComposite = null;
 	MobileBKUEnterNumberComposite getMobileBKUEnterNumberComposite() {
 		if (this.mobileBKUEnterNumberComposite == null) {
-			this.mobileBKUEnterNumberComposite = getStateMachine().getGUIProvider()
+			this.mobileBKUEnterNumberComposite = getStateMachine()
 					.createComposite(MobileBKUEnterNumberComposite.class, SWT.RESIZE, this);
 		}
 
@@ -135,7 +135,7 @@ public class MobileBKUState extends State {
 	MobileBKUFingerprintComposite mobileBKUFingerprintComposite = null;
 	MobileBKUFingerprintComposite getMobileBKUFingerprintComposite() {
 		if (this.mobileBKUFingerprintComposite == null) {
-			this.mobileBKUFingerprintComposite = getStateMachine().getGUIProvider()
+			this.mobileBKUFingerprintComposite = getStateMachine()
 					.createComposite(MobileBKUFingerprintComposite.class, SWT.RESIZE, this);
 		}
 
@@ -147,7 +147,7 @@ public class MobileBKUState extends State {
 	 * @return the mobile BKU URL
 	 */
 	public String getURL() {
-		return getStateMachine().getConfigProvider().getMobileBKUURL();
+		return getStateMachine().configProvider.getMobileBKUURL();
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class MobileBKUState extends State {
 	public void displayError(final String message) {
 		log.error(message);
 		Display.getDefault().syncExec(() -> {
-			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(), message, BUTTONS.OK);
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), message, BUTTONS.OK);
 			error.open();
 		});
 	}
@@ -222,9 +222,9 @@ public class MobileBKUState extends State {
 					ui.setMobilePassword(mobileStatus.mobilePassword);
 				}
 				ui.enableButton();
-				getStateMachine().getGUIProvider().display(ui);
+				getStateMachine().display(ui);
 
-				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+				Display display = getStateMachine().getMainShell().getDisplay();
 				while (!ui.userAck && !ui.userCancel) {
 					if (!display.readAndDispatch()) {
 						display.sleep();
@@ -246,7 +246,7 @@ public class MobileBKUState extends State {
 			mobileStatus.mobilePassword = ui.getMobilePassword();
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
+			getStateMachine().display(this.getWaitingComposite());
 		});
 	}
 
@@ -272,9 +272,9 @@ public class MobileBKUState extends State {
 					tan.setTries(mobileStatus.tanTries);
 				}
 				tan.enableButton();
-				getStateMachine().getGUIProvider().display(tan);
+				getStateMachine().display(tan);
 
-				Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+				Display display = getStateMachine().getMainShell().getDisplay();
 				while (!tan.isUserAck() && !tan.isUserCancel()) {
 					if (!display.readAndDispatch()) {
 						display.sleep();
@@ -294,7 +294,7 @@ public class MobileBKUState extends State {
 			mobileStatus.tan = tan.getTan();
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(getWaitingComposite());
+			getStateMachine().display(getWaitingComposite());
 		});
 	}
 
@@ -315,7 +315,7 @@ public class MobileBKUState extends State {
 					if (handler.handleQRResponse(resp)) {
 						log.debug("Signature page response: " + resp);
 						getMobileBKUQRComposite().setDone(true);
-						Display display = getStateMachine().getGUIProvider().
+						Display display = getStateMachine().
 								getMainShell().getDisplay();
 						display.wake();
 						checkDone.cancel();
@@ -338,9 +338,9 @@ public class MobileBKUState extends State {
 				this.threadException = new Exception(Messages.getString("error.FailedToLoadQRCode"));
 			}
 			qr.setQR(qrcode);
-			getStateMachine().getGUIProvider().display(qr);
+			getStateMachine().display(qr);
 
-			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			Display display = getStateMachine().getMainShell().getDisplay();
 			while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
 				if (!display.readAndDispatch()) {
 					display.sleep();
@@ -364,7 +364,7 @@ public class MobileBKUState extends State {
 				qr.setDone(false);
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
+			getStateMachine().display(this.getWaitingComposite());
 		});
 	}
 
@@ -377,9 +377,9 @@ public class MobileBKUState extends State {
 
 		Display.getDefault().syncExec(() -> {
 			WaitingForAppComposite waitingForAppcomposite = this.getWaitingForAppComposite();
-			getStateMachine().getGUIProvider().display(waitingForAppcomposite);
+			getStateMachine().display(waitingForAppcomposite);
 
-			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			Display display = getStateMachine().getMainShell().getDisplay();
 			undecidedPolling();
 			long timeoutTime = System.nanoTime() + (300 * ((long)1e9));
 
@@ -402,7 +402,7 @@ public class MobileBKUState extends State {
 				status.errorMessage = "sms";
 				status.isSMSTan = true;
 				// show waiting composite
-				getStateMachine().getGUIProvider().display(this.getWaitingComposite());
+				getStateMachine().display(this.getWaitingComposite());
 				return;
 
 			}
@@ -459,7 +459,7 @@ public class MobileBKUState extends State {
 					if (handler.handleQRResponse(resp)) {
 						log.debug("Signature page response: " + resp);
 						getMobileBKUFingerprintComposite().setDone(true);
-						Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+						Display display = getStateMachine().getMainShell().getDisplay();
 						display.wake();
 						checkDone.cancel();
 					}
@@ -475,9 +475,9 @@ public class MobileBKUState extends State {
 			fingerprintComposite.setRefVal(status.refVal);
 			fingerprintComposite.setSignatureData(status.signatureDataURL);
 			fingerprintComposite.setErrorMessage(status.errorMessage);
-			getStateMachine().getGUIProvider().display(fingerprintComposite);
+			getStateMachine().display(fingerprintComposite);
 
-			Display display = getStateMachine().getGUIProvider().getMainShell().getDisplay();
+			Display display = getStateMachine().getMainShell().getDisplay();
 			while (!fingerprintComposite.isUserCancel() && !fingerprintComposite.isUserSMS() && !fingerprintComposite.isDone()) {
 				if (!display.readAndDispatch()) {
 					display.sleep();
@@ -500,7 +500,7 @@ public class MobileBKUState extends State {
 				fingerprintComposite.setDone(false);
 
 			// show waiting composite
-			getStateMachine().getGUIProvider().display(this.getWaitingComposite());
+			getStateMachine().display(this.getWaitingComposite());
 		});
 	}
 
@@ -521,7 +521,7 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void run() {
-		this.signingState = getStateMachine().getStatus().signingState;
+		this.signingState = getStateMachine().status.signingState;
 
 		this.signingState.setBKUConnector(new MobileBKUConnector(this));
 		log.debug("Setting base64 request to " + this.handler.useBase64Request());
@@ -534,7 +534,7 @@ public class MobileBKUState extends State {
 			if (errormsg != null && !errormsg.isEmpty())
 				message += ": " + errormsg;
 			ErrorDialog error = new ErrorDialog(
-					getStateMachine().getGUIProvider().getMainShell(),
+					getStateMachine().getMainShell(),
 					message, BUTTONS.OK);
 			// error.setException(this.threadException);
 			// this.setNextState(error);
@@ -543,7 +543,7 @@ public class MobileBKUState extends State {
 			return;
 		}
 
-		getStateMachine().getGUIProvider().display(
+		getStateMachine().display(
 				this.getWaitingComposite());
 
 		this.setNextState(new at.asit.pdfover.gui.workflow.states.SigningState(getStateMachine()));
@@ -573,7 +573,7 @@ public class MobileBKUState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

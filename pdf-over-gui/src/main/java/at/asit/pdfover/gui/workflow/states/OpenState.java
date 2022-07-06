@@ -74,15 +74,15 @@ public class OpenState extends State {
 	private DataSourceSelectComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
-					getStateMachine().getGUIProvider().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
+					getStateMachine().createComposite(DataSourceSelectComposite.class, SWT.RESIZE, this);
 		}
 		return this.selectionComposite;
 	}
 
 	@Override
 	public void run() {
-		ConfigProvider config = getStateMachine().getConfigProvider();
-		Status status = getStateMachine().getStatus();
+		ConfigProvider config = getStateMachine().configProvider;
+		Status status = getStateMachine().status;
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {
 			status.bku = config.getDefaultBKU();
@@ -96,7 +96,7 @@ public class OpenState extends State {
 		if (status.document == null) {
 			DataSourceSelectComposite selection = this.getSelectionComposite();
 
-			getStateMachine().getGUIProvider().display(selection);
+			getStateMachine().display(selection);
 			selection.layout();
 
 			status.document = selection.getSelected();
@@ -106,12 +106,12 @@ public class OpenState extends State {
 				return;
 			}
 		}
-		log.debug("Got Datasource: " + getStateMachine().getStatus().document.getAbsolutePath());
+		log.debug("Got Datasource: " + getStateMachine().status.document.getAbsolutePath());
 
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
 		if (config.getEnablePlaceholderUsage()) {
-			try (PDDocument pddocument = PDDocument.load(getStateMachine().getStatus().document)) {
+			try (PDDocument pddocument = PDDocument.load(getStateMachine().status.document)) {
 				// - scan for placeholders
 				boolean useSignatureFields = config.getUseSignatureFields();
 				boolean useMarker = config.getUseMarker();
@@ -126,7 +126,7 @@ public class OpenState extends State {
 						{
 							// create a dialog with ok and cancel buttons and a question
 							// icon
-							MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+							MessageBox dialog = new MessageBox(getStateMachine().getMainShell(),
 									SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
 							dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
 							dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
@@ -143,11 +143,11 @@ public class OpenState extends State {
 								} else if (fields.size() > 1) {
 
 									PlaceholderSelectionGui gui = new PlaceholderSelectionGui(
-											getStateMachine().getGUIProvider().getMainShell(), 65570, "text",
+											getStateMachine().getMainShell(), 65570, "text",
 											"select the fields", fields);
 									int res = gui.open();
 									if (res != -1) {
-										getStateMachine().getStatus().searchForPlacehoderSignature = true;
+										getStateMachine().status.searchForPlacehoderSignature = true;
 										addPlaceholderSelectionToConfig(fields.get(res));
 										this.setNextState(new BKUSelectionState(getStateMachine()));
 									}
@@ -156,7 +156,7 @@ public class OpenState extends State {
 								}
 
 							} else if (result == SWT.NO) {
-								getStateMachine().getStatus().searchForPlacehoderSignature = false;
+								getStateMachine().status.searchForPlacehoderSignature = false;
 							} else {
 								status.document = null;
 								return;
@@ -172,7 +172,7 @@ public class OpenState extends State {
 					if (null != signaturePlaceholderData) {
 
 						// create a dialog with ok and cancel buttons and a question icon
-						MessageBox dialog = new MessageBox(getStateMachine().getGUIProvider().getMainShell(),
+						MessageBox dialog = new MessageBox(getStateMachine().getMainShell(),
 								SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
 						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
 						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
@@ -190,10 +190,10 @@ public class OpenState extends State {
 									signaturePlaceholderData.getTablePos().getPosY(),
 									signaturePlaceholderData.getTablePos().getPage());
 
-							getStateMachine().getStatus().searchForPlacehoderSignature = true;
+							getStateMachine().status.searchForPlacehoderSignature = true;
 
 						} else if (result == SWT.NO) {
-							getStateMachine().getStatus().searchForPlacehoderSignature = false;
+							getStateMachine().status.searchForPlacehoderSignature = false;
 						} else {
 							status.document = null;
 							return;
@@ -256,7 +256,7 @@ public class OpenState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

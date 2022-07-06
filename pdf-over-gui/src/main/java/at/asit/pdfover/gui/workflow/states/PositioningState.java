@@ -82,7 +82,7 @@ public class PositioningState extends State {
 
 	private void openPDFDocument() throws IOException {
 		closePDFDocument();
-		File documentPath = getStateMachine().getStatus().document;
+		File documentPath = getStateMachine().status.document;
 		PDFFile pdf = null;
 		RandomAccessFile rafile = new RandomAccessFile(documentPath, "r");
 		FileChannel chan = rafile.getChannel();
@@ -114,13 +114,13 @@ public class PositioningState extends State {
 		StateMachine stateMachine = getStateMachine();
 		if (this.positionComposite == null) {
 			this.positionComposite =
-					stateMachine.getGUIProvider().createComposite(PositioningComposite.class, SWT.RESIZE, this);
-			log.debug("Displaying " +  stateMachine.getStatus().document);
+					stateMachine.createComposite(PositioningComposite.class, SWT.RESIZE, this);
+			log.debug("Displaying " +  stateMachine.status.document);
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
-		ConfigProvider config = stateMachine.getConfigProvider();
-		SignatureParameter param = stateMachine.getPDFSigner().getPDFSigner().newParameter();
+		ConfigProvider config = stateMachine.configProvider;
+		SignatureParameter param = stateMachine.pdfSigner.getPDFSigner().newParameter();
 		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
@@ -146,7 +146,7 @@ public class PositioningState extends State {
 
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 		if (!(status.getPreviousState() instanceof PositioningState) &&
 			!(status.getPreviousState() instanceof OpenState))
 		{
@@ -155,7 +155,7 @@ public class PositioningState extends State {
 		}
 
 		if ((this.document == null) ||
-				(this.loadedDocumentPath != getStateMachine().getStatus().document)) {
+				(this.loadedDocumentPath != getStateMachine().status.document)) {
 			log.debug("Checking PDF document for encryption");
 			try {
 				openPDFDocument();
@@ -166,7 +166,7 @@ public class PositioningState extends State {
 				if (message == null)
 					message = Messages.getString("error.IOError");
 				ErrorDialog dialog = new ErrorDialog(
-						getStateMachine().getGUIProvider().getMainShell(),
+						getStateMachine().getMainShell(),
 						message, BUTTONS.RETRY_CANCEL);
 				if(dialog.open() == SWT.RETRY) {
 					run();
@@ -184,7 +184,7 @@ public class PositioningState extends State {
 			} catch(Exception ex) {
 				log.error("Failed to create composite (probably a mac...)", ex);
 				ErrorDialog dialog = new ErrorDialog(
-						getStateMachine().getGUIProvider().getMainShell(),
+						getStateMachine().getMainShell(),
 						Messages.getString("error.PositioningNotPossible"), BUTTONS.OK);
 				dialog.open();
 				status.signaturePosition = new SignaturePosition();
@@ -192,7 +192,7 @@ public class PositioningState extends State {
 				return;
 			}
 
-			getStateMachine().getGUIProvider().display(position);
+			getStateMachine().display(position);
 
 			status.signaturePosition = position.getPosition();
 
@@ -221,7 +221,7 @@ public class PositioningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

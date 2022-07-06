@@ -44,11 +44,10 @@ public class StateMachine implements GUIProvider {
 
 	private static final Logger log = LoggerFactory.getLogger(StateMachine.class);
 
-	private Status status;
-
-	private PDFSigner pdfSigner;
-
-	private ConfigProviderImpl configProvider;
+	public final Status status;
+	public final PDFSigner pdfSigner;
+	public final ConfigProviderImpl configProvider;
+	public final String[] cmdLineArgs;
 
 	/**
 	 * Default constructor
@@ -60,7 +59,7 @@ public class StateMachine implements GUIProvider {
 		this.status.setCurrentState(new PrepareConfigurationState(this));
 		this.pdfSigner = new PDFSigner();
 		this.configProvider = new ConfigProviderImpl();
-		setCmdLineArgs(cmdLineArgs);
+		this.cmdLineArgs = cmdLineArgs;
 	}
 
 	/**
@@ -267,37 +266,6 @@ public class StateMachine implements GUIProvider {
 			}
 			display.dispose();
 		}
-	}
-	public ConfigProvider getConfigProvider() {
-		return this.configProvider;
-	}
-	public PersistentConfigProvider getPersistentConfigProvider() {
-		return this.configProvider;
-	}
-	public ConfigManipulator getConfigManipulator() {
-		return this.configProvider;
-	}
-	public ConfigOverlayManipulator getConfigOverlayManipulator() {
-		return this.configProvider;
-	}
-	public Status getStatus() {
-		return this.status;
-	}
-
-	public PDFSigner getPDFSigner() {
-		return this.pdfSigner;
-	}
-
-	public GUIProvider getGUIProvider() {
-		return this;
-	}
-
-	private String[] cmdLineArgs = new String[] {};
-	private void setCmdLineArgs(String[] cmdLineArgs) {
-		this.cmdLineArgs = cmdLineArgs;
-	}
-	public String[] getCmdArgs() {
-		return this.cmdLineArgs;
 	}
 
 

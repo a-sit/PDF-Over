@@ -18,8 +18,6 @@ package at.asit.pdfover.gui;
 // Imports
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -41,7 +39,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -206,7 +203,7 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		this.shell = new Shell();
-		getShell().setSize(this.stateMachine.getConfigProvider().getMainWindowSize());
+		getShell().setSize(this.stateMachine.configProvider.getMainWindowSize());
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 			if (System.getProperty("os.name").contains("OS X")) {
 				hookupOSXMenu();
@@ -231,9 +228,9 @@ public class MainWindow {
 			@Override
 			public void shellClosed(ShellEvent e) {
 				log.debug("Closing main window");
-				MainWindow.this.stateMachine.getConfigManipulator().setMainWindowSize(getShell().getSize());
+				MainWindow.this.stateMachine.configProvider.setMainWindowSize(getShell().getSize());
 				try {
-					MainWindow.this.stateMachine.getConfigManipulator().saveCurrentConfiguration();
+					MainWindow.this.stateMachine.configProvider.saveCurrentConfiguration();
 				} catch (IOException e1) {
 					log.error("Error saving configuration", e);
 				}
@@ -305,9 +302,8 @@ public class MainWindow {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if (MainWindow.this.stateMachine.getStatus().getCurrentState() instanceof OpenState) {
-					((OpenState) MainWindow.this.stateMachine.getStatus()
-							.getCurrentState()).openFileDialog();
+				if (MainWindow.this.stateMachine.status.getCurrentState() instanceof OpenState) {
+					((OpenState) MainWindow.this.stateMachine.status.getCurrentState()).openFileDialog();
 				} else {
 					MainWindow.this.stateMachine.jumpToState(new OpenState(
 							MainWindow.this.stateMachine));
@@ -396,7 +392,7 @@ public class MainWindow {
 			},
 			/* preferencesListener */
 			(Event arg0) -> {
-				if (MainWindow.this.stateMachine.getStatus().behavior.getEnabled(Buttons.CONFIG))
+				if (MainWindow.this.stateMachine.status.behavior.getEnabled(Buttons.CONFIG))
 					MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(MainWindow.this.stateMachine));
 			}
 		);
@@ -406,10 +402,10 @@ public class MainWindow {
 	 * Update MainWindow to fit new status
 	 */
 	public void applyBehavior() {
-		MainWindowBehavior behavior = this.stateMachine.getStatus().behavior;
+		MainWindowBehavior behavior = this.stateMachine.status.behavior;
 
 		log.debug("Updating MainWindow state for : "
-				+ this.stateMachine.getStatus().getCurrentState().toString());
+				+ this.stateMachine.status.getCurrentState().toString());
 
 		for (Buttons button : Buttons.values()) {
 			boolean active = behavior.getActive(button);

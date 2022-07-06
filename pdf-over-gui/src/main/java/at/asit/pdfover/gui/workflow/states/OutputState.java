@@ -46,11 +46,11 @@ public class OutputState extends State {
 
 	private OutputComposite getOutputComposite() {
 		if (this.outputComposite == null) {
-			this.outputComposite = getStateMachine().getGUIProvider()
+			this.outputComposite = getStateMachine()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
 
-			ConfigProvider config = getStateMachine().getConfigProvider();
-			Status status = getStateMachine().getStatus();
+			ConfigProvider config = getStateMachine().configProvider;
+			Status status = getStateMachine().status;
 
 			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp");
 
@@ -78,10 +78,10 @@ public class OutputState extends State {
 
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		if (status.signResult == null) {
-			ErrorDialog error = new ErrorDialog(getStateMachine().getGUIProvider().getMainShell(),
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(),
 					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);
 			if(error.open() == SWT.RETRY) {
 				this.setNextState(new PrepareSigningState(getStateMachine()));
@@ -94,7 +94,7 @@ public class OutputState extends State {
 		OutputComposite outputComposite = this.getOutputComposite();
 
 		// Display dialog
-		getStateMachine().getGUIProvider().display(outputComposite);
+		getStateMachine().display(outputComposite);
 	}
 
 	/*
@@ -105,7 +105,7 @@ public class OutputState extends State {
 	@Override
 	public void cleanUp() {
 
-		getStateMachine().getStatus().signResult = null;
+		getStateMachine().status.signResult = null;
 
 		if (this.outputComposite != null)
 			this.outputComposite.dispose();
@@ -118,7 +118,7 @@ public class OutputState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

@@ -44,10 +44,10 @@ public class ConfigurationUIState extends State {
 	private ConfigurationComposite getConfigurationComposite() {
 		if (this.configurationComposite == null) {
 			this.configurationComposite =
-					getStateMachine().getGUIProvider().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
-			this.configurationComposite.setConfigManipulator(getStateMachine().getConfigManipulator());
-			this.configurationComposite.setConfigProvider(getStateMachine().getPersistentConfigProvider());
-			this.configurationComposite.setSigner(getStateMachine().getPDFSigner());
+					getStateMachine().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
+			this.configurationComposite.setConfigManipulator(getStateMachine().configProvider);
+			this.configurationComposite.setConfigProvider(getStateMachine().configProvider);
+			this.configurationComposite.setSigner(getStateMachine().pdfSigner);
 		}
 
 		return this.configurationComposite;
@@ -66,11 +66,11 @@ public class ConfigurationUIState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		ConfigurationComposite config = this.getConfigurationComposite();
 
-		getStateMachine().getGUIProvider().display(config);
+		getStateMachine().display(config);
 
 		if(config.isUserDone())
 		{
@@ -96,7 +96,7 @@ public class ConfigurationUIState extends State {
 	@Override
 	public void updateMainWindowBehavior() {
 		// Leave the state as it is
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.setEnabled(Buttons.CONFIG, false);
 		behavior.setMainBarVisible(false);
 	}
@@ -105,6 +105,6 @@ public class ConfigurationUIState extends State {
 	 * Triggers to reload the resources
 	 */
 	public void reloadResources() {
-		getStateMachine().getGUIProvider().reloadResources();
+		getStateMachine().reloadResources();
 	}
 }

@@ -67,10 +67,9 @@ public class PrepareSigningState extends State {
 		public void run() {
 			try {
 
-				Status status = this.state.getStateMachine().getStatus();
+				Status status = this.state.getStateMachine().status;
 
-				ConfigProvider configuration = this.state.getStateMachine()
-						.getConfigProvider();
+				ConfigProvider configuration = this.state.getStateMachine().configProvider;
 
 				// SET PROXY HOST and PORT settings
 				final String proxyHost = configuration.getProxyHost();
@@ -124,13 +123,11 @@ public class PrepareSigningState extends State {
 					});
 				}
 				if (this.state.signer == null) {
-					this.state.signer = this.state.getStateMachine().getPDFSigner()
-							.getPDFSigner();
+					this.state.signer = this.state.getStateMachine().pdfSigner.getPDFSigner();
 				}
 
 				if (this.state.signatureParameter == null) {
-					this.state.signatureParameter = this.state.signer
-							.newParameter();
+					this.state.signatureParameter = this.state.signer.newParameter();
 				}
 
 				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.document));
@@ -149,7 +146,7 @@ public class PrepareSigningState extends State {
 							"SIG_NOTE", configuration.getSignatureNote());
 				}
 
-				this.state.signatureParameter.setSearchForPlaceholderSignatures(getStateMachine().getStatus().searchForPlacehoderSignature);
+				this.state.signatureParameter.setSearchForPlaceholderSignatures(getStateMachine().status.searchForPlacehoderSignature);
 
 				this.state.signatureParameter.setSignatureLanguage(configuration.getSignatureLocale().getLanguage());
 
@@ -180,7 +177,7 @@ public class PrepareSigningState extends State {
 
 	private WaitingComposite getSelectionComposite() {
 		if (this.waitingComposite == null) {
-			this.waitingComposite = getStateMachine().getGUIProvider()
+			this.waitingComposite = getStateMachine()
 					.createComposite(WaitingComposite.class, SWT.RESIZE, this);
 		}
 
@@ -197,11 +194,11 @@ public class PrepareSigningState extends State {
 	public void run() {
 		WaitingComposite waiting = this.getSelectionComposite();
 
-		getStateMachine().getGUIProvider().display(waiting);
+		getStateMachine().display(waiting);
 
-		this.signer = getStateMachine().getPDFSigner().getPDFSigner();
+		this.signer = getStateMachine().pdfSigner.getPDFSigner();
 
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		if (this.signatureParameter == null) {
 			this.signatureParameter = this.signer.newParameter();
@@ -215,7 +212,7 @@ public class PrepareSigningState extends State {
 
 		if (this.threadException != null) {
 			ErrorDialog error = new ErrorDialog(getStateMachine()
-					.getGUIProvider().getMainShell(),
+					.getMainShell(),
 					Messages.getString("error.PrepareDocument"),
 					BUTTONS.RETRY_CANCEL);
 			this.threadException = null;
@@ -263,7 +260,7 @@ public class PrepareSigningState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

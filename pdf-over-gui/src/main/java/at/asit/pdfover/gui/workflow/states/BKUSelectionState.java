@@ -53,11 +53,11 @@ public class BKUSelectionState extends State {
 	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
-					getStateMachine().getGUIProvider().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
+					getStateMachine().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
-		if (getStateMachine().getConfigProvider().getKeyStoreEnabled()) {
-			File ks = new File(getStateMachine().getConfigProvider().getKeyStoreFile());
+		if (getStateMachine().configProvider.getKeyStoreEnabled()) {
+			File ks = new File(getStateMachine().configProvider.getKeyStoreFile());
 			this.selectionComposite.setKeystoreEnabled(ks.exists());
 		} else
 			this.selectionComposite.setKeystoreEnabled(false);
@@ -67,7 +67,7 @@ public class BKUSelectionState extends State {
 
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 		State previousState = status.getPreviousState();
 		if (!(
 		  (previousState instanceof OpenState) ||
@@ -76,14 +76,14 @@ public class BKUSelectionState extends State {
 		)) {
 			status.bku = BKUs.NONE;
 		} else if(!(status.getPreviousState() instanceof BKUSelectionState)) {
-			ConfigProvider config = getStateMachine().getConfigProvider();
+			ConfigProvider config = getStateMachine().configProvider;
 			status.bku = config.getDefaultBKU();
 		}
 
 		if(status.bku == BKUs.NONE) {
 			BKUSelectionComposite selection = this.getSelectionComposite();
 
-			getStateMachine().getGUIProvider().display(selection);
+			getStateMachine().display(selection);
 			selection.layout();
 
 			status.bku = selection.getSelected();
@@ -109,7 +109,7 @@ public class BKUSelectionState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setEnabled(Buttons.CONFIG, true);
 		behavior.setEnabled(Buttons.OPEN, true);

@@ -61,10 +61,10 @@ public class KSState extends State {
 	 */
 	@Override
 	public void run() {
-		Status status = getStateMachine().getStatus();
+		Status status = getStateMachine().status;
 
 		SigningState signingState = status.signingState;
-		ConfigProvider config = getStateMachine().getConfigProvider();
+		ConfigProvider config = getStateMachine().configProvider;
 
 		try {
 			String file = config.getKeyStoreFile();
@@ -72,7 +72,7 @@ public class KSState extends State {
 			if (!f.isFile()) {
 				log.error("Keystore not found");
 				ErrorDialog dialog = new ErrorDialog(
-						getStateMachine().getGUIProvider().getMainShell(),
+						getStateMachine().getMainShell(),
 						String.format(Messages.getString("error.KeyStoreFileNotExist"), f.getName()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() != SWT.RETRY) {
@@ -87,7 +87,7 @@ public class KSState extends State {
 			String storePass = config.getKeyStoreStorePass();
 			if (storePass.isEmpty()) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
-						getStateMachine().getGUIProvider().getMainShell(),
+						getStateMachine().getMainShell(),
 						Messages.getString("keystore_config.KeystoreStorePass"),
 						Messages.getString("keystore.KeystoreStorePassEntry"));
 				storePass = pwd.open();
@@ -95,7 +95,7 @@ public class KSState extends State {
 			String keyPass = config.getKeyStoreKeyPass();
 			if (keyPass.isEmpty()) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
-						getStateMachine().getGUIProvider().getMainShell(),
+						getStateMachine().getMainShell(),
 						Messages.getString("keystore_config.KeystoreKeyPass"),
 						Messages.getString("keystore.KeystoreKeyPassEntry"));
 				keyPass = pwd.open();
@@ -105,7 +105,7 @@ public class KSState extends State {
 		} catch (SignatureException e) {
 			log.error("Error loading keystore", e);
 			ErrorDialog dialog = new ErrorDialog(
-					getStateMachine().getGUIProvider().getMainShell(),
+					getStateMachine().getMainShell(),
 					Messages.getString("error.KeyStore"),
 					BUTTONS.RETRY_CANCEL);
 			if (dialog.open() != SWT.RETRY) {
@@ -138,7 +138,7 @@ public class KSState extends State {
 	 */
 	@Override
 	public void updateMainWindowBehavior() {
-		MainWindowBehavior behavior = getStateMachine().getStatus().behavior;
+		MainWindowBehavior behavior = getStateMachine().status.behavior;
 		behavior.reset();
 		behavior.setActive(Buttons.OPEN, true);
 		behavior.setActive(Buttons.POSITION, true);

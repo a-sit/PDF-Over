@@ -57,7 +57,7 @@ public abstract class Argument {
 	 * @return the configuration overlay manipulator
 	 */
 	protected ConfigOverlayManipulator getConfiguration() {
-		return this.stateMachine.getConfigOverlayManipulator();
+		return this.stateMachine.configProvider;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public abstract class Argument {
 	 * @return the status
 	 */
 	protected Status getStatus() {
-		return this.stateMachine.getStatus();
+		return this.stateMachine.status;
 	}
 
 	/**

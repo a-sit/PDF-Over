@@ -84,7 +84,7 @@ public abstract class State {
 
 	/**
 	 * Update the main window behavior of this state if necessary
-	 * Should update this.stateMachine.getStatus().getBehavior()
+	 * Should update this.stateMachine.status.getBehavior()
 	 */
 	public abstract void updateMainWindowBehavior();
 }
