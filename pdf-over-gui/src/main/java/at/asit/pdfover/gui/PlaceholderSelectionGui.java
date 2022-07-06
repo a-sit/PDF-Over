@@ -111,11 +111,8 @@ public class PlaceholderSelectionGui extends Dialog {
 		this.btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
-
 				PlaceholderSelectionGui.this.returnValue = -1;
 				PlaceholderSelectionGui.this.shlInfo.dispose();
-
 			}
 		});
 		this.btnCancel.setBounds(175, 118, 75, 25);
@@ -126,7 +123,6 @@ public class PlaceholderSelectionGui extends Dialog {
 		this.btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				PlaceholderSelectionGui.this.returnValue = PlaceholderSelectionGui.this.placeholderNameDropDown.getSelectionIndex();
 				PlaceholderSelectionGui.this.shlInfo.dispose();
 			}

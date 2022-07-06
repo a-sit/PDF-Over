@@ -381,26 +381,25 @@ public class MainWindow {
 	 */
 	private void hookupOSXMenu() {
 		log.debug("Hooking up OS X menu");
-		CocoaUIEnhancer.hookApplicationMenu(getShell().getDisplay(), new Listener() {
-			@Override
-			public void handleEvent(Event arg0) {
+		CocoaUIEnhancer.hookApplicationMenu(
+			getShell().getDisplay(),
+			/* quitListener */
+			(Event arg0) -> {
 				MainWindow.this.stateMachine.exit();
-			}
-		}, new Listener() {
-			@Override
-			public void handleEvent(Event arg0) {
+			},
+			/* aboutListener */
+			(Event arg0) -> {
 				Dialog dialog = new Dialog(getShell(),
 						String.format(Messages.getString("main.about"), Constants.APP_NAME),
 						Constants.APP_NAME_VERSION, BUTTONS.OK, ICON.INFORMATION);
 				dialog.open();
-			}
-		}, new Listener() {
-			@Override
-			public void handleEvent(Event arg0) {
+			},
+			/* preferencesListener */
+			(Event arg0) -> {
 				if (MainWindow.this.stateMachine.getStatus().getBehavior().getEnabled(Buttons.CONFIG))
 					MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(MainWindow.this.stateMachine));
 			}
-		});
+		);
 	}
 
 	/**

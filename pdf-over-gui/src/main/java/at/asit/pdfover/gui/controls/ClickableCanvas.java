@@ -51,12 +51,8 @@ public class ClickableCanvas extends Canvas {
 
 		final Cursor hand = new Cursor(this.getDisplay(), SWT.CURSOR_HAND);
 
-		this.addListener(SWT.Resize, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				ClickableCanvas.this.redraw();
-			}
+		this.addListener(SWT.Resize, (Event event) -> {
+			ClickableCanvas.this.redraw();
 		});
 
 		this.setCursor(hand);
