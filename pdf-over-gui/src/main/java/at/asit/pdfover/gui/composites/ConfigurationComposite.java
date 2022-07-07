@@ -437,7 +437,7 @@ public class ConfigurationComposite extends StateComposite {
 		do {
 			// Save current config to file
 			try {
-				this.configProvider.saveCurrentConfiguration();
+				this.configProvider.saveToDisk();
 				redo = false;
 				status = true;
 			} catch (IOException e) {

@@ -103,7 +103,7 @@ public class PrepareConfigurationState extends State {
 
 	private void initializeFromConfigurationFile() throws InitializationException {
 		try {
-			getStateMachine().configProvider.loadConfiguration();
+			getStateMachine().configProvider.loadFromDisk();
 		} catch (IOException ex) {
 			throw new InitializationException("Failed to read configuration from config file", ex);
 		}
@@ -278,7 +278,7 @@ public class PrepareConfigurationState extends State {
 
 			// initialize from config file
 			initializeFromConfigurationFile();
-			
+
 			// Read cli arguments
 			try {
 				initializeFromArguments(stateMachine.cmdLineArgs, this.handler);

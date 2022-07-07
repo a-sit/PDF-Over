@@ -230,7 +230,7 @@ public class MainWindow {
 				log.debug("Closing main window");
 				MainWindow.this.stateMachine.configProvider.setMainWindowSize(getShell().getSize());
 				try {
-					MainWindow.this.stateMachine.configProvider.saveCurrentConfiguration();
+					MainWindow.this.stateMachine.configProvider.saveToDisk();
 				} catch (IOException e1) {
 					log.error("Error saving configuration", e);
 				}

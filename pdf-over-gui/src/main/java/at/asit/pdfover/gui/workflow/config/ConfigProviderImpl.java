@@ -79,7 +79,7 @@ public class ConfigProviderImpl {
 	}
 
 	/* load from disk */
-	public void loadConfiguration() throws IOException {
+	public void loadFromDisk() throws IOException {
 
 		Properties config = new Properties();
 
@@ -297,7 +297,7 @@ public class ConfigProviderImpl {
 	}
 
 	/* save to file */
-	public void saveCurrentConfiguration() throws IOException {
+	public void saveToDisk() throws IOException {
 		String filename = this.getConfigurationFileName();
 		File configFile = new File(Constants.CONFIG_DIRECTORY + File.separator + filename);
 
