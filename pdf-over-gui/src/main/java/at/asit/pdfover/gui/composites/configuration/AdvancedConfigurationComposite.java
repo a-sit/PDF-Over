@@ -57,7 +57,6 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Composite for advanced configuration
@@ -532,8 +531,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	void performPositionSelection(boolean automatic) {
 		log.debug("Selected Position: {}", automatic);
-		SignaturePosition pos = automatic ? new SignaturePosition() : null;
-		this.configurationContainer.defaultSignaturePosition = pos;
+		this.configurationContainer.autoPositionSignature = automatic;
 		this.btnAutomatischePositionierung.setSelection(automatic);
 	}
 
@@ -648,7 +646,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	@Override
 	public void initConfiguration(ConfigurationManager provider) {
-		this.configurationContainer.defaultSignaturePosition = provider.getDefaultSignaturePositionPersistent();
+		this.configurationContainer.autoPositionSignature = provider.getAutoPositionSignaturePersistent();
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
 		this.configurationContainer.enabledPlaceholderUsage = provider.getEnablePlaceholderUsage();
@@ -696,8 +694,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		} else {
 			performPostFixChanged(Constants.DEFAULT_POSTFIX);
 		}
-		SignaturePosition pos = this.configurationContainer.defaultSignaturePosition;
-		performPositionSelection(pos != null && pos.useAutoPositioning());
+		performPositionSelection(this.configurationContainer.autoPositionSignature);
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
 		performEnableUsePlaceholder(this.configurationContainer.enabledPlaceholderUsage);
@@ -740,7 +737,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 	@Override
 	public void storeConfiguration(ConfigurationManager store) {
-		store.setDefaultSignaturePosition(this.configurationContainer.defaultSignaturePosition);
+		store.setAutoPositionSignature(this.configurationContainer.autoPositionSignature);
 		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
 		store.setEnablePlaceholderUsage(this.configurationContainer.enabledPlaceholderUsage);

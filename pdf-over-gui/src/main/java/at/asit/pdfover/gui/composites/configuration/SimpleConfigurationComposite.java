@@ -68,7 +68,6 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
-import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  *
@@ -539,7 +538,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
 
     	if (newProfile.equals(Profile.AMTSSIGNATURBLOCK) || newProfile.equals(Profile.INVISIBLE)){
-			this.configurationContainer.defaultSignaturePosition = new SignaturePosition();
+			this.configurationContainer.autoPositionSignature = true;
 		}
     	setSignatureProfileSetting();
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))

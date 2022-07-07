@@ -41,7 +41,7 @@ public class AutomaticPositioningArgument extends Argument {
 	public int handleArgument(String[] args, int argOffset,
 			ArgumentHandler handler)
 			throws InitializationException {
-		getConfiguration().setDefaultSignaturePositionOverlay(new SignaturePosition());
+		getConfiguration().setAutoPositionSignatureOverlay();
 		return argOffset;
 	}
 

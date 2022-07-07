@@ -22,8 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Point;
@@ -37,9 +35,6 @@ import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.SignaturePosition;
-
-// TODO: review which properties use the overlay in this file (also: remove unneeded setters/getters, maybe template impl for overlays?)
 
 /**
  * Implementation of the configuration provider and manipulator
@@ -224,53 +219,8 @@ public class ConfigurationManager {
 		this.configuration.mainWindowSize = new Point(width, height);
 
 		// Set Signature Position
-		String signaturePosition = diskConfig.getProperty(Constants.CFG_SIGNATURE_POSITION);
-		SignaturePosition position = null;
-		if (signaturePosition != null && !signaturePosition.trim().isEmpty()) {
-			signaturePosition = signaturePosition.trim().toLowerCase();
-
-			Pattern pattern = Pattern.compile("(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))");
-			Matcher matcher = pattern.matcher(signaturePosition);
-			if (matcher.matches()) {
-				if (matcher.groupCount() == 8) {
-					if (matcher.group(1) != null) {
-						// we have format: x=..;y=..;p=...
-						try {
-							// group 2 = x value
-							float x = Float.parseFloat(matcher.group(2));
-
-							// group 3 = y value
-							float y = Float.parseFloat(matcher.group(3));
-
-							// group 4 = p value
-							int p = Integer.parseInt(matcher.group(3));
-
-							position = new SignaturePosition(x, y, p);
-						} catch (NumberFormatException ex) {
-							log.error(
-									"Signature Position read from config failed: Not a valid number", ex);
-						}
-					} else if (matcher.group(5) != null) {
-						// we have format auto
-						position = new SignaturePosition();
-					} else if (matcher.group(6) != null) {
-						// we have format x=...;y=...;
-						// group 7 = x value
-						float x = Float.parseFloat(matcher.group(7));
-
-						// group 8 = y value
-						float y = Float.parseFloat(matcher.group(8));
-
-						position = new SignaturePosition(x, y);
-					}
-				} else {
-					log.error("Signature Position read from config failed: wrong group Count!");
-				}
-			} else {
-				log.error("Signature Position read from config failed: not matching string");
-			}
-		}
-		setDefaultSignaturePosition(position);
+		String signaturePositionStr = diskConfig.getProperty(Constants.CFG_SIGNATURE_POSITION);
+		setAutoPositionSignature(signaturePositionStr != null && signaturePositionStr.trim().equals("auto"));
 
 		//Set keystore stuff
 		String keystoreEnabled = diskConfig.getProperty(Constants.CFG_KEYSTORE_ENABLED);
@@ -350,16 +300,10 @@ public class ConfigurationManager {
 		if (getSignaturePdfACompat())
 			props.setProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT, Constants.TRUE);
 
-		SignaturePosition pos = getDefaultSignaturePositionPersistent();
-		if (pos == null) {
+		if (!getAutoPositionSignaturePersistent())
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "");
-		} else if (pos.useAutoPositioning()) {
+		else
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto");
-		} else {
-			props.setProperty(Constants.CFG_SIGNATURE_POSITION,
-					String.format((Locale) null, "x=%f;y=%f;p=%d",
-							pos.getX(), pos.getY(), pos.getPage()));
-		}
 
 		String mobileBKUURL = getMobileBKUURL();
 		if (!mobileBKUURL.equals(Constants.DEFAULT_MOBILE_BKU_URL))
@@ -435,23 +379,20 @@ public class ConfigurationManager {
 		return this.configuration.defaultBKU;
 	}
 
-	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
-		this.configuration.defaultSignaturePosition = signaturePosition;
+	public void setAutoPositionSignature(boolean state) {
+		this.configuration.autoPositionSignature = state;
 	}
 
-	public void setDefaultSignaturePositionOverlay(SignaturePosition signaturePosition) {
-		this.configurationOverlay.defaultSignaturePosition = signaturePosition;
+	public void setAutoPositionSignatureOverlay() {
+		this.configurationOverlay.autoPositionSignature = true;
 	}
 
-	public SignaturePosition getDefaultSignaturePosition() {
-		SignaturePosition position = this.configurationOverlay.defaultSignaturePosition;
-		if (position == null)
-			position = getDefaultSignaturePositionPersistent();
-		return position;
+	public boolean getAutoPositionSignature() {
+		return this.configurationOverlay.autoPositionSignature || getAutoPositionSignaturePersistent();
 	}
 
-	public SignaturePosition getDefaultSignaturePositionPersistent() {
-		return this.configuration.defaultSignaturePosition;
+	public boolean getAutoPositionSignaturePersistent() {
+		return this.configuration.autoPositionSignature;
 	}
 
 	public void setPlaceholderTransparency(int transparency) {

@@ -28,9 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.Locale;
 
-import at.asit.pdfover.commons.Profile;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.swt.SWT;
@@ -54,6 +52,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.Signator;
+import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Starting state of workflow proccess
@@ -350,7 +349,7 @@ public class PrepareConfigurationState extends State {
 			// Create PDF Signer
 			Status status = stateMachine.status;
 			status.bku = getStateMachine().configProvider.getDefaultBKU();
-			status.signaturePosition = getStateMachine().configProvider.getDefaultSignaturePosition();
+			status.signaturePosition = getStateMachine().configProvider.getAutoPositionSignature() ? (new SignaturePosition()) : null;
 
 			setNextState(new OpenState(stateMachine));
 

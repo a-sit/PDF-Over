@@ -34,7 +34,6 @@ import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * Implementation of the configuration container
@@ -141,7 +140,7 @@ public class ConfigurationDataInMemory {
 	protected boolean mobileBKUBase64 = false;
 
 	/** Holds the default signature position */
-	public SignaturePosition defaultSignaturePosition = null;
+	public boolean autoPositionSignature = false;
 
 	/** Keystore signing options */
 	public Boolean keystoreEnabled = null;
