@@ -293,7 +293,7 @@ public class ConfigProviderImpl {
 
 	/* save to file */
 	public void saveCurrentConfiguration() throws IOException {
-		String filename = this.getConfigurationFile();
+		String filename = this.getConfigurationFileName();
 		File configFile = new File(this.getConfigurationDirectory() + File.separator + filename);
 
 		Properties props = new Properties();
@@ -409,8 +409,8 @@ public class ConfigProviderImpl {
 	public String getConfigurationDirectory() { return Constants.CONFIG_DIRECTORY; }
 
 	// TODO review this
-	public void setConfigurationFile(String configurationFile) { this.configurationFile = configurationFile; }
-	public String getConfigurationFile() { return this.configurationFile; }
+	public void setConfigurationFileName(String configurationFile) { this.configurationFile = configurationFile; }
+	public String getConfigurationFileName() { return this.configurationFile; }
 
 	public void setDefaultBKU(BKUs bku) {
 		this.configuration.defaultBKU = bku;

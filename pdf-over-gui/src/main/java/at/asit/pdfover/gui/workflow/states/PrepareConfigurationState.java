@@ -105,33 +105,13 @@ public class PrepareConfigurationState extends State {
 		this.configFileHandler.addCLIArgument(ConfigFileArgument.class);
 	}
 
-	private void initializeFromConfigurationFile(String filename)
+	private void initializeFromConfigurationFile()
 			throws InitializationException {
 		try {
+			String filename = getStateMachine().configProvider.getConfigurationFileName();
+			getStateMachine().configProvider.loadConfiguration(new FileInputStream(getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
-			// TODO: move this to ConfigProviderImpl to mirror save logic
-			try {
-				getStateMachine().configProvider.loadConfiguration(new FileInputStream(getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
-
-				log.info("Loaded config from file : " + filename);
-			} catch (FileNotFoundException ex) {
-				if (filename.equals(Constants.DEFAULT_CONFIG_FILENAME)) {
-					// we only check for resource config file if it is the
-					// default value!
-					try {
-						InputStream is = getClass().getResourceAsStream(
-								Constants.RES_PKG_PATH + filename);
-						getStateMachine().configProvider
-								.loadConfiguration(is);
-
-						log.info("Loaded config from resource : " + filename);
-					} catch (Exception eex) {
-						throw ex;
-					}
-				} else {
-					throw ex;
-				}
-			}
+			log.info("Loaded config from file : " + filename);
 
 		} catch (IOException ex) {
 			throw new InitializationException(
@@ -292,8 +272,7 @@ public class PrepareConfigurationState extends State {
 	}
 
 	private void initializeConfig() throws InitializationException {
-		initializeFromConfigurationFile(getStateMachine()
-				.configProvider.getConfigurationFile());
+		initializeFromConfigurationFile();
 
 		resetSignatureNoteField(getStateMachine().configProvider);
 
@@ -416,7 +395,7 @@ public class PrepareConfigurationState extends State {
 			}
 
 
-			// Read cli arguments for config file first
+			// Read cli arguments for config file location first
 			try {
 				initializeFromArguments(stateMachine.cmdLineArgs, this.configFileHandler);
 			} catch (InitializationException e) {
@@ -430,7 +409,7 @@ public class PrepareConfigurationState extends State {
 			}
 
 			// initialize from config file
-			initializeFromConfigurationFile(config.getConfigurationFile());
+			initializeFromConfigurationFile();
 			updateConfiguration();
 
 			// Read cli arguments

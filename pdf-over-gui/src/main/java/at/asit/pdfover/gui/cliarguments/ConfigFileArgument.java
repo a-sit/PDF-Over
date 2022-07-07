@@ -51,7 +51,7 @@ public class ConfigFileArgument extends Argument {
 
 				String configFile = args[argOffset + 1];
 
-				getConfiguration().setConfigurationFile(configFile);
+				getConfiguration().setConfigurationFileName(configFile);
 
 				return argOffset + 1;
 			}
