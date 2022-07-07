@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.composites.StateComposite;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 public class AboutComposite extends ConfigurationCompositeBase {
 	static final Logger log = LoggerFactory.getLogger(AboutComposite.class);
@@ -137,13 +137,13 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	protected void signerChanged() {}
 
 	@Override
-	public void initConfiguration(ConfigProviderImpl provider) {}
+	public void initConfiguration(ConfigurationManager provider) {}
 
 	@Override
 	public void loadConfiguration() {}
 
 	@Override
-	public void storeConfiguration(ConfigProviderImpl store) {}
+	public void storeConfiguration(ConfigurationManager store) {}
 
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {}

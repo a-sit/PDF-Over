@@ -52,7 +52,7 @@ import at.asit.pdfover.gui.utils.Zipper;
 import at.asit.pdfover.gui.workflow.GUIProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.Signator;
 
 /**
@@ -246,7 +246,7 @@ public class PrepareConfigurationState extends State {
 		// Read config file
 		try {
 			StateMachine stateMachine = getStateMachine();
-			ConfigProviderImpl config = stateMachine.configProvider;
+			ConfigurationManager config = stateMachine.configProvider;
 			final GUIProvider gui = stateMachine;
 			File configDir = new File(Constants.CONFIG_DIRECTORY);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);

@@ -39,12 +39,12 @@ import at.asit.pdfover.signator.SignaturePosition;
 /**
  * Implementation of the configuration container
  */
-public class ConfigurationContainer {
+public class ConfigurationDataInMemory {
 	/**
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(ConfigurationContainer.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationDataInMemory.class);
 
 	/** the emblem File */
 	protected String emblemFile = null;
@@ -135,7 +135,7 @@ public class ConfigurationContainer {
 	public String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
 
 	/** Holds the mobile BKU type */
-	public MobileBKUs mobileBKUType = ConfigProviderImpl.DEFAULT_MOBILE_BKU_TYPE;
+	public MobileBKUs mobileBKUType = ConfigurationManager.DEFAULT_MOBILE_BKU_TYPE;
 
 	/** Holds the mobile BKU BASE64 setting */
 	protected boolean mobileBKUBase64 = false;

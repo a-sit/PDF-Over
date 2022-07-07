@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Composite;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -32,7 +32,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	/**
 	 * the configuration container
 	 */
-	protected ConfigurationContainer configurationContainer;
+	protected ConfigurationDataInMemory configurationContainer;
 
 	/**
 	 * The PDF Signer used to produce signature block preview
@@ -65,7 +65,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	 * @param state
 	 * @param configuration
 	 */
-	public ConfigurationCompositeBase(Composite parent, int style, State state, ConfigurationContainer configuration) {
+	public ConfigurationCompositeBase(Composite parent, int style, State state, ConfigurationDataInMemory configuration) {
 		super(parent, style, state);
 		this.configurationContainer = configuration;
 	}
@@ -74,7 +74,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	 * Initialize ConfigurationContainer from ConfigProviderImpl
 	 * @param provider the ConfigProviderImpl to load config from
 	 */
-	public abstract void initConfiguration(ConfigProviderImpl provider);
+	public abstract void initConfiguration(ConfigurationManager provider);
 
 	/**
 	 * Load configuration from ConfigurationContainer
@@ -85,7 +85,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	 * Store configuration from ConfigurationContainer to ConfigProvider
 	 * @param store the ConfigProviderImpl to store config to
 	 */
-	public abstract void storeConfiguration(ConfigProviderImpl store);
+	public abstract void storeConfiguration(ConfigurationManager store);
 
 	/**
 	 * Called before exit.

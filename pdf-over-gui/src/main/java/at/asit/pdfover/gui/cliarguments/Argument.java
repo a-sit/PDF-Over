@@ -19,7 +19,7 @@ import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 /**
  * CLI Argument base class
@@ -52,7 +52,7 @@ public abstract class Argument {
 		this.stateMachine = stateMachine;
 	}
 
-	protected ConfigProviderImpl getConfiguration() {
+	protected ConfigurationManager getConfiguration() {
 		return this.stateMachine.configProvider;
 	}
 

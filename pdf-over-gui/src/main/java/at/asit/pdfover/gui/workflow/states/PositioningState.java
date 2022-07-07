@@ -35,7 +35,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -119,7 +119,7 @@ public class PositioningState extends State {
 			this.positionComposite.displayDocument(document);
 		}
 		// Update possibly changed values
-		ConfigProviderImpl config = stateMachine.configProvider;
+		ConfigurationManager config = stateMachine.configProvider;
 		SignatureParameter param = stateMachine.pdfSigner.getPDFSigner().newParameter();
 		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);

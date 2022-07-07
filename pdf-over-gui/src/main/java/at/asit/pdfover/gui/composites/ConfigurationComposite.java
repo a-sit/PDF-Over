@@ -42,8 +42,8 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.PDFSigner;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -64,7 +64,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * configuration provider
 	 */
-	ConfigProviderImpl configProvider = null;
+	ConfigurationManager configProvider = null;
 
 	/**
 	 * simple configuration composite
@@ -89,7 +89,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * configuration container Keeps state for current configuration changes
 	 */
-	ConfigurationContainer configurationContainer = new ConfigurationContainer();
+	ConfigurationDataInMemory configurationContainer = new ConfigurationDataInMemory();
 
 	/**
 	 * The stack layout
@@ -308,7 +308,7 @@ public class ConfigurationComposite extends StateComposite {
 	 *
 	 * @param provider
 	 */
-	public void setConfigProvider(ConfigProviderImpl provider) {
+	public void setConfigProvider(ConfigurationManager provider) {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 			// Initialize Configuration Container

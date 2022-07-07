@@ -15,7 +15,7 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 /**
  * IAIK MobileBKUStatus implementation
@@ -31,7 +31,7 @@ public class IAIKStatus extends MobileBKUStatus {
 	 * Constructor
 	 * @param provider the ConfigProvider
 	 */
-	public IAIKStatus(ConfigProviderImpl provider) {
+	public IAIKStatus(ConfigurationManager provider) {
 		this.phoneNumber = provider.getDefaultMobileNumber();
 		this.mobilePassword = provider.getDefaultMobilePassword();
 	}

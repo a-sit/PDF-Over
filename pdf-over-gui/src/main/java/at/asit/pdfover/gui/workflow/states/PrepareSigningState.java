@@ -31,7 +31,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -69,7 +69,7 @@ public class PrepareSigningState extends State {
 
 				Status status = this.state.getStateMachine().status;
 
-				ConfigProviderImpl configuration = this.state.getStateMachine().configProvider;
+				ConfigurationManager configuration = this.state.getStateMachine().configProvider;
 
 				// SET PROXY HOST and PORT settings
 				final String proxyHost = configuration.getProxyHost();

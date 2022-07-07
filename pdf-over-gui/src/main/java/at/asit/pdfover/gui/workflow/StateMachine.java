@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -42,7 +42,7 @@ public class StateMachine implements GUIProvider {
 
 	public final Status status;
 	public final PDFSigner pdfSigner;
-	public final ConfigProviderImpl configProvider;
+	public final ConfigurationManager configProvider;
 	public final String[] cmdLineArgs;
 
 	/**
@@ -54,7 +54,7 @@ public class StateMachine implements GUIProvider {
 		this.status = new Status();
 		this.status.setCurrentState(new PrepareConfigurationState(this));
 		this.pdfSigner = new PDFSigner();
-		this.configProvider = new ConfigProviderImpl();
+		this.configProvider = new ConfigurationManager();
 		this.cmdLineArgs = cmdLineArgs;
 	}
 

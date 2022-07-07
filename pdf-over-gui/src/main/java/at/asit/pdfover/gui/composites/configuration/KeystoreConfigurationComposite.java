@@ -55,8 +55,8 @@ import at.asit.pdfover.gui.exceptions.KeystoreAliasNoKeyException;
 import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import iaik.security.provider.IAIK;
 
@@ -97,7 +97,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	public KeystoreConfigurationComposite(
 			org.eclipse.swt.widgets.Composite parent, int style, State state,
-			ConfigurationContainer container) {
+			ConfigurationDataInMemory container) {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
 
@@ -277,7 +277,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-		ConfigurationContainer config =
+		ConfigurationDataInMemory config =
 				KeystoreConfigurationComposite.this.configurationContainer;
 		File f = new File(config.keystoreFile);
 		this.ks = KeyStore.getInstance(config.keystoreType);
@@ -380,8 +380,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void initConfiguration(ConfigProviderImpl provider) {
-		ConfigurationContainer config = this.configurationContainer;
+	public void initConfiguration(ConfigurationManager provider) {
+		ConfigurationDataInMemory config = this.configurationContainer;
 		config.keystoreFile = provider.getKeyStoreFilePersistent();
 		config.keystoreType = provider.getKeyStoreTypePersistent();
 		config.keystoreAlias = provider.getKeyStoreAliasPersistent();
@@ -397,7 +397,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
-		ConfigurationContainer config = this.configurationContainer;
+		ConfigurationDataInMemory config = this.configurationContainer;
 		String ks = config.keystoreFile;
 		performKeystoreFileChanged(ks);
 		performKeystoreTypeChanged(config.keystoreType);
@@ -414,8 +414,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void storeConfiguration(ConfigProviderImpl store) {
-		ConfigurationContainer config = this.configurationContainer;
+	public void storeConfiguration(ConfigurationManager store) {
+		ConfigurationDataInMemory config = this.configurationContainer;
 		store.setKeyStoreFile(config.keystoreFile);
 		store.setKeyStoreType(config.keystoreType);
 		store.setKeyStoreAlias(config.keystoreAlias);
@@ -432,7 +432,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {
-		ConfigurationContainer config = this.configurationContainer;
+		ConfigurationDataInMemory config = this.configurationContainer;
 		switch (resumeFrom) {
 		case 0:
 			String fname = config.keystoreFile;

@@ -63,8 +63,8 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.utils.ImageConverter;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -119,7 +119,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	public SimpleConfigurationComposite(
 			org.eclipse.swt.widgets.Composite parent, int style, State state,
-			ConfigurationContainer container) {
+			ConfigurationDataInMemory container) {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
 
@@ -607,7 +607,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void initConfiguration(ConfigProviderImpl provider) {
+	public void initConfiguration(ConfigurationManager provider) {
 		this.configurationContainer.setMobileNumber(provider.getDefaultMobileNumberPersistent());
 
 		try {
@@ -663,7 +663,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void storeConfiguration(ConfigProviderImpl store) {
+	public void storeConfiguration(ConfigurationManager store) {
 		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
 		store.setDefaultEmblem(this.configurationContainer.getEmblem());
 		store.setSignatureLocale(this.configurationContainer.signatureLocale);

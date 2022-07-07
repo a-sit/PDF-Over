@@ -19,7 +19,7 @@ package at.asit.pdfover.gui.bku.mobile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 /**
  * A-Trust MobileBKUStatus implementation
@@ -52,7 +52,7 @@ public class ATrustStatus extends MobileBKUStatus {
 	 * Constructor
 	 * @param provider the ConfigProvider
 	 */
-	public ATrustStatus(ConfigProviderImpl provider) {
+	public ATrustStatus(ConfigurationManager provider) {
 		this.phoneNumber = provider.getDefaultMobileNumber();
 		this.mobilePassword = provider.getDefaultMobilePassword();
 	}

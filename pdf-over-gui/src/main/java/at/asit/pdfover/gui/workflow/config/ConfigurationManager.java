@@ -44,7 +44,7 @@ import at.asit.pdfover.signator.SignaturePosition;
 /**
  * Implementation of the configuration provider and manipulator
  */
-public class ConfigProviderImpl {
+public class ConfigurationManager {
 
 
 	/** Default Mobile BKU type */
@@ -54,8 +54,7 @@ public class ConfigProviderImpl {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(ConfigProviderImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationManager.class);
 
 	/**
 	 * An empty property entry
@@ -64,93 +63,89 @@ public class ConfigProviderImpl {
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
+	private boolean loaded = false;
+
 	// The persistent configuration read from the config file
-	private ConfigurationContainer configuration;
+	private ConfigurationDataInMemory configuration;
 
 	// The configuration overlay built from the cmd line args
-	private ConfigurationContainer configurationOverlay;
+	private ConfigurationDataInMemory configurationOverlay;
 
 	/**
 	 * Constructor
 	 */
-	public ConfigProviderImpl() {
-		this.configuration = new ConfigurationContainer();
-		this.configurationOverlay = new ConfigurationContainer();
+	public ConfigurationManager() {
+		this.configuration = new ConfigurationDataInMemory();
+		this.configurationOverlay = new ConfigurationDataInMemory();
 	}
 
 	/* load from disk */
 	public void loadFromDisk() throws IOException {
+		if (loaded)
+			throw new RuntimeException("ConfigProvider double load?");
 
-		Properties config = new Properties();
+		Properties diskConfig = new Properties();
 
-		config.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
+		diskConfig.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
 
-		setDefaultEmblem(config.getProperty(Constants.CFG_EMBLEM));
+		setDefaultEmblem(diskConfig.getProperty(Constants.CFG_EMBLEM));
 
-		setDefaultMobileNumber(config.getProperty(Constants.CFG_MOBILE_NUMBER));
+		setDefaultMobileNumber(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
 
-		setProxyHost(config.getProperty(Constants.CFG_PROXY_HOST));
-		setProxyUser(config.getProperty(Constants.CFG_PROXY_USER));
-		setProxyPass(config.getProperty(Constants.CFG_PROXY_PASS));
+		setProxyHost(diskConfig.getProperty(Constants.CFG_PROXY_HOST));
+		setProxyUser(diskConfig.getProperty(Constants.CFG_PROXY_USER));
+		setProxyPass(diskConfig.getProperty(Constants.CFG_PROXY_PASS));
 
-		setDefaultOutputFolder(config.getProperty(Constants.CFG_OUTPUT_FOLDER));
+		setDefaultOutputFolder(diskConfig.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
-		String postFix = config.getProperty(Constants.CFG_POSTFIX);
+		String postFix = diskConfig.getProperty(Constants.CFG_POSTFIX);
 		if (postFix == null)
 			setSaveFilePostFix(Constants.DEFAULT_POSTFIX);
 		else
 			setSaveFilePostFix(postFix);
 
-		String localeString = config.getProperty(Constants.CFG_LOCALE);
+		String localeString = diskConfig.getProperty(Constants.CFG_LOCALE);
 
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
 		if (targetLocale != null)
 			setLocale(targetLocale);
 
-		String signatureLocaleString = config.getProperty(Constants.CFG_SIGNATURE_LOCALE);
+		String signatureLocaleString = diskConfig.getProperty(Constants.CFG_SIGNATURE_LOCALE);
 
 		Locale signatureTargetLocale = LocaleSerializer.parseFromString(signatureLocaleString);
 		if (signatureTargetLocale != null)
 			setSignatureLocale(signatureTargetLocale);
 
-		String useMarker = config.getProperty(Constants.CFG_USE_MARKER);
+		String useMarker = diskConfig.getProperty(Constants.CFG_USE_MARKER);
 		if (useMarker != null)
 			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
 
-		String useSignatureFields = config.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
+		String useSignatureFields = diskConfig.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
 		if (useSignatureFields != null)
 			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
 
-		String enablePlaceholder = config.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
+		String enablePlaceholder = diskConfig.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
 		if (enablePlaceholder != null)
 			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
 
-		String signatureProfile = config.getProperty(Constants.SIGNATURE_PROFILE);
-		if (signatureProfile != null)
-		{
-			Profile profile = Profile.getProfile(signatureProfile);
-			if (profile != null)
-			{
-				this.configuration.setSignatureProfile(profile);
-				this.configurationOverlay.setSignatureProfile(profile);
-			}
-		}
+		String signatureProfileName = diskConfig.getProperty(Constants.SIGNATURE_PROFILE);
+		if (signatureProfileName != null)
+			setSignatureProfile(signatureProfileName);
 
-		if (config.containsKey(Constants.CFG_SIGNATURE_NOTE))
-			setSignatureNote(config.getProperty(Constants.CFG_SIGNATURE_NOTE));
+		if (diskConfig.containsKey(Constants.CFG_SIGNATURE_NOTE))
+			setSignatureNote(diskConfig.getProperty(Constants.CFG_SIGNATURE_NOTE));
 		else
 			setSignatureNote(Profile.getProfile(getSignatureProfile()).getDefaultSignatureBlockNote(getSignatureLocale()));
 
-		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
+		String compat = diskConfig.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
 			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
 
-		String bkuUrl = config.getProperty(Constants.CFG_MOBILE_BKU_URL);
+		String bkuUrl = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		if (bkuUrl != null && !bkuUrl.isEmpty())
 			this.configuration.mobileBKUURL = bkuUrl;
 
-		String bkuType = config
-				.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
+		String bkuType = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
 
 		if (bkuType != null && !bkuType.isEmpty())
 		{
@@ -163,11 +158,11 @@ public class ConfigProviderImpl {
 			}
 		}
 
-		String useBase64 = config.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
+		String useBase64 = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
 		if (useBase64 != null)
 			this.configuration.mobileBKUBase64 = useBase64.equalsIgnoreCase(Constants.TRUE);
 
-		String proxyPortString = config.getProperty(Constants.CFG_PROXY_PORT);
+		String proxyPortString = diskConfig.getProperty(Constants.CFG_PROXY_PORT);
 		if (proxyPortString != null && !proxyPortString.trim().isEmpty())
 		{
 			int port = Integer.parseInt(proxyPortString);
@@ -179,7 +174,7 @@ public class ConfigProviderImpl {
 		}
 
 		// Set Default BKU
-		String bkuString = config.getProperty(Constants.CFG_BKU);
+		String bkuString = diskConfig.getProperty(Constants.CFG_BKU);
 		BKUs defaultBKU = BKUs.NONE;
 		if (bkuString != null) {
 			try {
@@ -196,7 +191,7 @@ public class ConfigProviderImpl {
 
 		// Set Signature placeholder transparency
 		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
-		String trans = config.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY);
+		String trans = diskConfig.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY);
 		if (trans != null) {
 			try {
 				transparency = Integer.parseInt(trans);
@@ -210,7 +205,7 @@ public class ConfigProviderImpl {
 		// Set MainWindow size
 		int width = Constants.DEFAULT_MAINWINDOW_WIDTH;
 		int height = Constants.DEFAULT_MAINWINDOW_HEIGHT;
-		String size = config.getProperty(Constants.CFG_MAINWINDOW_SIZE);
+		String size = diskConfig.getProperty(Constants.CFG_MAINWINDOW_SIZE);
 		parse: {
 			if (size == null)
 				break parse;
@@ -229,7 +224,7 @@ public class ConfigProviderImpl {
 		this.configuration.mainWindowSize = new Point(width, height);
 
 		// Set Signature Position
-		String signaturePosition = config.getProperty(Constants.CFG_SIGNATURE_POSITION);
+		String signaturePosition = diskConfig.getProperty(Constants.CFG_SIGNATURE_POSITION);
 		SignaturePosition position = null;
 		if (signaturePosition != null && !signaturePosition.trim().isEmpty()) {
 			signaturePosition = signaturePosition.trim().toLowerCase();
@@ -278,22 +273,23 @@ public class ConfigProviderImpl {
 		setDefaultSignaturePosition(position);
 
 		//Set keystore stuff
-		String keystoreEnabled = config.getProperty(Constants.CFG_KEYSTORE_ENABLED);
+		String keystoreEnabled = diskConfig.getProperty(Constants.CFG_KEYSTORE_ENABLED);
 		if (keystoreEnabled != null)
 			setKeyStoreEnabled(keystoreEnabled.equalsIgnoreCase(Constants.TRUE));
-		setKeyStoreFile(config.getProperty(Constants.CFG_KEYSTORE_FILE));
-		setKeyStoreType(config.getProperty(Constants.CFG_KEYSTORE_TYPE));
-		setKeyStoreAlias(config.getProperty(Constants.CFG_KEYSTORE_ALIAS));
-		setKeyStoreStorePass(config.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
-		String keystoreKeyPass = config.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
+		setKeyStoreFile(diskConfig.getProperty(Constants.CFG_KEYSTORE_FILE));
+		setKeyStoreType(diskConfig.getProperty(Constants.CFG_KEYSTORE_TYPE));
+		setKeyStoreAlias(diskConfig.getProperty(Constants.CFG_KEYSTORE_ALIAS));
+		setKeyStoreStorePass(diskConfig.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
+		String keystoreKeyPass = diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
 		setKeyStoreKeyPass(keystoreKeyPass);
 
 		// Set update check
-		String updateCheck = config.getProperty(Constants.CFG_UPDATE_CHECK);
+		String updateCheck = diskConfig.getProperty(Constants.CFG_UPDATE_CHECK);
 		if (updateCheck != null)
 			setUpdateCheck(!updateCheck.equalsIgnoreCase(Constants.FALSE));
 		
 		log.info("Successfully loaded config from: " + getConfigurationFileName());
+		loaded = true;
 	}
 
 	/* save to file */
@@ -411,7 +407,14 @@ public class ConfigProviderImpl {
 	}
 
 	// TODO review this
-	public void setConfigurationFileName(String configurationFile) { this.configurationFile = configurationFile; }
+	public void setConfigurationFileName(String configurationFile)
+	{
+		if (this.configurationFile.equals(configurationFile))
+			return;
+		if (this.loaded)
+			throw new RuntimeException("Cannot change configuration file path after it has been loaded");
+		this.configurationFile = configurationFile;
+	}
 	public String getConfigurationFileName() { return this.configurationFile; }
 
 	public void setDefaultBKU(BKUs bku) {
@@ -980,46 +983,46 @@ public class ConfigProviderImpl {
 		this.configurationOverlay.skipFinish = skipFinish;
 	}
 
-	public boolean getUseMarker() {
-		return this.configurationOverlay.getUseMarker();
-	}
-
 	public boolean getUseSignatureFields() {
-		return this.configurationOverlay.getUseSignatureFields();
-	}
-
-	public void setUseMarker(boolean useMarker) {
-		this.configurationOverlay.setUseMarker(useMarker);
-		if (useMarker) setUseSignatureFields(false);
+		return this.configuration.getUseSignatureFields();
 	}
 
 	public void setUseSignatureFields(boolean useFields) {
-		this.configurationOverlay.setUseSignatureFields(useFields);
+		this.configuration.setUseSignatureFields(useFields);
 		if (useFields) setUseMarker(false);
 	}
 
+	public boolean getUseMarker() {
+		return this.configuration.getUseMarker();
+	}
+
+	public void setUseMarker(boolean useMarker) {
+		this.configuration.setUseMarker(useMarker);
+		if (useMarker) setUseSignatureFields(false);
+	}
+
 	public void setSignatureProfile(String profile) {
-		this.configurationOverlay.setSignatureProfile(Profile.getProfile(profile));
+		this.configuration.setSignatureProfile(Profile.getProfile(profile));
 	}
 
     public void setSaveFilePostFix(String postFix) {
-        this.configurationOverlay.saveFilePostFix = postFix;
+        this.configuration.saveFilePostFix = postFix;
     }
 
 	public String getSaveFilePostFix(){
-		return this.configurationOverlay.saveFilePostFix;
+		return this.configuration.saveFilePostFix;
 	}
 
 	public String getSignatureProfile() {
-		return this.configurationOverlay.getSignatureProfile().name();
+		return this.configuration.getSignatureProfile().name();
 	}
 
 	public void setEnablePlaceholderUsage(boolean bool) {
-		this.configurationOverlay.enabledPlaceholderUsage = bool;
+		this.configuration.enabledPlaceholderUsage = bool;
 	}
 
 	public boolean getEnablePlaceholderUsage() {
-		return this.configurationOverlay.enabledPlaceholderUsage;
+		return this.configuration.enabledPlaceholderUsage;
 	}
 
 

@@ -53,8 +53,8 @@ import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
-import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -120,7 +120,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	 * @param container
 	 * @param config
 	 */
-	public AdvancedConfigurationComposite(Composite parent, int style, State state, ConfigurationContainer container,
+	public AdvancedConfigurationComposite(Composite parent, int style, State state, ConfigurationDataInMemory container,
 			ConfigurationComposite config) {
 		super(parent, style, state, container);
 		this.configurationComposite = config;
@@ -647,7 +647,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void initConfiguration(ConfigProviderImpl provider) {
+	public void initConfiguration(ConfigurationManager provider) {
 		this.configurationContainer.defaultSignaturePosition = provider.getDefaultSignaturePositionPersistent();
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
@@ -739,7 +739,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	@Override
-	public void storeConfiguration(ConfigProviderImpl store) {
+	public void storeConfiguration(ConfigurationManager store) {
 		store.setDefaultSignaturePosition(this.configurationContainer.defaultSignaturePosition);
 		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
