@@ -57,21 +57,18 @@ public class Status {
 		return this.currentState;
 	}
 
-	public void setCurrentState(State currentState) {
-		log.debug("Changing from " + this.currentState + " to " + currentState);
+	public void setCurrentState(State newState) {
+		log.debug("Changing from " + currentState + " to " + newState);
 
-		if (this.previousState != this.currentState)
+		if ((previousState != null) && (previousState != currentState) && (previousState != newState))
 		{
 			// Reference to previous state will be lost - perform cleanup
-			if (this.previousState != null)
-			{
-				log.debug("Cleaning up " + this.previousState);
-				this.previousState.cleanUp();
-			}
+			log.debug("Cleaning up " + previousState);
+			previousState.cleanUp();
 		}
 
-		this.previousState = this.currentState;
-		this.currentState = currentState;
+		this.previousState = currentState;
+		this.currentState = newState;
 	}
 
 	public State getPreviousState() {
