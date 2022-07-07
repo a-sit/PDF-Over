@@ -18,6 +18,8 @@ package at.asit.pdfover.signator;
 //Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -55,12 +57,12 @@ public class Signator {
 //			SignerFactory factory = (SignerFactory)pdfAsClass.newInstance();
 //			registerSigner(Signers.PDFAS, factory);
 			Class<?> pdfAs4Class = Class.forName("at.asit.pdfover.signer.pdfas.PdfAs4SignerFactory");
-			SignerFactory factory = (SignerFactory)pdfAs4Class.newInstance();
+			SignerFactory factory = (SignerFactory)pdfAs4Class.getDeclaredConstructor().newInstance();
 			registerSigner(Signers.PDFAS4, factory);
 		} catch (ClassNotFoundException e) {
 			log.error("PDF Signer Factory not found", e);
 			throw new RuntimeException("PDF Signer Factory not found", e);
-		} catch (InstantiationException e) {
+		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException e) {
 			log.error("PDF Signer Factory could not be instantiated", e);
 			throw new RuntimeException("PDF Signer Factory could not be instantiated", e);
 		} catch (IllegalAccessException e) {

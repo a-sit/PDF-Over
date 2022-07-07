@@ -17,9 +17,6 @@ package at.asit.pdfover.gui;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-// Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Messages;
 
@@ -42,7 +39,6 @@ public class PlaceholderSelectionGui extends Dialog {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory.getLogger(PlaceholderSelectionGui.class);
 	protected Object result;
 	protected Shell shlInfo;
 	protected Combo placeholderNameDropDown;

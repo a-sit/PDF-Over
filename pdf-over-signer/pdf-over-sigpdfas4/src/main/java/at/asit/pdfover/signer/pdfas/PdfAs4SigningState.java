@@ -56,8 +56,6 @@ public class PdfAs4SigningState implements SigningState {
 
 	private boolean useBase64Request;
 
-	private boolean searchForPlaceholderSignature;
-
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#getSignatureRequest()
 	 */

@@ -212,13 +212,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
         return profileId;
     }
 
-    private String getProfileName() {
-        if (this.profile == null) {
-            this.profile = Profile.SIGNATURBLOCK_SMALL.name();
-        }
-        return Profile.getProfile(this.profile).name();
-    }
-
     private String getLangProfilePart(String lang) {
         return (lang != null && lang.equals("en")) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
     }

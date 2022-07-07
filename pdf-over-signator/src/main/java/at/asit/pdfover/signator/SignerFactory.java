@@ -15,8 +15,6 @@
  */
 package at.asit.pdfover.signator;
 
-import at.asit.pdfover.signator.Signer;
-
 /**
  * A Signer factory
  * Creates Signer instances
