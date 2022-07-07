@@ -53,7 +53,7 @@ import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -746,16 +746,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(
-	 * at.asit.pdfover.gui.workflow.config.ConfigManipulator,
-	 * at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
-	public void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider) {
+	public void storeConfiguration(ConfigProviderImpl store) {
 		store.setDefaultSignaturePosition(this.configurationContainer.defaultSignaturePosition);
 		store.setUseMarker(this.configurationContainer.getUseMarker());
 		store.setUseSignatureFields(this.configurationContainer.getUseSignatureFields());
@@ -774,7 +766,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
-		String hostOld = provider.getProxyHostPersistent();
+		String hostOld = store.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.proxyHost;
 		if (hostOld != null && !hostOld.isEmpty() && (hostNew == null || hostNew.isEmpty())) {
 			// Proxy has been removed, let's clear the system properties
@@ -784,7 +776,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		store.setProxyHost(hostNew);
 
-		int portOld = provider.getProxyPortPersistent();
+		int portOld = store.getProxyPortPersistent();
 		int portNew = this.configurationContainer.getProxyPort();
 		if (portOld != -1 && portNew == -1) {
 			// cf. above
@@ -793,7 +785,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		store.setProxyPort(portNew);
 
-		String userOld = provider.getProxyUserPersistent();
+		String userOld = store.getProxyUserPersistent();
 		String userNew = this.configurationContainer.proxyUser;
 		if (userOld != null && !userOld.isEmpty() && (userNew == null || userNew.isEmpty())) {
 			// cf. above
@@ -802,7 +794,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		store.setProxyUser(userNew);
 
-		String passOld = provider.getProxyPassPersistent();
+		String passOld = store.getProxyPassPersistent();
 		String passNew = this.configurationContainer.proxyPass;
 		if (passOld != null && passNew == null) {
 			// cf. above

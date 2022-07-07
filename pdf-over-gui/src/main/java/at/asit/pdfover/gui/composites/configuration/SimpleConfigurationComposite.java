@@ -63,7 +63,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.utils.ImageConverter;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -673,14 +673,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
 	 */
 	@Override
-	public void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider) {
+	public void storeConfiguration(ConfigProviderImpl store) {
 		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
 		store.setDefaultEmblem(this.configurationContainer.getEmblem());
 		store.setSignatureLocale(this.configurationContainer.signatureLocale);
 		store.setSignatureNote(this.configurationContainer.signatureNote);
 		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
-
-
 	}
 
 	/*

@@ -42,9 +42,8 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.PDFSigner;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -64,14 +63,9 @@ public class ConfigurationComposite extends StateComposite {
 			.getLogger(ConfigurationComposite.class);
 
 	/**
-	 * configuration manipulator
-	 */
-	ConfigManipulator configManipulator = null;
-
-	/**
 	 * configuration provider
 	 */
-	PersistentConfigProvider configProvider = null;
+	ConfigProviderImpl configProvider = null;
 
 	/**
 	 * simple configuration composite
@@ -311,20 +305,11 @@ public class ConfigurationComposite extends StateComposite {
 	}
 
 	/**
-	 * Sets the configuration manipulator
-	 *
-	 * @param manipulator
-	 */
-	public void setConfigManipulator(ConfigManipulator manipulator) {
-		this.configManipulator = manipulator;
-	}
-
-	/**
 	 * Sets the configuration provider
 	 *
 	 * @param provider
 	 */
-	public void setConfigProvider(PersistentConfigProvider provider) {
+	public void setConfigProvider(ConfigProviderImpl provider) {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 			// Initialize Configuration Container
@@ -443,20 +428,17 @@ public class ConfigurationComposite extends StateComposite {
 		}
 
 		// Write current Configuration
-		this.simpleConfigComposite.storeConfiguration(
-				this.configManipulator, this.configProvider);
-		this.advancedConfigComposite.storeConfiguration(
-				this.configManipulator, this.configProvider);
+		this.simpleConfigComposite.storeConfiguration(this.configProvider);
+		this.advancedConfigComposite.storeConfiguration(this.configProvider);
 		if (this.keystoreConfigComposite != null)
-			this.keystoreConfigComposite.storeConfiguration(
-					this.configManipulator, this.configProvider);
+			this.keystoreConfigComposite.storeConfiguration(this.configProvider);
 
 		status = false;
 		redo = false;
 		do {
 			// Save current config to file
 			try {
-				this.configManipulator.saveCurrentConfiguration();
+				this.configProvider.saveCurrentConfiguration();
 				redo = false;
 				status = true;
 			} catch (IOException e) {

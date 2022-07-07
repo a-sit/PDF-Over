@@ -45,7 +45,6 @@ public class ConfigurationUIState extends State {
 		if (this.configurationComposite == null) {
 			this.configurationComposite =
 					getStateMachine().createComposite(ConfigurationComposite.class, SWT.RESIZE, this);
-			this.configurationComposite.setConfigManipulator(getStateMachine().configProvider);
 			this.configurationComposite.setConfigProvider(getStateMachine().configProvider);
 			this.configurationComposite.setSigner(getStateMachine().pdfSigner);
 		}

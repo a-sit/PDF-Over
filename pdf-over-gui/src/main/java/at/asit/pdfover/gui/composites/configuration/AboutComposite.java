@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.composites.StateComposite;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 
 public class AboutComposite extends ConfigurationCompositeBase {
@@ -144,7 +144,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	public void loadConfiguration() {}
 
 	@Override
-	public void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider) {}
+	public void storeConfiguration(ConfigProviderImpl store) {}
 
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {}

@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;
-import at.asit.pdfover.gui.workflow.config.ConfigManipulator;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
 import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -83,11 +83,10 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	public abstract void loadConfiguration();
 
 	/**
-	 * Store configuration from ConfigurationContainer to ConfigManipulator
-	 * @param store the ConfigManipulator to store config to
-	 * @param provider the PersistentConfigProvider containing the old config
+	 * Store configuration from ConfigurationContainer to ConfigProvider
+	 * @param store the ConfigProvider to store config to
 	 */
-	public abstract void storeConfiguration(ConfigManipulator store, PersistentConfigProvider provider);
+	public abstract void storeConfiguration(ConfigProviderImpl store);
 
 	/**
 	 * Called before exit.
