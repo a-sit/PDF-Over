@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.FormData;
 // Imports
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -57,6 +58,11 @@ public abstract class StateComposite extends Composite {
 	 * Reloads the localizeable resources
 	 */
 	public abstract void reloadResources();
+
+	public static void disableEventDefault(Control c, int event)
+	{
+		c.addListener(event, (Event e) -> { e.doit = false; });
+	}
 
     public static void setFontHeight(Control c, int height)
     {

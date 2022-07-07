@@ -175,6 +175,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.sclTransparenz.setMaximum(255);
 		this.sclTransparenz.setIncrement(1);
 		this.sclTransparenz.setPageIncrement(10);
+		StateComposite.disableEventDefault(sclTransparenz, SWT.MouseVerticalWheel);
 		this.sclTransparenz.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -238,6 +239,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbBKUAuswahl = new Combo(this.grpBkuAuswahl, SWT.READ_ONLY);
 		StateComposite.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5).set();
 		StateComposite.setFontHeight(cmbBKUAuswahl, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.disableEventDefault(cmbBKUAuswahl, SWT.MouseVerticalWheel);
 
 		this.bkuStrings = Arrays.stream(BKUs.values()).map(s -> Messages.getString("BKU."+s)).collect(Collectors.toList());
 		this.cmbBKUAuswahl.setItems(bkuStrings.toArray(new String[0]));
@@ -342,6 +344,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		StateComposite.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5).set();
 		StateComposite.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
 		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
+		StateComposite.disableEventDefault(cmbLocaleAuswahl, SWT.MouseVerticalWheel);
 
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override

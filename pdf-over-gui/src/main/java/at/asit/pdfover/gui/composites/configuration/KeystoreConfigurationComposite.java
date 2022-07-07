@@ -132,6 +132,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystoreType = new Combo(grpKeystore, SWT.READ_ONLY);
 		StateComposite.anchor(cmbKeystoreType).right(100, -5).top(lblKeystoreType, 5).left(0,15).set();
 		StateComposite.setFontHeight(cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.disableEventDefault(cmbKeystoreType, SWT.MouseVerticalWheel);
 
 		this.lblKeystoreStorePass = new Label(this.grpKeystore, SWT.NONE);
 		StateComposite.anchor(lblKeystoreStorePass).top(cmbKeystoreType, 5).left(0,5).set();
@@ -151,6 +152,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystoreAlias = new Combo(grpKeystore, SWT.NONE);
 		StateComposite.anchor(cmbKeystoreAlias).top(lblKeystoreAlias, 5).left(0,15).right(100,-5).set();
 		StateComposite.setFontHeight(cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.disableEventDefault(cmbKeystoreAlias, SWT.MouseVerticalWheel);
 
 		this.lblKeystoreKeyPass = new Label(this.grpKeystore, SWT.NONE);
 		StateComposite.anchor(lblKeystoreKeyPass).top(cmbKeystoreAlias, 5).left(0,5).set();
