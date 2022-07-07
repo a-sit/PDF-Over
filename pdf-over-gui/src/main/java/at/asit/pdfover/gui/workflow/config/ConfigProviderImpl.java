@@ -17,9 +17,9 @@ package at.asit.pdfover.gui.workflow.config;
 
 // Imports
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -78,18 +78,16 @@ public class ConfigProviderImpl {
 		this.configurationOverlay = new ConfigurationContainer();
 	}
 
-	/* load from disk (file input stream) */
-	public void loadConfiguration(InputStream configSource) throws IOException {
+	/* load from disk */
+	public void loadConfiguration() throws IOException {
 
 		Properties config = new Properties();
 
-		config.load(configSource);
+		config.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
 
 		setDefaultEmblem(config.getProperty(Constants.CFG_EMBLEM));
 
 		setDefaultMobileNumber(config.getProperty(Constants.CFG_MOBILE_NUMBER));
-
-		setSignatureNote(config.getProperty(Constants.CFG_SIGNATURE_NOTE));
 
 		setProxyHost(config.getProperty(Constants.CFG_PROXY_HOST));
 		setProxyUser(config.getProperty(Constants.CFG_PROXY_USER));
@@ -137,6 +135,11 @@ public class ConfigProviderImpl {
 				this.configurationOverlay.setSignatureProfile(profile);
 			}
 		}
+
+		if (config.containsKey(Constants.CFG_SIGNATURE_NOTE))
+			setSignatureNote(config.getProperty(Constants.CFG_SIGNATURE_NOTE));
+		else
+			setSignatureNote(Profile.getProfile(getSignatureProfile()).getDefaultSignatureBlockNote(getSignatureLocale()));
 
 		String compat = config.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
@@ -289,12 +292,14 @@ public class ConfigProviderImpl {
 		String updateCheck = config.getProperty(Constants.CFG_UPDATE_CHECK);
 		if (updateCheck != null)
 			setUpdateCheck(!updateCheck.equalsIgnoreCase(Constants.FALSE));
+		
+		log.info("Successfully loaded config from: " + getConfigurationFileName());
 	}
 
 	/* save to file */
 	public void saveCurrentConfiguration() throws IOException {
 		String filename = this.getConfigurationFileName();
-		File configFile = new File(this.getConfigurationDirectory() + File.separator + filename);
+		File configFile = new File(Constants.CONFIG_DIRECTORY + File.separator + filename);
 
 		Properties props = new Properties();
 		props.clear();
@@ -404,9 +409,6 @@ public class ConfigProviderImpl {
 
 		log.info("Configuration file saved to " + configFile.getAbsolutePath());
 	}
-
-
-	public String getConfigurationDirectory() { return Constants.CONFIG_DIRECTORY; }
 
 	// TODO review this
 	public void setConfigurationFileName(String configurationFile) { this.configurationFile = configurationFile; }

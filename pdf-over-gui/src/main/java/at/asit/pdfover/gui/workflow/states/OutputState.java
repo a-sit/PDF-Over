@@ -25,6 +25,7 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.OutputComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -52,7 +53,7 @@ public class OutputState extends State {
 			ConfigProviderImpl config = getStateMachine().configProvider;
 			Status status = getStateMachine().status;
 
-			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp");
+			File tmpDir = new File(Constants.CONFIG_DIRECTORY + File.separator + "tmp");
 
 			if(!tmpDir.exists()) {
 				tmpDir.mkdir();

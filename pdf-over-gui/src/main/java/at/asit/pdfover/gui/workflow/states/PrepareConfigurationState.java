@@ -20,7 +20,6 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -64,10 +63,7 @@ import at.asit.pdfover.signator.Signator;
 public class PrepareConfigurationState extends State {
 
 	/** SLF4J Logger instance **/
-	static final Logger log = LoggerFactory
-			.getLogger(PrepareConfigurationState.class);
-
-	private static String FILE_SEPARATOR = File.separator;
+	static final Logger log = LoggerFactory.getLogger(PrepareConfigurationState.class);
 
 	private ArgumentHandler handler;
 
@@ -105,43 +101,15 @@ public class PrepareConfigurationState extends State {
 		this.configFileHandler.addCLIArgument(ConfigFileArgument.class);
 	}
 
-	private void initializeFromConfigurationFile()
-			throws InitializationException {
+	private void initializeFromConfigurationFile() throws InitializationException {
 		try {
-			String filename = getStateMachine().configProvider.getConfigurationFileName();
-			getStateMachine().configProvider.loadConfiguration(new FileInputStream(getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
-
-			log.info("Loaded config from file : " + filename);
-
+			getStateMachine().configProvider.loadConfiguration();
 		} catch (IOException ex) {
-			throw new InitializationException(
-					"Failed to read configuration from config file", ex);
+			throw new InitializationException("Failed to read configuration from config file", ex);
 		}
 	}
 
-	/**
-	 * Update configuration values as necessary
-	 */
-	private void updateConfiguration() {
-		ConfigProviderImpl config = getStateMachine().configProvider;
-
-		//Update signature note if old default is used
-		String note = config.getSignatureNote();
-		Locale loc = config.getSignatureLocale();
-
-		String note_old = Messages.getString("simple_config.Note_Default_Old", loc);
-		if (note.equals(note_old))
-			resetSignatureNoteField(config);
-	}
-
-	private void resetSignatureNoteField(ConfigProviderImpl config){
-		getStateMachine().configProvider.setSignatureNote(
-			Profile.getProfile(config.getSignatureProfile()).getDefaultSignatureBlockNote(config.getLocale())
-		);
-	}
-
-	private void initializeFromArguments(String[] args, ArgumentHandler handler)
-			throws InitializationException {
+	private void initializeFromArguments(String[] args, ArgumentHandler handler) throws InitializationException {
 		handler.handleArguments(args);
 
 		if (handler.doesRequireExit()) {
@@ -149,96 +117,15 @@ public class PrepareConfigurationState extends State {
 		}
 	}
 
-	private void copyPdfOverConfig() throws InitializationException {
-		// 1Kb buffer
-		byte[] buffer = new byte[1024];
-		int byteCount = 0;
-
-		InputStream inputStream = null;
-		FileOutputStream pdfOverConfig = null;
+	private void ensurePdfOverConfigExists() throws InitializationException {
 		try {
-			inputStream = getClass().getResourceAsStream(
-					Constants.RES_PKG_PATH + Constants.DEFAULT_CONFIG_FILENAME);
-			pdfOverConfig = new FileOutputStream(
-					getStateMachine().configProvider.getConfigurationDirectory() +
-					FILE_SEPARATOR + Constants.DEFAULT_CONFIG_FILENAME);
-
-			while ((byteCount = inputStream.read(buffer)) >= 0) {
-				pdfOverConfig.write(buffer, 0, byteCount);
-			}
+			File pdfOverConfig = new File(Constants.CONFIG_DIRECTORY + File.separator + Constants.DEFAULT_CONFIG_FILENAME);
+			if (!pdfOverConfig.exists())
+				pdfOverConfig.createNewFile();
 		} catch (Exception e) {
-			log.error(
-					"Failed to write PDF Over config file to config directory", e);
-			throw new InitializationException(
-					"Failed to write PDF Over config file to config directory",
-					e);
-		} finally {
-			if (pdfOverConfig != null) {
-				try {
-					pdfOverConfig.close();
-				} catch (IOException e) {
-					log.warn(
-							"Failed to close File stream for PDFOver config", e);
-				}
-			}
-
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					log.warn(
-							"Failed to close Resource stream for PDFOver config", e);
-				}
-			}
+			log.error("Failed to create PDF-Over config file", e);
+			throw new InitializationException("Failed to create PDF-Over config file", e);
 		}
-	}
-
-	private void copyLog4jConfig() throws InitializationException {
-		// TODO: figure out if we still need this
-		/*
-		// 1Kb buffer
-		byte[] buffer = new byte[1024];
-		int byteCount = 0;
-
-		InputStream inputStream = null;
-		FileOutputStream pdfOverConfig = null;
-		try {
-			inputStream = getClass().getResourceAsStream(
-					Constants.RES_PKG_PATH + Constants.DEFAULT_LOG4J_FILENAME);
-			String filename = getStateMachine().configProvider.getConfigurationDirectory()
-					+ FILE_SEPARATOR + Constants.DEFAULT_LOG4J_FILENAME;
-			pdfOverConfig = new FileOutputStream(filename);
-
-			while ((byteCount = inputStream.read(buffer)) >= 0) {
-				pdfOverConfig.write(buffer, 0, byteCount);
-			}
-
-			PropertyConfigurator.configureAndWatch(filename);
-		} catch (Exception e) {
-			log.error(
-					"Failed to write log4j config file to config directory", e);
-			throw new InitializationException(
-					"Failed to write log4j config file to config directory",
-					e);
-		} finally {
-			if (pdfOverConfig != null) {
-				try {
-					pdfOverConfig.close();
-				} catch (IOException e) {
-					log.warn(
-							"Failed to close File stream for log4j config", e);
-				}
-			}
-
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					log.warn(
-							"Failed to close Resource stream for log4j config", e);
-				}
-			}
-		}*/
 	}
 
 	private void unzipPdfAsConfig(File configDir) throws InitializationException {
@@ -271,22 +158,6 @@ public class PrepareConfigurationState extends State {
 		}
 	}
 
-	private void initializeConfig() throws InitializationException {
-		initializeFromConfigurationFile();
-
-		resetSignatureNoteField(getStateMachine().configProvider);
-
-		try {
-			getStateMachine().configProvider.saveCurrentConfiguration();
-		} catch (IOException e) {
-			log.error(
-					"Failed to set local configuration signature note!", e);
-			throw new InitializationException(
-					"Failed to set local configuration signature note!",
-					e);
-		}
-	}
-
 	private void createConfiguration(File configDir) throws InitializationException {
 		boolean allOK = false;
 
@@ -296,11 +167,9 @@ public class PrepareConfigurationState extends State {
 		}
 
 		try {
-			copyPdfOverConfig();
-			copyLog4jConfig();
+			ensurePdfOverConfigExists();
 			unzipPdfAsConfig(configDir);
 			updateVersionFile(configDir);
-			initializeConfig();
 
 			allOK = true;
 		} finally {
@@ -353,7 +222,7 @@ public class PrepareConfigurationState extends State {
 		try {
 			File backup = File.createTempFile(Constants.PDF_AS_CONFIG_BACKUP_FILENAME, ".zip");
 			OutputStream os = new FileOutputStream(backup);
-			Zipper.zip(configDir + FILE_SEPARATOR + "cfg", os, true);
+			Zipper.zip(configDir + File.separator + "cfg", os, true);
 			os.close();
 			unzipPdfAsConfig(configDir);
 			File b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + ".zip");
@@ -379,8 +248,7 @@ public class PrepareConfigurationState extends State {
 			StateMachine stateMachine = getStateMachine();
 			ConfigProviderImpl config = stateMachine.configProvider;
 			final GUIProvider gui = stateMachine;
-			String cDir = config.getConfigurationDirectory();
-			File configDir = new File(cDir);
+			File configDir = new File(Constants.CONFIG_DIRECTORY);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
 				log.debug("Creating configuration file");
@@ -410,8 +278,7 @@ public class PrepareConfigurationState extends State {
 
 			// initialize from config file
 			initializeFromConfigurationFile();
-			updateConfiguration();
-
+			
 			// Read cli arguments
 			try {
 				initializeFromArguments(stateMachine.cmdLineArgs, this.handler);
