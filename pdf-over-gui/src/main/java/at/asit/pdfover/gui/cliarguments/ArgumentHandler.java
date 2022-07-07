@@ -70,7 +70,7 @@ public class ArgumentHandler {
 
 		Argument arg;
 		try {
-			arg = cliArgument.newInstance();
+			arg = cliArgument.getDeclaredConstructor().newInstance();
 
 			arg.setStateMachine(this.stateMachine);
 

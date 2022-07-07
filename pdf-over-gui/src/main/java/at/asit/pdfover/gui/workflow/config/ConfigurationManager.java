@@ -406,7 +406,6 @@ public class ConfigurationManager {
 		log.info("Configuration file saved to " + configFile.getAbsolutePath());
 	}
 
-	// TODO review this
 	public void setConfigurationFileName(String configurationFile)
 	{
 		if (this.configurationFile.equals(configurationFile))

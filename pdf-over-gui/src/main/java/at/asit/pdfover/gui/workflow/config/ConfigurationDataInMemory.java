@@ -182,9 +182,8 @@ public class ConfigurationDataInMemory {
 	/**	The Signature Profile */
 	protected Profile signatureProfile = null;
 	public Profile getSignatureProfile() {
-		if (this.signatureProfile == null) {
-			this.signatureProfile = Profile.SIGNATURBLOCK_SMALL;
-		}
+		if (this.signatureProfile == null)
+			return Profile.SIGNATURBLOCK_SMALL;
 		return this.signatureProfile;
 	}
 	public void setSignatureProfile(Profile profile) { this.signatureProfile = profile; }
