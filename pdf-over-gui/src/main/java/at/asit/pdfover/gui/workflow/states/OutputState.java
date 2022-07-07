@@ -28,7 +28,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 
 /**
  * Produces the output of the signature process. (save file, open file)
@@ -49,7 +49,7 @@ public class OutputState extends State {
 			this.outputComposite = getStateMachine()
 					.createComposite(OutputComposite.class, SWT.RESIZE, this);
 
-			ConfigProvider config = getStateMachine().configProvider;
+			ConfigProviderImpl config = getStateMachine().configProvider;
 			Status status = getStateMachine().status;
 
 			File tmpDir = new File(config.getConfigurationDirectory() + File.separator + "tmp");

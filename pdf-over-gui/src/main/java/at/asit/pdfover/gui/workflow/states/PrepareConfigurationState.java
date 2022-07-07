@@ -53,7 +53,7 @@ import at.asit.pdfover.gui.utils.Zipper;
 import at.asit.pdfover.gui.workflow.GUIProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.signator.Signator;
 
 /**
@@ -109,10 +109,9 @@ public class PrepareConfigurationState extends State {
 			throws InitializationException {
 		try {
 
+			// TODO: move this to ConfigProviderImpl to mirror save logic
 			try {
-				getStateMachine().configProvider.loadConfiguration(
-						new FileInputStream(
-								getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
+				getStateMachine().configProvider.loadConfiguration(new FileInputStream(getStateMachine().configProvider.getConfigurationDirectory() + FILE_SEPARATOR + filename));
 
 				log.info("Loaded config from file : " + filename);
 			} catch (FileNotFoundException ex) {
@@ -144,7 +143,7 @@ public class PrepareConfigurationState extends State {
 	 * Update configuration values as necessary
 	 */
 	private void updateConfiguration() {
-		ConfigProvider config = getStateMachine().configProvider;
+		ConfigProviderImpl config = getStateMachine().configProvider;
 
 		//Update signature note if old default is used
 		String note = config.getSignatureNote();
@@ -155,7 +154,7 @@ public class PrepareConfigurationState extends State {
 			resetSignatureNoteField(config);
 	}
 
-	private void resetSignatureNoteField(ConfigProvider config){
+	private void resetSignatureNoteField(ConfigProviderImpl config){
 		getStateMachine().configProvider.setSignatureNote(
 			Profile.getProfile(config.getSignatureProfile()).getDefaultSignatureBlockNote(config.getLocale())
 		);
@@ -399,7 +398,7 @@ public class PrepareConfigurationState extends State {
 		// Read config file
 		try {
 			StateMachine stateMachine = getStateMachine();
-			ConfigProvider config = stateMachine.configProvider;
+			ConfigProviderImpl config = stateMachine.configProvider;
 			final GUIProvider gui = stateMachine;
 			String cDir = config.getConfigurationDirectory();
 			File configDir = new File(cDir);

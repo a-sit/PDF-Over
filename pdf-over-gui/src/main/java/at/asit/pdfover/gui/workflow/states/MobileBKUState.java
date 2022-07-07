@@ -46,7 +46,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.signator.SigningState;
 
 /**
@@ -64,7 +64,7 @@ public class MobileBKUState extends State {
 
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		ConfigProvider provider = stateMachine.configProvider;
+		ConfigProviderImpl provider = stateMachine.configProvider;
 		switch(provider.getMobileBKUType()) {
 			case A_TRUST:
 				this.status = new ATrustStatus(provider);

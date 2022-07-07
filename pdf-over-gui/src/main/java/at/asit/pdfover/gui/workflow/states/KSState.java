@@ -30,7 +30,7 @@ import at.asit.pdfover.gui.controls.PasswordInputDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SigningState;
 
@@ -64,7 +64,7 @@ public class KSState extends State {
 		Status status = getStateMachine().status;
 
 		SigningState signingState = status.signingState;
-		ConfigProvider config = getStateMachine().configProvider;
+		ConfigProviderImpl config = getStateMachine().configProvider;
 
 		try {
 			String file = config.getKeyStoreFile();

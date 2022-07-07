@@ -15,21 +15,12 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
-// Imports
-import org.apache.commons.httpclient.Cookie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 
 /**
  * IAIK MobileBKUStatus implementation
  */
 public class IAIKStatus extends MobileBKUStatus {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(IAIKStatus.class);
 
 	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
@@ -40,7 +31,7 @@ public class IAIKStatus extends MobileBKUStatus {
 	 * Constructor
 	 * @param provider the ConfigProvider
 	 */
-	public IAIKStatus(ConfigProvider provider) {
+	public IAIKStatus(ConfigProviderImpl provider) {
 		this.phoneNumber = provider.getDefaultMobileNumber();
 		this.mobilePassword = provider.getDefaultMobilePassword();
 	}

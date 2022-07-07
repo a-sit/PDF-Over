@@ -55,7 +55,6 @@ import at.asit.pdfover.gui.exceptions.OutputfolderDoesntExistException;
 import at.asit.pdfover.gui.exceptions.OutputfolderNotADirectoryException;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
@@ -647,15 +646,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		// Nothing to do here
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(
-	 * at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
-	public void initConfiguration(PersistentConfigProvider provider) {
+	public void initConfiguration(ConfigProviderImpl provider) {
 		this.configurationContainer.defaultSignaturePosition = provider.getDefaultSignaturePositionPersistent();
 		this.configurationContainer.setUseMarker(provider.getUseMarker());
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());

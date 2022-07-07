@@ -22,7 +22,6 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 
 public class AboutComposite extends ConfigurationCompositeBase {
 	static final Logger log = LoggerFactory.getLogger(AboutComposite.class);
@@ -138,7 +137,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	protected void signerChanged() {}
 
 	@Override
-	public void initConfiguration(PersistentConfigProvider provider) {}
+	public void initConfiguration(ConfigProviderImpl provider) {}
 
 	@Override
 	public void loadConfiguration() {}

@@ -40,7 +40,7 @@ import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
+import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
 
@@ -81,7 +81,7 @@ public class OpenState extends State {
 
 	@Override
 	public void run() {
-		ConfigProvider config = getStateMachine().configProvider;
+		ConfigProviderImpl config = getStateMachine().configProvider;
 		Status status = getStateMachine().status;
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {

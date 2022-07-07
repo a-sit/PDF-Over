@@ -27,7 +27,6 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.gui.workflow.config.ConfigProvider;
 import at.asit.pdfover.signator.BKUs;
 
 /**
@@ -76,8 +75,7 @@ public class BKUSelectionState extends State {
 		)) {
 			status.bku = BKUs.NONE;
 		} else if(!(status.getPreviousState() instanceof BKUSelectionState)) {
-			ConfigProvider config = getStateMachine().configProvider;
-			status.bku = config.getDefaultBKU();
+			getStateMachine().configProvider.getDefaultBKU();
 		}
 
 		if(status.bku == BKUs.NONE) {

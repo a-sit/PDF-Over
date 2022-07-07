@@ -39,11 +39,12 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignaturePosition;
 
+// TODO: review which properties use the overlay in this file (also: remove unneeded setters/getters, maybe template impl for overlays?)
+
 /**
  * Implementation of the configuration provider and manipulator
  */
-public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
-		ConfigOverlayManipulator, PersistentConfigProvider {
+public class ConfigProviderImpl {
 
 
 	/** Default Mobile BKU type */
@@ -77,14 +78,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		this.configurationOverlay = new ConfigurationContainer();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigProvider#loadConfiguration(java.io
-	 * .InputStream)
-	 */
-	@Override
+	/* load from disk (file input stream) */
 	public void loadConfiguration(InputStream configSource) throws IOException {
 
 		Properties config = new Properties();
@@ -237,7 +231,7 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		if (signaturePosition != null && !signaturePosition.trim().isEmpty()) {
 			signaturePosition = signaturePosition.trim().toLowerCase();
 
-			Pattern pattern = Pattern.compile(SIGN_POS_REGEX);
+			Pattern pattern = Pattern.compile("(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?);p=(\\d))|(auto)|(x=(\\d\\.?\\d?);y=(\\d\\.?\\d?))");
 			Matcher matcher = pattern.matcher(signaturePosition);
 			if (matcher.matches()) {
 				if (matcher.groupCount() == 8) {
@@ -297,18 +291,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 			setUpdateCheck(!updateCheck.equalsIgnoreCase(Constants.FALSE));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigManipulator#saveCurrentConfiguration()
-	 */
-	@Override
+	/* save to file */
 	public void saveCurrentConfiguration() throws IOException {
 		String filename = this.getConfigurationFile();
-
-		File configFile = new File(this.getConfigurationDirectory()
-				+ File.separator + filename);
+		File configFile = new File(this.getConfigurationDirectory() + File.separator + filename);
 
 		Properties props = new Properties();
 		props.clear();
@@ -420,65 +406,20 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 	}
 
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationDirectory()
-	 */
-	@Override
-	public String getConfigurationDirectory() {
-		return Constants.CONFIG_DIRECTORY;
-	}
+	public String getConfigurationDirectory() { return Constants.CONFIG_DIRECTORY; }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setConfigurationFile(java
-	 * .lang.String)
-	 */
-	@Override
-	public void setConfigurationFile(String configurationFile) {
-		this.configurationFile = configurationFile;
-	}
+	// TODO review this
+	public void setConfigurationFile(String configurationFile) { this.configurationFile = configurationFile; }
+	public String getConfigurationFile() { return this.configurationFile; }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigurationFile()
-	 */
-	@Override
-	public String getConfigurationFile() {
-		return this.configurationFile;
-	}
-
-	/**
-	 * Sets the default bku type
-	 *
-	 * @param bku
-	 *            the bku type
-	 */
-	@Override
 	public void setDefaultBKU(BKUs bku) {
 		this.configuration.defaultBKU = bku;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultBKUOverlay(at.asit.pdfover.signator.BKUs)
-	 */
-	@Override
 	public void setDefaultBKUOverlay(BKUs bku) {
 		this.configurationOverlay.defaultBKU = bku;
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultBKU()
-	 */
-	@Override
 	public BKUs getDefaultBKU() {
 		BKUs bku = this.configurationOverlay.defaultBKU;
 		if (bku == BKUs.NONE)
@@ -486,41 +427,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return bku;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultBKUPersistent()
-	 */
-	@Override
 	public BKUs getDefaultBKUPersistent() {
 		return this.configuration.defaultBKU;
 	}
 
-	/**
-	 * Sets the default signature position
-	 *
-	 * @param signaturePosition
-	 *            the default signature position
-	 */
-	@Override
 	public void setDefaultSignaturePosition(SignaturePosition signaturePosition) {
 		this.configuration.defaultSignaturePosition = signaturePosition;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setDefaultSignaturePositionOverlay(at.asit.pdfover.signator.SignaturePosition)
-	 */
-	@Override
 	public void setDefaultSignaturePositionOverlay(SignaturePosition signaturePosition) {
 		this.configurationOverlay.defaultSignaturePosition = signaturePosition;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultSignaturePosition()
-	 */
-	@Override
 	public SignaturePosition getDefaultSignaturePosition() {
 		SignaturePosition position = this.configurationOverlay.defaultSignaturePosition;
 		if (position == null)
@@ -528,43 +446,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return position;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getDefaultSignaturePositionPersistent()
-	 */
-	@Override
 	public SignaturePosition getDefaultSignaturePositionPersistent() {
 		return this.configuration.defaultSignaturePosition;
 	}
 
-	/**
-	 * Sets the signature placeholder transparency
-	 *
-	 * @param transparency
-	 *            the signature placeholder transparency
-	 */
-	@Override
 	public void setPlaceholderTransparency(int transparency) {
 		this.configuration.placeholderTransparency = transparency;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigProvider#getPlaceholderTransparency()
-	 */
-	@Override
 	public int getPlaceholderTransparency() {
 		return this.configuration.placeholderTransparency;
 	}
 
-	/**
-	 * Sets the default mobile number
-	 *
-	 * @param number
-	 *            the default mobile number
-	 */
-	@Override
 	public void setDefaultMobileNumber(String number) {
 		if (number == null || number.trim().isEmpty()) {
 			this.configuration.setMobileNumber(STRING_EMPTY);
@@ -573,10 +466,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultMobileNumberOverlay(java.lang.String)
-	 */
-	@Override
 	public void setDefaultMobileNumberOverlay(String number) {
 		if (number == null || number.trim().isEmpty()) {
 			this.configurationOverlay.setMobileNumber(STRING_EMPTY);
@@ -585,12 +474,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultMobileNumber()
-	 */
-	@Override
 	public String getDefaultMobileNumber() {
 		String number = this.configurationOverlay.getMobileNumber();
 		if (number == null)
@@ -598,10 +481,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return number;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultMobileNumberPersistent()
-	 */
-	@Override
 	public String getDefaultMobileNumberPersistent() {
 		String number = this.configuration.getMobileNumber();
 		if (number == null)
@@ -609,13 +488,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return number;
 	}
 
-	/**
-	 * Sets the default mobile password
-	 *
-	 * @param password
-	 *            the default password
-	 */
-	@Override
 	public void setDefaultMobilePassword(String password) {
 		if (password == null || password.trim().isEmpty()) {
 			this.configuration.mobilePassword = STRING_EMPTY;
@@ -624,10 +496,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultMobilePasswordOverlay(java.lang.String)
-	 */
-	@Override
 	public void setDefaultMobilePasswordOverlay(String password) {
 		if (password == null || password.trim().isEmpty()) {
 			this.configurationOverlay.mobilePassword = STRING_EMPTY;
@@ -636,12 +504,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultPassword()
-	 */
-	@Override
 	public String getDefaultMobilePassword() {
 		String password = this.configurationOverlay.mobilePassword;
 		if (password == null)
@@ -649,10 +511,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return password;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultMobilePasswordPersistent()
-	 */
-	@Override
 	public String getDefaultMobilePasswordPersistent() {
 		String password = this.configuration.mobilePassword;
 		if (password == null)
@@ -660,13 +518,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return password;
 	}
 
-	/**
-	 * Sets the default emblem
-	 *
-	 * @param emblem
-	 *            the default emblem
-	 */
-	@Override
 	public void setDefaultEmblem(String emblem) {
 		try {
 			if (emblem == null || emblem.trim().isEmpty()) {
@@ -684,10 +535,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultEmblemOverlay(java.lang.String)
-	 */
-	@Override
 	public void setDefaultEmblemOverlay(String emblem) {
 		try {
 			if (emblem == null || emblem.trim().isEmpty()) {
@@ -705,12 +552,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultEmblem()
-	 */
-	@Override
 	public String getDefaultEmblem() {
 		String emblem = this.configurationOverlay.getEmblem();
 		if (emblem == null)
@@ -718,10 +559,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return emblem;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultEmblemPersistent()
-	 */
-	@Override
 	public String getDefaultEmblemPersistent() {
 		String emblem = this.configuration.getEmblem();
 		if (emblem == null)
@@ -729,18 +566,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return emblem;
 	}
 
-	/*@Override
-	public String getDownloadURL() {
-		return Constants.CERTIFICATE_DOWNLOAD_XML_URL;
-	}*/
-
-	/**
-	 * Sets the proxy host
-	 *
-	 * @param host
-	 *            the proxy host
-	 */
-	@Override
 	public void setProxyHost(String host) {
 		if (host == null || host.trim().isEmpty()) {
 			this.configuration.proxyHost = STRING_EMPTY;
@@ -749,10 +574,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setProxyHostOverlay(java.lang.String)
-	 */
-	@Override
 	public void setProxyHostOverlay(String host) {
 		if (host == null || host.trim().isEmpty()) {
 			this.configurationOverlay.proxyHost = STRING_EMPTY;
@@ -761,12 +582,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getProxyHost()
-	 */
-	@Override
 	public String getProxyHost() {
 		String host = this.configurationOverlay.proxyHost;
 		if (host == null)
@@ -774,10 +589,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return host;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getProxyHostPersistent()
-	 */
-	@Override
 	public String getProxyHostPersistent() {
 		String host = this.configuration.proxyHost;
 		if (host == null)
@@ -785,13 +596,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return host;
 	}
 
-	/**
-	 * Sets the proxy port
-	 *
-	 * @param port
-	 *            the proxy port
-	 */
-	@Override
 	public void setProxyPort(int port) {
 		try {
 			this.configuration.setProxyPort(port);
@@ -801,10 +605,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setProxyPortOverlay(int)
-	 */
-	@Override
 	public void setProxyPortOverlay(int port) {
 		try {
 			this.configurationOverlay.setProxyPort(port);
@@ -814,12 +614,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getProxyPort()
-	 */
-	@Override
 	public int getProxyPort() {
 		int port = this.configurationOverlay.getProxyPort();
 		if (port == -1)
@@ -827,21 +621,10 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return port;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getProxyPortPersistent()
-	 */
-	@Override
 	public int getProxyPortPersistent() {
 		return this.configuration.getProxyPort();
 	}
 
-	/**
-	 * Sets the proxy username
-	 *
-	 * @param user
-	 *            the proxy username
-	 */
-	@Override
 	public void setProxyUser(String user) {
 		if (user == null || user.trim().isEmpty()) {
 			this.configuration.proxyUser = STRING_EMPTY;
@@ -850,10 +633,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setProxyUserOverlay(java.lang.String)
-	 */
-	@Override
 	public void setProxyUserOverlay(String user) {
 		if (user == null || user.trim().isEmpty()) {
 			this.configurationOverlay.proxyUser = STRING_EMPTY;
@@ -862,10 +641,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getProxyUser()
-	 */
-	@Override
 	public String getProxyUser() {
 		String user = this.configurationOverlay.proxyUser;
 		if (user == null)
@@ -873,10 +648,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return user;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getProxyUserPersistent()
-	 */
-	@Override
 	public String getProxyUserPersistent() {
 		String user = this.configuration.proxyUser;
 		if (user == null)
@@ -884,13 +655,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return user;
 	}
 
-	/**
-	 * Sets the proxy password
-	 *
-	 * @param pass
-	 *            the proxy password
-	 */
-	@Override
 	public void setProxyPass(String pass) {
 		if (pass == null || pass.trim().isEmpty()) {
 			this.configuration.proxyPass = STRING_EMPTY;
@@ -899,10 +663,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setProxyPassOverlay(java.lang.String)
-	 */
-	@Override
 	public void setProxyPassOverlay(String pass) {
 		if (pass == null || pass.trim().isEmpty()) {
 			this.configurationOverlay.proxyPass = STRING_EMPTY;
@@ -911,10 +671,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getProxyPass()
-	 */
-	@Override
 	public String getProxyPass() {
 		String pass = this.configurationOverlay.proxyPass;
 		if (pass == null)
@@ -922,10 +678,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return pass;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getProxyPassPersistent()
-	 */
-	@Override
 	public String getProxyPassPersistent() {
 		String pass = this.configuration.proxyPass;
 		if (pass == null)
@@ -933,14 +685,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return pass;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setDefaultOutputFolder
-	 * (java.lang.String)
-	 */
-	@Override
 	public void setDefaultOutputFolder(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
 			this.configuration.outputFolder = STRING_EMPTY;
@@ -949,10 +693,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigOverlayManipulator#setDefaultOutputFolderOverlay(java.lang.String)
-	 */
-	@Override
 	public void setDefaultOutputFolderOverlay(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
 			this.configurationOverlay.outputFolder = STRING_EMPTY;
@@ -961,12 +701,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getDefaultOutputFolder()
-	 */
-	@Override
 	public String getDefaultOutputFolder() {
 		String outputFolder = this.configurationOverlay.outputFolder;
 		if (outputFolder == null)
@@ -974,10 +708,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return outputFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.PersistentConfigProvider#getDefaultOutputFolderPersistent()
-	 */
-	@Override
 	public String getDefaultOutputFolderPersistent() {
 		String outputFolder = this.configuration.outputFolder;
 		if (outputFolder == null)
@@ -985,41 +715,18 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return outputFolder;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUURL()
-	 */
-	@Override
 	public String getMobileBKUURL() {
 		return this.configuration.mobileBKUURL;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMobileBKUType()
-	 */
-	@Override
 	public MobileBKUs getMobileBKUType() {
 		return this.configuration.mobileBKUType;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getMobileBKUBase64()
-	 */
-	@Override
 	public boolean getMobileBKUBase64() {
 		return this.configuration.mobileBKUBase64;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.workflow.ConfigManipulator#setSignatureNote(java.
-	 * lang.String)
-	 */
-	@Override
 	public void setSignatureNote(String note) {
 		if (note == null || note.trim().isEmpty()) {
 			this.configuration.signatureNote = STRING_EMPTY;
@@ -1028,12 +735,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureNote()
-	 */
-	@Override
 	public String getSignatureNote() {
 		String note = this.configuration.signatureNote;
 		if (note == null)
@@ -1041,10 +742,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return note;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setLocale(java.util.Locale)
-	 */
-	@Override
 	public void setLocale(Locale locale) {
 		if(locale == null) {
 			this.configuration.locale = Messages.getDefaultLocale();
@@ -1055,10 +752,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getConfigLocale()
-	 */
-	@Override
 	public Locale getLocale() {
 		Locale locale = this.configuration.locale;
 		if (locale == null)
@@ -1066,10 +759,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return locale;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setSignatureLocale(java.util.Locale)
-	 */
-	@Override
 	public void setSignatureLocale(Locale locale) {
 		if(locale == null) {
 			this.configuration.signatureLocale = Messages.getDefaultLocale();
@@ -1078,10 +767,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getSignatureLocale()
-	 */
-	@Override
 	public Locale getSignatureLocale() {
 		Locale locale = this.configuration.signatureLocale;
 		if (locale == null)
@@ -1089,42 +774,22 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return locale;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setSignaturePdfACompat(boolean)
-	 */
-	@Override
 	public void setSignaturePdfACompat(boolean compat) {
 		this.configuration.signaturePDFACompat = compat;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getSignaturePdfACompat()
-	 */
-	@Override
 	public boolean getSignaturePdfACompat() {
 		return this.configuration.signaturePDFACompat;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreEnabled(boolean)
-	 */
-	@Override
 	public void setKeyStoreEnabled(Boolean enabled) {
 		this.configuration.keystoreEnabled = enabled;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreEnabledOverlay(boolean)
-	 */
-	@Override
 	public void setKeyStoreEnabledOverlay(Boolean enabled) {
 		this.configurationOverlay.keystoreEnabled = enabled;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreEnabled()
-	 */
-	@Override
 	public Boolean getKeyStoreEnabled() {
 		Boolean enabled = this.configurationOverlay.keystoreEnabled;
 		if (enabled == null)
@@ -1132,10 +797,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return enabled;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreEnabledPersistent()
-	 */
-	@Override
 	public Boolean getKeyStoreEnabledPersistent() {
 		Boolean enabled = this.configuration.keystoreEnabled;
 		if (enabled == null)
@@ -1143,10 +804,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return enabled;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreFile(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreFile(String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configuration.keystoreFile = STRING_EMPTY;
@@ -1155,10 +812,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreFileOverlay(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreFileOverlay(String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configurationOverlay.keystoreFile = STRING_EMPTY;
@@ -1167,10 +820,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreFile()
-	 */
-	@Override
 	public String getKeyStoreFile() {
 		String file = this.configurationOverlay.keystoreFile;
 		if (file == null)
@@ -1178,10 +827,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return file;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreFilePersistent()
-	 */
-	@Override
 	public String getKeyStoreFilePersistent() {
 		String file = this.configuration.keystoreFile;
 		if (file == null)
@@ -1189,10 +834,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return file;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreType(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreType(String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configuration.keystoreType = STRING_EMPTY;
@@ -1201,10 +842,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreTypeOverlay(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreTypeOverlay(String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configurationOverlay.keystoreType = STRING_EMPTY;
@@ -1213,10 +850,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreType()
-	 */
-	@Override
 	public String getKeyStoreType() {
 		String type = this.configurationOverlay.keystoreType;
 		if (type == null)
@@ -1224,10 +857,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return type;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreTypePersistent()
-	 */
-	@Override
 	public String getKeyStoreTypePersistent() {
 		String type = this.configuration.keystoreType;
 		if (type == null)
@@ -1235,10 +864,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return type;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreAlias(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreAlias(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configuration.keystoreAlias = STRING_EMPTY;
@@ -1247,10 +872,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreAliasOverlay(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreAliasOverlay(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configurationOverlay.keystoreAlias = STRING_EMPTY;
@@ -1259,10 +880,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreAlias()
-	 */
-	@Override
 	public String getKeyStoreAlias() {
 		String alias = this.configurationOverlay.keystoreAlias;
 		if (alias == null)
@@ -1270,10 +887,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return alias;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreAliasPersistent()
-	 */
-	@Override
 	public String getKeyStoreAliasPersistent() {
 		String alias = this.configuration.keystoreAlias;
 		if (alias == null)
@@ -1281,10 +894,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return alias;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreStorePass(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreStorePass(String storePass) {
 		if (storePass == null || storePass.trim().isEmpty()) {
 			this.configuration.keystoreStorePass = STRING_EMPTY;
@@ -1293,10 +902,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreStorePassOverlay(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreStorePassOverlay(String storePass) {
 		if (storePass == null || storePass.trim().isEmpty()) {
 			this.configurationOverlay.keystoreStorePass = STRING_EMPTY;
@@ -1305,10 +910,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreStorePass()
-	 */
-	@Override
 	public String getKeyStoreStorePass() {
 		String storePass = this.configurationOverlay.keystoreStorePass;
 		if (storePass != null)
@@ -1316,10 +917,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return getKeyStoreStorePassPersistent();
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreStorePassPersistent()
-	 */
-	@Override
 	public String getKeyStoreStorePassPersistent() {
 		String storePass = this.configuration.keystoreStorePass;
 		if (storePass == null)
@@ -1327,10 +924,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return storePass;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setKeyStoreKeyPass(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreKeyPass(String keyPass) {
 		if (keyPass == null || keyPass.trim().isEmpty()) {
 			this.configuration.keystoreKeyPass = STRING_EMPTY;
@@ -1339,10 +932,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setKeyStoreKeyPassOverlay(java.lang.String)
-	 */
-	@Override
 	public void setKeyStoreKeyPassOverlay(String keyPass) {
 		if (keyPass == null || keyPass.trim().isEmpty()) {
 			this.configurationOverlay.keystoreKeyPass = STRING_EMPTY;
@@ -1351,10 +940,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getKeyStoreKeyPass()
-	 */
-	@Override
 	public String getKeyStoreKeyPass() {
 		String keyPass = this.configurationOverlay.keystoreKeyPass;
 		if (keyPass != null)
@@ -1362,10 +947,6 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return getKeyStoreKeyPassPersistent();
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getKeyStoreKeyPassPersistent()
-	 */
-	@Override
 	public String getKeyStoreKeyPassPersistent() {
 		String keyPass = this.configuration.keystoreKeyPass;
 		if (keyPass == null)
@@ -1373,120 +954,68 @@ public class ConfigProviderImpl implements ConfigProvider, ConfigManipulator,
 		return keyPass;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setUpdateCheck(boolean)
-	 */
-	@Override
 	public void setUpdateCheck(boolean checkUpdate) {
 		this.configuration.updateCheck = checkUpdate;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getUpdateCheck()
-	 */
-	@Override
 	public boolean getUpdateCheck() {
 		return this.configuration.updateCheck;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigManipulator#setMainWindowSize(org.eclipse.swt.graphics.Point)
-	 */
-	@Override
 	public void setMainWindowSize(Point size) {
 		this.configuration.mainWindowSize = size;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.ConfigProvider#getMainWindowSize()
-	 */
-	@Override
 	public Point getMainWindowSize() {
 		return this.configuration.mainWindowSize;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getSkipFinish()
-	 */
-	@Override
 	public boolean getSkipFinish() {
 		return this.configurationOverlay.skipFinish;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigOverlayManipulator#setSkipFinishOverlay(boolean)
-	 */
-	@Override
 	public void setSkipFinishOverlay(boolean skipFinish) {
 		this.configurationOverlay.skipFinish = skipFinish;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigProvider#getUseMarker()
-	 */
-	@Override
 	public boolean getUseMarker() {
 		return this.configurationOverlay.getUseMarker();
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.config.PersistentConfigProvider#getUseSignatureFields()
-	 */
-	@Override
 	public boolean getUseSignatureFields() {
 		return this.configurationOverlay.getUseSignatureFields();
 	}
 
-
-
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.workflow.config.ConfigManipulator#setUseMarker(
-	 * boolean)
-	 */
-	@Override
 	public void setUseMarker(boolean useMarker) {
 		this.configurationOverlay.setUseMarker(useMarker);
 		if (useMarker) setUseSignatureFields(false);
 	}
 
-	@Override
 	public void setUseSignatureFields(boolean useFields) {
 		this.configurationOverlay.setUseSignatureFields(useFields);
 		if (useFields) setUseMarker(false);
 	}
 
-	@Override
 	public void setSignatureProfile(String profile) {
 		this.configurationOverlay.setSignatureProfile(Profile.getProfile(profile));
 	}
 
-    @Override
     public void setSaveFilePostFix(String postFix) {
         this.configurationOverlay.saveFilePostFix = postFix;
     }
 
-    @Override
 	public String getSaveFilePostFix(){
 		return this.configurationOverlay.saveFilePostFix;
 	}
 
-    @Override
 	public String getSignatureProfile() {
 		return this.configurationOverlay.getSignatureProfile().name();
 	}
 
-
-	@Override
 	public void setEnablePlaceholderUsage(boolean bool) {
 		this.configurationOverlay.enabledPlaceholderUsage = bool;
 	}
 
-	@Override
 	public boolean getEnablePlaceholderUsage() {
 		return this.configurationOverlay.enabledPlaceholderUsage;
 	}

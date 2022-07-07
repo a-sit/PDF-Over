@@ -57,7 +57,6 @@ import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import iaik.security.provider.IAIK;
 
@@ -380,12 +379,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		layout(true, true);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
-	public void initConfiguration(PersistentConfigProvider provider) {
+	public void initConfiguration(ConfigProviderImpl provider) {
 		ConfigurationContainer config = this.configurationContainer;
 		config.keystoreFile = provider.getKeyStoreFilePersistent();
 		config.keystoreType = provider.getKeyStoreTypePersistent();
@@ -418,9 +413,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		performKeystoreKeyPassChanged(config.keystoreKeyPass);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
 	public void storeConfiguration(ConfigProviderImpl store) {
 		ConfigurationContainer config = this.configurationContainer;

@@ -65,7 +65,6 @@ import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
@@ -607,18 +606,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		layout(true, true);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#initConfiguration(at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
-	public void initConfiguration(PersistentConfigProvider provider) {
-		this.configurationContainer.setMobileNumber(
-				provider.getDefaultMobileNumberPersistent());
+	public void initConfiguration(ConfigProviderImpl provider) {
+		this.configurationContainer.setMobileNumber(provider.getDefaultMobileNumberPersistent());
 
 		try {
-			this.configurationContainer.setEmblem(
-					provider.getDefaultEmblemPersistent());
+			this.configurationContainer.setEmblem(provider.getDefaultEmblemPersistent());
 		} catch (InvalidEmblemFile e) {
 			log.error("Failed to set emblem!", e);
 		}
@@ -669,9 +662,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.BaseConfigurationComposite#storeConfiguration(at.asit.pdfover.gui.workflow.config.ConfigManipulator, at.asit.pdfover.gui.workflow.config.PersistentConfigProvider)
-	 */
 	@Override
 	public void storeConfiguration(ConfigProviderImpl store) {
 		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());

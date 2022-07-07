@@ -59,8 +59,7 @@ public class ConfigurationComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(ConfigurationComposite.class);
+	static final Logger log = LoggerFactory.getLogger(ConfigurationComposite.class);
 
 	/**
 	 * configuration provider

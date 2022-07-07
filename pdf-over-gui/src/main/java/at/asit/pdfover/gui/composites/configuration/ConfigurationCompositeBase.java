@@ -22,7 +22,6 @@ import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.config.ConfigProviderImpl;
 import at.asit.pdfover.gui.workflow.config.ConfigurationContainer;
-import at.asit.pdfover.gui.workflow.config.PersistentConfigProvider;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -72,10 +71,10 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	}
 
 	/**
-	 * Initialize ConfigurationContainer from PersistentConfigProvider
-	 * @param provider the PersistentConfigProvider to load config from
+	 * Initialize ConfigurationContainer from ConfigProviderImpl
+	 * @param provider the ConfigProviderImpl to load config from
 	 */
-	public abstract void initConfiguration(PersistentConfigProvider provider);
+	public abstract void initConfiguration(ConfigProviderImpl provider);
 
 	/**
 	 * Load configuration from ConfigurationContainer
@@ -84,7 +83,7 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 
 	/**
 	 * Store configuration from ConfigurationContainer to ConfigProvider
-	 * @param store the ConfigProvider to store config to
+	 * @param store the ConfigProviderImpl to store config to
 	 */
 	public abstract void storeConfiguration(ConfigProviderImpl store);
 
