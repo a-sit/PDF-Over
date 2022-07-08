@@ -480,17 +480,8 @@ public class ConfigurationManager {
 	}
 
 	public String getDefaultMobilePassword() {
-		String password = this.configurationOverlay.mobilePassword;
-		if (password == null)
-			password = getDefaultMobilePasswordPersistent();
-		return password;
-	}
-
-	public String getDefaultMobilePasswordPersistent() {
-		String password = this.configuration.mobilePassword;
-		if (password == null)
-			password = STRING_EMPTY;
-		return password;
+		/* this does not exist as a permanent config variable */
+		return this.configurationOverlay.mobilePassword;
 	}
 
 	public void setDefaultEmblem(String emblem) {
