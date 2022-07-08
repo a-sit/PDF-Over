@@ -31,6 +31,6 @@ public class PasswordInputDialog extends InputDialog {
 	 */
 	public PasswordInputDialog(Shell parent, String title, String prompt) {
 		super(parent, title, prompt);
-		TEXT_FLAGS = SWT.BORDER | SWT.PASSWORD;
+		PasswordInputDialog.TEXT_FLAGS = SWT.BORDER | SWT.PASSWORD;
 	}
 }

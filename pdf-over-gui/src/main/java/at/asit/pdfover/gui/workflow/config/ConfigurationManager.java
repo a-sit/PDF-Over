@@ -230,8 +230,8 @@ public class ConfigurationManager {
 		setKeyStoreFile(diskConfig.getProperty(Constants.CFG_KEYSTORE_FILE));
 		setKeyStoreType(diskConfig.getProperty(Constants.CFG_KEYSTORE_TYPE));
 		setKeyStoreAlias(diskConfig.getProperty(Constants.CFG_KEYSTORE_ALIAS));
-		setKeyStoreStorePass(diskConfig.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
-		setKeyStoreKeyPass(diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS));
+		setKeyStoreStorePassPersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
+		setKeyStoreKeyPassPersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS));
 		String storeTypeOnDisk = diskConfig.getProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE);
 		if (storeTypeOnDisk == null) /* auto-detect based on old config */
 		{
@@ -877,7 +877,7 @@ public class ConfigurationManager {
 		return this.configuration.keystorePassStorageType;
 	}
 
-	public void setKeyStoreStorePass(String storePass) {
+	public void setKeyStoreStorePassPersistent(String storePass) {
 		this.configuration.keystoreStorePass = storePass;
 	}
 
@@ -898,7 +898,7 @@ public class ConfigurationManager {
 		return this.configuration.keystoreStorePass;
 	}
 
-	public void setKeyStoreKeyPass(String keyPass) {
+	public void setKeyStoreKeyPassPersistent(String keyPass) {
 		this.configuration.keystoreKeyPass = keyPass;
 	}
 

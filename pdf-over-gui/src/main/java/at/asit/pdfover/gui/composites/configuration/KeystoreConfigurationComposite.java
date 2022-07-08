@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -57,12 +58,12 @@ import at.asit.pdfover.gui.exceptions.KeystoreAliasDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreAliasNoKeyException;
 import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
+import at.asit.pdfover.gui.keystore.KeystoreUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
-import iaik.security.provider.IAIK;
 
 /**
  *
@@ -250,6 +251,9 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				} catch (NullPointerException ex) {
 					log.error("Error loading keystore - NPE?", ex);
 					showErrorDialog(Messages.getString("error.KeyStore"));
+				} catch (UnrecoverableKeyException ex) {
+					log.warn("Error loading keystore, invalid password", ex);
+					showErrorDialog(Messages.getString("error.KeyStoreStorePass"));
 				}
 			}
 		});
@@ -296,13 +300,9 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		e.open();
 	}
 
-	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-		ConfigurationDataInMemory config =
-				KeystoreConfigurationComposite.this.configurationContainer;
-		File f = new File(config.keystoreFile);
-		this.ks = KeyStore.getInstance(config.keystoreType);
-		FileInputStream fis = new FileInputStream(f);
-		this.ks.load(fis, config.keystoreStorePass.toCharArray());
+	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
+		ConfigurationDataInMemory config = this.configurationContainer;
+		this.ks = KeystoreUtils.tryLoadKeystore(new File(config.keystoreFile), config.keystoreType, config.keystoreStorePass);
 		this.cmbKeystoreAlias.remove(0, this.cmbKeystoreAlias.getItemCount()-1);
 		Enumeration<String> aliases = this.ks.aliases();
 		while (aliases.hasMoreElements())
@@ -460,8 +460,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		store.setKeyStoreType(config.keystoreType);
 		store.setKeyStoreAlias(config.keystoreAlias);
 		store.setKeyStorePassStorageType(config.keystorePassStorageType);
-		store.setKeyStoreStorePass(config.keystoreStorePass);
-		store.setKeyStoreKeyPass(config.keystoreKeyPass);
+		store.setKeyStoreStorePassPersistent(config.keystoreStorePass);
+		store.setKeyStoreKeyPassPersistent(config.keystoreKeyPass);
 	}
 
 	/*

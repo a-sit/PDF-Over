@@ -17,6 +17,10 @@ package at.asit.pdfover.gui.workflow.states;
 
 // Imports
 import java.io.File;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.UnrecoverableKeyException;
 
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
@@ -25,12 +29,14 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.keystore.KeystoreUtils;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.PasswordInputDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SigningState;
 
@@ -52,6 +58,16 @@ public class KSState extends State {
 		super(stateMachine);
 	}
 
+	private void showError(String messageKey, Object... args)
+	{
+		new ErrorDialog(getStateMachine().getMainShell(), String.format(Messages.getString(messageKey), args), BUTTONS.OK).open();
+	}
+
+	private boolean askShouldRetry(String messageKey, Object... args)
+	{
+		return SWT.RETRY == (new ErrorDialog(getStateMachine().getMainShell(), String.format(Messages.getString(messageKey), args), BUTTONS.RETRY_CANCEL).open());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -71,37 +87,100 @@ public class KSState extends State {
 			File f = new File(file);
 			if (!f.isFile()) {
 				log.error("Keystore not found");
-				ErrorDialog dialog = new ErrorDialog(
-						getStateMachine().getMainShell(),
-						String.format(Messages.getString("error.KeyStoreFileNotExist"), f.getName()),
-						BUTTONS.RETRY_CANCEL);
-				if (dialog.open() != SWT.RETRY) {
-					//getStateMachine().exit();
+				if (askShouldRetry("error.KeyStoreFileNotExist", f.getName()))
+					this.run();
+				else
 					this.setNextState(new BKUSelectionState(getStateMachine()));
-					return;
-				}
-				this.run();
 				return;
 			}
-			String alias = config.getKeyStoreAlias();
-			String storePass = config.getKeyStoreStorePass();
-			// TODO trial and error
-			if (storePass == null) {
-				PasswordInputDialog pwd = new PasswordInputDialog(
-						getStateMachine().getMainShell(),
-						Messages.getString("keystore_config.KeystoreStorePass"),
-						Messages.getString("keystore.KeystoreStorePassEntry"));
-				storePass = pwd.open();
-			}
-			String keyPass = config.getKeyStoreKeyPass();
-			if (keyPass == null) {
-				PasswordInputDialog pwd = new PasswordInputDialog(
-						getStateMachine().getMainShell(),
-						Messages.getString("keystore_config.KeystoreKeyPass"),
-						Messages.getString("keystore.KeystoreKeyPassEntry"));
-				keyPass = pwd.open();
-			}
 			String type = config.getKeyStoreType();
+			KeyStore keyStore = null;
+			String storePass = config.getKeyStoreStorePass();
+			while (keyStore == null) {
+				if (storePass == null)
+				{
+					PasswordInputDialog pwd = new PasswordInputDialog(
+							getStateMachine().getMainShell(),
+							Messages.getString("keystore_config.KeystoreStorePass"),
+							Messages.getString("keystore.KeystoreStorePassEntry"));
+					storePass = pwd.open();
+					if (storePass == null)
+					{
+						this.setNextState(new BKUSelectionState(getStateMachine()));
+						return;
+					}
+				}
+
+				try {
+					keyStore = KeystoreUtils.tryLoadKeystore(f, type, storePass);
+				} catch (UnrecoverableKeyException e) {
+					showError("error.KeyStoreStorePass");
+					storePass = null;
+				} catch (Exception e) {
+					throw new SignatureException("Failed to load keystore", e);
+				}
+			}
+
+			/* we've successfully unlocked the key store, save the entered password if requested */
+			if (config.getKeyStorePassStorageType() == KeyStorePassStorageType.DISK)
+			{
+				/* only save to disk if the current keystore file is the one saved to disk */
+				/* (might not be true if overridden from CLI) */
+				if (file.equals(config.getKeyStoreFilePersistent()))
+					config.setKeyStoreStorePassPersistent(storePass);
+				else
+					config.setKeyStoreStorePassOverlay(storePass);
+			}
+			else if (config.getKeyStorePassStorageType() == KeyStorePassStorageType.MEMORY)
+				config.setKeyStoreStorePassOverlay(storePass);
+
+			/* next, try to load the key from the now-unlocked keystore */
+			String alias = config.getKeyStoreAlias();
+			Key key = null;
+			String keyPass = config.getKeyStoreKeyPass();
+			while (key == null) {
+				if (keyPass == null) {
+					PasswordInputDialog pwd = new PasswordInputDialog(
+							getStateMachine().getMainShell(),
+							Messages.getString("keystore_config.KeystoreKeyPass"),
+							Messages.getString("keystore.KeystoreKeyPassEntry"));
+					keyPass = pwd.open();
+					if (keyPass == null)
+					{
+						this.setNextState(new BKUSelectionState(getStateMachine()));
+						return;
+					}
+				}
+
+				try {
+					key = keyStore.getKey(alias, keyPass.toCharArray());
+					if (key == null) /* alias does not exist */
+					{
+						if (!askShouldRetry("error.KeyStoreAliasExist", alias))
+						{
+							this.setNextState(new BKUSelectionState(getStateMachine()));
+							return;
+						}
+						continue;
+					}
+				} catch (UnrecoverableKeyException e) {
+					showError("error.KeyStoreKeyPass");
+					keyPass = null;
+				} catch (Exception e) {
+					throw new SignatureException("Failed to load key from store", e);
+				}
+			}
+
+			if (config.getKeyStorePassStorageType() == KeyStorePassStorageType.DISK)
+			{
+				if (file.equals(config.getKeyStoreFilePersistent()))
+					config.setKeyStoreKeyPassPersistent(keyPass);
+				else
+					config.setKeyStoreKeyPassOverlay(keyPass);
+			}
+			else if (config.getKeyStorePassStorageType() == KeyStorePassStorageType.MEMORY)
+				config.setKeyStoreKeyPassOverlay(keyPass);
+
 			signingState.setKSSigner(file, alias, storePass, keyPass, type);
 		} catch (SignatureException e) {
 			log.error("Error loading keystore", e);
