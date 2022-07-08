@@ -189,6 +189,8 @@ public class Constants {
 	/** KeyStore alias config parameter */
 	public static final String CFG_KEYSTORE_ALIAS = "KEYSTORE_ALIAS";
 
+	public static final String CFG_KEYSTORE_PASSSTORETYPE = "KEYSTORE_PASS_STORE_TYPE";
+
 	/** KeyStore store password config parameter */
 	public static final String CFG_KEYSTORE_STOREPASS = "KEYSTORE_STOREPASS";
 

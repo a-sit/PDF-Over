@@ -33,6 +33,7 @@ import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.signator.BKUs;
 
@@ -230,8 +231,23 @@ public class ConfigurationManager {
 		setKeyStoreType(diskConfig.getProperty(Constants.CFG_KEYSTORE_TYPE));
 		setKeyStoreAlias(diskConfig.getProperty(Constants.CFG_KEYSTORE_ALIAS));
 		setKeyStoreStorePass(diskConfig.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
-		String keystoreKeyPass = diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS);
-		setKeyStoreKeyPass(keystoreKeyPass);
+		setKeyStoreKeyPass(diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS));
+		String storeTypeOnDisk = diskConfig.getProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE);
+		if (storeTypeOnDisk == null) /* auto-detect based on old config */
+		{
+			String oldKeyPass = getKeyStoreKeyPassPersistent();
+			String oldStorePass = getKeyStoreStorePassPersistent();
+			if ((oldKeyPass != null && !oldKeyPass.trim().isEmpty()) || (oldStorePass != null && !oldStorePass.trim().isEmpty()))  /* previously stored password exists */
+				storeTypeOnDisk = "disk";
+			else
+				storeTypeOnDisk = "memory";
+		}
+		if ("disk".equals(storeTypeOnDisk))
+			setKeyStorePassStorageType(KeyStorePassStorageType.DISK);
+		else if ("memory".equals(storeTypeOnDisk))
+			setKeyStorePassStorageType(KeyStorePassStorageType.MEMORY);
+		else
+			setKeyStorePassStorageType(null);
 
 		// Set update check
 		String updateCheck = diskConfig.getProperty(Constants.CFG_UPDATE_CHECK);
@@ -330,12 +346,26 @@ public class ConfigurationManager {
 		String keystoreAlias = getKeyStoreAliasPersistent();
 		if (keystoreAlias != STRING_EMPTY)
 			props.setProperty(Constants.CFG_KEYSTORE_ALIAS, keystoreAlias);
-		String keystoreStorePass = getKeyStoreStorePassPersistent();
-		if (keystoreStorePass != STRING_EMPTY)
+
+		KeyStorePassStorageType keystorePassStorageType = getKeyStorePassStorageType();
+		if (keystorePassStorageType == null)
+			props.setProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE, "none");
+		else if (keystorePassStorageType == KeyStorePassStorageType.MEMORY)
+			props.setProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE, "memory");
+		else if (keystorePassStorageType == KeyStorePassStorageType.DISK)
+			props.setProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE, "disk");
+
+		if (keystorePassStorageType == KeyStorePassStorageType.DISK)
+		{
+			String keystoreStorePass = getKeyStoreStorePassPersistent();
+			if (keystoreStorePass == null)
+				keystoreStorePass = STRING_EMPTY;
 			props.setProperty(Constants.CFG_KEYSTORE_STOREPASS, keystoreStorePass);
-		String keystoreKeyPass = getKeyStoreKeyPassPersistent();
-		if (keystoreKeyPass != STRING_EMPTY)
+			String keystoreKeyPass = getKeyStoreKeyPassPersistent();
+			if (keystoreKeyPass == null)
+				keystoreKeyPass = STRING_EMPTY;
 			props.setProperty(Constants.CFG_KEYSTORE_KEYPASS, keystoreKeyPass);
+		}
 
 		if (!getUpdateCheck())
 			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
@@ -839,64 +869,54 @@ public class ConfigurationManager {
 		return alias;
 	}
 
+	public void setKeyStorePassStorageType(KeyStorePassStorageType type) {
+		this.configuration.keystorePassStorageType = type;
+	}
+
+	public KeyStorePassStorageType getKeyStorePassStorageType() {
+		return this.configuration.keystorePassStorageType;
+	}
+
 	public void setKeyStoreStorePass(String storePass) {
-		if (storePass == null || storePass.trim().isEmpty()) {
-			this.configuration.keystoreStorePass = STRING_EMPTY;
-		} else {
-			this.configuration.keystoreStorePass = storePass;
-		}
+		this.configuration.keystoreStorePass = storePass;
 	}
 
 	public void setKeyStoreStorePassOverlay(String storePass) {
-		if (storePass == null || storePass.trim().isEmpty()) {
-			this.configurationOverlay.keystoreStorePass = STRING_EMPTY;
-		} else {
-			this.configurationOverlay.keystoreStorePass = storePass;
-		}
+		this.configurationOverlay.keystoreStorePass = storePass;
 	}
 
 	public String getKeyStoreStorePass() {
 		String storePass = this.configurationOverlay.keystoreStorePass;
 		if (storePass != null)
 			return storePass;
+		if (getKeyStorePassStorageType() != KeyStorePassStorageType.DISK)
+			return null;
 		return getKeyStoreStorePassPersistent();
 	}
 
 	public String getKeyStoreStorePassPersistent() {
-		String storePass = this.configuration.keystoreStorePass;
-		if (storePass == null)
-			storePass = STRING_EMPTY;
-		return storePass;
+		return this.configuration.keystoreStorePass;
 	}
 
 	public void setKeyStoreKeyPass(String keyPass) {
-		if (keyPass == null || keyPass.trim().isEmpty()) {
-			this.configuration.keystoreKeyPass = STRING_EMPTY;
-		} else {
-			this.configuration.keystoreKeyPass = keyPass;
-		}
+		this.configuration.keystoreKeyPass = keyPass;
 	}
 
 	public void setKeyStoreKeyPassOverlay(String keyPass) {
-		if (keyPass == null || keyPass.trim().isEmpty()) {
-			this.configurationOverlay.keystoreKeyPass = STRING_EMPTY;
-		} else {
-			this.configurationOverlay.keystoreKeyPass = keyPass;
-		}
+		this.configurationOverlay.keystoreKeyPass = keyPass;
 	}
 
 	public String getKeyStoreKeyPass() {
 		String keyPass = this.configurationOverlay.keystoreKeyPass;
 		if (keyPass != null)
 			return keyPass;
+		if (getKeyStorePassStorageType() != KeyStorePassStorageType.DISK)
+			return null;
 		return getKeyStoreKeyPassPersistent();
 	}
 
 	public String getKeyStoreKeyPassPersistent() {
-		String keyPass = this.configuration.keystoreKeyPass;
-		if (keyPass == null)
-			keyPass = STRING_EMPTY;
-		return keyPass;
+		return this.configuration.keystoreKeyPass;
 	}
 
 	public void setUpdateCheck(boolean checkUpdate) {

@@ -27,7 +27,10 @@ import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -56,6 +59,7 @@ import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import iaik.security.provider.IAIK;
@@ -77,15 +81,15 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	private Button btnBrowse;
 	private Label lblKeystoreType;
 	Combo cmbKeystoreType;
-	private Label lblKeystoreStorePass;
-	Text txtKeystoreStorePass;
 	private Button btnLoad;
 	private Label lblKeystoreAlias;
 	Combo cmbKeystoreAlias;
+	private Label lblKeystorePassStoreType;
+	Combo cmbKeystorePassStoreType;
+	private Label lblKeystoreStorePass;
+	Text txtKeystoreStorePass;
 	private Label lblKeystoreKeyPass;
 	Text txtKeystoreKeyPass;
-
-	Map<String, String> keystoreTypes;
 
 	private KeyStore ks;
 
@@ -129,24 +133,17 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		StateComposite.anchor(lblKeystoreType).top(txtKeystoreFile, 5).left(0,5).set();
 		StateComposite.setFontHeight(lblKeystoreType, Constants.TEXT_SIZE_NORMAL);
 
+		this.btnLoad = new Button(this.grpKeystore, SWT.NONE);
+		StateComposite.anchor(btnLoad).top(lblKeystoreType, 5).right(100,-5).set();
+		StateComposite.setFontHeight(btnLoad, Constants.TEXT_SIZE_BUTTON);
+
 		this.cmbKeystoreType = new Combo(grpKeystore, SWT.READ_ONLY);
-		StateComposite.anchor(cmbKeystoreType).right(100, -5).top(lblKeystoreType, 5).left(0,15).set();
+		StateComposite.anchor(cmbKeystoreType).top(lblKeystoreType, 5).left(0,15).right(btnLoad, -5).set();
 		StateComposite.setFontHeight(cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
 		StateComposite.disableEventDefault(cmbKeystoreType, SWT.MouseVerticalWheel);
 
-		this.lblKeystoreStorePass = new Label(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreStorePass).top(cmbKeystoreType, 5).left(0,5).set();
-		StateComposite.setFontHeight(lblKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
-
-		this.txtKeystoreStorePass = new Text(this.grpKeystore, SWT.BORDER | SWT.PASSWORD);
-		this.btnLoad = new Button(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(txtKeystoreStorePass).top(lblKeystoreStorePass, 5).left(0,15).right(btnLoad, -5).set();
-		StateComposite.anchor(btnLoad).top(lblKeystoreStorePass, 5).right(100,-5).set();
-		StateComposite.setFontHeight(txtKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.setFontHeight(btnLoad, Constants.TEXT_SIZE_BUTTON);
-
 		this.lblKeystoreAlias = new Label(grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreAlias).top(txtKeystoreStorePass, 5).left(0, 5).set();
+		StateComposite.anchor(lblKeystoreAlias).top(cmbKeystoreType, 5).left(0, 5).set();
 		StateComposite.setFontHeight(lblKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbKeystoreAlias = new Combo(grpKeystore, SWT.NONE);
@@ -154,11 +151,28 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		StateComposite.setFontHeight(cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
 		StateComposite.disableEventDefault(cmbKeystoreAlias, SWT.MouseVerticalWheel);
 
-		this.lblKeystoreKeyPass = new Label(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreKeyPass).top(cmbKeystoreAlias, 5).left(0,5).set();
+		this.lblKeystorePassStoreType = new Label(this.grpKeystore, SWT.NONE);
+		StateComposite.anchor(lblKeystorePassStoreType).top(cmbKeystoreAlias, 5).left(0,5).set();
+		StateComposite.setFontHeight(lblKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
+
+		this.cmbKeystorePassStoreType = new Combo(grpKeystore, SWT.READ_ONLY);
+		StateComposite.anchor(cmbKeystorePassStoreType).top(lblKeystorePassStoreType, 5).left(0,15).right(100,-5).set();
+		StateComposite.setFontHeight(cmbKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.disableEventDefault(cmbKeystorePassStoreType, SWT.MouseVerticalWheel);
+
+		this.lblKeystoreStorePass = new Label(grpKeystore, SWT.NONE);
+		StateComposite.anchor(lblKeystoreStorePass).top(cmbKeystorePassStoreType, 5).left(0,5).set();
+		StateComposite.setFontHeight(lblKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
+
+		this.txtKeystoreStorePass = new Text(grpKeystore, SWT.BORDER | SWT.PASSWORD);
+		StateComposite.anchor(txtKeystoreStorePass).right(100, -5).top(lblKeystoreStorePass, 5).left(0,15).set();
+		StateComposite.setFontHeight(txtKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
+
+		this.lblKeystoreKeyPass = new Label(grpKeystore, SWT.NONE);
+		StateComposite.anchor(lblKeystoreKeyPass).top(txtKeystoreStorePass, 5).left(0,5).set();
 		StateComposite.setFontHeight(lblKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
 
-		this.txtKeystoreKeyPass = new Text(this.grpKeystore, SWT.BORDER | SWT.PASSWORD);
+		this.txtKeystoreKeyPass = new Text(grpKeystore, SWT.BORDER | SWT.PASSWORD);
 		StateComposite.anchor(txtKeystoreKeyPass).top(lblKeystoreKeyPass, 5).left(0,15).right(100,-5).set();
 		StateComposite.setFontHeight(txtKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
 
@@ -251,16 +265,25 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystoreAlias.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				performKeystoreAliasChanged(KeystoreConfigurationComposite.
-						this.cmbKeystoreAlias.getText());
+				performKeystoreAliasChanged(KeystoreConfigurationComposite.this.cmbKeystoreAlias.getText());
+			}
+		});
+
+		this.cmbKeystorePassStoreType.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				performKeystorePassStorageTypeChanged(
+					keystorePassStorageTypeOptions.get(
+						KeystoreConfigurationComposite.this.cmbKeystorePassStoreType.getSelectionIndex()
+					).getLeft()
+				);
 			}
 		});
 
 		this.txtKeystoreKeyPass.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				performKeystoreKeyPassChanged(KeystoreConfigurationComposite.
-						this.txtKeystoreKeyPass.getText());
+				performKeystoreKeyPassChanged(KeystoreConfigurationComposite.this.txtKeystoreKeyPass.getText());
 			}
 		});
 
@@ -289,12 +312,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		Enumeration<String> aliases = this.ks.aliases();
 		while (aliases.hasMoreElements())
 			this.cmbKeystoreAlias.add(aliases.nextElement());
-	}
-
-	private void initKeystoreTypes() {
-		this.keystoreTypes = new HashMap<String, String>();
-		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_PKCS12"), "PKCS12");
-		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_JKS"), "JCEKS");
 	}
 
 	/**
@@ -333,13 +350,34 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
+	protected void performKeystorePassStorageTypeChanged(KeyStorePassStorageType p) {
+		this.configurationContainer.keystorePassStorageType = p;
+		for (int i=0; i<keystorePassStorageTypeOptions.size(); ++i)
+		{
+			if (keystorePassStorageTypeOptions.get(i).getLeft() == p)
+			{
+				this.cmbKeystorePassStoreType.select(i);
+				break;
+			}
+		}
+		
+		boolean showPasswordFields = (p == KeyStorePassStorageType.DISK);
+		this.lblKeystoreKeyPass.setVisible(showPasswordFields);
+		this.txtKeystoreKeyPass.setVisible(showPasswordFields);
+		this.lblKeystoreStorePass.setVisible(showPasswordFields);
+		this.txtKeystoreStorePass.setVisible(showPasswordFields);
+	}
+
 	/**
 	 * @param storepass
 	 */
 	protected void performKeystoreStorePassChanged(String storepass) {
 		log.debug("Changed keystore store password");
 		this.configurationContainer.keystoreStorePass = storepass;
-		this.txtKeystoreStorePass.setText(storepass);
+		if (storepass == null)
+			this.txtKeystoreStorePass.setText("");
+		else
+			this.txtKeystoreStorePass.setText(storepass);
 	}
 
 	/**
@@ -357,7 +395,10 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	protected void performKeystoreKeyPassChanged(String keypass) {
 		log.debug("Changed keystore key password");
 		this.configurationContainer.keystoreKeyPass = keypass;
-		this.txtKeystoreKeyPass.setText(keypass);
+		if (keypass == null)
+			this.txtKeystoreKeyPass.setText("");
+		else
+			this.txtKeystoreKeyPass.setText(keypass);
 	}
 
 	/*
@@ -387,6 +428,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		config.keystoreFile = provider.getKeyStoreFilePersistent();
 		config.keystoreType = provider.getKeyStoreTypePersistent();
 		config.keystoreAlias = provider.getKeyStoreAliasPersistent();
+		config.keystorePassStorageType = provider.getKeyStorePassStorageType();
 		config.keystoreStorePass = provider.getKeyStoreStorePassPersistent();
 		config.keystoreKeyPass = provider.getKeyStoreKeyPassPersistent();
 	}
@@ -403,6 +445,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		String ks = config.keystoreFile;
 		performKeystoreFileChanged(ks);
 		performKeystoreTypeChanged(config.keystoreType);
+		performKeystorePassStorageTypeChanged(config.keystorePassStorageType);
 		performKeystoreStorePassChanged(config.keystoreStorePass);
 		try {
 			File ksf = new File(ks);
@@ -421,6 +464,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		store.setKeyStoreFile(config.keystoreFile);
 		store.setKeyStoreType(config.keystoreType);
 		store.setKeyStoreAlias(config.keystoreAlias);
+		store.setKeyStorePassStorageType(config.keystorePassStorageType);
 		store.setKeyStoreStorePass(config.keystoreStorePass);
 		store.setKeyStoreKeyPass(config.keystoreKeyPass);
 	}
@@ -469,11 +513,30 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
-	 */
+	Map<String, String> keystoreTypes;
+	private void reloadKeystoreTypeStrings() {
+		this.keystoreTypes = new HashMap<String, String>();
+		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_PKCS12"), "PKCS12");
+		this.keystoreTypes.put(Messages.getString("keystore_config.KeystoreType_JKS"), "JCEKS");
+	}
+
+	Vector<Pair<KeyStorePassStorageType, String>> keystorePassStorageTypeOptions;
+	private void reloadKeystorePassStorageTypeStrings() {
+		keystorePassStorageTypeOptions = new Vector<Pair<KeyStorePassStorageType, String>>();
+		java.util.function.BiConsumer<KeyStorePassStorageType, String> add = (k,v) -> {
+			keystorePassStorageTypeOptions.add(new ImmutablePair<KeyStorePassStorageType,String>(k,Messages.getString(v)));
+		};
+		add.accept(null, "keystore_config.SaveToWhere.None");
+		add.accept(KeyStorePassStorageType.MEMORY, "keystore_config.SaveToWhere.Memory");
+		add.accept(KeyStorePassStorageType.DISK, "keystore_config.SaveToWhere.Disk");
+
+		int n = keystorePassStorageTypeOptions.size();
+		cmbKeystorePassStoreType.setVisibleItemCount(n);
+		cmbKeystorePassStoreType.setItems();
+		for (int i=0; i<n; ++i)
+			cmbKeystorePassStoreType.add(keystorePassStorageTypeOptions.get(i).getRight());
+	}
+	
 	@Override
 	public void reloadResources() {
 		this.grpKeystore.setText(Messages.getString("keystore_config.Keystore_Title"));
@@ -481,7 +544,9 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnBrowse.setText(Messages.getString("common.browse"));
 		this.txtKeystoreFile.setToolTipText(Messages.getString("keystore_config.KeystoreFile_ToolTip"));
 		this.lblKeystoreType.setText(Messages.getString("keystore_config.KeystoreType"));
-		initKeystoreTypes();
+		reloadKeystoreTypeStrings();
+		this.lblKeystorePassStoreType.setText(Messages.getString("keystore_config.SaveToWhere.Header"));
+		reloadKeystorePassStorageTypeStrings();
 		this.cmbKeystoreType.setItems(this.keystoreTypes.keySet().toArray(new String[0]));
 		this.lblKeystoreStorePass.setText(Messages.getString("keystore_config.KeystoreStorePass"));
 		this.txtKeystoreStorePass.setToolTipText(Messages.getString("keystore_config.KeystoreStorePass_ToolTip"));

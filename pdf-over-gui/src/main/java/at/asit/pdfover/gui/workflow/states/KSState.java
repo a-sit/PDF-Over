@@ -85,7 +85,8 @@ public class KSState extends State {
 			}
 			String alias = config.getKeyStoreAlias();
 			String storePass = config.getKeyStoreStorePass();
-			if (storePass.isEmpty()) {
+			// TODO trial and error
+			if (storePass == null) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
 						getStateMachine().getMainShell(),
 						Messages.getString("keystore_config.KeystoreStorePass"),
@@ -93,7 +94,7 @@ public class KSState extends State {
 				storePass = pwd.open();
 			}
 			String keyPass = config.getKeyStoreKeyPass();
-			if (keyPass.isEmpty()) {
+			if (keyPass == null) {
 				PasswordInputDialog pwd = new PasswordInputDialog(
 						getStateMachine().getMainShell(),
 						Messages.getString("keystore_config.KeystoreKeyPass"),

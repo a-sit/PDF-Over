@@ -143,10 +143,12 @@ public class ConfigurationDataInMemory {
 	public boolean autoPositionSignature = false;
 
 	/** Keystore signing options */
+	public enum KeyStorePassStorageType { MEMORY, DISK };
 	public Boolean keystoreEnabled = null;
 	public String keystoreFile = null;
 	public String keystoreType = null;
 	public String keystoreAlias = null;
+	public KeyStorePassStorageType keystorePassStorageType = null;
 	public String keystoreStorePass = null;
 	public String keystoreKeyPass = null;
 

@@ -16,7 +16,6 @@
 package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
-import at.asit.pdfover.signator.SignaturePosition;
 
 /**
  * CLI Argument to set the BKU to use
