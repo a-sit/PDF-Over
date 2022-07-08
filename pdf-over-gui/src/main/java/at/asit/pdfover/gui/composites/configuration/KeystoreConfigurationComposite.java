@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -46,6 +47,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,7 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.PasswordInputDialog;
 import at.asit.pdfover.gui.exceptions.CantLoadKeystoreException;
 import at.asit.pdfover.gui.exceptions.KeystoreAliasDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreAliasNoKeyException;
@@ -223,6 +226,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				performKeystoreStorePassChanged(KeystoreConfigurationComposite.
 						this.txtKeystoreStorePass.getText());
 			}
+			
 		});
 
 		this.btnLoad.addSelectionListener(new SelectionAdapter() {
@@ -231,7 +235,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				File f = new File(KeystoreConfigurationComposite.this
 						.configurationContainer.keystoreFile);
 				try {
-					loadKeystore();
+					loadKeystore(true);
 				} catch (KeyStoreException ex) {
 					log.error("Error loading keystore", ex);
 					showErrorDialog(Messages.getString("error.KeyStore"));
@@ -292,6 +296,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		// Load localized strings
+		
 		reloadResources();
 	}
 
@@ -300,10 +305,36 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		e.open();
 	}
 
-	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
-		ConfigurationDataInMemory config = this.configurationContainer;
-		this.ks = KeystoreUtils.tryLoadKeystore(new File(config.keystoreFile), config.keystoreType, config.keystoreStorePass);
+	void loadKeystore(boolean force) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
 		this.cmbKeystoreAlias.remove(0, this.cmbKeystoreAlias.getItemCount()-1);
+
+		ConfigurationDataInMemory config = this.configurationContainer;
+		this.ks = null;
+		String pass = config.keystoreStorePass;
+		if (!force && pass == null)
+			throw new UnrecoverableKeyException("No password specified");
+
+		while (this.ks == null)
+		{
+			if (pass == null)
+			{
+				pass = new PasswordInputDialog(
+						getShell(),
+						Messages.getString("keystore_config.KeystoreStorePass"),
+						Messages.getString("keystore.KeystoreStorePassEntry")).open();
+				if (pass == null)
+					throw new UnrecoverableKeyException("User cancelled password input");
+			}
+
+			try {
+				this.ks = KeystoreUtils.tryLoadKeystore(new File(config.keystoreFile), config.keystoreType, pass);
+			} catch (UnrecoverableKeyException ex) {
+				new ErrorDialog(getShell(), Messages.getString("error.KeyStoreStorePass"), BUTTONS.OK).open();
+				pass = null;
+			}
+		}
+		config.keystoreStorePass = pass;
+
 		Enumeration<String> aliases = this.ks.aliases();
 		while (aliases.hasMoreElements())
 			this.cmbKeystoreAlias.add(aliases.nextElement());
@@ -437,6 +468,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	public void loadConfiguration() {
 		// Initialize form fields from configuration Container
 		ConfigurationDataInMemory config = this.configurationContainer;
+		
 		String ks = config.keystoreFile;
 		performKeystoreFileChanged(ks);
 		performKeystoreTypeChanged(config.keystoreType);
@@ -445,9 +477,9 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		try {
 			File ksf = new File(ks);
 			if (ksf.exists())
-				loadKeystore();
+				loadKeystore(false);
 		} catch (Exception e) {
-			log.error("Error loading keystore", e);
+			log.info("Failed to load keystore on init", e);
 		}
 		performKeystoreAliasChanged(config.keystoreAlias);
 		performKeystoreKeyPassChanged(config.keystoreKeyPass);
@@ -460,8 +492,16 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		store.setKeyStoreType(config.keystoreType);
 		store.setKeyStoreAlias(config.keystoreAlias);
 		store.setKeyStorePassStorageType(config.keystorePassStorageType);
-		store.setKeyStoreStorePassPersistent(config.keystoreStorePass);
-		store.setKeyStoreKeyPassPersistent(config.keystoreKeyPass);
+		if (config.keystorePassStorageType == KeyStorePassStorageType.DISK)
+		{
+			store.setKeyStoreStorePassPersistent(config.keystoreStorePass);
+			store.setKeyStoreKeyPassPersistent(config.keystoreKeyPass);
+		}
+		else if (config.keystorePassStorageType == KeyStorePassStorageType.MEMORY)
+		{
+			store.setKeyStoreStorePassOverlay(config.keystoreStorePass);
+			store.setKeyStoreKeyPassOverlay(config.keystoreKeyPass);
+		}
 	}
 
 	/*
@@ -475,39 +515,68 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	public void validateSettings(int resumeFrom) throws Exception {
 		ConfigurationDataInMemory config = this.configurationContainer;
 		switch (resumeFrom) {
-		case 0:
-			String fname = config.keystoreFile;
-			if (fname.isEmpty())
-				break; //no checks required
-			File f = new File(fname);
-			if (!f.exists() || !f.isFile())
-				throw new KeystoreDoesntExistException(f, 4); //skip next checks
-			// Fall through
-		case 1:
-			try {
-				loadKeystore();
-			} catch (Exception e) {
-				throw new CantLoadKeystoreException(e, 4); //skip next checks
+			case 0:
+				String fname = config.keystoreFile;
+				
+				if (fname.isEmpty())
+					break; //no checks required
+					
+				File f = new File(fname);
+				if (!f.exists() || !f.isFile())
+					throw new KeystoreDoesntExistException(f, 4); //skip next checks
+				// Fall through
+			case 1:
+				try {
+					loadKeystore(true);
+				} catch (Exception e) {
+					throw new CantLoadKeystoreException(e, 4); //skip next checks
+				}
+				// Fall through
+			case 2:
+			{
+				String alias = config.keystoreAlias;
+				if (!this.ks.containsAlias(alias))
+					throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
+				if (!this.ks.isKeyEntry(alias))
+					throw new KeystoreAliasNoKeyException(alias, 4); //skip next check
 			}
-			// Fall through
-		case 2:
-			String alias = config.keystoreAlias;
-			if (!this.ks.containsAlias(alias))
-				throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
-			if (!this.ks.isKeyEntry(alias))
-				throw new KeystoreAliasNoKeyException(alias, 4); //skip next check
-			// Fall through
-		case 3:
-			try {
-				alias = config.keystoreAlias;
-				String keypass = config.keystoreKeyPass;
-				this.ks.getKey(alias, keypass.toCharArray());
-			} catch (Exception e) {
-				throw new KeystoreKeyPasswordException(4);
-			}
+				// Fall through
+			case 3:
+				try {
+					String alias = config.keystoreAlias;
+					String keypass = config.keystoreKeyPass;
+					if (keypass != null)
+					{ /* if no keypass is specified, this will happen at signature time */
+						Key key = null;
+						while (key == null)
+						{
+							if (keypass == null)
+							{
+								keypass = new PasswordInputDialog(
+									getShell(),
+									Messages.getString("keystore_config.KeystoreKeyPass"),
+									Messages.getString("keystore.KeystoreKeyPassEntry")).open();
+								
+								if (keypass == null)
+									throw new UnrecoverableKeyException("User cancelled password input");
+							}
+
+							try {
+								key = this.ks.getKey(alias, keypass.toCharArray());
+							} catch (UnrecoverableKeyException ex) {
+								new ErrorDialog(getShell(), Messages.getString("error.KeyStoreKeyPass"), BUTTONS.OK).open();
+								keypass = null;
+							}
+						}
+						config.keystoreKeyPass = keypass;
+					}
+				} catch (Exception e) {
+					throw new KeystoreKeyPasswordException(4);
+				}
 		}
 	}
 
+	
 	Map<String, String> keystoreTypes;
 	private void reloadKeystoreTypeStrings() {
 		this.keystoreTypes = new HashMap<String, String>();
@@ -532,7 +601,9 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			cmbKeystorePassStoreType.add(keystorePassStorageTypeOptions.get(i).getRight());
 	}
 	
+	
 	@Override
+	
 	public void reloadResources() {
 		this.grpKeystore.setText(Messages.getString("keystore_config.Keystore_Title"));
 		this.lblKeystoreFile.setText(Messages.getString("keystore_config.KeystoreFile"));

@@ -19,7 +19,6 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.File;
 import java.security.Key;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.UnrecoverableKeyException;
 
 import org.eclipse.swt.SWT;
@@ -99,11 +98,11 @@ public class KSState extends State {
 			while (keyStore == null) {
 				if (storePass == null)
 				{
-					PasswordInputDialog pwd = new PasswordInputDialog(
+					storePass = new PasswordInputDialog(
 							getStateMachine().getMainShell(),
 							Messages.getString("keystore_config.KeystoreStorePass"),
-							Messages.getString("keystore.KeystoreStorePassEntry"));
-					storePass = pwd.open();
+							Messages.getString("keystore.KeystoreStorePassEntry")).open();
+
 					if (storePass == null)
 					{
 						this.setNextState(new BKUSelectionState(getStateMachine()));
@@ -140,11 +139,11 @@ public class KSState extends State {
 			String keyPass = config.getKeyStoreKeyPass();
 			while (key == null) {
 				if (keyPass == null) {
-					PasswordInputDialog pwd = new PasswordInputDialog(
+					keyPass = new PasswordInputDialog(
 							getStateMachine().getMainShell(),
 							Messages.getString("keystore_config.KeystoreKeyPass"),
-							Messages.getString("keystore.KeystoreKeyPassEntry"));
-					keyPass = pwd.open();
+							Messages.getString("keystore.KeystoreKeyPassEntry")).open();
+
 					if (keyPass == null)
 					{
 						this.setNextState(new BKUSelectionState(getStateMachine()));
@@ -184,16 +183,10 @@ public class KSState extends State {
 			signingState.setKSSigner(file, alias, storePass, keyPass, type);
 		} catch (SignatureException e) {
 			log.error("Error loading keystore", e);
-			ErrorDialog dialog = new ErrorDialog(
-					getStateMachine().getMainShell(),
-					Messages.getString("error.KeyStore"),
-					BUTTONS.RETRY_CANCEL);
-			if (dialog.open() != SWT.RETRY) {
-				//getStateMachine().exit();
+			if (askShouldRetry("error.KeyStore"))
+				this.run(); /* recurse */
+			else
 				this.setNextState(new BKUSelectionState(getStateMachine()));
-				return;
-			}
-			this.run();
 			return;
 		}
 
