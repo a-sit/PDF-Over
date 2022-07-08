@@ -296,11 +296,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		e.open();
 	}
 
-	static
-	{
-		IAIK.addAsProvider();
-	}
-
 	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		ConfigurationDataInMemory config =
 				KeystoreConfigurationComposite.this.configurationContainer;
