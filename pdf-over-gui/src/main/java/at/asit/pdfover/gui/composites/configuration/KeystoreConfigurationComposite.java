@@ -235,7 +235,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				File f = new File(KeystoreConfigurationComposite.this
 						.configurationContainer.keystoreFile);
 				try {
-					loadKeystore(true);
+					loadKeystore();
 				} catch (KeyStoreException ex) {
 					log.error("Error loading keystore", ex);
 					showErrorDialog(Messages.getString("error.KeyStore"));
@@ -305,14 +305,12 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		e.open();
 	}
 
-	void loadKeystore(boolean force) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
+	void loadKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
 		this.cmbKeystoreAlias.remove(0, this.cmbKeystoreAlias.getItemCount()-1);
 
 		ConfigurationDataInMemory config = this.configurationContainer;
 		this.ks = null;
 		String pass = config.keystoreStorePass;
-		if (!force && pass == null)
-			throw new UnrecoverableKeyException("No password specified");
 
 		while (this.ks == null)
 		{
@@ -392,6 +390,11 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.txtKeystoreKeyPass.setVisible(showPasswordFields);
 		this.lblKeystoreStorePass.setVisible(showPasswordFields);
 		this.txtKeystoreStorePass.setVisible(showPasswordFields);
+		if (showPasswordFields)
+		{ /* get rid of potential nulls */
+			performKeystoreKeyPassChanged(this.txtKeystoreKeyPass.getText());
+			performKeystoreStorePassChanged(this.txtKeystoreStorePass.getText());
+		}
 	}
 
 	/**
@@ -476,8 +479,8 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		performKeystoreStorePassChanged(config.keystoreStorePass);
 		try {
 			File ksf = new File(ks);
-			if (ksf.exists())
-				loadKeystore(false);
+			if (ksf.exists() && config.keystoreStorePass != null)
+				loadKeystore();
 		} catch (Exception e) {
 			log.info("Failed to load keystore on init", e);
 		}
@@ -488,10 +491,10 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void storeConfiguration(ConfigurationManager store) {
 		ConfigurationDataInMemory config = this.configurationContainer;
-		store.setKeyStoreFile(config.keystoreFile);
-		store.setKeyStoreType(config.keystoreType);
-		store.setKeyStoreAlias(config.keystoreAlias);
-		store.setKeyStorePassStorageType(config.keystorePassStorageType);
+		store.setKeyStoreFilePersistent(config.keystoreFile);
+		store.setKeyStoreTypePersistent(config.keystoreType);
+		store.setKeyStoreAliasPersistent(config.keystoreAlias);
+		store.setKeyStorePassStorageTypePersistent(config.keystorePassStorageType);
 		if (config.keystorePassStorageType == KeyStorePassStorageType.DISK)
 		{
 			store.setKeyStoreStorePassPersistent(config.keystoreStorePass);
@@ -527,7 +530,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				// Fall through
 			case 1:
 				try {
-					loadKeystore(true);
+					loadKeystore();
 				} catch (Exception e) {
 					throw new CantLoadKeystoreException(e, 4); //skip next checks
 				}

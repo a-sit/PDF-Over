@@ -228,7 +228,7 @@ public class MainWindow {
 			@Override
 			public void shellClosed(ShellEvent e) {
 				log.debug("Closing main window");
-				MainWindow.this.stateMachine.configProvider.setMainWindowSize(getShell().getSize());
+				MainWindow.this.stateMachine.configProvider.setMainWindowSizePersistent(getShell().getSize());
 				try {
 					MainWindow.this.stateMachine.configProvider.saveToDisk();
 				} catch (IOException e1) {

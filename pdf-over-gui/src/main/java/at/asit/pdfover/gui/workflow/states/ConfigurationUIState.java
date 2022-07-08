@@ -74,7 +74,11 @@ public class ConfigurationUIState extends State {
 		if(config.isUserDone())
 		{
 			this.reloadResources();
-			this.setNextState(status.getPreviousState());
+			State previousState = status.getPreviousState();
+			if (previousState instanceof OutputState)
+				this.setNextState(new OpenState(getStateMachine()));
+			else
+				this.setNextState(previousState);
 		}
 	}
 

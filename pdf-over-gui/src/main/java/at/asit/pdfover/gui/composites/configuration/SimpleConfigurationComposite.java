@@ -665,11 +665,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	@Override
 	public void storeConfiguration(ConfigurationManager store) {
-		store.setDefaultMobileNumber(this.configurationContainer.getMobileNumber());
-		store.setDefaultEmblem(this.configurationContainer.getEmblem());
-		store.setSignatureLocale(this.configurationContainer.signatureLocale);
-		store.setSignatureNote(this.configurationContainer.signatureNote);
-		store.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
+		store.setDefaultMobileNumberPersistent(this.configurationContainer.getMobileNumber());
+		store.setDefaultEmblemPersistent(this.configurationContainer.getEmblem());
+		store.setSignatureLocalePersistent(this.configurationContainer.signatureLocale);
+		store.setSignatureNotePersistent(this.configurationContainer.signatureNote);
+		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile().name());
 	}
 
 	/*

@@ -84,58 +84,58 @@ public class ConfigurationManager {
 
 		diskConfig.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
 
-		setDefaultEmblem(diskConfig.getProperty(Constants.CFG_EMBLEM));
+		setDefaultEmblemPersistent(diskConfig.getProperty(Constants.CFG_EMBLEM));
 
-		setDefaultMobileNumber(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
+		setDefaultMobileNumberPersistent(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
 
-		setProxyHost(diskConfig.getProperty(Constants.CFG_PROXY_HOST));
-		setProxyUser(diskConfig.getProperty(Constants.CFG_PROXY_USER));
-		setProxyPass(diskConfig.getProperty(Constants.CFG_PROXY_PASS));
+		setProxyHostPersistent(diskConfig.getProperty(Constants.CFG_PROXY_HOST));
+		setProxyUserPersistent(diskConfig.getProperty(Constants.CFG_PROXY_USER));
+		setProxyPassPersistent(diskConfig.getProperty(Constants.CFG_PROXY_PASS));
 
-		setDefaultOutputFolder(diskConfig.getProperty(Constants.CFG_OUTPUT_FOLDER));
+		setDefaultOutputFolderPersistent(diskConfig.getProperty(Constants.CFG_OUTPUT_FOLDER));
 
 		String postFix = diskConfig.getProperty(Constants.CFG_POSTFIX);
 		if (postFix == null)
-			setSaveFilePostFix(Constants.DEFAULT_POSTFIX);
+			setSaveFilePostFixPersistent(Constants.DEFAULT_POSTFIX);
 		else
-			setSaveFilePostFix(postFix);
+			setSaveFilePostFixPersistent(postFix);
 
 		String localeString = diskConfig.getProperty(Constants.CFG_LOCALE);
 
 		Locale targetLocale = LocaleSerializer.parseFromString(localeString);
 		if (targetLocale != null)
-			setLocale(targetLocale);
+			setInterfaceLocalePersistent(targetLocale);
 
 		String signatureLocaleString = diskConfig.getProperty(Constants.CFG_SIGNATURE_LOCALE);
 
 		Locale signatureTargetLocale = LocaleSerializer.parseFromString(signatureLocaleString);
 		if (signatureTargetLocale != null)
-			setSignatureLocale(signatureTargetLocale);
+			setSignatureLocalePersistent(signatureTargetLocale);
 
 		String useMarker = diskConfig.getProperty(Constants.CFG_USE_MARKER);
 		if (useMarker != null)
-			setUseMarker(useMarker.equalsIgnoreCase(Constants.TRUE));
+			setUseMarkerPersistent(useMarker.equalsIgnoreCase(Constants.TRUE));
 
 		String useSignatureFields = diskConfig.getProperty(Constants.CFG_USE_SIGNATURE_FIELDS);
 		if (useSignatureFields != null)
-			setUseSignatureFields(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
+			setUseSignatureFieldsPersistent(useSignatureFields.equalsIgnoreCase(Constants.TRUE));
 
 		String enablePlaceholder = diskConfig.getProperty(Constants.CFG_ENABLE_PLACEHOLDER);
 		if (enablePlaceholder != null)
-			setEnablePlaceholderUsage(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
+			setEnablePlaceholderUsagePersistent(enablePlaceholder.equalsIgnoreCase(Constants.TRUE));
 
 		String signatureProfileName = diskConfig.getProperty(Constants.SIGNATURE_PROFILE);
 		if (signatureProfileName != null)
-			setSignatureProfile(signatureProfileName);
+			setSignatureProfilePersistent(signatureProfileName);
 
 		if (diskConfig.containsKey(Constants.CFG_SIGNATURE_NOTE))
-			setSignatureNote(diskConfig.getProperty(Constants.CFG_SIGNATURE_NOTE));
+			setSignatureNotePersistent(diskConfig.getProperty(Constants.CFG_SIGNATURE_NOTE));
 		else
-			setSignatureNote(Profile.getProfile(getSignatureProfile()).getDefaultSignatureBlockNote(getSignatureLocale()));
+			setSignatureNotePersistent(Profile.getProfile(getSignatureProfile()).getDefaultSignatureBlockNote(getSignatureLocale()));
 
 		String compat = diskConfig.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
-			setSignaturePdfACompat(compat.equalsIgnoreCase(Constants.TRUE));
+			setSignaturePdfACompatPersistent(compat.equalsIgnoreCase(Constants.TRUE));
 
 		String bkuUrl = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_URL);
 		if (bkuUrl != null && !bkuUrl.isEmpty())
@@ -164,7 +164,7 @@ public class ConfigurationManager {
 			int port = Integer.parseInt(proxyPortString);
 
 			if (port > 0 && port <= 0xFFFF)
-				setProxyPort(port);
+				setProxyPortPersistent(port);
 			else
 				log.warn("Proxy port is out of range!: " + port);
 		}
@@ -183,7 +183,7 @@ public class ConfigurationManager {
 				defaultBKU = BKUs.NONE;
 			}
 		}
-		setDefaultBKU(defaultBKU);
+		setDefaultBKUPersistent(defaultBKU);
 
 		// Set Signature placeholder transparency
 		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
@@ -221,15 +221,15 @@ public class ConfigurationManager {
 
 		// Set Signature Position
 		String signaturePositionStr = diskConfig.getProperty(Constants.CFG_SIGNATURE_POSITION);
-		setAutoPositionSignature(signaturePositionStr != null && signaturePositionStr.trim().equals("auto"));
+		setAutoPositionSignaturePersistent(signaturePositionStr != null && signaturePositionStr.trim().equals("auto"));
 
 		//Set keystore stuff
 		String keystoreEnabled = diskConfig.getProperty(Constants.CFG_KEYSTORE_ENABLED);
 		if (keystoreEnabled != null)
-			setKeyStoreEnabled(keystoreEnabled.equalsIgnoreCase(Constants.TRUE));
-		setKeyStoreFile(diskConfig.getProperty(Constants.CFG_KEYSTORE_FILE));
-		setKeyStoreType(diskConfig.getProperty(Constants.CFG_KEYSTORE_TYPE));
-		setKeyStoreAlias(diskConfig.getProperty(Constants.CFG_KEYSTORE_ALIAS));
+			setKeyStoreEnabledPersistent(keystoreEnabled.equalsIgnoreCase(Constants.TRUE));
+		setKeyStoreFilePersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_FILE));
+		setKeyStoreTypePersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_TYPE));
+		setKeyStoreAliasPersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_ALIAS));
 		setKeyStoreStorePassPersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_STOREPASS));
 		setKeyStoreKeyPassPersistent(diskConfig.getProperty(Constants.CFG_KEYSTORE_KEYPASS));
 		String storeTypeOnDisk = diskConfig.getProperty(Constants.CFG_KEYSTORE_PASSSTORETYPE);
@@ -243,16 +243,16 @@ public class ConfigurationManager {
 				storeTypeOnDisk = "memory";
 		}
 		if ("disk".equals(storeTypeOnDisk))
-			setKeyStorePassStorageType(KeyStorePassStorageType.DISK);
+			setKeyStorePassStorageTypePersistent(KeyStorePassStorageType.DISK);
 		else if ("memory".equals(storeTypeOnDisk))
-			setKeyStorePassStorageType(KeyStorePassStorageType.MEMORY);
+			setKeyStorePassStorageTypePersistent(KeyStorePassStorageType.MEMORY);
 		else
-			setKeyStorePassStorageType(null);
+			setKeyStorePassStorageTypePersistent(null);
 
 		// Set update check
 		String updateCheck = diskConfig.getProperty(Constants.CFG_UPDATE_CHECK);
 		if (updateCheck != null)
-			setUpdateCheck(!updateCheck.equalsIgnoreCase(Constants.FALSE));
+			setUpdateCheckPersistent(!updateCheck.equalsIgnoreCase(Constants.FALSE));
 		
 		log.info("Successfully loaded config from: " + getConfigurationFileName());
 		loaded = true;
@@ -292,7 +292,7 @@ public class ConfigurationManager {
 		Point size = this.configuration.mainWindowSize;
 		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y);
 
-		Locale configLocale = getLocale();
+		Locale configLocale = getInterfaceLocale();
 		if(configLocale != null) {
 			props.setProperty(Constants.CFG_LOCALE, LocaleSerializer.getParsableString(configLocale));
 		}
@@ -390,7 +390,7 @@ public class ConfigurationManager {
 	}
 	public String getConfigurationFileName() { return this.configurationFile; }
 
-	public void setDefaultBKU(BKUs bku) {
+	public void setDefaultBKUPersistent(BKUs bku) {
 		this.configuration.defaultBKU = bku;
 	}
 
@@ -409,7 +409,7 @@ public class ConfigurationManager {
 		return this.configuration.defaultBKU;
 	}
 
-	public void setAutoPositionSignature(boolean state) {
+	public void setAutoPositionSignaturePersistent(boolean state) {
 		this.configuration.autoPositionSignature = state;
 	}
 
@@ -433,7 +433,7 @@ public class ConfigurationManager {
 		return this.configuration.placeholderTransparency;
 	}
 
-	public void setDefaultMobileNumber(String number) {
+	public void setDefaultMobileNumberPersistent(String number) {
 		if (number == null || number.trim().isEmpty()) {
 			this.configuration.setMobileNumber(STRING_EMPTY);
 		} else {
@@ -463,14 +463,6 @@ public class ConfigurationManager {
 		return number;
 	}
 
-	public void setDefaultMobilePassword(String password) {
-		if (password == null || password.trim().isEmpty()) {
-			this.configuration.mobilePassword = STRING_EMPTY;
-		} else {
-			this.configuration.mobilePassword = password;
-		}
-	}
-
 	public void setDefaultMobilePasswordOverlay(String password) {
 		if (password == null || password.trim().isEmpty()) {
 			this.configurationOverlay.mobilePassword = STRING_EMPTY;
@@ -484,7 +476,7 @@ public class ConfigurationManager {
 		return this.configurationOverlay.mobilePassword;
 	}
 
-	public void setDefaultEmblem(String emblem) {
+	public void setDefaultEmblemPersistent(String emblem) {
 		try {
 			if (emblem == null || emblem.trim().isEmpty()) {
 				this.configuration.setEmblem(STRING_EMPTY);
@@ -532,7 +524,7 @@ public class ConfigurationManager {
 		return emblem;
 	}
 
-	public void setProxyHost(String host) {
+	public void setProxyHostPersistent(String host) {
 		if (host == null || host.trim().isEmpty()) {
 			this.configuration.proxyHost = STRING_EMPTY;
 		} else {
@@ -562,7 +554,7 @@ public class ConfigurationManager {
 		return host;
 	}
 
-	public void setProxyPort(int port) {
+	public void setProxyPortPersistent(int port) {
 		try {
 			this.configuration.setProxyPort(port);
 		} catch (InvalidPortException e) {
@@ -591,7 +583,7 @@ public class ConfigurationManager {
 		return this.configuration.getProxyPort();
 	}
 
-	public void setProxyUser(String user) {
+	public void setProxyUserPersistent(String user) {
 		if (user == null || user.trim().isEmpty()) {
 			this.configuration.proxyUser = STRING_EMPTY;
 		} else {
@@ -621,7 +613,7 @@ public class ConfigurationManager {
 		return user;
 	}
 
-	public void setProxyPass(String pass) {
+	public void setProxyPassPersistent(String pass) {
 		if (pass == null || pass.trim().isEmpty()) {
 			this.configuration.proxyPass = STRING_EMPTY;
 		} else {
@@ -651,7 +643,7 @@ public class ConfigurationManager {
 		return pass;
 	}
 
-	public void setDefaultOutputFolder(String outputFolder) {
+	public void setDefaultOutputFolderPersistent(String outputFolder) {
 		if (outputFolder == null || outputFolder.trim().isEmpty()) {
 			this.configuration.outputFolder = STRING_EMPTY;
 		} else {
@@ -693,7 +685,7 @@ public class ConfigurationManager {
 		return this.configuration.mobileBKUBase64;
 	}
 
-	public void setSignatureNote(String note) {
+	public void setSignatureNotePersistent(String note) {
 		if (note == null || note.trim().isEmpty()) {
 			this.configuration.signatureNote = STRING_EMPTY;
 		} else {
@@ -708,24 +700,24 @@ public class ConfigurationManager {
 		return note;
 	}
 
-	public void setLocale(Locale locale) {
+	public void setInterfaceLocalePersistent(Locale locale) {
 		if(locale == null) {
-			this.configuration.locale = Messages.getDefaultLocale();
+			this.configuration.interfaceLocale = Messages.getDefaultLocale();
 		} else {
-			this.configuration.locale = locale;
+			this.configuration.interfaceLocale = locale;
 			Locale.setDefault(locale);
 			Messages.setLocale(locale);
 		}
 	}
 
-	public Locale getLocale() {
-		Locale locale = this.configuration.locale;
+	public Locale getInterfaceLocale() {
+		Locale locale = this.configuration.interfaceLocale;
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
 		return locale;
 	}
 
-	public void setSignatureLocale(Locale locale) {
+	public void setSignatureLocalePersistent(Locale locale) {
 		if(locale == null) {
 			this.configuration.signatureLocale = Messages.getDefaultLocale();
 		} else {
@@ -740,7 +732,7 @@ public class ConfigurationManager {
 		return locale;
 	}
 
-	public void setSignaturePdfACompat(boolean compat) {
+	public void setSignaturePdfACompatPersistent(boolean compat) {
 		this.configuration.signaturePDFACompat = compat;
 	}
 
@@ -748,7 +740,7 @@ public class ConfigurationManager {
 		return this.configuration.signaturePDFACompat;
 	}
 
-	public void setKeyStoreEnabled(Boolean enabled) {
+	public void setKeyStoreEnabledPersistent(Boolean enabled) {
 		this.configuration.keystoreEnabled = enabled;
 	}
 
@@ -770,7 +762,7 @@ public class ConfigurationManager {
 		return enabled;
 	}
 
-	public void setKeyStoreFile(String file) {
+	public void setKeyStoreFilePersistent(String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configuration.keystoreFile = STRING_EMPTY;
 		} else {
@@ -800,7 +792,7 @@ public class ConfigurationManager {
 		return file;
 	}
 
-	public void setKeyStoreType(String type) {
+	public void setKeyStoreTypePersistent(String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configuration.keystoreType = STRING_EMPTY;
 		} else {
@@ -830,7 +822,7 @@ public class ConfigurationManager {
 		return type;
 	}
 
-	public void setKeyStoreAlias(String alias) {
+	public void setKeyStoreAliasPersistent(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configuration.keystoreAlias = STRING_EMPTY;
 		} else {
@@ -860,7 +852,7 @@ public class ConfigurationManager {
 		return alias;
 	}
 
-	public void setKeyStorePassStorageType(KeyStorePassStorageType type) {
+	public void setKeyStorePassStorageTypePersistent(KeyStorePassStorageType type) {
 		this.configuration.keystorePassStorageType = type;
 	}
 
@@ -910,7 +902,7 @@ public class ConfigurationManager {
 		return this.configuration.keystoreKeyPass;
 	}
 
-	public void setUpdateCheck(boolean checkUpdate) {
+	public void setUpdateCheckPersistent(boolean checkUpdate) {
 		this.configuration.updateCheck = checkUpdate;
 	}
 
@@ -918,7 +910,7 @@ public class ConfigurationManager {
 		return this.configuration.updateCheck;
 	}
 
-	public void setMainWindowSize(Point size) {
+	public void setMainWindowSizePersistent(Point size) {
 		this.configuration.mainWindowSize = size;
 	}
 
@@ -938,25 +930,25 @@ public class ConfigurationManager {
 		return this.configuration.getUseSignatureFields();
 	}
 
-	public void setUseSignatureFields(boolean useFields) {
+	public void setUseSignatureFieldsPersistent(boolean useFields) {
 		this.configuration.setUseSignatureFields(useFields);
-		if (useFields) setUseMarker(false);
+		if (useFields) setUseMarkerPersistent(false);
 	}
 
 	public boolean getUseMarker() {
 		return this.configuration.getUseMarker();
 	}
 
-	public void setUseMarker(boolean useMarker) {
+	public void setUseMarkerPersistent(boolean useMarker) {
 		this.configuration.setUseMarker(useMarker);
-		if (useMarker) setUseSignatureFields(false);
+		if (useMarker) setUseSignatureFieldsPersistent(false);
 	}
 
-	public void setSignatureProfile(String profile) {
+	public void setSignatureProfilePersistent(String profile) {
 		this.configuration.setSignatureProfile(Profile.getProfile(profile));
 	}
 
-    public void setSaveFilePostFix(String postFix) {
+    public void setSaveFilePostFixPersistent(String postFix) {
         this.configuration.saveFilePostFix = postFix;
     }
 
@@ -968,7 +960,7 @@ public class ConfigurationManager {
 		return this.configuration.getSignatureProfile().name();
 	}
 
-	public void setEnablePlaceholderUsage(boolean bool) {
+	public void setEnablePlaceholderUsagePersistent(boolean bool) {
 		this.configuration.enabledPlaceholderUsage = bool;
 	}
 

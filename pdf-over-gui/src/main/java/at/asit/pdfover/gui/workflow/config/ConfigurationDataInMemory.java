@@ -122,7 +122,7 @@ public class ConfigurationDataInMemory {
 	public String signatureNote = null;
 
 	/** Holds the locale */
-	public Locale locale = null;
+	public Locale interfaceLocale = null;
 	
 	/** Holds the signature locale */
 	public Locale signatureLocale = null;
