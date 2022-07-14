@@ -19,11 +19,14 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.widgets.Button;
 // Imports
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -63,6 +66,9 @@ public abstract class StateComposite extends Composite {
 	{
 		c.addListener(event, (Event e) -> { e.doit = false; });
 	}
+
+	public static void setLocalizedText(Label l, String messageKey) { l.setText(Messages.getString(messageKey)); l.requestLayout(); }
+	public static void setLocalizedText(Button b, String messageKey) { b.setText(Messages.getString(messageKey)); b.requestLayout(); }
 
     public static void setFontHeight(Control c, int height)
     {

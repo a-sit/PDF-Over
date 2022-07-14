@@ -23,8 +23,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -155,8 +153,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 * @param style
 	 * @param state
 	 */
-	public MobileBKUEnterNumberComposite(Composite parent, int style,
-			State state) {
+	public MobileBKUEnterNumberComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 		setLayout(new FormLayout());
 
@@ -181,7 +178,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
-		this.lbl_number.setText(Messages.getString("mobileBKU.number"));
 		StateComposite.anchor(lbl_number).bottom(50, -10).right(50, -10).set();
 
 		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
@@ -198,16 +194,13 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
 		StateComposite.anchor(lbl_password).top(50, 10).right(50, -10).set();
 		this.lbl_password.setAlignment(SWT.RIGHT);
-		this.lbl_password.setText(Messages.getString("mobileBKU.password"));
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		StateComposite.anchor(btn_ok).bottom(100, -20).right(100, -20).set();
-		this.btn_ok.setText(Messages.getString("common.Ok"));
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		StateComposite.anchor(btn_cancel).bottom(100, -20).right(btn_ok, -10).set();
-		this.btn_cancel.setText(Messages.getString("common.Cancel"));
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
@@ -287,9 +280,10 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_number.setText(Messages.getString("mobileBKU.number"));
-		this.lbl_password.setText(Messages.getString("mobileBKU.password"));
-		this.btn_ok.setText(Messages.getString("common.Ok"));
+		StateComposite.setLocalizedText(lbl_number, "mobileBKU.number");
+		StateComposite.setLocalizedText(lbl_password, "mobileBKU.password");
+		StateComposite.setLocalizedText(btn_ok, "common.Ok");
+		StateComposite.setLocalizedText(btn_cancel, "common.Cancel");
 	}
 
 }
