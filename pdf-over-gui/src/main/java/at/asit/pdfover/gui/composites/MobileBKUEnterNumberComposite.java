@@ -124,6 +124,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 	Button btn_ok;
 	Button btn_cancel;
+	Button btn_remember;
 
 	/**
 	 * @return the errorMessage
@@ -206,6 +207,8 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
 		StateComposite.anchor(lbl_error).top(87, -15).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
 
+		this.btn_remember = new Button(containerComposite, SWT.CHECK);
+		StateComposite.anchor(btn_remember).right(100, -10).top(0, 5).set();
 	}
 
 	@Override
@@ -282,8 +285,11 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	public void reloadResources() {
 		StateComposite.setLocalizedText(lbl_number, "mobileBKU.number");
 		StateComposite.setLocalizedText(lbl_password, "mobileBKU.password");
+		StateComposite.setLocalizedText(btn_remember, "mobileBKU.rememberPassword");
 		StateComposite.setLocalizedText(btn_ok, "common.Ok");
 		StateComposite.setLocalizedText(btn_cancel, "common.Cancel");
+
+		this.btn_remember.setToolTipText(Messages.getString("mobileBKU.rememberPasswordNote"));
 	}
 
 }
