@@ -173,85 +173,45 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 					10, 10);
 		});
 		containerComposite.setLayout(new FormLayout());
-		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -120);
-		fd_containerComposite.bottom = new FormAttachment(50, 120);
-		fd_containerComposite.left = new FormAttachment(50, -200);
-		fd_containerComposite.right = new FormAttachment(50, 200);
-		containerComposite.setLayoutData(fd_containerComposite);
-
+		StateComposite.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200).set();
 
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
-		FormData fd_number = new FormData();
-		fd_number.bottom = new FormAttachment(50, -10);
-		fd_number.left = new FormAttachment(50, 10);
-		fd_number.right = new FormAttachment(100, -20);
-		this.txt_number.setLayoutData(fd_number);
+		StateComposite.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20).set();
 		this.txt_number.setEditable(true);
-
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
 		this.lbl_number.setText(Messages.getString("mobileBKU.number"));
-		FormData fd_lbl_number = new FormData();
-		fd_lbl_number.bottom = new FormAttachment(50, -10);
-		fd_lbl_number.right = new FormAttachment(50, -10);
-		this.lbl_number.setLayoutData(fd_lbl_number);
+		StateComposite.anchor(lbl_number).bottom(50, -10).right(50, -10).set();
+
+		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
+		Image mobileIcon = new Image(getDisplay(), mobileIconData);
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
+		StateComposite.anchor(lbl_image).top(20, -1 * (mobileIconData.width / 2)).bottom(20, mobileIconData.width / 2).left(0, 10).width(mobileIconData.width).set();
+		lbl_image.setImage(mobileIcon);
 
-		ImageData data = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
-		Image mobile = new Image(getDisplay(), data);
-
-		FormData fd_lbl_image = new FormData();
-		fd_lbl_image.top = new FormAttachment(20, -1 * (data.width / 2));
-		fd_lbl_image.bottom = new FormAttachment(20, data.width / 2);
-		fd_lbl_image.left = new FormAttachment(0, 10);
-		fd_lbl_image.width = data.width;
-		lbl_image.setLayoutData(fd_lbl_image);
-		lbl_image.setImage(mobile);
-
-
-		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD
-				| SWT.BORDER | SWT.NATIVE);
-		FormData fd_password = new FormData();
-		fd_password.top = new FormAttachment(50, 10);
-		fd_password.left = new FormAttachment(50, 10);
-		fd_password.right = new FormAttachment(100, -20);
-		this.txt_password.setLayoutData(fd_password);
+		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER | SWT.NATIVE);
+		StateComposite.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20).set();
 		this.txt_password.setEditable(true);
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
+		StateComposite.anchor(lbl_password).top(50, 10).right(50, -10).set();
 		this.lbl_password.setAlignment(SWT.RIGHT);
 		this.lbl_password.setText(Messages.getString("mobileBKU.password"));
-		FormData fd_lbl_password = new FormData();
-		fd_lbl_password.top = new FormAttachment(50, 10);
-		fd_lbl_password.right = new FormAttachment(50, -10);
-		this.lbl_password.setLayoutData(fd_lbl_password);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
+		StateComposite.anchor(btn_ok).bottom(100, -20).right(100, -20).set();
 		this.btn_ok.setText(Messages.getString("common.Ok"));
-		FormData fd_btn_ok = new FormData();
-		fd_btn_ok.bottom = new FormAttachment(100, -20);
-		fd_btn_ok.right = new FormAttachment(100, -20);
-		this.btn_ok.setLayoutData(fd_btn_ok);
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
+		StateComposite.anchor(btn_cancel).bottom(100, -20).right(btn_ok, -10).set();
 		this.btn_cancel.setText(Messages.getString("common.Cancel"));
-		FormData fd_btn_cancel = new FormData();
-		fd_btn_cancel.bottom = new FormAttachment(100, -20);
-		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -10);
-		this.btn_cancel.setLayoutData(fd_btn_cancel);
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
-		FormData fd_lbl_error = new FormData();
-		fd_lbl_error.top = new FormAttachment(87, -15);
-		fd_lbl_error.bottom = new FormAttachment(103, -20);
-		fd_lbl_error.left = new FormAttachment(5, 0);
-		fd_lbl_error.right = new FormAttachment(this.btn_cancel, -10);
-		this.lbl_error.setLayoutData(fd_lbl_error);
+		StateComposite.anchor(lbl_error).top(87, -15).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
 
 	}
 
