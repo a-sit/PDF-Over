@@ -186,6 +186,19 @@ public class MobileBKUState extends State {
 		});
 	}
 
+	public void rememberCredentialsIfNecessary() {
+		if (getStateMachine().configProvider.getRememberMobilePassword())
+		{
+			getStateMachine().configProvider.setDefaultMobileNumberOverlay(status.phoneNumber);
+			getStateMachine().configProvider.setDefaultMobilePasswordOverlay(status.mobilePassword);
+		}
+	}
+
+	public void clearRememberedCredentials() {
+		getStateMachine().configProvider.setDefaultMobilePasswordOverlay(null);
+		status.mobilePassword = null;
+	}
+
 	/**
 	 * Make sure phone number and password are set in the MobileBKUStatus
 	 */

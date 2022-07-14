@@ -231,6 +231,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		if (responseData.contains("signature.aspx?sid=")) {
 			// credentials ok! TAN entry
+			state.rememberCredentialsIfNecessary();
 			log.debug("Credentials accepted - TAN required");
 			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\"");
 			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
@@ -264,6 +265,7 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		} else if (responseData.contains("sl:InfoboxReadResponse")) {
 			// credentials ok! InfoboxReadResponse
+			state.rememberCredentialsIfNecessary();
 			log.debug("Credentials accepted - Response given");
 			getSigningState().setSignatureResponse(new SLResponse(responseData, getStatus().server, null, null));
 			return;
@@ -275,6 +277,9 @@ public class ATrustHandler extends MobileBKUHandler {
 			return;
 		}else {
 			// error page
+
+			// force UI again!
+			state.clearRememberedCredentials();
 			// extract error text!
 			try {
 				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass");
@@ -283,9 +288,6 @@ public class ATrustHandler extends MobileBKUHandler {
 				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " +
 						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>"));
 			}
-
-			// force UI again!
-			status.mobilePassword = null;
 		}
 
 		log.debug("sessionID: " + sessionID);
