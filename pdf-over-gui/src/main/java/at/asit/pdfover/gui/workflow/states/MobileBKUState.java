@@ -221,6 +221,9 @@ public class MobileBKUState extends State {
 					// set possible password
 					ui.setMobilePassword(mobileStatus.mobilePassword);
 				}
+
+				ui.setRememberPassword(getStateMachine().configProvider.getRememberMobilePassword());
+
 				ui.enableButton();
 				getStateMachine().display(ui);
 
@@ -244,6 +247,7 @@ public class MobileBKUState extends State {
 			// get number and password from UI
 			mobileStatus.phoneNumber = ui.getMobileNumber();
 			mobileStatus.mobilePassword = ui.getMobilePassword();
+			getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
 
 			// show waiting composite
 			getStateMachine().display(this.getWaitingComposite());

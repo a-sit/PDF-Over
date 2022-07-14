@@ -85,6 +85,8 @@ public class ConfigurationDataInMemory {
 	/** The mobile phone password */
 	public String mobilePassword = null;
 
+	public boolean rememberPassword = false;
+
 	/** Holds the proxy host */
 	public String proxyHost = null;
 

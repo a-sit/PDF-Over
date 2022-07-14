@@ -87,6 +87,7 @@ public class ConfigurationManager {
 		setDefaultEmblemPersistent(diskConfig.getProperty(Constants.CFG_EMBLEM));
 
 		setDefaultMobileNumberPersistent(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
+		setRememberMobilePasswordPersistent(Constants.TRUE.equals(diskConfig.getProperty(Constants.CFG_MOBILE_PASSWORD_REMEMBER)));
 
 		setProxyHostPersistent(diskConfig.getProperty(Constants.CFG_PROXY_HOST));
 		setProxyUserPersistent(diskConfig.getProperty(Constants.CFG_PROXY_USER));
@@ -284,6 +285,8 @@ public class ConfigurationManager {
 		props.setProperty(Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
+		if (getRememberMobilePassword())
+			props.setProperty(Constants.CFG_MOBILE_PASSWORD_REMEMBER, Constants.TRUE);
 		props.setProperty(Constants.CFG_OUTPUT_FOLDER, getDefaultOutputFolderPersistent());
 		props.setProperty(Constants.CFG_POSTFIX, getSaveFilePostFix());
 		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
@@ -474,6 +477,14 @@ public class ConfigurationManager {
 	public String getDefaultMobilePassword() {
 		/* this does not exist as a permanent config variable */
 		return this.configurationOverlay.mobilePassword;
+	}
+
+	public boolean getRememberMobilePassword() {
+		return this.configuration.rememberPassword;
+	}
+
+	public void setRememberMobilePasswordPersistent(boolean state) {
+		this.configuration.rememberPassword = state;
 	}
 
 	public void setDefaultEmblemPersistent(String emblem) {

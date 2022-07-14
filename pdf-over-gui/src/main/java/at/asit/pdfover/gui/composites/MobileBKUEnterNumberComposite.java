@@ -143,6 +143,9 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		}
 	}
 
+	public boolean isRememberPassword() { return this.btn_remember.getSelection(); }
+	public void setRememberPassword(boolean state) { this.btn_remember.setSelection(state); }
+
 	/**
 	 * Create the composite.
 	 *

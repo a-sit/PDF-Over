@@ -158,6 +158,7 @@ public class Constants {
 
 	/** The mobile number config parameter */
 	public static final String CFG_MOBILE_NUMBER = "MOBILE_NUMBER";
+	public static final String CFG_MOBILE_PASSWORD_REMEMBER = "MOBILE_REMEMBER_PASSWORD";
 
 	/** The signature note config parameter */
 	public static final String CFG_SIGNATURE_NOTE = "SIGNATURE_NOTE";
