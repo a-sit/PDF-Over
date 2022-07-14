@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow.states;
 
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -164,11 +165,18 @@ public class MobileBKUState extends State {
 	 *            the exception
 	 */
 	public void displayError(Exception e) {
-		String message = Messages.getString("error.Unexpected");
-		log.error(message, e);
-		String errormsg = e.getLocalizedMessage();
-		if (errormsg != null && !errormsg.isEmpty())
-			message += ": " + errormsg;
+		String message = null;
+		if (e instanceof UnknownHostException)
+		{
+			log.error("Failed to resolve hostname", e);
+			message = String.format(Messages.getString("error.CouldNotResolveHostname"), e.getMessage());
+		} else {
+			message = Messages.getString("error.Unexpected");
+			log.error(message, e);
+			String errormsg = e.getLocalizedMessage();
+			if (errormsg != null && !errormsg.isEmpty())
+				message += ": " + errormsg;
+		}
 		displayError(message);
 	}
 
@@ -548,18 +556,7 @@ public class MobileBKUState extends State {
 		this.signingState.setUseBase64Request(this.handler.useBase64Request());
 
 		if (this.threadException != null) {
-			String message = Messages.getString("error.Unexpected");
-			log.error(message, this.threadException);
-			String errormsg = this.threadException.getLocalizedMessage();
-			if (errormsg != null && !errormsg.isEmpty())
-				message += ": " + errormsg;
-			ErrorDialog error = new ErrorDialog(
-					getStateMachine().getMainShell(),
-					message, BUTTONS.OK);
-			// error.setException(this.threadException);
-			// this.setNextState(error);
-			error.open();
-			getStateMachine().exit();
+			displayError(this.threadException);
 			return;
 		}
 
