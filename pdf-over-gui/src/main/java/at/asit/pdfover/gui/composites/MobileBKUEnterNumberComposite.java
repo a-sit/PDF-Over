@@ -202,7 +202,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
-		StateComposite.anchor(lbl_error).top(87, -15).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
+		StateComposite.anchor(lbl_error).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
 
 		this.btn_remember = new Button(containerComposite, SWT.CHECK);
 		StateComposite.anchor(btn_remember).right(100, -10).top(0, 5).set();
