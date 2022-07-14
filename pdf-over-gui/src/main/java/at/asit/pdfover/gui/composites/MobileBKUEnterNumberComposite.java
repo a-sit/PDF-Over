@@ -53,22 +53,18 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	private final SelectionListener okListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(!MobileBKUEnterNumberComposite.this.btn_ok.isEnabled()) {
+			if (!MobileBKUEnterNumberComposite.this.btn_ok.isEnabled()) {
 				return;
 			}
 
 			try {
-				String number = MobileBKUEnterNumberComposite.this.txt_number
-						.getText();
+				String number = MobileBKUEnterNumberComposite.this.txt_number.getText();
 
 				number = number.replaceAll("\\s","");
 
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
-				MobileBKUEnterNumberComposite.this.mobileNumber = number;
-
-				String password = MobileBKUEnterNumberComposite.this.txt_password
-						.getText();
+				String password = MobileBKUEnterNumberComposite.this.txt_password.getText();
 
 				MobileBKUHelper.validatePassword(password);
 
