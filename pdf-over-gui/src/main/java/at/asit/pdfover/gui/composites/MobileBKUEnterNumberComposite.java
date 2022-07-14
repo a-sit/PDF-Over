@@ -75,14 +75,12 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 			} catch(InvalidPasswordException ex) {
 				log.error("Validating input for Mobile BKU failed!", ex);
-				MobileBKUEnterNumberComposite.this
-				.setErrorMessage(ex.getMessage());
+				MobileBKUEnterNumberComposite.this.setErrorMessage(ex.getMessage());
 				MobileBKUEnterNumberComposite.this.txt_password.setFocus();
 			}
 			catch (Exception ex) {
 				log.error("Validating input for Mobile BKU failed!", ex);
-				MobileBKUEnterNumberComposite.this
-						.setErrorMessage(Messages.getString("error.InvalidPhoneNumber"));
+				MobileBKUEnterNumberComposite.this.setErrorMessage(Messages.getString("error.InvalidPhoneNumber"));
 				MobileBKUEnterNumberComposite.this.txt_number.setFocus();
 				return;
 			}
