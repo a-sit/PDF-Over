@@ -49,10 +49,6 @@
 			<artifactId>pdfview</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jpedal</groupId>
-			<artifactId>jbig2</artifactId>
-		</dependency>
-		<dependency>
 	      <groupId>com.google.code.gson</groupId>
 	      <artifactId>gson</artifactId>
 	      <version>2.9.0</version>
