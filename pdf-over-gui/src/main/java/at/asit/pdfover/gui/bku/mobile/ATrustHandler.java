@@ -282,11 +282,22 @@ public class ATrustHandler extends MobileBKUHandler {
 			state.clearRememberedCredentials();
 			// extract error text!
 			try {
-				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "class", "ErrorClass");
-				status.errorMessage = errorMessage;
+				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label1");
+				if (errorMessage.startsWith("Fehler: "))
+					errorMessage = errorMessage.substring(8);
+				status.errorMessage = errorMessage.strip();
 			} catch (Exception e) {
-				throw new SignatureException(MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " +
-						MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>"));
+				log.error("Failed to get credentials error message", e);
+				String msg = null;
+				try
+				{
+					msg = MobileBKUHelper.extractSubstring(responseData, "<sl:ErrorCode>", "</sl:ErrorCode>") + ": " +
+					  MobileBKUHelper.extractSubstring(responseData, "<sl:Info>", "</sl:Info>");
+				} catch (Exception e2) {
+					log.error("Failed to get credentials error code", e2);
+					msg = Messages.getString("error.Unexpected");
+				}
+				status.errorMessage = msg.strip();
 			}
 		}
 
