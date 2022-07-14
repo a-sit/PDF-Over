@@ -16,6 +16,7 @@
 package at.asit.pdfover.gui.workflow.states;
 
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -170,6 +171,9 @@ public class MobileBKUState extends State {
 		{
 			log.error("Failed to resolve hostname", e);
 			message = String.format(Messages.getString("error.CouldNotResolveHostname"), e.getMessage());
+		} else if (e instanceof ConnectException) {
+			log.error("Failed to connect", e);
+			message = String.format(Messages.getString("error.FailedToConnect"), e.getMessage());
 		} else {
 			message = Messages.getString("error.Unexpected");
 			log.error(message, e);
