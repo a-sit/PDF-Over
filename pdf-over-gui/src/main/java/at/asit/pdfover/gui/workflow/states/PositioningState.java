@@ -22,6 +22,8 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +43,6 @@ import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.decrypt.UnsupportedEncryptionException;
-import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 /**
  * Decides where to position the signature block
  */
@@ -68,14 +67,14 @@ public class PositioningState extends State {
 
 
 	private File loadedDocumentPath = null;
-	private PDFFile document = null;
+	private PDDocument document = null;
 
 	private void closePDFDocument() {
 
 		if (this.document != null)
 		{
+			try { this.document.close(); } catch (IOException e) { log.warn("Failed to close PDF", e); }
 			this.document = null;
-			System.gc(); /* try to get Java to close the mapped file... */
 		}
 		this.loadedDocumentPath = null;
 	}
@@ -83,34 +82,26 @@ public class PositioningState extends State {
 	private void openPDFDocument() throws IOException {
 		closePDFDocument();
 		File documentPath = getStateMachine().status.document;
-		PDFFile pdf = null;
-		RandomAccessFile rafile = new RandomAccessFile(documentPath, "r");
-		FileChannel chan = rafile.getChannel();
-		ByteBuffer buf = chan.map(FileChannel.MapMode.READ_ONLY, 0, chan.size());
-		chan.close();
-		rafile.close();
+		PDDocument pdf = null;
 		try
 		{
-			pdf = new PDFFile(buf);
-			if (pdf.getNumPages() > 0)
-				pdf.getPage(1);
+			pdf = PDDocument.load(documentPath);
+			if (pdf.getNumberOfPages() > 0)
+				pdf.getPage(0);
 			else
 				throw new IOException();
 		}
-		catch (PDFAuthenticationFailureException e) {
+		catch (InvalidPasswordException e) {
 			throw new IOException(Messages.getString("error.PDFPwdProtected"), e);
 		}
 		catch (IOException e) {
-			if (e.getCause() instanceof UnsupportedEncryptionException)
-				throw new IOException(Messages.getString("error.PDFProtected"));
-			else
-				throw new IOException(Messages.getString("error.MayNotBeAPDF"), e);
+			throw new IOException(Messages.getString("error.MayNotBeAPDF"), e);
 		}
 		this.document = pdf;
 		this.loadedDocumentPath = documentPath;
 	}
 
-	private PositioningComposite getPositioningComposite(PDFFile document) {
+	private PositioningComposite getPositioningComposite(PDDocument document) {
 		StateMachine stateMachine = getStateMachine();
 		if (this.positionComposite == null) {
 			this.positionComposite =

@@ -29,17 +29,20 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
-
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
 
 /**
  *
@@ -55,13 +58,14 @@ public class SignaturePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/** The PDF file being displayed */
-	private PDFFile pdf = null;
+	private PDDocument pdf = null;
+	private PDFRenderer renderer = null;
 	/** The image of the rendered PDF page being displayed */
 	Image currentImage = null;
 	/** The current PDFPage that was rendered into currentImage */
-	private PDFPage currentPage = null;
+	private PDPage currentPage = null;
 	/** The current transform from screen to page space */
-	AffineTransform currentXform = null;
+	AffineTransform currentTransform = null;
 	/** The horizontal offset of the image from the left edge of the panel */
 	int offX = 0;
 	/** The vertical offset of the image from the top of the panel */
@@ -95,7 +99,7 @@ public class SignaturePanel extends JPanel {
 	/** Color of the signature placeholder border */
 	private Color sigPlaceholderBorderColor = Color.BLUE;
 	/** Current page */
-	int page = 0;
+	int currentPageNo = 0;
 	/** Number of pages in the document */
 	int numPages = 0;
 	/** Cursor types */
@@ -113,7 +117,7 @@ public class SignaturePanel extends JPanel {
 	 * Create a new PagePanel.
 	 * @param pdf the PDFFile to display
 	 */
-	public SignaturePanel(PDFFile pdf) {
+	public SignaturePanel(PDDocument pdf) {
 		super(new BorderLayout());
 		setDocument(pdf);
 		setPreferredSize(new Dimension(Constants.DEFAULT_MAINWINDOW_WIDTH, Constants.DEFAULT_MAINWINDOW_HEIGHT - Constants.MAINBAR_HEIGHT));
@@ -126,19 +130,22 @@ public class SignaturePanel extends JPanel {
 	 * Set a new document to be displayed
 	 * @param pdf the PDFFile to be displayed
 	 */
-	public void setDocument(PDFFile pdf) {
+	public void setDocument(PDDocument pdf) {
 		this.pdf = pdf;
 		this.sigPagePos = null;
 		if (pdf != null)
 		{
-			this.numPages = pdf.getNumPages();
+			this.renderer = new PDFRenderer(pdf);
+			this.numPages = pdf.getNumberOfPages();
 			showPage(this.numPages);
 		}
 		else
 		{
-			this.page = 0;
+			this.renderer = null;
+			this.currentPageNo = 0;
 			this.numPages = 0;
-			showPage(null);
+			renderPageToImage();
+			repaint();
 		}
 	}
 
@@ -169,8 +176,9 @@ public class SignaturePanel extends JPanel {
 	 * @param page the number of the page to display
 	 */
 	public void showPage(int page) {
-		this.page = page;
-		showPage(this.pdf.getPage(page));
+		this.currentPageNo = page;
+		renderPageToImage();
+		repaint();
 	}
 
 	/**
@@ -227,29 +235,30 @@ public class SignaturePanel extends JPanel {
 	 *
 	 * @param page the PDFPage to draw.
 	 */
-	private synchronized void showPage(PDFPage page) {
-		// stop drawing the previous page
-		if (this.currentPage != null && this.prevSize != null) {
-			this.currentPage.stop(this.prevSize.width, this.prevSize.height, null);
+	private synchronized void renderPageToImage() {
+		if (this.pdf == null)
+		{
+			this.currentImage = null;
+			this.currentTransform = null;
+			return;
 		}
 
 		boolean newPage = false;
 		// set up the new page
-		if (this.page > this.numPages)
+		if (this.currentPageNo > this.numPages)
 		{
 			// New last page - use old last page as template
-			this.currentPage = this.pdf.getPage(this.numPages);
+			this.currentPage = this.pdf.getPage(this.numPages-1);
 			newPage = true;
 		}
 		else
-			this.currentPage = page;
+			this.currentPage = this.pdf.getPage(this.currentPageNo-1);
 
 
 		if (this.currentPage == null) {
 			// no page
 			this.currentImage = null;
-			this.currentXform = null;
-			repaint();
+			this.currentTransform = null;
 		} else {
 			// start drawing
 			Dimension sz = getSize();
@@ -258,8 +267,14 @@ public class SignaturePanel extends JPanel {
 				return;
 			}
 
-			Dimension pageSize = this.currentPage.getUnstretchedSize(sz.width, sz.height,
-					null);
+			PDRectangle clip = this.currentPage.getBBox();
+			double clipRatio = clip.getHeight() / clip.getWidth();
+			double myRatio = (double)sz.height / (double)sz.width;
+			Dimension pageSize = (Dimension)sz.clone();
+			if (myRatio > clipRatio)
+				pageSize.height = (int)(pageSize.width * clipRatio + 0.5);
+			else
+				pageSize.width = (int)(pageSize.height / clipRatio + 0.5);
 
 			// get the new image
 			if (newPage)
@@ -270,25 +285,36 @@ public class SignaturePanel extends JPanel {
 				g.fillRect(0, 0, pageSize.width, pageSize.height);
 			}
 			else
-				this.currentImage = this.currentPage.getImage(pageSize.width, pageSize.height,
-						null, this);
+			{
+				int whichPage = Math.min(this.currentPageNo, this.numPages);
+				float scale = 1;
+				if (pageSize.width == sz.width)
+					scale = ((float) sz.width) / clip.getWidth();
+				else if (pageSize.height == sz.height)
+					scale = ((float) sz.height) / clip.getHeight();
+
+				try {
+					this.currentImage = renderer.renderImage(whichPage-1, scale);
+				} catch (IOException e) {
+					log.error(String.format("Failed to render image for page %d of %d", whichPage, this.numPages), e);
+				}
+			}
 
 			// calculate the transform from page to screen space
-			this.currentXform = new AffineTransform(1, 0, 0, -1, 0, pageSize.height);
-			Rectangle2D clip = this.currentPage.getBBox();
+			this.currentTransform = new AffineTransform(1, 0, 0, -1, 0, pageSize.height);
 			double scaleX = pageSize.width / clip.getWidth();
 			double scaleY = pageSize.height / clip.getHeight();
-			this.currentXform.scale(scaleX, scaleY);
-			this.currentXform.translate(-clip.getMinX(), -clip.getMinY());
+			this.currentTransform.scale(scaleX, scaleY);
+			this.currentTransform.translate(-clip.getLowerLeftX(), -clip.getLowerLeftY());
 
 			if (this.sigPagePos != null)
-				this.sigScreenPos = this.currentXform.transform(this.sigPagePos, this.sigScreenPos);
-			this.sigScreenWidth = (int) Math.round(this.sigPageWidth * this.currentXform.getScaleX());
-			this.sigScreenHeight = (int) Math.round(this.sigPageHeight * this.currentXform.getScaleX());
+				this.sigScreenPos = this.currentTransform.transform(this.sigPagePos, this.sigScreenPos);
+			this.sigScreenWidth = (int) Math.round(this.sigPageWidth * this.currentTransform.getScaleX());
+			this.sigScreenHeight = (int) Math.round(this.sigPageHeight * this.currentTransform.getScaleX());
 
 			// invert the transform (screen to page space)
 			try {
-				this.currentXform = this.currentXform.createInverse();
+				this.currentTransform = this.currentTransform.createInverse();
 			} catch (NoninvertibleTransformException nte) {
 				log.error("Error inverting page transform!", nte);
 			}
@@ -298,14 +324,12 @@ public class SignaturePanel extends JPanel {
 				this.sigScreenPos = new Point2D.Double(
 						clamp((int) (pageSize.getWidth() / 2), 0, this.currentImage.getWidth(null) - this.sigScreenWidth),
 						clamp((int) ((pageSize.getHeight() / 4) * 3), 0, this.currentImage.getHeight(null) - this.sigScreenHeight));
-				this.sigPagePos = this.currentXform.transform(this.sigScreenPos, this.sigPagePos);
+				this.sigPagePos = this.currentTransform.transform(this.sigScreenPos, this.sigPagePos);
 			}
 			else
 				updateSigPos((int) this.sigScreenPos.getX(), (int) this.sigScreenPos.getY());
 
 			this.prevSize = pageSize;
-
-			repaint();
 		}
 	}
 
@@ -319,10 +343,10 @@ public class SignaturePanel extends JPanel {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if (this.currentImage == null) {
 			g.setColor(Color.black);
-			g.drawString(Messages.getString("error.SignaturePanel.NoPage"), getWidth() / 2 - 30,
-					getHeight() / 2);
+			g.drawString(Messages.getString("error.SignaturePanel.NoPage"), getWidth() / 2 - 30, getHeight() / 2);
 			if (this.currentPage != null) {
-				showPage(this.currentPage);
+				renderPageToImage();
+				repaint();
 			}
 		} else {
 			// draw the image
@@ -395,9 +419,9 @@ public class SignaturePanel extends JPanel {
 
 			} else {
 				// the image is bogus. try again, or give up.
-				if (this.currentPage != null) {
-					showPage(this.currentPage);
-				}
+				if (this.currentPage != null)
+					renderPageToImage();
+
 				g.setColor(Color.black);
 				g.drawString(Messages.getString("error.SignaturePanel.NoRender"), getWidth() / 2 - 30,
 						getHeight() / 2);
@@ -536,7 +560,7 @@ public class SignaturePanel extends JPanel {
 		sigx = clamp(sigx, 0, this.currentImage.getWidth(null) - this.sigScreenWidth);
 		sigy = clamp(sigy, 0, this.currentImage.getHeight(null) - this.sigScreenHeight);
 		this.sigScreenPos = new Point2D.Double(sigx, sigy);
-		this.sigPagePos = this.currentXform.transform(this.sigScreenPos, this.sigPagePos);
+		this.sigPagePos = this.currentTransform.transform(this.sigScreenPos, this.sigPagePos);
 		repaint();
 	}
 

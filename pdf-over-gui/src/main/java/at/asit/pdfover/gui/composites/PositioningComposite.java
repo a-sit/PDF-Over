@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,8 +48,6 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
-import com.sun.pdfview.PDFFile;
-
 /**
  * Composite which allows to position the signature on a preview of the document
  */
@@ -56,8 +55,7 @@ public class PositioningComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(PositioningComposite.class);
+	static final Logger log = LoggerFactory.getLogger(PositioningComposite.class);
 
 	SignaturePanel viewer = null;
 	Frame frame = null;
@@ -155,7 +153,7 @@ public class PositioningComposite extends StateComposite {
 	 * @param document
 	 *            document to display
 	 */
-	public void displayDocument(final PDFFile document) {
+	public void displayDocument(final PDDocument document) {
 		if (this.viewer == null) {
 			EventQueue.invokeLater(() -> {
 				this.viewer = new SignaturePanel(document);
@@ -173,7 +171,7 @@ public class PositioningComposite extends StateComposite {
 
 		if (document != null)
 		{
-			this.numPages = document.getNumPages();
+			this.numPages = document.getNumberOfPages();
 			this.scrollbar.setValues(1, 1, this.numPages + 1, 1, 1, 1);
 			showPage(this.numPages);
 		}
