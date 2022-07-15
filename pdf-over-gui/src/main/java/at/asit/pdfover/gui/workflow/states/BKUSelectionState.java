@@ -73,9 +73,7 @@ public class BKUSelectionState extends State {
 		  (previousState instanceof PositioningState) ||
 		  (previousState instanceof BKUSelectionState)
 		)) {
-			status.bku = BKUs.NONE;
-		} else if(!(status.getPreviousState() instanceof BKUSelectionState)) {
-			getStateMachine().configProvider.getDefaultBKU();
+			status.bku = getStateMachine().configProvider.getDefaultBKU();
 		}
 
 		if(status.bku == BKUs.NONE) {
