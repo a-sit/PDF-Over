@@ -153,13 +153,11 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
             if (in_pos.getPage() < 1) {
                 out_pos = String.format(
                         (Locale) null,
-                        "p:new;x:%f;y:%f", in_pos.getX(),
-                        in_pos.getY());
+                        "p:new;x:%f;y:%f", in_pos.getX(), in_pos.getY());
             } else {
                 out_pos = String.format(
                         (Locale) null,
-                        "p:%d;x:%f;y:%f", in_pos.getPage(), in_pos.getX(),
-                        in_pos.getY());
+                        "p:%d;x:%f;y:%f", in_pos.getPage(), in_pos.getX(), in_pos.getY());
             }
         } else {
             out_pos = "p:auto;x:auto;y:auto";
