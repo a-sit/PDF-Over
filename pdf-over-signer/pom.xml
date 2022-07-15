@@ -7,12 +7,73 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>pdf-over-signer</artifactId>
-	<name>PDF-Over PDF-Signer libraries</name>
-	<packaging>pom</packaging>
+	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<pdfover-build.root-dir>${project.basedir}/..</pdfover-build.root-dir>
+		<pdfover-build.pdfas-version>4.2.1-snapshot</pdfover-build.pdfas-version>
 	</properties>
-	<modules>
-		<module>pdf-over-sigpdfas4</module>
-	</modules>
+    <dependencies>
+		<dependency>
+			<groupId>at.a-sit</groupId>
+			<artifactId>pdf-over-signator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.gv.egiz.pdfas</groupId>
+			<artifactId>pdf-as-lib</artifactId>
+			<version>${pdfover-build.pdfas-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.gv.egiz.pdfas</groupId>
+			<artifactId>sigs-pades</artifactId>
+			<version>${pdfover-build.pdfas-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.gv.egiz.pdfas</groupId>
+			<artifactId>pdf-as-pdfbox-2</artifactId>
+			<version>${pdfover-build.pdfas-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>iaik.prod</groupId>
+			<artifactId>iaik_jce_full</artifactId>
+			<version>5.63_moa</version>
+		</dependency>
+		<dependency>
+			<groupId>iaik</groupId>
+			<artifactId>iaik_eccelerate</artifactId>
+			<version>3.01</version>
+		</dependency>
+		<dependency>
+			<groupId>iaik</groupId>
+			<artifactId>iaik_cms</artifactId>
+			<version>2.15</version>
+		</dependency>
+		<dependency>
+			<groupId>iaik</groupId>
+			<artifactId>iaik_eccelerate_cms</artifactId>
+			<version>3.01</version>
+		</dependency>
+		<dependency>
+			<groupId>at.a-sit</groupId>
+			<artifactId>pdf-over-commons</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.24</version>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>EGIZ Maven</id>
+			<name>EGIZ Maven Repository</name>
+			<url>https://apps.egiz.gv.at/maven/</url>
+		</repository>
+		<repository>
+			<id>local-repo</id>
+			<url>file://${pdfover-build.root-dir}/repo</url>
+		</repository>
+	</repositories>
 </project>

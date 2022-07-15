@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>at.a-sit</groupId>
-			<artifactId>pdf-over-sigpdfas4</artifactId>
+			<artifactId>pdf-over-signer</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
