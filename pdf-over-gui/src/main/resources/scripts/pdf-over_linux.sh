@@ -1,3 +1,3 @@
 #!/bin/sh
 BASEDIR=`dirname $0`
-exec $BASEDIR/jre/bin/java -cp "$BASEDIR/lib/*" at.asit.pdfover.gui.Main "$@"
+GDK_BACKEND=x11 exec $BASEDIR/jre/bin/java -cp "$BASEDIR/lib/*" at.asit.pdfover.gui.Main "$@"
