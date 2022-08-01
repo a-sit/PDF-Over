@@ -530,48 +530,31 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 				// Fall through
 			case 1:
 				try {
-					loadKeystore();
+					if (config.keystoreStorePass != null) /* don't cause password prompts, just silently accept if there is no saved password */
+						loadKeystore();
 				} catch (Exception e) {
 					throw new CantLoadKeystoreException(e, 4); //skip next checks
 				}
 				// Fall through
 			case 2:
 			{
-				String alias = config.keystoreAlias;
-				if (!this.ks.containsAlias(alias))
-					throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
-				if (!this.ks.isKeyEntry(alias))
-					throw new KeystoreAliasNoKeyException(alias, 4); //skip next check
+				if (this.ks != null)
+				{
+					String alias = config.keystoreAlias;
+					if (!this.ks.containsAlias(alias))
+						throw new KeystoreAliasDoesntExistException(alias, 4); //skip next check
+					if (!this.ks.isKeyEntry(alias))
+						throw new KeystoreAliasNoKeyException(alias, 4); //skip next check
+				}
 			}
 				// Fall through
 			case 3:
 				try {
 					String alias = config.keystoreAlias;
 					String keypass = config.keystoreKeyPass;
-					if (keypass != null)
+					if ((this.ks != null) && (keypass != null))
 					{ /* if no keypass is specified, this will happen at signature time */
-						Key key = null;
-						while (key == null)
-						{
-							if (keypass == null)
-							{
-								keypass = new PasswordInputDialog(
-									getShell(),
-									Messages.getString("keystore_config.KeystoreKeyPass"),
-									Messages.getString("keystore.KeystoreKeyPassEntry")).open();
-								
-								if (keypass == null)
-									throw new UnrecoverableKeyException("User cancelled password input");
-							}
-
-							try {
-								key = this.ks.getKey(alias, keypass.toCharArray());
-							} catch (UnrecoverableKeyException ex) {
-								new ErrorDialog(getShell(), Messages.getString("error.KeyStoreKeyPass"), BUTTONS.OK).open();
-								keypass = null;
-							}
-						}
-						config.keystoreKeyPass = keypass;
+						this.ks.getKey(alias, keypass.toCharArray());
 					}
 				} catch (Exception e) {
 					throw new KeystoreKeyPasswordException(4);
