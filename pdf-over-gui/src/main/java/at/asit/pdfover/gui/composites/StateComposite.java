@@ -104,21 +104,25 @@ public abstract class StateComposite extends Composite {
 
 		public AnchorSetter top(Control control, int offset, int alignment) { return top(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter top(Control control, int offset) { return top(new FormAttachment(control, offset)); }
+		public AnchorSetter top(Control control) { return top(new FormAttachment(control)); }
     	public AnchorSetter top(int num, int offset) { return top(new FormAttachment(num, offset)); }
     	public AnchorSetter top(int num) { return top(new FormAttachment(num)); }
 
 		public AnchorSetter left(Control control, int offset, int alignment) { return left(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter left(Control control, int offset) { return left(new FormAttachment(control, offset)); }
+		public AnchorSetter left(Control control) { return left(new FormAttachment(control)); }
     	public AnchorSetter left(int num, int offset) { return left(new FormAttachment(num, offset)); }
     	public AnchorSetter left(int num) { return left(new FormAttachment(num)); }
 
 		public AnchorSetter right(Control control, int offset, int alignment) { return right(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter right(Control control, int offset) { return right(new FormAttachment(control, offset)); }
+		public AnchorSetter right(Control control) { return right(new FormAttachment(control)); }
     	public AnchorSetter right(int num, int offset) { return right(new FormAttachment(num, offset)); }
     	public AnchorSetter right(int num) { return right(new FormAttachment(num)); }
 
 		public AnchorSetter bottom(Control control, int offset, int alignment) { return bottom(new FormAttachment(control, offset, alignment)); }
     	public AnchorSetter bottom(Control control, int offset) { return bottom(new FormAttachment(control, offset)); }
+		public AnchorSetter bottom(Control control) { return bottom(new FormAttachment(control)); }
     	public AnchorSetter bottom(int num, int offset) { return bottom(new FormAttachment(num, offset)); }
     	public AnchorSetter bottom(int num) { return bottom(new FormAttachment(num)); }
     }

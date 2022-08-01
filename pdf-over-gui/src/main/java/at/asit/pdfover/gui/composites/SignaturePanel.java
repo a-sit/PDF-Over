@@ -50,8 +50,7 @@ public class SignaturePanel extends JPanel {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(SignaturePanel.class);
+	private static final Logger log = LoggerFactory.getLogger(SignaturePanel.class);
 
 	/** Default serial version ID */
 	private static final long serialVersionUID = 1L;

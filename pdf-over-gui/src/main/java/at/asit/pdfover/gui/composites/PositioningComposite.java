@@ -81,33 +81,23 @@ public class PositioningComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		this.bottomBar = new Composite(this, SWT.NONE);
-		FormData fd_bottomBar = new FormData();
-		fd_bottomBar.left = new FormAttachment(0);
-		fd_bottomBar.right = new FormAttachment(100);
-		fd_bottomBar.bottom = new FormAttachment(100);
-		this.bottomBar.setLayoutData(fd_bottomBar);
+		StateComposite.anchor(bottomBar).left(0).right(100).bottom(100).set();
 		this.bottomBar.setLayout(new FormLayout());
 
 		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
-		this.btnSign.setText(Messages.getString("positioning.sign"));
-		FormData fd_btnSign = new FormData();
-		fd_btnSign.right = new FormAttachment(100);
-		fd_btnSign.top = new FormAttachment(0);
-		this.btnSign.setLayoutData(fd_btnSign);
+		StateComposite.anchor(btnSign).right(100).top(0).set();
 		this.getShell().setDefaultButton(this.btnSign);
-		this.btnSign.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setFinalPosition();
-			}
-		});
 
 		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
-		this.btnNewPage.setText(Messages.getString("positioning.newPage"));
-		FormData fd_btnNewPage = new FormData();
-		fd_btnNewPage.right = new FormAttachment(this.btnSign);
-		fd_btnNewPage.top = new FormAttachment(0);
-		this.btnNewPage.setLayoutData(fd_btnNewPage);
+		StateComposite.anchor(btnNewPage).right(btnSign).top(0).set();
+
+		this.lblPage = new Label(this.bottomBar, SWT.CENTER);
+		StateComposite.anchor(lblPage).left(0).right(btnNewPage, 5).bottom(100).set();
+
+		this.mainArea = new Composite(this, SWT.EMBEDDED | SWT.V_SCROLL);
+		StateComposite.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5).set();
+		this.scrollbar = this.mainArea.getVerticalBar();
+
 		this.btnNewPage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -119,31 +109,22 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
-		this.lblPage = new Label(this.bottomBar, SWT.CENTER);
-		FormData fd_lblPage = new FormData();
-		fd_lblPage.left = new FormAttachment(0);
-		fd_lblPage.right = new FormAttachment(this.btnNewPage, 5);
-		fd_lblPage.bottom = new FormAttachment(100);
-		this.lblPage.setLayoutData(fd_lblPage);
-
-		this.mainArea = new Composite(this, SWT.EMBEDDED | SWT.V_SCROLL);
-		FormData fd_mainArea = new FormData();
-		fd_mainArea.left = new FormAttachment(0);
-		fd_mainArea.right = new FormAttachment(100);
-		fd_mainArea.top = new FormAttachment(0);
-		fd_mainArea.bottom = new FormAttachment(this.bottomBar, -5);
-		this.mainArea.setLayoutData(fd_mainArea);
-		this.scrollbar = this.mainArea.getVerticalBar();
-
 		EventQueue.invokeLater(() -> {
 			getDisplay().syncExec(() -> {
 				this.frame = SWT_AWT.new_Frame(this.mainArea);
 				this.frame.addKeyListener(this.keyListener);
 				this.frame.addMouseWheelListener(this.mouseListener);
 			});
+		this.btnSign.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setFinalPosition();
+			}
 		});
 
 		this.scrollbar.addSelectionListener(this.selectionListener);
+
+		reloadResources();
 		requestFocus();
 	}
 
