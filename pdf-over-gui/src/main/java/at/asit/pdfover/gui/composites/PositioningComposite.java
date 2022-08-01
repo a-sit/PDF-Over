@@ -98,6 +98,17 @@ public class PositioningComposite extends StateComposite {
 		StateComposite.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5).set();
 		this.scrollbar = this.mainArea.getVerticalBar();
 
+		this.frame = SWT_AWT.new_Frame(this.mainArea);
+		this.frame.addKeyListener(this.keyListener);
+		this.frame.addMouseWheelListener(this.mouseListener);
+
+		this.viewer = new SignaturePanel();
+		this.viewer.setSignaturePlaceholderBorderColor(new Color(
+				Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
+				Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
+				Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
+		this.frame.add(this.viewer, BorderLayout.CENTER);
+
 		this.btnNewPage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -109,12 +120,6 @@ public class PositioningComposite extends StateComposite {
 			}
 		});
 
-		EventQueue.invokeLater(() -> {
-			getDisplay().syncExec(() -> {
-				this.frame = SWT_AWT.new_Frame(this.mainArea);
-				this.frame.addKeyListener(this.keyListener);
-				this.frame.addMouseWheelListener(this.mouseListener);
-			});
 		this.btnSign.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -135,20 +140,9 @@ public class PositioningComposite extends StateComposite {
 	 *            document to display
 	 */
 	public void displayDocument(final PDDocument document) {
-		if (this.viewer == null) {
-			EventQueue.invokeLater(() -> {
-				this.viewer = new SignaturePanel(document);
-				this.viewer.setSignaturePlaceholderBorderColor(new Color(
-						Constants.MAINBAR_ACTIVE_BACK_DARK.getRed(),
-						Constants.MAINBAR_ACTIVE_BACK_DARK.getGreen(),
-						Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
-				this.frame.add(this.viewer, BorderLayout.CENTER);
-			});
-		} else {
-			EventQueue.invokeLater(() -> {
-				this.viewer.setDocument(document);
-			});
-		}
+		EventQueue.invokeLater(() -> {
+			this.viewer.setDocument(document);
+		});
 
 		if (document != null)
 		{
