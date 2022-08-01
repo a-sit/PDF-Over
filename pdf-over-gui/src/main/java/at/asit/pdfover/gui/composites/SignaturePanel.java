@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -261,37 +260,37 @@ public class SignaturePanel extends JPanel {
 			this.currentTransform = null;
 		} else {
 			// start drawing
-			Dimension sz = getSize();
-			if (sz.width + sz.height == 0) {
+			Dimension renderPanelSize = getSize();
+			if (renderPanelSize.width + renderPanelSize.height == 0) {
 				// no image to draw.
 				return;
 			}
 
-			PDRectangle clip = this.currentPage.getBBox();
-			double clipRatio = clip.getHeight() / clip.getWidth();
-			double myRatio = (double)sz.height / (double)sz.width;
-			Dimension pageSize = (Dimension)sz.clone();
-			if (myRatio > clipRatio)
-				pageSize.height = (int)(pageSize.width * clipRatio + 0.5);
+			PDRectangle actualPageSize = this.currentPage.getBBox();
+			double desiredAspectRatio = actualPageSize.getHeight() / actualPageSize.getWidth();
+			double renderRatioAvailable = (double)renderPanelSize.height / (double)renderPanelSize.width;
+			Dimension actualRenderSize = (Dimension)renderPanelSize.clone();
+			if (renderRatioAvailable > desiredAspectRatio)
+				actualRenderSize.height = (int)(actualRenderSize.width * desiredAspectRatio + 0.5);
 			else
-				pageSize.width = (int)(pageSize.height / clipRatio + 0.5);
+				actualRenderSize.width = (int)(actualRenderSize.height / desiredAspectRatio + 0.5);
 
 			// get the new image
 			if (newPage)
 			{
-				this.currentImage = new BufferedImage(pageSize.width, pageSize.height, BufferedImage.TYPE_INT_RGB);
+				this.currentImage = new BufferedImage(actualRenderSize.width, actualRenderSize.height, BufferedImage.TYPE_INT_RGB);
 				Graphics g = this.currentImage.getGraphics();
 				g.setColor(Color.WHITE);
-				g.fillRect(0, 0, pageSize.width, pageSize.height);
+				g.fillRect(0, 0, actualRenderSize.width, actualRenderSize.height);
 			}
 			else
 			{
 				int whichPage = Math.min(this.currentPageNo, this.numPages);
 				float scale = 1;
-				if (pageSize.width == sz.width)
-					scale = ((float) sz.width) / clip.getWidth();
-				else if (pageSize.height == sz.height)
-					scale = ((float) sz.height) / clip.getHeight();
+				if (actualRenderSize.width == renderPanelSize.width)
+					scale = ((float) renderPanelSize.width) / actualPageSize.getWidth();
+				else if (actualRenderSize.height == renderPanelSize.height)
+					scale = ((float) renderPanelSize.height) / actualPageSize.getHeight();
 
 				try {
 					this.currentImage = renderer.renderImage(whichPage-1, scale);
@@ -301,11 +300,11 @@ public class SignaturePanel extends JPanel {
 			}
 
 			// calculate the transform from page to screen space
-			this.currentTransform = new AffineTransform(1, 0, 0, -1, 0, pageSize.height);
-			double scaleX = pageSize.width / clip.getWidth();
-			double scaleY = pageSize.height / clip.getHeight();
+			this.currentTransform = new AffineTransform(1, 0, 0, -1, 0, actualRenderSize.height);
+			double scaleX = ((double)actualRenderSize.width) / actualPageSize.getWidth();
+			double scaleY = ((double)actualRenderSize.height) / actualPageSize.getHeight();
 			this.currentTransform.scale(scaleX, scaleY);
-			this.currentTransform.translate(-clip.getLowerLeftX(), -clip.getLowerLeftY());
+			this.currentTransform.translate(-actualPageSize.getLowerLeftX(), -actualPageSize.getLowerLeftY());
 
 			if (this.sigPagePos != null)
 				this.sigScreenPos = this.currentTransform.transform(this.sigPagePos, this.sigScreenPos);
@@ -322,14 +321,14 @@ public class SignaturePanel extends JPanel {
 			if (this.sigPagePos == null)
 			{
 				this.sigScreenPos = new Point2D.Double(
-						clamp((int) (pageSize.getWidth() / 2), 0, this.currentImage.getWidth(null) - this.sigScreenWidth),
-						clamp((int) ((pageSize.getHeight() / 4) * 3), 0, this.currentImage.getHeight(null) - this.sigScreenHeight));
+						clamp((int) (actualRenderSize.getWidth() / 2), 0, this.currentImage.getWidth(null) - this.sigScreenWidth),
+						clamp((int) ((actualRenderSize.getHeight() / 4) * 3), 0, this.currentImage.getHeight(null) - this.sigScreenHeight));
 				this.sigPagePos = this.currentTransform.transform(this.sigScreenPos, this.sigPagePos);
 			}
 			else
 				updateSigPos((int) this.sigScreenPos.getX(), (int) this.sigScreenPos.getY());
 
-			this.prevSize = pageSize;
+			this.prevSize = actualRenderSize;
 		}
 	}
 
@@ -338,7 +337,7 @@ public class SignaturePanel extends JPanel {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		Dimension sz = getSize();
+		Dimension renderPanelSize = getSize();
 		g.setColor(getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if (this.currentImage == null) {
@@ -350,15 +349,15 @@ public class SignaturePanel extends JPanel {
 			}
 		} else {
 			// draw the image
-			int imwid = this.currentImage.getWidth(null);
-			int imhgt = this.currentImage.getHeight(null);
+			int actualRenderWidth = this.currentImage.getWidth(null);
+			int actualRenderHeight = this.currentImage.getHeight(null);
 
 			// draw it centered within the panel
-			this.offX = (sz.width - imwid) / 2;
-			this.offY = (sz.height - imhgt) / 2;
+			this.offX = (renderPanelSize.width - actualRenderWidth) / 2;
+			this.offY = (renderPanelSize.height - actualRenderHeight) / 2;
 
-			if ((imwid == sz.width && imhgt <= sz.height)
-					|| (imhgt == sz.height && imwid <= sz.width)) {
+			if ((actualRenderWidth == renderPanelSize.width && actualRenderHeight <= renderPanelSize.height)
+					|| (actualRenderHeight == renderPanelSize.height && actualRenderWidth <= renderPanelSize.width)) {
 
 				// draw document
 				g.drawImage(this.currentImage, this.offX, this.offY, this);
