@@ -299,19 +299,20 @@ public class PositioningComposite extends StateComposite {
 			int numPages = this.numPages;
 			if ((previousPage > numPages) && (currentPage <= numPages)) {
 				// Was on new page
-				this.btnNewPage.setText(Messages.getString("positioning.newPage"));
+				StateComposite.setLocalizedText(btnNewPage, "positioning.newPage");
 				this.btnNewPage.setSelection(false);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 1);
 			} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 				// Go to new page
+				StateComposite.setLocalizedText(btnNewPage, "positioning.removeNewPage");
 				this.btnNewPage.setText(Messages.getString("positioning.removeNewPage"));
 				this.btnNewPage.setSelection(true);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 2);
 			}
 			this.scrollbar.setSelection(currentPage);
-			this.lblPage.setText(String.format(Messages.getString("positioning.page"), currentPage, numPages));
+			StateComposite.setLocalizedText(lblPage, "positioning.page", currentPage, numPages);
 		});
 		EventQueue.invokeLater(() -> {
 			PositioningComposite.this.viewer.showPage(page);
@@ -394,12 +395,8 @@ public class PositioningComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		if (this.currentPage <= this.numPages)
-			this.btnNewPage.setText(Messages.getString("positioning.newPage"));
-		else
-			this.btnNewPage.setText(Messages.getString("positioning.removeNewPage"));
-		this.btnSign.setText(Messages.getString("positioning.sign"));
-		this.lblPage.setText(String.format(Messages.getString("positioning.page"),
-				this.currentPage, this.numPages));
+		StateComposite.setLocalizedText(btnNewPage, (this.currentPage <= this.numPages) ? "positioning.newPage" : "positioning.removeNewPage");
+		StateComposite.setLocalizedText(btnSign, "positioning.sign");
+		StateComposite.setLocalizedText(lblPage, "positioning.page", this.currentPage, this.numPages);
 	}
 }

@@ -68,7 +68,9 @@ public abstract class StateComposite extends Composite {
 	}
 
 	public static void setLocalizedText(Label l, String messageKey) { l.setText(Messages.getString(messageKey)); l.requestLayout(); }
+	public static void setLocalizedText(Label l, String formatMessageKey, Object... formatArgs) { l.setText(String.format(Messages.getString(formatMessageKey), formatArgs)); l.requestLayout(); }
 	public static void setLocalizedText(Button b, String messageKey) { b.setText(Messages.getString(messageKey)); b.requestLayout(); }
+	public static void setLocalizedText(Button b, String formatMessageKey, Object... formatArgs) { b.setText(String.format(Messages.getString(formatMessageKey), formatArgs)); b.requestLayout(); }
 
     public static void setFontHeight(Control c, int height)
     {
