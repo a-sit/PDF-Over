@@ -41,27 +41,10 @@ import at.asit.pdfover.commons.Profile;
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 public class PdfAs4SignatureParameter extends SignatureParameter {
-    /**
-     * The profile ID extension for the German signature block
-     */
-    private static final String PROFILE_ID_LANG_DE = "_DE";
-    /**
-     * The profile ID extension for the English signature block
-     */
-    private static final String PROFILE_ID_LANG_EN = "_EN";
-    /**
-     * The profile ID extension for the signature note
-     */
-    private static final String PROFILE_ID_NOTE = "_NOTE";
-    /**
-     * The profile ID extension for PDF/A compatibility
-     */
-    private static final String PROFILE_ID_PDFA = "_PDFA";
-
-    private static final String PROFILE_ID_RECOMMENDED = "_RECOMMENDED";
 
     /**
-     * Visibility of signature block
+     * this is set by CliArguments.InvisibleProfile
+     * TODO: this is a no good, very bad, hack
      */
     public static boolean PROFILE_VISIBILITY = true;
 
@@ -191,7 +174,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
             case AMTSSIGNATURBLOCK:
                 profileId = this.profile;
                 profileId += getLangProfilePart(lang);
-                profileId += PROFILE_ID_RECOMMENDED;
+                profileId += "_RECOMMENDED";
                 return profileId;
             default:
                 profileId = this.profile;
@@ -200,17 +183,17 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
         }
 
         if (useNote)
-            profileId += PROFILE_ID_NOTE;
+            profileId += "_NOTE";
 
         if (usePdfACompat)
-            profileId += PROFILE_ID_PDFA;
+            profileId += "_PDFA";
 
         log.debug("Profile ID: {}", profileId);
         return profileId;
     }
 
     private static String getLangProfilePart(String lang) {
-        return ("en".equals(lang)) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
+        return ("en".equals(lang)) ? "_EN" : "_DE";
     }
 
     @Override
