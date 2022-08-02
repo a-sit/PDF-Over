@@ -260,6 +260,8 @@ public class MobileBKUState extends State {
 				}
 			}
 
+			getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
+
 			if (ui.userCancel) {
 				ui.userCancel = false;
 				mobileStatus.errorMessage = "cancel";
@@ -272,7 +274,6 @@ public class MobileBKUState extends State {
 			// get number and password from UI
 			mobileStatus.phoneNumber = ui.getMobileNumber();
 			mobileStatus.mobilePassword = ui.getMobilePassword();
-			getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
 
 			// show waiting composite
 			getStateMachine().display(this.getWaitingComposite());
