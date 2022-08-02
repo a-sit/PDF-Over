@@ -46,10 +46,10 @@ public class PdfAs4Signer {
 		}
 
 		String sigProfile = parameter.getPdfAsSignatureProfileId();
-		String sigEmblem = (parameter.getEmblem() == null ? null : parameter.getEmblem().getFileName());
+		String sigEmblem = (parameter.emblem == null ? null : parameter.emblem.getFileName());
 		String sigNote = parameter.getProperty("SIG_NOTE");
 		String sigPos = null;
-		if (parameter.getSignaturePosition() != null) {
+		if (parameter.signaturePosition != null) {
 			sigPos = parameter.getPdfAsSignaturePosition();
 		}
 		PdfAs pdfas = PdfAs4Helper.getPdfAs();
@@ -64,7 +64,7 @@ public class PdfAs4Signer {
 
 		PdfAs4SigningState state = new PdfAs4SigningState();
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		DataSource input = new ByteArrayDataSource(parameter.getInputDocument().getByteArray());
+		DataSource input = new ByteArrayDataSource(parameter.inputDocument.getByteArray());
 		SignParameter param = PdfAsFactory.createSignParameter(config, input, output);
 		if (sigPos != null) {
 			param.setSignaturePosition(sigPos);
@@ -73,7 +73,7 @@ public class PdfAs4Signer {
 		String id = UUID.randomUUID().toString();
 		param.setTransactionId(id);
 
-		if (parameter.isSearchForPlaceholderSignatures()) {
+		if (parameter.searchForPlaceholderSignatures) {
 			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_MODE, "1");
 			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_SEARCH_ENABLED, IConfigurationConstants.TRUE);
 		}

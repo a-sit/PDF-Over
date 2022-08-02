@@ -42,8 +42,6 @@ import at.asit.pdfover.commons.Profile;
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 public class PdfAs4SignatureParameter {
-
-	// TODO nuke getters/setters from this class
     /**
      * SLF4J Logger instance
      **/
@@ -56,172 +54,28 @@ public class PdfAs4SignatureParameter {
     public static boolean PROFILE_VISIBILITY = true;
 
     /** The Signature Position */
-	protected SignaturePosition signaturePosition = null;
+	public SignaturePosition signaturePosition = null;
 
 	/** The Signature language */
-	protected String signatureLanguage = null;
+	public String signatureLanguage = null;
 
 	/** The key identifier */
-	protected String keyIdentifier = null;
+	public String keyIdentifier = null;
 
 	/** The input document */
-	protected DocumentSource documentSource = null;
+	public DocumentSource inputDocument = null;
 
 	/** Holds the emblem */
-	protected Emblem emblem;
+	public Emblem emblem;
 
 	/** Whether to use PDF/A compatibility */
-	protected boolean pdfACompat;
+	public boolean enablePDFACompat;
 
 	/** The signature device */
-	protected BKUs signatureDevice;
+	public BKUs signatureDevice;
 
 	/** Whether so look for placeholder signatures or not. */
-	protected boolean searchForPlaceholderSignatures = false;
-
-	/**
-	 * @return the searchForPlaceholderSignatures
-	 */
-	public boolean isSearchForPlaceholderSignatures() {
-		return this.searchForPlaceholderSignatures;
-	}
-
-	/**
-	 * @param value
-	 *            the searchForPlaceholderSignatures to set
-	 */
-	public void setSearchForPlaceholderSignatures(boolean value) {
-		this.searchForPlaceholderSignatures = value;
-	}
-
-	/**
-	 * @return the signatureDevice
-	 */
-	public BKUs getSignatureDevice() {
-		return this.signatureDevice;
-	}
-
-	/**
-	 * @param signatureDevice
-	 *            the signatureDevice to set
-	 */
-	public void setSignatureDevice(BKUs signatureDevice) {
-		this.signatureDevice = signatureDevice;
-	}
-
-	/**
-	 * Getter of the property <tt>signaturePosition</tt>
-	 *
-	 * @return Returns the signaturePosition.
-	 */
-	public SignaturePosition getSignaturePosition() {
-		return this.signaturePosition;
-	}
-
-	/**
-	 * Setter of the property <tt>signaturePosition</tt>
-	 *
-	 * @param signaturePosition
-	 *            The signaturePosition to set.
-	 */
-	public void setSignaturePosition(SignaturePosition signaturePosition) {
-		this.signaturePosition = signaturePosition;
-	}
-
-	/**
-	 * Getter of the property <tt>signatureLanguage</tt>
-	 *
-	 * @return Returns the signatureLanguage.
-	 */
-	public String getSignatureLanguage() {
-		return this.signatureLanguage;
-	}
-
-	/**
-	 * Setter of the property <tt>signatureLanguage</tt>
-	 *
-	 * @param signatureLanguage
-	 *            The signatureLanguage to set.
-	 */
-	public void setSignatureLanguage(String signatureLanguage) {
-		this.signatureLanguage = signatureLanguage;
-	}
-
-	/**
-	 * Getter of the property <tt>signaturePdfACompat</tt>
-	 *
-	 * @return Returns the PDF/A compatibility setting.
-	 */
-	public boolean getSignaturePdfACompat() {
-		return this.pdfACompat;
-	}
-
-	/**
-	 * Setter of the property <tt>signaturePdfACompat</tt>
-	 *
-	 * @param compat
-	 *            The the PDF/A compatibility setting to set.
-	 */
-	public void setSignaturePdfACompat(boolean compat) {
-		this.pdfACompat = compat;
-	}
-
-	/**
-	 * Getter of the property <tt>keyIdentifier</tt>
-	 *
-	 * @return Returns the keyIdentifier.
-	 */
-	public String getKeyIdentifier() {
-		return this.keyIdentifier;
-	}
-
-	/**
-	 * Setter of the property <tt>keyIdentifier</tt>
-	 *
-	 * @param keyIdentifier
-	 *            The keyIdentifier to set.
-	 */
-	public void setKeyIdentifier(String keyIdentifier) {
-		this.keyIdentifier = keyIdentifier;
-	}
-
-	/**
-	 * Getter of the property <tt>documentSource</tt>
-	 *
-	 * @return Returns the documentSource.
-	 */
-	public DocumentSource getInputDocument() {
-		return this.documentSource;
-	}
-
-	/**
-	 * Setter of the property <tt>documentSource</tt>
-	 *
-	 * @param inputDocument
-	 *            The documentSource to set.
-	 */
-	public void setInputDocument(DocumentSource inputDocument) {
-		this.documentSource = inputDocument;
-	}
-
-	/**
-	 * Gets the Emblem
-	 *
-	 * @return the Emblem
-	 */
-	public Emblem getEmblem() {
-		return this.emblem;
-	}
-
-	/**
-	 * Sets the Emblem
-	 *
-	 * @param emblem
-	 *            The new Emblem
-	 */
-	public void setEmblem(Emblem emblem) {
-		this.emblem = emblem;
-	}
+	public boolean searchForPlaceholderSignatures = false;
 
     private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
@@ -231,22 +85,17 @@ public class PdfAs4SignatureParameter {
     private int sig_w = 229;
     private int sig_h = 77;
 
-    private String profile = Profile.getDefaultProfile();
+    public String signatureProfileName = Profile.getDefaultProfile();
 
-    /* (non-Javadoc)
-     * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
-     */
+	// TODO why is this stored separately?
     public SignatureDimension getPlaceholderDimension() {
         return new SignatureDimension(this.sig_w, this.sig_h);
     }
 
-    /* (non-Javadoc)
-     * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholder()
-     */
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
 
-        String sigEmblem = (getEmblem() == null ? null : getEmblem().getFileName());
+        String sigEmblem = (this.emblem == null ? null : this.emblem.getFileName());
         String sigNote = getProperty("SIG_NOTE");
 
         try {
@@ -275,16 +124,11 @@ public class PdfAs4SignatureParameter {
         }
     }
 
-    /* (non-Javadoc)
-     * @see at.asit.pdfover.signator.SignatureParameter#setProperty(java.lang.String, java.lang.String)
-     */
+    // TODO review this
     public void setProperty(String key, String value) {
         this.genericProperties.put(key, value);
     }
 
-    /* (non-Javadoc)
-     * @see at.asit.pdfover.signator.SignatureParameter#getProperty(java.lang.String)
-     */
     public String getProperty(String key) {
         return this.genericProperties.get(key);
     }
@@ -295,24 +139,21 @@ public class PdfAs4SignatureParameter {
      * @return Signature Position String
      */
     public String getPdfAsSignaturePosition() {
-        SignaturePosition in_pos = getSignaturePosition();
-        String out_pos;
+        SignaturePosition in_pos = this.signaturePosition;
 
-        if (!in_pos.useAutoPositioning()) {
-            if (in_pos.getPage() < 1) {
-                out_pos = String.format(
-                        (Locale) null,
-                        "p:new;x:%f;y:%f", in_pos.getX(), in_pos.getY());
-            } else {
-                out_pos = String.format(
-                        (Locale) null,
-                        "p:%d;x:%f;y:%f", in_pos.getPage(), in_pos.getX(), in_pos.getY());
-            }
-        } else {
-            out_pos = "p:auto;x:auto;y:auto";
-        }
+        if (in_pos.useAutoPositioning())
+			return "p:auto;x:auto;y:auto";
 
-        return out_pos;
+		if (in_pos.getPage() < 1)
+		{
+			return String.format(
+					(Locale) null,
+					"p:new;x:%f;y:%f", in_pos.getX(), in_pos.getY());
+		} else {
+			return String.format(
+					(Locale) null,
+					"p:%d;x:%f;y:%f", in_pos.getPage(), in_pos.getX(), in_pos.getY());
+		}
     }
 
     /**
@@ -321,9 +162,6 @@ public class PdfAs4SignatureParameter {
      * @return the Signature Profile ID
      */
     public String getPdfAsSignatureProfileId() {
-        String lang = getSignatureLanguage();
-        boolean useNote = (getProperty("SIG_NOTE") != null);
-        boolean usePdfACompat = (getSignaturePdfACompat());
 
         //Add Signature Param here//
         String profileId;
@@ -333,26 +171,26 @@ public class PdfAs4SignatureParameter {
             return Profile.INVISIBLE.name();
         }
 
-        Profile profile = Profile.getProfile(this.profile);
+        Profile profile = Profile.getProfile(this.signatureProfileName);
         switch (profile) {
             case BASE_LOGO:
             case INVISIBLE:
-                return this.profile;
+                return this.signatureProfileName;
             case AMTSSIGNATURBLOCK:
-                profileId = this.profile;
-                profileId += getLangProfilePart(lang);
+                profileId = this.signatureProfileName;
+                profileId += getLangProfilePart(this.signatureLanguage);
                 profileId += "_RECOMMENDED";
                 return profileId;
             default:
-                profileId = this.profile;
-                profileId += getLangProfilePart(lang);
+                profileId = this.signatureProfileName;
+                profileId += getLangProfilePart(this.signatureLanguage);
                 break;
         }
 
-        if (useNote)
+        if (getProperty("SIG_NOTE") != null)
             profileId += "_NOTE";
 
-        if (usePdfACompat)
+        if (this.enablePDFACompat)
             profileId += "_PDFA";
 
         log.debug("Profile ID: {}", profileId);
@@ -362,15 +200,6 @@ public class PdfAs4SignatureParameter {
     private static String getLangProfilePart(String lang) {
         return ("en".equals(lang)) ? "_EN" : "_DE";
     }
-
-    public void setSignatureProfile(String profile) {
-        this.profile = profile;
-    }
-
-    public String getSignatureProfile() {
-        return this.profile;
-    }
-
 }
 
 

@@ -109,13 +109,13 @@ public class PositioningState extends State {
 		ConfigurationManager config = stateMachine.configProvider;
 		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
 		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
-		param.setEmblem(emblem);
+		param.emblem = emblem;
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
 			param.setProperty("SIG_NOTE", config.getSignatureNote());
 		}
 
-		param.setSignatureLanguage(config.getSignatureLocale().getLanguage());
-		param.setSignaturePdfACompat(config.getSignaturePdfACompat());
+		param.signatureLanguage = config.getSignatureLocale().getLanguage();
+		param.enablePDFACompat = config.getSignaturePdfACompat();
 
 		this.positionComposite.setPlaceholder(
 				SignaturePlaceholderCache.getPlaceholder(param),

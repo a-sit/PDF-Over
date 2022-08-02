@@ -445,11 +445,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 			}
 
-			param.setSignatureLanguage(this.configurationContainer.signatureLocale.getLanguage());
-			param.setSignaturePdfACompat(this.configurationContainer.signaturePDFACompat);
+			param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
+			param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
 			if (image != null && !image.trim().isEmpty()) {
 				logo = new ImageData(image);
-				param.setEmblem(new CachedFileNameEmblem(image));
+				param.emblem = new CachedFileNameEmblem(image);
 			}
 			//TODO deactivated the placeholder preview
 			//TODO display accurate placeholder preview -> now its only standard placeholder shown
@@ -554,8 +554,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	void setSignatureProfileSetting(){
 		try {
+			// TODO this doesn't do anything...?
 			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
+			param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
 
 		} catch (Exception e){
 			log.warn("Cannot save signature profile {}", e.getMessage());

@@ -128,14 +128,14 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter = new PdfAs4SignatureParameter();
 				}
 
-				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.document));
-				this.state.signatureParameter.setSignatureDevice(status.bku);
+				this.state.signatureParameter.inputDocument = new PDFFileDocumentSource(status.document);
+				this.state.signatureParameter.signatureDevice = status.bku;
 				if (status.signaturePosition != null) {
-					this.state.signatureParameter.setSignaturePosition(status.signaturePosition);
+					this.state.signatureParameter.signaturePosition = status.signaturePosition;
 				}
 
 				if (configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().isEmpty()) {
-					this.state.signatureParameter.setEmblem(new CachedFileNameEmblem(configuration.getDefaultEmblem()));
+					this.state.signatureParameter.emblem = new CachedFileNameEmblem(configuration.getDefaultEmblem());
 				}
 
 				if (configuration.getSignatureNote() != null
@@ -144,13 +144,13 @@ public class PrepareSigningState extends State {
 							"SIG_NOTE", configuration.getSignatureNote());
 				}
 
-				this.state.signatureParameter.setSearchForPlaceholderSignatures(getStateMachine().status.searchForPlacehoderSignature);
+				this.state.signatureParameter.searchForPlaceholderSignatures = getStateMachine().status.searchForPlacehoderSignature;
 
-				this.state.signatureParameter.setSignatureLanguage(configuration.getSignatureLocale().getLanguage());
+				this.state.signatureParameter.signatureLanguage = configuration.getSignatureLocale().getLanguage();
 
-				this.state.signatureParameter.setSignaturePdfACompat(configuration.getSignaturePdfACompat());
+				this.state.signatureParameter.enablePDFACompat = configuration.getSignaturePdfACompat();
 
-				this.state.signatureParameter.setSignatureProfile(configuration.getSignatureProfile());
+				this.state.signatureParameter.signatureProfileName = configuration.getSignatureProfile();
 
 				this.state.signingState = PdfAs4Signer.prepare(this.state.signatureParameter);
 

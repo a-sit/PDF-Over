@@ -74,11 +74,11 @@ public class SignaturePlaceholderCache {
 		final String sigNoteProp = "NOTE";
 		final String sigProfProp = "PROF";
 
-		String sigLang = param.getSignatureLanguage();
+		String sigLang = param.signatureLanguage;
 		String sigEmbl = "";
 		String sigEHsh = "";
-		if (param.getEmblem() != null) {
-			Emblem embl = param.getEmblem();
+		if (param.emblem != null) {
+			Emblem embl = param.emblem;
 			if (embl instanceof CachedFileNameEmblem) {
 				sigEmbl = ((CachedFileNameEmblem) embl).getOriginalFileName();
 				sigEHsh = ((CachedFileNameEmblem) embl).getOriginalFileHash();
@@ -86,11 +86,11 @@ public class SignaturePlaceholderCache {
 				sigEmbl = embl.getFileName();
 			}
 		}
-		String sigPdfA = param.getSignaturePdfACompat() ? Constants.TRUE : Constants.FALSE;
+		String sigPdfA = param.enablePDFACompat ? Constants.TRUE : Constants.FALSE;
 		String sigNote = param.getProperty("SIG_NOTE");
 		if (sigNote == null)
 			sigNote = "";
-		String profile = param.getSignatureProfile();
+		String profile = param.signatureProfileName;
 		if (profile == null){
 			// set default value
 			profile = Profile.getDefaultProfile();
