@@ -10,7 +10,6 @@ import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignResultImpl;
 import at.asit.pdfover.signator.SignatureException;
-import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
@@ -42,24 +41,18 @@ public class PdfAs4Signer {
 	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE
 			+ "</sl:LocRefContent>";
 
-	public static SigningState prepare(SignatureParameter parameter)
-			throws SignatureException {
-		PdfAs4SignatureParameter sign_para = null;
+	public static SigningState prepare(PdfAs4SignatureParameter parameter) throws SignatureException {
 
-		if (PdfAs4SignatureParameter.class.isInstance(parameter)) {
-			sign_para = PdfAs4SignatureParameter.class.cast(parameter);
-		}
-
-		if (sign_para == null) {
+		if (parameter == null) {
 			throw new SignatureException("Incorrect SignatureParameter!");
 		}
 
-		String sigProfile = sign_para.getPdfAsSignatureProfileId();
-		String sigEmblem = (sign_para.getEmblem() == null ? null : sign_para.getEmblem().getFileName());
-		String sigNote = sign_para.getProperty("SIG_NOTE");
+		String sigProfile = parameter.getPdfAsSignatureProfileId();
+		String sigEmblem = (parameter.getEmblem() == null ? null : parameter.getEmblem().getFileName());
+		String sigNote = parameter.getProperty("SIG_NOTE");
 		String sigPos = null;
-		if (sign_para.getSignaturePosition() != null) {
-			sigPos = sign_para.getPdfAsSignaturePosition();
+		if (parameter.getSignaturePosition() != null) {
+			sigPos = parameter.getPdfAsSignaturePosition();
 		}
 		PdfAs pdfas = PdfAs4Helper.getPdfAs();
 		Configuration config = pdfas.getConfiguration();

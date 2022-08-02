@@ -34,7 +34,6 @@ import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
-import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
@@ -168,7 +167,7 @@ public class PrepareSigningState extends State {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
 
-	SignatureParameter signatureParameter;
+	PdfAs4SignatureParameter signatureParameter;
 
 	private WaitingComposite waitingComposite = null;
 

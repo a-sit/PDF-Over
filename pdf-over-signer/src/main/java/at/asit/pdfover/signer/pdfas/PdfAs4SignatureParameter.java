@@ -27,9 +27,10 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import at.asit.pdfover.signator.BKUs;
+import at.asit.pdfover.signator.DocumentSource;
+import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureDimension;
-import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
@@ -40,13 +41,186 @@ import at.asit.pdfover.commons.Profile;
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
-public class PdfAs4SignatureParameter extends SignatureParameter {
+public class PdfAs4SignatureParameter {
 
+    /**
+     * SLF4J Logger instance
+     **/
+    static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
+    
     /**
      * this is set by CliArguments.InvisibleProfile
      * TODO: this is a no good, very bad, hack
      */
     public static boolean PROFILE_VISIBILITY = true;
+
+    /** The Signature Position */
+	protected SignaturePosition signaturePosition = null;
+
+	/** The Signature language */
+	protected String signatureLanguage = null;
+
+	/** The key identifier */
+	protected String keyIdentifier = null;
+
+	/** The input document */
+	protected DocumentSource documentSource = null;
+
+	/** Holds the emblem */
+	protected Emblem emblem;
+
+	/** Whether to use PDF/A compatibility */
+	protected boolean pdfACompat;
+
+	/** The signature device */
+	protected BKUs signatureDevice;
+
+	/** Whether so look for placeholder signatures or not. */
+	protected boolean searchForPlaceholderSignatures = false;
+
+	/**
+	 * @return the searchForPlaceholderSignatures
+	 */
+	public boolean isSearchForPlaceholderSignatures() {
+		return this.searchForPlaceholderSignatures;
+	}
+
+	/**
+	 * @param value
+	 *            the searchForPlaceholderSignatures to set
+	 */
+	public void setSearchForPlaceholderSignatures(boolean value) {
+		this.searchForPlaceholderSignatures = value;
+	}
+
+	/**
+	 * @return the signatureDevice
+	 */
+	public BKUs getSignatureDevice() {
+		return this.signatureDevice;
+	}
+
+	/**
+	 * @param signatureDevice
+	 *            the signatureDevice to set
+	 */
+	public void setSignatureDevice(BKUs signatureDevice) {
+		this.signatureDevice = signatureDevice;
+	}
+
+	/**
+	 * Getter of the property <tt>signaturePosition</tt>
+	 *
+	 * @return Returns the signaturePosition.
+	 */
+	public SignaturePosition getSignaturePosition() {
+		return this.signaturePosition;
+	}
+
+	/**
+	 * Setter of the property <tt>signaturePosition</tt>
+	 *
+	 * @param signaturePosition
+	 *            The signaturePosition to set.
+	 */
+	public void setSignaturePosition(SignaturePosition signaturePosition) {
+		this.signaturePosition = signaturePosition;
+	}
+
+	/**
+	 * Getter of the property <tt>signatureLanguage</tt>
+	 *
+	 * @return Returns the signatureLanguage.
+	 */
+	public String getSignatureLanguage() {
+		return this.signatureLanguage;
+	}
+
+	/**
+	 * Setter of the property <tt>signatureLanguage</tt>
+	 *
+	 * @param signatureLanguage
+	 *            The signatureLanguage to set.
+	 */
+	public void setSignatureLanguage(String signatureLanguage) {
+		this.signatureLanguage = signatureLanguage;
+	}
+
+	/**
+	 * Getter of the property <tt>signaturePdfACompat</tt>
+	 *
+	 * @return Returns the PDF/A compatibility setting.
+	 */
+	public boolean getSignaturePdfACompat() {
+		return this.pdfACompat;
+	}
+
+	/**
+	 * Setter of the property <tt>signaturePdfACompat</tt>
+	 *
+	 * @param compat
+	 *            The the PDF/A compatibility setting to set.
+	 */
+	public void setSignaturePdfACompat(boolean compat) {
+		this.pdfACompat = compat;
+	}
+
+	/**
+	 * Getter of the property <tt>keyIdentifier</tt>
+	 *
+	 * @return Returns the keyIdentifier.
+	 */
+	public String getKeyIdentifier() {
+		return this.keyIdentifier;
+	}
+
+	/**
+	 * Setter of the property <tt>keyIdentifier</tt>
+	 *
+	 * @param keyIdentifier
+	 *            The keyIdentifier to set.
+	 */
+	public void setKeyIdentifier(String keyIdentifier) {
+		this.keyIdentifier = keyIdentifier;
+	}
+
+	/**
+	 * Getter of the property <tt>documentSource</tt>
+	 *
+	 * @return Returns the documentSource.
+	 */
+	public DocumentSource getInputDocument() {
+		return this.documentSource;
+	}
+
+	/**
+	 * Setter of the property <tt>documentSource</tt>
+	 *
+	 * @param inputDocument
+	 *            The documentSource to set.
+	 */
+	public void setInputDocument(DocumentSource inputDocument) {
+		this.documentSource = inputDocument;
+	}
+
+	/**
+	 * Gets the Emblem
+	 *
+	 * @return the Emblem
+	 */
+	public Emblem getEmblem() {
+		return this.emblem;
+	}
+
+	/**
+	 * Sets the Emblem
+	 *
+	 * @param emblem
+	 *            The new Emblem
+	 */
+	public void setEmblem(Emblem emblem) {
+		this.emblem = emblem;
+	}
 
     private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
@@ -56,16 +230,11 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     private int sig_w = 229;
     private int sig_h = 77;
 
-    /**
-     * SLF4J Logger instance
-     **/
-    static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
     private String profile = Profile.getDefaultProfile();
 
     /* (non-Javadoc)
      * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholderDimension()
      */
-    @Override
     public SignatureDimension getPlaceholderDimension() {
         return new SignatureDimension(this.sig_w, this.sig_h);
     }
@@ -73,7 +242,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     /* (non-Javadoc)
      * @see at.asit.pdfover.signator.SignatureParameter#getPlaceholder()
      */
-    @Override
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
 
@@ -109,7 +277,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     /* (non-Javadoc)
      * @see at.asit.pdfover.signator.SignatureParameter#setProperty(java.lang.String, java.lang.String)
      */
-    @Override
     public void setProperty(String key, String value) {
         this.genericProperties.put(key, value);
     }
@@ -117,7 +284,6 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     /* (non-Javadoc)
      * @see at.asit.pdfover.signator.SignatureParameter#getProperty(java.lang.String)
      */
-    @Override
     public String getProperty(String key) {
         return this.genericProperties.get(key);
     }
@@ -196,12 +362,10 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
         return ("en".equals(lang)) ? "_EN" : "_DE";
     }
 
-    @Override
     public void setSignatureProfile(String profile) {
         this.profile = profile;
     }
 
-    @Override
     public String getSignatureProfile() {
         return this.profile;
     }

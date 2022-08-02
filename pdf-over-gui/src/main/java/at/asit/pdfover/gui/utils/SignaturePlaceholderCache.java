@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
-import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 
 /**
  *
@@ -61,7 +61,7 @@ public class SignaturePlaceholderCache {
 	 * @param param SignatureParameter
 	 * @return the placeholder AWT Image
 	 */
-	public static Image getPlaceholder(SignatureParameter param) {
+	public static Image getPlaceholder(PdfAs4SignatureParameter param) {
 		final String fileDir = Constants.CONFIG_DIRECTORY;
 		final String imgFileName = Constants.PLACEHOLDER_CACHE_FILENAME;
 		final String imgFileExt = "png";
@@ -144,7 +144,7 @@ public class SignaturePlaceholderCache {
 	 * @param param SignatureParameter
 	 * @return the placeholder SWT ImageData
 	 */
-	public static ImageData getSWTPlaceholder(SignatureParameter param) {
+	public static ImageData getSWTPlaceholder(PdfAs4SignatureParameter param) {
 		return ImageConverter.convertToSWT((BufferedImage) getPlaceholder(param));
 	}
 }

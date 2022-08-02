@@ -67,9 +67,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
-import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
-import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
  *
@@ -442,7 +440,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		ImageData logo = null;
 
 		try {
-			SignatureParameter param = new PdfAs4SignatureParameter();
+			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
 			if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
 				param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 			}
@@ -556,7 +554,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	void setSignatureProfileSetting(){
 		try {
-			SignatureParameter param = new PdfAs4SignatureParameter();
+			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
 			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		} catch (Exception e){
