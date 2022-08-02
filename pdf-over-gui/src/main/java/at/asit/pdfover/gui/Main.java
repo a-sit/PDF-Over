@@ -45,7 +45,6 @@ public class Main {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-
 		try {
 			log.info("This is " + Constants.APP_NAME_VERSION + ", " +
 			  "running on " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + ", " +
@@ -56,11 +55,14 @@ public class Main {
 				configDir.mkdir();
 			}
 
-			// force loading the IAIK JCE
+			// force loading the IAIK JCE (cf. #95)
 			IAIK.addAsProvider();
 
-			// force keystore type (Adoptium JRE 17 still ships with JKS)
+			// force keystore type (Adoptium JRE 17 still ships with JKS, cf. #95)
 			System.setProperty("javax.net.ssl.trustStoreType", "jks");
+
+			// disable display scaling for AWT components embedded in SWT (cf. #106)
+			System.setProperty("sun.java2d.uiScale", "1");
 
 			log.debug("Starting stateMachine ...");
 			(new StateMachine(args)).start();
