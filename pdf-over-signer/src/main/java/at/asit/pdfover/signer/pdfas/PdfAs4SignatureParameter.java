@@ -43,6 +43,7 @@ import at.asit.pdfover.commons.Profile;
  */
 public class PdfAs4SignatureParameter {
 
+	// TODO nuke getters/setters from this class
     /**
      * SLF4J Logger instance
      **/
