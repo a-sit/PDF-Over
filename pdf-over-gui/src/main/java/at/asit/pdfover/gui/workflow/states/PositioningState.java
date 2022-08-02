@@ -39,6 +39,7 @@ import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
  * Decides where to position the signature block
@@ -107,7 +108,7 @@ public class PositioningState extends State {
 		}
 		// Update possibly changed values
 		ConfigurationManager config = stateMachine.configProvider;
-		SignatureParameter param = stateMachine.pdfSigner.getPDFSigner().newParameter();
+		SignatureParameter param = PdfAs4Signer.newParameter();
 		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
 		param.setEmblem(emblem);
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {

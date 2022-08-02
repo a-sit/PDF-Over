@@ -455,17 +455,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		AdvancedConfigurationComposite.this.txtSaveFilePostFix.setText(postfix);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
-	 */
-	@Override
-	protected void signerChanged() {
-		// Nothing to do here (yet)
-	}
-
 	void performOutputFolderChanged(String foldername) {
 		log.debug("Selected Output folder: {}", foldername);
 		this.configurationContainer.outputFolder = foldername;

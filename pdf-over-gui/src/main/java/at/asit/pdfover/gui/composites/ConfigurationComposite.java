@@ -41,7 +41,6 @@ import at.asit.pdfover.gui.composites.configuration.SimpleConfigurationComposite
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.ResumableException;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.workflow.PDFSigner;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -50,11 +49,6 @@ import at.asit.pdfover.gui.workflow.states.State;
  * Composite for hosting configuration composites
  */
 public class ConfigurationComposite extends StateComposite {
-
-	/**
-	 * The PDF Signer used to produce signature block preview
-	 */
-	protected PDFSigner signer;
 
 	/**
 	 * SLF4J Logger instance
@@ -122,13 +116,6 @@ public class ConfigurationComposite extends StateComposite {
 	private Button btnSpeichern;
 
 	private Button btnAbbrechen;
-
-	/**
-	 * @return the signer
-	 */
-	public PDFSigner getSigner() {
-		return this.signer;
-	}
 
 	/**
 	 * Create the composite.
@@ -249,25 +236,6 @@ public class ConfigurationComposite extends StateComposite {
 		getShell().setText(Constants.APP_NAME_VERSION + " [" + System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + "]");
 
 		this.doLayout();
-	}
-
-	/**
-	 * @param signer
-	 *            the signer to set
-	 */
-	public void setSigner(PDFSigner signer) {
-		this.signer = signer;
-		if (this.simpleConfigComposite != null) {
-			this.simpleConfigComposite.setSigner(getSigner());
-		}
-		if (this.advancedConfigComposite != null) {
-			// not needed at the moment
-			this.advancedConfigComposite.setSigner(getSigner());
-		}
-		if (this.keystoreConfigComposite != null) {
-			// not needed at the moment
-			this.keystoreConfigComposite.setSigner(getSigner());
-		}
 	}
 
 	private boolean keystoreInitialized = false;

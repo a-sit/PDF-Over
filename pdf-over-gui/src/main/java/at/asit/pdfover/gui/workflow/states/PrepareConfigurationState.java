@@ -51,7 +51,6 @@ import at.asit.pdfover.gui.workflow.GUIProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.Signator;
 import at.asit.pdfover.signator.SignaturePosition;
 
 /**
@@ -341,10 +340,6 @@ public class PrepareConfigurationState extends State {
 					}
 				}).start();
 			}
-
-			// Set usedSignerLib ...
-			stateMachine.pdfSigner.setUsedPDFSignerLibrary(
-					Signator.Signers.PDFAS4);
 
 			// Create PDF Signer
 			Status status = stateMachine.status;

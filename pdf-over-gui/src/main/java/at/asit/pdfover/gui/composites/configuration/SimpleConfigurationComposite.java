@@ -68,6 +68,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.SignatureParameter;
+import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
  *
@@ -440,22 +441,20 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		ImageData logo = null;
 
 		try {
-			if (this.signer != null) {
-				SignatureParameter param = this.signer.getPDFSigner().newParameter();
-				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
-					param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
-				}
-
-				param.setSignatureLanguage(this.configurationContainer.signatureLocale.getLanguage());
-				param.setSignaturePdfACompat(this.configurationContainer.signaturePDFACompat);
-				if (image != null && !image.trim().isEmpty()) {
-					logo = new ImageData(image);
-					param.setEmblem(new CachedFileNameEmblem(image));
-				}
-				//TODO deactivated the placeholder preview
-				//TODO display accurate placeholder preview -> now its only standard placeholder shown
-				//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
+			SignatureParameter param = PdfAs4Signer.newParameter();
+			if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
+				param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 			}
+
+			param.setSignatureLanguage(this.configurationContainer.signatureLocale.getLanguage());
+			param.setSignaturePdfACompat(this.configurationContainer.signaturePDFACompat);
+			if (image != null && !image.trim().isEmpty()) {
+				logo = new ImageData(image);
+				param.setEmblem(new CachedFileNameEmblem(image));
+			}
+			//TODO deactivated the placeholder preview
+			//TODO display accurate placeholder preview -> now its only standard placeholder shown
+			//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 		} catch (Exception e) {
 			log.error("Failed to load image for display...", e);
 		}
@@ -555,29 +554,13 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void setSignatureProfileSetting(){
-		if (this.signer == null){
-			log.debug("In setSignatureProfileSettings: Signer was null");
-			return;
-		}
 		try {
-			SignatureParameter param = this.signer.getPDFSigner().newParameter();
+			SignatureParameter param = PdfAs4Signer.newParameter();
 			param.setSignatureProfile(this.configurationContainer.getSignatureProfile().name());
 
 		} catch (Exception e){
 			log.warn("Cannot save signature profile {}", e.getMessage());
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
-	 */
-	@Override
-	protected void signerChanged() {
-		this.setVisibleImage();
-		this.setSignatureProfileSetting();
 	}
 
 	private void plainMobileNumberSetter() {

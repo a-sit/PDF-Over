@@ -132,10 +132,6 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.btnOpenLogDirectory.setText(Messages.getString("config.ShowLogDirectory"));
 	}
 
-
-	@Override
-	protected void signerChanged() {}
-
 	@Override
 	public void initConfiguration(ConfigurationManager provider) {}
 

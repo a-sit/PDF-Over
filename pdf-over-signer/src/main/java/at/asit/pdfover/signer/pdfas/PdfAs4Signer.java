@@ -12,7 +12,6 @@ import at.asit.pdfover.signator.SignResultImpl;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignatureParameter;
 import at.asit.pdfover.signator.SignaturePosition;
-import at.asit.pdfover.signator.Signer;
 import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
@@ -30,10 +29,7 @@ import at.knowcenter.wag.egov.egiz.pdf.TablePos;
 /**
  * PDF AS Signer Implementation
  */
-public class PdfAs4Signer implements Signer {
-
-
-
+public class PdfAs4Signer {
 
 	/**
 	 * The template URL
@@ -46,8 +42,7 @@ public class PdfAs4Signer implements Signer {
 	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE
 			+ "</sl:LocRefContent>";
 
-	@Override
-	public SigningState prepare(SignatureParameter parameter)
+	public static SigningState prepare(SignatureParameter parameter)
 			throws SignatureException {
 		PdfAs4SignatureParameter sign_para = null;
 
@@ -97,8 +92,7 @@ public class PdfAs4Signer implements Signer {
 		return state;
 	}
 
-	@Override
-	public SignResult sign(SigningState state) throws SignatureException {
+	public static SignResult sign(SigningState state) throws SignatureException {
 		try {
 			PdfAs4SigningState sstate = null;
 
@@ -157,8 +151,7 @@ public class PdfAs4Signer implements Signer {
 		}
 	}
 
-	@Override
-	public SignatureParameter newParameter() {
+	public static SignatureParameter newParameter() {
 		return new PdfAs4SignatureParameter();
 	}
 }

@@ -430,17 +430,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see
-	 * at.asit.pdfover.gui.composites.BaseConfigurationComposite#signerChanged()
-	 */
-	@Override
-	protected void signerChanged() {
-		// Nothing to do here (yet)
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override

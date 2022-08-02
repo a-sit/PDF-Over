@@ -41,7 +41,6 @@ public class StateMachine implements GUIProvider {
 	private static final Logger log = LoggerFactory.getLogger(StateMachine.class);
 
 	public final Status status;
-	public final PDFSigner pdfSigner;
 	public final ConfigurationManager configProvider;
 	public final String[] cmdLineArgs;
 
@@ -53,7 +52,6 @@ public class StateMachine implements GUIProvider {
 	public StateMachine(String[] cmdLineArgs) {
 		this.status = new Status();
 		this.status.setCurrentState(new PrepareConfigurationState(this));
-		this.pdfSigner = new PDFSigner();
 		this.configProvider = new ConfigurationManager();
 		this.cmdLineArgs = cmdLineArgs;
 	}

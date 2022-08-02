@@ -35,7 +35,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signator.SignatureParameter;
-import at.asit.pdfover.signator.Signer;
+import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
  * User waiting state, wait for PDF Signator library to prepare document for
@@ -122,12 +122,9 @@ public class PrepareSigningState extends State {
 						}
 					});
 				}
-				if (this.state.signer == null) {
-					this.state.signer = this.state.getStateMachine().pdfSigner.getPDFSigner();
-				}
 
 				if (this.state.signatureParameter == null) {
-					this.state.signatureParameter = this.state.signer.newParameter();
+					this.state.signatureParameter = PdfAs4Signer.newParameter();
 				}
 
 				this.state.signatureParameter.setInputDocument(new PDFFileDocumentSource(status.document));
@@ -154,7 +151,7 @@ public class PrepareSigningState extends State {
 
 				this.state.signatureParameter.setSignatureProfile(configuration.getSignatureProfile());
 
-				this.state.signingState = this.state.signer.prepare(this.state.signatureParameter);
+				this.state.signingState = PdfAs4Signer.prepare(this.state.signatureParameter);
 
 			} catch (Exception e) {
 				log.error("PrepareDocumentThread: ", e);
@@ -185,8 +182,6 @@ public class PrepareSigningState extends State {
 
 	at.asit.pdfover.signator.SigningState signingState = null;
 
-	Signer  signer;
-
 	Exception threadException = null;
 
 	@Override
@@ -195,12 +190,10 @@ public class PrepareSigningState extends State {
 
 		getStateMachine().display(waiting);
 
-		this.signer = getStateMachine().pdfSigner.getPDFSigner();
-
 		Status status = getStateMachine().status;
 
 		if (this.signatureParameter == null) {
-			this.signatureParameter = this.signer.newParameter();
+			this.signatureParameter = PdfAs4Signer.newParameter();
 		}
 
 		if (this.signingState == null && this.threadException == null) {

@@ -30,7 +30,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SignatureException;
-import at.asit.pdfover.signator.Signer;
+import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
@@ -54,10 +54,8 @@ public class SigningState extends State {
 		@Override
 		public void run() {
 			try {
-				Signer signer = this.state.getStateMachine().pdfSigner.getPDFSigner();
 				Status status = this.state.getStateMachine().status;
-
-				status.signResult = signer.sign(status.signingState);
+				status.signResult = PdfAs4Signer.sign(status.signingState);
 			} catch(Exception e) {
 				this.state.threadException = e;
 			} finally {
