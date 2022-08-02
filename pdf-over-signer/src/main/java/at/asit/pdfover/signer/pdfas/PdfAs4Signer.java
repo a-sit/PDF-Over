@@ -150,8 +150,4 @@ public class PdfAs4Signer {
 			throw new SignatureException(e);
 		}
 	}
-
-	public static SignatureParameter newParameter() {
-		return new PdfAs4SignatureParameter();
-	}
 }
