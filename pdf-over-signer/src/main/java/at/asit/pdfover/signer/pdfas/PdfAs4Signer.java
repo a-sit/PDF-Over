@@ -8,7 +8,6 @@ import javax.activation.DataSource;
 import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SignResult;
-import at.asit.pdfover.signator.SignResultImpl;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
@@ -114,7 +113,7 @@ public class PdfAs4Signer {
 
 			pdfas.sign(param);
 
-			SignResultImpl result = new SignResultImpl();
+			SignResult result = new SignResult();
 
 			if (param.getSignaturePosition() != null) {
 				TablePos tp = new TablePos(param.getSignaturePosition());

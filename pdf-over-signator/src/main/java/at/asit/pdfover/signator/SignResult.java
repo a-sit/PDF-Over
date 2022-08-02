@@ -15,28 +15,51 @@
  */
 package at.asit.pdfover.signator;
 
+//Imports
 import java.security.cert.X509Certificate;
 
 /**
- * Signature Result containing the signed document as document source
+ * The result of a signature operation
  */
-public interface SignResult {
+public class SignResult {
+
+	private SignaturePosition position;
+	private DocumentSource source;
+	private X509Certificate certificate;
+
+	public SignaturePosition getSignaturePosition() {
+		return this.position;
+	}
+
+	public DocumentSource getSignedDocument() {
+		return this.source;
+	}
+
+	public X509Certificate getSignerCertificate() {
+		return this.certificate;
+	}
 
 	/**
-	 * Getter of the property <tt>signaturePosition</tt>
-	 * @return  Returns the signaturePosition.
+	 * Set the signer certificate
+	 * @param x509Certificate the signer certificate
 	 */
-	public SignaturePosition getSignaturePosition();
+	public void setSignerCertificate(X509Certificate x509Certificate) {
+		this.certificate = x509Certificate;
+	}
 
 	/**
-	 * Gets the signed Document
-	 * @return  Returns the documentSource.
+	 * Set the signature position
+	 * @param postion the signature position
 	 */
-	public DocumentSource getSignedDocument();
+	public void setSignaturePosition(SignaturePosition postion) {
+		this.position = postion;
+	}
 
 	/**
-	 * Gets the signer certificate
-	 * @return The signer x509 certificate
+	 * Set the signed document
+	 * @param source DocumentSource containing the signed document
 	 */
-	public X509Certificate getSignerCertificate();
+	public void setSignedDocument(DocumentSource source) {
+		this.source = source;
+	}
 }
