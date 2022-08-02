@@ -133,19 +133,10 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
 		this.tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
-		FormData fd_tabFolder = new FormData();
-		fd_tabFolder.bottom = new FormAttachment(100, -5);
-		fd_tabFolder.right = new FormAttachment(100, -5);
-		fd_tabFolder.top = new FormAttachment(0, 5);
-		fd_tabFolder.left = new FormAttachment(0, 5);
-		this.tabFolder.setLayoutData(fd_tabFolder);
-
-		FontData[] fD_tabFolder = this.tabFolder.getFont().getFontData();
-		fD_tabFolder[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.tabFolder.setFont(new Font(Display.getCurrent(), fD_tabFolder[0]));
+		StateComposite.anchor(tabFolder).bottom(100, -5).right(100, -5).top(0, 5).left(0, 5).set();
+		StateComposite.setFontHeight(tabFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.simpleTabItem.setText(Messages.getString("config.Simple"));
 
 		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.simpleTabItem.setControl(simpleCompositeScr);
@@ -156,7 +147,6 @@ public class ConfigurationComposite extends StateComposite {
 		simpleCompositeScr.setMinSize(simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.advancedTabItem.setText(Messages.getString("config.Advanced"));
 
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.advancedTabItem.setControl(advancedCompositeScr);
@@ -167,7 +157,6 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setMinSize(advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
-		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME));
 
 		ScrolledComposite aboutCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.aboutTabItem.setControl(aboutCompositeScr);
@@ -184,10 +173,8 @@ public class ConfigurationComposite extends StateComposite {
 		this.tabFolder.setSelection(this.simpleTabItem);
 
 		this.btnSpeichern = new Button(this, SWT.NONE);
-		FormData fd_btnSpeichern = new FormData();
-		fd_btnSpeichern.right = new FormAttachment(100, -5);
-		fd_btnSpeichern.bottom = new FormAttachment(100);
-		this.btnSpeichern.setLayoutData(fd_btnSpeichern);
+		StateComposite.anchor(btnSpeichern).right(100, -5).bottom(100).set();
+		StateComposite.setFontHeight(btnSpeichern, Constants.TEXT_SIZE_BUTTON);
 		this.btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -198,19 +185,11 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		});
-		this.btnSpeichern.setText(Messages.getString("common.Save"));
 		getShell().setDefaultButton(this.btnSpeichern);
 
-		FontData[] fD_btnSpeichern = this.btnSpeichern.getFont().getFontData();
-		fD_btnSpeichern[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnSpeichern.setFont(new Font(Display.getCurrent(), fD_btnSpeichern[0]));
-
 		this.btnAbbrechen = new Button(this, SWT.NONE);
-		FormData fd_btnAbrechen = new FormData();
-		fd_btnAbrechen.right = new FormAttachment(this.btnSpeichern, -10);
-		fd_btnAbrechen.bottom = new FormAttachment(this.btnSpeichern, 0, SWT.BOTTOM);
-		this.btnAbbrechen.setLayoutData(fd_btnAbrechen);
-		this.btnAbbrechen.setText(Messages.getString("common.Cancel"));
+		StateComposite.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM).set();
+		StateComposite.setFontHeight(btnAbbrechen, Constants.TEXT_SIZE_BUTTON);
 		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -220,21 +199,13 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 
-		FontData[] fD_btnAbbrechen = this.btnAbbrechen.getFont().getFontData();
-		fD_btnAbbrechen[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btnAbbrechen.setFont(new Font(Display.getCurrent(), fD_btnAbbrechen[0]));
-
-		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(0, 5);
-		fd_composite.bottom = new FormAttachment(this.btnSpeichern, -10);
-		fd_composite.left = new FormAttachment(0, 5);
-		fd_composite.right = new FormAttachment(100, -5);
-		this.containerComposite.setLayoutData(fd_composite);
+		StateComposite.anchor(containerComposite).top(0, 5).bottom(btnSpeichern, -10).left(0, 5).right(100, -5).set();
 		this.containerComposite.setLayout(this.compositeStack);
 		this.compositeStack.topControl = this.tabFolder;
 
 		getShell().setText(Constants.APP_NAME_VERSION + " [" + System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + "]");
 
+		reloadResources();
 		this.doLayout();
 	}
 
@@ -265,6 +236,8 @@ public class ConfigurationComposite extends StateComposite {
 				this.keystoreInitialized = true;
 			}
 			this.keystoreConfigComposite.loadConfiguration();
+
+			reloadResources();
 		} else if (!enabled && this.keystoreConfigComposite != null){
 			this.keystoreTabItem.dispose();
 			this.keystoreConfigComposite = null;
@@ -457,10 +430,13 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.simpleTabItem.setText(Messages.getString("config.Simple"));
-		this.advancedTabItem.setText(Messages.getString("config.Advanced"));
-		this.aboutTabItem.setText(String.format(Messages.getString("config.About"), Constants.APP_NAME));
-		this.btnSpeichern.setText(Messages.getString("common.Save"));
-		this.btnAbbrechen.setText(Messages.getString("common.Cancel"));
+		StateComposite.setLocalizedText(simpleTabItem, "config.Simple");
+		StateComposite.setLocalizedText(advancedTabItem, "config.Advanced");
+		StateComposite.setLocalizedText(aboutTabItem, "config.About", Constants.APP_NAME);
+		if (this.keystoreTabItem != null)
+			StateComposite.setLocalizedText(keystoreTabItem, "config.Keystore");
+
+		StateComposite.setLocalizedText(btnSpeichern, "common.Save");
+		StateComposite.setLocalizedText(btnAbbrechen, "common.Cancel");
 	}
 }

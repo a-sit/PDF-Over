@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 
 import at.asit.pdfover.commons.Messages;
@@ -67,6 +68,8 @@ public abstract class StateComposite extends Composite {
 		c.addListener(event, (Event e) -> { e.doit = false; });
 	}
 
+	public static void setLocalizedText(Item i, String messageKey) { i.setText(Messages.getString(messageKey)); }
+	public static void setLocalizedText(Item i, String formatMessageKey, Object... formatArgs) { i.setText(String.format(Messages.getString(formatMessageKey), formatArgs)); }
 	public static void setLocalizedText(Label l, String messageKey) { l.setText(Messages.getString(messageKey)); l.requestLayout(); }
 	public static void setLocalizedText(Label l, String formatMessageKey, Object... formatArgs) { l.setText(String.format(Messages.getString(formatMessageKey), formatArgs)); l.requestLayout(); }
 	public static void setLocalizedText(Button b, String messageKey) { b.setText(Messages.getString(messageKey)); b.requestLayout(); }
