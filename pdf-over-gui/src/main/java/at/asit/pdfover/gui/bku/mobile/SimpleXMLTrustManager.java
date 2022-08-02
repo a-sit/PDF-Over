@@ -41,8 +41,7 @@ public class SimpleXMLTrustManager implements X509TrustManager {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(SimpleXMLTrustManager.class);
+	private static final Logger log = LoggerFactory.getLogger(SimpleXMLTrustManager.class);
 
 	/*
 	 * The default X509TrustManager returned by SunX509. We'll delegate

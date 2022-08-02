@@ -39,8 +39,7 @@ public class InputDocumentArgument extends Argument {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(InputDocumentArgument.class);
+	private static final Logger log = LoggerFactory.getLogger(InputDocumentArgument.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfovewr.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)

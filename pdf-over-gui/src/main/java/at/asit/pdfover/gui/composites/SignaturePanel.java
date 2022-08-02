@@ -68,8 +68,6 @@ public class SignaturePanel extends JPanel {
 	int offX = 0;
 	/** The vertical offset of the image from the top of the panel */
 	int offY = 0;
-	/** The size of the image */
-	private Dimension prevSize = null;
 	/** The position of the signature, in page space */
 	Point2D sigPagePos = null;
 	/** The position of the signature, in screen space */
@@ -324,8 +322,6 @@ public class SignaturePanel extends JPanel {
 			}
 			else
 				updateSigPos((int) this.sigScreenPos.getX(), (int) this.sigScreenPos.getY());
-
-			this.prevSize = actualRenderSize;
 		}
 	}
 

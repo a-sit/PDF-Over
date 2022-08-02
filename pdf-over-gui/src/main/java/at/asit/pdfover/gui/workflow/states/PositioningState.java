@@ -18,9 +18,6 @@ package at.asit.pdfover.gui.workflow.states;
 //Imports
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -58,8 +55,7 @@ public class PositioningState extends State {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(PositioningState.class);
+	private static final Logger log = LoggerFactory.getLogger(PositioningState.class);
 
 	private PositioningComposite positionComposite = null;
 

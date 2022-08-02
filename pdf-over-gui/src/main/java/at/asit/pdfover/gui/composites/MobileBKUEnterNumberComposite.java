@@ -44,8 +44,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUEnterNumberComposite.class);
+	static final Logger log = LoggerFactory.getLogger(MobileBKUEnterNumberComposite.class);
 
 	/**
 	 *

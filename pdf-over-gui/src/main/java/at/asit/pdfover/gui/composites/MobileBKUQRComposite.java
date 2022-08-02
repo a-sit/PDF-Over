@@ -89,8 +89,7 @@ public class MobileBKUQRComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUQRComposite.class);
+	static final Logger log = LoggerFactory.getLogger(MobileBKUQRComposite.class);
 
 	private Label lblQR;
 

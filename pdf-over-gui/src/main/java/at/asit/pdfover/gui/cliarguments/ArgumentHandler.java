@@ -34,8 +34,7 @@ public class ArgumentHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(ArgumentHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ArgumentHandler.class);
 
 	private Map<String, Argument> cliArguments = new LinkedHashMap<String, Argument>();
 

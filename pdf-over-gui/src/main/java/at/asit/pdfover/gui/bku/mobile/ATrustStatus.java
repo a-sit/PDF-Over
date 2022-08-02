@@ -29,8 +29,7 @@ public class ATrustStatus extends MobileBKUStatus {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(ATrustStatus.class);
+	private static final Logger log = LoggerFactory.getLogger(ATrustStatus.class);
 
 	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;

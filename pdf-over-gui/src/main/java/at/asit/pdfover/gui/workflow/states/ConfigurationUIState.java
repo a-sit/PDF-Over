@@ -34,8 +34,7 @@ public class ConfigurationUIState extends State {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(ConfigurationUIState.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationUIState.class);
 
 
 

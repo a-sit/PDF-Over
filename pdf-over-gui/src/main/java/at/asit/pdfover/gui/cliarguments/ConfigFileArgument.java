@@ -29,8 +29,7 @@ public class ConfigFileArgument extends Argument {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(ConfigFileArgument.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigFileArgument.class);
 
 	/**
 	 * Constructor

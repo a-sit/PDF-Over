@@ -40,8 +40,7 @@ public class MobileBKUHelper {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(MobileBKUHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(MobileBKUHelper.class);
 
 	/**
 	 * Regular expression for mobile phone numbers: this allows the entry of

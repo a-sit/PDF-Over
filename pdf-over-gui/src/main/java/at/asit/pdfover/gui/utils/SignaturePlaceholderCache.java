@@ -45,8 +45,7 @@ public class SignaturePlaceholderCache {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(SignaturePlaceholderCache.class);
+	private static final Logger log = LoggerFactory.getLogger(SignaturePlaceholderCache.class);
 
 	private static void saveImage(BufferedImage image, String fileDir, String fileName, String fileExt) throws IOException {
 		File file = new File(fileDir, fileName + "." + fileExt);

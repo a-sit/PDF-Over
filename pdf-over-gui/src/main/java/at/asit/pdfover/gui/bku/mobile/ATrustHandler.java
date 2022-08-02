@@ -21,14 +21,12 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URLConnection;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
@@ -48,7 +46,6 @@ import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLResponse;
-import at.asit.pdfover.signator.SignatureException;
 
 /**
  * A-Trust mobile BKU handler
@@ -70,8 +67,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(ATrustHandler.class);
+	static final Logger log = LoggerFactory.getLogger(ATrustHandler.class);
 
 	private static boolean expiryNoticeDisplayed = false;
 
@@ -166,11 +162,6 @@ public class ATrustHandler extends MobileBKUHandler {
 
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) {
 			// Certificate expiration interstitial - skip
-			String notice = Messages.getString("mobileBKU.notice") + " " +
-					StringEscapeUtils.unescapeHtml4(MobileBKUHelper.extractContentFromTagWithParam(responseData, "span", "id", "Label2"))
-					.replaceAll("\\<.*?\\>", "");
-			log.info(notice);
-
 			if (!expiryNoticeDisplayed) {
 				Display.getDefault().syncExec(()->  {
 					Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING);
@@ -502,11 +493,8 @@ public class ATrustHandler extends MobileBKUHandler {
 	public boolean handlePolling() throws ATrustConnectionException {
 
 		ATrustStatus status = getStatus();
-		URLConnection urlconnection = null;
 		String isReady = null;
 		Status serverStatus = null;
-		int waits = 0;
-		final String ERROR = "Error: Server is not responding";
 		HttpClient client;
 		try {
 			do {
@@ -521,7 +509,7 @@ public class ATrustHandler extends MobileBKUHandler {
 				get.addRequestHeader("Referer", uri);
 
 
-				int returnValue = client.executeMethod(get);
+				client.executeMethod(get);
 				InputStream in = new BufferedInputStream(get.getResponseBodyAsStream());
 
 				isReady = IOUtils.toString(in, "utf-8");
@@ -556,17 +544,11 @@ public class ATrustHandler extends MobileBKUHandler {
 		private final boolean wait;
 
 		public Status(String status) {
-			 JsonElement jelement = new JsonParser().parse(status.toLowerCase());
+			 JsonElement jelement = JsonParser.parseString(status.toLowerCase());
 			 JsonObject  jobject = jelement.getAsJsonObject();
 			 this.fin = jobject.get("fin").getAsBoolean();
 			 this.error = jobject.get("error").getAsBoolean();
 			 this.wait = jobject.get("wait").getAsBoolean();
-		}
-
-		public Status(boolean error) {
-			this.error = error;
-			this.fin = false;
-			this.wait = false;
 		}
 
 		public boolean isFin() {

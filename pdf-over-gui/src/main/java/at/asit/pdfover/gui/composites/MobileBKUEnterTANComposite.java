@@ -117,8 +117,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUEnterTANComposite.class);
+	static final Logger log = LoggerFactory.getLogger(MobileBKUEnterTANComposite.class);
 
 	Text txt_tan;
 

@@ -45,8 +45,7 @@ public class TrustedSocketFactory implements SecureProtocolSocketFactory {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(TrustedSocketFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(TrustedSocketFactory.class);
 
 	private static final String ENABLED_CS[] = {
 		"TLS_RSA_WITH_AES_128_CBC_SHA",

@@ -33,8 +33,7 @@ public class MainBarRectangleButton extends MainBarButton {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MainBarRectangleButton.class);
+	private static final Logger log = LoggerFactory.getLogger(MainBarRectangleButton.class);
 
 	private Image enabledImg = null;
 	private Image disabledImg = null;

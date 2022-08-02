@@ -78,7 +78,7 @@ public class SLResponse {
 	 * Get the Security Layer response text
 	 * @return the Security Layer response text
 	 */
-	public String getSLRespone() {
+	public String getSLResponse() {
 		return this.response;
 	}
 }

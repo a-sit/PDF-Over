@@ -51,8 +51,7 @@ public class CachedFileNameEmblem implements Emblem {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(CachedFileNameEmblem.class);
+	private static final Logger log = LoggerFactory.getLogger(CachedFileNameEmblem.class);
 
 	private final String fileDir = System.getProperty("user.home") + File.separator + ".pdf-over";
 	private final String imgFileName = ".emblem";

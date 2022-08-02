@@ -46,8 +46,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(PdfAs4BKUSLConnector.class);
+	private static final Logger log = LoggerFactory.getLogger(PdfAs4BKUSLConnector.class);
 
 	private BkuSlConnector connector;
 
@@ -70,13 +69,11 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		JAXBElement<?> element = null;
 		try {
 			String slRequestString = SLMarschaller.marshalToString(this.of.createInfoboxReadRequest(request));
-			//log.trace(slRequestString);
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, null);
-			String slResponse = this.connector.handleSLRequest(slRequest).getSLRespone();
+			String slResponse = this.connector.handleSLRequest(slRequest).getSLResponse();
 
-			element = (JAXBElement<?>) SLMarschaller
-					.unmarshalFromString(slResponse);
+			element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
 		} catch (JAXBException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (PdfAs4SLRequestException e) {
@@ -90,14 +87,10 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		}
 
 		if (element.getValue() instanceof InfoboxReadResponseType) {
-			InfoboxReadResponseType infoboxReadResponseType = (InfoboxReadResponseType) element
-					.getValue();
-			return infoboxReadResponseType;
+			return (InfoboxReadResponseType) element.getValue();
 		} else if (element.getValue() instanceof ErrorResponseType) {
-			ErrorResponseType errorResponseType = (ErrorResponseType) element
-					.getValue();
-			throw new SLPdfAsException(errorResponseType.getErrorCode(),
-					errorResponseType.getInfo());
+			ErrorResponseType errorResponseType = (ErrorResponseType)element.getValue();
+			throw new SLPdfAsException(errorResponseType.getErrorCode(), errorResponseType.getInfo());
 		}
 		throw new PdfAsException("error.pdf.io.03");
 	}
@@ -118,7 +111,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 				signatureData = PDFUtils.blackOutSignature(signatureData, pack.getByteRange());
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, signatureData);
-			String slResponse = this.connector.handleSLRequest(slRequest).getSLRespone();
+			String slResponse = this.connector.handleSLRequest(slRequest).getSLResponse();
 
 			element = (JAXBElement<?>) SLMarschaller
 					.unmarshalFromString(slResponse);

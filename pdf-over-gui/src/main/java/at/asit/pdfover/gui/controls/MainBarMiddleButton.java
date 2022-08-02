@@ -39,8 +39,7 @@ public class MainBarMiddleButton extends MainBarButton {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MainBarMiddleButton.class);
+	private static final Logger log = LoggerFactory.getLogger(MainBarMiddleButton.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.controls.MainBarButton#paintButton(org.eclipse.swt.events.PaintEvent)

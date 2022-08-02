@@ -39,8 +39,7 @@ public class MainBarStartButton extends MainBarButton {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(MainBarStartButton.class);
+	private static final Logger log = LoggerFactory.getLogger(MainBarStartButton.class);
 
 	@Override
 	protected void paintBackground(PaintEvent e) {

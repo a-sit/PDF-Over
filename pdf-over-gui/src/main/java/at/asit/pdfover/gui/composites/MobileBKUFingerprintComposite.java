@@ -87,8 +87,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUFingerprintComposite.class);
+	static final Logger log = LoggerFactory.getLogger(MobileBKUFingerprintComposite.class);
 
 	boolean userCancel = false;
 	boolean userSMS = false;

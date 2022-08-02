@@ -38,8 +38,7 @@ public class PhoneNumberArgument extends Argument {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(PhoneNumberArgument.class);
+	private static final Logger log = LoggerFactory.getLogger(PhoneNumberArgument.class);
 
 
 	/* (non-Javadoc)

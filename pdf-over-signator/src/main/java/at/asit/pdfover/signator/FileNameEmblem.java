@@ -27,8 +27,7 @@ public class FileNameEmblem implements Emblem {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(FileNameEmblem.class);
+	private static final Logger log = LoggerFactory.getLogger(FileNameEmblem.class);
 
 	private String fileName = null;
 

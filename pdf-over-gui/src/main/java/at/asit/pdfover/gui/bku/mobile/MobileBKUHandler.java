@@ -48,8 +48,7 @@ public abstract class MobileBKUHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(MobileBKUHandler.class);
+	static final Logger log = LoggerFactory.getLogger(MobileBKUHandler.class);
 
 	public final MobileBKUState state;
 

@@ -77,8 +77,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(SimpleConfigurationComposite.class);
+	static final Logger log = LoggerFactory.getLogger(SimpleConfigurationComposite.class);
 
 	private Group grpHandySignatur;
 	private Label lblMobileNumber;

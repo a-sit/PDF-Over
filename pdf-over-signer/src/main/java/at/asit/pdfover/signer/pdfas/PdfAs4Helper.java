@@ -33,8 +33,7 @@ public class PdfAs4Helper {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(PdfAs4Helper.class);
+	private static final Logger log = LoggerFactory.getLogger(PdfAs4Helper.class);
 
 	/**
 	 * PDF-AS Object

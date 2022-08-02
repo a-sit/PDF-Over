@@ -36,8 +36,7 @@ public class KeystoreStorePassArgument extends Argument {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(KeystoreStorePassArgument.class);
+	private static final Logger log = LoggerFactory.getLogger(KeystoreStorePassArgument.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)

@@ -76,8 +76,7 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
     /**
      * SLF4J Logger instance
      **/
-    static final Logger log = LoggerFactory
-            .getLogger(PdfAs4SignatureParameter.class);
+    static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
     private String profile = Profile.getDefaultProfile();
 
     /* (non-Javadoc)
@@ -210,8 +209,8 @@ public class PdfAs4SignatureParameter extends SignatureParameter {
         return profileId;
     }
 
-    private String getLangProfilePart(String lang) {
-        return (lang != null && lang.equals("en")) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
+    private static String getLangProfilePart(String lang) {
+        return ("en".equals(lang)) ? PROFILE_ID_LANG_EN : PROFILE_ID_LANG_DE;
     }
 
     @Override

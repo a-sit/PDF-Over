@@ -37,8 +37,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(MobileBKUConnector.class);
+	private static final Logger log = LoggerFactory.getLogger(MobileBKUConnector.class);
 
 	private MobileBKUState state;
 

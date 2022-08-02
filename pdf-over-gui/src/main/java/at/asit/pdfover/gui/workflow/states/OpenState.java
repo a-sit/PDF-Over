@@ -65,8 +65,7 @@ public class OpenState extends State {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(OpenState.class);
+	private static final Logger log = LoggerFactory.getLogger(OpenState.class);
 	private static final String advancedConfig = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties";
 
 	private DataSourceSelectComposite selectionComposite = null;

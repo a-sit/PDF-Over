@@ -17,10 +17,8 @@ package at.asit.pdfover.gui.composites.configuration;
 
 // Imports
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -76,8 +74,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(KeystoreConfigurationComposite.class);
+	static final Logger log = LoggerFactory.getLogger(KeystoreConfigurationComposite.class);
 
 	private Group grpKeystore;
 	private Label lblKeystoreFile;

@@ -44,8 +44,7 @@ public class IAIKHandler extends MobileBKUHandler {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	private static final Logger log = LoggerFactory
-			.getLogger(IAIKHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(IAIKHandler.class);
 
 	Shell shell;
 

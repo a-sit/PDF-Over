@@ -39,8 +39,7 @@ public class ErrorMarker extends Label {
 	 * SLF4J Logger instance
 	 **/
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(ErrorMarker.class);
+	private static final Logger log = LoggerFactory.getLogger(ErrorMarker.class);
 
 	Image errorImg;
 
