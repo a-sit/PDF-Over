@@ -539,7 +539,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
     	if (newProfile.equals(Profile.AMTSSIGNATURBLOCK) || newProfile.equals(Profile.INVISIBLE)){
 			this.configurationContainer.autoPositionSignature = true;
 		}
-    	setSignatureProfileSetting();
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
 	}
@@ -550,17 +549,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		if (locale == null)
 			locale = configurationContainer.signatureLocale;
 		return profile.getDefaultSignatureBlockNote(locale);
-	}
-
-	void setSignatureProfileSetting(){
-		try {
-			// TODO this doesn't do anything...?
-			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-			param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
-
-		} catch (Exception e){
-			log.warn("Cannot save signature profile {}", e.getMessage());
-		}
 	}
 
 	private void plainMobileNumberSetter() {
