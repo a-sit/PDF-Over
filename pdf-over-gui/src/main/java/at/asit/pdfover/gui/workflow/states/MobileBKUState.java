@@ -557,9 +557,9 @@ public class MobileBKUState extends State {
 	public void run() {
 		this.signingState = getStateMachine().status.signingState;
 
-		this.signingState.setBKUConnector(new MobileBKUConnector(this));
+		this.signingState.bkuConnector = new MobileBKUConnector(this);
 		log.debug("Setting base64 request to " + this.handler.useBase64Request());
-		this.signingState.setUseBase64Request(this.handler.useBase64Request());
+		this.signingState.useBase64Request = this.handler.useBase64Request();
 
 		if (this.threadException != null) {
 			displayError(this.threadException);

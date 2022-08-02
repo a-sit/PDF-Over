@@ -137,8 +137,8 @@ public class LocalBKUState extends State {
 					log.debug("SL Response: " + response);
 					SLResponse slResponse = new SLResponse(response, server,
 							userAgent, signatureLayout);
-					this.signingState.setSignatureResponse(slResponse);
-					this.signingState.setUseBase64Request(LocalBKUState.this.useBase64Request);
+					this.signingState.signatureResponse = slResponse;
+					this.signingState.useBase64Request = LocalBKUState.this.useBase64Request;
 				}
 			} catch (Exception e) {
 				log.error("SignLocalBKUThread: ", e);
@@ -175,13 +175,13 @@ public class LocalBKUState extends State {
 
 		PdfAs4SigningState signingState = status.signingState;
 
-		if (!signingState.hasSignatureResponse()
+		if ((signingState.signatureResponse == null)
 				&& this.threadException == null) {
 			Thread t = new Thread(new SignLocalBKUThread(this, signingState));
 			t.start();
 			return;
 		}
-		signingState.setBKUConnector(new LocalBKUConnector());
+		signingState.bkuConnector = new LocalBKUConnector();
 
 		if (this.threadException != null) {
 			ErrorDialog dialog = new ErrorDialog(

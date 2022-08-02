@@ -55,7 +55,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	@Override
 	public SLResponse handleSLRequest(SLRequest request) throws SignatureException {
 		PdfAs4SigningState signingState = this.state.getSigningState();
-		signingState.setSignatureRequest(request);
+		signingState.signatureRequest = request;
 
 		MobileBKUHandler handler = this.state.handler;
 
@@ -112,9 +112,9 @@ public class MobileBKUConnector implements BkuSlConnector {
 			} while(this.state.status.errorMessage != null);
 
 			// Check if response is already available
-			if (signingState.hasSignatureResponse()) {
-				SLResponse response = signingState.getSignatureResponse();
-				signingState.setSignatureResponse(null);
+			if (signingState.signatureResponse != null) {
+				SLResponse response = signingState.signatureResponse;
+				signingState.signatureResponse = null;
 				return response;
 			}
 
@@ -200,7 +200,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 				throw new SignatureException(new IllegalStateException());
 		} while (this.state.status.tanTries == -2);
 
-		return signingState.getSignatureResponse();
+		return signingState.signatureResponse;
 	}
 
 	private boolean consumeCancelError() {

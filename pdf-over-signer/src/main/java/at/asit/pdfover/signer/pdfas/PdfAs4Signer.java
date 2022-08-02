@@ -79,8 +79,8 @@ public class PdfAs4Signer {
 			param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_SEARCH_ENABLED, IConfigurationConstants.TRUE);
 		}
 
-		state.setSignParameter(param);
-		state.setOutput(output);
+		state.signParameter = param;
+		state.output = output;
 		return state;
 	}
 
@@ -93,20 +93,20 @@ public class PdfAs4Signer {
 			// Retrieve objects
 			PdfAs pdfas = PdfAs4Helper.getPdfAs();
 
-			SignParameter param = state.getSignParameter();
+			SignParameter param = state.signParameter;
 
 			Configuration config = param.getConfiguration();
 			config.setValue(IConfigurationConstants.SL_REQUEST_TYPE,
-					state.getUseBase64Request() ?
+					state.useBase64Request ?
 							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
 								IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD);
 
 			IPlainSigner signer;
-			if (state.hasBKUConnector()) {
-				ISLConnector connector = new PdfAs4BKUSLConnector(state.getBKUConnector());
+			if (state.bkuConnector != null) {
+				ISLConnector connector = new PdfAs4BKUSLConnector(state.bkuConnector);
 				signer = new PAdESSigner(connector);
-			} else if (state.hasKSSigner()) {
-				signer = state.getKSSigner();
+			} else if (state.hasKeystoreSigner()) {
+				signer = state.getKeystoreSigner();
 			} else {
 				throw new SignatureException("SigningState doesn't have a signer");
 			}
@@ -130,7 +130,7 @@ public class PdfAs4Signer {
 				result.setSignaturePosition(sp);
 			}
 
-			result.setSignedDocument(new ByteArrayDocumentSource(state.getOutput().toByteArray()));
+			result.setSignedDocument(new ByteArrayDocumentSource(state.output.toByteArray()));
 			return result;
 		} catch (PdfAsException | PDFASError e) {
 			throw new SignatureException(e);

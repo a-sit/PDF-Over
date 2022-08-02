@@ -180,7 +180,7 @@ public class KSState extends State {
 			else if (config.getKeyStorePassStorageType() == KeyStorePassStorageType.MEMORY)
 				config.setKeyStoreKeyPassOverlay(keyPass);
 
-			signingState.setKSSigner(file, alias, storePass, keyPass, type);
+			signingState.setKeystoreSigner(file, alias, storePass, keyPass, type);
 		} catch (SignatureException e) {
 			log.error("Error loading keystore", e);
 			if (askShouldRetry("error.KeyStore"))

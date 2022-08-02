@@ -35,151 +35,50 @@ public class PdfAs4SigningState {
 	/**
 	 * The Signature Layer request
 	 */
-	private SLRequest slrequest;
+	public SLRequest signatureRequest;
 
 	/**
 	 * The Signature Layer response
 	 */
-	private SLResponse slresponse;
+	public SLResponse signatureResponse;
 
 	/**
 	 * The Sign Parameters
 	 */
-	private SignParameter parameter;
+	public SignParameter signParameter;
 
-	private ByteArrayOutputStream output;
+	public ByteArrayOutputStream output;
 
-	private BkuSlConnector bkuconnector = null;
+	public BkuSlConnector bkuConnector = null;
 
-	private IPlainSigner kssigner = null;
+	private IPlainSigner keystoreSigner = null;
 
-	private boolean useBase64Request;
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#getSignatureRequest()
-	 */
-	public SLRequest getSignatureRequest() {
-		return this.slrequest;
-	}
-
-	/**
-	 * Sets the SL Request
-	 * @param request The SL Request
-	 */
-	public void setSignatureRequest(SLRequest request) {
-		this.slrequest = request;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#setUseBase64Request(boolean)
-	 */
-	public void setUseBase64Request(boolean useBase64Request) {
-		this.useBase64Request = useBase64Request;
-	}
-
-	/**
-	 * Gets whether to use base64 (or FileUpload) for request data
-	 * @return whether to use base64 for request data
-	 */
-	public boolean getUseBase64Request() {
-		return this.useBase64Request;
-	}
-
-	/**
-	 * Gets the SL Response
-	 * @return The SL Response object
-	 */
-	public SLResponse getSignatureResponse() {
-		return this.slresponse;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#setSignatureResponse(at.asit.pdfover.signator.SLResponse)
-	 */
-	public void setSignatureResponse(SLResponse response) {
-		this.slresponse = response;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#hasSignatureResponse()
-	 */
-	public boolean hasSignatureResponse() {
-		return this.slresponse != null;
-	}
-
-	/**
-	 * @return the output
-	 */
-	public ByteArrayOutputStream getOutput() {
-		return this.output;
-	}
-
-	/**
-	 * @param output the output to set
-	 */
-	public void setOutput(ByteArrayOutputStream output) {
-		this.output = output;
-	}
-
-	/**
-	 * @return the parameter
-	 */
-	public SignParameter getSignParameter() {
-		return this.parameter;
-	}
-
-	/**
-	 * @param parameter the parameter to set
-	 */
-	public void setSignParameter(SignParameter parameter) {
-		this.parameter = parameter;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.signator.SigningState#setBKUConnector(at.asit.pdfover.signator.BkuSlConnector)
-	 */
-	public void setBKUConnector(BkuSlConnector connector) {
-		this.bkuconnector = connector;
-	}
+	public boolean useBase64Request;
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#setKSSigner(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void setKSSigner(String file, String alias, String kspassword,
+	public void setKeystoreSigner(String file, String alias, String kspassword,
 			String keypassword, String type) throws SignatureException {
 		try {
-			this.kssigner = new PAdESSignerKeystore(file, alias, kspassword, keypassword, type);
+			this.keystoreSigner = new PAdESSignerKeystore(file, alias, kspassword, keypassword, type);
 		} catch (PDFASError e) {
 			throw new SignatureException(e);
 		}
 	}
 
 	/**
-	 * @return whether a BKU connector was set
-	 */
-	public boolean hasBKUConnector() {
-		return this.bkuconnector != null;
-	}
-
-	/**
-	 * @return the BKU connector
-	 */
-	public BkuSlConnector getBKUConnector() {
-		return this.bkuconnector;
-	}
-
-	/**
 	 * @return whether a KS signer was set
 	 */
-	public boolean hasKSSigner() {
-		return this.kssigner != null;
+	public boolean hasKeystoreSigner() {
+		return this.keystoreSigner != null;
 	}
 
 	/**
 	 * @return the KS signer
 	 */
-	public IPlainSigner getKSSigner() {
-		return this.kssigner;
+	public IPlainSigner getKeystoreSigner() {
+		return this.keystoreSigner;
 	}
 
 }

@@ -158,8 +158,7 @@ public class IAIKHandler extends MobileBKUHandler {
 
 		if (responseData.contains("sl:InfoboxReadResponse")) {
 			// credentials ok! InfoboxReadResponse
-			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, status.server, null, null));
+			getSigningState().signatureResponse = new SLResponse(responseData, status.server, null, null);
 			return;
 		}
 
@@ -288,8 +287,7 @@ public class IAIKHandler extends MobileBKUHandler {
 		status.errorMessage = null;
 		if (responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success
-			getSigningState().setSignatureResponse(
-					new SLResponse(responseData, status.server, null, null));
+			getSigningState().signatureResponse = new SLResponse(responseData, status.server, null, null);
 		} else {
 			try {
 				String errorMessage = MobileBKUHelper.extractContentFromTagWithParam(
