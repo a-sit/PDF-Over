@@ -66,7 +66,7 @@ import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.CachedFileNameEmblem;
+import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 
 /**
@@ -423,8 +423,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	private void setEmblemFileInternal(final String filename, boolean force)
 			throws Exception {
-		if (!force && this.configurationContainer.getEmblem() != null) {
-			if (this.configurationContainer.getEmblem().equals(filename)) {
+		if (!force && this.configurationContainer.getEmblemPath() != null) {
+			if (this.configurationContainer.getEmblemPath().equals(filename)) {
 				return; // Ignore ...
 			}
 		}
@@ -435,7 +435,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void updateSignatureBlockPreview() {
-		String image = this.configurationContainer.getEmblem();
+		String image = this.configurationContainer.getEmblemPath();
 		ImageData img = null;
 		ImageData logo = null;
 
@@ -449,7 +449,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
 			if (image != null && !image.trim().isEmpty()) {
 				logo = new ImageData(image);
-				param.emblem = new CachedFileNameEmblem(image);
+				param.emblem = new Emblem(image);
 			}
 			//TODO deactivated the placeholder preview
 			//TODO display accurate placeholder preview -> now its only standard placeholder shown
@@ -468,7 +468,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			try {
 				File imgFile = new File(image);
 				this.logo = new Image(this.getDisplay(),
-						ImageConverter.convertToSWT(CachedFileNameEmblem.fixImage(
+						ImageConverter.convertToSWT(Emblem.fixImage(
 								ImageIO.read(imgFile), imgFile)));
 			} catch (IOException e) {
 				log.error("Error reading image", e);
@@ -604,7 +604,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtMobileNumber.setText(number);
 		}
 
-		String emblemFile = this.configurationContainer.getEmblem();
+		String emblemFile = this.configurationContainer.getEmblemPath();
 		if (emblemFile != null && !emblemFile.trim().isEmpty()) {
 			this.logoFile = emblemFile;
 			try {
@@ -636,7 +636,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	public void storeConfiguration(ConfigurationManager store) {
 		store.setDefaultMobileNumberPersistent(this.configurationContainer.getMobileNumber());
-		store.setDefaultEmblemPersistent(this.configurationContainer.getEmblem());
+		store.setDefaultEmblemPersistent(this.configurationContainer.getEmblemPath());
 		store.setSignatureLocalePersistent(this.configurationContainer.signatureLocale);
 		store.setSignatureNotePersistent(this.configurationContainer.signatureNote);
 		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile().name());

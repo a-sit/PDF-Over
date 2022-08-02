@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 
@@ -79,12 +78,8 @@ public class SignaturePlaceholderCache {
 		String sigEHsh = "";
 		if (param.emblem != null) {
 			Emblem embl = param.emblem;
-			if (embl instanceof CachedFileNameEmblem) {
-				sigEmbl = ((CachedFileNameEmblem) embl).getOriginalFileName();
-				sigEHsh = ((CachedFileNameEmblem) embl).getOriginalFileHash();
-			} else {
-				sigEmbl = embl.getFileName();
-			}
+			sigEmbl = embl.getOriginalFileName();
+			sigEHsh = embl.getOriginalFileHash();
 		}
 		String sigPdfA = param.enablePDFACompat ? Constants.TRUE : Constants.FALSE;
 		String sigNote = param.getProperty("SIG_NOTE");

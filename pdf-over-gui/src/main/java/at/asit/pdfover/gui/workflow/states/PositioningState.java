@@ -35,7 +35,6 @@ import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
@@ -108,7 +107,7 @@ public class PositioningState extends State {
 		// Update possibly changed values
 		ConfigurationManager config = stateMachine.configProvider;
 		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-		Emblem emblem = new CachedFileNameEmblem(config.getDefaultEmblem());
+		Emblem emblem = new Emblem(config.getDefaultEmblemPath());
 		param.emblem = emblem;
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
 			param.setProperty("SIG_NOTE", config.getSignatureNote());

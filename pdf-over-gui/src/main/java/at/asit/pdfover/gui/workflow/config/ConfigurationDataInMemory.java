@@ -47,7 +47,7 @@ public class ConfigurationDataInMemory {
 
 	/** the emblem File */
 	protected String emblemFile = null;
-	public String getEmblem() { return this.emblemFile; }
+	public String getEmblemPath() { return this.emblemFile; }
 	public void setEmblem(String emblemFile) throws InvalidEmblemFile {
 		if (emblemFile == null || emblemFile.trim().isEmpty()) {
 			// Ok to set no file ...

@@ -521,15 +521,15 @@ public class ConfigurationManager {
 		}
 	}
 
-	public String getDefaultEmblem() {
-		String emblem = this.configurationOverlay.getEmblem();
+	public String getDefaultEmblemPath() {
+		String emblem = this.configurationOverlay.getEmblemPath();
 		if (emblem == null)
 			emblem = getDefaultEmblemPersistent();
 		return emblem;
 	}
 
 	public String getDefaultEmblemPersistent() {
-		String emblem = this.configuration.getEmblem();
+		String emblem = this.configuration.getEmblemPath();
 		if (emblem == null)
 			emblem = STRING_EMPTY;
 		return emblem;

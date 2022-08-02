@@ -32,7 +32,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.CachedFileNameEmblem;
+import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
@@ -134,8 +134,8 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter.signaturePosition = status.signaturePosition;
 				}
 
-				if (configuration.getDefaultEmblem() != null && !configuration.getDefaultEmblem().isEmpty()) {
-					this.state.signatureParameter.emblem = new CachedFileNameEmblem(configuration.getDefaultEmblem());
+				if (configuration.getDefaultEmblemPath() != null && !configuration.getDefaultEmblemPath().isEmpty()) {
+					this.state.signatureParameter.emblem = new Emblem(configuration.getDefaultEmblemPath());
 				}
 
 				if (configuration.getSignatureNote() != null
