@@ -54,7 +54,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	 */
 	@Override
 	public SLResponse handleSLRequest(SLRequest request) throws SignatureException {
-		PdfAs4SigningState signingState = (PdfAs4SigningState) this.state.getSigningState();
+		PdfAs4SigningState signingState = this.state.getSigningState();
 		signingState.setSignatureRequest(request);
 
 		MobileBKUHandler handler = this.state.handler;

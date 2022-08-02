@@ -36,7 +36,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signator.SLResponse;
-import at.asit.pdfover.signator.SigningState;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
  * Logical state for performing the BKU Request to a local BKU
@@ -88,14 +88,14 @@ public class LocalBKUState extends State {
 	private final class SignLocalBKUThread implements Runnable {
 
 		private LocalBKUState state;
-		private SigningState signingState;
+		private PdfAs4SigningState signingState;
 
 
 		/**
 		 * @param localBKUState
 		 * @param signingState
 		 */
-		public SignLocalBKUThread(LocalBKUState localBKUState, SigningState signingState) {
+		public SignLocalBKUThread(LocalBKUState localBKUState, PdfAs4SigningState signingState) {
 			this.state = localBKUState;
 			this.signingState = signingState;
 		}
@@ -173,7 +173,7 @@ public class LocalBKUState extends State {
 	public void run() {
 		Status status = getStateMachine().status;
 
-		SigningState signingState = status.signingState;
+		PdfAs4SigningState signingState = status.signingState;
 
 		if (!signingState.hasSignatureResponse()
 				&& this.threadException == null) {

@@ -11,7 +11,6 @@ import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignResultImpl;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signator.SignaturePosition;
-import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.lib.api.ByteArrayDataSource;
@@ -41,7 +40,7 @@ public class PdfAs4Signer {
 	protected static final String LOC_REF = "<sl:LocRefContent>" + URL_TEMPLATE
 			+ "</sl:LocRefContent>";
 
-	public static SigningState prepare(PdfAs4SignatureParameter parameter) throws SignatureException {
+	public static PdfAs4SigningState prepare(PdfAs4SignatureParameter parameter) throws SignatureException {
 
 		if (parameter == null) {
 			throw new SignatureException("Incorrect SignatureParameter!");
@@ -85,35 +84,29 @@ public class PdfAs4Signer {
 		return state;
 	}
 
-	public static SignResult sign(SigningState state) throws SignatureException {
+	public static SignResult sign(PdfAs4SigningState state) throws SignatureException {
 		try {
-			PdfAs4SigningState sstate = null;
-
-			if (PdfAs4SigningState.class.isInstance(state)) {
-				sstate = PdfAs4SigningState.class.cast(state);
-			}
-
-			if (sstate == null) {
+			if (state == null) {
 				throw new SignatureException("Incorrect SigningState!");
 			}
 
 			// Retrieve objects
 			PdfAs pdfas = PdfAs4Helper.getPdfAs();
 
-			SignParameter param = sstate.getSignParameter();
+			SignParameter param = state.getSignParameter();
 
 			Configuration config = param.getConfiguration();
 			config.setValue(IConfigurationConstants.SL_REQUEST_TYPE,
-					sstate.getUseBase64Request() ?
+					state.getUseBase64Request() ?
 							IConfigurationConstants.SL_REQUEST_TYPE_BASE64 :
 								IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD);
 
 			IPlainSigner signer;
-			if (sstate.hasBKUConnector()) {
-				ISLConnector connector = new PdfAs4BKUSLConnector(sstate.getBKUConnector());
+			if (state.hasBKUConnector()) {
+				ISLConnector connector = new PdfAs4BKUSLConnector(state.getBKUConnector());
 				signer = new PAdESSigner(connector);
-			} else if (sstate.hasKSSigner()) {
-				signer = sstate.getKSSigner();
+			} else if (state.hasKSSigner()) {
+				signer = state.getKSSigner();
 			} else {
 				throw new SignatureException("SigningState doesn't have a signer");
 			}
@@ -137,7 +130,7 @@ public class PdfAs4Signer {
 				result.setSignaturePosition(sp);
 			}
 
-			result.setSignedDocument(new ByteArrayDocumentSource(sstate.getOutput().toByteArray()));
+			result.setSignedDocument(new ByteArrayDocumentSource(state.getOutput().toByteArray()));
 			return result;
 		} catch (PdfAsException | PDFASError e) {
 			throw new SignatureException(e);

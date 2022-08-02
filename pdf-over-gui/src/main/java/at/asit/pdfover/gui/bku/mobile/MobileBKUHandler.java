@@ -39,7 +39,7 @@ import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLRequest;
-import at.asit.pdfover.signator.SigningState;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
  * A mobile BKU Handler
@@ -151,7 +151,7 @@ public abstract class MobileBKUHandler {
 	 * Get the SigningState
 	 * @return the SigningState
 	 */
-	protected SigningState getSigningState() {
+	protected PdfAs4SigningState getSigningState() {
 		return state.getSigningState();
 	}
 

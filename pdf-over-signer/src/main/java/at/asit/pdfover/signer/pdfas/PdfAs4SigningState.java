@@ -22,7 +22,6 @@ import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
-import at.asit.pdfover.signator.SigningState;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.lib.api.sign.IPlainSigner;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
@@ -31,7 +30,7 @@ import at.gv.egiz.pdfas.sigs.pades.PAdESSignerKeystore;
 /**
  * Signing State for PDFAS Wrapper
  */
-public class PdfAs4SigningState implements SigningState {
+public class PdfAs4SigningState {
 
 	/**
 	 * The Signature Layer request
@@ -59,7 +58,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#getSignatureRequest()
 	 */
-	@Override
 	public SLRequest getSignatureRequest() {
 		return this.slrequest;
 	}
@@ -75,7 +73,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#setUseBase64Request(boolean)
 	 */
-	@Override
 	public void setUseBase64Request(boolean useBase64Request) {
 		this.useBase64Request = useBase64Request;
 	}
@@ -99,7 +96,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#setSignatureResponse(at.asit.pdfover.signator.SLResponse)
 	 */
-	@Override
 	public void setSignatureResponse(SLResponse response) {
 		this.slresponse = response;
 	}
@@ -107,7 +103,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#hasSignatureResponse()
 	 */
-	@Override
 	public boolean hasSignatureResponse() {
 		return this.slresponse != null;
 	}
@@ -143,7 +138,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#setBKUConnector(at.asit.pdfover.signator.BkuSlConnector)
 	 */
-	@Override
 	public void setBKUConnector(BkuSlConnector connector) {
 		this.bkuconnector = connector;
 	}
@@ -151,7 +145,6 @@ public class PdfAs4SigningState implements SigningState {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.SigningState#setKSSigner(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	@Override
 	public void setKSSigner(String file, String alias, String kspassword,
 			String keypassword, String type) throws SignatureException {
 		try {

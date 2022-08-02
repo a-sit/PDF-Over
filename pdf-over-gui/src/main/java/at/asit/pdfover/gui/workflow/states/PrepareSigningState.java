@@ -36,6 +36,7 @@ import at.asit.pdfover.signator.CachedFileNameEmblem;
 import at.asit.pdfover.signator.PDFFileDocumentSource;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
  * User waiting state, wait for PDF Signator library to prepare document for
@@ -180,7 +181,7 @@ public class PrepareSigningState extends State {
 		return this.waitingComposite;
 	}
 
-	at.asit.pdfover.signator.SigningState signingState = null;
+	PdfAs4SigningState signingState = null;
 
 	Exception threadException = null;
 

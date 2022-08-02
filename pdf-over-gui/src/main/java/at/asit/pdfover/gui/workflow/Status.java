@@ -26,7 +26,7 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.SignResult;
 import at.asit.pdfover.signator.SignaturePosition;
-import at.asit.pdfover.signator.SigningState;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 public class Status {
 	private static final Logger log = LoggerFactory.getLogger(Status.class);
@@ -41,7 +41,7 @@ public class Status {
 
 	private State previousState = null;
 
-	public SigningState signingState = null;
+	public PdfAs4SigningState signingState = null;
 
 	public SignResult signResult = null;
 

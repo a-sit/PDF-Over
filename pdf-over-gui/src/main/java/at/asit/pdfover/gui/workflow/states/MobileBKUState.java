@@ -24,6 +24,8 @@ import java.util.TimerTask;
 // Imports
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -49,7 +51,6 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.SigningState;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -57,7 +58,7 @@ import at.asit.pdfover.signator.SigningState;
 public class MobileBKUState extends State {
 	static final Logger log = LoggerFactory.getLogger(MobileBKUState.class);
 
-	SigningState signingState;
+	PdfAs4SigningState signingState;
 
 	public Exception threadException = null;
 
@@ -155,7 +156,7 @@ public class MobileBKUState extends State {
 	/**
 	 * @return the signingState
 	 */
-	public SigningState getSigningState() {
+	public PdfAs4SigningState getSigningState() {
 		return this.signingState;
 	}
 
