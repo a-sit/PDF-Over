@@ -44,6 +44,7 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
+// TODO: what's the benefit of all of this caching business, especially since we seem to load it from disk anyway to hash it?
 /**
  *
  */
