@@ -100,7 +100,8 @@ public class BKUSelectionComposite extends StateComposite {
 	/**
 	 * SLF4J Logger instance
 	 **/
-	static final Logger log = LoggerFactory.getLogger(BKUSelectionComposite.class);
+	static final Logger log = LoggerFactory
+			.getLogger(BKUSelectionComposite.class);
 
 	private BKUs selected = BKUs.NONE;
 

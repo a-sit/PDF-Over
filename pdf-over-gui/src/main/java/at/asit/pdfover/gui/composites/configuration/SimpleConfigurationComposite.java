@@ -171,7 +171,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
 				Profile selected = Profile.values()[index];
 				if (!current.equals(selected)) {
-					preformProfileSelectionChanged(selected);
+					performProfileSelectionChanged(selected);
 				}
 			}
 		});
@@ -430,11 +430,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 
 		this.configurationContainer.setEmblem(filename);
-		this.setVisibleImage();
+		this.updateSignatureBlockPreview();
 		this.doLayout();
 	}
 
-	void setVisibleImage() {
+	void updateSignatureBlockPreview() {
 		String image = this.configurationContainer.getEmblem();
 		ImageData img = null;
 		ImageData logo = null;
@@ -530,7 +530,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 
 
-    void preformProfileSelectionChanged(Profile newProfile) {
+    void performProfileSelectionChanged(Profile newProfile) {
 		log.debug("Signature Profile {} was selected", newProfile.name());
 		Profile oldProfile = this.configurationContainer.getSignatureProfile();
     	this.configurationContainer.setSignatureProfile(newProfile);
@@ -625,11 +625,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtSignatureNote.setText(note);
 		}
 
-		this.setVisibleImage();
+		this.updateSignatureBlockPreview();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.signatureLocale, null);
 
-		this.preformProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
+		this.performProfileSelectionChanged(this.configurationContainer.getSignatureProfile());
 
 	}
 
