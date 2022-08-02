@@ -99,7 +99,7 @@ public class PdfAs4SignatureParameter {
         String sigNote = getProperty("SIG_NOTE");
 
         try {
-            X509Certificate cert = new X509Certificate(PdfAs4SignatureParameter.class.getResourceAsStream("/qualified.cer"));
+            X509Certificate cert = new X509Certificate(PdfAs4SignatureParameter.class.getResourceAsStream("/example.cer"));
             PdfAs pdfas = PdfAs4Helper.getPdfAs();
             Configuration conf = pdfas.getConfiguration();
             if (sigEmblem != null && !sigEmblem.trim().equals("")) {
