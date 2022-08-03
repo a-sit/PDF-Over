@@ -17,6 +17,8 @@ package at.asit.pdfover.signator;
 
 import at.asit.pdfover.Util;
 // Imports
+import at.asit.pdfover.commons.Constants;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,7 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
@@ -44,15 +46,15 @@ public class Emblem {
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(Emblem.class);
 
-	private final String fileDir = System.getProperty("user.home") + File.separator + ".pdf-over";
-	private final String imgFileName = ".emblem";
-	private final String imgFileExt = "png";
-	private final String propFileName = ".emblem.properties";
+	private static final String CACHE_DIR = Constants.CONFIG_DIRECTORY;
+	private static final String CACHE_IMG_FILENAME = ".emblem.png";
+	private static final String CACHE_IMG_FORMAT = "png";
+	private static final String CACHE_PROPS_FILENAME = ".emblem.properties";
 
-	private final String imgProp = "IMG";
-	private final String hshProp = "HSH";
-	private final int maxWidth  = 480;
-	private final int maxHeight = 600;
+	private static final String PROPKEY_ORIG_PATH = "IMG";
+	private static final String PROPKEY_ORIG_DIGEST = "HSH";
+	private static final int MAX_EMBLEM_WIDTH  = 480;
+	private static final int MAX_EMBLEM_HEIGHT = 600;
 
 	private String fileName = null;
 
@@ -65,12 +67,11 @@ public class Emblem {
 	}
 
 	private String getFileHash(String filename) throws IOException {
-		InputStream is = Files.newInputStream(Paths.get(this.fileName));
+		InputStream is = Files.newInputStream(Path.of(filename));
 		return DigestUtils.md5Hex(is);
 	}
 
-
-	private static BufferedImage scaleImage(BufferedImage img, int maxWidth, int maxHeight) {
+	private static BufferedImage reduceImageSizeIfNecessary(BufferedImage img, int maxWidth, int maxHeight) {
 		int oheight = img.getHeight();
 		int owidth = img.getWidth();
 
@@ -104,7 +105,7 @@ public class Emblem {
 	public String getFileName() {
 		String emblemImg = this.fileName;
 		String emblemHsh = null;
-		String cachedEmblemFileName = this.fileDir + File.separator + this.imgFileName + "." + this.imgFileExt;
+		String cachedEmblemFileName = CACHE_DIR + File.separator + CACHE_IMG_FILENAME;
 
 		if (emblemImg == null || !(new File(emblemImg).exists()))
 			return null;
@@ -112,11 +113,11 @@ public class Emblem {
 		Properties emblemProps = new Properties();
 		// compare cache, try to load if match
 		try {
-			InputStream in = new FileInputStream(new File(this.fileDir, this.propFileName));
+			InputStream in = new FileInputStream(new File(CACHE_DIR, CACHE_PROPS_FILENAME));
 			emblemProps.load(in);
-			if (emblemImg.equals(emblemProps.getProperty(this.imgProp))) {
+			if (emblemImg.equals(emblemProps.getProperty(PROPKEY_ORIG_PATH))) {
 				emblemHsh = getFileHash(emblemImg);
-				if (emblemHsh.equals(emblemProps.getProperty(this.hshProp))) {
+				if (emblemHsh.equals(emblemProps.getProperty(PROPKEY_ORIG_DIGEST))) {
 					log.debug("Emblem cache hit: " + cachedEmblemFileName);
 					return cachedEmblemFileName;
 				}
@@ -130,16 +131,16 @@ public class Emblem {
 			// create new cache
 			if (emblemHsh == null)
 				emblemHsh = getFileHash(emblemImg);
-			emblemProps.setProperty(this.imgProp, emblemImg);
-			emblemProps.setProperty(this.hshProp, emblemHsh);
+			emblemProps.setProperty(PROPKEY_ORIG_PATH, emblemImg);
+			emblemProps.setProperty(PROPKEY_ORIG_DIGEST, emblemHsh);
 			File imgFile = new File(emblemImg);
 
-			img = scaleImage(img, this.maxWidth, this.maxHeight);
 			BufferedImage img = Util.readImageWithEXIFRotation(imgFile);
+			img = reduceImageSizeIfNecessary(img, MAX_EMBLEM_WIDTH, MAX_EMBLEM_HEIGHT);
 
-			File file = new File(this.fileDir, this.imgFileName + "." + this.imgFileExt);
-			ImageIO.write(img, this.imgFileExt, file); // ignore returned boolean
-			OutputStream out = new FileOutputStream(new File(this.fileDir, this.propFileName));
+			File file = new File(CACHE_DIR, CACHE_IMG_FILENAME + "." + CACHE_IMG_FORMAT);
+			ImageIO.write(img, CACHE_IMG_FORMAT, file); // ignore returned boolean
+			OutputStream out = new FileOutputStream(new File(CACHE_DIR, CACHE_PROPS_FILENAME));
 			emblemProps.store(out, null);
 		} catch (IOException e) {
 			log.error("Can't save emblem cache", e);
