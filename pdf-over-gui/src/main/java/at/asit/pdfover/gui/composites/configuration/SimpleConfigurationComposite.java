@@ -170,8 +170,80 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
+		this.grpSignatureLang = new Group(this, SWT.NONE);
+		StateComposite.anchor(grpSignatureLang).right(100,-5).top(grpSignatureProfile, 5).left(0,5).set();
+		this.grpSignatureLang.setLayout(new FormLayout());
+		StateComposite.setFontHeight(grpSignatureLang, Constants.TEXT_SIZE_NORMAL);
+
+		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
+		StateComposite.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
+		StateComposite.setFontHeight(cmbSignatureLang, Constants.TEXT_SIZE_NORMAL);
+		StateComposite.disableEventDefault(cmbSignatureLang, SWT.MouseVerticalWheel);
+		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
+
+		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
+				Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
+				if (!currentLocale.equals(selectedLocale)) {
+					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
+				}
+			}
+		});
+
+		this.grpSignatureNote = new Group(this, SWT.NONE);
+		StateComposite.anchor(grpSignatureNote).right(100,-5).top(grpSignatureLang,5).left(0,5).set();
+		this.grpSignatureNote.setLayout(new GridLayout(2, false));
+		StateComposite.setFontHeight(grpSignatureNote, Constants.TEXT_SIZE_NORMAL);
+
+		this.lblSignatureNote = new Label(this.grpSignatureNote, SWT.NONE);
+		do { /* grid positioning */
+			GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER,
+					false, false, 1, 1);
+			gd_lblSignatureNote.widthHint = 66;
+			this.lblSignatureNote.setLayoutData(gd_lblSignatureNote);
+			this.lblSignatureNote.setBounds(0, 0, 57, 15);
+		} while (false);
+		StateComposite.setFontHeight(lblSignatureNote, Constants.TEXT_SIZE_NORMAL);
+
+		Composite compSignatureNoteContainer = new Composite(this.grpSignatureNote, SWT.NONE);
+		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		compSignatureNoteContainer.setLayout(new FormLayout());
+
+		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
+		StateComposite.anchor(txtSignatureNote).top(0,0).left(0,5).right(100,-42).set();
+		StateComposite.setFontHeight(txtSignatureNote, Constants.TEXT_SIZE_NORMAL);
+
+		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				processSignatureNoteChanged();
+			}
+		});
+
+		this.txtSignatureNote.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				processSignatureNoteChanged();
+			}
+		});
+
+		Composite compSignatureNoteButtonContainer = new Composite(this.grpSignatureNote, SWT.NONE);
+		compSignatureNoteButtonContainer.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
+		compSignatureNoteButtonContainer.setLayout(new FormLayout());
+
+		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
+		StateComposite.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42).set();
+		StateComposite.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
+		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
+			}
+		});
+
 		this.grpPreview = new Group(this, SWT.NONE);
-		StateComposite.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureProfile, 5).height(250).set();
+		StateComposite.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureNote, 5).height(250).set();
 		this.grpPreview.setLayout(new FormLayout());
 		StateComposite.setFontHeight(grpPreview, Constants.TEXT_SIZE_NORMAL);
 
@@ -256,86 +328,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnClearImage.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				SimpleConfigurationComposite.this.processEmblemChanged(null);
 			}
 		});
 		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
-
-
-		this.grpSignatureLang = new Group(this, SWT.NONE);
-		StateComposite.anchor(grpSignatureLang).right(100,-5).top(grpPreview, 5).left(0,5).set();
-		this.grpSignatureLang.setLayout(new FormLayout());
-		StateComposite.setFontHeight(grpSignatureLang, Constants.TEXT_SIZE_NORMAL);
-
-		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
-		StateComposite.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
-		StateComposite.setFontHeight(cmbSignatureLang, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.disableEventDefault(cmbSignatureLang, SWT.MouseVerticalWheel);
-		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
-
-		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
-				Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
-				if (!currentLocale.equals(selectedLocale)) {
-					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
-				}
-			}
-		});
-
-		this.grpSignatureNote = new Group(this, SWT.NONE);
-		StateComposite.anchor(grpSignatureNote).right(100,-5).top(grpSignatureLang,5).left(0,5).set();
-		this.grpSignatureNote.setLayout(new GridLayout(2, false));
-		StateComposite.setFontHeight(grpSignatureNote, Constants.TEXT_SIZE_NORMAL);
-
-		this.lblSignatureNote = new Label(this.grpSignatureNote, SWT.NONE);
-		do { /* grid positioning */
-			GridData gd_lblSignatureNote = new GridData(SWT.LEFT, SWT.CENTER,
-					false, false, 1, 1);
-			gd_lblSignatureNote.widthHint = 66;
-			this.lblSignatureNote.setLayoutData(gd_lblSignatureNote);
-			this.lblSignatureNote.setBounds(0, 0, 57, 15);
-		} while (false);
-		StateComposite.setFontHeight(lblSignatureNote, Constants.TEXT_SIZE_NORMAL);
-
-		Composite compSignatureNoteContainer = new Composite(this.grpSignatureNote, SWT.NONE);
-		compSignatureNoteContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		compSignatureNoteContainer.setLayout(new FormLayout());
-
-		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
-		StateComposite.anchor(txtSignatureNote).top(0,0).left(0,5).right(100,-42).set();
-		StateComposite.setFontHeight(txtSignatureNote, Constants.TEXT_SIZE_NORMAL);
-
-		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				processSignatureNoteChanged();
-			}
-		});
-
-		this.txtSignatureNote.addTraverseListener(e -> {
-			if (e.detail == SWT.TRAVERSE_RETURN) {
-				processSignatureNoteChanged();
-			}
-		});
-
-		Composite compSignatureNoteButtonContainer = new Composite(this.grpSignatureNote, SWT.NONE);
-		compSignatureNoteButtonContainer.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
-		compSignatureNoteButtonContainer.setLayout(new FormLayout());
-
-		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
-		StateComposite.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42).set();
-		StateComposite.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
-		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
-			}
-		});
 
 		// Load localized strings
 		reloadResources();
