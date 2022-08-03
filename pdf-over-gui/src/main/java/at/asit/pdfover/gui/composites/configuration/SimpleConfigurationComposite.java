@@ -84,12 +84,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	protected Text txtMobileNumber;
 	protected ErrorMarker txtMobileNumberErrorMarker;
 
-	private Group grpLogo;
-	private Canvas cLogo;
-	private Label lblDropLogo;
+	private Group grpPreview;
+	protected Canvas cSigPreview;
 	protected Button btnClearImage;
 	private Button btnBrowseLogo;
-	protected Canvas cSigPreview;
 
 	private Group grpSignatureNote;
 	private Label lblSignatureNote;
@@ -176,48 +174,30 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-		this.grpLogo = new Group(this, SWT.NONE);
-		StateComposite.anchor(grpLogo).left(0,5).right(100,-5).top(grpSignatureProfile, 5).set();
-		this.grpLogo.setLayout(new FormLayout());
-		StateComposite.setFontHeight(grpLogo, Constants.TEXT_SIZE_NORMAL);
+		this.grpPreview = new Group(this, SWT.NONE);
+		StateComposite.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureProfile, 5).height(250).set();
+		this.grpPreview.setLayout(new FormLayout());
+		StateComposite.setFontHeight(grpPreview, Constants.TEXT_SIZE_NORMAL);
 
-		Composite containerComposite = new Composite(this.grpLogo, SWT.NONE);
+		Composite containerComposite = new Composite(this.grpPreview, SWT.NONE);
 		StateComposite.anchor(containerComposite).left(0).right(100).top(0).bottom(100).set();
 		containerComposite.setLayout(new FormLayout());
 
-		final Composite controlComposite = new Composite(containerComposite, SWT.NONE);
-		StateComposite.anchor(controlComposite).left(0,20).right(0,300).top(0,20).bottom(100,-20).set();
-		controlComposite.setLayout(new FormLayout());
-		controlComposite.addPaintListener(e -> {
-			e.gc.setForeground(Constants.DROP_BORDER_COLOR);
-			e.gc.setLineWidth(3);
-			e.gc.setLineStyle(SWT.LINE_DASH);
-			Point size = controlComposite.getSize();
-			e.gc.drawRoundRectangle(0, 0, size.x - 2, size.y - 2,
-					10, 10);
-		});
+		this.btnBrowseLogo = new Button(containerComposite, SWT.NONE);
+		StateComposite.anchor(btnBrowseLogo).top(0,5).right(50,-5).set();
+		StateComposite.setFontHeight(btnBrowseLogo, Constants.TEXT_SIZE_BUTTON);
+
+		this.btnClearImage = new Button(containerComposite, SWT.NATIVE);
+		StateComposite.anchor(btnClearImage).top(0,5).left(50, 5).set();
+		StateComposite.setFontHeight(btnClearImage, Constants.TEXT_SIZE_BUTTON);
+		this.btnClearImage.setVisible(false);
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
-		StateComposite.anchor(cSigPreview).left(controlComposite, 20).right(100,-20).top(0,20).bottom(100,-20).set();
+		StateComposite.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5).set();
 		StateComposite.setFontHeight(cSigPreview, Constants.TEXT_SIZE_NORMAL);
 		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
 
-		this.btnBrowseLogo = new Button(controlComposite, SWT.NONE);
-		StateComposite.anchor(btnBrowseLogo).bottom(100,-20).right(100,-20).set();
-		StateComposite.setFontHeight(btnBrowseLogo, Constants.TEXT_SIZE_BUTTON);
-
-		this.lblDropLogo = new Label(controlComposite, SWT.NATIVE | SWT.CENTER);
-		StateComposite.anchor(lblDropLogo).left(0,20).right(100,-20).bottom(btnBrowseLogo,-20).set();
-
-		this.cLogo = new Canvas(controlComposite, SWT.NONE);
-		StateComposite.anchor(cLogo).left(0,20).right(100,-20).top(0,20).bottom(lblDropLogo,-20).height(40).width(40).set();
-		this.cLogo.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.logo));
-
-		this.btnClearImage = new Button(controlComposite, SWT.NATIVE);
-		StateComposite.anchor(btnClearImage).bottom(100,-20).right(btnBrowseLogo, -10).set();
-		StateComposite.setFontHeight(btnClearImage, Constants.TEXT_SIZE_BUTTON);
-
-		DropTarget dnd_target = new DropTarget(controlComposite, DND.DROP_DEFAULT | DND.DROP_COPY);
+		DropTarget dnd_target = new DropTarget(containerComposite, DND.DROP_DEFAULT | DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
 		Transfer[] types = new Transfer[] { fileTransfer };
 		dnd_target.setTransfer(types);
@@ -234,6 +214,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 							log.error("File: {} does not exist!", files[0]); ////
 							return;
 						}
+						performProfileSelectionChanged(Profile.BASE_LOGO);
 						processEmblemChanged(file.getAbsolutePath());
 					}
 				}
@@ -289,7 +270,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 
 		this.grpSignatureLang = new Group(this, SWT.NONE);
-		StateComposite.anchor(grpSignatureLang).right(100,-5).top(grpLogo, 5).left(0,5).set();
+		StateComposite.anchor(grpSignatureLang).right(100,-5).top(grpPreview, 5).left(0,5).set();
 		this.grpSignatureLang.setLayout(new FormLayout());
 		StateComposite.setFontHeight(grpSignatureLang, Constants.TEXT_SIZE_NORMAL);
 
@@ -430,6 +411,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 
 		this.configurationContainer.setEmblem(filename);
+		this.btnClearImage.setVisible(filename != null);
 		this.updateSignatureBlockPreview();
 		this.doLayout();
 	}
@@ -475,7 +457,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 
 		this.cSigPreview.redraw();
-		this.cLogo.redraw();
 	}
 
 	void processEmblemChanged(String filename) {
@@ -672,10 +653,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.txtMobileNumber.setToolTipText(Messages.getString("simple_config.ExampleNumber_ToolTip"));
 		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber"));
 
-		this.grpLogo.setText(Messages.getString("simple_config.Emblem_Title"));
-		this.lblDropLogo.setText(Messages.getString("simple_config.EmblemEmpty"));
+		this.grpPreview.setText(Messages.getString("simple_config.Preview_Title"));
 		this.btnClearImage.setText(Messages.getString("simple_config.ClearEmblem"));
-		this.btnBrowseLogo.setText(Messages.getString("common.browse"));
+		this.btnBrowseLogo.setText(Messages.getString("simple_config.ReplaceEmblem"));
 		this.grpSignatureNote.setText(Messages.getString("simple_config.Note_Title"));
 		this.lblSignatureNote.setText(Messages.getString("simple_config.Note"));
 		this.txtSignatureNote.setToolTipText(Messages.getString("simple_config.Note_Tooltip"));
