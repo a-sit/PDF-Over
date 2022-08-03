@@ -15,6 +15,7 @@
  */
 package at.asit.pdfover.signator;
 
+import at.asit.pdfover.Util;
 // Imports
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -26,25 +27,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
-import com.drew.metadata.exif.ExifDirectoryBase;
-import com.drew.metadata.exif.ExifIFD0Directory;
-
-// TODO: what's the benefit of all of this caching business, especially since we seem to load it from disk anyway to hash it?
 /**
  *
  */
@@ -79,93 +69,6 @@ public class Emblem {
 		return DigestUtils.md5Hex(is);
 	}
 
-	/**
-	 * Correctly rotate JPEG image by EXIF header
-	 * @param img the image
-	 * @param imgFile the image file
-	 * @return the fixed image
-	 */
-	public static BufferedImage fixImage(BufferedImage img, File imgFile) {
-		int oheight = img.getHeight();
-		int owidth = img.getWidth();
-
-		// Read EXIF metadata for jpeg
-		ImageInputStream iis = null;
-		try {
-			iis = ImageIO.createImageInputStream(imgFile);
-			Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(iis);
-
-			while (imageReaders.hasNext()) {
-				ImageReader reader = imageReaders.next();
-				log.debug(reader.getFormatName());
-				if (reader.getFormatName().equals("JPEG")) {
-					try {
-						Metadata metadata = ImageMetadataReader.readMetadata(imgFile);
-						ExifIFD0Directory metaDirectory = (metadata != null) ? metadata.getFirstDirectoryOfType(ExifIFD0Directory.class) : null;
-						if (metaDirectory != null) {
-							int orientation = metaDirectory.getInt(
-									ExifDirectoryBase.TAG_ORIENTATION);
-							if (orientation > 2) {
-								// rotate
-								double rotation = 0;
-								int height = owidth;
-								int width = oheight;
-								switch ((orientation + 1) / 2) {
-									case 2:
-										rotation = Math.PI;
-										height = oheight;
-										width = owidth;
-										break;
-									case 3:
-										rotation = Math.PI / 2;
-										break;
-									case 4:
-										rotation = 3 * Math.PI / 2;
-										break;
-								}
-								log.debug("EXIF orientation " + orientation + ", rotating " + rotation + "rad");
-								BufferedImage result = new BufferedImage(width, height, img.getType());
-								Graphics2D g = result.createGraphics();
-								g.translate((width - owidth) / 2, (height - oheight) / 2);
-								g.rotate(rotation, owidth / 2, oheight / 2);
-								g.drawRenderedImage(img, null);
-								g.dispose();
-								img = result;
-								owidth = width;
-								oheight = height;
-							}
-							if (((orientation < 5) && (orientation % 2 == 0)) ||
-									(orientation > 5) && (orientation % 2 == 1)) {
-								// flip
-								log.debug("flipping image");
-								BufferedImage result = new BufferedImage(owidth, oheight, img.getType());
-								Graphics2D g = result.createGraphics();
-								g.drawImage(img, owidth, 0, -owidth, oheight, null);
-								g.dispose();
-								img = result;
-							}
-						}
-					} catch (ImageProcessingException e) {
-						log.error("Error reading emblem metadata", e);
-					} catch (MetadataException e) {
-						log.error("Error reading emblem metadata", e);
-					} catch (NullPointerException e) {
-						log.error("Error reading emblem metadata", e);
-					}
-				}
-			}
-		} catch (IOException e) {
-			log.error("Error reading image" , e);
-		} finally {
-			try {
-				if (iis != null)
-					iis.close();
-			} catch (IOException e) {
-				log.debug("Error closing stream", e);
-			}
-		}
-		return img;
-	}
 
 	private static BufferedImage scaleImage(BufferedImage img, int maxWidth, int maxHeight) {
 		int oheight = img.getHeight();
@@ -231,9 +134,8 @@ public class Emblem {
 			emblemProps.setProperty(this.hshProp, emblemHsh);
 			File imgFile = new File(emblemImg);
 
-			BufferedImage img = ImageIO.read(imgFile);
-			img = fixImage(img, imgFile);
 			img = scaleImage(img, this.maxWidth, this.maxHeight);
+			BufferedImage img = Util.readImageWithEXIFRotation(imgFile);
 
 			File file = new File(this.fileDir, this.imgFileName + "." + this.imgFileExt);
 			ImageIO.write(img, this.imgFileExt, file); // ignore returned boolean

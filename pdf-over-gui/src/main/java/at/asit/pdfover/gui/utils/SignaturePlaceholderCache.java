@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.Util;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
@@ -52,7 +53,7 @@ public class SignaturePlaceholderCache {
 	}
 
 	private static Image loadImage(String fileDir, String fileName, String fileExt) throws IOException {
-		return ImageIO.read(new File(fileDir, fileName + "." + fileExt));
+		return Util.readImageWithEXIFRotation(new File(fileDir, fileName + "." + fileExt));
 	}
 
 	/**

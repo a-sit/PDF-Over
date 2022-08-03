@@ -22,6 +22,10 @@
 			<version>4.23</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

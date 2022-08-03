@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
-import javax.imageio.ImageIO;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -54,6 +52,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.Util;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.commons.Profile;
@@ -468,8 +467,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			try {
 				File imgFile = new File(image);
 				this.logo = new Image(this.getDisplay(),
-						ImageConverter.convertToSWT(Emblem.fixImage(
-								ImageIO.read(imgFile), imgFile)));
+						ImageConverter.convertToSWT(Util.readImageWithEXIFRotation(imgFile)));
 			} catch (IOException e) {
 				log.error("Error reading image", e);
 			}
