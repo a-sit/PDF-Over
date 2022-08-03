@@ -423,6 +423,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		try {
 			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
+			param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
 			if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
 				param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 			}
@@ -504,6 +505,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous))))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, selected));
+		
+		updateSignatureBlockPreview();
 	}
 
 
@@ -519,6 +522,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
+
+		updateSignatureBlockPreview();
 	}
 
 	String getDefaultSignatureBlockNoteTextFor(Profile profile, Locale locale){
@@ -543,6 +548,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	void processSignatureNoteChanged() {
 		String note = this.txtSignatureNote.getText();
 		this.configurationContainer.signatureNote = note;
+		updateSignatureBlockPreview();
 	}
 
 	/*
