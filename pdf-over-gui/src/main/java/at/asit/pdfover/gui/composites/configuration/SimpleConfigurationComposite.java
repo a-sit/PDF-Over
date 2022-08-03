@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -53,7 +52,6 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.Util;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.commons.Profile;
@@ -98,8 +96,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	protected final Combo cmbSignatureLang;
 
 	protected String logoFile = null;
-	protected Image sigPreview = null;
-	protected Image logo = null;
 
 	protected final Group grpSignatureProfile;
 	protected final Combo cmbSignatureProfiles;
@@ -195,7 +191,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
 		StateComposite.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5).set();
 		StateComposite.setFontHeight(cSigPreview, Constants.TEXT_SIZE_NORMAL);
-		this.cSigPreview.addPaintListener(e -> imagePaintControl(e, SimpleConfigurationComposite.this.sigPreview));
+		this.cSigPreview.addPaintListener(e -> SimpleConfigurationComposite.this.paintSignaturePreview(e));
 
 		DropTarget dnd_target = new DropTarget(containerComposite, DND.DROP_DEFAULT | DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
@@ -345,14 +341,49 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		reloadResources();
 	}
 
-	static void imagePaintControl(PaintEvent e, Image i) {
-		if (i == null)
-			return;
+	boolean needSigPreviewUpdate = true;
+	private Image sigPreview = null;
+	void paintSignaturePreview(PaintEvent evt) {
+		if (needSigPreviewUpdate)
+		{
+			log.info("updating signature preview");
+			String image = this.configurationContainer.getEmblemPath();
+			ImageData img = null;
 
-		Rectangle r = i.getBounds();
+			try {
+				PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
+				param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
+				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
+					param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
+				}
+
+				param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
+				param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
+				if (image != null && !image.trim().isEmpty()) {
+					param.emblem = new Emblem(image);
+				}
+				// TODO this is super slow, can we get rid of it?
+				// SWT_AWT, same as PositioningComposite, maybe?
+				// .... i hate this
+				img = ImageConverter.convertToSWT((BufferedImage) param.getPlaceholder());
+			} catch (Exception e) {
+				log.error("Failed to load image for display...", e);
+			}
+
+			if (img != null) {
+				this.sigPreview = new Image(this.getDisplay(), img);
+			} else {
+				this.sigPreview = null;
+			}
+			needSigPreviewUpdate = false;
+		}
+
+		if (this.sigPreview == null)
+			return;
+		Rectangle r = this.sigPreview.getBounds();
 		int srcW = r.width;
 		int srcH = r.height;
-		Point p = ((Control) e.widget).getSize();
+		Point p = ((Canvas)evt.widget).getSize();
 		float dstW = p.x;
 		float dstH = p.y;
 
@@ -365,7 +396,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		int x = (int) ((dstW / 2) - (w / 2));
 		int y = (int) ((dstH / 2) - (h / 2));
-		e.gc.drawImage(i, 0, 0, srcW, srcH, x, y, (int) w, (int) h);
+		evt.gc.drawImage(this.sigPreview, 0, 0, srcW, srcH, x, y, (int) w, (int) h);
 	}
 
 	/**
@@ -412,51 +443,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.configurationContainer.setEmblem(filename);
 		this.btnClearImage.setVisible(filename != null);
-		this.updateSignatureBlockPreview();
+		this.signatureBlockPreviewChanged();
 		this.doLayout();
 	}
 
-	void updateSignatureBlockPreview() {
-		String image = this.configurationContainer.getEmblemPath();
-		ImageData img = null;
-		ImageData logo = null;
-
-		try {
-			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-			param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
-			if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
-				param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
-			}
-
-			param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
-			param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
-			if (image != null && !image.trim().isEmpty()) {
-				logo = new ImageData(image);
-				param.emblem = new Emblem(image);
-			}
-			img = ImageConverter.convertToSWT((BufferedImage) param.getPlaceholder());
-		} catch (Exception e) {
-			log.error("Failed to load image for display...", e);
-		}
-
-		if (img != null) {
-			this.sigPreview = new Image(this.getDisplay(), img);
-		} else {
-			this.sigPreview = null;
-		}
-
-		if (logo != null) {
-			try {
-				File imgFile = new File(image);
-				this.logo = new Image(this.getDisplay(),
-						ImageConverter.convertToSWT(Util.readImageWithEXIFRotation(imgFile)));
-			} catch (IOException e) {
-				log.error("Error reading image", e);
-			}
-		} else {
-			this.logo = null;
-		}
-
+	void signatureBlockPreviewChanged() {
+		needSigPreviewUpdate = true;
 		this.cSigPreview.redraw();
 	}
 
@@ -506,7 +498,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous))))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, selected));
 		
-		updateSignatureBlockPreview();
+		signatureBlockPreviewChanged();
 	}
 
 
@@ -523,7 +515,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
 
-		updateSignatureBlockPreview();
+		signatureBlockPreviewChanged();
 	}
 
 	String getDefaultSignatureBlockNoteTextFor(Profile profile, Locale locale){
@@ -548,7 +540,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	void processSignatureNoteChanged() {
 		String note = this.txtSignatureNote.getText();
 		this.configurationContainer.signatureNote = note;
-		updateSignatureBlockPreview();
+		signatureBlockPreviewChanged();
 	}
 
 	/*
@@ -609,7 +601,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtSignatureNote.setText(note);
 		}
 
-		this.updateSignatureBlockPreview();
+		this.signatureBlockPreviewChanged();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.signatureLocale, null);
 
