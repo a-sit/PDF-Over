@@ -88,7 +88,7 @@ public class Emblem {
 			height = (int) (maxWidth / ratio);
 		}
 		BufferedImage result = img;
-		if (width != owidth || height == oheight) {
+		if (width != owidth || height != oheight) {
 			//scale image
 			log.debug("Scaling emblem: " + owidth + "x" + oheight + " to " + width + "x" + height);
 			result = new BufferedImage(width, height, img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType());
