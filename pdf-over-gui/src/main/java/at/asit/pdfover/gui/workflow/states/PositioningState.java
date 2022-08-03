@@ -103,9 +103,12 @@ public class PositioningState extends State {
 			log.debug("Displaying " +  stateMachine.status.document);
 			this.positionComposite.displayDocument(document);
 		}
-		// Update possibly changed values
+
 		ConfigurationManager config = stateMachine.configProvider;
-		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter(); // TODO: these don't actually reflect the chosen settings
+
+		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
+		param.signatureProfileName = config.getSignatureProfile();
+
 		Emblem emblem = new Emblem(config.getDefaultEmblemPath());
 		param.emblem = emblem;
 		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty()) {
@@ -118,11 +121,14 @@ public class PositioningState extends State {
 		this.positionComposite.setPlaceholder(
 				param.getPlaceholder(),
 				config.getPlaceholderTransparency());
+
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
+		{
 			this.positionComposite.setPosition(
 					this.previousPosition.getX(),
 					this.previousPosition.getY(),
 					this.previousPosition.getPage());
+		}
 
 		return this.positionComposite;
 	}
