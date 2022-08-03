@@ -138,7 +138,7 @@ public class Emblem {
 			BufferedImage img = Util.readImageWithEXIFRotation(imgFile);
 			img = reduceImageSizeIfNecessary(img, MAX_EMBLEM_WIDTH, MAX_EMBLEM_HEIGHT);
 
-			File file = new File(CACHE_DIR, CACHE_IMG_FILENAME + "." + CACHE_IMG_FORMAT);
+			File file = new File(CACHE_DIR, CACHE_IMG_FILENAME);
 			ImageIO.write(img, CACHE_IMG_FORMAT, file); // ignore returned boolean
 			OutputStream out = new FileOutputStream(new File(CACHE_DIR, CACHE_PROPS_FILENAME));
 			emblemProps.store(out, null);
