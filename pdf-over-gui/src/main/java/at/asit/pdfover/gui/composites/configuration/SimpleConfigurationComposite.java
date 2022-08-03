@@ -344,7 +344,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	void paintSignaturePreview(PaintEvent evt) {
 		if (needSigPreviewUpdate)
 		{
-			log.info("updating signature preview");
 			String image = this.configurationContainer.getEmblemPath();
 			ImageData img = null;
 
