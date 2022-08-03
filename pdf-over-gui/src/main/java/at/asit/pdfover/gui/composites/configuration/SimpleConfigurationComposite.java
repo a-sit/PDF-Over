@@ -515,6 +515,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
 
+		this.grpPreview.setVisible(!Profile.INVISIBLE.equals(newProfile));
 		signatureBlockPreviewChanged();
 	}
 
