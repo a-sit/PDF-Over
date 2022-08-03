@@ -62,6 +62,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.utils.ImageConverter;
+import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -450,9 +451,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				logo = new ImageData(image);
 				param.emblem = new Emblem(image);
 			}
-			//TODO deactivated the placeholder preview
-			//TODO display accurate placeholder preview -> now its only standard placeholder shown
-			//img = SignaturePlaceholderCache.getSWTPlaceholder(param);
+			img = SignaturePlaceholderCache.getSWTPlaceholder(param);
 		} catch (Exception e) {
 			log.error("Failed to load image for display...", e);
 		}
