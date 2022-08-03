@@ -31,7 +31,6 @@ import at.asit.pdfover.gui.composites.PositioningComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.utils.SignaturePlaceholderCache;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
@@ -117,9 +116,7 @@ public class PositioningState extends State {
 		param.enablePDFACompat = config.getSignaturePdfACompat();
 
 		this.positionComposite.setPlaceholder(
-				SignaturePlaceholderCache.getPlaceholder(param),
-				param.getPlaceholderDimension().getWidth(),
-				param.getPlaceholderDimension().getHeight(),
+				param.getPlaceholder(),
 				config.getPlaceholderTransparency());
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
 			this.positionComposite.setPosition(

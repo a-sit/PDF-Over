@@ -150,10 +150,11 @@ public class SignaturePanel extends JPanel {
 	 * @param height height of the placeholder in page space
 	 * @param transparency transparency of the signature placeholder (0 - 255)
 	 */
-	public void setSignaturePlaceholder(Image placeholder, int width, int height, int transparency) {
+	public void setSignaturePlaceholder(Image placeholder, int transparency) {
 		this.sigPlaceholder = placeholder;
-		this.sigPageWidth = width;
-		this.sigPageHeight = height;
+		// TODO figure out why this is divided by 4 (factor ported from old code)
+		this.sigPageWidth = placeholder.getWidth(null) / 4;
+		this.sigPageHeight = placeholder.getHeight(null) / 4;
 		this.sigPlaceholderTransparency = transparency;
 	}
 

@@ -100,6 +100,9 @@ public class ImageConverter {
 	 * @return SWT Image data
 	 */
 	public static ImageData convertToSWT(final BufferedImage bufferedImage) {
+		if (bufferedImage == null)
+			return null;
+
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
 			DirectColorModel colorModel = (DirectColorModel) bufferedImage
 					.getColorModel();

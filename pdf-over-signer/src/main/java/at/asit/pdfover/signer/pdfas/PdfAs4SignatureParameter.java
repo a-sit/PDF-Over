@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.signator.BKUs;
 import at.asit.pdfover.signator.DocumentSource;
 import at.asit.pdfover.signator.Emblem;
-import at.asit.pdfover.signator.SignatureDimension;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
@@ -79,18 +78,7 @@ public class PdfAs4SignatureParameter {
 
     private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
-    /**
-     * This parameters are defining the signature block size
-     */
-    private int sig_w = 229;
-    private int sig_h = 77;
-
     public String signatureProfileName = Profile.getDefaultProfile();
-
-	// TODO why is this stored separately?
-    public SignatureDimension getPlaceholderDimension() {
-        return new SignatureDimension(this.sig_w, this.sig_h);
-    }
 
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
@@ -108,19 +96,13 @@ public class PdfAs4SignatureParameter {
             if (sigNote != null) {
                 conf.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
             }
-            SignParameter param = PdfAsFactory
-                    .createSignParameter(conf, null, null);
+            SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
             param.setSignatureProfileId(sigProfile);
-            Image img = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
-            this.sig_w = img.getWidth(null) / 4;
-            this.sig_h = img.getHeight(null) / 4;
-
-            return img;
+            
+            return pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
         } catch (Exception e) {
             log.error("Failed to get signature placeholder", e);
-            return new BufferedImage(getPlaceholderDimension().getWidth(),
-                    getPlaceholderDimension().getHeight(),
-                    BufferedImage.TYPE_INT_RGB);
+            return new BufferedImage(229, 77, BufferedImage.TYPE_INT_RGB);
         }
     }
 
