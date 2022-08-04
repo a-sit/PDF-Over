@@ -20,6 +20,7 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.utils.ImageUtil;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * TODO all of this caching business is a bit of a mess
  */
 public class Emblem {
 	/**
@@ -56,18 +57,31 @@ public class Emblem {
 	private static final int MAX_EMBLEM_WIDTH  = 480;
 	private static final int MAX_EMBLEM_HEIGHT = 600;
 
-	private String fileName = null;
+	private String originalFileName = null;
+	private Image image = null; /* image data, if we have it */
 
-	// TODO actual values
-	public int getWidth() { return 190; }
-	public int getHeight() { return 96; }
+	private void lazyLoadImage() {
+		if (this.image != null) return;
+
+		String filename = getCachedFileName();
+		if (this.image != null) return; /* getCachedFileName may have re-generated the cache and populated this.image */
+
+		try {
+			image = ImageUtil.readImageWithEXIFRotation(new File(filename));
+		} catch (IOException e) {
+			log.warn("Failed to load Emblem image");
+		}
+	}
+
+	public int getWidth() { if (image == null) lazyLoadImage(); return (image != null) ? image.getWidth(null) : 0; }
+	public int getHeight() { if (image == null) lazyLoadImage(); return (image != null) ? image.getHeight(null) : 0; }
 
 	/**
 	 * Constructor
 	 * @param filename
 	 */
 	public Emblem(String filename) {
-		this.fileName = filename;
+		this.originalFileName = filename;
 	}
 
 	private String getFileHash(String filename) throws IOException {
@@ -106,8 +120,8 @@ public class Emblem {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.signator.Emblem#getFileName()
 	 */
-	public String getFileName() {
-		String emblemImg = this.fileName;
+	public String getCachedFileName() {
+		String emblemImg = this.originalFileName;
 		String emblemHsh = null;
 		String cachedEmblemFileName = CACHE_DIR + File.separator + CACHE_IMG_FILENAME;
 
@@ -144,11 +158,12 @@ public class Emblem {
 
 			File file = new File(CACHE_DIR, CACHE_IMG_FILENAME);
 			ImageIO.write(img, CACHE_IMG_FORMAT, file); // ignore returned boolean
+			this.image = img;
 			OutputStream out = new FileOutputStream(new File(CACHE_DIR, CACHE_PROPS_FILENAME));
 			emblemProps.store(out, null);
 		} catch (IOException e) {
 			log.error("Can't save emblem cache", e);
-			return this.fileName;
+			return this.originalFileName;
 		}
 		return cachedEmblemFileName;
 	}
@@ -158,7 +173,7 @@ public class Emblem {
 	 * @return the original filename
 	 */
 	public String getOriginalFileName() {
-		return this.fileName;
+		return this.originalFileName;
 	}
 
 	/**
@@ -166,10 +181,10 @@ public class Emblem {
 	 * @return the original filename
 	 */
 	public String getOriginalFileHash() {
-		if (this.fileName == null || !(new File(this.fileName).exists()))
+		if (this.originalFileName == null || !(new File(this.originalFileName).exists()))
 			return "";
 		try {
-			return getFileHash(this.fileName);
+			return getFileHash(this.originalFileName);
 		} catch (IOException e) {
 			log.debug("Error getting file hash", e);
 			return "";

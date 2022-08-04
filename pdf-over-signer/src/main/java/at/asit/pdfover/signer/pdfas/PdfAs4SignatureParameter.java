@@ -85,7 +85,7 @@ public class PdfAs4SignatureParameter {
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
 
-        String sigEmblem = (this.emblem == null ? null : this.emblem.getFileName());
+        String sigEmblem = (this.emblem == null ? null : this.emblem.getCachedFileName());
         String sigNote = getProperty("SIG_NOTE");
 
         try {
