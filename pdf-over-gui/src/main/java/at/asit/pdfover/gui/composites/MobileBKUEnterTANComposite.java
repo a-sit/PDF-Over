@@ -31,8 +31,6 @@ import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
@@ -325,66 +323,32 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			}
 		});
 		containerComposite.setLayout(new FormLayout());
-		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -120);
-		fd_containerComposite.bottom = new FormAttachment(50, 120);
-		fd_containerComposite.left = new FormAttachment(50, -200);
-		fd_containerComposite.right = new FormAttachment(50, 200);
-		containerComposite.setLayoutData(fd_containerComposite);
+		SWTUtils.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200).set();
 
 		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
-		this.lblRefValLabel.setAlignment(SWT.RIGHT);
-		FormData fd_lblRefValLabel = new FormData();
-		// fd_lblRefValLabel.left = new FormAttachment(0, 20);
-		fd_lblRefValLabel.right = new FormAttachment(50, -10);
-		// fd_lblRefValLabel.top = new FormAttachment(30, -15);
-		fd_lblRefValLabel.bottom = new FormAttachment(50, -10);
-		this.lblRefValLabel.setLayoutData(fd_lblRefValLabel);
+		SWTUtils.anchor(lblRefValLabel).right(50, -10).bottom(50,-10).set();
 		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
+		this.lblRefValLabel.setAlignment(SWT.RIGHT);
 
+		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-
-		ImageData data = new ImageData(this.getClass().getResourceAsStream(
-				Constants.RES_IMG_MOBILE));
-		Image mobile = new Image(getDisplay(), data);
-
-		FormData fd_lbl_image = new FormData();
-		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
-		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
-		fd_lbl_image.left = new FormAttachment(0, 10);
-		fd_lbl_image.width = data.width;
-		lbl_image.setLayoutData(fd_lbl_image);
-		lbl_image.setImage(mobile);
+		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width).set();
+		lbl_image.setImage(new Image(getDisplay(), mobileIcon));
 
 		this.lblRefVal = new Label(containerComposite, SWT.NATIVE);
-		FormData fd_lblRefVal = new FormData();
-		fd_lblRefVal.left = new FormAttachment(50, 10);
-		fd_lblRefVal.right = new FormAttachment(100, -20);
-		// fd_lblRefVal.top = new FormAttachment(30, -15);
-		fd_lblRefVal.bottom = new FormAttachment(50, -10);
-		this.lblRefVal.setLayoutData(fd_lblRefVal);
+		SWTUtils.anchor(lblRefVal).left(50,10).right(100,-20).bottom(50,-10).set();
 		this.lblRefVal.setText("");
 
 		this.lblTan = new Label(containerComposite, SWT.NATIVE);
-		this.lblTan.setAlignment(SWT.RIGHT);
-		FormData fd_lblTan = new FormData();
-		// fd_lblTan.left = new FormAttachment(0, 20);
-		fd_lblTan.right = new FormAttachment(50, -10);
-		fd_lblTan.top = new FormAttachment(50, 10);
-		// fd_lblTan.bottom = new FormAttachment(50, 15);
-		this.lblTan.setLayoutData(fd_lblTan);
+		SWTUtils.anchor(lblTan).right(50,-10).top(50,10).set();
 		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
+		this.lblTan.setAlignment(SWT.RIGHT);
 
 		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
-		FormData fd_text = new FormData();
-		fd_text.left = new FormAttachment(50, 10);
-		fd_text.right = new FormAttachment(100, -20);
-		fd_text.top = new FormAttachment(50, 10);
+		SWTUtils.anchor(txt_tan).left(50,10).right(100,-20).top(50,10).set();
 		this.txt_tan.setEditable(true);
-		this.txt_tan.setLayoutData(fd_text);
 
 		this.txt_tan.addTraverseListener(new TraverseListener() {
-
 			@Override
 			public void keyTraversed(TraverseEvent e) {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -396,7 +360,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		});
 
 		this.txt_tan.addModifyListener(new ModifyListener() {
-
 			@Override
 			public void modifyText(ModifyEvent e) {
 
@@ -412,46 +375,24 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		});
 
 		Link lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
-
-		FormData fd_lnk_data = new FormData();
-		fd_lnk_data.right = new FormAttachment(100, -20);
-		fd_lnk_data.top = new FormAttachment(0, 20);
+		SWTUtils.anchor(lnk_sig_data).right(100,-20).top(0,20).set();
 		lnk_sig_data.setEnabled(true);
-		lnk_sig_data.setLayoutData(fd_lnk_data);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
 		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-
-		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		FormData fd_lbl_tries = new FormData();
-		// fd_lbl_tries.left = new FormAttachment(15, 5);
-		fd_lbl_tries.right = new FormAttachment(this.btn_cancel, -10);
-		// fd_lbl_tries.top = new FormAttachment(70, -15);
-		fd_lbl_tries.bottom = new FormAttachment(100, -20);
-		this.lblTries.setLayoutData(fd_lbl_tries);
-
-		FormData fd_btn_ok = new FormData();
-		// fd_btn_ok.left = new FormAttachment(95, 0);
-		fd_btn_ok.right = new FormAttachment(100, -20);
-		//fd_btn_ok.left = new FormAttachment(100, -70);
-		fd_btn_ok.bottom = new FormAttachment(100, -20);
-
-		this.btn_ok.setLayoutData(fd_btn_ok);
+		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20).set();
 		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
-
-		FormData fd_btn_cancel = new FormData();
-		// fd_btn_cancel.left = new FormAttachment(95, 0);
-		fd_btn_cancel.right = new FormAttachment(this.btn_ok, -20);
-		//fd_btn_cancel.left = new FormAttachment(100, -70);
-		fd_btn_cancel.bottom = new FormAttachment(100, -20);
-
-		this.btn_cancel.setLayoutData(fd_btn_cancel);
+		
+		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20).set();
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
+
+		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		SWTUtils.anchor(lblTries).right(btn_cancel, -10).bottom(100, -20).set();
 	}
 
 	@Override

@@ -30,15 +30,10 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
@@ -168,12 +163,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		// Color back = new Color(Display.getCurrent(), 77, 190, 250);
 
 		this.drop_area = new Composite(this, SWT.RESIZE);
-		FormData fd_drop_area = new FormData();
-		fd_drop_area.left = new FormAttachment(0, 30);
-		fd_drop_area.right = new FormAttachment(100, -30);
-		fd_drop_area.top = new FormAttachment(0, 30);
-		fd_drop_area.bottom = new FormAttachment(100, -30);
-		this.drop_area.setLayoutData(fd_drop_area);
+		SWTUtils.anchor(drop_area).left(0, 30).right(100, -30).top(0, 30).bottom(100, -30).set();
 		this.drop_area.setLayout(new FormLayout());
 
 		this.drop_area.addPaintListener(new PaintListener() {
@@ -252,82 +242,27 @@ public class DataSourceSelectComposite extends StateComposite {
 			}
 		});
 
-		this.lbl_drag2 = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
-
 		this.lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
-		this.fd_lbl_drag = new FormData();
-		this.fd_lbl_drag.left = new FormAttachment(0, 10);
-		this.fd_lbl_drag.right = new FormAttachment(100, -10);
-		//this.fd_lbl_drag.top = new FormAttachment(40, -10);
-		this.fd_lbl_drag.bottom = new FormAttachment(this.lbl_drag2, -10);
-		this.lbl_drag.setLayoutData(this.fd_lbl_drag);
-		FontData[] fD = this.lbl_drag.getFont().getFontData();
-		fD[0].setHeight(Constants.TEXT_SIZE_BIG);
-		this.lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		SWTUtils.setLocalizedText(lbl_drag, "dataSourceSelection.DropLabel");
+		this.lbl_drag2 = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
+		SWTUtils.anchor(lbl_drag).left(0, 10).right(100, -10).bottom(lbl_drag2, -10).set();
+		SWTUtils.anchor(lbl_drag2).left(0, 10).right(100, -10).top(50, -10).set();
+		SWTUtils.setFontHeight(lbl_drag, Constants.TEXT_SIZE_BIG);
+		SWTUtils.setFontHeight(lbl_drag2, Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag.setAlignment(SWT.CENTER);
-
-
-		this.fd_lbl_drag2 = new FormData();
-		this.fd_lbl_drag2.left = new FormAttachment(0, 10);
-		this.fd_lbl_drag2.right = new FormAttachment(100, -10);
-		this.fd_lbl_drag2.top = new FormAttachment(50, -10);
-		// fd_lbl_drag.bottom = new FormAttachment(100, -10);
-		this.lbl_drag2.setLayoutData(this.fd_lbl_drag2);
-		FontData[] fD2 = this.lbl_drag2.getFont().getFontData();
-		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
-		this.lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
-		SWTUtils.setLocalizedText(lbl_drag2, "dataSourceSelection.DropLabel2");
 		this.lbl_drag2.setAlignment(SWT.CENTER);
 
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.setLocalizedText(btn_open, "dataSourceSelection.browse");
+		SWTUtils.anchor(btn_open).left(lbl_drag2, 0, SWT.CENTER).top(lbl_drag2, 10).set();
+		SWTUtils.setFontHeight(btn_open, Constants.TEXT_SIZE_BUTTON);
 
-		FontData[] fD_open = this.btn_open.getFont().getFontData();
-		fD_open[0].setHeight(Constants.TEXT_SIZE_BUTTON);
-		this.btn_open.setFont(new Font(Display.getCurrent(), fD_open[0]));
+		reloadResources();
 
-		/*
-		lbl_drag.addListener(SWT.Resize, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				DataSourceSelectComposite.this.fd_lbl_drag.top = new FormAttachment(
-						50, -1 * (lbl_drag.getSize().y / 2));
-				DataSourceSelectComposite.this.fd_lbl_drag.left = new FormAttachment(
-						50, -1 * (lbl_drag.getSize().x / 2));
-
-				Point size = btn_open.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				DataSourceSelectComposite.this.fd_btn_open.top = new FormAttachment(
-						50, (lbl_drag.getSize().y / 2) + 10);
-				DataSourceSelectComposite.this.fd_btn_open.left = new FormAttachment(
-						50, -1 * (size.x / 2));
-				DataSourceSelectComposite.this.fd_btn_open.right = new FormAttachment(
-						50, (size.x / 2));
-				DataSourceSelectComposite.this.fd_btn_open.bottom = new FormAttachment(
-						50, (lbl_drag.getSize().y / 2) + 10 + size.y);
-			}
-		});
-		*/
-		// lbl_drag.setBackground(back);
-
-		this.fd_btn_open = new FormData();
-		this.fd_btn_open.left = new FormAttachment(this.lbl_drag2, 0, SWT.CENTER);
-		this.fd_btn_open.top = new FormAttachment(this.lbl_drag2, 10);
-		this.btn_open.setLayoutData(this.fd_btn_open);
-
-		// btn_open.setBackground(back);
 		this.btn_open.addSelectionListener(new FileBrowseDialogListener());
 		this.drop_area.pack();
 		this.redrawDrop();
 	}
 
 	Composite drop_area;
-
-	FormData fd_lbl_drag;
-	FormData fd_lbl_drag2;
-
-	FormData fd_btn_open;
 
 	private Label lbl_drag2;
 
@@ -357,7 +292,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	@Override
 	public void reloadResources() {
 		SWTUtils.setLocalizedText(lbl_drag, "dataSourceSelection.DropLabel");
-		SWTUtils.setLocalizedText(btn_open, "dataSourceSelection.browse");
 		SWTUtils.setLocalizedText(lbl_drag2, "dataSourceSelection.DropLabel2");
+		SWTUtils.setLocalizedText(btn_open, "dataSourceSelection.browse");
 	}
 }

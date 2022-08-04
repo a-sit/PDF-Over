@@ -255,15 +255,9 @@ public class MainWindow {
 		this.mainbar.setLayoutData(this.mainBarFormData);
 
 		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
-		FormData fd_btn_config = new FormData();
-		fd_btn_config.bottom = new FormAttachment(100);
-		fd_btn_config.right = new FormAttachment(0, 50);
-		fd_btn_config.top = new FormAttachment(0);
-		fd_btn_config.left = new FormAttachment(0);
-		this.btn_config.setLayoutData(fd_btn_config);
+		SWTUtils.anchor(btn_config).bottom(100).right(0,50).top(0).left(0).set();
 		SWTUtils.setLocalizedText(btn_config, "main.configuration");
-		this.btn_config
-				.setToolTipText(Messages.getString("main.configuration"));
+		this.btn_config.setToolTipText(Messages.getString("main.configuration"));
 		this.btn_config.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -283,24 +277,13 @@ public class MainWindow {
 
 		Composite mainbarContainer = new Composite(this.mainbar, SWT.NONE);
 		mainbarContainer.setLayout(new FormLayout());
-		FormData fd_mainbarContainer = new FormData();
-		fd_mainbarContainer.left = new FormAttachment(this.btn_config);
-		fd_mainbarContainer.right = new FormAttachment(100);
-		fd_mainbarContainer.top = new FormAttachment(0);
-		fd_mainbarContainer.bottom = new FormAttachment(100);
-		mainbarContainer.setLayoutData(fd_mainbarContainer);
+		SWTUtils.anchor(mainbarContainer).left(btn_config).right(100).top(0).bottom(100).set();
 
 		this.btn_open = new MainBarStartButton(mainbarContainer, SWT.NONE);
-		FormData fd_btn_open = new FormData();
-		fd_btn_open.left = new FormAttachment(0);
-		fd_btn_open.right = new FormAttachment(27, (MainBarButton.SplitFactor / 2));
-		fd_btn_open.top = new FormAttachment(0);
-		fd_btn_open.bottom = new FormAttachment(100);
-		this.btn_open.setLayoutData(fd_btn_open);
+		SWTUtils.anchor(btn_open).left(0).right(27, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
 		SWTUtils.setLocalizedText(btn_open, "common.open");
 		this.btn_open.setToolTipText(Messages.getString("common.open"));
 		this.btn_open.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if (MainWindow.this.stateMachine.status.getCurrentState() instanceof OpenState) {
@@ -314,16 +297,10 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
 		this.btn_position = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
-		FormData fd_btn_position = new FormData();
-		fd_btn_position.left = new FormAttachment(27, -1 * (MainBarButton.SplitFactor / 2));
-		fd_btn_position.right = new FormAttachment(54, (MainBarButton.SplitFactor / 2));
-		fd_btn_position.top = new FormAttachment(0);
-		fd_btn_position.bottom = new FormAttachment(100);
-		this.btn_position.setLayoutData(fd_btn_position);
+		SWTUtils.anchor(btn_position).left(27, -1 * (MainBarButton.SplitFactor / 2)).right(54, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
 		SWTUtils.setLocalizedText(btn_position, "main.position");
 		this.btn_position.setToolTipText(Messages.getString("main.position"));
 		this.btn_position.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine.jumpToState(new PositioningState(
@@ -333,16 +310,10 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
 		this.btn_sign = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
-		FormData fd_btn_sign = new FormData();
-		fd_btn_sign.left = new FormAttachment(54, -1 * (MainBarButton.SplitFactor / 2));
-		fd_btn_sign.right = new FormAttachment(81, (MainBarButton.SplitFactor / 2));
-		fd_btn_sign.top = new FormAttachment(0);
-		fd_btn_sign.bottom = new FormAttachment(100);
-		this.btn_sign.setLayoutData(fd_btn_sign);
+		SWTUtils.anchor(btn_sign).left(54, -1 * (MainBarButton.SplitFactor / 2)).right(81, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
 		SWTUtils.setLocalizedText(btn_sign, "main.signature");
 		this.btn_sign.setToolTipText(Messages.getString("main.signature"));
 		this.btn_sign.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseUp(MouseEvent e) {
 				MainWindow.this.stateMachine.jumpToState(new BKUSelectionState(
@@ -352,12 +323,7 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
 		this.btn_end = new MainBarEndButton(mainbarContainer, SWT.NONE);
-		FormData fd_btn_end = new FormData();
-		fd_btn_end.left = new FormAttachment(81, -1 * (MainBarButton.SplitFactor / 2));
-		fd_btn_end.right = new FormAttachment(100);
-		fd_btn_end.top = new FormAttachment(0);
-		fd_btn_end.bottom = new FormAttachment(100);
-		this.btn_end.setLayoutData(fd_btn_end);
+		SWTUtils.anchor(btn_end).left(81, -1 * (MainBarButton.SplitFactor / 2)).right(100).top(0).bottom(100).set();
 		SWTUtils.setLocalizedText(btn_end, "main.done");
 		this.btn_end.setToolTipText(Messages.getString("main.done"));
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);
