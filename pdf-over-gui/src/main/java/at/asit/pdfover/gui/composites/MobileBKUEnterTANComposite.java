@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -373,7 +374,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_lblTan.top = new FormAttachment(50, 10);
 		// fd_lblTan.bottom = new FormAttachment(50, 15);
 		this.lblTan.setLayoutData(fd_lblTan);
-		this.lblTan.setText(Messages.getString("tanEnter.TAN"));
+		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
 
 		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
 		FormData fd_text = new FormData();
@@ -440,7 +441,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_btn_ok.bottom = new FormAttachment(100, -20);
 
 		this.btn_ok.setLayoutData(fd_btn_ok);
-		this.btn_ok.setText(Messages.getString("common.Ok"));
+		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
 
 		FormData fd_btn_cancel = new FormData();
@@ -450,7 +451,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		fd_btn_cancel.bottom = new FormAttachment(100, -20);
 
 		this.btn_cancel.setLayoutData(fd_btn_cancel);
-		this.btn_cancel.setText(Messages.getString("common.Cancel"));
+		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 	}
 
@@ -478,6 +479,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
 				.getString("tanEnter.ReferenceValue"));
-		this.lblTan.setText(Messages.getString("tanEnter.TAN"));
+		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
 	}
 }

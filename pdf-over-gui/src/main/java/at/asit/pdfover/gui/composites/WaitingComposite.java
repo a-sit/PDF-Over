@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -50,7 +50,7 @@ public class WaitingComposite extends StateComposite {
 		fd_lbl_description.right = new FormAttachment(100, -10);
 		this.lbl_description.setLayoutData(fd_lbl_description);
 		this.lbl_description.setAlignment(SWT.CENTER);
-		this.lbl_description.setText(Messages.getString("waiting.message"));
+		SWTUtils.setLocalizedText(lbl_description, "waiting.message");
 
 		ProgressBar progressBar = new ProgressBar(this, SWT.HORIZONTAL | SWT.INDETERMINATE);
 		FormData fd_progressBar = new FormData();
@@ -79,6 +79,6 @@ public class WaitingComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_description.setText(Messages.getString("waiting.message"));
+		SWTUtils.setLocalizedText(lbl_description, "waiting.message");
 	}
 }

@@ -46,6 +46,7 @@ import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.DocumentSource;
@@ -475,14 +476,14 @@ public class OutputComposite extends StateComposite {
 			this.lnk_saved_file.setText(Messages
 					.getString("output.link_open_message"));
 		}
-		this.btn_save.setText(Messages.getString("common.Save"));
+		SWTUtils.setLocalizedText(btn_save, "common.Save");
 	}
 
 	/**
 	 * @param str
 	 */
 	public void reReloadResources(String str) {
-		this.lbl_success_message.setText(Messages.getString("output.success_message"));
+		SWTUtils.setLocalizedText(lbl_success_message, "output.success_message");
 		if (this.outputFile == null) {
 			this.lnk_saved_file.setText(Messages
 					.getString("output.link_save_message"));
@@ -491,7 +492,7 @@ public class OutputComposite extends StateComposite {
 			this.lbl_success_message.setText(str2);
 			this.lnk_saved_file.setText("");
 		}
-		this.btn_save.setText(Messages.getString("common.Save"));
+		SWTUtils.setLocalizedText(btn_save, "common.Save");
 	}
 
 

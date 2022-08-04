@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -371,10 +372,10 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	public void reloadResources() {
 		this.lblRefValLabel.setText(Messages
 				.getString("tanEnter.ReferenceValue"));
-		this.lblFPLabel.setText(Messages.getString("tanEnter.FP"));
-		this.lnk_sig_data.setText(Messages.getString("mobileBKU.show"));
+		SWTUtils.setLocalizedText(lblFPLabel, "tanEnter.FP");
+		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
 		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
-		this.btn_cancel.setText(Messages.getString("common.Cancel"));
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS"));
+		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
+		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
 	}
 }

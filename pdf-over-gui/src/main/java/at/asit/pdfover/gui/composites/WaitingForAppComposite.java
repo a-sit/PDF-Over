@@ -24,7 +24,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
-import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -72,7 +72,7 @@ public class WaitingForAppComposite extends StateComposite {
 		fd_lbl_description.right = new FormAttachment(100, -10);
 		this.lbl_description.setLayoutData(fd_lbl_description);
 		this.lbl_description.setAlignment(SWT.CENTER);
-		this.lbl_description.setText(Messages.getString("waiting_for_app.message"));
+		SWTUtils.setLocalizedText(lbl_description, "waiting_for_app.message");
 
 		ProgressBar progressBar = new ProgressBar(this, SWT.HORIZONTAL | SWT.INDETERMINATE);
 		FormData fd_progressBar = new FormData();
@@ -89,7 +89,7 @@ public class WaitingForAppComposite extends StateComposite {
 		fd_btnSMS.top = new FormAttachment(progressBar, 24);
 		fd_btnSMS.right = new FormAttachment(progressBar, 0, SWT.RIGHT);
 		this.btn_sms.setLayoutData(fd_btnSMS);
-		this.btn_sms.setText(Messages.getString("SMS tan"));
+		SWTUtils.setLocalizedText(btn_sms, "SMS tan");
 
 		this.btn_cancel = new Button(this, SWT.NONE);
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
@@ -97,7 +97,7 @@ public class WaitingForAppComposite extends StateComposite {
 		fd_btnCancel.top = new FormAttachment(btn_sms, 0, SWT.TOP);
 		fd_btnCancel.right = new FormAttachment(btn_sms, -6);
 		this.btn_cancel.setLayoutData(fd_btnCancel);
-		this.btn_cancel.setText(Messages.getString("WaitingForAppComposite.btnCancel.text"));
+		SWTUtils.setLocalizedText(btn_cancel, "WaitingForAppComposite.btnCancel.text");
 
 		reloadResources();
 
@@ -162,10 +162,10 @@ public class WaitingForAppComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_description.setText(Messages.getString("waiting_for_app.message"));
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS"));
-		this.btn_cancel.setText(Messages.getString("common.Cancel"));
-		this.btn_sms.setText(Messages.getString("tanEnter.SMS"));
+		SWTUtils.setLocalizedText(lbl_description, "waiting_for_app.message");
+		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
+		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
+		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
 	}
 
 	/**

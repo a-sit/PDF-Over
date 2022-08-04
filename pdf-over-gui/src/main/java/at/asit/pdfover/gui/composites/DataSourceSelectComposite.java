@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
 /**
@@ -263,7 +264,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		FontData[] fD = this.lbl_drag.getFont().getFontData();
 		fD[0].setHeight(Constants.TEXT_SIZE_BIG);
 		this.lbl_drag.setFont(new Font(Display.getCurrent(), fD[0]));
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel"));
+		SWTUtils.setLocalizedText(lbl_drag, "dataSourceSelection.DropLabel");
 		this.lbl_drag.setAlignment(SWT.CENTER);
 
 
@@ -281,7 +282,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		this.lbl_drag2.setAlignment(SWT.CENTER);
 
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse"));
+		SWTUtils.setLocalizedText(btn_open, "dataSourceSelection.browse");
 
 		FontData[] fD_open = this.btn_open.getFont().getFontData();
 		fD_open[0].setHeight(Constants.TEXT_SIZE_BUTTON);
@@ -356,8 +357,8 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_drag.setText(Messages.getString("dataSourceSelection.DropLabel"));
-		this.btn_open.setText(Messages.getString("dataSourceSelection.browse"));
-		this.lbl_drag2.setText(Messages.getString("dataSourceSelection.DropLabel2"));
+		SWTUtils.setLocalizedText(lbl_drag, "dataSourceSelection.DropLabel");
+		SWTUtils.setLocalizedText(btn_open, "dataSourceSelection.browse");
+		SWTUtils.setLocalizedText(lbl_drag2, "dataSourceSelection.DropLabel2");
 	}
 }

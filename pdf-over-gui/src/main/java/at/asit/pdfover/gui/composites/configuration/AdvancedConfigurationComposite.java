@@ -829,53 +829,53 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.grpSignatur.setText(Messages.getString("advanced_config.Signature_Title"));
-		this.btnAutomatischePositionierung.setText(Messages.getString("advanced_config.AutoPosition"));
+		SWTUtils.setLocalizedText(grpSignatur, "advanced_config.Signature_Title");
+		SWTUtils.setLocalizedText(btnAutomatischePositionierung, "advanced_config.AutoPosition");
 		this.btnAutomatischePositionierung.setToolTipText(Messages.getString("advanced_config.AutoPosition_ToolTip"));
-		this.grpPlaceholder.setText(Messages.getString("advanced_config.Placeholder_Title"));
-		this.btnPlatzhalterVerwenden.setText(Messages.getString("advanced_config.UseMarker"));
+		SWTUtils.setLocalizedText(grpPlaceholder, "advanced_config.Placeholder_Title");
+		SWTUtils.setLocalizedText(btnPlatzhalterVerwenden, "advanced_config.UseMarker");
 		this.btnPlatzhalterVerwenden.setToolTipText(Messages.getString("advanced_config.UseMarker_ToolTip"));
-		this.btnSignatureFieldsUsage.setText(Messages.getString("advanced_config.UseSignatureFields"));
+		SWTUtils.setLocalizedText(btnSignatureFieldsUsage, "advanced_config.UseSignatureFields");
 		this.btnSignatureFieldsUsage.setToolTipText(Messages.getString("advanced_config.UseSignatureFields_ToolTip"));
-		this.btnEnablePlaceholderUsage.setText(Messages.getString("advanced_config.Placeholder_Enabled"));
-		this.btnPdfACompat.setText(Messages.getString("advanced_config.PdfACompat"));
+		SWTUtils.setLocalizedText(btnEnablePlaceholderUsage, "advanced_config.Placeholder_Enabled");
+		SWTUtils.setLocalizedText(btnPdfACompat, "advanced_config.PdfACompat");
 		this.btnPdfACompat.setToolTipText(Messages.getString("advanced_config.PdfACompat_ToolTip"));
-		this.lblTransparenz.setText(Messages.getString("advanced_config.SigPHTransparency"));
-		this.lblTransparenzLinks.setText(Messages.getString("advanced_config.SigPHTransparencyMin"));
-		this.lblTransparenzRechts.setText(Messages.getString("advanced_config.SigPHTransparencyMax"));
+		SWTUtils.setLocalizedText(lblTransparenz, "advanced_config.SigPHTransparency");
+		SWTUtils.setLocalizedText(lblTransparenzLinks, "advanced_config.SigPHTransparencyMin");
+		SWTUtils.setLocalizedText(lblTransparenzRechts, "advanced_config.SigPHTransparencyMax");
 		this.sclTransparenz.setToolTipText(Messages.getString("advanced_config.SigPHTransparencyTooltip"));
 
-		this.grpBkuAuswahl.setText(Messages.getString("advanced_config.BKUSelection_Title"));
+		SWTUtils.setLocalizedText(grpBkuAuswahl, "advanced_config.BKUSelection_Title");
 		this.cmbBKUAuswahl.setToolTipText(Messages.getString("advanced_config.BKUSelection_ToolTip"));
-		this.btnKeystoreEnabled.setText(Messages.getString("advanced_config.KeystoreEnabled"));
+		SWTUtils.setLocalizedText(btnKeystoreEnabled, "advanced_config.KeystoreEnabled");
 		this.btnKeystoreEnabled.setToolTipText(Messages.getString("advanced_config.KeystoreEnabled_ToolTip"));
 
-		this.grpSpeicherort.setText(Messages.getString("advanced_config.OutputFolder_Title"));
-		this.lblDefaultOutputFolder.setText(Messages.getString("advanced_config.OutputFolder"));
+		SWTUtils.setLocalizedText(grpSpeicherort, "advanced_config.OutputFolder_Title");
+		SWTUtils.setLocalizedText(lblDefaultOutputFolder, "advanced_config.OutputFolder");
 		this.txtOutputFolder.setToolTipText(Messages.getString("advanced_config.OutputFolder_ToolTip"));
-		this.btnBrowse.setText(Messages.getString("common.browse"));
+		SWTUtils.setLocalizedText(btnBrowse, "common.browse");
 
-		this.grpLocaleAuswahl.setText(Messages.getString("advanced_config.LocaleSelection_Title"));
+		SWTUtils.setLocalizedText(grpLocaleAuswahl, "advanced_config.LocaleSelection_Title");
 		this.cmbLocaleAuswahl.setToolTipText(Messages.getString("advanced_config.LocaleSelection_ToolTip"));
 
-		this.grpUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck_Title"));
-		this.btnUpdateCheck.setText(Messages.getString("advanced_config.UpdateCheck"));
+		SWTUtils.setLocalizedText(grpUpdateCheck, "advanced_config.UpdateCheck_Title");
+		SWTUtils.setLocalizedText(btnUpdateCheck, "advanced_config.UpdateCheck");
 		this.btnUpdateCheck.setToolTipText(Messages.getString("advanced_config.UpdateCheck_ToolTip"));
 
-		this.grpProxy.setText(Messages.getString("advanced_config.Proxy_Title"));
-		this.lblProxyHost.setText(Messages.getString("advanced_config.ProxyHost"));
+		SWTUtils.setLocalizedText(grpProxy, "advanced_config.Proxy_Title");
+		SWTUtils.setLocalizedText(lblProxyHost, "advanced_config.ProxyHost");
 		this.txtProxyHost.setToolTipText(Messages.getString("advanced_config.ProxyHost_ToolTip"));
 		this.txtProxyHost.setMessage(Messages.getString("advanced_config.ProxyHost_Template"));
-		this.lblProxyPort.setText(Messages.getString("advanced_config.ProxyPort"));
+		SWTUtils.setLocalizedText(lblProxyPort, "advanced_config.ProxyPort");
 		this.txtProxyPort.setToolTipText(Messages.getString("advanced_config.ProxyPort_ToolTip"));
 		this.txtProxyPort.setMessage(Messages.getString("advanced_config.ProxyPort_Template"));
-		// this.lblProxyUser.setText(Messages.getString("advanced_config.ProxyUser"));
+		// StateComposite.setLocalizedText(lblProxyUser, "advanced_config.ProxyUser");
 
 		// this.txtProxyUser.setToolTipText(Messages
 		// .getString("advanced_config.ProxyUser_ToolTip"));
 		// this.txtProxyUser.setMessage(Messages
 		// .getString("advanced_config.ProxyUser_Template"));
-		// this.lblProxyPass.setText(Messages.getString("advanced_config.ProxyPass"));
+		// StateComposite.setLocalizedText(lblProxyPass, "advanced_config.ProxyPass");
 
 		// this.txtProxyPass.setToolTipText(Messages
 		// .getString("advanced_config.ProxyPass_ToolTip"));

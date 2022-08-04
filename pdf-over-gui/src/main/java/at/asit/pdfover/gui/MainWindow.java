@@ -54,6 +54,7 @@ import at.asit.pdfover.gui.controls.MainBarMiddleButton;
 import at.asit.pdfover.gui.controls.MainBarRectangleButton;
 import at.asit.pdfover.gui.controls.MainBarStartButton;
 import at.asit.pdfover.gui.osx.CocoaUIEnhancer;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
@@ -175,18 +176,18 @@ public class MainWindow {
 	 * Reload the localization
 	 */
 	public void reloadLocalization() {
-		this.btn_config.setText(Messages.getString("main.configuration"));
+		SWTUtils.setLocalizedText(btn_config, "main.configuration");
 		this.btn_config.setToolTipText(Messages.getString("main.configuration"));
-		this.btn_open.setText(Messages.getString("common.open"));
+		SWTUtils.setLocalizedText(btn_open, "common.open");
 		this.btn_open.setToolTipText(Messages.getString("common.open"));
 
-		this.btn_position.setText(Messages.getString("main.position"));
+		SWTUtils.setLocalizedText(btn_position, "main.position");
 		this.btn_position.setToolTipText(Messages.getString("main.position"));
 
-		this.btn_sign.setText(Messages.getString("main.signature"));
+		SWTUtils.setLocalizedText(btn_sign, "main.signature");
 		this.btn_sign.setToolTipText(Messages.getString("main.signature"));
 
-		this.btn_end.setText(Messages.getString("main.done"));
+		SWTUtils.setLocalizedText(btn_end, "main.done");
 		this.btn_end.setToolTipText(Messages.getString("main.done"));
 
 		Control ctrl = this.stack.topControl;
@@ -260,7 +261,7 @@ public class MainWindow {
 		fd_btn_config.top = new FormAttachment(0);
 		fd_btn_config.left = new FormAttachment(0);
 		this.btn_config.setLayoutData(fd_btn_config);
-		this.btn_config.setText(Messages.getString("main.configuration"));
+		SWTUtils.setLocalizedText(btn_config, "main.configuration");
 		this.btn_config
 				.setToolTipText(Messages.getString("main.configuration"));
 		this.btn_config.addMouseListener(new MouseAdapter() {
@@ -296,7 +297,7 @@ public class MainWindow {
 		fd_btn_open.top = new FormAttachment(0);
 		fd_btn_open.bottom = new FormAttachment(100);
 		this.btn_open.setLayoutData(fd_btn_open);
-		this.btn_open.setText(Messages.getString("common.open"));
+		SWTUtils.setLocalizedText(btn_open, "common.open");
 		this.btn_open.setToolTipText(Messages.getString("common.open"));
 		this.btn_open.addMouseListener(new MouseAdapter() {
 
@@ -319,7 +320,7 @@ public class MainWindow {
 		fd_btn_position.top = new FormAttachment(0);
 		fd_btn_position.bottom = new FormAttachment(100);
 		this.btn_position.setLayoutData(fd_btn_position);
-		this.btn_position.setText(Messages.getString("main.position"));
+		SWTUtils.setLocalizedText(btn_position, "main.position");
 		this.btn_position.setToolTipText(Messages.getString("main.position"));
 		this.btn_position.addMouseListener(new MouseAdapter() {
 
@@ -338,7 +339,7 @@ public class MainWindow {
 		fd_btn_sign.top = new FormAttachment(0);
 		fd_btn_sign.bottom = new FormAttachment(100);
 		this.btn_sign.setLayoutData(fd_btn_sign);
-		this.btn_sign.setText(Messages.getString("main.signature"));
+		SWTUtils.setLocalizedText(btn_sign, "main.signature");
 		this.btn_sign.setToolTipText(Messages.getString("main.signature"));
 		this.btn_sign.addMouseListener(new MouseAdapter() {
 
@@ -357,7 +358,7 @@ public class MainWindow {
 		fd_btn_end.top = new FormAttachment(0);
 		fd_btn_end.bottom = new FormAttachment(100);
 		this.btn_end.setLayoutData(fd_btn_end);
-		this.btn_end.setText(Messages.getString("main.done"));
+		SWTUtils.setLocalizedText(btn_end, "main.done");
 		this.btn_end.setToolTipText(Messages.getString("main.done"));
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);
 

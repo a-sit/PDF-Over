@@ -215,7 +215,7 @@ public class ConfigurationComposite extends StateComposite {
 	public void keystoreEnabled(boolean enabled) {
 		if (enabled && this.keystoreConfigComposite == null) {
 			this.keystoreTabItem = new TabItem(this.tabFolder, SWT.NONE, 2);
-			this.keystoreTabItem.setText(Messages.getString("config.Keystore"));
+			SWTUtils.setLocalizedText(keystoreTabItem, "config.Keystore");
 
 			ScrolledComposite keystoreCompositeScr = new ScrolledComposite(
 					this.tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);

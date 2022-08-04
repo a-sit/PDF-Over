@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.ClickableCanvas;
-import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
@@ -230,9 +229,9 @@ public class BKUSelectionComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.btnMobile.setText(Messages.getString("bku_selection.mobile"));
-		this.btnCard.setText(Messages.getString("bku_selection.card"));
+		SWTUtils.setLocalizedText(btnMobile, "bku_selection.mobile");
+		SWTUtils.setLocalizedText(btnCard, "bku_selection.card");
 		if (this.btnKS != null)
-			this.btnKS.setText(Messages.getString("bku_selection.ks"));
+			SWTUtils.setLocalizedText(btnKS, "bku_selection.ks");
 	}
 }

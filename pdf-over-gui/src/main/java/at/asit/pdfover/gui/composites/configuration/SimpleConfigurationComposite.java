@@ -644,23 +644,23 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.grpHandySignatur.setText(Messages.getString("simple_config.MobileBKU_Title"));
-		this.lblMobileNumber.setText(Messages.getString("simple_config.PhoneNumber"));
+		SWTUtils.setLocalizedText(grpHandySignatur, "simple_config.MobileBKU_Title");
+		SWTUtils.setLocalizedText(lblMobileNumber, "simple_config.PhoneNumber");
 		this.txtMobileNumber.setToolTipText(Messages.getString("simple_config.ExampleNumber_ToolTip"));
 		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber"));
 
-		this.grpPreview.setText(Messages.getString("simple_config.Preview_Title"));
-		this.btnClearImage.setText(Messages.getString("simple_config.ClearEmblem"));
-		this.btnBrowseLogo.setText(Messages.getString("simple_config.ReplaceEmblem"));
-		this.grpSignatureNote.setText(Messages.getString("simple_config.Note_Title"));
-		this.lblSignatureNote.setText(Messages.getString("simple_config.Note"));
+		SWTUtils.setLocalizedText(grpPreview, "simple_config.Preview_Title");
+		SWTUtils.setLocalizedText(btnClearImage, "simple_config.ClearEmblem");
+		SWTUtils.setLocalizedText(btnBrowseLogo, "simple_config.ReplaceEmblem");
+		SWTUtils.setLocalizedText(grpSignatureNote, "simple_config.Note_Title");
+		SWTUtils.setLocalizedText(lblSignatureNote, "simple_config.Note");
 		this.txtSignatureNote.setToolTipText(Messages.getString("simple_config.Note_Tooltip"));
-		this.btnSignatureNoteDefault.setText(Messages.getString("simple_config.Note_SetDefault"));
+		SWTUtils.setLocalizedText(btnSignatureNoteDefault, "simple_config.Note_SetDefault");
 
-		this.grpSignatureLang.setText(Messages.getString("simple_config.SigBlockLang_Title"));
+		SWTUtils.setLocalizedText(grpSignatureLang, "simple_config.SigBlockLang_Title");
 		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip"));
 
-		this.grpSignatureProfile.setText(Messages.getString("simple_config.SigProfile_Title"));
+		SWTUtils.setLocalizedText(grpSignatureProfile, "simple_config.SigProfile_Title");
 		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
 	}
 }

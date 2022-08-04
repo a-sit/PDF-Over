@@ -126,10 +126,10 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lnkAbout.setText(Messages.getString("config.AboutText"));
-		this.lblDataProtection.setText(Messages.getString("config.DataProtection"));
-		this.lnkDataProtection.setText(Messages.getString("config.DataProtectionStatement"));
-		this.btnOpenLogDirectory.setText(Messages.getString("config.ShowLogDirectory"));
+		SWTUtils.setLocalizedText(lnkAbout, "config.AboutText");
+		SWTUtils.setLocalizedText(lblDataProtection, "config.DataProtection");
+		SWTUtils.setLocalizedText(lnkDataProtection, "config.DataProtectionStatement");
+		SWTUtils.setLocalizedText(btnOpenLogDirectory, "config.ShowLogDirectory");
 	}
 
 	@Override

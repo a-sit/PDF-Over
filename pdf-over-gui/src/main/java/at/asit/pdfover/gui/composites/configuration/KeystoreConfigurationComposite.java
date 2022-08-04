@@ -577,21 +577,21 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 	@Override
 	
 	public void reloadResources() {
-		this.grpKeystore.setText(Messages.getString("keystore_config.Keystore_Title"));
-		this.lblKeystoreFile.setText(Messages.getString("keystore_config.KeystoreFile"));
-		this.btnBrowse.setText(Messages.getString("common.browse"));
+		SWTUtils.setLocalizedText(grpKeystore, "keystore_config.Keystore_Title");
+		SWTUtils.setLocalizedText(lblKeystoreFile, "keystore_config.KeystoreFile");
+		SWTUtils.setLocalizedText(btnBrowse, "common.browse");
 		this.txtKeystoreFile.setToolTipText(Messages.getString("keystore_config.KeystoreFile_ToolTip"));
-		this.lblKeystoreType.setText(Messages.getString("keystore_config.KeystoreType"));
+		SWTUtils.setLocalizedText(lblKeystoreType, "keystore_config.KeystoreType");
 		reloadKeystoreTypeStrings();
-		this.lblKeystorePassStoreType.setText(Messages.getString("keystore_config.SaveToWhere.Header"));
+		SWTUtils.setLocalizedText(lblKeystorePassStoreType, "keystore_config.SaveToWhere.Header");
 		reloadKeystorePassStorageTypeStrings();
 		this.cmbKeystoreType.setItems(this.keystoreTypes.keySet().toArray(new String[0]));
-		this.lblKeystoreStorePass.setText(Messages.getString("keystore_config.KeystoreStorePass"));
+		SWTUtils.setLocalizedText(lblKeystoreStorePass, "keystore_config.KeystoreStorePass");
 		this.txtKeystoreStorePass.setToolTipText(Messages.getString("keystore_config.KeystoreStorePass_ToolTip"));
-		this.btnLoad.setText(Messages.getString("keystore_config.Load"));
+		SWTUtils.setLocalizedText(btnLoad, "keystore_config.Load");
 		this.btnLoad.setToolTipText(Messages.getString("keystore_config.Load_ToolTip"));
-		this.lblKeystoreAlias.setText(Messages.getString("keystore_config.KeystoreAlias"));
-		this.lblKeystoreKeyPass.setText(Messages.getString("keystore_config.KeystoreKeyPass"));
+		SWTUtils.setLocalizedText(lblKeystoreAlias, "keystore_config.KeystoreAlias");
+		SWTUtils.setLocalizedText(lblKeystoreKeyPass, "keystore_config.KeystoreKeyPass");
 		this.txtKeystoreKeyPass.setToolTipText(Messages.getString("keystore_config.KeystoreKeyPass_ToolTip"));
 	}
 }
