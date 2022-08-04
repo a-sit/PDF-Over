@@ -39,4 +39,15 @@ public enum Profile {
         }
     }
 
+    public boolean hasText() {
+        return ((this == SIGNATURBLOCK_SMALL) || (this == AMTSSIGNATURBLOCK));
+    }
+
+    public boolean hasLogo() {
+        return (this != INVISIBLE);
+    }
+
+    public boolean isVisibleSignature() {
+        return (this != INVISIBLE);
+    }
 }
