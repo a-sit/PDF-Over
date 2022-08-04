@@ -19,6 +19,8 @@ package at.asit.pdfover.signer.pdfas;
 
 import iaik.x509.X509Certificate;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -99,7 +101,17 @@ public class PdfAs4SignatureParameter {
             SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
             param.setSignatureProfileId(sigProfile);
             
-            return pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
+            Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
+
+            // WORKAROUND for #110, manually paint a black border
+            if (!this.signatureProfileName.equals(Profile.BASE_LOGO.name()))
+            {
+                Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
+                ctx.setColor(Color.BLACK);
+                ctx.drawRect(0, 0, placeholder.getWidth(null)-1, placeholder.getHeight(null)-1);
+            }
+
+            return placeholder;
         } catch (Exception e) {
             log.error("Failed to get signature placeholder", e);
             return new BufferedImage(229, 77, BufferedImage.TYPE_INT_RGB);
