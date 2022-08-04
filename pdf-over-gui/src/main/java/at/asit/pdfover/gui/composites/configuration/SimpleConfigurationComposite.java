@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.composites.configuration;
 import java.awt.image.BufferedImage;
 // Imports
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 

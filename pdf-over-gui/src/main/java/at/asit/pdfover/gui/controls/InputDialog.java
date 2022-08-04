@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 
 /**
  *
@@ -134,7 +134,7 @@ public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 		data.horizontalSpan = 2;
 		text.setLayoutData(data);
 		Button ok = new Button(shell, SWT.PUSH);
-		ok.setText(Messages.getString("common.Ok"));
+		SWTUtils.setLocalizedText(ok, "common.Ok");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
 		ok.addSelectionListener(new SelectionAdapter() {
@@ -145,7 +145,7 @@ public class InputDialog extends org.eclipse.swt.widgets.Dialog {
 			}
 		});
 		Button cancel = new Button(shell, SWT.PUSH);
-		cancel.setText(Messages.getString("common.Cancel"));
+		SWTUtils.setLocalizedText(cancel, "common.Cancel");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
 		cancel.addSelectionListener(new SelectionAdapter() {

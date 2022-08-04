@@ -18,7 +18,7 @@ package at.asit.pdfover.gui;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Dialog;
@@ -127,7 +127,7 @@ public class PlaceholderSelectionGui extends Dialog {
 
 		Label lbLabel = new Label(this.shlInfo, SWT.WRAP);
 		lbLabel.setBounds(27, 10, 223, 41);
-		lbLabel.setText(Messages.getString("positioning.placeholder"));
+		SWTUtils.setLocalizedText(lbLabel, "positioning.placeholder");
 
 	}
 

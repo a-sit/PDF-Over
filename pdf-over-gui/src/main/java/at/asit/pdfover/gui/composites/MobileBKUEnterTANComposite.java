@@ -340,8 +340,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		// fd_lblRefValLabel.top = new FormAttachment(30, -15);
 		fd_lblRefValLabel.bottom = new FormAttachment(50, -10);
 		this.lblRefValLabel.setLayoutData(fd_lblRefValLabel);
-		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue"));
+		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 
@@ -420,7 +419,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		lnk_sig_data.setEnabled(true);
 		lnk_sig_data.setLayoutData(fd_lnk_data);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
-		lnk_sig_data.setText(Messages.getString("mobileBKU.show"));
+		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
 		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
@@ -477,8 +476,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue"));
+		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
 	}
 }

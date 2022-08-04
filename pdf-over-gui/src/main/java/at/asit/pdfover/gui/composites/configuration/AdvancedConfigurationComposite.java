@@ -299,9 +299,9 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 				// Set the initial filter path according
 				// to anything they've selected or typed in
 				dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
-
+				
 				// Change the title bar text
-				dlg.setText(Messages.getString("advanced_config.OutputFolder.Dialog_Title"));
+				SWTUtils.setLocalizedText(dlg, "advanced_config.OutputFolder.Dialog_Title");
 
 				// Customizable message displayed in the dialog
 				dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog"));
@@ -318,7 +318,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.lblSaveFilePostFix = new Label(this.grpSpeicherort, SWT.NONE);
-		lblSaveFilePostFix.setText(Messages.getString("AdvancedConfigurationComposite.lblSaveFilePostFix.text"));
+		SWTUtils.setLocalizedText(lblSaveFilePostFix, "AdvancedConfigurationComposite.lblSaveFilePostFix.text");
 		SWTUtils.setFontHeight(lblSaveFilePostFix, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtSaveFilePostFix = new Text(this.grpSpeicherort, SWT.BORDER);

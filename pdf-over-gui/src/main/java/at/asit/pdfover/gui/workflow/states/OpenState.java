@@ -37,6 +37,7 @@ import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.PlaceholderSelectionGui;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
@@ -127,7 +128,7 @@ public class OpenState extends State {
 							// icon
 							MessageBox dialog = new MessageBox(getStateMachine().getMainShell(),
 									SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
-							dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
+							SWTUtils.setLocalizedText(dialog, "dataSourceSelection.usePlaceholderTitle");
 							dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
 
 							// open dialog and await user selection
@@ -173,7 +174,7 @@ public class OpenState extends State {
 						// create a dialog with ok and cancel buttons and a question icon
 						MessageBox dialog = new MessageBox(getStateMachine().getMainShell(),
 								SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
-						dialog.setText(Messages.getString("dataSourceSelection.usePlaceholderTitle"));
+						SWTUtils.setLocalizedText(dialog, "dataSourceSelection.usePlaceholderTitle");
 						dialog.setMessage(Messages.getString("dataSourceSelection.usePlaceholderText"));
 
 						// open dialog and await user selection

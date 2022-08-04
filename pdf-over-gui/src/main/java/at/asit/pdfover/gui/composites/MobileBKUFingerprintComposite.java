@@ -370,8 +370,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lblRefValLabel.setText(Messages
-				.getString("tanEnter.ReferenceValue"));
+		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		SWTUtils.setLocalizedText(lblFPLabel, "tanEnter.FP");
 		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
 		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));

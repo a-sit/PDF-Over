@@ -277,8 +277,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		FontData[] fD2 = this.lbl_drag2.getFont().getFontData();
 		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag2.setFont(new Font(Display.getCurrent(), fD2[0]));
-		this.lbl_drag2.setText(Messages
-				.getString("dataSourceSelection.DropLabel2"));
+		SWTUtils.setLocalizedText(lbl_drag2, "dataSourceSelection.DropLabel2");
 		this.lbl_drag2.setAlignment(SWT.CENTER);
 
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);

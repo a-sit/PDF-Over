@@ -467,14 +467,11 @@ public class OutputComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		this.lbl_success_message.setText(Messages
-				.getString("output.success_message"));
+		SWTUtils.setLocalizedText(lbl_success_message, "output.success_message");
 		if (this.outputFile == null) {
-			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message"));
+			SWTUtils.setLocalizedText(lnk_saved_file, "output.link_save_message");
 		} else {
-			this.lnk_saved_file.setText(Messages
-					.getString("output.link_open_message"));
+			SWTUtils.setLocalizedText(lnk_saved_file, "output.link_open_message");
 		}
 		SWTUtils.setLocalizedText(btn_save, "common.Save");
 	}
@@ -485,8 +482,7 @@ public class OutputComposite extends StateComposite {
 	public void reReloadResources(String str) {
 		SWTUtils.setLocalizedText(lbl_success_message, "output.success_message");
 		if (this.outputFile == null) {
-			this.lnk_saved_file.setText(Messages
-					.getString("output.link_save_message"));
+			SWTUtils.setLocalizedText(lnk_saved_file, "output.link_save_message");
 		} else {
 			String str2 = "File location: " + str;
 			this.lbl_success_message.setText(str2);
