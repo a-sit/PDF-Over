@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.ClickableCanvas;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.BKUs;
 
@@ -135,7 +136,7 @@ public class BKUSelectionComposite extends StateComposite {
 	public void setKeystoreEnabled(boolean enabled) {
 		if (enabled) {
 			this.btnKS = new Button(this, SWT.NONE);
-			StateComposite.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT).set();
+			SWTUtils.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT).set();
 			this.btnKS.addSelectionListener(new KSSelectionListener());
 
 			reloadResources();
@@ -157,10 +158,10 @@ public class BKUSelectionComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		ClickableCanvas cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		StateComposite.anchor(cc_mobile).right(50, -5).top(40, -20).set();
+		SWTUtils.anchor(cc_mobile).right(50, -5).top(40, -20).set();
 		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
 		cc_mobile.setImage(mobile);
-		StateComposite.setFontHeight(cc_mobile, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.setFontHeight(cc_mobile, Constants.TEXT_SIZE_BUTTON);
 
 		cc_mobile.addMouseListener(new MouseAdapter() {
 			@Override
@@ -170,10 +171,10 @@ public class BKUSelectionComposite extends StateComposite {
 		});
 
 		ClickableCanvas cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		StateComposite.anchor(cc_karte).left(50, 5).top(40, -20).set();
+		SWTUtils.anchor(cc_karte).left(50, 5).top(40, -20).set();
 		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
 		cc_karte.setImage(karte);
-		StateComposite.setFontHeight(cc_karte, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.setFontHeight(cc_karte, Constants.TEXT_SIZE_BUTTON);
 
 		cc_karte.addMouseListener(new MouseAdapter() {
 			@Override

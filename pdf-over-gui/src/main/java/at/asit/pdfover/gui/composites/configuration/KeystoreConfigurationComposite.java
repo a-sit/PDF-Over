@@ -50,7 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.PasswordInputDialog;
@@ -60,6 +59,7 @@ import at.asit.pdfover.gui.exceptions.KeystoreAliasNoKeyException;
 import at.asit.pdfover.gui.exceptions.KeystoreDoesntExistException;
 import at.asit.pdfover.gui.exceptions.KeystoreKeyPasswordException;
 import at.asit.pdfover.gui.keystore.KeystoreUtils;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
@@ -112,70 +112,70 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		layout.marginWidth = 5;
 		this.grpKeystore.setLayout(layout);
 
-		StateComposite.anchor(grpKeystore).top(0,5).left(0,5).right(100,-5).set();
-		StateComposite.setFontHeight(this.grpKeystore, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(grpKeystore).top(0,5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(this.grpKeystore, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblKeystoreFile = new Label(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreFile).top(0).left(0,5).set();
+		SWTUtils.anchor(lblKeystoreFile).top(0).left(0,5).set();
 		FormData fd_lblKeystoreFile = new FormData();
 		fd_lblKeystoreFile.top = new FormAttachment(0);
 		fd_lblKeystoreFile.left = new FormAttachment(0, 5);
 		this.lblKeystoreFile.setLayoutData(fd_lblKeystoreFile);
-		StateComposite.setFontHeight(lblKeystoreFile, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.setFontHeight(lblKeystoreFile, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtKeystoreFile = new Text(grpKeystore, SWT.BORDER);
 		this.btnBrowse = new Button(grpKeystore, SWT.NONE);
-		StateComposite.setFontHeight(txtKeystoreFile, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.setFontHeight(btnBrowse, Constants.TEXT_SIZE_BUTTON);
-		StateComposite.anchor(txtKeystoreFile).top(lblKeystoreFile, 5).left(0,15).right(btnBrowse,-5).set();
-		StateComposite.anchor(btnBrowse).top(lblKeystoreFile, 5).right(100,-5).set();
+		SWTUtils.setFontHeight(txtKeystoreFile, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.setFontHeight(btnBrowse, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.anchor(txtKeystoreFile).top(lblKeystoreFile, 5).left(0,15).right(btnBrowse,-5).set();
+		SWTUtils.anchor(btnBrowse).top(lblKeystoreFile, 5).right(100,-5).set();
 
 		this.lblKeystoreType = new Label(grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreType).top(txtKeystoreFile, 5).left(0,5).set();
-		StateComposite.setFontHeight(lblKeystoreType, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lblKeystoreType).top(txtKeystoreFile, 5).left(0,5).set();
+		SWTUtils.setFontHeight(lblKeystoreType, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnLoad = new Button(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(btnLoad).top(lblKeystoreType, 5).right(100,-5).set();
-		StateComposite.setFontHeight(btnLoad, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.anchor(btnLoad).top(lblKeystoreType, 5).right(100,-5).set();
+		SWTUtils.setFontHeight(btnLoad, Constants.TEXT_SIZE_BUTTON);
 
 		this.cmbKeystoreType = new Combo(grpKeystore, SWT.READ_ONLY);
-		StateComposite.anchor(cmbKeystoreType).top(lblKeystoreType, 5).left(0,15).right(btnLoad, -5).set();
-		StateComposite.setFontHeight(cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.disableEventDefault(cmbKeystoreType, SWT.MouseVerticalWheel);
+		SWTUtils.anchor(cmbKeystoreType).top(lblKeystoreType, 5).left(0,15).right(btnLoad, -5).set();
+		SWTUtils.setFontHeight(cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.disableEventDefault(cmbKeystoreType, SWT.MouseVerticalWheel);
 
 		this.lblKeystoreAlias = new Label(grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreAlias).top(cmbKeystoreType, 5).left(0, 5).set();
-		StateComposite.setFontHeight(lblKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lblKeystoreAlias).top(cmbKeystoreType, 5).left(0, 5).set();
+		SWTUtils.setFontHeight(lblKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbKeystoreAlias = new Combo(grpKeystore, SWT.NONE);
-		StateComposite.anchor(cmbKeystoreAlias).top(lblKeystoreAlias, 5).left(0,15).right(100,-5).set();
-		StateComposite.setFontHeight(cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.disableEventDefault(cmbKeystoreAlias, SWT.MouseVerticalWheel);
+		SWTUtils.anchor(cmbKeystoreAlias).top(lblKeystoreAlias, 5).left(0,15).right(100,-5).set();
+		SWTUtils.setFontHeight(cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.disableEventDefault(cmbKeystoreAlias, SWT.MouseVerticalWheel);
 
 		this.lblKeystorePassStoreType = new Label(this.grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystorePassStoreType).top(cmbKeystoreAlias, 5).left(0,5).set();
-		StateComposite.setFontHeight(lblKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lblKeystorePassStoreType).top(cmbKeystoreAlias, 5).left(0,5).set();
+		SWTUtils.setFontHeight(lblKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbKeystorePassStoreType = new Combo(grpKeystore, SWT.READ_ONLY);
-		StateComposite.anchor(cmbKeystorePassStoreType).top(lblKeystorePassStoreType, 5).left(0,15).right(100,-5).set();
-		StateComposite.setFontHeight(cmbKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
-		StateComposite.disableEventDefault(cmbKeystorePassStoreType, SWT.MouseVerticalWheel);
+		SWTUtils.anchor(cmbKeystorePassStoreType).top(lblKeystorePassStoreType, 5).left(0,15).right(100,-5).set();
+		SWTUtils.setFontHeight(cmbKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.disableEventDefault(cmbKeystorePassStoreType, SWT.MouseVerticalWheel);
 
 		this.lblKeystoreStorePass = new Label(grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreStorePass).top(cmbKeystorePassStoreType, 5).left(0,5).set();
-		StateComposite.setFontHeight(lblKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lblKeystoreStorePass).top(cmbKeystorePassStoreType, 5).left(0,5).set();
+		SWTUtils.setFontHeight(lblKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtKeystoreStorePass = new Text(grpKeystore, SWT.BORDER | SWT.PASSWORD);
-		StateComposite.anchor(txtKeystoreStorePass).right(100, -5).top(lblKeystoreStorePass, 5).left(0,15).set();
-		StateComposite.setFontHeight(txtKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(txtKeystoreStorePass).right(100, -5).top(lblKeystoreStorePass, 5).left(0,15).set();
+		SWTUtils.setFontHeight(txtKeystoreStorePass, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblKeystoreKeyPass = new Label(grpKeystore, SWT.NONE);
-		StateComposite.anchor(lblKeystoreKeyPass).top(txtKeystoreStorePass, 5).left(0,5).set();
-		StateComposite.setFontHeight(lblKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lblKeystoreKeyPass).top(txtKeystoreStorePass, 5).left(0,5).set();
+		SWTUtils.setFontHeight(lblKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtKeystoreKeyPass = new Text(grpKeystore, SWT.BORDER | SWT.PASSWORD);
-		StateComposite.anchor(txtKeystoreKeyPass).top(lblKeystoreKeyPass, 5).left(0,15).right(100,-5).set();
-		StateComposite.setFontHeight(txtKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(txtKeystoreKeyPass).top(lblKeystoreKeyPass, 5).left(0,15).right(100,-5).set();
+		SWTUtils.setFontHeight(txtKeystoreKeyPass, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtKeystoreFile.addFocusListener(new FocusAdapter() {
 			@Override

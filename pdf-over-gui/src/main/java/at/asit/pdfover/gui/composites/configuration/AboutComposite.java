@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.composites.StateComposite;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 public class AboutComposite extends ConfigurationCompositeBase {
@@ -39,21 +39,21 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		setLayout(new FormLayout());
 
 		this.lnkAbout = new Link(this, SWT.WRAP);
-		StateComposite.anchor(lnkAbout).top(0,5).right(100,-5).left(0,5).set();
-		StateComposite.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lnkAbout).top(0,5).right(100,-5).left(0,5).set();
+		SWTUtils.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblDataProtection = new Label(this, SWT.WRAP);
-		StateComposite.anchor(lblDataProtection).top(lnkAbout, 15).left(0,5).right(100,-5).set();
-		StateComposite.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
-		StateComposite.setFontStyle(lblDataProtection, SWT.BOLD);
+		SWTUtils.anchor(lblDataProtection).top(lnkAbout, 15).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(lblDataProtection, Constants.TEXT_SIZE_BIG);
+		SWTUtils.setFontStyle(lblDataProtection, SWT.BOLD);
 
 		this.lnkDataProtection = new Link(this, SWT.WRAP);
-		StateComposite.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5).set();
-		StateComposite.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnOpenLogDirectory = new Button(this, SWT.NONE);
-		StateComposite.anchor(btnOpenLogDirectory).bottom(100, -5).right(100, -5).set();
-		StateComposite.setFontHeight(btnOpenLogDirectory, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.anchor(btnOpenLogDirectory).bottom(100, -5).right(100, -5).set();
+		SWTUtils.setFontHeight(btnOpenLogDirectory, Constants.TEXT_SIZE_BUTTON);
 
 		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
 			@Override

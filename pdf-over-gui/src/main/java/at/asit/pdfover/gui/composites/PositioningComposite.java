@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.SignaturePosition;
 
@@ -79,21 +79,21 @@ public class PositioningComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		this.bottomBar = new Composite(this, SWT.NONE);
-		StateComposite.anchor(bottomBar).left(0).right(100).bottom(100).set();
+		SWTUtils.anchor(bottomBar).left(0).right(100).bottom(100).set();
 		this.bottomBar.setLayout(new FormLayout());
 
 		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
-		StateComposite.anchor(btnSign).right(100).top(0).set();
+		SWTUtils.anchor(btnSign).right(100).top(0).set();
 		this.getShell().setDefaultButton(this.btnSign);
 
 		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
-		StateComposite.anchor(btnNewPage).right(btnSign).top(0).set();
+		SWTUtils.anchor(btnNewPage).right(btnSign).top(0).set();
 
 		this.lblPage = new Label(this.bottomBar, SWT.CENTER);
-		StateComposite.anchor(lblPage).left(0).right(btnNewPage, 5).bottom(100).set();
+		SWTUtils.anchor(lblPage).left(0).right(btnNewPage, 5).bottom(100).set();
 
 		this.mainArea = new Composite(this, SWT.EMBEDDED | SWT.V_SCROLL);
-		StateComposite.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5).set();
+		SWTUtils.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5).set();
 		this.scrollbar = this.mainArea.getVerticalBar();
 
 		this.frame = SWT_AWT.new_Frame(this.mainArea);
@@ -296,20 +296,19 @@ public class PositioningComposite extends StateComposite {
 			int numPages = this.numPages;
 			if ((previousPage > numPages) && (currentPage <= numPages)) {
 				// Was on new page
-				StateComposite.setLocalizedText(btnNewPage, "positioning.newPage");
+				SWTUtils.setLocalizedText(btnNewPage, "positioning.newPage");
 				this.btnNewPage.setSelection(false);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 1);
 			} else if ((previousPage <= numPages) && (currentPage > numPages)) {
 				// Go to new page
-				StateComposite.setLocalizedText(btnNewPage, "positioning.removeNewPage");
-				this.btnNewPage.setText(Messages.getString("positioning.removeNewPage"));
+				SWTUtils.setLocalizedText(btnNewPage, "positioning.removeNewPage");
 				this.btnNewPage.setSelection(true);
 				this.bottomBar.layout();
 				this.scrollbar.setMaximum(numPages + 2);
 			}
 			this.scrollbar.setSelection(currentPage);
-			StateComposite.setLocalizedText(lblPage, "positioning.page", currentPage, numPages);
+			SWTUtils.setLocalizedText(lblPage, "positioning.page", currentPage, numPages);
 		});
 		EventQueue.invokeLater(() -> {
 			PositioningComposite.this.viewer.showPage(page);
@@ -392,8 +391,8 @@ public class PositioningComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		StateComposite.setLocalizedText(btnNewPage, (this.currentPage <= this.numPages) ? "positioning.newPage" : "positioning.removeNewPage");
-		StateComposite.setLocalizedText(btnSign, "positioning.sign");
-		StateComposite.setLocalizedText(lblPage, "positioning.page", this.currentPage, this.numPages);
+		SWTUtils.setLocalizedText(btnNewPage, (this.currentPage <= this.numPages) ? "positioning.newPage" : "positioning.removeNewPage");
+		SWTUtils.setLocalizedText(btnSign, "positioning.sign");
+		SWTUtils.setLocalizedText(lblPage, "positioning.page", this.currentPage, this.numPages);
 	}
 }

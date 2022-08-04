@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -167,44 +168,44 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 					10, 10);
 		});
 		containerComposite.setLayout(new FormLayout());
-		StateComposite.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200).set();
+		SWTUtils.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200).set();
 
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
-		StateComposite.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20).set();
+		SWTUtils.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20).set();
 		this.txt_number.setEditable(true);
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
-		StateComposite.anchor(lbl_number).bottom(50, -10).right(50, -10).set();
+		SWTUtils.anchor(lbl_number).bottom(50, -10).right(50, -10).set();
 
 		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Image mobileIcon = new Image(getDisplay(), mobileIconData);
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-		StateComposite.anchor(lbl_image).top(20, -1 * (mobileIconData.width / 2)).bottom(20, mobileIconData.width / 2).left(0, 10).width(mobileIconData.width).set();
+		SWTUtils.anchor(lbl_image).top(20, -1 * (mobileIconData.width / 2)).bottom(20, mobileIconData.width / 2).left(0, 10).width(mobileIconData.width).set();
 		lbl_image.setImage(mobileIcon);
 
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER | SWT.NATIVE);
-		StateComposite.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20).set();
+		SWTUtils.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20).set();
 		this.txt_password.setEditable(true);
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
-		StateComposite.anchor(lbl_password).top(50, 10).right(50, -10).set();
+		SWTUtils.anchor(lbl_password).top(50, 10).right(50, -10).set();
 		this.lbl_password.setAlignment(SWT.RIGHT);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-		StateComposite.anchor(btn_ok).bottom(100, -20).right(100, -20).set();
+		SWTUtils.anchor(btn_ok).bottom(100, -20).right(100, -20).set();
 		this.btn_ok.addSelectionListener(this.okListener);
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		StateComposite.anchor(btn_cancel).bottom(100, -20).right(btn_ok, -10).set();
+		SWTUtils.anchor(btn_cancel).bottom(100, -20).right(btn_ok, -10).set();
 		this.btn_cancel.addSelectionListener(this.cancelListener);
 
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
-		StateComposite.anchor(lbl_error).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
+		SWTUtils.anchor(lbl_error).bottom(103, -20).left(5, 0).right(btn_cancel, -10).set();
 
 		this.btn_remember = new Button(containerComposite, SWT.CHECK);
-		StateComposite.anchor(btn_remember).right(100, -10).top(0, 5).set();
+		SWTUtils.anchor(btn_remember).right(100, -10).top(0, 5).set();
 	}
 
 	@Override
@@ -279,11 +280,11 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		StateComposite.setLocalizedText(lbl_number, "mobileBKU.number");
-		StateComposite.setLocalizedText(lbl_password, "mobileBKU.password");
-		StateComposite.setLocalizedText(btn_remember, "mobileBKU.rememberPassword");
-		StateComposite.setLocalizedText(btn_ok, "common.Ok");
-		StateComposite.setLocalizedText(btn_cancel, "common.Cancel");
+		SWTUtils.setLocalizedText(lbl_number, "mobileBKU.number");
+		SWTUtils.setLocalizedText(lbl_password, "mobileBKU.password");
+		SWTUtils.setLocalizedText(btn_remember, "mobileBKU.rememberPassword");
+		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
+		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 
 		this.btn_remember.setToolTipText(Messages.getString("mobileBKU.rememberPasswordNote"));
 	}

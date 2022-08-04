@@ -36,6 +36,7 @@ import at.asit.pdfover.gui.composites.configuration.KeystoreConfigurationComposi
 import at.asit.pdfover.gui.composites.configuration.SimpleConfigurationComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.ResumableException;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
@@ -129,8 +130,8 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
 		this.tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
-		StateComposite.anchor(tabFolder).bottom(100, -5).right(100, -5).top(0, 5).left(0, 5).set();
-		StateComposite.setFontHeight(tabFolder, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.anchor(tabFolder).bottom(100, -5).right(100, -5).top(0, 5).left(0, 5).set();
+		SWTUtils.setFontHeight(tabFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
 
@@ -169,8 +170,8 @@ public class ConfigurationComposite extends StateComposite {
 		this.tabFolder.setSelection(this.simpleTabItem);
 
 		this.btnSpeichern = new Button(this, SWT.NONE);
-		StateComposite.anchor(btnSpeichern).right(100, -5).bottom(100).set();
-		StateComposite.setFontHeight(btnSpeichern, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.anchor(btnSpeichern).right(100, -5).bottom(100).set();
+		SWTUtils.setFontHeight(btnSpeichern, Constants.TEXT_SIZE_BUTTON);
 		this.btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -184,8 +185,8 @@ public class ConfigurationComposite extends StateComposite {
 		getShell().setDefaultButton(this.btnSpeichern);
 
 		this.btnAbbrechen = new Button(this, SWT.NONE);
-		StateComposite.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM).set();
-		StateComposite.setFontHeight(btnAbbrechen, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM).set();
+		SWTUtils.setFontHeight(btnAbbrechen, Constants.TEXT_SIZE_BUTTON);
 		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -195,7 +196,7 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 
-		StateComposite.anchor(containerComposite).top(0, 5).bottom(btnSpeichern, -10).left(0, 5).right(100, -5).set();
+		SWTUtils.anchor(containerComposite).top(0, 5).bottom(btnSpeichern, -10).left(0, 5).right(100, -5).set();
 		this.containerComposite.setLayout(this.compositeStack);
 		this.compositeStack.topControl = this.tabFolder;
 
@@ -426,13 +427,13 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
-		StateComposite.setLocalizedText(simpleTabItem, "config.Simple");
-		StateComposite.setLocalizedText(advancedTabItem, "config.Advanced");
-		StateComposite.setLocalizedText(aboutTabItem, "config.About", Constants.APP_NAME);
+		SWTUtils.setLocalizedText(simpleTabItem, "config.Simple");
+		SWTUtils.setLocalizedText(advancedTabItem, "config.Advanced");
+		SWTUtils.setLocalizedText(aboutTabItem, "config.About", Constants.APP_NAME);
 		if (this.keystoreTabItem != null)
-			StateComposite.setLocalizedText(keystoreTabItem, "config.Keystore");
+			SWTUtils.setLocalizedText(keystoreTabItem, "config.Keystore");
 
-		StateComposite.setLocalizedText(btnSpeichern, "common.Save");
-		StateComposite.setLocalizedText(btnAbbrechen, "common.Cancel");
+		SWTUtils.setLocalizedText(btnSpeichern, "common.Save");
+		SWTUtils.setLocalizedText(btnAbbrechen, "common.Cancel");
 	}
 }
