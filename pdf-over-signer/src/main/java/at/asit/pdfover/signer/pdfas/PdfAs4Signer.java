@@ -62,6 +62,23 @@ public class PdfAs4Signer {
 			config.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
 		}
 
+		// TODO encapsulate this parameter magic in PdfAs4SignatureParameter
+		if (parameter.signatureProfile == Profile.BASE_LOGO)
+		{
+			int emblemWidth = (parameter.emblem != null) ? parameter.emblem.getWidth() : 65;
+			int emblemHeight = (parameter.emblem != null) ? parameter.emblem.getHeight() : 65;
+			double aspectRatio = ((double)emblemWidth) / emblemHeight;
+			double targetWidth = 65.0;
+			double targetHeight = 65.0;
+			if (aspectRatio < 1)
+				targetWidth = 65.0 * aspectRatio;
+			else
+				targetHeight = 65.0 / aspectRatio;
+			config.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
+			config.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
+			config.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);
+		}
+
 		PdfAs4SigningState state = new PdfAs4SigningState();
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataSource input = new ByteArrayDataSource(parameter.inputDocument.getByteArray());

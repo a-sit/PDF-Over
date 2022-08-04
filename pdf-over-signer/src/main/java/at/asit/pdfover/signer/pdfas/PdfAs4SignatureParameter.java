@@ -98,6 +98,21 @@ public class PdfAs4SignatureParameter {
             if (sigNote != null) {
                 conf.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
             }
+            if (this.signatureProfile == Profile.BASE_LOGO)
+            {
+                int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 65;
+                int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 65;
+                double aspectRatio = ((double)emblemWidth) / emblemHeight;
+                double targetWidth = 65.0;
+                double targetHeight = 65.0;
+                if (aspectRatio < 1)
+                    targetWidth = 65.0 * aspectRatio;
+                else
+                    targetHeight = 65.0 / aspectRatio;
+                conf.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
+                conf.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
+                conf.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);
+            }
             SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
             param.setSignatureProfileId(sigProfile);
             

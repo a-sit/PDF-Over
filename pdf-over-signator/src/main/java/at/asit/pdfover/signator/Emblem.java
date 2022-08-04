@@ -58,6 +58,10 @@ public class Emblem {
 
 	private String fileName = null;
 
+	// TODO actual values
+	public int getWidth() { return 190; }
+	public int getHeight() { return 96; }
+
 	/**
 	 * Constructor
 	 * @param filename
