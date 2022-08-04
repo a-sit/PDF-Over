@@ -10,6 +10,11 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,6 +147,13 @@ public final class ImageUtil {
             g.dispose();
             image = result;
         }
+        return image;
+    }
+
+    public static java.awt.Image debugDisplayImage(java.awt.Image image) {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(new ImageIcon(image)));
+        JOptionPane.showMessageDialog(null, new JScrollPane(panel));
         return image;
     }
 }
