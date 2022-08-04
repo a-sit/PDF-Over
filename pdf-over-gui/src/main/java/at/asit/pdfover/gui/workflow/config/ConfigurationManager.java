@@ -127,12 +127,12 @@ public class ConfigurationManager {
 
 		String signatureProfileName = diskConfig.getProperty(Constants.SIGNATURE_PROFILE);
 		if (signatureProfileName != null)
-			setSignatureProfilePersistent(signatureProfileName);
+			setSignatureProfilePersistent(Profile.getProfile(signatureProfileName));
 
 		if (diskConfig.containsKey(Constants.CFG_SIGNATURE_NOTE))
 			setSignatureNotePersistent(diskConfig.getProperty(Constants.CFG_SIGNATURE_NOTE));
 		else
-			setSignatureNotePersistent(Profile.getProfile(getSignatureProfile()).getDefaultSignatureBlockNote(getSignatureLocale()));
+			setSignatureNotePersistent(getSignatureProfile().getDefaultSignatureBlockNote(getSignatureLocale()));
 
 		String compat = diskConfig.getProperty(Constants.CFG_SIGNATURE_PDFA_COMPAT);
 		if (compat != null)
@@ -373,7 +373,7 @@ public class ConfigurationManager {
 		if (!getUpdateCheck())
 			props.setProperty(Constants.CFG_UPDATE_CHECK, Constants.FALSE);
 
-		props.setProperty(Constants.SIGNATURE_PROFILE, getSignatureProfile());
+		props.setProperty(Constants.SIGNATURE_PROFILE, getSignatureProfile().name());
 
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
@@ -955,10 +955,6 @@ public class ConfigurationManager {
 		if (useMarker) setUseSignatureFieldsPersistent(false);
 	}
 
-	public void setSignatureProfilePersistent(String profile) {
-		this.configuration.setSignatureProfile(Profile.getProfile(profile));
-	}
-
     public void setSaveFilePostFixPersistent(String postFix) {
         this.configuration.saveFilePostFix = postFix;
     }
@@ -967,8 +963,12 @@ public class ConfigurationManager {
 		return this.configuration.saveFilePostFix;
 	}
 
-	public String getSignatureProfile() {
-		return this.configuration.getSignatureProfile().name();
+	public Profile getSignatureProfile() {
+		return this.configuration.getSignatureProfile();
+	}
+
+	public void setSignatureProfilePersistent(Profile profile) {
+		this.configuration.setSignatureProfile(profile);
 	}
 
 	public void setEnablePlaceholderUsagePersistent(boolean bool) {

@@ -80,7 +80,7 @@ public class PdfAs4SignatureParameter {
 
     private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
-    public String signatureProfileName = Profile.getDefaultProfile();
+    public Profile signatureProfile = Profile.getDefaultProfile();
 
     public Image getPlaceholder() {
         String sigProfile = getPdfAsSignatureProfileId();
@@ -104,7 +104,7 @@ public class PdfAs4SignatureParameter {
             Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
 
             // WORKAROUND for #110, manually paint a black border
-            if (!this.signatureProfileName.equals(Profile.BASE_LOGO.name()))
+            if (!this.signatureProfile.equals(Profile.BASE_LOGO))
             {
                 Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
                 ctx.setColor(Color.BLACK);
@@ -165,18 +165,17 @@ public class PdfAs4SignatureParameter {
             return Profile.INVISIBLE.name();
         }
 
-        Profile profile = Profile.getProfile(this.signatureProfileName);
-        switch (profile) {
+        switch (this.signatureProfile) {
             case BASE_LOGO:
             case INVISIBLE:
-                return this.signatureProfileName;
+                return this.signatureProfile.name();
             case AMTSSIGNATURBLOCK:
-                profileId = this.signatureProfileName;
+                profileId = this.signatureProfile.name();
                 profileId += getLangProfilePart(this.signatureLanguage);
                 profileId += "_RECOMMENDED";
                 return profileId;
             default:
-                profileId = this.signatureProfileName;
+                profileId = this.signatureProfile.name();
                 profileId += getLangProfilePart(this.signatureLanguage);
                 break;
         }

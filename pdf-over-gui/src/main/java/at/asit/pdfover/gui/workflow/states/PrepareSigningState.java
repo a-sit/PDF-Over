@@ -150,7 +150,7 @@ public class PrepareSigningState extends State {
 
 				this.state.signatureParameter.enablePDFACompat = configuration.getSignaturePdfACompat();
 
-				this.state.signatureParameter.signatureProfileName = configuration.getSignatureProfile();
+				this.state.signatureParameter.signatureProfile = configuration.getSignatureProfile();
 
 				this.state.signingState = PdfAs4Signer.prepare(this.state.signatureParameter);
 

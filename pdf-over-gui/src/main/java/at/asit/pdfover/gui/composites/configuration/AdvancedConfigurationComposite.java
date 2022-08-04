@@ -663,7 +663,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		this.configurationContainer.proxyUser = provider.getProxyUserPersistent();
 		this.configurationContainer.proxyPass = provider.getProxyPassPersistent();
-		this.configurationContainer.setSignatureProfile(Profile.getProfile(provider.getSignatureProfile()));
+		this.configurationContainer.setSignatureProfile(provider.getSignatureProfile());
 	}
 
 	/*
@@ -745,7 +745,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		store.setUpdateCheckPersistent(this.configurationContainer.updateCheck);
 
-		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile().name());
+		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile());
 
 		String hostOld = store.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.proxyHost;

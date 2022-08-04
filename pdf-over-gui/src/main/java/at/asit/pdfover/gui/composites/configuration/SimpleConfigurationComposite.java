@@ -348,7 +348,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 			try {
 				PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-				param.signatureProfileName = this.configurationContainer.getSignatureProfile().name();
+				param.signatureProfile = this.configurationContainer.getSignatureProfile();
 				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
 					param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
 				}
@@ -612,7 +612,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		store.setDefaultEmblemPersistent(this.configurationContainer.getEmblemPath());
 		store.setSignatureLocalePersistent(this.configurationContainer.signatureLocale);
 		store.setSignatureNotePersistent(this.configurationContainer.signatureNote);
-		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile().name());
+		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile());
 	}
 
 	/*

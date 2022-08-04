@@ -24,8 +24,8 @@ public enum Profile {
         return null;
     }
 
-    public static String getDefaultProfile(){
-        return SIGNATURBLOCK_SMALL.name();
+    public static Profile getDefaultProfile(){
+        return SIGNATURBLOCK_SMALL;
     }
 
     public String getDefaultSignatureBlockNote(Locale locale){

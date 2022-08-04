@@ -107,7 +107,7 @@ public class PositioningState extends State {
 		ConfigurationManager config = stateMachine.configProvider;
 
 		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-		param.signatureProfileName = config.getSignatureProfile();
+		param.signatureProfile = config.getSignatureProfile();
 
 		Emblem emblem = new Emblem(config.getDefaultEmblemPath());
 		param.emblem = emblem;
