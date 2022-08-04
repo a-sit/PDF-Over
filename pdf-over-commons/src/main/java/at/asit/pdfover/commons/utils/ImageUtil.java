@@ -1,4 +1,4 @@
-package at.asit.pdfover;
+package at.asit.pdfover.commons.utils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -75,7 +75,7 @@ class EXIFRotation {
     }
 }
 
-public final class Util {
+public final class ImageUtil {
     
     /**
      * ImageIO.read, except it honors EXIF rotation metadata

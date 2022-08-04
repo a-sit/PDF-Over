@@ -15,9 +15,9 @@
  */
 package at.asit.pdfover.signator;
 
-import at.asit.pdfover.Util;
 // Imports
 import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.utils.ImageUtil;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -135,7 +135,7 @@ public class Emblem {
 			emblemProps.setProperty(PROPKEY_ORIG_DIGEST, emblemHsh);
 			File imgFile = new File(emblemImg);
 
-			BufferedImage img = Util.readImageWithEXIFRotation(imgFile);
+			BufferedImage img = ImageUtil.readImageWithEXIFRotation(imgFile);
 			img = reduceImageSizeIfNecessary(img, MAX_EMBLEM_WIDTH, MAX_EMBLEM_HEIGHT);
 
 			File file = new File(CACHE_DIR, CACHE_IMG_FILENAME);
