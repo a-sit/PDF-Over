@@ -64,9 +64,16 @@ public final class SWTUtils {
     public static class AnchorSetter {
     	private final Control c;
     	private final FormData fd = new FormData();
+		private boolean didSet = false;
     	private AnchorSetter(Control c) { this.c = c; }
+
+		@Override
+		protected void finalize() {
+			if (!didSet)
+				log.warn("AnchorSetter: you did not call set()!");
+		}
     
-    	public void set() { this.c.setLayoutData(this.fd); }
+    	public void set() { this.c.setLayoutData(this.fd); didSet = true; }
     
     	public AnchorSetter height(int h) { fd.height = h; return this; }
     	public AnchorSetter width(int w) { fd.width = w; return this; }
