@@ -379,7 +379,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		lnk_sig_data.setEnabled(true);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
-		lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
+		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20).set();

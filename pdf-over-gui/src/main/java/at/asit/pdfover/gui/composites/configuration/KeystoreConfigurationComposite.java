@@ -580,18 +580,18 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setLocalizedText(grpKeystore, "keystore_config.Keystore_Title");
 		SWTUtils.setLocalizedText(lblKeystoreFile, "keystore_config.KeystoreFile");
 		SWTUtils.setLocalizedText(btnBrowse, "common.browse");
-		this.txtKeystoreFile.setToolTipText(Messages.getString("keystore_config.KeystoreFile_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(txtKeystoreFile, "keystore_config.KeystoreFile_ToolTip");
 		SWTUtils.setLocalizedText(lblKeystoreType, "keystore_config.KeystoreType");
 		reloadKeystoreTypeStrings();
 		SWTUtils.setLocalizedText(lblKeystorePassStoreType, "keystore_config.SaveToWhere.Header");
 		reloadKeystorePassStorageTypeStrings();
 		this.cmbKeystoreType.setItems(this.keystoreTypes.keySet().toArray(new String[0]));
 		SWTUtils.setLocalizedText(lblKeystoreStorePass, "keystore_config.KeystoreStorePass");
-		this.txtKeystoreStorePass.setToolTipText(Messages.getString("keystore_config.KeystoreStorePass_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(txtKeystoreStorePass, "keystore_config.KeystoreStorePass_ToolTip");
 		SWTUtils.setLocalizedText(btnLoad, "keystore_config.Load");
-		this.btnLoad.setToolTipText(Messages.getString("keystore_config.Load_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(btnLoad, "keystore_config.Load_ToolTip");
 		SWTUtils.setLocalizedText(lblKeystoreAlias, "keystore_config.KeystoreAlias");
 		SWTUtils.setLocalizedText(lblKeystoreKeyPass, "keystore_config.KeystoreKeyPass");
-		this.txtKeystoreKeyPass.setToolTipText(Messages.getString("keystore_config.KeystoreKeyPass_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(txtKeystoreKeyPass, "keystore_config.KeystoreKeyPass_ToolTip");
 	}
 }

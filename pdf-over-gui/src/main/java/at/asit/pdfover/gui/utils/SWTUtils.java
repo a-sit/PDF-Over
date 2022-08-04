@@ -39,9 +39,20 @@ public final class SWTUtils {
     		log.error("Failed to re-layout {}", swtObj.getClass().getSimpleName(), e);
     	}
     }
-
     public static void setLocalizedText(Object o, String messageKey) { genericSetText(o, Messages.getString(messageKey)); }
     public static void setLocalizedText(Object o, String formatMessageKey, Object... formatArgs) { genericSetText(o, String.format(Messages.getString(formatMessageKey), formatArgs)); }
+
+	private static void genericSetToolTipText(Object swtObj, String text) {
+		try {
+			Method m = swtObj.getClass().getMethod("setToolTipText", String.class);
+			m.invoke(swtObj, text);
+		} catch (NoSuchMethodException | IllegalAccessException e) {
+			log.error("Attempted to setLocalizedToolTipText on object of type {}, which does not have an accessible setToolTipText method", swtObj.getClass().getSimpleName(), e);
+		} catch (InvocationTargetException e) {
+			log.error("Failed to setLocalizedToolTipText on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
+	public static void setLocalizedToolTipText(Object o, String messageKey) { genericSetToolTipText(o, Messages.getString(messageKey));}
 
     public static void disableEventDefault(Control c, int event) {
     	c.addListener(event, (Event e) -> { e.doit = false; });

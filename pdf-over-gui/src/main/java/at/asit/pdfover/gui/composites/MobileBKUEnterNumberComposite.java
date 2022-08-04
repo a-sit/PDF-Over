@@ -286,7 +286,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 
-		this.btn_remember.setToolTipText(Messages.getString("mobileBKU.rememberPasswordNote"));
+		SWTUtils.setLocalizedToolTipText(btn_remember, "mobileBKU.rememberPasswordNote");
 	}
 
 }

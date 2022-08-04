@@ -397,7 +397,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		SWTUtils.setLocalizedText(lblQRLabel, "tanEnter.QR");
 		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
-		this.lnk_sig_data.setToolTipText(Messages.getString("mobileBKU.show_tooltip"));
+		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
 	}

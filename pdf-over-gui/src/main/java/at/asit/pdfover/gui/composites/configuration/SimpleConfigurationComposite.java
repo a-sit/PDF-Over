@@ -645,7 +645,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	public void reloadResources() {
 		SWTUtils.setLocalizedText(grpHandySignatur, "simple_config.MobileBKU_Title");
 		SWTUtils.setLocalizedText(lblMobileNumber, "simple_config.PhoneNumber");
-		this.txtMobileNumber.setToolTipText(Messages.getString("simple_config.ExampleNumber_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(txtMobileNumber, "simple_config.ExampleNumber_ToolTip");
 		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber"));
 
 		SWTUtils.setLocalizedText(grpPreview, "simple_config.Preview_Title");
@@ -653,11 +653,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setLocalizedText(btnBrowseLogo, "simple_config.ReplaceEmblem");
 		SWTUtils.setLocalizedText(grpSignatureNote, "simple_config.Note_Title");
 		SWTUtils.setLocalizedText(lblSignatureNote, "simple_config.Note");
-		this.txtSignatureNote.setToolTipText(Messages.getString("simple_config.Note_Tooltip"));
+		SWTUtils.setLocalizedToolTipText(txtSignatureNote, "simple_config.Note_Tooltip");
 		SWTUtils.setLocalizedText(btnSignatureNoteDefault, "simple_config.Note_SetDefault");
 
 		SWTUtils.setLocalizedText(grpSignatureLang, "simple_config.SigBlockLang_Title");
-		this.cmbSignatureLang.setToolTipText(Messages.getString("simple_config.SigBlockLang_ToolTip"));
+		SWTUtils.setLocalizedToolTipText(cmbSignatureLang, "simple_config.SigBlockLang_ToolTip");
 
 		SWTUtils.setLocalizedText(grpSignatureProfile, "simple_config.SigProfile_Title");
 		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
