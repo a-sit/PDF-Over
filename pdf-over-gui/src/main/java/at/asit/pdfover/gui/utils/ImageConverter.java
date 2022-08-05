@@ -40,6 +40,9 @@ public class ImageConverter {
 		if (bufferedImage == null)
 			return null;
 
+		if ((bufferedImage.getWidth() <= 0) || (bufferedImage.getHeight() <= 0))
+			return null;
+
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
 			DirectColorModel colorModel = (DirectColorModel) bufferedImage
 					.getColorModel();
