@@ -91,43 +91,46 @@ public class PdfAs4SignatureParameter {
 
         try {
             X509Certificate cert = new X509Certificate(PdfAs4SignatureParameter.class.getResourceAsStream("/example.cer"));
-            PdfAs pdfas = PdfAs4Helper.getPdfAs();
-            Configuration conf = pdfas.getConfiguration();
-            if (sigEmblem != null && !sigEmblem.trim().equals("")) {
-                conf.setValue("sig_obj." + sigProfile + ".value.SIG_LABEL", sigEmblem);
-            }
-            if (sigNote != null) {
-                conf.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
-            }
-            if (this.signatureProfile == Profile.BASE_LOGO)
-            {
-                int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 65;
-                int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 65;
-                double aspectRatio = ((double)emblemWidth) / emblemHeight;
-                double targetWidth = 65.0;
-                double targetHeight = 65.0;
-                if (aspectRatio < 1)
-                    targetWidth = 65.0 * aspectRatio;
-                else
-                    targetHeight = 65.0 / aspectRatio;
-                conf.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
-                conf.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
-                conf.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);
-            }
-            SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
-            param.setSignatureProfileId(sigProfile);
             
-            Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
+            PdfAs pdfas = PdfAs4Helper.getPdfAs();
+            synchronized (PdfAs4Helper.class) {
+                Configuration conf = pdfas.getConfiguration();
+                if (sigEmblem != null && !sigEmblem.trim().equals("")) {
+                    conf.setValue("sig_obj." + sigProfile + ".value.SIG_LABEL", sigEmblem);
+                }
+                if (sigNote != null) {
+                    conf.setValue("sig_obj." + sigProfile + ".value.SIG_NOTE", sigNote);
+                }
+                if (this.signatureProfile == Profile.BASE_LOGO)
+                {
+                    int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 65;
+                    int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 65;
+                    double aspectRatio = ((double)emblemWidth) / emblemHeight;
+                    double targetWidth = 65.0;
+                    double targetHeight = 65.0;
+                    if (aspectRatio < 1)
+                        targetWidth = 65.0 * aspectRatio;
+                    else
+                        targetHeight = 65.0 / aspectRatio;
+                    conf.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
+                    conf.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
+                    conf.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);
+                }
+                SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
+                param.setSignatureProfileId(sigProfile);
+                
+                Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
 
-            // WORKAROUND for #110, manually paint a black border
-            if (!this.signatureProfile.equals(Profile.BASE_LOGO))
-            {
-                Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
-                ctx.setColor(Color.BLACK);
-                ctx.drawRect(0, 0, placeholder.getWidth(null)-1, placeholder.getHeight(null)-1);
+                // WORKAROUND for #110, manually paint a black border
+                if (!this.signatureProfile.equals(Profile.BASE_LOGO))
+                {
+                    Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
+                    ctx.setColor(Color.BLACK);
+                    ctx.drawRect(0, 0, placeholder.getWidth(null)-1, placeholder.getHeight(null)-1);
+                }
+
+                return placeholder;
             }
-
-            return placeholder;
         } catch (Exception e) {
             log.error("Failed to get signature placeholder", e);
             return new BufferedImage(229, 77, BufferedImage.TYPE_INT_RGB);
