@@ -29,6 +29,9 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -331,6 +334,13 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
+
+		this.cSigPreview.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				SimpleConfigurationComposite.this.forceFocus();
+			}
+		});
 
 		// Load localized strings
 		reloadResources();
