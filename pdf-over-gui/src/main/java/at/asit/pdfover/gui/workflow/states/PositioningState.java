@@ -111,7 +111,7 @@ public class PositioningState extends State {
 
 		Emblem emblem = new Emblem(config.getDefaultEmblemPath());
 		param.emblem = emblem;
-		if(config.getSignatureNote() != null && !config.getSignatureNote().isEmpty())
+		if (config.getSignatureNote() != null && !config.getSignatureNote().isEmpty())
 			param.signatureNote = config.getSignatureNote();
 
 		param.signatureLanguage = config.getSignatureLocale().getLanguage();

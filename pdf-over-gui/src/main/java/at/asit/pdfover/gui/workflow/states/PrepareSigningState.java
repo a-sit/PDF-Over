@@ -138,10 +138,8 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter.emblem = new Emblem(configuration.getDefaultEmblemPath());
 				}
 
-				if (configuration.getSignatureNote() != null
-						&& !configuration.getSignatureNote().isEmpty()) {
-					this.state.signatureParameter.setProperty(
-							"SIG_NOTE", configuration.getSignatureNote());
+				if (configuration.getSignatureNote() != null && !configuration.getSignatureNote().isEmpty()) {
+					this.state.signatureParameter.signatureNote = configuration.getSignatureNote();
 				}
 
 				this.state.signatureParameter.searchForPlaceholderSignatures = getStateMachine().status.searchForPlacehoderSignature;
