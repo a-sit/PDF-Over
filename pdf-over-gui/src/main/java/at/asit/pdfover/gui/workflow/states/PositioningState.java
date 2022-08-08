@@ -120,8 +120,7 @@ public class PositioningState extends State {
 
 		PdfAs4SignaturePlaceholder.For(param, (p) -> {
 			this.positionComposite.setPlaceholder(
-				p.getAWTImage(),
-				config.getPlaceholderTransparency());
+				p.getAWTImage());
 		});
 
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())

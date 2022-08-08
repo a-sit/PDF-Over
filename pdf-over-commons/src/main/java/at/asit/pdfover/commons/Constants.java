@@ -102,9 +102,6 @@ public class Constants {
 	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx";
 	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
 
-	/** Default signature placeholder transparency */
-	public static final int DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY = 170;
-
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 

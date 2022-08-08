@@ -184,14 +184,12 @@ public class PositioningComposite extends StateComposite {
 	 *            width of the placeholder in page space
 	 * @param height
 	 *            height of the placeholder in page space
-	 * @param transparency
-	 *            transparency of the signature placeholder (0 - 255)
 	 */
-	public void setPlaceholder(final Image placeholder, final int transparency) {
+	public void setPlaceholder(final Image placeholder) {
 		EventQueue.invokeLater(() -> {
 			if (this.viewer == null)
 				return;
-			this.viewer.setSignaturePlaceholder(placeholder, transparency);
+			this.viewer.setSignaturePlaceholder(placeholder);
 		});
 	}
 

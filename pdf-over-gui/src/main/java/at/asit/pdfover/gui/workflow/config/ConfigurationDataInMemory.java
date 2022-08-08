@@ -111,9 +111,6 @@ public class ConfigurationDataInMemory {
 	/** Holds the proxy password */
 	public String proxyPass = null;
 
-	/** Holds the transparency of the signature placeholder */
-	public int placeholderTransparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
-
 	/** Holds the default BKU to use */
 	public BKUs defaultBKU = BKUs.NONE;
 

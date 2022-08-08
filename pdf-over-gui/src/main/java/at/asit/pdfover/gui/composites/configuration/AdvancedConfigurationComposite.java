@@ -170,6 +170,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setFontHeight(lblTransparenzRechts, Constants.TEXT_SIZE_NORMAL);
 
 		this.sclTransparenz = new Scale(this.grpSignatur, SWT.HORIZONTAL);
+		this.sclTransparenz.setEnabled(false);
 		SWTUtils.anchor(sclTransparenz).right(lblTransparenzRechts, -5).top(lblTransparenz, 5).left(lblTransparenzLinks, 5).set();
 		this.sclTransparenz.setMinimum(0);
 		this.sclTransparenz.setMaximum(255);
@@ -179,7 +180,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.sclTransparenz.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				performPlaceholderTransparency(AdvancedConfigurationComposite.this.sclTransparenz.getSelection());
 			}
 		});
 
@@ -569,10 +569,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	void performPlaceholderTransparency(int transparency) {
-		this.configurationContainer.placeholderTransparency = transparency;
-	}
-
 	void performUpdateCheckSelection(boolean checkUpdate) {
 		this.configurationContainer.updateCheck = checkUpdate;
 		this.btnUpdateCheck.setSelection(checkUpdate);
@@ -643,7 +639,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationContainer.setUseSignatureFields(provider.getUseSignatureFields());
 		this.configurationContainer.enabledPlaceholderUsage = provider.getEnablePlaceholderUsage();
 		this.configurationContainer.signaturePDFACompat = provider.getSignaturePdfACompat();
-		this.configurationContainer.placeholderTransparency = provider.getPlaceholderTransparency();
 
 		this.configurationContainer.defaultBKU = provider.getDefaultBKUPersistent();
 		this.configurationContainer.keystoreEnabled = provider.getKeyStoreEnabledPersistent();
@@ -690,7 +685,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
 		performEnableUsePlaceholder(this.configurationContainer.enabledPlaceholderUsage);
-		this.sclTransparenz.setSelection(this.configurationContainer.placeholderTransparency);
+		this.sclTransparenz.setSelection(170); // TODO REPLACE WITH SIGNATURE SCALE
 		performLocaleSelectionChanged(this.configurationContainer.interfaceLocale);
 		performPdfACompatSelection(this.configurationContainer.signaturePDFACompat);
 		performKeystoreEnabledSelection(this.configurationContainer.keystoreEnabled);
@@ -734,7 +729,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		store.setUseSignatureFieldsPersistent(this.configurationContainer.getUseSignatureFields());
 		store.setEnablePlaceholderUsagePersistent(this.configurationContainer.enabledPlaceholderUsage);
 		store.setSignaturePdfACompatPersistent(this.configurationContainer.signaturePDFACompat);
-		store.setPlaceholderTransparency(this.configurationContainer.placeholderTransparency);
 
 		store.setDefaultBKUPersistent(this.configurationContainer.defaultBKU);
 		store.setKeyStoreEnabledPersistent(this.configurationContainer.keystoreEnabled);

@@ -186,19 +186,6 @@ public class ConfigurationManager {
 		}
 		setDefaultBKUPersistent(defaultBKU);
 
-		// Set Signature placeholder transparency
-		int transparency = Constants.DEFAULT_SIGNATURE_PLACEHOLDER_TRANSPARENCY;
-		String trans = diskConfig.getProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY);
-		if (trans != null) {
-			try {
-				transparency = Integer.parseInt(trans);
-			} catch (NumberFormatException e) {
-				log.debug("Couldn't parse placeholder transparency", e);
-				// ignore parsing exception
-			}
-		}
-		setPlaceholderTransparency(transparency);
-
 		// Set MainWindow size
 		int width = Constants.DEFAULT_MAINWINDOW_WIDTH;
 		int height = Constants.DEFAULT_MAINWINDOW_HEIGHT;
@@ -289,8 +276,6 @@ public class ConfigurationManager {
 			props.setProperty(Constants.CFG_MOBILE_PASSWORD_REMEMBER, Constants.TRUE);
 		props.setProperty(Constants.CFG_OUTPUT_FOLDER, getDefaultOutputFolderPersistent());
 		props.setProperty(Constants.CFG_POSTFIX, getSaveFilePostFix());
-		props.setProperty(Constants.CFG_SIGNATURE_PLACEHOLDER_TRANSPARENCY,
-				Integer.toString(getPlaceholderTransparency()));
 
 		Point size = this.configuration.mainWindowSize;
 		props.setProperty(Constants.CFG_MAINWINDOW_SIZE, size.x + "," + size.y);
@@ -426,14 +411,6 @@ public class ConfigurationManager {
 
 	public boolean getAutoPositionSignaturePersistent() {
 		return this.configuration.autoPositionSignature;
-	}
-
-	public void setPlaceholderTransparency(int transparency) {
-		this.configuration.placeholderTransparency = transparency;
-	}
-
-	public int getPlaceholderTransparency() {
-		return this.configuration.placeholderTransparency;
 	}
 
 	public void setDefaultMobileNumberPersistent(String number) {
