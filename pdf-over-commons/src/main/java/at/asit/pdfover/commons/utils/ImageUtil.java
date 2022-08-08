@@ -246,6 +246,8 @@ public final class ImageUtil {
 		            raster.getPixel(x, y, pixelArray);
 		            int pixel = palette.getPixel(new RGB(pixelArray[0], pixelArray[1], pixelArray[2]));
 		            data.setPixel(x, y, pixel);
+                    if (3 < pixelArray.length)
+                        data.setAlpha(x, y, pixelArray[3]);
 		        }
 		    }
 		    return data;
