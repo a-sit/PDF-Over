@@ -15,7 +15,6 @@
  */
 package at.asit.pdfover.gui.composites.configuration;
 
-import java.awt.image.BufferedImage;
 // Imports
 import java.io.File;
 import java.util.Arrays;
@@ -34,7 +33,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormLayout;
@@ -58,13 +56,13 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.controls.ErrorMarker;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
-import at.asit.pdfover.gui.utils.ImageConverter;
 import at.asit.pdfover.gui.utils.SWTUtils;
-import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
+import at.asit.pdfover.signer.pdfas.PdfAs4SignaturePlaceholder;
 
 /**
  *
@@ -338,41 +336,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		reloadResources();
 	}
 
-	boolean needSigPreviewUpdate = true;
+	private PdfAs4SignatureParameter sigPreviewParam = null;
 	private Image sigPreview = null;
 	void paintSignaturePreview(PaintEvent evt) {
-		if (needSigPreviewUpdate)
-		{
-			String image = this.configurationContainer.getEmblemPath();
-			ImageData img = null;
-
-			try {
-				PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
-				param.signatureProfile = this.configurationContainer.getSignatureProfile();
-				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
-					param.signatureNote = this.configurationContainer.signatureNote;
-				}
-
-				param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
-				param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
-				if (image != null && !image.trim().isEmpty()) {
-					param.emblem = new Emblem(image);
-				}
-
-				// TODO getPlaceholder is super slow, can we async this somehow?
-				img = ImageConverter.convertToSWT((BufferedImage) param.getPlaceholder());
-			} catch (Exception e) {
-				log.error("Failed to load image for display...", e);
-			}
-
-			if (img != null) {
-				this.sigPreview = new Image(this.getDisplay(), img);
-			} else {
-				this.sigPreview = null;
-			}
-			needSigPreviewUpdate = false;
-		}
-
 		if (this.sigPreview == null)
 			return;
 		Rectangle r = this.sigPreview.getBounds();
@@ -443,8 +409,37 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	}
 
 	void signatureBlockPreviewChanged() {
-		needSigPreviewUpdate = true;
-		this.cSigPreview.redraw();
+		try {
+			PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
+			param.signatureProfile = this.configurationContainer.getSignatureProfile();
+			if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
+				param.signatureNote = this.configurationContainer.signatureNote;
+			}
+
+			param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
+			param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
+			String image = this.configurationContainer.getEmblemPath();
+			if (image != null && !image.trim().isEmpty()) {
+				param.emblem = new Emblem(image);
+			}
+
+			this.sigPreviewParam = param;
+			PdfAs4SignaturePlaceholder.For(param, (p) -> {
+				if (this.isDisposed())
+					return;
+
+				this.getDisplay().syncExec(() -> {
+					if (this.sigPreviewParam != param)
+						return;
+					if (this.sigPreview != null)
+						this.sigPreview.dispose();
+					this.sigPreview = new Image(this.getDisplay(), p.getSWTImage());
+					this.cSigPreview.redraw();
+				});
+			});
+		} catch (Exception e) {
+			log.error("Failed to load image for display...", e);
+		}
 	}
 
 	void processEmblemChanged(String filename) {

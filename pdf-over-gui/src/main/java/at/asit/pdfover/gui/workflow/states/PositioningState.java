@@ -37,6 +37,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signator.Emblem;
 import at.asit.pdfover.signator.SignaturePosition;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
+import at.asit.pdfover.signer.pdfas.PdfAs4SignaturePlaceholder;
 
 /**
  * Decides where to position the signature block
@@ -117,9 +118,11 @@ public class PositioningState extends State {
 		param.signatureLanguage = config.getSignatureLocale().getLanguage();
 		param.enablePDFACompat = config.getSignaturePdfACompat();
 
-		this.positionComposite.setPlaceholder(
-				param.getPlaceholder(),
+		PdfAs4SignaturePlaceholder.For(param, (p) -> {
+			this.positionComposite.setPlaceholder(
+				p.getAWTImage(),
 				config.getPlaceholderTransparency());
+		});
 
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
 		{

@@ -156,6 +156,8 @@ public class SignaturePanel extends JPanel {
 		this.sigPageWidth = placeholder.getWidth(null) / 4;
 		this.sigPageHeight = placeholder.getHeight(null) / 4;
 		this.sigPlaceholderTransparency = transparency;
+		renderPageToImage();
+		repaint();
 	}
 
 	/**
