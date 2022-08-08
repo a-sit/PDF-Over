@@ -58,6 +58,7 @@ public class Emblem {
 	private static final int MAX_EMBLEM_HEIGHT = 600;
 
 	private String originalFileName = null;
+	private String originalFileHash = null;
 	private Image image = null; /* image data, if we have it */
 
 	private void lazyLoadImage() {
@@ -181,13 +182,16 @@ public class Emblem {
 	 * @return the original filename
 	 */
 	public String getOriginalFileHash() {
-		if (this.originalFileName == null || !(new File(this.originalFileName).exists()))
-			return "";
-		try {
-			return getFileHash(this.originalFileName);
-		} catch (IOException e) {
-			log.debug("Error getting file hash", e);
-			return "";
+		if (this.originalFileHash == null) {
+			if (this.originalFileName == null || !(new File(this.originalFileName).exists())) {
+				this.originalFileHash = "";
+			} else try {
+				this.originalFileHash = getFileHash(this.originalFileName);
+			} catch (IOException e) {
+				log.debug("Error getting file hash", e);
+				this.originalFileHash = "";
+			}
 		}
+		return this.originalFileHash;
 	}
 }
