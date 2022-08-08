@@ -350,7 +350,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
 				param.signatureProfile = this.configurationContainer.getSignatureProfile();
 				if(this.configurationContainer.signatureNote != null && !this.configurationContainer.signatureNote.isEmpty()) {
-					param.setProperty("SIG_NOTE", this.configurationContainer.signatureNote);
+					param.signatureNote = this.configurationContainer.signatureNote;
 				}
 
 				param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();

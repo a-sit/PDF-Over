@@ -75,10 +75,11 @@ public class PdfAs4SignatureParameter {
 	/** The signature device */
 	public BKUs signatureDevice;
 
+    /** The siganture note, if any */
+    public String signatureNote = null;
+
 	/** Whether so look for placeholder signatures or not. */
 	public boolean searchForPlaceholderSignatures = false;
-
-    private HashMap<String, String> genericProperties = new HashMap<String, String>();
 
     public Profile signatureProfile = Profile.getDefaultProfile();
 
@@ -86,7 +87,7 @@ public class PdfAs4SignatureParameter {
         String sigProfile = getPdfAsSignatureProfileId();
 
         String sigEmblem = (this.emblem == null ? null : this.emblem.getCachedFileName());
-        String sigNote = getProperty("SIG_NOTE");
+        String sigNote = this.signatureNote;
 
         try {
             X509Certificate cert = new X509Certificate(PdfAs4SignatureParameter.class.getResourceAsStream("/example.cer"));
@@ -131,15 +132,6 @@ public class PdfAs4SignatureParameter {
             log.error("Failed to get signature placeholder", e);
             return new BufferedImage(229, 77, BufferedImage.TYPE_INT_RGB);
         }
-    }
-
-    // TODO review this
-    public void setProperty(String key, String value) {
-        this.genericProperties.put(key, value);
-    }
-
-    public String getProperty(String key) {
-        return this.genericProperties.get(key);
     }
 
     /**
@@ -195,7 +187,7 @@ public class PdfAs4SignatureParameter {
                 break;
         }
 
-        if (getProperty("SIG_NOTE") != null)
+        if (this.signatureNote)
             profileId += "_NOTE";
 
         if (this.enablePDFACompat)
