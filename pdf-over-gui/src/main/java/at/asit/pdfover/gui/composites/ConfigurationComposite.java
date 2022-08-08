@@ -182,7 +182,6 @@ public class ConfigurationComposite extends StateComposite {
 				}
 			}
 		});
-		getShell().setDefaultButton(this.btnSpeichern);
 
 		this.btnAbbrechen = new Button(this, SWT.NONE);
 		SWTUtils.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM).set();
