@@ -92,15 +92,15 @@ public class MobileBKUQRComposite extends StateComposite {
 
 	private Label lblQR;
 
-	boolean userCancel = false;
-	boolean userSMS = false;
-	boolean done = false;
+	private boolean userCancel = false;
+	private boolean userSMS = false;
+	private boolean done = false;
 
 	private Label lblRefVal;
 
-	String refVal;
+	private String refVal;
 
-	String signatureData;
+	private String signatureData;
 
 	/**
 	 * @return the signatureData
@@ -121,10 +121,10 @@ public class MobileBKUQRComposite extends StateComposite {
 	private Label lblRefValLabel;
 	private Label lblQRLabel;
 
-	Button btn_sms;
-	Button btn_cancel;
+	private Button btn_sms;
+	private Button btn_cancel;
 
-	Link lnk_sig_data;
+	private Link lnk_sig_data;
 
 	/**
 	 * @return the userCancel
