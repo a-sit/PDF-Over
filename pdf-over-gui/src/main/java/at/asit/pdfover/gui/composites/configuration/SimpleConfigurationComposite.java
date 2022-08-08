@@ -358,6 +358,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				if (image != null && !image.trim().isEmpty()) {
 					param.emblem = new Emblem(image);
 				}
+
 				// TODO this is super slow, can we get rid of it?
 				// SWT_AWT, same as PositioningComposite, maybe?
 				// .... i hate this

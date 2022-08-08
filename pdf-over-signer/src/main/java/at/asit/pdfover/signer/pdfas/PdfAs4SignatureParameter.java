@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -187,7 +186,7 @@ public class PdfAs4SignatureParameter {
                 break;
         }
 
-        if (this.signatureNote)
+        if (this.signatureNote != null)
             profileId += "_NOTE";
 
         if (this.enablePDFACompat)
