@@ -383,21 +383,8 @@ public class SignaturePanel extends JPanel {
 						this.sigPlaceholderScaled = new BufferedImage(this.sigScreenWidth, this.sigScreenHeight, BufferedImage.TYPE_INT_ARGB);
 						Graphics g_phs = this.sigPlaceholderScaled.getGraphics();
 						g_phs.drawImage(placeholder, 0, 0, null);
-
-						// Draw grey "Signature" overlay
-						String overlay = Messages.getString("positioning.signature");
-						// Voodoo to get overlay font scale
-						float scale = (((float) this.sigScreenWidth) / this.sigPlaceholder.getWidth(null)) * 150;
-						g_phs.setFont(getFont().deriveFont(scale));
-						g_phs.setColor(this.sigPlaceholderBorderColor);
-						Rectangle2D overlay_size = g_phs.getFontMetrics().getStringBounds(overlay, g_phs);
-						int width = (int) overlay_size.getWidth();
-						int height = (int) overlay_size.getHeight();
-						int x = this.sigScreenWidth / 2 - width / 2;
-						int y = this.sigScreenHeight / 2 - height / 2 + g_phs.getFontMetrics().getAscent();
-						g_phs.drawString(overlay, x, y);
-
 						g_phs.dispose();
+						
 						int[] phpixels = new int[this.sigScreenWidth * this.sigScreenHeight];
 						phpixels = this.sigPlaceholderScaled.getRGB(0, 0, this.sigScreenWidth, this.sigScreenHeight, phpixels, 0, this.sigScreenWidth);
 						for (int i = 0; i < phpixels.length; ++i) {
