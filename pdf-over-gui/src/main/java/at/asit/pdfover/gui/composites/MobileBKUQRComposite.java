@@ -27,6 +27,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
@@ -99,6 +100,8 @@ public class MobileBKUQRComposite extends StateComposite {
 	private Label lblRefVal;
 
 	private String refVal;
+
+	private ImageData currentQRImage;
 
 	private String signatureData;
 
@@ -202,7 +205,19 @@ public class MobileBKUQRComposite extends StateComposite {
 		} else {
 			this.lblRefVal.setText("");
 		}
+	}
 
+	private void updateQRImage() {
+		if (this.currentQRImage == null)
+			return;
+
+		Point availableSize = this.lblQR.getSize();
+		int targetSize = Math.min(availableSize.x, availableSize.y);
+		log.info("target size {}", targetSize);
+		if (targetSize <= 0)
+			return;
+		
+		this.lblQR.setImage(new Image(this.lblQR.getDisplay(), this.currentQRImage.scaledTo(targetSize, targetSize)));
 	}
 
 	/**
@@ -214,8 +229,8 @@ public class MobileBKUQRComposite extends StateComposite {
 			setErrorMessage(Messages.getString("error.FailedToLoadQRCode"));
 			return;
 		}
-		Image qr = new Image(Display.getCurrent(), qrcode);
-		this.lblQR.setImage(qr);
+		this.currentQRImage = new ImageData(qrcode);
+		updateQRImage();
 	}
 
 	/**
@@ -293,6 +308,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		this.lblQRLabel.setAlignment(SWT.RIGHT);
 
 		this.lblQR = new Label(containerComposite, SWT.NATIVE);
+		this.lblQR.addListener(SWT.Resize, (e) -> { updateQRImage(); });
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20).set();
