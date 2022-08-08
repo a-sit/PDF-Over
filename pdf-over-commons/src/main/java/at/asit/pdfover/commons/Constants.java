@@ -82,12 +82,6 @@ public class Constants {
 	/** The configuration version file name */
 	public static final String CONFIG_VERSION_FILENAME = ".version";
 
-	/** The signature placeholder cache file name */
-	public static final String PLACEHOLDER_CACHE_FILENAME = ".placeholder";
-
-	/** The signature placeholder cache properties file name */
-	public static final String PLACEHOLDER_CACHE_PROPS_FILENAME = ".placeholder.properties";
-
 	/**
 	 * The minimum PDF-AS configuration version (older ones will be backed up
 	 * and updated
