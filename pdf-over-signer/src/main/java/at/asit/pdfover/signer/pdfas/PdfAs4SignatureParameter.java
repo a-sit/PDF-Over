@@ -80,6 +80,7 @@ public class PdfAs4SignatureParameter {
 	/** Whether so look for placeholder signatures or not. */
 	public boolean searchForPlaceholderSignatures = false;
 
+    /** The signature profile in use */
     public Profile signatureProfile = Profile.getDefaultProfile();
 
     public Image getPlaceholder() {
