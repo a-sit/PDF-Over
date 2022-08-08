@@ -255,7 +255,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnClearImage = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btnClearImage).top(0,5).left(50, 5).set();
 		SWTUtils.setFontHeight(btnClearImage, Constants.TEXT_SIZE_BUTTON);
-		this.btnClearImage.setVisible(false);
+		this.btnClearImage.setEnabled(false);
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
 		SWTUtils.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5).set();
