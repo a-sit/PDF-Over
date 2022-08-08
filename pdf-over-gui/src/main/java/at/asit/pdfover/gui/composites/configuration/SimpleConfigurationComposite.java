@@ -359,9 +359,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 					param.emblem = new Emblem(image);
 				}
 
-				// TODO this is super slow, can we get rid of it?
-				// SWT_AWT, same as PositioningComposite, maybe?
-				// .... i hate this
+				// TODO getPlaceholder is super slow, can we async this somehow?
 				img = ImageConverter.convertToSWT((BufferedImage) param.getPlaceholder());
 			} catch (Exception e) {
 				log.error("Failed to load image for display...", e);
