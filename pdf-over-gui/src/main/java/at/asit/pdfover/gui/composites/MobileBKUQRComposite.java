@@ -28,8 +28,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
@@ -262,6 +260,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		setLayout(new FormLayout());
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
+		SWTUtils.anchor(containerComposite).top(50, -140).bottom(50, 140).left(50, -200).right(50, 200).set();
 		containerComposite.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -276,98 +275,42 @@ public class MobileBKUQRComposite extends StateComposite {
 			}
 		});
 		containerComposite.setLayout(new FormLayout());
-		FormData fd_containerComposite = new FormData();
-		fd_containerComposite.top = new FormAttachment(50, -140);
-		fd_containerComposite.bottom = new FormAttachment(50, 140);
-		fd_containerComposite.left = new FormAttachment(50, -200);
-		fd_containerComposite.right = new FormAttachment(50, 200);
-		containerComposite.setLayoutData(fd_containerComposite);
 
 		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(lblRefValLabel).right(50, -10).top(30, -10).set();
 		this.lblRefValLabel.setAlignment(SWT.RIGHT);
-		FormData fd_lblRefValLabel = new FormData();
-		// fd_lblRefValLabel.left = new FormAttachment(0, 20);
-		fd_lblRefValLabel.right = new FormAttachment(50, -10);
-		fd_lblRefValLabel.top = new FormAttachment(30, -10);
-		//fd_lblRefValLabel.bottom = new FormAttachment(50, -10);
-		this.lblRefValLabel.setLayoutData(fd_lblRefValLabel);
 
+		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-
-		ImageData data = new ImageData(this.getClass().getResourceAsStream(
-				Constants.RES_IMG_MOBILE));
-		Image mobile = new Image(getDisplay(), data);
-
-		FormData fd_lbl_image = new FormData();
-		fd_lbl_image.top = new FormAttachment(50, -1 * (data.width / 2));
-		fd_lbl_image.bottom = new FormAttachment(50, data.width / 2);
-		fd_lbl_image.left = new FormAttachment(0, 10);
-		fd_lbl_image.width = data.width;
-		lbl_image.setLayoutData(fd_lbl_image);
-		lbl_image.setImage(mobile);
+		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width).set();
+		lbl_image.setImage(new Image(getDisplay(), mobileIcon));
 
 		this.lblRefVal = new Label(containerComposite, SWT.NATIVE);
-		FormData fd_lblRefVal = new FormData();
-		fd_lblRefVal.left = new FormAttachment(50, 10);
-		fd_lblRefVal.right = new FormAttachment(100, -20);
-		fd_lblRefVal.top = new FormAttachment(30, -10);
-		//fd_lblRefVal.bottom = new FormAttachment(50, -10);
-		this.lblRefVal.setLayoutData(fd_lblRefVal);
-		this.lblRefVal.setText("");
+		SWTUtils.anchor(lblRefVal).left(50, 10).right(100, -20).top(30, -10).set();
 
 		this.lblQRLabel = new Label(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(lblQRLabel).right(50, -10).top(lblRefValLabel, 10).set();
 		this.lblQRLabel.setAlignment(SWT.RIGHT);
-		FormData fd_lblQRLabel = new FormData();
-		// fd_lblQRLabel.left = new FormAttachment(0, 20);
-		fd_lblQRLabel.right = new FormAttachment(50, -10);
-		fd_lblQRLabel.top = new FormAttachment(this.lblRefValLabel, 10);
-		// fd_lblQRLabel.bottom = new FormAttachment(50, 15);
-		this.lblQRLabel.setLayoutData(fd_lblQRLabel);
 
 		this.lblQR = new Label(containerComposite, SWT.NATIVE);
-		FormData fd_lblQR = new FormData();
-		fd_lblQR.left = new FormAttachment(50, 10);
-		fd_lblQR.right = new FormAttachment(100, -20);
-		fd_lblQR.top = new FormAttachment(this.lblRefVal, 10);
-		this.lblQR.setLayoutData(fd_lblQR);
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
-
-		FormData fd_lnk_data = new FormData();
-		fd_lnk_data.right = new FormAttachment(100, -20);
-		fd_lnk_data.top = new FormAttachment(0, 20);
+		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20).set();
 		this.lnk_sig_data.setEnabled(true);
-		this.lnk_sig_data.setLayoutData(fd_lnk_data);
 		this.lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
-
-		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		FormData fd_lbl_error = new FormData();
-		// fd_lbl_error.left = new FormAttachment(15, 5);
-		fd_lbl_error.right = new FormAttachment(this.btn_sms, -10);
-		// fd_lbl_error.top = new FormAttachment(70, -15);
-		fd_lbl_error.bottom = new FormAttachment(100, -20);
-		this.lblError.setLayoutData(fd_lbl_error);
-
-		FormData fd_btn_cancel = new FormData();
-		// fd_btn_cancel.left = new FormAttachment(95, 0);
-		fd_btn_cancel.right = new FormAttachment(100, -20);
-		//fd_btn_cancel.left = new FormAttachment(100, -70);
-		fd_btn_cancel.bottom = new FormAttachment(100, -5);
-
-		this.btn_cancel.setLayoutData(fd_btn_cancel);
+		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -5).set();
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 
-		FormData fd_btn_sms = new FormData();
-		// fd_btn_sms.left = new FormAttachment(95, 0);
-		fd_btn_sms.right = new FormAttachment(this.btn_cancel, -20);
-		//fd_btn_sms.left = new FormAttachment(100, -70);
-		fd_btn_sms.bottom = new FormAttachment(100, -5);
-
-		this.btn_sms.setLayoutData(fd_btn_sms);
+		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -5).set();
 		this.btn_sms.addSelectionListener(new SMSSelectionListener());
+
+		SWTUtils.anchor(lblQR).left(50, 10).right(100, -20).top(lblRefVal, 10).bottom(btn_sms, -10).set();
+
+		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20).set();
 
 		reloadResources();
 	}
