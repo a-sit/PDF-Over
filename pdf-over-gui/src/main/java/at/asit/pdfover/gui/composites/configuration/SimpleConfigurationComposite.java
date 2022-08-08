@@ -413,7 +413,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		}
 
 		this.configurationContainer.setEmblem(filename);
-		this.btnClearImage.setVisible(filename != null);
+		this.btnClearImage.setEnabled(filename != null);
 		this.signatureBlockPreviewChanged();
 		this.doLayout();
 	}
