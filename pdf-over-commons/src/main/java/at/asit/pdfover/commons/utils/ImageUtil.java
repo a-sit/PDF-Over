@@ -75,14 +75,16 @@ class EXIFRotation {
             ExifIFD0Directory metaDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
             if (metaDir == null)
                 return NONE;
-            int orientation = metaDir.getInt(ExifDirectoryBase.TAG_ORIENTATION);
+            Integer orientation = metaDir.getInteger(ExifDirectoryBase.TAG_ORIENTATION);
+            if (orientation == null)
+                return NONE;
             if (rotationForIndex.length <= orientation)
             {
                 log.warn("Invalid orientation {} in EXIF metadata for {}", orientation, file.getName());
                 return NONE;
             }
             return rotationForIndex[orientation];
-        } catch (ImageProcessingException | MetadataException e) {
+        } catch (ImageProcessingException e) {
             log.error("Failed to read EXIF metadata for {}", file.getName(), e);
             return NONE;
         }
