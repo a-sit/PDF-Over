@@ -2,7 +2,10 @@ package at.asit.pdfover.gui.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -120,4 +123,19 @@ public final class SWTUtils {
     }
     public static AnchorSetter anchor(Control c) { return new AnchorSetter(c); }
     
+	/**
+	 * functional-interface wrapper around swtObj.addSelectionListener
+	 * @param swtObj SWT widget supporting addSelectionListener
+	 * @param callback widgetSelected method
+	 */
+	public static void addSelectionListener(Object swtObj, Consumer<SelectionEvent> callback) {
+		try {
+			Method m = swtObj.getClass().getMethod("addSelectionListener", SelectionAdapter.class);
+			m.invoke(swtObj, new SelectionAdapter() { @Override public void widgetSelected(SelectionEvent e) { callback.accept(e); } });
+		} catch (NoSuchMethodException | IllegalAccessException e) {
+			log.error("Attempted to pass object of type {} to onSelectionChanged; object does not have an accessible addSelectionListener method", swtObj.getClass().getSimpleName(), e);
+		} catch (InvocationTargetException e) {
+			log.error("Failed to add selection listener on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
 }

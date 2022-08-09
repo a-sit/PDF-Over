@@ -133,24 +133,12 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnAutomatischePositionierung = new Button(this.grpSignatur, SWT.CHECK);
 		SWTUtils.anchor(btnAutomatischePositionierung).right(100,-5).top(0).left(0,5).set();
 		SWTUtils.setFontHeight(btnAutomatischePositionierung, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnAutomatischePositionierung.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performPositionSelection(btnAutomatischePositionierung.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnAutomatischePositionierung, e -> { performPositionSelection(btnAutomatischePositionierung.getSelection()); });
 
 		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
 		SWTUtils.anchor(btnPdfACompat).right(100,-5).top(btnAutomatischePositionierung, 5).left(0,5).set();
 		SWTUtils.setFontHeight(btnPdfACompat, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnPdfACompat.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performPdfACompatSelection(btnPdfACompat.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnPdfACompat, e -> { performPdfACompatSelection(btnPdfACompat.getSelection()); });
 
 		this.grpPlaceholder = new Group(this, SWT.NONE);
 		this.grpPlaceholder.setLayout(STANDARD_LAYOUT);
@@ -160,35 +148,17 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
 		SWTUtils.anchor(btnEnablePlaceholderUsage).top(0,5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(btnEnablePlaceholderUsage, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnEnablePlaceholderUsage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performEnableUsePlaceholder(btnEnablePlaceholderUsage.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnEnablePlaceholderUsage, e -> { performEnableUsePlaceholder(btnEnablePlaceholderUsage.getSelection()); });
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
 		SWTUtils.anchor(btnPlatzhalterVerwenden).right(100,-5).top(btnEnablePlaceholderUsage,5).left(0,5).set();
 		SWTUtils.setFontHeight(btnPlatzhalterVerwenden, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performUseMarkerSelection(btnPlatzhalterVerwenden.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnPlatzhalterVerwenden, e -> { performUseMarkerSelection(btnPlatzhalterVerwenden.getSelection()); });
 
 		this.btnSignatureFieldsUsage = new Button(this.grpPlaceholder, SWT.RADIO);
 		SWTUtils.anchor(btnSignatureFieldsUsage).right(100,-5).top(btnPlatzhalterVerwenden, 5).left(0,5).set();
 		SWTUtils.setFontHeight(btnSignatureFieldsUsage, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnSignatureFieldsUsage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performUseSignatureFieldsSelection(btnSignatureFieldsUsage.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnSignatureFieldsUsage, e -> { performUseSignatureFieldsSelection(btnSignatureFieldsUsage.getSelection()); });
 
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
 		this.grpBkuAuswahl.setLayout(STANDARD_LAYOUT);
@@ -202,14 +172,11 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.bkuStrings = Arrays.stream(BKUs.values()).map(s -> Messages.getString("BKU."+s)).collect(Collectors.toList());
 		this.cmbBKUAuswahl.setItems(bkuStrings.toArray(new String[0]));
-		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int selectionIndex = getBKUElementIndex(configurationContainer.defaultBKU);
-				if (cmbBKUAuswahl.getSelectionIndex() != selectionIndex) {
-					selectionIndex = cmbBKUAuswahl.getSelectionIndex();
-					performBKUSelectionChanged(cmbBKUAuswahl.getItem(selectionIndex));
-				}
+		SWTUtils.addSelectionListener(cmbBKUAuswahl, e -> {
+			int selectionIndex = getBKUElementIndex(configurationContainer.defaultBKU);
+			if (cmbBKUAuswahl.getSelectionIndex() != selectionIndex) {
+				selectionIndex = cmbBKUAuswahl.getSelectionIndex();
+				performBKUSelectionChanged(cmbBKUAuswahl.getItem(selectionIndex));
 			}
 		});
 
@@ -217,12 +184,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5).set();
 		SWTUtils.setFontHeight(btnKeystoreEnabled, Constants.TEXT_SIZE_BUTTON);
 
-		this.btnKeystoreEnabled.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnKeystoreEnabled, e -> { performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection()); });
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
 		grpSpeicherort.setLayout(new GridLayout(3, false));
@@ -247,29 +209,26 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		SWTUtils.setFontHeight(btnBrowse, Constants.TEXT_SIZE_BUTTON);
 
-		this.btnBrowse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dlg = new DirectoryDialog(AdvancedConfigurationComposite.this.getShell());
+		SWTUtils.addSelectionListener(btnBrowse, e -> {
+			DirectoryDialog dlg = new DirectoryDialog(AdvancedConfigurationComposite.this.getShell());
 
-				// Set the initial filter path according
-				// to anything they've selected or typed in
-				dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
-				
-				// Change the title bar text
-				SWTUtils.setLocalizedText(dlg, "advanced_config.OutputFolder.Dialog_Title");
+			// Set the initial filter path according
+			// to anything they've selected or typed in
+			dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
+			
+			// Change the title bar text
+			SWTUtils.setLocalizedText(dlg, "advanced_config.OutputFolder.Dialog_Title");
 
-				// Customizable message displayed in the dialog
-				dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog"));
+			// Customizable message displayed in the dialog
+			dlg.setMessage(Messages.getString("advanced_config.OutputFolder.Dialog"));
 
-				// Calling open() will open and run the dialog.
-				// It will return the selected directory, or
-				// null if user cancels
-				String dir = dlg.open();
-				if (dir != null) {
-					// Set the text box to the new selection
-					performOutputFolderChanged(dir);
-				}
+			// Calling open() will open and run the dialog.
+			// It will return the selected directory, or
+			// null if user cancels
+			String dir = dlg.open();
+			if (dir != null) {
+				// Set the text box to the new selection
+				performOutputFolderChanged(dir);
 			}
 		});
 
@@ -299,14 +258,11 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 		SWTUtils.disableEventDefault(cmbLocaleAuswahl, SWT.MouseVerticalWheel);
 
-		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = configurationContainer.interfaceLocale;
-				Locale selectedLocale = Constants.SUPPORTED_LOCALES[cmbLocaleAuswahl.getSelectionIndex()];
-				if (!currentLocale.equals(selectedLocale)) {
-					performLocaleSelectionChanged(selectedLocale);
-				}
+		SWTUtils.addSelectionListener(cmbLocaleAuswahl, e -> {
+			Locale currentLocale = configurationContainer.interfaceLocale;
+			Locale selectedLocale = Constants.SUPPORTED_LOCALES[cmbLocaleAuswahl.getSelectionIndex()];
+			if (!currentLocale.equals(selectedLocale)) {
+				performLocaleSelectionChanged(selectedLocale);
 			}
 		});
 
@@ -318,13 +274,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnUpdateCheck = new Button(this.grpUpdateCheck, SWT.CHECK);
 		SWTUtils.anchor(btnUpdateCheck).right(100,-5).top(0).left(0,5).set();
 		SWTUtils.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
-
-		this.btnUpdateCheck.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performUpdateCheckSelection(btnUpdateCheck.getSelection());
-			}
-		});
+		SWTUtils.addSelectionListener(btnUpdateCheck, e -> { performUpdateCheckSelection(btnUpdateCheck.getSelection()); });
 
 		this.grpProxy = new Group(this, SWT.NONE);
 		SWTUtils.anchor(grpProxy).right(100,-5).top(grpUpdateCheck, 5).left(0,5).set();
