@@ -28,6 +28,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	private Link lnkAbout;
 	private Link lnkDataProtection;
 	private Label lblDataProtection;
+	private Button btnUpdateCheck;
 	private Button btnOpenLogDirectory;
 	/**
  * @param parent
@@ -50,6 +51,11 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkDataProtection = new Link(this, SWT.WRAP);
 		SWTUtils.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
+
+		this.btnUpdateCheck = new Button(this, SWT.CHECK);
+		SWTUtils.anchor(btnUpdateCheck).bottom(100,-5).left(0,5).set();
+		SWTUtils.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.addSelectionListener(btnUpdateCheck, e -> { this.configurationContainer.updateCheck = btnUpdateCheck.getSelection(); });
 
 		this.btnOpenLogDirectory = new Button(this, SWT.NONE);
 		SWTUtils.anchor(btnOpenLogDirectory).bottom(100, -5).right(100, -5).set();
@@ -129,17 +135,25 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		SWTUtils.setLocalizedText(lnkAbout, "config.AboutText");
 		SWTUtils.setLocalizedText(lblDataProtection, "config.DataProtection");
 		SWTUtils.setLocalizedText(lnkDataProtection, "config.DataProtectionStatement");
+		SWTUtils.setLocalizedText(btnUpdateCheck, "advanced_config.UpdateCheck");
+		SWTUtils.setLocalizedToolTipText(btnUpdateCheck, "advanced_config.UpdateCheck_ToolTip");
 		SWTUtils.setLocalizedText(btnOpenLogDirectory, "config.ShowLogDirectory");
 	}
 
 	@Override
-	public void initConfiguration(ConfigurationManager provider) {}
+	public void initConfiguration(ConfigurationManager provider) {
+		this.configurationContainer.updateCheck = provider.getUpdateCheck();
+	}
 
 	@Override
-	public void loadConfiguration() {}
+	public void loadConfiguration() {
+		btnUpdateCheck.setSelection(this.configurationContainer.updateCheck);
+	}
 
 	@Override
-	public void storeConfiguration(ConfigurationManager store) {}
+	public void storeConfiguration(ConfigurationManager store) {
+		store.setUpdateCheckPersistent(this.configurationContainer.updateCheck);
+	}
 
 	@Override
 	public void validateSettings(int resumeFrom) throws Exception {}

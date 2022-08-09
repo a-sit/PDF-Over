@@ -95,9 +95,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	private final Group grpLocaleAuswahl;
 	Combo cmbLocaleAuswahl;
 
-	private Group grpUpdateCheck;
-	Button btnUpdateCheck;
-
 	private Group grpProxy;
 	private Label lblProxyHost;
 	private Text txtProxyHost;
@@ -125,14 +122,9 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		STANDARD_LAYOUT.marginHeight = 10;
 		STANDARD_LAYOUT.marginWidth = 5;
 
-		this.grpUpdateCheck = new Group(this, SWT.NONE);
-		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpUpdateCheck).top(0, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
-
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
 		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpLocaleAuswahl).top(grpUpdateCheck, 5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(grpLocaleAuswahl).top(0, 5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpSignatur = new Group(this, SWT.NONE);
@@ -274,11 +266,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 				performLocaleSelectionChanged(selectedLocale);
 			}
 		});
-
-		this.btnUpdateCheck = new Button(this.grpUpdateCheck, SWT.CHECK);
-		SWTUtils.anchor(btnUpdateCheck).right(100,-5).top(0).left(0,5).set();
-		SWTUtils.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
-		SWTUtils.addSelectionListener(btnUpdateCheck, e -> { performUpdateCheckSelection(btnUpdateCheck.getSelection()); });
 
 		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
 		do { /* grid positioning */
@@ -467,11 +454,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	void performUpdateCheckSelection(boolean checkUpdate) {
-		this.configurationContainer.updateCheck = checkUpdate;
-		this.btnUpdateCheck.setSelection(checkUpdate);
-	}
-
 	void processProxyHostChanged() {
 		try {
 			this.proxyHostErrorMarker.setVisible(false);
@@ -546,8 +528,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.configurationContainer.interfaceLocale = provider.getInterfaceLocale();
 
-		this.configurationContainer.updateCheck = provider.getUpdateCheck();
-
 		this.configurationContainer.proxyHost = provider.getProxyHostPersistent();
 		try {
 			this.configurationContainer.setProxyPort(provider.getProxyPortPersistent());
@@ -586,7 +566,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		performLocaleSelectionChanged(this.configurationContainer.interfaceLocale);
 		performPdfACompatSelection(this.configurationContainer.signaturePDFACompat);
 		performKeystoreEnabledSelection(this.configurationContainer.keystoreEnabled);
-		performUpdateCheckSelection(this.configurationContainer.updateCheck);
 		performSetSignatureProfile(this.configurationContainer.getSignatureProfile());
 
 		int port = this.configurationContainer.getProxyPort();
@@ -633,8 +612,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		store.setDefaultOutputFolderPersistent(this.configurationContainer.outputFolder);
 		store.setSaveFilePostFixPersistent(this.configurationContainer.saveFilePostFix);
 		store.setInterfaceLocalePersistent(this.configurationContainer.interfaceLocale);
-
-		store.setUpdateCheckPersistent(this.configurationContainer.updateCheck);
 
 		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile());
 
@@ -744,10 +721,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		SWTUtils.setLocalizedText(grpLocaleAuswahl, "advanced_config.LocaleSelection_Title");
 		SWTUtils.setLocalizedToolTipText(cmbLocaleAuswahl, "advanced_config.LocaleSelection_ToolTip");
-
-		SWTUtils.setLocalizedText(grpUpdateCheck, "advanced_config.UpdateCheck_Title");
-		SWTUtils.setLocalizedText(btnUpdateCheck, "advanced_config.UpdateCheck");
-		SWTUtils.setLocalizedToolTipText(btnUpdateCheck, "advanced_config.UpdateCheck_ToolTip");
 
 		SWTUtils.setLocalizedText(grpProxy, "advanced_config.Proxy_Title");
 		SWTUtils.setLocalizedText(lblProxyHost, "advanced_config.ProxyHost");
