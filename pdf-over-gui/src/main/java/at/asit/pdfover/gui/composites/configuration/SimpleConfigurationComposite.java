@@ -438,6 +438,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 					return;
 
 				this.getDisplay().syncExec(() -> {
+					if (this.isDisposed())
+						return;
 					if (this.sigPreviewParam != param)
 						return;
 					if (this.sigPreview != null)
