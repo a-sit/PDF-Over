@@ -79,10 +79,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 	Button btnPlatzhalterVerwenden;
 	Button btnSignatureFieldsUsage;
 	Button btnEnablePlaceholderUsage;
-	private Label lblTransparenz;
-	private Label lblTransparenzLinks;
-	private Label lblTransparenzRechts;
-	Scale sclTransparenz;
 
 	private Group grpBkuAuswahl;
 	Combo cmbBKUAuswahl;
@@ -154,32 +150,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			public void widgetSelected(SelectionEvent e) {
 				AdvancedConfigurationComposite.this
 						.performPdfACompatSelection(AdvancedConfigurationComposite.this.btnPdfACompat.getSelection());
-			}
-		});
-
-		this.lblTransparenz = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblTransparenz).top(btnPdfACompat, 5).left(0,5).set();
-		SWTUtils.setFontHeight(lblTransparenz, Constants.TEXT_SIZE_NORMAL);
-
-		this.lblTransparenzLinks = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblTransparenzLinks).top(lblTransparenz, 5).left(0,15).set();
-		SWTUtils.setFontHeight(lblTransparenzLinks, Constants.TEXT_SIZE_NORMAL);
-
-		this.lblTransparenzRechts = new Label(this.grpSignatur, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblTransparenzRechts).top(lblTransparenz, 5).right(100,-5).set();
-		SWTUtils.setFontHeight(lblTransparenzRechts, Constants.TEXT_SIZE_NORMAL);
-
-		this.sclTransparenz = new Scale(this.grpSignatur, SWT.HORIZONTAL);
-		this.sclTransparenz.setEnabled(false);
-		SWTUtils.anchor(sclTransparenz).right(lblTransparenzRechts, -5).top(lblTransparenz, 5).left(lblTransparenzLinks, 5).set();
-		this.sclTransparenz.setMinimum(0);
-		this.sclTransparenz.setMaximum(255);
-		this.sclTransparenz.setIncrement(1);
-		this.sclTransparenz.setPageIncrement(10);
-		SWTUtils.disableEventDefault(sclTransparenz, SWT.MouseVerticalWheel);
-		this.sclTransparenz.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
 			}
 		});
 
@@ -685,7 +655,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());
 		performEnableUsePlaceholder(this.configurationContainer.enabledPlaceholderUsage);
-		this.sclTransparenz.setSelection(170); // TODO REPLACE WITH SIGNATURE SCALE
 		performLocaleSelectionChanged(this.configurationContainer.interfaceLocale);
 		performPdfACompatSelection(this.configurationContainer.signaturePDFACompat);
 		performKeystoreEnabledSelection(this.configurationContainer.keystoreEnabled);
@@ -834,10 +803,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setLocalizedText(btnEnablePlaceholderUsage, "advanced_config.Placeholder_Enabled");
 		SWTUtils.setLocalizedText(btnPdfACompat, "advanced_config.PdfACompat");
 		SWTUtils.setLocalizedToolTipText(btnPdfACompat, "advanced_config.PdfACompat_ToolTip");
-		SWTUtils.setLocalizedText(lblTransparenz, "advanced_config.SigPHTransparency");
-		SWTUtils.setLocalizedText(lblTransparenzLinks, "advanced_config.SigPHTransparencyMin");
-		SWTUtils.setLocalizedText(lblTransparenzRechts, "advanced_config.SigPHTransparencyMax");
-		SWTUtils.setLocalizedToolTipText(sclTransparenz, "advanced_config.SigPHTransparencyTooltip");
 
 		SWTUtils.setLocalizedText(grpBkuAuswahl, "advanced_config.BKUSelection_Title");
 		SWTUtils.setLocalizedToolTipText(cmbBKUAuswahl, "advanced_config.BKUSelection_ToolTip");
