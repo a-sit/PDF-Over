@@ -16,6 +16,8 @@
 package at.asit.pdfover.gui.composites;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -76,6 +78,32 @@ public class ConfigurationComposite extends StateComposite {
 	 * about page composite
 	 */
 	ConfigurationCompositeBase aboutConfigComposite;
+
+	private final Iterable<ConfigurationCompositeBase> _compositeIterable = new Iterable<>() {
+		@Override
+		public Iterator<ConfigurationCompositeBase> iterator() {
+			return new Iterator<>() {
+				int i = 0;
+				@Override
+				public boolean hasNext() {
+					return i < 4;
+				}
+
+				@Override
+				public ConfigurationCompositeBase next() {
+					if ((i == 2) && (keystoreConfigComposite == null)) ++i;
+					switch (++i) {
+						case 1: return simpleConfigComposite;
+						case 2: return advancedConfigComposite;
+						case 3: return keystoreConfigComposite;
+						case 4: return aboutConfigComposite;
+					}
+					throw new NoSuchElementException();
+				}
+			};
+		}
+	};
+	private Iterable<ConfigurationCompositeBase> composites() { return _compositeIterable; }
 
 	/**
 	 * The TabFolder
@@ -254,110 +282,33 @@ public class ConfigurationComposite extends StateComposite {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 			// Initialize Configuration Container
-			this.simpleConfigComposite.initConfiguration(this.configProvider);
-			this.advancedConfigComposite.initConfiguration(this.configProvider);
-			this.aboutConfigComposite.initConfiguration(this.configProvider);
-
-			this.simpleConfigComposite.loadConfiguration();
-			this.advancedConfigComposite.loadConfiguration();
-			this.aboutConfigComposite.loadConfiguration();
-
-			if (this.keystoreConfigComposite != null)
+			for (ConfigurationCompositeBase c : composites())
 			{
-				this.keystoreConfigComposite.initConfiguration(this.configProvider);
-				this.keystoreConfigComposite.loadConfiguration();
+				c.initConfiguration(this.configProvider);
+				c.loadConfiguration();
 			}
 		}
 	}
 
-	// TODO lots and lots of duplicate code in here
 	boolean storeConfiguration() {
-		boolean status = false;
-		boolean redo = false;
-		int resumeIndex = 0;
 		try {
-			do {
-				try {
-					this.simpleConfigComposite.validateSettings(resumeIndex);
-
-					redo = false;
-					status = true;
-				} catch (ResumableException e) {
-					log.error("Settings validation failed!", e);
-					ErrorDialog dialog = new ErrorDialog(getShell(),
-							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
-					int rc = dialog.open();
-
-					redo = (rc == SWT.RETRY);
-					if (rc == SWT.IGNORE)
-					{
-						resumeIndex = e.getResumeIndex();
-						redo = true;
-					}
-				}
-			} while (redo);
-
-			if (!status) {
-				return false;
-			}
-
-			status = false;
-			redo = false;
-			resumeIndex = 0;
-
-			do {
-				try {
-					this.advancedConfigComposite.validateSettings(resumeIndex);
-
-					redo = false;
-					status = true;
-				} catch (ResumableException e) {
-					log.error("Settings validation failed!", e);
-					ErrorDialog dialog = new ErrorDialog(getShell(),
-							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
-					int rc = dialog.open();
-
-					redo = (rc == SWT.RETRY);
-					if (rc == SWT.IGNORE)
-					{
-						resumeIndex = e.getResumeIndex();
-						redo = true;
-					}
-				}
-			} while (redo);
-
-			if (!status) {
-				return false;
-			}
-
-			if (this.keystoreConfigComposite != null) {
-				status = false;
-				redo = false;
-				resumeIndex = 0;
-
-				do {
+			for (ConfigurationCompositeBase c : composites()) {
+				int resumeIndex = 0;
+				while (true) {
 					try {
-						this.keystoreConfigComposite.validateSettings(resumeIndex);
-
-						redo = false;
-						status = true;
+						c.validateSettings(resumeIndex);
+						break;
 					} catch (ResumableException e) {
-						log.error("Settings validation failed!", e);
+						log.info("Settings validation failed!", e);
 						ErrorDialog dialog = new ErrorDialog(getShell(),
-								e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
+							e.getMessage(), BUTTONS.ABORT_RETRY_IGNORE);
 						int rc = dialog.open();
 
-						redo = (rc == SWT.RETRY);
+						if (rc == SWT.ABORT)
+							return false;
 						if (rc == SWT.IGNORE)
-						{
 							resumeIndex = e.getResumeIndex();
-							redo = true;
-						}
 					}
-				} while (redo);
-
-				if (!status) {
-					return false;
 				}
 			}
 		} catch (Exception e) {
@@ -371,36 +322,24 @@ public class ConfigurationComposite extends StateComposite {
 			return false;
 		}
 
-		if (!status) {
-			return false;
-		}
-
 		// Write current Configuration
-		this.simpleConfigComposite.storeConfiguration(this.configProvider);
-		this.advancedConfigComposite.storeConfiguration(this.configProvider);
-		this.aboutConfigComposite.storeConfiguration(this.configProvider);
-		if (this.keystoreConfigComposite != null)
-			this.keystoreConfigComposite.storeConfiguration(this.configProvider);
+		for (ConfigurationCompositeBase c : composites())
+			c.storeConfiguration(this.configProvider);
 
-		status = false;
-		redo = false;
-		do {
+		while (true) {
 			// Save current config to file
 			try {
 				this.configProvider.saveToDisk();
-				redo = false;
-				status = true;
+				return true;
 			} catch (IOException e) {
 				log.error("Failed to save configuration to file!", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
 						Messages.getString("error.FailedToSaveSettings"), BUTTONS.RETRY_CANCEL);
-				redo = (dialog.open() == SWT.RETRY);
-
-				// return false;
+				int rc = dialog.open();
+				if (rc == SWT.CANCEL)
+					return false;
 			}
-		} while (redo);
-
-		return status;
+		}
 	}
 
 	/**
