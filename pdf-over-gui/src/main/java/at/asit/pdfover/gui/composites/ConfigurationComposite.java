@@ -281,12 +281,11 @@ public class ConfigurationComposite extends StateComposite {
 	public void setConfigProvider(ConfigurationManager provider) {
 		this.configProvider = provider;
 		if (this.configProvider != null) {
-			// Initialize Configuration Container
 			for (ConfigurationCompositeBase c : composites())
-			{
 				c.initConfiguration(this.configProvider);
+
+			for (ConfigurationCompositeBase c : composites())
 				c.loadConfiguration();
-			}
 		}
 	}
 
