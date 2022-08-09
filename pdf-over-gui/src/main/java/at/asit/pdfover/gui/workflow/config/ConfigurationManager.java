@@ -88,7 +88,7 @@ public class ConfigurationManager {
 		try {
 			String strProp = diskConfig.getProperty(Constants.CFG_LOGO_ONLY_SIZE);
 			if (strProp != null)
-				setLogoOnlyTargetSize(Double.parseDouble(strProp));
+				setLogoOnlyTargetSizePersistent(Double.parseDouble(strProp));
 		} catch (NumberFormatException e) { log.info("Invalid value for CFG_LOGO_ONLY_SIZE ignored.", e); }
 
 		setDefaultMobileNumberPersistent(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
@@ -518,7 +518,7 @@ public class ConfigurationManager {
 		return emblem;
 	}
 
-	public void setLogoOnlyTargetSize(double v) {
+	public void setLogoOnlyTargetSizePersistent(double v) {
 		this.configuration.logoOnlyTargetSize = v;
 	}
 
