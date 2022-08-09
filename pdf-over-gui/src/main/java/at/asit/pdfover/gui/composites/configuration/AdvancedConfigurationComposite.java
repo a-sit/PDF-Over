@@ -121,11 +121,12 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationComposite = config;
 		setLayout(new FormLayout());
 
+		FormLayout STANDARD_LAYOUT = new FormLayout();
+		STANDARD_LAYOUT.marginHeight = 10;
+		STANDARD_LAYOUT.marginWidth = 5;
+
 		this.grpSignatur = new Group(this, SWT.NONE);
-		FormLayout layout = new FormLayout();
-		layout.marginHeight = 10;
-		layout.marginWidth = 5;
-		this.grpSignatur.setLayout(layout);
+		this.grpSignatur.setLayout(STANDARD_LAYOUT);
 		SWTUtils.anchor(grpSignatur).top(0,5).right(100,-5).left(0,5).set();
 		SWTUtils.setFontHeight(grpSignatur, Constants.TEXT_SIZE_NORMAL);
 
@@ -154,10 +155,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpPlaceholder = new Group(this, SWT.NONE);
-		FormLayout layout_grpPlaceholder = new FormLayout();
-		layout_grpPlaceholder.marginHeight = 10;
-		layout_grpPlaceholder.marginWidth = 5;
-		this.grpPlaceholder.setLayout(layout_grpPlaceholder);
+		this.grpPlaceholder.setLayout(STANDARD_LAYOUT);
 		SWTUtils.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpPlaceholder, Constants.TEXT_SIZE_NORMAL);
 
@@ -199,10 +197,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
-		layout = new FormLayout();
-		layout.marginHeight = 10;
-		layout.marginWidth = 5;
-		this.grpBkuAuswahl.setLayout(layout);
+		this.grpBkuAuswahl.setLayout(STANDARD_LAYOUT);
 		SWTUtils.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpBkuAuswahl, Constants.TEXT_SIZE_NORMAL);
 
@@ -303,10 +298,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
-		FormLayout layout_grpLocaleAuswahl = new FormLayout();
-		layout_grpLocaleAuswahl.marginHeight = 10;
-		layout_grpLocaleAuswahl.marginWidth = 5;
-		this.grpLocaleAuswahl.setLayout(layout_grpLocaleAuswahl);
+		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
 		SWTUtils.anchor(grpLocaleAuswahl).top(grpSpeicherort, 5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
 
@@ -329,10 +321,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpUpdateCheck = new Group(this, SWT.NONE);
-		FormLayout layout_grpUpdateCheck = new FormLayout();
-		layout_grpUpdateCheck.marginHeight = 10;
-		layout_grpUpdateCheck.marginWidth = 5;
-		this.grpUpdateCheck.setLayout(layout_grpUpdateCheck);
+		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
 		SWTUtils.anchor(grpUpdateCheck).top(grpLocaleAuswahl, 5).left(0,5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
 
