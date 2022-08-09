@@ -80,6 +80,9 @@ public class PdfAs4SignatureParameter {
 	/** Whether so look for placeholder signatures or not. */
 	public boolean searchForPlaceholderSignatures = false;
 
+    /** The size to scale the logo to */
+    public double targetLogoSize = 65.0;
+
     /** The signature profile in use */
     public Profile signatureProfile = Profile.getDefaultProfile();
 
@@ -103,15 +106,15 @@ public class PdfAs4SignatureParameter {
                 }
                 if (this.signatureProfile == Profile.BASE_LOGO)
                 {
-                    int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 65;
-                    int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 65;
+                    int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 1;
+                    int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 1;
                     double aspectRatio = ((double)emblemWidth) / emblemHeight;
-                    double targetWidth = 65.0;
-                    double targetHeight = 65.0;
+                    double targetWidth = this.targetLogoSize;
+                    double targetHeight = this.targetLogoSize;
                     if (aspectRatio < 1)
-                        targetWidth = 65.0 * aspectRatio;
+                        targetWidth *= aspectRatio;
                     else
-                        targetHeight = 65.0 / aspectRatio;
+                        targetHeight /= aspectRatio;
                     conf.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
                     conf.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
                     conf.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);

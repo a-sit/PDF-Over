@@ -16,6 +16,7 @@ public final class PdfAs4SignaturePlaceholder implements Runnable {
           .comparing(PdfAs4SignatureParameter::getPdfAsSignatureProfileId)
           .thenComparing((p) -> { return (p.emblem != null) ? p.emblem.getOriginalFileHash() : ""; })
           .thenComparing((p) -> { return p.signatureNote; }, Comparator.nullsFirst(String::compareTo))
+          .thenComparing((p) -> { return p.targetLogoSize; })
     );
 
     /**

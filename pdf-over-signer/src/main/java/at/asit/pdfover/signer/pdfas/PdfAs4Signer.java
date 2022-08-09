@@ -67,15 +67,15 @@ public class PdfAs4Signer {
 			// TODO encapsulate this parameter magic in PdfAs4SignatureParameter
 			if (parameter.signatureProfile == Profile.BASE_LOGO)
 			{
-				int emblemWidth = (parameter.emblem != null) ? parameter.emblem.getWidth() : 65;
-				int emblemHeight = (parameter.emblem != null) ? parameter.emblem.getHeight() : 65;
+				int emblemWidth = (parameter.emblem != null) ? parameter.emblem.getWidth() : 1;
+				int emblemHeight = (parameter.emblem != null) ? parameter.emblem.getHeight() : 1;
 				double aspectRatio = ((double)emblemWidth) / emblemHeight;
-				double targetWidth = 65.0;
-				double targetHeight = 65.0;
+				double targetWidth = parameter.targetLogoSize;
+				double targetHeight = parameter.targetLogoSize;
 				if (aspectRatio < 1)
-					targetWidth = 65.0 * aspectRatio;
+					targetWidth *= aspectRatio;
 				else
-					targetHeight = 65.0 / aspectRatio;
+					targetHeight /= aspectRatio;
 				config.setValue("sig_obj." + sigProfile + ".table.main.Style.padding", "0");
 				config.setValue("sig_obj." + sigProfile + ".pos", "w:"+targetWidth+";f:0");
 				config.setValue("sig_obj." + sigProfile + ".table.main.Style.imagescaletofit", targetWidth+";"+targetHeight);
