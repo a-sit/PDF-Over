@@ -143,13 +143,9 @@ public class PrepareSigningState extends State {
 				}
 
 				this.state.signatureParameter.searchForPlaceholderSignatures = getStateMachine().status.searchForPlacehoderSignature;
-
 				this.state.signatureParameter.signatureLanguage = configuration.getSignatureLocale().getLanguage();
-
 				this.state.signatureParameter.enablePDFACompat = configuration.getSignaturePdfACompat();
-
 				this.state.signatureParameter.signatureProfile = configuration.getSignatureProfile();
-
 				this.state.signatureParameter.targetLogoSize = configuration.getLogoOnlyTargetSize();
 
 				this.state.signingState = PdfAs4Signer.prepare(this.state.signatureParameter);
