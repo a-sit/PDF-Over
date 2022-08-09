@@ -137,8 +137,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnAutomatischePositionierung.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performPositionSelection(
-						AdvancedConfigurationComposite.this.btnAutomatischePositionierung.getSelection());
+				performPositionSelection(btnAutomatischePositionierung.getSelection());
 			}
 		});
 
@@ -149,8 +148,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnPdfACompat.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this
-						.performPdfACompatSelection(AdvancedConfigurationComposite.this.btnPdfACompat.getSelection());
+				performPdfACompatSelection(btnPdfACompat.getSelection());
 			}
 		});
 
@@ -166,9 +164,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnEnablePlaceholderUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performEnableUsePlaceholder(
-						AdvancedConfigurationComposite.this.btnEnablePlaceholderUsage.getSelection());
-
+				performEnableUsePlaceholder(btnEnablePlaceholderUsage.getSelection());
 			}
 		});
 
@@ -179,8 +175,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnPlatzhalterVerwenden.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUseMarkerSelection(
-						AdvancedConfigurationComposite.this.btnPlatzhalterVerwenden.getSelection());
+				performUseMarkerSelection(btnPlatzhalterVerwenden.getSelection());
 			}
 		});
 
@@ -191,8 +186,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnSignatureFieldsUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUseSignatureFieldsSelection(
-						AdvancedConfigurationComposite.this.btnSignatureFieldsUsage.getSelection());
+				performUseSignatureFieldsSelection(btnSignatureFieldsUsage.getSelection());
 			}
 		});
 
@@ -211,12 +205,10 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbBKUAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int selectionIndex = getBKUElementIndex(
-						AdvancedConfigurationComposite.this.configurationContainer.defaultBKU);
-				if (AdvancedConfigurationComposite.this.cmbBKUAuswahl.getSelectionIndex() != selectionIndex) {
-					selectionIndex = AdvancedConfigurationComposite.this.cmbBKUAuswahl.getSelectionIndex();
-					performBKUSelectionChanged(
-							AdvancedConfigurationComposite.this.cmbBKUAuswahl.getItem(selectionIndex));
+				int selectionIndex = getBKUElementIndex(configurationContainer.defaultBKU);
+				if (cmbBKUAuswahl.getSelectionIndex() != selectionIndex) {
+					selectionIndex = cmbBKUAuswahl.getSelectionIndex();
+					performBKUSelectionChanged(cmbBKUAuswahl.getItem(selectionIndex));
 				}
 			}
 		});
@@ -228,8 +220,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnKeystoreEnabled.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performKeystoreEnabledSelection(
-						AdvancedConfigurationComposite.this.btnKeystoreEnabled.getSelection());
+				performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection());
 			}
 		});
 
@@ -248,7 +239,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.txtOutputFolder.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				performOutputFolderChanged(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
+				performOutputFolderChanged(txtOutputFolder.getText());
 			}
 		});
 
@@ -293,7 +284,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				performPostFixChanged(AdvancedConfigurationComposite.this.txtSaveFilePostFix.getText());
+				performPostFixChanged(txtSaveFilePostFix.getText());
 			}
 		});
 
@@ -311,9 +302,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbLocaleAuswahl.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = AdvancedConfigurationComposite.this.configurationContainer.interfaceLocale;
-				Locale selectedLocale = Constants.SUPPORTED_LOCALES[AdvancedConfigurationComposite.this.cmbLocaleAuswahl
-						.getSelectionIndex()];
+				Locale currentLocale = configurationContainer.interfaceLocale;
+				Locale selectedLocale = Constants.SUPPORTED_LOCALES[cmbLocaleAuswahl.getSelectionIndex()];
 				if (!currentLocale.equals(selectedLocale)) {
 					performLocaleSelectionChanged(selectedLocale);
 				}
@@ -332,7 +322,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnUpdateCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AdvancedConfigurationComposite.this.performUpdateCheckSelection(AdvancedConfigurationComposite.this.btnUpdateCheck.getSelection());
+				performUpdateCheckSelection(btnUpdateCheck.getSelection());
 			}
 		});
 
