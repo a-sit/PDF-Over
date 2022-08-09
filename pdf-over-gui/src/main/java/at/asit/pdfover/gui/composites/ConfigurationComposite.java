@@ -270,6 +270,7 @@ public class ConfigurationComposite extends StateComposite {
 		}
 	}
 
+	// TODO lots and lots of duplicate code in here
 	boolean storeConfiguration() {
 		boolean status = false;
 		boolean redo = false;
