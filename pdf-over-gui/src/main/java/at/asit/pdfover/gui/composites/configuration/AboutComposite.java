@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTUtils;
+import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import at.asit.pdfover.gui.workflow.states.State;
 
 public class AboutComposite extends ConfigurationCompositeBase {
 	static final Logger log = LoggerFactory.getLogger(AboutComposite.class);
@@ -34,8 +36,8 @@ public class AboutComposite extends ConfigurationCompositeBase {
  * @param parent
  * @param style
 	 */
-	public AboutComposite(Composite parent, int style) {
-		super(parent, style, null, null);
+	public AboutComposite(Composite parent, int style, State state, ConfigurationDataInMemory container) {
+		super(parent, style, state, container);
 
 		setLayout(new FormLayout());
 

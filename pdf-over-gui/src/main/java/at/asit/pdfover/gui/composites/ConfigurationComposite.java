@@ -73,6 +73,11 @@ public class ConfigurationComposite extends StateComposite {
 	ConfigurationCompositeBase keystoreConfigComposite = null;
 
 	/**
+	 * about page composite
+	 */
+	ConfigurationCompositeBase aboutConfigComposite;
+
+	/**
 	 * The TabFolder
 	 */
 	TabFolder tabFolder;
@@ -157,7 +162,7 @@ public class ConfigurationComposite extends StateComposite {
 
 		ScrolledComposite aboutCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.aboutTabItem.setControl(aboutCompositeScr);
-		AboutComposite aboutConfigComposite = new AboutComposite(aboutCompositeScr, SWT.NONE);
+		this.aboutConfigComposite = new AboutComposite(aboutCompositeScr, SWT.NONE, state, configurationContainer);
 		aboutCompositeScr.setContent(aboutConfigComposite);
 		aboutCompositeScr.setExpandHorizontal(true);
 		aboutCompositeScr.setExpandVertical(true);
@@ -251,11 +256,17 @@ public class ConfigurationComposite extends StateComposite {
 			// Initialize Configuration Container
 			this.simpleConfigComposite.initConfiguration(this.configProvider);
 			this.advancedConfigComposite.initConfiguration(this.configProvider);
+			this.aboutConfigComposite.initConfiguration(this.configProvider);
 
 			this.simpleConfigComposite.loadConfiguration();
 			this.advancedConfigComposite.loadConfiguration();
+			this.aboutConfigComposite.loadConfiguration();
+
 			if (this.keystoreConfigComposite != null)
+			{
+				this.keystoreConfigComposite.initConfiguration(this.configProvider);
 				this.keystoreConfigComposite.loadConfiguration();
+			}
 		}
 	}
 
@@ -366,6 +377,7 @@ public class ConfigurationComposite extends StateComposite {
 		// Write current Configuration
 		this.simpleConfigComposite.storeConfiguration(this.configProvider);
 		this.advancedConfigComposite.storeConfiguration(this.configProvider);
+		this.aboutConfigComposite.storeConfiguration(this.configProvider);
 		if (this.keystoreConfigComposite != null)
 			this.keystoreConfigComposite.storeConfiguration(this.configProvider);
 
