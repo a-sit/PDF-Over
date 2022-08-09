@@ -197,6 +197,9 @@ public class Constants {
 	/** The emblem config parameter */
 	public static final String CFG_EMBLEM = "EMBLEM";
 
+	/** The emblem size config parameter */
+	public static final String CFG_LOGO_ONLY_SIZE = "LOGO_ONLY_SIZE";
+
 	/** The locale config parameter */
 	public static final String CFG_LOCALE = "LOCALE";
 

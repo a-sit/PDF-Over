@@ -150,6 +150,8 @@ public class PrepareSigningState extends State {
 
 				this.state.signatureParameter.signatureProfile = configuration.getSignatureProfile();
 
+				this.state.signatureParameter.targetLogoSize = configuration.getLogoOnlyTargetSize();
+
 				this.state.signingState = PdfAs4Signer.prepare(this.state.signatureParameter);
 
 			} catch (Exception e) {

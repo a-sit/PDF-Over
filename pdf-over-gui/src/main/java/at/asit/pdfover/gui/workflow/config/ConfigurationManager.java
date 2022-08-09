@@ -85,6 +85,11 @@ public class ConfigurationManager {
 		diskConfig.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
 
 		setDefaultEmblemPersistent(diskConfig.getProperty(Constants.CFG_EMBLEM));
+		try {
+			String strProp = diskConfig.getProperty(Constants.CFG_LOGO_ONLY_SIZE);
+			if (strProp != null)
+				setLogoOnlyTargetSize(Double.parseDouble(strProp));
+		} catch (NumberFormatException e) { log.info("Invalid value for CFG_LOGO_ONLY_SIZE ignored.", e); }
 
 		setDefaultMobileNumberPersistent(diskConfig.getProperty(Constants.CFG_MOBILE_NUMBER));
 		setRememberMobilePasswordPersistent(Constants.TRUE.equals(diskConfig.getProperty(Constants.CFG_MOBILE_PASSWORD_REMEMBER)));
@@ -270,6 +275,7 @@ public class ConfigurationManager {
 			props.setProperty(Constants.CFG_PROXY_PASS, proxyPass);
 
 		props.setProperty(Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
+		props.setProperty(Constants.CFG_LOGO_ONLY_SIZE, Double.toString(getLogoOnlyTargetSize()));
 		props.setProperty(Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
 		props.setProperty(Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
 		if (getRememberMobilePassword())
@@ -510,6 +516,14 @@ public class ConfigurationManager {
 		if (emblem == null)
 			emblem = STRING_EMPTY;
 		return emblem;
+	}
+
+	public void setLogoOnlyTargetSize(double v) {
+		this.configuration.logoOnlyTargetSize = v;
+	}
+
+	public double getLogoOnlyTargetSize() {
+		return this.configuration.logoOnlyTargetSize;
 	}
 
 	public void setProxyHostPersistent(String host) {

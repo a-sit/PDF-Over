@@ -45,6 +45,9 @@ public class ConfigurationDataInMemory {
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ConfigurationDataInMemory.class);
 
+	/** the emblem size (in mm) for logo only signatures */
+	public double logoOnlyTargetSize = Constants.DEFAULT_LOGO_ONLY_SIZE;
+
 	/** the emblem File */
 	protected String emblemFile = null;
 	public String getEmblemPath() { return this.emblemFile; }
