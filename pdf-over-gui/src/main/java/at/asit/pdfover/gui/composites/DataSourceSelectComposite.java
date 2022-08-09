@@ -163,7 +163,7 @@ public class DataSourceSelectComposite extends StateComposite {
 		// Color back = new Color(Display.getCurrent(), 77, 190, 250);
 
 		this.drop_area = new Composite(this, SWT.RESIZE);
-		SWTUtils.anchor(drop_area).left(0, 30).right(100, -30).top(0, 30).bottom(100, -30).set();
+		SWTUtils.anchor(drop_area).left(0, 30).right(100, -30).top(0, 30).bottom(100, -30);
 		this.drop_area.setLayout(new FormLayout());
 
 		this.drop_area.addPaintListener(new PaintListener() {
@@ -244,15 +244,15 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		this.lbl_drag = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
 		this.lbl_drag2 = new Label(this.drop_area, SWT.NONE | SWT.RESIZE );
-		SWTUtils.anchor(lbl_drag).left(0, 10).right(100, -10).bottom(lbl_drag2, -10).set();
-		SWTUtils.anchor(lbl_drag2).left(0, 10).right(100, -10).top(50, -10).set();
+		SWTUtils.anchor(lbl_drag).left(0, 10).right(100, -10).bottom(lbl_drag2, -10);
+		SWTUtils.anchor(lbl_drag2).left(0, 10).right(100, -10).top(50, -10);
 		SWTUtils.setFontHeight(lbl_drag, Constants.TEXT_SIZE_BIG);
 		SWTUtils.setFontHeight(lbl_drag2, Constants.TEXT_SIZE_NORMAL);
 		this.lbl_drag.setAlignment(SWT.CENTER);
 		this.lbl_drag2.setAlignment(SWT.CENTER);
 
 		this.btn_open = new Button(this.drop_area, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.anchor(btn_open).left(lbl_drag2, 0, SWT.CENTER).top(lbl_drag2, 10).set();
+		SWTUtils.anchor(btn_open).left(lbl_drag2, 0, SWT.CENTER).top(lbl_drag2, 10);
 		SWTUtils.setFontHeight(btn_open, Constants.TEXT_SIZE_BUTTON);
 
 		reloadResources();

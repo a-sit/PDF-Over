@@ -135,7 +135,7 @@ public class BKUSelectionComposite extends StateComposite {
 	public void setKeystoreEnabled(boolean enabled) {
 		if (enabled) {
 			this.btnKS = new Button(this, SWT.NONE);
-			SWTUtils.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT).set();
+			SWTUtils.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT);
 			this.btnKS.addSelectionListener(new KSSelectionListener());
 
 			reloadResources();
@@ -157,7 +157,7 @@ public class BKUSelectionComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		ClickableCanvas cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.anchor(cc_mobile).right(50, -5).top(40, -20).set();
+		SWTUtils.anchor(cc_mobile).right(50, -5).top(40, -20);
 		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
 		cc_mobile.setImage(mobile);
 		SWTUtils.setFontHeight(cc_mobile, Constants.TEXT_SIZE_BUTTON);
@@ -170,7 +170,7 @@ public class BKUSelectionComposite extends StateComposite {
 		});
 
 		ClickableCanvas cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.anchor(cc_karte).left(50, 5).top(40, -20).set();
+		SWTUtils.anchor(cc_karte).left(50, 5).top(40, -20);
 		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
 		cc_karte.setImage(karte);
 		SWTUtils.setFontHeight(cc_karte, Constants.TEXT_SIZE_BUTTON);

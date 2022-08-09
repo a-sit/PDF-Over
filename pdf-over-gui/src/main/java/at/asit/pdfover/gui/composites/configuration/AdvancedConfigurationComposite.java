@@ -121,61 +121,61 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
 		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpLocaleAuswahl).top(0, 5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(grpLocaleAuswahl).top(0, 5).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpSignatur = new Group(this, SWT.NONE);
 		this.grpSignatur.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpSignatur).top(grpLocaleAuswahl,5).right(100,-5).left(0,5).set();
+		SWTUtils.anchor(grpSignatur).top(grpLocaleAuswahl,5).right(100,-5).left(0,5);
 		SWTUtils.setFontHeight(grpSignatur, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpPlaceholder = new Group(this, SWT.NONE);
 		this.grpPlaceholder.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(grpPlaceholder, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpBkuAuswahl = new Group(this, SWT.NONE);
 		this.grpBkuAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(grpBkuAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
 		grpSpeicherort.setLayout(new GridLayout(3, false));
-		SWTUtils.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5).set();
+		SWTUtils.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5);
 		SWTUtils.setFontHeight(grpSpeicherort, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpProxy = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpProxy).right(100,-5).top(grpSpeicherort, 5).left(0,5).set();
+		SWTUtils.anchor(grpProxy).right(100,-5).top(grpSpeicherort, 5).left(0,5);
 		this.grpProxy.setLayout(new GridLayout(2, false));
 		SWTUtils.setFontHeight(grpProxy, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnAutomatischePositionierung = new Button(this.grpSignatur, SWT.CHECK);
-		SWTUtils.anchor(btnAutomatischePositionierung).right(100,-5).top(0).left(0,5).set();
+		SWTUtils.anchor(btnAutomatischePositionierung).right(100,-5).top(0).left(0,5);
 		SWTUtils.setFontHeight(btnAutomatischePositionierung, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnAutomatischePositionierung, e -> { performPositionSelection(btnAutomatischePositionierung.getSelection()); });
 
 		this.btnPdfACompat = new Button(this.grpSignatur, SWT.CHECK);
-		SWTUtils.anchor(btnPdfACompat).right(100,-5).top(btnAutomatischePositionierung, 5).left(0,5).set();
+		SWTUtils.anchor(btnPdfACompat).right(100,-5).top(btnAutomatischePositionierung, 5).left(0,5);
 		SWTUtils.setFontHeight(btnPdfACompat, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnPdfACompat, e -> { performPdfACompatSelection(btnPdfACompat.getSelection()); });
 
 		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
-		SWTUtils.anchor(btnEnablePlaceholderUsage).top(0,5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(btnEnablePlaceholderUsage).top(0,5).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(btnEnablePlaceholderUsage, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnEnablePlaceholderUsage, e -> { performEnableUsePlaceholder(btnEnablePlaceholderUsage.getSelection()); });
 
 		this.btnPlatzhalterVerwenden = new Button(this.grpPlaceholder, SWT.RADIO);
-		SWTUtils.anchor(btnPlatzhalterVerwenden).right(100,-5).top(btnEnablePlaceholderUsage,5).left(0,5).set();
+		SWTUtils.anchor(btnPlatzhalterVerwenden).right(100,-5).top(btnEnablePlaceholderUsage,5).left(0,5);
 		SWTUtils.setFontHeight(btnPlatzhalterVerwenden, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnPlatzhalterVerwenden, e -> { performUseMarkerSelection(btnPlatzhalterVerwenden.getSelection()); });
 
 		this.btnSignatureFieldsUsage = new Button(this.grpPlaceholder, SWT.RADIO);
-		SWTUtils.anchor(btnSignatureFieldsUsage).right(100,-5).top(btnPlatzhalterVerwenden, 5).left(0,5).set();
+		SWTUtils.anchor(btnSignatureFieldsUsage).right(100,-5).top(btnPlatzhalterVerwenden, 5).left(0,5);
 		SWTUtils.setFontHeight(btnSignatureFieldsUsage, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnSignatureFieldsUsage, e -> { performUseSignatureFieldsSelection(btnSignatureFieldsUsage.getSelection()); });
 
 		this.cmbBKUAuswahl = new Combo(this.grpBkuAuswahl, SWT.READ_ONLY);
-		SWTUtils.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5).set();
+		SWTUtils.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5);
 		SWTUtils.setFontHeight(cmbBKUAuswahl, Constants.TEXT_SIZE_NORMAL);
 		SWTUtils.disableEventDefault(cmbBKUAuswahl, SWT.MouseVerticalWheel);
 
@@ -190,7 +190,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.btnKeystoreEnabled = new Button(this.grpBkuAuswahl, SWT.CHECK);
-		SWTUtils.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5).set();
+		SWTUtils.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5);
 		SWTUtils.setFontHeight(btnKeystoreEnabled, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnKeystoreEnabled, e -> { performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection()); });
 
@@ -251,7 +251,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
-		SWTUtils.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5).set();
+		SWTUtils.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5);
 		SWTUtils.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
 		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 		SWTUtils.disableEventDefault(cmbLocaleAuswahl, SWT.MouseVerticalWheel);
@@ -278,11 +278,11 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		compProxyHostContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		this.txtProxyHost = new Text(compProxyHostContainer, SWT.BORDER);
-		SWTUtils.anchor(txtProxyHost).right(100,-42).top(0).left(0,5).set();
+		SWTUtils.anchor(txtProxyHost).right(100,-42).top(0).left(0,5);
 		SWTUtils.setFontHeight(txtProxyHost, Constants.TEXT_SIZE_NORMAL);
 
 		this.proxyHostErrorMarker = new ErrorMarker(compProxyHostContainer, SWT.NONE, "");
-		SWTUtils.anchor(proxyHostErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
+		SWTUtils.anchor(proxyHostErrorMarker).left(100,-32).right(100).top(0).bottom(0,32);
 		this.proxyHostErrorMarker.setVisible(false);
 
 		this.txtProxyHost.addFocusListener(new FocusAdapter() {
@@ -307,7 +307,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		compProxyPortContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		this.txtProxyPort = new Text(compProxyPortContainer, SWT.BORDER);
-		SWTUtils.anchor(txtProxyPort).top(0,0).left(0,5).right(100,-42).set();
+		SWTUtils.anchor(txtProxyPort).top(0,0).left(0,5).right(100,-42);
 		SWTUtils.setFontHeight(txtProxyPort, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtProxyPort.addTraverseListener(e -> {
@@ -317,7 +317,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.txtProxyPortErrorMarker = new ErrorMarker(compProxyPortContainer, SWT.NONE, "");
-		SWTUtils.anchor(txtProxyPortErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
+		SWTUtils.anchor(txtProxyPortErrorMarker).left(100,-32).right(100).top(0).bottom(0,32);
 		this.txtProxyPortErrorMarker.setVisible(false);
 
 		this.txtProxyPort.addFocusListener(new FocusAdapter() {

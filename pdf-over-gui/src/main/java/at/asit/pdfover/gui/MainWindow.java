@@ -255,7 +255,7 @@ public class MainWindow {
 		this.mainbar.setLayoutData(this.mainBarFormData);
 
 		this.btn_config = new MainBarRectangleButton(this.mainbar, SWT.NONE);
-		SWTUtils.anchor(btn_config).bottom(100).right(0,50).top(0).left(0).set();
+		SWTUtils.anchor(btn_config).bottom(100).right(0,50).top(0).left(0);
 		SWTUtils.setLocalizedText(btn_config, "main.configuration");
 		SWTUtils.setLocalizedToolTipText(btn_config, "main.configuration");
 		this.btn_config.addMouseListener(new MouseAdapter() {
@@ -277,10 +277,10 @@ public class MainWindow {
 
 		Composite mainbarContainer = new Composite(this.mainbar, SWT.NONE);
 		mainbarContainer.setLayout(new FormLayout());
-		SWTUtils.anchor(mainbarContainer).left(btn_config).right(100).top(0).bottom(100).set();
+		SWTUtils.anchor(mainbarContainer).left(btn_config).right(100).top(0).bottom(100);
 
 		this.btn_open = new MainBarStartButton(mainbarContainer, SWT.NONE);
-		SWTUtils.anchor(btn_open).left(0).right(27, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
+		SWTUtils.anchor(btn_open).left(0).right(27, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_open, "common.open");
 		SWTUtils.setLocalizedToolTipText(btn_open, "common.open");
 		this.btn_open.addMouseListener(new MouseAdapter() {
@@ -297,7 +297,7 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
 
 		this.btn_position = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
-		SWTUtils.anchor(btn_position).left(27, -1 * (MainBarButton.SplitFactor / 2)).right(54, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
+		SWTUtils.anchor(btn_position).left(27, -1 * (MainBarButton.SplitFactor / 2)).right(54, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_position, "main.position");
 		SWTUtils.setLocalizedToolTipText(btn_position, "main.position");
 		this.btn_position.addMouseListener(new MouseAdapter() {
@@ -310,7 +310,7 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
 		this.btn_sign = new MainBarMiddleButton(mainbarContainer, SWT.NONE);
-		SWTUtils.anchor(btn_sign).left(54, -1 * (MainBarButton.SplitFactor / 2)).right(81, (MainBarButton.SplitFactor / 2)).top(0).bottom(100).set();
+		SWTUtils.anchor(btn_sign).left(54, -1 * (MainBarButton.SplitFactor / 2)).right(81, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_sign, "main.signature");
 		SWTUtils.setLocalizedToolTipText(btn_sign, "main.signature");
 		this.btn_sign.addMouseListener(new MouseAdapter() {
@@ -323,7 +323,7 @@ public class MainWindow {
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
 		this.btn_end = new MainBarEndButton(mainbarContainer, SWT.NONE);
-		SWTUtils.anchor(btn_end).left(81, -1 * (MainBarButton.SplitFactor / 2)).right(100).top(0).bottom(100).set();
+		SWTUtils.anchor(btn_end).left(81, -1 * (MainBarButton.SplitFactor / 2)).right(100).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_end, "main.done");
 		SWTUtils.setLocalizedToolTipText(btn_end, "main.done");
 		this.buttonMap.put(Buttons.FINAL, this.btn_end);

@@ -274,7 +274,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		setLayout(new FormLayout());
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
-		SWTUtils.anchor(containerComposite).top(50, -140).bottom(50, 140).left(50, -200).right(50, 200).set();
+		SWTUtils.anchor(containerComposite).top(50, -140).bottom(50, 140).left(50, -200).right(50, 200);
 		containerComposite.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -291,41 +291,41 @@ public class MobileBKUQRComposite extends StateComposite {
 		containerComposite.setLayout(new FormLayout());
 
 		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblRefValLabel).right(50, -10).top(30, -10).set();
+		SWTUtils.anchor(lblRefValLabel).right(50, -10).top(30, -10);
 		this.lblRefValLabel.setAlignment(SWT.RIGHT);
 
 		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width).set();
+		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width);
 		lbl_image.setImage(new Image(getDisplay(), mobileIcon));
 
 		this.lblRefVal = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblRefVal).left(50, 10).right(100, -20).top(30, -10).set();
+		SWTUtils.anchor(lblRefVal).left(50, 10).right(100, -20).top(30, -10);
 
 		this.lblQRLabel = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblQRLabel).right(50, -10).top(lblRefValLabel, 10).set();
+		SWTUtils.anchor(lblQRLabel).right(50, -10).top(lblRefValLabel, 10);
 		this.lblQRLabel.setAlignment(SWT.RIGHT);
 
 		this.lblQR = new Label(containerComposite, SWT.NATIVE);
 		this.lblQR.addListener(SWT.Resize, (e) -> { updateQRImage(); });
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20).set();
+		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20);
 		this.lnk_sig_data.setEnabled(true);
 		this.lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -5).set();
+		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -5);
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 
 		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -5).set();
+		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -5);
 		this.btn_sms.addSelectionListener(new SMSSelectionListener());
 
-		SWTUtils.anchor(lblQR).left(50, 10).right(100, -20).top(lblRefVal, 10).bottom(btn_sms, -10).set();
+		SWTUtils.anchor(lblQR).left(50, 10).right(100, -20).top(lblRefVal, 10).bottom(btn_sms, -10);
 
 		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20).set();
+		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20);
 
 		reloadResources();
 	}

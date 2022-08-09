@@ -323,29 +323,29 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			}
 		});
 		containerComposite.setLayout(new FormLayout());
-		SWTUtils.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200).set();
+		SWTUtils.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200);
 
 		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblRefValLabel).right(50, -10).bottom(50,-10).set();
+		SWTUtils.anchor(lblRefValLabel).right(50, -10).bottom(50,-10);
 		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		this.lblRefValLabel.setAlignment(SWT.RIGHT);
 
 		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width).set();
+		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width);
 		lbl_image.setImage(new Image(getDisplay(), mobileIcon));
 
 		this.lblRefVal = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblRefVal).left(50,10).right(100,-20).bottom(50,-10).set();
+		SWTUtils.anchor(lblRefVal).left(50,10).right(100,-20).bottom(50,-10);
 		this.lblRefVal.setText("");
 
 		this.lblTan = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lblTan).right(50,-10).top(50,10).set();
+		SWTUtils.anchor(lblTan).right(50,-10).top(50,10);
 		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
 		this.lblTan.setAlignment(SWT.RIGHT);
 
 		this.txt_tan = new Text(containerComposite, SWT.BORDER | SWT.NATIVE);
-		SWTUtils.anchor(txt_tan).left(50,10).right(100,-20).top(50,10).set();
+		SWTUtils.anchor(txt_tan).left(50,10).right(100,-20).top(50,10);
 		this.txt_tan.setEditable(true);
 
 		this.txt_tan.addTraverseListener(new TraverseListener() {
@@ -375,24 +375,24 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		});
 
 		Link lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
-		SWTUtils.anchor(lnk_sig_data).right(100,-20).top(0,20).set();
+		SWTUtils.anchor(lnk_sig_data).right(100,-20).top(0,20);
 		lnk_sig_data.setEnabled(true);
 		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
 		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
 		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20).set();
+		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20);
 		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
 		
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20).set();
+		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20);
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 
 		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		SWTUtils.anchor(lblTries).right(btn_cancel, -10).bottom(100, -20).set();
+		SWTUtils.anchor(lblTries).right(btn_cancel, -10).bottom(100, -20);
 	}
 
 	@Override

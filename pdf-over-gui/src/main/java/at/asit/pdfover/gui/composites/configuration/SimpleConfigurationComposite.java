@@ -124,7 +124,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		setLayout(new FormLayout());
 
 		this.grpHandySignatur = new Group(this, SWT.NONE | SWT.RESIZE);
-		SWTUtils.anchor(grpHandySignatur).right(100,-5).left(0,5).top(0,5).set();
+		SWTUtils.anchor(grpHandySignatur).right(100,-5).left(0,5).top(0,5);
 		grpHandySignatur.setLayout(new GridLayout(2, false));
 		SWTUtils.setFontHeight(grpHandySignatur, Constants.TEXT_SIZE_NORMAL);
 
@@ -137,12 +137,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		compMobileNumerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		this.txtMobileNumber = new Text(compMobileNumerContainer, SWT.BORDER | SWT.RESIZE);
-		SWTUtils.anchor(txtMobileNumber).left(0,5).right(100,-42).top(0).set();
+		SWTUtils.anchor(txtMobileNumber).left(0,5).right(100,-42).top(0);
 		SWTUtils.setFontHeight(txtMobileNumber, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtMobileNumberErrorMarker = new ErrorMarker(compMobileNumerContainer, SWT.NONE, "");
 		this.txtMobileNumberErrorMarker.setVisible(false);
-		SWTUtils.anchor(txtMobileNumberErrorMarker).left(100,-32).right(100).top(0).bottom(0,32).set();
+		SWTUtils.anchor(txtMobileNumberErrorMarker).left(100,-32).right(100).top(0).bottom(0,32);
 
 		this.txtMobileNumber.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -158,12 +158,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5).set();
+		SWTUtils.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5);
 		this.grpSignatureProfile.setLayout(new FormLayout());
 		SWTUtils.setFontHeight(grpSignatureProfile, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
-		SWTUtils.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
+		SWTUtils.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10);
 		SWTUtils.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
 		SWTUtils.disableEventDefault(cmbSignatureProfiles, SWT.MouseVerticalWheel);
 		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
@@ -179,12 +179,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSignatureLang = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpSignatureLang).right(100,-5).top(grpSignatureProfile, 5).left(0,5).set();
+		SWTUtils.anchor(grpSignatureLang).right(100,-5).top(grpSignatureProfile, 5).left(0,5);
 		this.grpSignatureLang.setLayout(new FormLayout());
 		SWTUtils.setFontHeight(grpSignatureLang, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
-		SWTUtils.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10).set();
+		SWTUtils.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10);
 		SWTUtils.setFontHeight(cmbSignatureLang, Constants.TEXT_SIZE_NORMAL);
 		SWTUtils.disableEventDefault(cmbSignatureLang, SWT.MouseVerticalWheel);
 		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
@@ -201,7 +201,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSignatureNote = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpSignatureNote).right(100,-5).top(grpSignatureLang,5).left(0,5).set();
+		SWTUtils.anchor(grpSignatureNote).right(100,-5).top(grpSignatureLang,5).left(0,5);
 		this.grpSignatureNote.setLayout(new GridLayout(2, false));
 		SWTUtils.setFontHeight(grpSignatureNote, Constants.TEXT_SIZE_NORMAL);
 
@@ -220,7 +220,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		compSignatureNoteContainer.setLayout(new FormLayout());
 
 		this.txtSignatureNote = new Text(compSignatureNoteContainer, SWT.BORDER);
-		SWTUtils.anchor(txtSignatureNote).top(0,0).left(0,5).right(100,-42).set();
+		SWTUtils.anchor(txtSignatureNote).top(0,0).left(0,5).right(100,-42);
 		SWTUtils.setFontHeight(txtSignatureNote, Constants.TEXT_SIZE_NORMAL);
 
 		this.txtSignatureNote.addFocusListener(new FocusAdapter() {
@@ -241,7 +241,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		compSignatureNoteButtonContainer.setLayout(new FormLayout());
 
 		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
-		SWTUtils.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42).set();
+		SWTUtils.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42);
 		SWTUtils.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
 		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -251,22 +251,22 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpLogoOnlyTargetSize = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpLogoOnlyTargetSize).left(0,5).right(100,-5).top(grpSignatureProfile,5).set();
+		SWTUtils.anchor(grpLogoOnlyTargetSize).left(0,5).right(100,-5).top(grpSignatureProfile,5);
 		this.grpLogoOnlyTargetSize.setLayout(new FormLayout());
 		SWTUtils.setFontHeight(grpLogoOnlyTargetSize, Constants.TEXT_SIZE_NORMAL);
 
 		Label lblLOTSLeft = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblLOTSLeft).top(0, 5).left(0, 15).set();
+		SWTUtils.anchor(lblLOTSLeft).top(0, 5).left(0, 15);
 		lblLOTSLeft.setText("1cm");
 		SWTUtils.setFontHeight(lblLOTSLeft, Constants.TEXT_SIZE_NORMAL);
 
 		Label lblLOTSRight = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblLOTSRight).top(0,5).right(100, -5).set();
+		SWTUtils.anchor(lblLOTSRight).top(0,5).right(100, -5);
 		lblLOTSRight.setText("20cm");
 		SWTUtils.setFontHeight(lblLOTSRight, Constants.TEXT_SIZE_NORMAL);
 
 		this.sclLogoOnlyTargetSize = new Scale(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
-		SWTUtils.anchor(sclLogoOnlyTargetSize).top(0,5).left(lblLOTSLeft,5).right(lblLOTSRight,-5).set();
+		SWTUtils.anchor(sclLogoOnlyTargetSize).top(0,5).left(lblLOTSLeft,5).right(lblLOTSRight,-5);
 		sclLogoOnlyTargetSize.setMinimum(10);
 		sclLogoOnlyTargetSize.setMaximum(200);
 		sclLogoOnlyTargetSize.setIncrement(1);
@@ -279,30 +279,30 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.lblLogoOnlyTargetSizeCurrentValue = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
-		SWTUtils.anchor(lblLogoOnlyTargetSizeCurrentValue).top(sclLogoOnlyTargetSize, 5).left(0,5).right(100,-5).set();
+		SWTUtils.anchor(lblLogoOnlyTargetSizeCurrentValue).top(sclLogoOnlyTargetSize, 5).left(0,5).right(100,-5);
 		lblLogoOnlyTargetSizeCurrentValue.setAlignment(SWT.CENTER);
 		SWTUtils.setFontHeight(lblLogoOnlyTargetSizeCurrentValue, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpPreview = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureNote, 5).height(250).set();
+		SWTUtils.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureNote, 5).height(250);
 		this.grpPreview.setLayout(new FormLayout());
 		SWTUtils.setFontHeight(grpPreview, Constants.TEXT_SIZE_NORMAL);
 
 		Composite containerComposite = new Composite(this.grpPreview, SWT.NONE);
-		SWTUtils.anchor(containerComposite).left(0).right(100).top(0).bottom(100).set();
+		SWTUtils.anchor(containerComposite).left(0).right(100).top(0).bottom(100);
 		containerComposite.setLayout(new FormLayout());
 
 		this.btnBrowseLogo = new Button(containerComposite, SWT.NONE);
-		SWTUtils.anchor(btnBrowseLogo).top(0,5).right(50,-5).set();
+		SWTUtils.anchor(btnBrowseLogo).top(0,5).right(50,-5);
 		SWTUtils.setFontHeight(btnBrowseLogo, Constants.TEXT_SIZE_BUTTON);
 
 		this.btnClearImage = new Button(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(btnClearImage).top(0,5).left(50, 5).set();
+		SWTUtils.anchor(btnClearImage).top(0,5).left(50, 5);
 		SWTUtils.setFontHeight(btnClearImage, Constants.TEXT_SIZE_BUTTON);
 		this.btnClearImage.setEnabled(false);
 
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
-		SWTUtils.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5).set();
+		SWTUtils.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5);
 		SWTUtils.setFontHeight(cSigPreview, Constants.TEXT_SIZE_NORMAL);
 		this.cSigPreview.addPaintListener(e -> SimpleConfigurationComposite.this.paintSignaturePreview(e));
 

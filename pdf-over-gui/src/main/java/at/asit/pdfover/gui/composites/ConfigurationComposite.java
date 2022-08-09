@@ -163,7 +163,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.containerComposite = new Composite(this, SWT.FILL | SWT.RESIZE);
 
 		this.tabFolder = new TabFolder(this.containerComposite, SWT.NONE);
-		SWTUtils.anchor(tabFolder).bottom(100, -5).right(100, -5).top(0, 5).left(0, 5).set();
+		SWTUtils.anchor(tabFolder).bottom(100, -5).right(100, -5).top(0, 5).left(0, 5);
 		SWTUtils.setFontHeight(tabFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
@@ -203,7 +203,7 @@ public class ConfigurationComposite extends StateComposite {
 		this.tabFolder.setSelection(this.simpleTabItem);
 
 		this.btnSpeichern = new Button(this, SWT.NONE);
-		SWTUtils.anchor(btnSpeichern).right(100, -5).bottom(100).set();
+		SWTUtils.anchor(btnSpeichern).right(100, -5).bottom(100);
 		SWTUtils.setFontHeight(btnSpeichern, Constants.TEXT_SIZE_BUTTON);
 		this.btnSpeichern.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -217,7 +217,7 @@ public class ConfigurationComposite extends StateComposite {
 		});
 
 		this.btnAbbrechen = new Button(this, SWT.NONE);
-		SWTUtils.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM).set();
+		SWTUtils.anchor(btnAbbrechen).right(btnSpeichern, -10).bottom(btnSpeichern, 0, SWT.BOTTOM);
 		SWTUtils.setFontHeight(btnAbbrechen, Constants.TEXT_SIZE_BUTTON);
 		this.btnAbbrechen.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -228,7 +228,7 @@ public class ConfigurationComposite extends StateComposite {
 			}
 		});
 
-		SWTUtils.anchor(containerComposite).top(0, 5).bottom(btnSpeichern, -10).left(0, 5).right(100, -5).set();
+		SWTUtils.anchor(containerComposite).top(0, 5).bottom(btnSpeichern, -10).left(0, 5).right(100, -5);
 		this.containerComposite.setLayout(this.compositeStack);
 		this.compositeStack.topControl = this.tabFolder;
 

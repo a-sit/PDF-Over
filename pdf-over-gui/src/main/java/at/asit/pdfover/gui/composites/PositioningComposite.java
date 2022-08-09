@@ -79,21 +79,21 @@ public class PositioningComposite extends StateComposite {
 		this.setLayout(new FormLayout());
 
 		this.bottomBar = new Composite(this, SWT.NONE);
-		SWTUtils.anchor(bottomBar).left(0).right(100).bottom(100).set();
+		SWTUtils.anchor(bottomBar).left(0).right(100).bottom(100);
 		this.bottomBar.setLayout(new FormLayout());
 
 		this.btnSign = new Button(this.bottomBar, SWT.PUSH);
-		SWTUtils.anchor(btnSign).right(100).top(0).set();
+		SWTUtils.anchor(btnSign).right(100).top(0);
 		this.getShell().setDefaultButton(this.btnSign);
 
 		this.btnNewPage = new Button(this.bottomBar, SWT.TOGGLE);
-		SWTUtils.anchor(btnNewPage).right(btnSign).top(0).set();
+		SWTUtils.anchor(btnNewPage).right(btnSign).top(0);
 
 		this.lblPage = new Label(this.bottomBar, SWT.CENTER);
-		SWTUtils.anchor(lblPage).left(0).right(btnNewPage, 5).bottom(100).set();
+		SWTUtils.anchor(lblPage).left(0).right(btnNewPage, 5).bottom(100);
 
 		this.mainArea = new Composite(this, SWT.EMBEDDED | SWT.V_SCROLL);
-		SWTUtils.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5).set();
+		SWTUtils.anchor(mainArea).left(0).right(100).top(0).bottom(bottomBar, -5);
 		this.scrollbar = this.mainArea.getVerticalBar();
 
 		this.frame = SWT_AWT.new_Frame(this.mainArea);

@@ -78,17 +78,23 @@ public final class SWTUtils {
 
     public static class AnchorSetter {
     	private final Control c;
-    	private final FormData fd = new FormData();
-		private boolean didSet = false;
-    	private AnchorSetter(Control c) { this.c = c; }
-
-		@Override
-		protected void finalize() {
-			if (!didSet)
-				log.warn("AnchorSetter: you did not call set()!");
+    	private final FormData fd;
+    	private AnchorSetter(Control c, boolean isNew)
+		{
+			this.c = c;
+			if (isNew) {
+				this.fd = new FormData();
+				this.c.setLayoutData(this.fd);
+			} else {
+				Object layoutData = this.c.getLayoutData();
+				try {
+					this.fd = (FormData)layoutData;
+				} catch (ClassCastException e) {
+					log.error("Tried to reanchor() object with layout data of type {} (not FormData)", layoutData.getClass().getSimpleName(), e);
+					throw new RuntimeException("Invalid reanchor() use");
+				}
+			}
 		}
-    
-    	public void set() { this.c.setLayoutData(this.fd); didSet = true; }
     
     	public AnchorSetter height(int h) { fd.height = h; return this; }
     	public AnchorSetter width(int w) { fd.width = w; return this; }
@@ -122,7 +128,8 @@ public final class SWTUtils {
     	public AnchorSetter bottom(int num, int offset) { return bottom(new FormAttachment(num, offset)); }
     	public AnchorSetter bottom(int num) { return bottom(new FormAttachment(num)); }
     }
-    public static AnchorSetter anchor(Control c) { return new AnchorSetter(c); }
+    public static AnchorSetter anchor(Control c) { return new AnchorSetter(c, true); }
+	public static AnchorSetter reanchor(Control c) { return new AnchorSetter(c, false); }
     
 	/**
 	 * functional-interface wrapper around swtObj.addSelectionListener
