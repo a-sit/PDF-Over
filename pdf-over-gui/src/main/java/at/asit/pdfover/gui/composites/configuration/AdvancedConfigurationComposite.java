@@ -130,6 +130,36 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(grpSignatur).top(0,5).right(100,-5).left(0,5).set();
 		SWTUtils.setFontHeight(grpSignatur, Constants.TEXT_SIZE_NORMAL);
 
+		this.grpPlaceholder = new Group(this, SWT.NONE);
+		this.grpPlaceholder.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpPlaceholder, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpBkuAuswahl = new Group(this, SWT.NONE);
+		this.grpBkuAuswahl.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpBkuAuswahl, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpSpeicherort = new Group(this, SWT.NONE);
+		grpSpeicherort.setLayout(new GridLayout(3, false));
+		SWTUtils.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpSpeicherort, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
+		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpLocaleAuswahl).top(grpSpeicherort, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpUpdateCheck = new Group(this, SWT.NONE);
+		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpUpdateCheck).top(grpLocaleAuswahl, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpProxy = new Group(this, SWT.NONE);
+		SWTUtils.anchor(grpProxy).right(100,-5).top(grpUpdateCheck, 5).left(0,5).set();
+		this.grpProxy.setLayout(new GridLayout(2, false));
+		SWTUtils.setFontHeight(grpProxy, Constants.TEXT_SIZE_NORMAL);
+
 		this.btnAutomatischePositionierung = new Button(this.grpSignatur, SWT.CHECK);
 		SWTUtils.anchor(btnAutomatischePositionierung).right(100,-5).top(0).left(0,5).set();
 		SWTUtils.setFontHeight(btnAutomatischePositionierung, Constants.TEXT_SIZE_BUTTON);
@@ -139,11 +169,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(btnPdfACompat).right(100,-5).top(btnAutomatischePositionierung, 5).left(0,5).set();
 		SWTUtils.setFontHeight(btnPdfACompat, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnPdfACompat, e -> { performPdfACompatSelection(btnPdfACompat.getSelection()); });
-
-		this.grpPlaceholder = new Group(this, SWT.NONE);
-		this.grpPlaceholder.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpPlaceholder).top(grpSignatur, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpPlaceholder, Constants.TEXT_SIZE_NORMAL);
 
 		this.btnEnablePlaceholderUsage = new Button(this.grpPlaceholder, SWT.CHECK);
 		SWTUtils.anchor(btnEnablePlaceholderUsage).top(0,5).left(0,5).right(100,-5).set();
@@ -159,11 +184,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(btnSignatureFieldsUsage).right(100,-5).top(btnPlatzhalterVerwenden, 5).left(0,5).set();
 		SWTUtils.setFontHeight(btnSignatureFieldsUsage, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnSignatureFieldsUsage, e -> { performUseSignatureFieldsSelection(btnSignatureFieldsUsage.getSelection()); });
-
-		this.grpBkuAuswahl = new Group(this, SWT.NONE);
-		this.grpBkuAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpBkuAuswahl).top(grpPlaceholder, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpBkuAuswahl, Constants.TEXT_SIZE_NORMAL);
 
 		this.cmbBKUAuswahl = new Combo(this.grpBkuAuswahl, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5).set();
@@ -184,11 +204,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5).set();
 		SWTUtils.setFontHeight(btnKeystoreEnabled, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnKeystoreEnabled, e -> { performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection()); });
-
-		this.grpSpeicherort = new Group(this, SWT.NONE);
-		grpSpeicherort.setLayout(new GridLayout(3, false));
-		SWTUtils.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpSpeicherort, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblDefaultOutputFolder = new Label(this.grpSpeicherort, SWT.NONE);
 		SWTUtils.setFontHeight(lblDefaultOutputFolder, Constants.TEXT_SIZE_NORMAL);
@@ -246,11 +261,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
-		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpLocaleAuswahl).top(grpSpeicherort, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
-
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5).set();
 		SWTUtils.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
@@ -265,20 +275,10 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-		this.grpUpdateCheck = new Group(this, SWT.NONE);
-		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpUpdateCheck).top(grpLocaleAuswahl, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
-
 		this.btnUpdateCheck = new Button(this.grpUpdateCheck, SWT.CHECK);
 		SWTUtils.anchor(btnUpdateCheck).right(100,-5).top(0).left(0,5).set();
 		SWTUtils.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
 		SWTUtils.addSelectionListener(btnUpdateCheck, e -> { performUpdateCheckSelection(btnUpdateCheck.getSelection()); });
-
-		this.grpProxy = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpProxy).right(100,-5).top(grpUpdateCheck, 5).left(0,5).set();
-		this.grpProxy.setLayout(new GridLayout(2, false));
-		SWTUtils.setFontHeight(grpProxy, Constants.TEXT_SIZE_NORMAL);
 
 		this.lblProxyHost = new Label(this.grpProxy, SWT.NONE);
 		do { /* grid positioning */
