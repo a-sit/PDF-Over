@@ -252,6 +252,6 @@ public final class ImageUtil {
 		    }
 		    return data;
 		}
-		return null;
+		throw new RuntimeException("could not convert image with model " + bufferedImage.getColorModel().getClass().getName());
 	}
 }
