@@ -94,6 +94,11 @@ public class Constants {
 	/** File suffix for the signed document */
 	public final static String SIGNED_SUFFIX = "_signed";
 
+	public final static double PDF_UNITS_PER_MM = (595.0 / 210.0);
+
+	/** The default target size for logo-only signatures (in mm) */
+	public final static double DEFAULT_LOGO_ONLY_SIZE = 23;
+
 	/** Local BKU URL */
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request";
 

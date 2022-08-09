@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.activation.DataSource;
 
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
 import at.asit.pdfover.signator.SignResult;
@@ -70,8 +71,8 @@ public class PdfAs4Signer {
 				int emblemWidth = (parameter.emblem != null) ? parameter.emblem.getWidth() : 1;
 				int emblemHeight = (parameter.emblem != null) ? parameter.emblem.getHeight() : 1;
 				double aspectRatio = ((double)emblemWidth) / emblemHeight;
-				double targetWidth = parameter.targetLogoSize;
-				double targetHeight = parameter.targetLogoSize;
+				double targetWidth = parameter.targetLogoSize * Constants.PDF_UNITS_PER_MM;
+				double targetHeight = parameter.targetLogoSize * Constants.PDF_UNITS_PER_MM;
 				if (aspectRatio < 1)
 					targetWidth *= aspectRatio;
 				else

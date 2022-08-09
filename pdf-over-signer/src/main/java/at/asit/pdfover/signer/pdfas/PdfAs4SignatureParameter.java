@@ -36,6 +36,7 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
 
 /**
@@ -80,8 +81,8 @@ public class PdfAs4SignatureParameter {
 	/** Whether so look for placeholder signatures or not. */
 	public boolean searchForPlaceholderSignatures = false;
 
-    /** The size to scale the logo to */
-    public double targetLogoSize = 65.0;
+    /** The size to scale the logo to (in mm) */
+    public double targetLogoSize = Constants.DEFAULT_LOGO_ONLY_SIZE;
 
     /** The signature profile in use */
     public Profile signatureProfile = Profile.getDefaultProfile();
@@ -109,8 +110,8 @@ public class PdfAs4SignatureParameter {
                     int emblemWidth = (this.emblem != null) ? this.emblem.getWidth() : 1;
                     int emblemHeight = (this.emblem != null) ? this.emblem.getHeight() : 1;
                     double aspectRatio = ((double)emblemWidth) / emblemHeight;
-                    double targetWidth = this.targetLogoSize;
-                    double targetHeight = this.targetLogoSize;
+                    double targetWidth = this.targetLogoSize * Constants.PDF_UNITS_PER_MM;
+                    double targetHeight = this.targetLogoSize * Constants.PDF_UNITS_PER_MM;
                     if (aspectRatio < 1)
                         targetWidth *= aspectRatio;
                     else
