@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -130,7 +131,7 @@ public final class SWTUtils {
 	 */
 	public static void addSelectionListener(Object swtObj, Consumer<SelectionEvent> callback) {
 		try {
-			Method m = swtObj.getClass().getMethod("addSelectionListener", SelectionAdapter.class);
+			Method m = swtObj.getClass().getMethod("addSelectionListener", SelectionListener.class);
 			m.invoke(swtObj, new SelectionAdapter() { @Override public void widgetSelected(SelectionEvent e) { callback.accept(e); } });
 		} catch (NoSuchMethodException | IllegalAccessException e) {
 			log.error("Attempted to pass object of type {} to onSelectionChanged; object does not have an accessible addSelectionListener method", swtObj.getClass().getSimpleName(), e);

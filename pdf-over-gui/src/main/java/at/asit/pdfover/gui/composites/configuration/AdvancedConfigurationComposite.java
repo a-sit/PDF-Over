@@ -183,7 +183,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnKeystoreEnabled = new Button(this.grpBkuAuswahl, SWT.CHECK);
 		SWTUtils.anchor(btnKeystoreEnabled).right(100,-5).top(cmbBKUAuswahl,5).left(0,5).set();
 		SWTUtils.setFontHeight(btnKeystoreEnabled, Constants.TEXT_SIZE_BUTTON);
-
 		SWTUtils.addSelectionListener(btnKeystoreEnabled, e -> { performKeystoreEnabledSelection(btnKeystoreEnabled.getSelection()); });
 
 		this.grpSpeicherort = new Group(this, SWT.NONE);
