@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +94,14 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 	protected final Group grpSignatureLang;
 	protected final Combo cmbSignatureLang;
+
+	final Group grpLogoOnlyTargetSize;
+	final Label lblLogoOnlyTargetSizeCurrentValue;
+	/** in millimeters */
+	final Scale sclLogoOnlyTargetSize;
+	private void updateLogoOnlyTargetSizeCurrentValueLabel() {
+		lblLogoOnlyTargetSizeCurrentValue.setText(String.format("%4.1fcm", configurationContainer.logoOnlyTargetSize / 10.0));
+	}
 
 	protected String logoFile = null;
 
@@ -240,6 +249,39 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
 			}
 		});
+
+		this.grpLogoOnlyTargetSize = new Group(this, SWT.NONE);
+		SWTUtils.anchor(grpLogoOnlyTargetSize).left(0,5).right(100,-5).top(grpSignatureProfile,5).set();
+		this.grpLogoOnlyTargetSize.setLayout(new FormLayout());
+		SWTUtils.setFontHeight(grpLogoOnlyTargetSize, Constants.TEXT_SIZE_NORMAL);
+
+		Label lblLOTSLeft = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
+		SWTUtils.anchor(lblLOTSLeft).top(0, 5).left(0, 15).set();
+		lblLOTSLeft.setText("1cm");
+		SWTUtils.setFontHeight(lblLOTSLeft, Constants.TEXT_SIZE_NORMAL);
+
+		Label lblLOTSRight = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
+		SWTUtils.anchor(lblLOTSRight).top(0,5).right(100, -5).set();
+		lblLOTSRight.setText("20cm");
+		SWTUtils.setFontHeight(lblLOTSRight, Constants.TEXT_SIZE_NORMAL);
+
+		this.sclLogoOnlyTargetSize = new Scale(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
+		SWTUtils.anchor(sclLogoOnlyTargetSize).top(0,5).left(lblLOTSLeft,5).right(lblLOTSRight,-5).set();
+		sclLogoOnlyTargetSize.setMinimum(10);
+		sclLogoOnlyTargetSize.setMaximum(200);
+		sclLogoOnlyTargetSize.setIncrement(1);
+		sclLogoOnlyTargetSize.setPageIncrement(10);
+		SWTUtils.disableEventDefault(sclLogoOnlyTargetSize, SWT.MouseVerticalWheel);
+		SWTUtils.addSelectionListener(sclLogoOnlyTargetSize, e ->
+		{
+			configurationContainer.logoOnlyTargetSize = sclLogoOnlyTargetSize.getSelection();
+			this.updateLogoOnlyTargetSizeCurrentValueLabel();
+		});
+
+		this.lblLogoOnlyTargetSizeCurrentValue = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
+		SWTUtils.anchor(lblLogoOnlyTargetSizeCurrentValue).top(sclLogoOnlyTargetSize, 5).left(0,5).right(100,-5).set();
+		lblLogoOnlyTargetSizeCurrentValue.setAlignment(SWT.CENTER);
+		SWTUtils.setFontHeight(lblLogoOnlyTargetSizeCurrentValue, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpPreview = new Group(this, SWT.NONE);
 		SWTUtils.anchor(grpPreview).left(0,5).right(100,-5).top(grpSignatureNote, 5).height(250).set();
@@ -519,6 +561,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.grpSignatureLang.setVisible(newProfile.hasText());
 		this.grpSignatureNote.setVisible(newProfile.hasText());
+		this.sclLogoOnlyTargetSize.setVisible(newProfile.equals(Profile.BASE_LOGO));
 
 		this.grpPreview.setVisible(newProfile.isVisibleSignature());
 		signatureBlockPreviewChanged();
@@ -571,6 +614,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		this.configurationContainer.signatureLocale = provider.getSignatureLocale();
 		this.configurationContainer.signatureNote = provider.getSignatureNote();
+		this.configurationContainer.logoOnlyTargetSize = provider.getLogoOnlyTargetSize();
 	}
 
 	/*
@@ -607,6 +651,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtSignatureNote.setText(note);
 		}
 
+		this.sclLogoOnlyTargetSize.setSelection((int)this.configurationContainer.logoOnlyTargetSize);
+		this.updateLogoOnlyTargetSizeCurrentValueLabel();
+
 		this.signatureBlockPreviewChanged();
 
 		this.performSignatureLangSelectionChanged(this.configurationContainer.signatureLocale, null);
@@ -622,6 +669,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		store.setSignatureLocalePersistent(this.configurationContainer.signatureLocale);
 		store.setSignatureNotePersistent(this.configurationContainer.signatureNote);
 		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile());
+		store.setLogoOnlyTargetSizePersistent(this.configurationContainer.logoOnlyTargetSize);
 	}
 
 	/*
@@ -670,5 +718,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		SWTUtils.setLocalizedText(grpSignatureProfile, "simple_config.SigProfile_Title");
 		this.cmbSignatureProfiles.setItems(Arrays.stream(Profile.values()).map(v -> Messages.getString("simple_config."+v.name())).toArray(String[]::new));
+
+		SWTUtils.setLocalizedText(grpLogoOnlyTargetSize, "simple_config.LogoOnlyTargetSize_Title");
 	}
 }
