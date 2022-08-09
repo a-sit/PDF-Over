@@ -125,9 +125,19 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		STANDARD_LAYOUT.marginHeight = 10;
 		STANDARD_LAYOUT.marginWidth = 5;
 
+		this.grpUpdateCheck = new Group(this, SWT.NONE);
+		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpUpdateCheck).top(0, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
+
+		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
+		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
+		SWTUtils.anchor(grpLocaleAuswahl).top(grpUpdateCheck, 5).left(0,5).right(100,-5).set();
+		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
+
 		this.grpSignatur = new Group(this, SWT.NONE);
 		this.grpSignatur.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpSignatur).top(0,5).right(100,-5).left(0,5).set();
+		SWTUtils.anchor(grpSignatur).top(grpLocaleAuswahl,5).right(100,-5).left(0,5).set();
 		SWTUtils.setFontHeight(grpSignatur, Constants.TEXT_SIZE_NORMAL);
 
 		this.grpPlaceholder = new Group(this, SWT.NONE);
@@ -145,18 +155,8 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(grpSpeicherort).left(0,5).top(grpBkuAuswahl, 5).right(100,-5).set();
 		SWTUtils.setFontHeight(grpSpeicherort, Constants.TEXT_SIZE_NORMAL);
 
-		this.grpLocaleAuswahl = new Group(this, SWT.NONE);
-		this.grpLocaleAuswahl.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpLocaleAuswahl).top(grpSpeicherort, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
-
-		this.grpUpdateCheck = new Group(this, SWT.NONE);
-		this.grpUpdateCheck.setLayout(STANDARD_LAYOUT);
-		SWTUtils.anchor(grpUpdateCheck).top(grpLocaleAuswahl, 5).left(0,5).right(100,-5).set();
-		SWTUtils.setFontHeight(grpUpdateCheck, Constants.TEXT_SIZE_NORMAL);
-
 		this.grpProxy = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpProxy).right(100,-5).top(grpUpdateCheck, 5).left(0,5).set();
+		SWTUtils.anchor(grpProxy).right(100,-5).top(grpSpeicherort, 5).left(0,5).set();
 		this.grpProxy.setLayout(new GridLayout(2, false));
 		SWTUtils.setFontHeight(grpProxy, Constants.TEXT_SIZE_NORMAL);
 
