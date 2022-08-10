@@ -157,8 +157,11 @@ public class ConfigurationDataInMemory {
 	/** Whether to automatically check for updates */
 	public boolean updateCheck = true;
 
-	/** Holds the main window size */
-	public Point mainWindowSize = null;
+	/** Holds the main window size
+	 * 
+	 * @IMPORTANT this must always be valid and non-null, even if configuration failed to load for whatever reason (it is used by error handlers!)
+	*/
+	public Point mainWindowSize = new Point(Constants.DEFAULT_MAINWINDOW_WIDTH, Constants.DEFAULT_MAINWINDOW_HEIGHT);
 
 	/** Whether to skip the output state */
 	public boolean skipFinish = false;

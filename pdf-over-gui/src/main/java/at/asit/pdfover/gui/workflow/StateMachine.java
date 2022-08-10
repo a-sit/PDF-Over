@@ -166,7 +166,7 @@ public class StateMachine implements GUIProvider {
 			this.shell.open();
 			this.shell.layout();
 		} catch (Exception e) {
-			log.warn("Main-Window creation FAILED. Reason: " + e.getMessage());
+			log.warn("Main-Window creation FAILED.", e);
 			this.display = null;
 			this.mainWindow = null;
 			this.shell = null;
