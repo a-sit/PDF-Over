@@ -4,13 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.slf4j.Logger;
@@ -60,6 +64,27 @@ public final class SWTUtils {
 
     public static void disableEventDefault(Control c, int event) {
     	c.addListener(event, (Event e) -> { e.doit = false; });
+    }
+
+    public static void scrollPassthrough(Control c) {
+    	c.addListener(SWT.MouseVerticalWheel, (Event e) -> {
+			// disable default handling
+			e.doit = false;
+
+			// find containing ScrolledComposite
+			Composite target = c.getParent();
+			while ((target != null) && !(target instanceof ScrolledComposite))
+				target = target.getParent();
+			
+			if (target == null)
+				return;
+			
+			// scroll containing ScrolledComposite
+			ScrolledComposite sTarget = (ScrolledComposite)target;
+			Point origin = sTarget.getOrigin();
+			origin.y -= (e.count * 10);
+			sTarget.setOrigin(origin);
+		});
     }
 
     public static void setFontHeight(Control c, int height) {

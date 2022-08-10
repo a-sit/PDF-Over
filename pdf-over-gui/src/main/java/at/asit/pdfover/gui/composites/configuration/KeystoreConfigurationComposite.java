@@ -141,7 +141,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystoreType = new Combo(grpKeystore, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbKeystoreType).top(lblKeystoreType, 5).left(0,15).right(btnLoad, -5);
 		SWTUtils.setFontHeight(cmbKeystoreType, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbKeystoreType, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbKeystoreType);
 
 		this.lblKeystoreAlias = new Label(grpKeystore, SWT.NONE);
 		SWTUtils.anchor(lblKeystoreAlias).top(cmbKeystoreType, 5).left(0, 5);
@@ -150,7 +150,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystoreAlias = new Combo(grpKeystore, SWT.NONE);
 		SWTUtils.anchor(cmbKeystoreAlias).top(lblKeystoreAlias, 5).left(0,15).right(100,-5);
 		SWTUtils.setFontHeight(cmbKeystoreAlias, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbKeystoreAlias, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbKeystoreAlias);
 
 		this.lblKeystorePassStoreType = new Label(this.grpKeystore, SWT.NONE);
 		SWTUtils.anchor(lblKeystorePassStoreType).top(cmbKeystoreAlias, 5).left(0,5);
@@ -159,7 +159,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbKeystorePassStoreType = new Combo(grpKeystore, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbKeystorePassStoreType).top(lblKeystorePassStoreType, 5).left(0,15).right(100,-5);
 		SWTUtils.setFontHeight(cmbKeystorePassStoreType, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbKeystorePassStoreType, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbKeystorePassStoreType);
 
 		this.lblKeystoreStorePass = new Label(grpKeystore, SWT.NONE);
 		SWTUtils.anchor(lblKeystoreStorePass).top(cmbKeystorePassStoreType, 5).left(0,5);

@@ -177,7 +177,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbBKUAuswahl = new Combo(this.grpBkuAuswahl, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbBKUAuswahl).right(100,-5).top(0).left(0,5);
 		SWTUtils.setFontHeight(cmbBKUAuswahl, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbBKUAuswahl, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbBKUAuswahl);
 
 		this.bkuStrings = Arrays.stream(BKUs.values()).map(s -> Messages.getString("BKU."+s)).collect(Collectors.toList());
 		this.cmbBKUAuswahl.setItems(bkuStrings.toArray(new String[0]));
@@ -254,7 +254,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5);
 		SWTUtils.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
 		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
-		SWTUtils.disableEventDefault(cmbLocaleAuswahl, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbLocaleAuswahl);
 
 		SWTUtils.addSelectionListener(cmbLocaleAuswahl, e -> {
 			Locale currentLocale = configurationContainer.interfaceLocale;

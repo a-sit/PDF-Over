@@ -165,7 +165,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbSignatureProfiles = new Combo(this.grpSignatureProfile, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10);
 		SWTUtils.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbSignatureProfiles, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbSignatureProfiles);
 		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -186,7 +186,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbSignatureLang = new Combo(this.grpSignatureLang, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbSignatureLang).left(0,10).right(100,-10).top(0,10).bottom(100,-10);
 		SWTUtils.setFontHeight(cmbSignatureLang, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.disableEventDefault(cmbSignatureLang, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(cmbSignatureLang);
 		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 
 		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
@@ -271,7 +271,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		sclLogoOnlyTargetSize.setMaximum(200);
 		sclLogoOnlyTargetSize.setIncrement(1);
 		sclLogoOnlyTargetSize.setPageIncrement(10);
-		SWTUtils.disableEventDefault(sclLogoOnlyTargetSize, SWT.MouseVerticalWheel);
+		SWTUtils.scrollPassthrough(sclLogoOnlyTargetSize);
 		SWTUtils.addSelectionListener(sclLogoOnlyTargetSize, e ->
 		{
 			configurationContainer.logoOnlyTargetSize = sclLogoOnlyTargetSize.getSelection();
