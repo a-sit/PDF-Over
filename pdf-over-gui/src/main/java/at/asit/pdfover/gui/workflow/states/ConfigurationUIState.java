@@ -76,7 +76,7 @@ public class ConfigurationUIState extends State {
 			if (previousState instanceof OutputState)
 				this.setNextState(new OpenState(getStateMachine()));
 			else
-				this.setNextState(previousState);
+				this.setNextState(previousState); // TODO do we need to tell a previous state to refresh from config settings? (positioning preview)
 		}
 	}
 
