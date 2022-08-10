@@ -69,6 +69,9 @@ public class ConfigurationManager {
 	// The configuration overlay built from the cmd line args
 	private ConfigurationDataInMemory configurationOverlay;
 
+	// whether the configuration screen should crash on startup (for debugging purposes)
+	public boolean crashOnConfig = false;
+
 	/**
 	 * Constructor
 	 */
@@ -123,6 +126,16 @@ public class ConfigurationManager {
 		Properties diskConfig = new Properties();
 
 		diskConfig.load(new FileInputStream(Constants.CONFIG_DIRECTORY + File.separator + getConfigurationFileName()));
+
+		{ /* for testing of error handlers */
+			String crashProperty = diskConfig.getProperty("CRASH");
+			if ("startup".equalsIgnoreCase(crashProperty))
+				throw new RuntimeException("A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n(CRASH=startup is set.)");
+			else if ("config".equalsIgnoreCase(crashProperty))
+				this.crashOnConfig = true;
+			else if (crashProperty != null)
+				log.warn("Unknown value '{}' for CRASH property -- you want 'startup' or 'config'.", crashProperty);
+		}
 
 		setDefaultEmblemPersistent(diskConfig.getProperty(Constants.CFG_EMBLEM));
 		try {

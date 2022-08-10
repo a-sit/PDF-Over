@@ -279,6 +279,9 @@ public class ConfigurationComposite extends StateComposite {
 	 * @param provider
 	 */
 	public void setConfigProvider(ConfigurationManager provider) {
+		if (provider.crashOnConfig) /* for testing initialization error handlers */
+			throw new RuntimeException("A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.\n(CRASH=config is set.)");
+
 		this.configProvider = provider;
 		if (this.configProvider != null) {
 			for (ConfigurationCompositeBase c : composites())
