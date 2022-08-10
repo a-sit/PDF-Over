@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 import at.asit.pdfover.commons.Profile;
+
+import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.graphics.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,44 @@ public class ConfigurationManager {
 	public ConfigurationManager() {
 		this.configuration = new ConfigurationDataInMemory();
 		this.configurationOverlay = new ConfigurationDataInMemory();
+	}
+
+	static public void factoryResetPersistentConfig() {
+		// tell logback to close all file handles
+		((ch.qos.logback.classic.LoggerContext)LoggerFactory.getILoggerFactory()).stop();
+
+		File configDirectory = new File(Constants.CONFIG_DIRECTORY);
+		File backupDirectory = new File(Constants.CONFIG_BACKUP_DIRECTORY);
+		
+		// delete existing backup, if any
+		FileUtils.deleteQuietly(backupDirectory);
+
+		// attempt 1: try to move the old config directory to a backup location
+		try {
+			FileUtils.moveDirectory(
+				configDirectory,
+				backupDirectory
+			);
+		} catch (Exception e) {
+			System.out.println("Failed move config directory to backup location:");
+			e.printStackTrace();
+
+			// attempt 2: try to simply force delete the config directory
+			try {
+				FileUtils.forceDelete(configDirectory);
+			} catch (Exception e2) {
+				System.out.println("Failed to delete config directory:");
+				e2.printStackTrace();
+
+				// attempt 3: try to schedule the config directory for force deletion on JVM exit
+				try {
+					FileUtils.forceDeleteOnExit(configDirectory);
+				} catch (Exception e3) {
+					System.out.println("Failed to schedule config directory for deletion:");
+					e3.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/* load from disk */

@@ -348,15 +348,19 @@ public class PrepareConfigurationState extends State {
 
 			setNextState(new OpenState(stateMachine));
 
-		} catch (InitializationException e) {
+		} catch (Exception e) {
 			log.error("Failed to initialize: ", e);
-			ErrorDialog error = new ErrorDialog(getStateMachine()
-					.getMainShell(),
-					Messages.getString("error.Initialization"),
-					BUTTONS.OK);
+			ErrorDialog error = new ErrorDialog(
+				getStateMachine().getMainShell(),
+				Messages.getString("error.Initialization"),
+				BUTTONS.YES_NO
+			);
 			// error.setException(e);
 			// setNextState(error);
-			error.open();
+			int selection = error.open();
+			if (selection == SWT.YES)
+				ConfigurationManager.factoryResetPersistentConfig();
+
 			getStateMachine().exit();
 		}
 	}

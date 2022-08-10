@@ -20,11 +20,15 @@ import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.composites.ConfigurationComposite;
+import at.asit.pdfover.gui.controls.ErrorDialog;
+import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 /**
  *
@@ -64,10 +68,29 @@ public class ConfigurationUIState extends State {
 	@Override
 	public void run() {
 		Status status = getStateMachine().status;
+		
+		ConfigurationComposite config;
+		try {
+			config = this.getConfigurationComposite();
+			getStateMachine().display(config);
+		} catch (Exception e) {
+			log.error("Failed to initialize config UI", e);
+			ErrorDialog error = new ErrorDialog(
+				getStateMachine().getMainShell(),
+				Messages.getString("error.ConfigInitialization"),
+				BUTTONS.YES_NO
+			);
 
-		ConfigurationComposite config = this.getConfigurationComposite();
+			int selection = error.open();
+			if (selection == SWT.YES)
+			{
+				ConfigurationManager.factoryResetPersistentConfig();
+				getStateMachine().exit();
+				return;
+			}
 
-		getStateMachine().display(config);
+			throw e;
+		}
 
 		if(config.isUserDone())
 		{

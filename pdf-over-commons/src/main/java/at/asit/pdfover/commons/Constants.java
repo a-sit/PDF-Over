@@ -76,6 +76,9 @@ public class Constants {
 	/** Configuration directory */
 	public static final String CONFIG_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over";
 
+	/** Directory for config backup on factory reset */
+	public static final String CONFIG_BACKUP_DIRECTORY = System.getProperty("user.home") + File.separator + ".pdf-over.old";
+
 	/** The default configuration file name */
 	public static final String DEFAULT_CONFIG_FILENAME = "PDF-Over.config";
 
