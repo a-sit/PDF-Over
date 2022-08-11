@@ -212,7 +212,6 @@ public class MobileBKUQRComposite extends StateComposite {
 
 		Point availableSize = this.lblQR.getSize();
 		int targetSize = Math.min(availableSize.x, availableSize.y);
-		log.info("target size {}", targetSize);
 		if (targetSize <= 0)
 			return;
 		

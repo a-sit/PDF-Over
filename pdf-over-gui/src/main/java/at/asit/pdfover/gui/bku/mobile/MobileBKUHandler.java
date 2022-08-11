@@ -252,7 +252,7 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server);
+			log.debug("Server: " + server);
 
 		return responseData;
 	}
@@ -334,7 +334,7 @@ public abstract class MobileBKUHandler {
 
 		getStatus().server = server;
 		if (server != null)
-			log.info("Server: " + server);
+			log.debug("Server: " + server);
 
 		return responseData;
 	}

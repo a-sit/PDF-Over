@@ -109,9 +109,9 @@ public class ATrustHandler extends MobileBKUHandler {
 		String dynamicAttrTan = MobileBKUHelper.getDynamicNameAttribute(responseData, Constants.LABEL_TAN);
 
 
-		log.info("sessionID: " + sessionID);
-		log.info("viewState: " + viewState);
-		log.info("eventValidation: " + eventValidation);
+		log.debug("sessionID: " + sessionID);
+		log.debug("viewState: " + viewState);
+		log.debug("eventValidation: " + eventValidation);
 
 		status.sessionID = sessionID;
 		status.viewState = viewState;
