@@ -270,7 +270,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		sclLogoOnlyTargetSize.setMinimum(10);
 		sclLogoOnlyTargetSize.setMaximum(200);
 		sclLogoOnlyTargetSize.setIncrement(1);
-		sclLogoOnlyTargetSize.setPageIncrement(10);
+		sclLogoOnlyTargetSize.setPageIncrement(1);
 		SWTUtils.scrollPassthrough(sclLogoOnlyTargetSize);
 		SWTUtils.addSelectionListener(sclLogoOnlyTargetSize, e ->
 		{
