@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -175,25 +174,29 @@ public final class ImageUtil {
 		return image;
 	}
 
-	public static org.eclipse.swt.graphics.Image debugDisplayImage(org.eclipse.swt.graphics.Image image) {
+	public static org.eclipse.swt.graphics.ImageData debugDisplayImage(org.eclipse.swt.graphics.ImageData image) {
 		Display display = Display.getDefault();
 		Shell shell = new Shell(display, SWT.CLOSE);
 		shell.setLayout(new FormLayout());
 
-		Rectangle imgBounds = image.getBounds();
 		Label imgLabel = new Label(shell, SWT.NATIVE);
 		FormData imgFD = new FormData();
 		imgFD.left = new FormAttachment(0);
 		imgFD.top = new FormAttachment(0);
-		imgFD.width = imgBounds.width;
-		imgFD.height = imgBounds.height;
+		imgFD.width = image.width;
+		imgFD.height = image.height;
 		imgLabel.setLayoutData(imgFD);
-		imgLabel.setImage(image);
+		imgLabel.setImage(new org.eclipse.swt.graphics.Image(display, image));
 
-		shell.setSize(imgBounds.width + 20, imgBounds.height + 60);
+		shell.setSize(image.width + 20, image.height + 60);
 
 		shell.open();
 		shell.forceActive();
+		return image;
+	}
+
+	public static org.eclipse.swt.graphics.Image debugDisplayImage(org.eclipse.swt.graphics.Image image) {
+		debugDisplayImage(image.getImageData());
 		return image;
 	}
 
