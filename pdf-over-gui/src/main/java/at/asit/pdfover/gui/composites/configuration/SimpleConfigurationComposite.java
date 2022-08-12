@@ -277,6 +277,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			configurationContainer.logoOnlyTargetSize = sclLogoOnlyTargetSize.getSelection();
 			this.updateLogoOnlyTargetSizeCurrentValueLabel();
 		});
+		sclLogoOnlyTargetSize.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) { signatureBlockPreviewChanged(); };
+		});
 
 		this.lblLogoOnlyTargetSizeCurrentValue = new Label(this.grpLogoOnlyTargetSize, SWT.HORIZONTAL);
 		SWTUtils.anchor(lblLogoOnlyTargetSizeCurrentValue).top(sclLogoOnlyTargetSize, 5).left(0,5).right(100,-5);
