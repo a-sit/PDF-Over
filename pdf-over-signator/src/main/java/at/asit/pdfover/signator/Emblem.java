@@ -132,13 +132,16 @@ public class Emblem {
 		Properties emblemProps = new Properties();
 		// compare cache, try to load if match
 		try {
-			InputStream in = new FileInputStream(new File(CACHE_DIR, CACHE_PROPS_FILENAME));
-			emblemProps.load(in);
-			if (emblemImg.equals(emblemProps.getProperty(PROPKEY_ORIG_PATH))) {
-				emblemHsh = getFileHash(emblemImg);
-				if (emblemHsh.equals(emblemProps.getProperty(PROPKEY_ORIG_DIGEST))) {
-					log.debug("Emblem cache hit: " + cachedEmblemFileName);
-					return cachedEmblemFileName;
+			File cacheProps = new File(CACHE_DIR, CACHE_PROPS_FILENAME);
+			if (cacheProps.exists()) {
+				InputStream in = new FileInputStream(cacheProps);
+				emblemProps.load(in);
+				if (emblemImg.equals(emblemProps.getProperty(PROPKEY_ORIG_PATH))) {
+					emblemHsh = getFileHash(emblemImg);
+					if (emblemHsh.equals(emblemProps.getProperty(PROPKEY_ORIG_DIGEST))) {
+						log.debug("Emblem cache hit: " + cachedEmblemFileName);
+						return cachedEmblemFileName;
+					}
 				}
 			}
 			log.debug("Emblem cache miss");
