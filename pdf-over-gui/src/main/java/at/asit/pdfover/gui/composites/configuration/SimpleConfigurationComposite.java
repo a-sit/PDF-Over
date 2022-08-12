@@ -472,7 +472,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 			param.signatureLanguage = this.configurationContainer.signatureLocale.getLanguage();
 			param.enablePDFACompat = this.configurationContainer.signaturePDFACompat;
-			param.targetLogoSize = this.configurationContainer.logoOnlyTargetSize;
+			param.targetLogoSize = Math.min(120.0, this.configurationContainer.logoOnlyTargetSize); // TODO WORKAROUND FOR #117
 			String image = this.configurationContainer.getEmblemPath();
 			if (image != null && !image.trim().isEmpty()) {
 				param.emblem = new Emblem(image);

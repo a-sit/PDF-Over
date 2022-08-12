@@ -117,7 +117,7 @@ public class PositioningState extends State {
 
 		param.signatureLanguage = config.getSignatureLocale().getLanguage();
 		param.enablePDFACompat = config.getSignaturePdfACompat();
-		param.targetLogoSize = config.getLogoOnlyTargetSize();
+		param.targetLogoSize = Math.min(120.0, config.getLogoOnlyTargetSize()); // TODO WORKAROUND FOR #117
 
 		PdfAs4SignaturePlaceholder.For(param, (p) -> {
 			this.positionComposite.setPlaceholder(
