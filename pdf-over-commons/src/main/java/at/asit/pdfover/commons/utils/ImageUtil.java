@@ -43,161 +43,161 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
 class EXIFRotation {
-    private static final Logger log = LoggerFactory.getLogger(EXIFRotation.class);
-    /**
-     * rotate by this times Math.PI / 2
-     */
-    final int rotationInQuarters;
-    /**
-     * whether you should mirror (left-right) the image AFTER rotation
-     */
-    final boolean shouldMirrorLR;
+	private static final Logger log = LoggerFactory.getLogger(EXIFRotation.class);
+	/**
+	 * rotate by this times Math.PI / 2
+	 */
+	final int rotationInQuarters;
+	/**
+	 * whether you should mirror (left-right) the image AFTER rotation
+	 */
+	final boolean shouldMirrorLR;
 
-    private EXIFRotation(int rotateQuarters, boolean mirrorLR) {
-        this.rotationInQuarters = rotateQuarters;
-        this.shouldMirrorLR = mirrorLR;
-    }
+	private EXIFRotation(int rotateQuarters, boolean mirrorLR) {
+		this.rotationInQuarters = rotateQuarters;
+		this.shouldMirrorLR = mirrorLR;
+	}
 
-    public static final EXIFRotation NONE = new EXIFRotation(0, false);
+	public static final EXIFRotation NONE = new EXIFRotation(0, false);
 
-    private static final EXIFRotation[] rotationForIndex = {
-        /* invalid (0) */ NONE,
-        /* 1 */ NONE,
-        /* 2 */ new EXIFRotation(0, true),
-        /* 3 */ new EXIFRotation(2, false),
-        /* 4 */ new EXIFRotation(2, true),
-        /* 5 */ new EXIFRotation(1, true),
-        /* 6 */ new EXIFRotation(1, false),
-        /* 7 */ new EXIFRotation(3, true),
-        /* 8 */ new EXIFRotation(3, false)
-    };
+	private static final EXIFRotation[] rotationForIndex = {
+		/* invalid (0) */ NONE,
+		/* 1 */ NONE,
+		/* 2 */ new EXIFRotation(0, true),
+		/* 3 */ new EXIFRotation(2, false),
+		/* 4 */ new EXIFRotation(2, true),
+		/* 5 */ new EXIFRotation(1, true),
+		/* 6 */ new EXIFRotation(1, false),
+		/* 7 */ new EXIFRotation(3, true),
+		/* 8 */ new EXIFRotation(3, false)
+	};
 
-    static EXIFRotation For(File file) throws IOException
-    {
-        try
-        {
-            Metadata metadata = ImageMetadataReader.readMetadata(file);
-            if (metadata == null)
-                return NONE;
-            ExifIFD0Directory metaDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-            if (metaDir == null)
-                return NONE;
-            Integer orientation = metaDir.getInteger(ExifDirectoryBase.TAG_ORIENTATION);
-            if (orientation == null)
-                return NONE;
-            if (rotationForIndex.length <= orientation)
-            {
-                log.warn("Invalid orientation {} in EXIF metadata for {}", orientation, file.getName());
-                return NONE;
-            }
-            return rotationForIndex[orientation];
-        } catch (ImageProcessingException e) {
-            log.error("Failed to read EXIF metadata for {}", file.getName(), e);
-            return NONE;
-        }
-    }
+	static EXIFRotation For(File file) throws IOException
+	{
+		try
+		{
+			Metadata metadata = ImageMetadataReader.readMetadata(file);
+			if (metadata == null)
+				return NONE;
+			ExifIFD0Directory metaDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+			if (metaDir == null)
+				return NONE;
+			Integer orientation = metaDir.getInteger(ExifDirectoryBase.TAG_ORIENTATION);
+			if (orientation == null)
+				return NONE;
+			if (rotationForIndex.length <= orientation)
+			{
+				log.warn("Invalid orientation {} in EXIF metadata for {}", orientation, file.getName());
+				return NONE;
+			}
+			return rotationForIndex[orientation];
+		} catch (ImageProcessingException e) {
+			log.error("Failed to read EXIF metadata for {}", file.getName(), e);
+			return NONE;
+		}
+	}
 }
 
 public final class ImageUtil {
-    
-    /**
-     * ImageIO.read, except it honors EXIF rotation metadata
-     * (which the default, for some reason, does not)
-     */
-    public static final BufferedImage readImageWithEXIFRotation(File input) throws IOException
-    {
-        if (input == null)
-            throw new IllegalArgumentException("input == null");
-        if (!input.canRead())
-            throw new IllegalArgumentException("cannot read input");
-        
-        ImageInputStream stream = ImageIO.createImageInputStream(input);
-        if (stream == null)
-            throw new RuntimeException("Failed to create ImageInputStream for some reason?");
-        
-        Iterator<ImageReader> iter = ImageIO.getImageReaders(stream);
-        if (!iter.hasNext())
-        {
-            stream.close();
-            return null;
-        }
+	
+	/**
+	 * ImageIO.read, except it honors EXIF rotation metadata
+	 * (which the default, for some reason, does not)
+	 */
+	public static final BufferedImage readImageWithEXIFRotation(File input) throws IOException
+	{
+		if (input == null)
+			throw new IllegalArgumentException("input == null");
+		if (!input.canRead())
+			throw new IllegalArgumentException("cannot read input");
+		
+		ImageInputStream stream = ImageIO.createImageInputStream(input);
+		if (stream == null)
+			throw new RuntimeException("Failed to create ImageInputStream for some reason?");
+		
+		Iterator<ImageReader> iter = ImageIO.getImageReaders(stream);
+		if (!iter.hasNext())
+		{
+			stream.close();
+			return null;
+		}
 
-        ImageReader reader = iter.next();
-        boolean isJPEG = reader.getFormatName().equals("JPEG");
-        ImageReadParam param = reader.getDefaultReadParam();
-        reader.setInput(stream, true, false);
-        BufferedImage image;
-        try {
-            image = reader.read(0, param);
-        } finally {
-            reader.dispose();
-            stream.close();
-        }
+		ImageReader reader = iter.next();
+		boolean isJPEG = reader.getFormatName().equals("JPEG");
+		ImageReadParam param = reader.getDefaultReadParam();
+		reader.setInput(stream, true, false);
+		BufferedImage image;
+		try {
+			image = reader.read(0, param);
+		} finally {
+			reader.dispose();
+			stream.close();
+		}
 
-        if (!isJPEG)
-            return image;
+		if (!isJPEG)
+			return image;
 
-        EXIFRotation rotation = EXIFRotation.For(input);
-        if (rotation.rotationInQuarters > 0)
-        {
-            boolean isSideways = ((rotation.rotationInQuarters % 2) == 1);
-            int sourceWidth = image.getWidth();
-            int sourceHeight = image.getHeight();
-            int targetWidth = isSideways ? sourceHeight : sourceWidth;
-            int targetHeight = isSideways ? sourceWidth : sourceHeight;
-            
-            BufferedImage result = new BufferedImage(targetWidth, targetHeight, image.getType());
-            Graphics2D g = result.createGraphics();
-            g.translate((targetWidth - sourceWidth)/2, (targetHeight - sourceHeight)/2);
-            g.rotate(rotation.rotationInQuarters * Math.PI / 2, sourceWidth/2, sourceHeight/2);
-            g.drawRenderedImage(image, null);
-            g.dispose();
-            image = result;
-        }
+		EXIFRotation rotation = EXIFRotation.For(input);
+		if (rotation.rotationInQuarters > 0)
+		{
+			boolean isSideways = ((rotation.rotationInQuarters % 2) == 1);
+			int sourceWidth = image.getWidth();
+			int sourceHeight = image.getHeight();
+			int targetWidth = isSideways ? sourceHeight : sourceWidth;
+			int targetHeight = isSideways ? sourceWidth : sourceHeight;
+			
+			BufferedImage result = new BufferedImage(targetWidth, targetHeight, image.getType());
+			Graphics2D g = result.createGraphics();
+			g.translate((targetWidth - sourceWidth)/2, (targetHeight - sourceHeight)/2);
+			g.rotate(rotation.rotationInQuarters * Math.PI / 2, sourceWidth/2, sourceHeight/2);
+			g.drawRenderedImage(image, null);
+			g.dispose();
+			image = result;
+		}
 
-        if (rotation.shouldMirrorLR)
-        {
-            int width = image.getWidth();
-            int height = image.getHeight();
-            BufferedImage result = new BufferedImage(width, height, image.getType());
-            Graphics2D g = result.createGraphics();
-            g.drawImage(image, width, 0, -width, height, null);
-            g.dispose();
-            image = result;
-        }
-        return image;
-    }
+		if (rotation.shouldMirrorLR)
+		{
+			int width = image.getWidth();
+			int height = image.getHeight();
+			BufferedImage result = new BufferedImage(width, height, image.getType());
+			Graphics2D g = result.createGraphics();
+			g.drawImage(image, width, 0, -width, height, null);
+			g.dispose();
+			image = result;
+		}
+		return image;
+	}
 
-    public static java.awt.Image debugDisplayImage(java.awt.Image image) {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel(new ImageIcon(image)));
-        JOptionPane.showMessageDialog(null, new JScrollPane(panel));
-        return image;
-    }
+	public static java.awt.Image debugDisplayImage(java.awt.Image image) {
+		JPanel panel = new JPanel();
+		panel.add(new JLabel(new ImageIcon(image)));
+		JOptionPane.showMessageDialog(null, new JScrollPane(panel));
+		return image;
+	}
 
-    public static org.eclipse.swt.graphics.Image debugDisplayImage(org.eclipse.swt.graphics.Image image) {
-        Display display = Display.getDefault();
-        Shell shell = new Shell(display, SWT.CLOSE);
-        shell.setLayout(new FormLayout());
+	public static org.eclipse.swt.graphics.Image debugDisplayImage(org.eclipse.swt.graphics.Image image) {
+		Display display = Display.getDefault();
+		Shell shell = new Shell(display, SWT.CLOSE);
+		shell.setLayout(new FormLayout());
 
-        Rectangle imgBounds = image.getBounds();
-        Label imgLabel = new Label(shell, SWT.NATIVE);
-        FormData imgFD = new FormData();
-        imgFD.left = new FormAttachment(0);
-        imgFD.top = new FormAttachment(0);
-        imgFD.width = imgBounds.width;
-        imgFD.height = imgBounds.height;
-        imgLabel.setLayoutData(imgFD);
+		Rectangle imgBounds = image.getBounds();
+		Label imgLabel = new Label(shell, SWT.NATIVE);
+		FormData imgFD = new FormData();
+		imgFD.left = new FormAttachment(0);
+		imgFD.top = new FormAttachment(0);
+		imgFD.width = imgBounds.width;
+		imgFD.height = imgBounds.height;
+		imgLabel.setLayoutData(imgFD);
 		imgLabel.setImage(image);
 
-        shell.setSize(imgBounds.width + 20, imgBounds.height + 60);
+		shell.setSize(imgBounds.width + 20, imgBounds.height + 60);
 
-        shell.open();
-        shell.forceActive();
-        return image;
-    }
+		shell.open();
+		shell.forceActive();
+		return image;
+	}
 
-    /**
+	/**
 	 * Convert AWT Image to SWT Image
 	 *
 	 * @param bufferedImage
@@ -259,28 +259,28 @@ public final class ImageUtil {
 			}
 			return data;
 		} else if (bufferedImage.getColorModel() instanceof ComponentColorModel) {
-		    ComponentColorModel colorModel = (ComponentColorModel)bufferedImage.getColorModel();
+			ComponentColorModel colorModel = (ComponentColorModel)bufferedImage.getColorModel();
 
-		    //ASSUMES: 3 BYTE BGR IMAGE TYPE
+			//ASSUMES: 3 BYTE BGR IMAGE TYPE
 
-		    PaletteData palette = new PaletteData(0x0000FF, 0x00FF00,0xFF0000);
-		    ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
+			PaletteData palette = new PaletteData(0x0000FF, 0x00FF00,0xFF0000);
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
 
-		    //This is valid because we are using a 3-byte Data model with no transparent pixels
-		    data.transparentPixel = -1;
+			//This is valid because we are using a 3-byte Data model with no transparent pixels
+			data.transparentPixel = -1;
 
-		    WritableRaster raster = bufferedImage.getRaster();
-		    int[] pixelArray = new int[bufferedImage.getColorModel().getNumComponents()];
-		    for (int y = 0; y < data.height; y++) {
-		        for (int x = 0; x < data.width; x++) {
-		            raster.getPixel(x, y, pixelArray);
-		            int pixel = palette.getPixel(new RGB(pixelArray[0], pixelArray[1], pixelArray[2]));
-		            data.setPixel(x, y, pixel);
-                    if (3 < pixelArray.length)
-                        data.setAlpha(x, y, pixelArray[3]);
-		        }
-		    }
-		    return data;
+			WritableRaster raster = bufferedImage.getRaster();
+			int[] pixelArray = new int[bufferedImage.getColorModel().getNumComponents()];
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					raster.getPixel(x, y, pixelArray);
+					int pixel = palette.getPixel(new RGB(pixelArray[0], pixelArray[1], pixelArray[2]));
+					data.setPixel(x, y, pixel);
+					if (3 < pixelArray.length)
+						data.setAlpha(x, y, pixelArray[3]);
+				}
+			}
+			return data;
 		}
 		throw new RuntimeException("could not convert image with model " + bufferedImage.getColorModel().getClass().getName());
 	}
