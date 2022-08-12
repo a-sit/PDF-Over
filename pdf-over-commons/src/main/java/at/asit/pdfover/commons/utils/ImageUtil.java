@@ -11,9 +11,17 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
@@ -164,6 +172,28 @@ public final class ImageUtil {
         JPanel panel = new JPanel();
         panel.add(new JLabel(new ImageIcon(image)));
         JOptionPane.showMessageDialog(null, new JScrollPane(panel));
+        return image;
+    }
+
+    public static org.eclipse.swt.graphics.Image debugDisplayImage(org.eclipse.swt.graphics.Image image) {
+        Display display = Display.getDefault();
+        Shell shell = new Shell(display, SWT.CLOSE);
+        shell.setLayout(new FormLayout());
+
+        Rectangle imgBounds = image.getBounds();
+        Label imgLabel = new Label(shell, SWT.NATIVE);
+        FormData imgFD = new FormData();
+        imgFD.left = new FormAttachment(0);
+        imgFD.top = new FormAttachment(0);
+        imgFD.width = imgBounds.width;
+        imgFD.height = imgBounds.height;
+        imgLabel.setLayoutData(imgFD);
+		imgLabel.setImage(image);
+
+        shell.setSize(imgBounds.width + 20, imgBounds.height + 60);
+
+        shell.open();
+        shell.forceActive();
         return image;
     }
 
