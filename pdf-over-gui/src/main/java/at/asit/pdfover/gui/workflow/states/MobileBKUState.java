@@ -261,7 +261,8 @@ public class MobileBKUState extends State {
 				}
 			}
 
-			getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
+			if (!(ui.userCancel && ui.isRememberPassword())) /* don't allow "remember" to be enabled via cancel button */
+				getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
 
 			if (ui.userCancel) {
 				ui.userCancel = false;
