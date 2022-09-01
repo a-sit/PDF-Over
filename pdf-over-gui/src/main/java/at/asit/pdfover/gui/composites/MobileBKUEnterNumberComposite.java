@@ -60,8 +60,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 			try {
 				String number = MobileBKUEnterNumberComposite.this.txt_number.getText();
 
-				number = number.replaceAll("\\s","");
-
 				MobileBKUEnterNumberComposite.this.setMobileNumber(number);
 
 				String password = MobileBKUEnterNumberComposite.this.txt_password.getText();

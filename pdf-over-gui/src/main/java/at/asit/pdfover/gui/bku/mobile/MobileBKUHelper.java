@@ -201,10 +201,12 @@ public class MobileBKUHelper {
 	public static String normalizeMobileNumber(String number) {
 		// Verify number and normalize
 
-		number = number.replaceAll("\\s","");
+		number = number.trim();
+		
+		String numberWithoutWhitespace = number.replaceAll("\\s","");
 		// Compile and use regular expression
 		Pattern pattern = Pattern.compile(NUMBER_REGEX);
-		Matcher matcher = pattern.matcher(number);
+		Matcher matcher = pattern.matcher(numberWithoutWhitespace);
 
 		if (!matcher.find())
 			return number; /* might be an idA username, return unchanged */
@@ -219,7 +221,7 @@ public class MobileBKUHelper {
 
 		if (countryCode.equals("10301")) {
 			// A-Trust Testnumber! Don't change
-			return number;
+			return numberWithoutWhitespace;
 		}
 
 		countryCode = countryCode.replace("00", "+");
