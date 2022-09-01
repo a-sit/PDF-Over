@@ -16,7 +16,6 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,24 +26,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.program.Program;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.cliarguments.*;
-import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
-import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.utils.UpdateCheckManager;
 import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.utils.Zipper;
 import at.asit.pdfover.gui.workflow.GUIProvider;
@@ -301,45 +295,8 @@ public class PrepareConfigurationState extends State {
 			}
 
 			// Check for updates
-			if (config.getUpdateCheck() && Constants.APP_VERSION != null) {
-				new Thread(() -> {
-					HttpClient client = (HttpClient) BKUHelper.getHttpClient();
-					GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
-					try {
-						client.executeMethod(method);
-						final String version = method.getResponseBodyAsString().trim();
-						if (!VersionComparator.before(Constants.APP_VERSION, version))
-							return;
-
-						// wait 500ms before invoke the GUI message, because GUI had to be started from
-						// main thread
-						try {Thread.sleep(500); } catch (InterruptedException e1) { }
-						// invoke GUI message in main thread
-						gui.getMainShell().getDisplay().asyncExec(() -> {
-							Dialog info = new Dialog(gui.getMainShell(),
-									Messages.getString("version_check.UpdateTitle"),
-									String.format(Messages.getString("version_check.UpdateText"), version),
-									BUTTONS.OK_CANCEL, ICON.INFORMATION);
-
-							if (info.open() == SWT.OK)
-							{
-								if (Desktop.isDesktopSupported()) {
-									try {
-										Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
-									} catch (Exception e) {
-										log.error("Error opening update location ", e);
-									}
-								} else {
-									log.info("SWT Desktop is not supported on this platform");
-									Program.launch(Constants.UPDATE_URL);
-								}
-							}
-						});
-					} catch (Exception e) {
-						log.error("Error downloading update information: ", e);
-					}
-				}).start();
-			}
+			if (config.getUpdateCheck())
+				UpdateCheckManager.checkNow(gui.getMainShell());
 
 			// Create PDF Signer
 			Status status = stateMachine.status;
