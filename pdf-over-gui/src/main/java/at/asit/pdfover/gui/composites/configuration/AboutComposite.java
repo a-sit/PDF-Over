@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTUtils;
+import at.asit.pdfover.gui.utils.UpdateCheckManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -30,8 +31,10 @@ public class AboutComposite extends ConfigurationCompositeBase {
 	private Link lnkAbout;
 	private Link lnkDataProtection;
 	private Label lblDataProtection;
+	private Link lnkUpdateCheckStatus;
 	private Button btnUpdateCheck;
 	private Button btnOpenLogDirectory;
+	private UpdateCheckManager.Status latestUpdateStatus;
 	/**
  * @param parent
  * @param style
@@ -54,14 +57,32 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
 
+		this.lnkUpdateCheckStatus = new Link(this, SWT.NONE);
+		SWTUtils.anchor(lnkUpdateCheckStatus).bottom(100, -5).left(0,5);
+		SWTUtils.setFontHeight(lnkUpdateCheckStatus, Constants.TEXT_SIZE_BUTTON);
+		UpdateCheckManager.registerStatusCallback((s) -> { latestUpdateStatus = s; getDisplay().asyncExec(() -> { RefreshUpdateStatusText(); }); });
+		SWTUtils.addSelectionListener(lnkUpdateCheckStatus, (e) -> {
+			if (latestUpdateStatus == UpdateCheckManager.Status.OUTDATED)
+				Program.launch(Constants.UPDATE_URL);
+			else
+				UpdateCheckManager.checkNow(getShell());
+		});
+
 		this.btnUpdateCheck = new Button(this, SWT.CHECK);
-		SWTUtils.anchor(btnUpdateCheck).bottom(100,-5).left(0,5);
+		SWTUtils.anchor(btnUpdateCheck).bottom(lnkUpdateCheckStatus,-5).left(0,5);
 		SWTUtils.setFontHeight(btnUpdateCheck, Constants.TEXT_SIZE_BUTTON);
-		SWTUtils.addSelectionListener(btnUpdateCheck, e -> { this.configurationContainer.updateCheck = btnUpdateCheck.getSelection(); });
+		SWTUtils.addSelectionListener(btnUpdateCheck, (e) -> {
+			boolean enabled = btnUpdateCheck.getSelection();
+			this.configurationContainer.updateCheck = enabled;
+			if (enabled)
+				UpdateCheckManager.checkNow(getShell());
+		});
 
 		this.btnOpenLogDirectory = new Button(this, SWT.NONE);
 		SWTUtils.anchor(btnOpenLogDirectory).bottom(100, -5).right(100, -5);
 		SWTUtils.setFontHeight(btnOpenLogDirectory, Constants.TEXT_SIZE_BUTTON);
+
+		SWTUtils.reanchor(lnkDataProtection).bottom(btnUpdateCheck,-5);
 
 		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -129,6 +150,10 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		// Nothing to do here
 	}
 
+	private void RefreshUpdateStatusText() {
+		SWTUtils.setLocalizedText(lnkUpdateCheckStatus, "config.UpdateStatus." + latestUpdateStatus.name());
+	}
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
@@ -140,6 +165,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		SWTUtils.setLocalizedText(btnUpdateCheck, "advanced_config.UpdateCheck");
 		SWTUtils.setLocalizedToolTipText(btnUpdateCheck, "advanced_config.UpdateCheck_ToolTip");
 		SWTUtils.setLocalizedText(btnOpenLogDirectory, "config.ShowLogDirectory");
+		RefreshUpdateStatusText();
 	}
 
 	@Override
