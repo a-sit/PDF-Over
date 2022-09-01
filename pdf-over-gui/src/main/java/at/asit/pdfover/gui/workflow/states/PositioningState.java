@@ -110,8 +110,9 @@ public class PositioningState extends State {
 		PdfAs4SignatureParameter param = new PdfAs4SignatureParameter();
 		param.signatureProfile = config.getSignatureProfile();
 
-		Emblem emblem = new Emblem(config.getDefaultEmblemPath());
-		param.emblem = emblem;
+		String emblemPath = config.getDefaultEmblemPath();
+		if (emblemPath != null && !emblemPath.trim().isEmpty())
+			param.emblem = new Emblem(emblemPath);
 		if (config.getSignatureNote() != null && !config.getSignatureNote().isEmpty())
 			param.signatureNote = config.getSignatureNote();
 
@@ -120,8 +121,7 @@ public class PositioningState extends State {
 		param.targetLogoSize = Math.min(120.0, config.getLogoOnlyTargetSize()); // TODO WORKAROUND FOR #117
 
 		PdfAs4SignaturePlaceholder.For(param, (p) -> {
-			this.positionComposite.setPlaceholder(
-				p.getAWTImage());
+			this.positionComposite.setPlaceholder(p.getAWTImage());
 		});
 
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())

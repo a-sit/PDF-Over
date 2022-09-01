@@ -513,6 +513,9 @@ public class SignaturePanel extends JPanel {
 	 */
 	boolean isOnSignature(int x, int y)
 	{
+		if (this.sigScreenPos == null)
+			return false;
+
 		Rectangle2D sig = new Rectangle2D.Double(
 				this.sigScreenPos.getX() + this.offX,
 				this.sigScreenPos.getY() + this.offY,

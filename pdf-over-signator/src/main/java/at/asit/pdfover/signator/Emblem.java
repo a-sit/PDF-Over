@@ -68,7 +68,7 @@ public class Emblem {
 		if (this.image != null) return; /* getCachedFileName may have re-generated the cache and populated this.image */
 
 		try {
-			image = ImageUtil.readImageWithEXIFRotation(new File(filename));
+			this.image = ImageUtil.readImageWithEXIFRotation(new File(filename));
 		} catch (IOException e) {
 			log.warn("Failed to load Emblem image");
 		}
