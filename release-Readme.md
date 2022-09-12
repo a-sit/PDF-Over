@@ -31,14 +31,14 @@ step 1: unpack zip archive
   -> try if pdf-over.exe works
 
 step 2: create signed installer
-  -> open pdf-over/installer/windows/PDF-Over.aip in Advanced Installer
+  -> open PDF-Over.aip in Advanced Installer
   -> update Product Details
     -> Product version
     -> attempt to switch away from page
     -> when prompted, choose "Major Upgrade"
   -> make sure the project is still valid (these *should* be correct, but...)
     -> ensure that current files are included (Files and Folders)
-      -> include exactly the contents of the release zip
+      -> include exactly the contents of the release zip except PDF-Over.aip
     -> create shortcuts in "Start Menu -> Programs", "Desktop", and "Send To"
     -> ensure Digital Signature configuration is correct
       -> Use the A-SIT code signing cert from your cert store
@@ -54,8 +54,8 @@ step 2: create signed installer
       -> HKEY_CLASSES_ROOT\PDF-Over.pdf, REG_SZ `(empty key)` `PDF-Over`
       -> HKEY_CLASSES_ROOT\PDF-Over.pdf\DefaultIcon, REG_SZ `(empty key)` `"[reference to PDFOver.exe]",0`
       -> HKEY_CLASSES_ROOT\PDF-Over.pdf\shell\open\command `(empty key)` `"[reference to PDFOver.exe]" "%1"`
-      -> Click "Build" in the toolbar, this produces pdf-over/installer/windows/PDF-Over-SetupFiles/PDF-Over.msi
-      -> rename this to PDF-Over-{version}.msi; you are done
+    -> Click "Build" in the toolbar, this produces pdf-over/installer/windows/PDF-Over-SetupFiles/PDF-Over.msi
+    -> rename this to PDF-Over-{version}.msi; you are done
 
 ==== MAC-SPECIFIC RELEASE PROCESS
 == (must be done on a Mac VM)
