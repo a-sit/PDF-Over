@@ -3,6 +3,8 @@
   -> switch to your pdf-over clone
   -> run mvn install to verify that it builds
     -> you can skip this step if you are feeling brave
+  -> if using WSL, ensure that your line endings are correct
+    -> git add --renormalize .
   -> to actually prep a release, run mvn release:prepare -Dresume=false
   -> this will prompt in the following order:
     -> current release version (x.y.z)
