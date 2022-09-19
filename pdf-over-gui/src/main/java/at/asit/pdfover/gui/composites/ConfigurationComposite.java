@@ -383,7 +383,7 @@ public class ConfigurationComposite extends StateComposite {
 		SWTUtils.setLocalizedText(simpleTabItem, "config.Simple");
 		SWTUtils.setLocalizedText(advancedTabItem, "config.Advanced");
 		SWTUtils.setLocalizedText(aboutTabItem, "config.About", Constants.APP_NAME);
-		if (this.keystoreTabItem != null)
+		if (this.keystoreConfigComposite != null)
 			SWTUtils.setLocalizedText(keystoreTabItem, "config.Keystore");
 
 		SWTUtils.setLocalizedText(btnSpeichern, "common.Save");
