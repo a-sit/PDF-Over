@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>pdf-over</artifactId>
 		<groupId>at.a-sit</groupId>
-		<version>4.4.2</version>
+		<version>4.4.3-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>pdf-over-gui</artifactId>
