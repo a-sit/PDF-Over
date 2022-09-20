@@ -244,7 +244,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		setLayout(new FormLayout());
 
 		final Composite containerComposite = new Composite(this, SWT.NATIVE);
-		SWTUtils.anchor(containerComposite).top(50, -140).bottom(50, 140).left(50, -200).right(50, 200);
 		containerComposite.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -258,6 +257,8 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 						clientArea.width - 2, clientArea.height - 2, 10, 10);
 			}
 		});
+		containerComposite.setLayout(new FormLayout());
+		SWTUtils.anchor(containerComposite).top(50, -140).bottom(50, 140).left(50, -200).right(50, 200);
 
 		this.lblRefValLabel = new Label(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(lblRefValLabel).right(50, -10).top(30, -10);
