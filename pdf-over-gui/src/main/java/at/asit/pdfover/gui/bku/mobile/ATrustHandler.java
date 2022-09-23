@@ -253,6 +253,18 @@ public class ATrustHandler extends MobileBKUHandler {
 			}catch (Exception e) {
 				log.debug("No text_tan tag");
 			}
+			try {
+				String webauthnLink = MobileBKUHelper.extractValueFromTagWithParam(responseData, "a", "id", "FidoButton", "href");
+				log.info("Webauthn link: {}", webauthnLink);
+			} catch (Exception e) {
+				log.info("No webauthnLink");
+			}
+			try {
+				String webauthnData = MobileBKUHelper.extractValueFromTagWithParam(responseData, "input", "id", "credentialOptions", "value");
+				log.info("Fido credential options: {}", webauthnData);
+			} catch (Exception e) {
+				log.info("No webauthnData");
+			}
 
 		} else if (responseData.contains("sl:InfoboxReadResponse")) {
 			// credentials ok! InfoboxReadResponse
