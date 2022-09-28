@@ -197,9 +197,8 @@ public class MobileBKUQRComposite extends StateComposite {
 	 *            the reference value to set
 	 */
 	public void setRefVal(String refVal) {
-		this.refVal = refVal.trim();
-
 		if (this.refVal != null) {
+			this.refVal = refVal.trim();
 			this.lblRefVal.setText(this.refVal);
 		} else {
 			this.lblRefVal.setText("");
