@@ -15,9 +15,14 @@
  */
 package at.asit.pdfover.gui.bku;
 
+import java.util.Base64;
+
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
@@ -29,6 +34,11 @@ import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import at.asit.webauthn.PublicKeyCredential;
+import at.asit.webauthn.PublicKeyCredentialRequestOptions;
+import at.asit.webauthn.WebAuthN;
+import at.asit.webauthn.exceptions.WebAuthNOperationFailed;
+import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
 
 /**
  *
@@ -125,6 +135,51 @@ public class MobileBKUConnector implements BkuSlConnector {
 				if (status instanceof ATrustStatus) {
 					ATrustStatus aStatus = (ATrustStatus) status;
 					ATrustHandler aHandler = (ATrustHandler) handler;
+					if (aStatus.fido2OptionAvailable && (aStatus.fido2FormOptions == null)) {
+						try {
+							handler.handleCredentialsResponse(aHandler.postFIDO2Request());
+						} catch (Exception ex) {
+							log.error("Error in PostCredentialsThread", ex);
+							this.state.threadException = ex;
+							throw new SignatureException(ex);
+						}
+					}
+					if (aStatus.fido2FormOptions != null) {
+						log.info("Fido2 credentials GET!");
+						if (WebAuthN.isAvailable())
+						{
+							log.info("Authenticating with WebAuthn!");
+							enterTAN = false;
+							try {
+								PublicKeyCredential<AuthenticatorAssertionResponse> credential = 
+									PublicKeyCredentialRequestOptions.FromJSONString(aStatus.fido2FormOptions.get(aStatus.fido2OptionsKey)).get("https://service.a-trust.at");
+								
+								Base64.Encoder base64 = Base64.getEncoder();
+								JsonObject aTrustCredential = new JsonObject();
+								aTrustCredential.addProperty("id", credential.id);
+								aTrustCredential.addProperty("rawId", base64.encodeToString(credential.rawId));
+								aTrustCredential.addProperty("type", credential.type);
+								aTrustCredential.add("extensions", new JsonObject()); // TODO fix getClientExtensionResults() in library
+
+								JsonObject aTrustCredentialResponse = new JsonObject();
+								aTrustCredential.add("response", aTrustCredentialResponse);
+								aTrustCredentialResponse.addProperty("authenticatorData", base64.encodeToString(credential.response.authenticatorData));
+								aTrustCredentialResponse.addProperty("clientDataJson", base64.encodeToString(credential.response.clientDataJSON));
+								aTrustCredentialResponse.addProperty("signature", base64.encodeToString(credential.response.signature));
+								if (credential.response.userHandle != null)
+									aTrustCredentialResponse.addProperty("userHandle", base64.encodeToString(credential.response.userHandle));
+								else
+									aTrustCredentialResponse.add("userHandle", JsonNull.INSTANCE);
+
+								aStatus.fido2FormOptions.put(aStatus.fido2ResultKey, aTrustCredential.toString());
+								handler.handleTANResponse(aHandler.postFIDO2Result()); // TODO dedicated response
+							} catch (WebAuthNOperationFailed e) {
+								log.error("WebAuthN failed", e);
+							} catch (Exception e) {
+								log.error("generic failure", e);
+							}
+						}
+					}
 					if (aStatus.qrCodeURL != null) {
 						this.state.showQR();
 						if ("cancel".equals(this.state.status.errorMessage))

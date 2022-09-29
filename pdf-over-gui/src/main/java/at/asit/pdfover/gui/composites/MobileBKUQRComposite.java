@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -226,7 +227,13 @@ public class MobileBKUQRComposite extends StateComposite {
 			setErrorMessage(Messages.getString("error.FailedToLoadQRCode"));
 			return;
 		}
-		this.currentQRImage = new ImageData(qrcode);
+		try {
+			this.currentQRImage = new ImageData(qrcode);
+		} catch (SWTException e) {
+			log.warn("Failed to load QR code", e);
+			setErrorMessage(Messages.getString("error.FailedToLoadQRCode"));
+			return;
+		}
 		updateQRImage();
 	}
 

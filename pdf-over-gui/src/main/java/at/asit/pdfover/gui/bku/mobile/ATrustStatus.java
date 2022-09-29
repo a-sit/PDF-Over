@@ -15,6 +15,8 @@
  */
 package at.asit.pdfover.gui.bku.mobile;
 
+import java.util.Map;
+
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,11 @@ public class ATrustStatus extends MobileBKUStatus {
 	public String dynAttrTan;
 	public String dynAttrSignButton;
 	public boolean isSMSTan = false;
+
+	public boolean fido2OptionAvailable = false;
+	public String fido2OptionsKey;
+	public String fido2ResultKey;
+	public Map<String,String> fido2FormOptions;
 
 	/**
 	 * Constructor

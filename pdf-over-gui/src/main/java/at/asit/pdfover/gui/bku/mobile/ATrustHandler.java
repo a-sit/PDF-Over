@@ -21,16 +21,22 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +155,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleCredentialsResponse(java.lang.String)
 	 */
 	@Override
-	public void handleCredentialsResponse(String responseData) throws Exception {
+	public void handleCredentialsResponse(final String responseData) throws Exception {
 		ATrustStatus status = getStatus();
 		String viewState = status.viewState;
 		String eventValidation = status.eventValidation;
@@ -159,6 +165,8 @@ public class ATrustHandler extends MobileBKUHandler {
 		String viewstateGenerator = status.viewStateGenerator;
 
 		status.errorMessage = null;
+
+		final Document responseDocument = Jsoup.parse(responseData);
 
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) {
 			// Certificate expiration interstitial - skip
@@ -196,8 +204,8 @@ public class ATrustHandler extends MobileBKUHandler {
 			post.addParameter("__EVENTVALIDATION", t_eventValidation);
 			post.addParameter("Button_Next", "Weiter");
 
-			responseData = executePost(client, post);
-			log.trace("Response from mobile BKU: " + responseData);
+			handleCredentialsResponse(executePost(client, post));
+			return;
 		} else if (responseData.contains("tanAppInfo.aspx?sid=")) {
 			// App info interstitial - skip
 			log.info("Skipping tan app interstitial");
@@ -216,8 +224,8 @@ public class ATrustHandler extends MobileBKUHandler {
 			post.addParameter("__EVENTVALIDATION", t_eventValidation);
 			post.addParameter("NextBtn", "Weiter");
 
-			responseData = executePost(client, post);
-			log.trace("Response from mobile BKU: " + responseData);
+			handleCredentialsResponse(executePost(client, post));
+			return;
 		}
 
 		if (responseData.contains("signature.aspx?sid=")) {
@@ -227,7 +235,12 @@ public class ATrustHandler extends MobileBKUHandler {
 			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\"");
 			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
 			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value");
-			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");
+			try {
+				refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");
+			} catch (Exception e) {
+				refVal = null;
+				log.debug("No reference value");
+			}
 			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" +
 					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'");
 			try {
@@ -253,17 +266,27 @@ public class ATrustHandler extends MobileBKUHandler {
 			}catch (Exception e) {
 				log.debug("No text_tan tag");
 			}
-			try {
-				String webauthnLink = MobileBKUHelper.extractValueFromTagWithParam(responseData, "a", "id", "FidoButton", "href");
-				log.info("Webauthn link: {}", webauthnLink);
-			} catch (Exception e) {
-				log.info("No webauthnLink");
-			}
-			try {
-				String webauthnData = MobileBKUHelper.extractValueFromTagWithParam(responseData, "input", "id", "credentialOptions", "value");
-				log.info("Fido credential options: {}", webauthnData);
-			} catch (Exception e) {
-				log.info("No webauthnData");
+			
+			status.fido2OptionAvailable = (responseDocument.selectFirst("#FidoButton") != null);
+			{
+				Element fidoBlock = responseDocument.selectFirst("#fidoBlock");
+
+				if (fidoBlock != null) {
+					Map<String,String> options = new HashMap<>();
+					for (Element field : fidoBlock.select("input"))
+					{
+						if (!field.hasAttr("name"))
+							continue;
+						options.put(field.attr("name"), field.attr("value"));
+						if ("credentialOptions".equals(field.attr("id")))
+							status.fido2OptionsKey = field.attr("name");
+						if ("credentialResult".equals(field.attr("id")))
+							status.fido2ResultKey = field.attr("name");
+					}
+					log.info("Fido credential options: {}", options);
+					status.fido2FormOptions = options;
+					status.qrCodeURL = null;
+				}
 			}
 
 		} else if (responseData.contains("sl:InfoboxReadResponse")) {
@@ -341,6 +364,7 @@ public class ATrustHandler extends MobileBKUHandler {
 		return executePost(client, post);
 	}
 
+
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleTANResponse(java.lang.String)
 	 */
@@ -399,6 +423,40 @@ public class ATrustHandler extends MobileBKUHandler {
 		get.getParams().setContentCharset("utf-8");
 
 		return executeGet(client, get);
+	}
+
+	/**
+	 * Cancel QR process, request FIDO2 authentication
+	 * @return the response
+	 * @throws IOException Error during posting
+	 */
+
+	public String postFIDO2Request() throws IOException {
+		ATrustStatus status = getStatus();
+
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = MobileBKUHelper.getHttpClient(status);
+		GetMethod get = new GetMethod(status.baseURL + "/usefido.aspx?sid=" + status.sessionID);
+		get.getParams().setContentCharset("utf-8");
+
+		return executeGet(client, get);
+	}
+
+	public String postFIDO2Result() throws IOException {
+		ATrustStatus status = getStatus();
+
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = MobileBKUHelper.getHttpClient(status);
+
+		PostMethod post = new PostMethod(status.baseURL + "/signature.aspx?sid=" + status.sessionID);
+		post.getParams().setContentCharset("utf-8");
+		post.addParameter("__VIEWSTATE", status.viewState);
+		post.addParameter("__VIEWSTATEGENERATOR", status.viewStateGenerator);
+		post.addParameter("__EVENTVALIDATION", status.eventValidation);
+		for (Map.Entry<String, String> entry : status.fido2FormOptions.entrySet())
+			post.addParameter(entry.getKey(), entry.getValue());
+
+		return executePost(client, post);
 	}
 
 	/**
