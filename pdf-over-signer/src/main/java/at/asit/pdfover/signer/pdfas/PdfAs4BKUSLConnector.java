@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
+import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.exceptions.PdfAs4SLRequestException;
 import at.gv.egiz.pdfas.common.exceptions.PDFIOException;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
@@ -68,22 +69,29 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 			throws PdfAsException {
 		JAXBElement<?> element = null;
 		try {
-			String slRequestString = SLMarschaller.marshalToString(this.of.createInfoboxReadRequest(request));
+			try {
+				String slRequestString = SLMarschaller.marshalToString(this.of.createInfoboxReadRequest(request));
 
-			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, null);
-			String slResponse = this.connector.handleSLRequest(slRequest);
+				String slResponse = this.connector.handleSLRequest(new PdfAs4SLRequest(slRequestString, null));
 
-			element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
+				element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
+			} catch (SignatureException e) {
+				Throwable c = e;
+				while (c.getCause() != null)
+					c = c.getCause();
+				if (c instanceof IllegalStateException) // TODO: this is a legacy hack, remove it?
+					throw new UserCancelledException(e);
+				else
+					throw e;
+			}
 		} catch (JAXBException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (PdfAs4SLRequestException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (SignatureException e) {
-			Throwable e2 = e;
-			while (e2.getCause() != null)
-				e2 = e2.getCause();
-			/*if (e2 instanceof IllegalStateException) // user cancelled (TODO: this is a pretty big hack honestly)
-				return null;*/
+			throw new PDFIOException("error.pdf.io.03", e);
+		} catch (UserCancelledException e) {
+			// TODO: find out how to communicate this out to PDF-AS?
 			throw new PDFIOException("error.pdf.io.03", e);
 		}
 
@@ -108,22 +116,36 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 			SignParameter parameter) throws PdfAsException {
 		JAXBElement<?> element = null;
 		try {
+			
 			String slRequestString = SLMarschaller.marshalToString(this.of.createCreateCMSSignatureRequest(pack.getRequestType()));
-			//log.trace(slRequestString);
 
 			byte[] signatureData = pack.getSignatureData();
 			if (IConfigurationConstants.SL_REQUEST_TYPE_UPLOAD.equals(parameter.getConfiguration().getValue(IConfigurationConstants.SL_REQUEST_TYPE)))
 				signatureData = PDFUtils.blackOutSignature(signatureData, pack.getByteRange());
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, signatureData);
-			String slResponse = this.connector.handleSLRequest(slRequest);
 
-			element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
+			try {
+				String slResponse = this.connector.handleSLRequest(slRequest);
+
+				element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
+			} catch (SignatureException e) {
+				Throwable c = e;
+				while (c.getCause() != null)
+					c = c.getCause();
+				if (c instanceof IllegalStateException) // TODO: this is a legacy hack, remove it?
+					throw new UserCancelledException(e);
+				else
+					throw e;
+			}
 		} catch (JAXBException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (PdfAs4SLRequestException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (SignatureException e) {
+			throw new PDFIOException("error.pdf.io.03", e);
+		} catch (UserCancelledException e) {
+			// TODO: find out how to communicate this out to PDF-AS?
 			throw new PDFIOException("error.pdf.io.03", e);
 		}
 

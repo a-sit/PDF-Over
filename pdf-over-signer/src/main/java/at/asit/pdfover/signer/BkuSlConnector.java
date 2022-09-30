@@ -27,6 +27,7 @@ public interface BkuSlConnector {
 	 * @param request
 	 * @return SL Response
 	 * @throws SignatureException
+	 * @throws UserCancelledException
 	 */
-	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException;
+	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException, UserCancelledException;
 }
