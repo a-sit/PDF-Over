@@ -61,7 +61,6 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.SLRequest;
-import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
@@ -512,13 +511,13 @@ public class ATrustHandler {
 			// credentials ok! InfoboxReadResponse
 			state.rememberCredentialsIfNecessary();
 			log.debug("Credentials accepted - Response given");
-			getSigningState().signatureResponse = new SLResponse(responseData);
+			getSigningState().signatureResponse = responseData;
 			return;
 		} else if (responseData.contains("undecided.aspx?sid=")) {
 			// skip intermediate page
 			log.debug("Page Undecided");
-			getSigningState().signatureResponse = new SLResponse(responseData);
-			status.errorMessage = "waiting...";
+			getSigningState().signatureResponse = responseData;
+			status.errorMessage = "waiting..."; // TODO: this looks incorrect...?
 			return;
 		}else {
 			// error page
@@ -591,7 +590,7 @@ public class ATrustHandler {
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
-			getSigningState().signatureResponse = new SLResponse(responseData);
+			getSigningState().signatureResponse = responseData;
 		} else {
 			try {
 				String tries = MobileBKUHelper.extractSubstring(
@@ -701,7 +700,7 @@ public class ATrustHandler {
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
-			getSigningState().signatureResponse = new SLResponse(responseData);
+			getSigningState().signatureResponse = responseData;
 			return true;
 		}
 		return false;

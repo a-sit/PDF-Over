@@ -71,7 +71,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 			String slRequestString = SLMarschaller.marshalToString(this.of.createInfoboxReadRequest(request));
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, null);
-			String slResponse = this.connector.handleSLRequest(slRequest).getSLResponse();
+			String slResponse = this.connector.handleSLRequest(slRequest);
 
 			element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
 		} catch (JAXBException e) {
@@ -116,10 +116,9 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 				signatureData = PDFUtils.blackOutSignature(signatureData, pack.getByteRange());
 
 			PdfAs4SLRequest slRequest = new PdfAs4SLRequest(slRequestString, signatureData);
-			String slResponse = this.connector.handleSLRequest(slRequest).getSLResponse();
+			String slResponse = this.connector.handleSLRequest(slRequest);
 
-			element = (JAXBElement<?>) SLMarschaller
-					.unmarshalFromString(slResponse);
+			element = (JAXBElement<?>) SLMarschaller.unmarshalFromString(slResponse);
 		} catch (JAXBException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (PdfAs4SLRequestException e) {

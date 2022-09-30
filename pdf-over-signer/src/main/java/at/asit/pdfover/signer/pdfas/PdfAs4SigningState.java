@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
-import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.lib.api.sign.IPlainSigner;
@@ -40,7 +39,7 @@ public class PdfAs4SigningState {
 	/**
 	 * The Signature Layer response
 	 */
-	public SLResponse signatureResponse;
+	public String signatureResponse;
 
 	/**
 	 * The Sign Parameters

@@ -34,7 +34,6 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
-import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signator.SignatureException;
 
 /**
@@ -65,7 +64,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
 	@Override
-	public SLResponse handleSLRequest(SLRequest request) throws SignatureException {
+	public String handleSLRequest(SLRequest request) throws SignatureException {
 		try {
 			HttpClient client = BKUHelper.getHttpClient();
 			PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
@@ -94,10 +93,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 						method.getResponseBodyAsString());
 			}
 
-			String response = method.getResponseBodyAsString();
-			log.debug("SL Response: " + response);
-			SLResponse slResponse = new SLResponse(response);
-			return slResponse;
+			return method.getResponseBodyAsString();
 		} catch (HttpException e) {
 			log.error("LocalBKUConnector: ", e);
 			throw new SignatureException(e);

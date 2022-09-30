@@ -35,7 +35,6 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.signator.SLResponse;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
@@ -120,8 +119,7 @@ public class LocalBKUState extends State {
 					if ((server != null) && (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")))
 						LocalBKUState.this.useBase64Request = true;
 
-					String response = method.getResponseBodyAsString();
-					this.signingState.signatureResponse = new SLResponse(response);
+					this.signingState.signatureResponse = method.getResponseBodyAsString();
 					this.signingState.useBase64Request = LocalBKUState.this.useBase64Request;
 				}
 			} catch (Exception e) {
