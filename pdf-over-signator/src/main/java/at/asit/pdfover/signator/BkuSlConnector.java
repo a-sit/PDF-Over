@@ -26,5 +26,5 @@ public interface BkuSlConnector {
 	 * @return SL Response
 	 * @throws SignatureException
 	 */
-	public String handleSLRequest(SLRequest request) throws SignatureException;
+	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException;
 }

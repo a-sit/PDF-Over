@@ -24,8 +24,8 @@ import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.BkuSlConnector;
-import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
@@ -51,7 +51,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
 	@Override
-	public String handleSLRequest(SLRequest request) throws SignatureException {
+	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException {
 		PdfAs4SigningState signingState = this.state.getSigningState();
 		signingState.signatureRequest = request;
 

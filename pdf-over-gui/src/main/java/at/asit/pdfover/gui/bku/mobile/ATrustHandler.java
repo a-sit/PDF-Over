@@ -60,7 +60,7 @@ import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
-import at.asit.pdfover.signator.SLRequest;
+import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
@@ -287,7 +287,7 @@ public class ATrustHandler {
 	 * @return the response
 	 * @throws IOException IO error
 	 */
-	public String postSLRequest(String mobileBKUUrl, SLRequest request) throws IOException {
+	public String postSLRequest(String mobileBKUUrl, PdfAs4SLRequest request) throws IOException {
 		MobileBKUHelper.registerTrustedSocketFactory();
 		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
 

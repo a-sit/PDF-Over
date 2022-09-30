@@ -16,23 +16,23 @@
 package at.asit.pdfover.signer.pdfas;
 
 // Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.signator.ByteArrayDocumentSource;
-import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signer.pdfas.exceptions.PdfAs4SLRequestException;
 
 /**
  * PDF - AS Security Layer Request implementation
  */
-public class PdfAs4SLRequest extends SLRequest {
+public class PdfAs4SLRequest {
 
 	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(PdfAs4SLRequest.class);
+	 * The security layer request
+	 */
+	public final String request;
+
+	/**
+	 * The document to be signed
+	 */
+	public final ByteArrayDocumentSource signatureData;
 
 	/**
 	 * Default constructor
@@ -41,7 +41,7 @@ public class PdfAs4SLRequest extends SLRequest {
 	 * @throws PdfAs4SLRequestException
 	 */
 	public PdfAs4SLRequest(String slRequest, byte[] signData) throws PdfAs4SLRequestException {
-		setRequest(slRequest);
-		setSignatureData(signData == null ? null : new ByteArrayDocumentSource(signData));
+		this.request = slRequest;
+		this.signatureData = (signData == null ? null : new ByteArrayDocumentSource(signData));
 	}
 }
