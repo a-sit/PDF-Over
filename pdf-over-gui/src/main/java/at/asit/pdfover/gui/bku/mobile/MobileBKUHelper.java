@@ -295,7 +295,7 @@ public class MobileBKUHelper {
 	 * @param status the mobile BKU status
 	 * @return the HttpClient
 	 */
-	public static HttpClient getHttpClient(MobileBKUStatus status) {
+	public static HttpClient getHttpClient(ATrustStatus status) {
 		return BKUHelper.getHttpClient(true);
 	}
 

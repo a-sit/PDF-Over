@@ -24,7 +24,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 /**
  * A-Trust MobileBKUStatus implementation
  */
-public class ATrustStatus extends MobileBKUStatus {
+public class ATrustStatus {
 	/**
 	 * SLF4J Logger instance
 	 **/
@@ -34,6 +34,16 @@ public class ATrustStatus extends MobileBKUStatus {
 	/** Maximum number of TAN tries */
 	public static final int MOBILE_MAX_TAN_TRIES = 3;
 
+	public String sessionID;
+	public String phoneNumber;
+	public String mobilePassword;
+	public String baseURL;
+	public String refVal;
+	public String errorMessage;
+	public String tan;
+	public String server;
+	public String signatureDataURL;
+	public int tanTries = MOBILE_MAX_TAN_TRIES;
 	public String viewState;
 	public String eventValidation;
 	public String qrCodeURL = null;
@@ -54,18 +64,5 @@ public class ATrustStatus extends MobileBKUStatus {
 	public ATrustStatus(ConfigurationManager provider) {
 		this.phoneNumber = provider.getDefaultMobileNumber();
 		this.mobilePassword = provider.getDefaultMobilePassword();
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUStatus#getMaxTanTries()
-	 */
-	@Override
-	public int getMaxTanTries() {
-		return MOBILE_MAX_TAN_TRIES;
-	}
-
-	@Override
-	public String ensureSessionID(String url) {
-		return url;
 	}
 }

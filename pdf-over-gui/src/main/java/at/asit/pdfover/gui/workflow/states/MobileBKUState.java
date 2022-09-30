@@ -36,8 +36,6 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.MobileBKUFingerprintComposite;
@@ -60,14 +58,14 @@ public class MobileBKUState extends State {
 
 	public Exception threadException = null;
 
-	public final MobileBKUStatus status;
-	public final MobileBKUHandler handler;
+	public final ATrustStatus status;
+	public final ATrustHandler handler;
 
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
 		ConfigurationManager provider = stateMachine.configProvider;
 		this.status = new ATrustStatus(provider);
-		this.handler = new ATrustHandler(this, stateMachine.getMainShell(), false);
+		this.handler = new ATrustHandler(this, stateMachine.getMainShell());
 	}
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
@@ -194,7 +192,7 @@ public class MobileBKUState extends State {
 	 * Make sure phone number and password are set in the MobileBKUStatus
 	 */
 	public void checkCredentials() {
-		final MobileBKUStatus mobileStatus = this.status;
+		final ATrustStatus mobileStatus = this.status;
 		// check if we have everything we need!
 		if (mobileStatus.phoneNumber != null && !mobileStatus.phoneNumber.isEmpty() &&
 		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
@@ -264,7 +262,7 @@ public class MobileBKUState extends State {
 	 * Make sure TAN is set in the MobileBKUStatus
 	 */
 	public void checkTAN() {
-		final MobileBKUStatus mobileStatus = this.status;
+		final ATrustStatus mobileStatus = this.status;
 
 		Display.getDefault().syncExec(() -> {
 			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
@@ -274,7 +272,7 @@ public class MobileBKUState extends State {
 				tan.setRefVal(mobileStatus.refVal);
 				tan.setSignatureData(mobileStatus.signatureDataURL);
 				tan.setErrorMessage(mobileStatus.errorMessage);
-				if (mobileStatus.tanTries < mobileStatus.getMaxTanTries()
+				if (mobileStatus.tanTries < ATrustStatus.MOBILE_MAX_TAN_TRIES
 						&& mobileStatus.tanTries > 0) {
 					// show warning message x tries left!
 					// overrides error message
@@ -537,8 +535,7 @@ public class MobileBKUState extends State {
 		this.signingState = getStateMachine().status.signingState;
 
 		this.signingState.bkuConnector = new MobileBKUConnector(this);
-		log.debug("Setting base64 request to " + this.handler.useBase64Request());
-		this.signingState.useBase64Request = this.handler.useBase64Request();
+		this.signingState.useBase64Request = false;
 
 		if (this.threadException != null) {
 			displayError(this.threadException);

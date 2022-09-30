@@ -18,14 +18,24 @@ package at.asit.pdfover.gui.bku.mobile;
 // Imports
 import java.awt.Desktop;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
@@ -46,25 +56,28 @@ import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
+import at.asit.pdfover.gui.utils.FileUploadSource;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
+import at.asit.pdfover.signator.SLRequest;
 import at.asit.pdfover.signator.SLResponse;
+import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 /**
  * A-Trust mobile BKU handler
  */
-public class ATrustHandler extends MobileBKUHandler {
-	Shell shell;
+public class ATrustHandler {
+	public final MobileBKUState state;
+	public final Shell shell;
 
 	/**
 	 * @param state
 	 * @param shell
-	 * @param useBase64
 	 */
-	public ATrustHandler(MobileBKUState state, Shell shell, boolean useBase64) {
-		super(state);
+	public ATrustHandler(MobileBKUState state, Shell shell) {
+		this.state = state;
 		this.shell = shell;
-		this.useBase64 = useBase64;
 	}
 
 	/**
@@ -76,12 +89,238 @@ public class ATrustHandler extends MobileBKUHandler {
 
 	private static final String ACTIVATION_URL = "https://www.handy-signatur.at/";
 
-	private boolean useBase64 = false;
+	/**
+	 * Get the MobileBKUStatus
+	 * @return the MobileBKUStatus
+	 */
+	protected ATrustStatus getStatus() {
+		return this.state.status;
+	}
+
+	/**
+	 * Get the SigningState
+	 * @return the SigningState
+	 */
+	protected PdfAs4SigningState getSigningState() {
+		return state.getSigningState();
+	}
+
+	/**
+	 * Execute a post to the mobile BKU, following redirects
+	 * @param client the HttpClient
+	 * @param post the PostMethod
+	 * @return the response
+	 * @throws IOException IO error
+	 */
+	protected String executePost(HttpClient client, PostMethod post) throws IOException {
+		if (log.isDebugEnabled()) {
+			String req;
+			if (post.getRequestEntity().getContentLength() < 1024) {
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				post.getRequestEntity().writeRequest(os);
+				req = os.toString();
+				if (req.contains("passwort="))
+					req = req.replaceAll("passwort=[^&]*", "passwort=******");
+				if (req.contains(":pwd="))
+					req = req.replaceAll(":pwd=[^&]*", ":pwd=******");
+				os.close();
+			} else {
+				req = post.getRequestEntity().getContentLength() + " bytes";
+			}
+			log.debug("Posting to " + post.getURI() + ": " + req);
+		}
+		int returnCode = client.executeMethod(post);
+
+		String redirectLocation = null;
+		GetMethod get = null;
+
+
+		String responseData = null;
+
+		String server = null;
+
+		// Follow redirects
+		do {
+			// check return code
+			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
+				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+
+				Header locationHeader = post.getResponseHeader("location");
+				if (locationHeader != null) {
+					redirectLocation = locationHeader.getValue();
+				} else {
+					throw new IOException(
+							"Got HTTP 302 but no location to follow!");
+				}
+			} else if (returnCode == HttpStatus.SC_OK) {
+				if (get != null) {
+					responseData = get.getResponseBodyAsString();
+					Header serverHeader = get.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				} else {
+					responseData = post.getResponseBodyAsString();
+
+					Header serverHeader = post.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				}
+				redirectLocation = null;
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\"";
+				Pattern pat = Pattern.compile(p);
+				Matcher m = pat.matcher(responseData);
+				if (m.find()) {
+					String content = m.group(1);
+					int start = content.indexOf("URL=");
+					if (start != -1) {
+						start += 9;
+						redirectLocation  = content.substring(start, content.length() - 5);
+					}
+				}
+			} else {
+				throw new HttpException(
+						HttpStatus.getStatusText(returnCode));
+			}
+
+			if (redirectLocation != null) {
+				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(post.getURI().toString()));
+				log.debug("Redirected to " + redirectLocation);
+				get = new GetMethod(redirectLocation);
+				get.setFollowRedirects(true);
+				returnCode = client.executeMethod(get);
+			}
+		} while (redirectLocation != null);
+
+		getStatus().server = server;
+		if (server != null)
+			log.debug("Server: " + server);
+
+		return responseData;
+	}
+
+	/**
+	 * Execute a get from the mobile BKU, following redirects
+	 * @param client the HttpClient
+	 * @param get the GetMethod
+	 * @return the response
+	 * @throws IOException IO error
+	 */
+	protected String executeGet(HttpClient client, GetMethod get) throws IOException {
+		log.debug("Getting " + get.getURI());
+
+		int returnCode = client.executeMethod(get);
+
+		String redirectLocation = null;
+
+		GetMethod get2 = null;
+
+		String responseData = null;
+
+		String server = null;
+
+		// Follow redirects
+		do {
+			// check return code
+			if (returnCode == HttpStatus.SC_MOVED_TEMPORARILY ||
+				returnCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+
+				Header locationHeader = get.getResponseHeader("location");
+				if (locationHeader != null) {
+					redirectLocation = locationHeader.getValue();
+				} else {
+					throw new IOException(
+							"Got HTTP 302 but no location to follow!");
+				}
+			} else if (returnCode == HttpStatus.SC_OK) {
+				if (get2 != null) {
+					responseData = get2.getResponseBodyAsString();
+					Header serverHeader = get2.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				} else {
+					responseData = get.getResponseBodyAsString();
+
+					Header serverHeader = get.getResponseHeader(
+							LocalBKUState.BKU_RESPONSE_HEADER_SERVER);
+					if (serverHeader != null)
+						server = serverHeader.getValue();
+				}
+				redirectLocation = null;
+				String p = "<meta [^>]*http-equiv=\"refresh\" [^>]*content=\"([^\"]*)\"";
+				Pattern pat = Pattern.compile(p);
+				Matcher m = pat.matcher(responseData);
+				if (m.find()) {
+					String content = m.group(1);
+					int start = content.indexOf("URL=");
+					if (start != -1) {
+						start += 9;
+						redirectLocation  = content.substring(start, content.length() - 5);
+					}
+				}
+			} else {
+				throw new HttpException(
+						HttpStatus.getStatusText(returnCode));
+			}
+
+			if (redirectLocation != null) {
+				redirectLocation = MobileBKUHelper.getQualifiedURL(redirectLocation, new URL(get.getURI().toString()));
+				log.debug("Redirected to " + redirectLocation);
+				get2 = new GetMethod(redirectLocation);
+				get2.setFollowRedirects(true);
+				returnCode = client.executeMethod(get2);
+			}
+		} while (redirectLocation != null);
+
+		getStatus().server = server;
+		if (server != null)
+			log.debug("Server: " + server);
+
+		return responseData;
+	}
+
+	/**
+	 * Post the SL request
+	 * @param mobileBKUUrl mobile BKU URL
+	 * @param request SLRequest
+	 * @return the response
+	 * @throws IOException IO error
+	 */
+	public String postSLRequest(String mobileBKUUrl, SLRequest request) throws IOException {
+		MobileBKUHelper.registerTrustedSocketFactory();
+		HttpClient client = MobileBKUHelper.getHttpClient(getStatus());
+
+		PostMethod post = new PostMethod(mobileBKUUrl);
+		String sl_request;
+		if (request.getSignatureData() != null) {
+			sl_request = request.getRequest();
+			StringPart xmlpart = new StringPart(
+					"XMLRequest", sl_request, "UTF-8");
+
+			FilePart filepart = new FilePart("fileupload",
+					new FileUploadSource(request.getSignatureData()),
+					"application/pdf", "UTF-8");
+
+			Part[] parts = { xmlpart, filepart };
+
+			post.setRequestEntity(new MultipartRequestEntity(parts, post
+					.getParams()));
+		} else { /* TODO is this ever false? */
+			sl_request = request.getRequest();
+			post.addParameter("XMLRequest", sl_request);
+		}
+		log.trace("SL Request: " + sl_request);
+
+		state.status.baseURL = MobileBKUHelper.stripQueryString(mobileBKUUrl);
+
+		return executePost(client, post);
+	}
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleSLRequestResponse(java.lang.String)
 	 */
-	@Override
 	public void handleSLRequestResponse(String responseData) throws Exception {
 		ATrustStatus status = getStatus();
 
@@ -129,8 +368,7 @@ public class ATrustHandler extends MobileBKUHandler {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#postCredentials()
 	 */
-	@Override
-	public String postCredentials() throws Exception {
+	public String postCredentials() throws IOException {
 		ATrustStatus status = getStatus();
 
 		MobileBKUHelper.registerTrustedSocketFactory();
@@ -151,7 +389,6 @@ public class ATrustHandler extends MobileBKUHandler {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleCredentialsResponse(java.lang.String)
 	 */
-	@Override
 	public void handleCredentialsResponse(final String responseData) throws Exception {
 		ATrustStatus status = getStatus();
 		String viewState = status.viewState;
@@ -326,7 +563,6 @@ public class ATrustHandler extends MobileBKUHandler {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#postTAN()
 	 */
-	@Override
 	public String postTAN() throws IOException {
 		ATrustStatus status = getStatus();
 
@@ -349,7 +585,6 @@ public class ATrustHandler extends MobileBKUHandler {
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleTANResponse(java.lang.String)
 	 */
-	@Override
 	public void handleTANResponse(String responseData) {
 		getStatus().errorMessage = null;
 		if (responseData.contains("sl:CreateXMLSignatureResponse xmlns:sl") ||
@@ -472,24 +707,10 @@ public class ATrustHandler extends MobileBKUHandler {
 		return false;
 	}
 
-	@Override
-	public ATrustStatus getStatus() {
-		return (ATrustStatus) state.status;
-	}
-
-	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.bku.mobile.MobileBKUHandler#useBase64Request()
-	 */
-	@Override
-	public boolean useBase64Request() {
-		return this.useBase64;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
 	public boolean handlePolling() throws ATrustConnectionException {
 
 		ATrustStatus status = getStatus();

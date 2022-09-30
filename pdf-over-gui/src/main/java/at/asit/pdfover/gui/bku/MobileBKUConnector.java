@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signator.BkuSlConnector;
 import at.asit.pdfover.signator.SLRequest;
@@ -58,7 +56,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 		PdfAs4SigningState signingState = this.state.getSigningState();
 		signingState.signatureRequest = request;
 
-		MobileBKUHandler handler = this.state.handler;
+		ATrustHandler handler = this.state.handler;
 
 		do {
 			// Post SL Request
@@ -120,7 +118,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 			}
 
 			do {
-				MobileBKUStatus status = this.state.status;
+				ATrustStatus status = this.state.status;
 				boolean enterTAN = true;
 				String responseData = null;
 				if (status instanceof ATrustStatus) {
