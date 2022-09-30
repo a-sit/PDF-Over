@@ -38,7 +38,7 @@ public class BKUHelper {
 	/* public static HttpClient getHttpClient(boolean useProxy) {
 	 HttpClient client = new HttpClient();
 	 client.getParams().setParameter("http.useragent",
-	 Constants.USER_AGENT_STRING);
+	 Constants.APP_NAME_VERSION);
 
 	  if (useProxy) {
 	 String host = System.getProperty("http.proxyHost");
@@ -70,7 +70,7 @@ public class BKUHelper {
 	public static HttpClient getHttpClient(boolean useProxy) {
 		HttpClient client = new HttpClient();
 		client.getParams().setParameter("http.useragent",
-				Constants.USER_AGENT_STRING);
+				Constants.APP_NAME_VERSION);
 
 
 		client.getParams().setParameter("http.protocol.cookie-policy", CookieSpecs.BROWSER_COMPATIBILITY);
