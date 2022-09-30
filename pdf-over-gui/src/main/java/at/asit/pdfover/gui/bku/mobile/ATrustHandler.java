@@ -512,12 +512,12 @@ public class ATrustHandler {
 			// credentials ok! InfoboxReadResponse
 			state.rememberCredentialsIfNecessary();
 			log.debug("Credentials accepted - Response given");
-			getSigningState().signatureResponse = new SLResponse(responseData, getStatus().server, null, null);
+			getSigningState().signatureResponse = new SLResponse(responseData);
 			return;
 		} else if (responseData.contains("undecided.aspx?sid=")) {
 			// skip intermediate page
 			log.debug("Page Undecided");
-			getSigningState().signatureResponse = new SLResponse(responseData, getStatus().server, null, null);
+			getSigningState().signatureResponse = new SLResponse(responseData);
 			status.errorMessage = "waiting...";
 			return;
 		}else {
@@ -591,7 +591,7 @@ public class ATrustHandler {
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
-			getSigningState().signatureResponse = new SLResponse(responseData, getStatus().server, null, null);
+			getSigningState().signatureResponse = new SLResponse(responseData);
 		} else {
 			try {
 				String tries = MobileBKUHelper.extractSubstring(
@@ -701,7 +701,7 @@ public class ATrustHandler {
 		    responseData.contains("sl:CreateCMSSignatureResponse xmlns:sl")) {
 			// success !!
 
-			getSigningState().signatureResponse = new SLResponse(responseData, getStatus().server, null, null);
+			getSigningState().signatureResponse = new SLResponse(responseData);
 			return true;
 		}
 		return false;

@@ -31,34 +31,6 @@ public class SLResponse {
 	private static Logger log = LoggerFactory.getLogger(SLResponse.class);
 
 	private String response;
-	private String server;
-
-	/**
-	 * Gets the server string
-	 * @return the server
-	 */
-	public String getServer() {
-		return this.server;
-	}
-
-	/**
-	 * Gets the user Agent string
-	 * @return the user Agent
-	 */
-	public String getUserAgent() {
-		return this.userAgent;
-	}
-
-	/**
-	 * Gets the signature Layout value
-	 * @return the signature Layout
-	 */
-	public String getSignaturLayout() {
-		return this.signaturLayout;
-	}
-
-	private String userAgent;
-	private String signaturLayout;
 
 	/**
 	 * Create a new Security Layer response
@@ -67,11 +39,8 @@ public class SLResponse {
 	 * @param userAgent the user Agent
 	 * @param signaturLayout the signature Layout
 	 */
-	public SLResponse(String response, String server, String userAgent, String signaturLayout) {
+	public SLResponse(String response) {
 		this.response = response;
-		this.server = server;
-		this.userAgent = userAgent;
-		this.signaturLayout = signaturLayout;
 	}
 
 	/**

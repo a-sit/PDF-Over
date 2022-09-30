@@ -79,6 +79,11 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		} catch (PdfAs4SLRequestException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (SignatureException e) {
+			Throwable e2 = e;
+			while (e2.getCause() != null)
+				e2 = e2.getCause();
+			/*if (e2 instanceof IllegalStateException) // user cancelled (TODO: this is a pretty big hack honestly)
+				return null;*/
 			throw new PDFIOException("error.pdf.io.03", e);
 		}
 

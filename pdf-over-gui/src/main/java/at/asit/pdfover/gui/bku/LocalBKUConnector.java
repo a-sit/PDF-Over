@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -95,18 +94,9 @@ public class LocalBKUConnector implements BkuSlConnector {
 						method.getResponseBodyAsString());
 			}
 
-			String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
-			if (server == null)
-				server = "";
-			String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
-			if (userAgent == null)
-				userAgent = "";
-			String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
-
 			String response = method.getResponseBodyAsString();
 			log.debug("SL Response: " + response);
-			SLResponse slResponse = new SLResponse(response, server,
-					userAgent, signatureLayout);
+			SLResponse slResponse = new SLResponse(response);
 			return slResponse;
 		} catch (HttpException e) {
 			log.error("LocalBKUConnector: ", e);
@@ -115,17 +105,5 @@ public class LocalBKUConnector implements BkuSlConnector {
 			log.error("LocalBKUConnector: ", e);
 			throw new SignatureException(e);
 		}
-	}
-
-	/**
-	 * Returns the value corresponding to the given header name
-	 * @param method the HTTP method
-	 * @param headerName the header name
-	 * @return the header value (or null if not found)
-	 */
-	private static String getResponseHeader(HttpMethod method, String headerName) {
-		if (method.getResponseHeader(headerName) == null)
-			return null;
-		return method.getResponseHeader(headerName).getValue();
 	}
 }

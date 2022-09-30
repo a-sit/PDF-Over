@@ -112,32 +112,16 @@ public class LocalBKUState extends State {
 				method.addParameter("XMLRequest", sl_request);
 				int returnCode = client.executeMethod(method);
 
-				String userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
-				String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
-
 				if (returnCode != HttpStatus.SC_OK) {
 					this.state.threadException = new HttpException(
 							method.getResponseBodyAsString());
 				} else {
-					server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
-					if (server == null)
-						server = "";
-					else
-						if (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer"))
-							LocalBKUState.this.useBase64Request = true;
-
-					userAgent = getResponseHeader(method, BKU_RESPONSE_HEADER_USERAGENT);
-					if (userAgent == null)
-						userAgent = "";
-					String signatureLayout = getResponseHeader(method, BKU_RESPONSE_HEADER_SIGNATURE_LAYOUT);
-
-					log.debug("Server - UA: " + server + " - " + userAgent);
+					String server = getResponseHeader(method, BKU_RESPONSE_HEADER_SERVER);
+					if ((server != null) && (server.contains("trustDeskbasic") || server.contains("asignSecurityLayer")))
+						LocalBKUState.this.useBase64Request = true;
 
 					String response = method.getResponseBodyAsString();
-					log.debug("SL Response: " + response);
-					SLResponse slResponse = new SLResponse(response, server,
-							userAgent, signatureLayout);
-					this.signingState.signatureResponse = slResponse;
+					this.signingState.signatureResponse = new SLResponse(response);
 					this.signingState.useBase64Request = LocalBKUState.this.useBase64Request;
 				}
 			} catch (Exception e) {
