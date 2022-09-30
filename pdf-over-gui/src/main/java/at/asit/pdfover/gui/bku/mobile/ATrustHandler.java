@@ -509,21 +509,6 @@ public class ATrustHandler extends MobileBKUHandler {
 	}
 
 	/**
-	 * @param responseData
-	 * @return a boolean
-	 */
-	public Boolean handleWaitforAppResponse(String responseData) {
-
-		getStatus().errorMessage = null;
-		if (!responseData.toLowerCase().contains("Bitte starten Sie Ihre Handy-Signatur App!".toLowerCase())/* ||
-		    responseData.toLowerCase().contains("TAN (Handy-Signatur App)".toLowerCase())*/) {
-
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Parse QR code response
 	 * @param responseData
 	 * @return whether a SL response was received

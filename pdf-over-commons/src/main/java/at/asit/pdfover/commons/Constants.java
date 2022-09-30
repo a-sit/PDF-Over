@@ -47,12 +47,13 @@ public class Constants {
 			v = props.getProperty("version");
 		} catch (Exception e) {
 			log.warn("Failed to load project version", e);
+			v = "UNKNOWN-SNAPSHOT";
 		}
 		APP_VERSION = v;
 	}
 
 	/** Application name + version */
-	public static final String APP_NAME_VERSION = (APP_VERSION == null ? APP_NAME : APP_NAME + " v" + APP_VERSION);
+	public static final String APP_NAME_VERSION = (APP_NAME + " v" + APP_VERSION);
 
 	public static final String SIGNATURE_PROFILE = "SIGNATURE_PROFILE";
     public static final String DEFAULT_POSTFIX = "_signed";
@@ -114,7 +115,7 @@ public class Constants {
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
 
 	/** PDF-Over User Agent string */
-	public static final String USER_AGENT_STRING = "PDF-Over " + (APP_VERSION == null ? "4.3" : APP_VERSION);
+	public static final String USER_AGENT_STRING = "PDF-Over " + APP_VERSION;
 
 	/** Current release file */
 	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt";
