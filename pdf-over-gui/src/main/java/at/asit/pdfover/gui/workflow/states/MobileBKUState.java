@@ -208,7 +208,7 @@ public class MobileBKUState extends State {
 					// set possible error message
 					ui.setErrorMessage(mobileStatus.errorMessage);
 					mobileStatus.errorMessage = null;
-				} else if (mobileStatus instanceof ATrustStatus) {
+				} else {
 					ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer"));
 				}
 
@@ -311,8 +311,8 @@ public class MobileBKUState extends State {
 	 * Show QR code
 	 */
 	public void showQR() {
-		final ATrustStatus status = (ATrustStatus) this.status;
-		final ATrustHandler handler = (ATrustHandler) this.handler;
+		final ATrustStatus status = this.status;
+		final ATrustHandler handler = this.handler;
 
 		final Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
@@ -383,7 +383,7 @@ public class MobileBKUState extends State {
 	 */
 	public void showOpenAppMessageWithSMSandCancel() throws SignatureException {
 
-		final ATrustStatus status = (ATrustStatus) this.status;
+		final ATrustStatus status = this.status;
 
 		Display.getDefault().syncExec(() -> {
 			WaitingForAppComposite waitingForAppcomposite = this.getWaitingForAppComposite();
@@ -431,7 +431,7 @@ public class MobileBKUState extends State {
 	}
 
 	private void undecidedPolling(){
-		final ATrustHandler handler = (ATrustHandler) this.handler;
+		final ATrustHandler handler = this.handler;
 
 		Thread pollingThread = new Thread(() -> {
 			try {
@@ -455,8 +455,8 @@ public class MobileBKUState extends State {
 	 *  this information is shown
 	 */
 	public void showFingerPrintInformation() {
-		final ATrustStatus status = (ATrustStatus) this.status;
-		final ATrustHandler handler = (ATrustHandler) this.handler;
+		final ATrustStatus status = this.status;
+		final ATrustHandler handler = this.handler;
 
 		Timer checkDone = new Timer();
 		checkDone.scheduleAtFixedRate(new TimerTask() {
@@ -545,7 +545,7 @@ public class MobileBKUState extends State {
 		getStateMachine().display(
 				this.getWaitingComposite());
 
-		this.setNextState(new at.asit.pdfover.gui.workflow.states.SigningState(getStateMachine()));
+		this.setNextState(new SigningState(getStateMachine()));
 	}
 
 	/*
