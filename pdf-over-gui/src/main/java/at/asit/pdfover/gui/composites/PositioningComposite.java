@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.SignaturePosition;
 
 /**
  * Composite which allows to position the signature on a preview of the document

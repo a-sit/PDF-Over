@@ -13,50 +13,43 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.signator;
+package at.asit.pdfover.signer;
 
 //Imports
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
- * Base class for signature exceptions
+ * A DocumentSource using a byte[] to store the document content
  */
-public class SignatureException extends Exception {
+public class ByteArrayDocumentSource implements DocumentSource {
 
 	/**
-	 *
+	 * Document content
 	 */
-	private static final long serialVersionUID = 711578398780816710L;
-
+	protected byte[] data;
 
 	/**
-	 * Empty constructor
+	 * Constructor with byte[] content
+	 * @param data the document content
 	 */
-	public SignatureException() {
-		super();
+	public ByteArrayDocumentSource(byte[] data) {
+		this.data = data;
 	}
 
-	/**
-	 * Constructor with causing exception
-	 * @param cause the cause
-	 */
-	public SignatureException(Throwable cause) {
-		super(cause);
+	@Override
+	public InputStream getInputStream() {
+		return new ByteArrayInputStream(this.data);
 	}
 
-	/**
-	 * Constructor with message
-	 * @param msg the message
-	 */
-	public SignatureException(String msg) {
-		super(msg);
+	@Override
+	public int getLength() {
+		return this.data.length;
 	}
 
-	/**
-	 * Constructor with message and causing exception
-	 * @param message the message
-	 * @param cause the cause
-	 */
-	public SignatureException(String message, Throwable cause) {
-		super(message, cause);
+	@Override
+	public byte[] getByteArray() {
+		return this.data;
 	}
+
 }

@@ -7,10 +7,10 @@ import javax.activation.DataSource;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
-import at.asit.pdfover.signator.ByteArrayDocumentSource;
-import at.asit.pdfover.signator.SignResult;
-import at.asit.pdfover.signator.SignatureException;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.ByteArrayDocumentSource;
+import at.asit.pdfover.signer.SignResult;
+import at.asit.pdfover.signer.SignatureException;
+import at.asit.pdfover.signer.SignaturePosition;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
 import at.gv.egiz.pdfas.lib.api.ByteArrayDataSource;

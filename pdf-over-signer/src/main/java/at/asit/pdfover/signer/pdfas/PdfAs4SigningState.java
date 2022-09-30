@@ -18,8 +18,8 @@ package at.asit.pdfover.signer.pdfas;
 //Imports
 import java.io.ByteArrayOutputStream;
 
-import at.asit.pdfover.signator.BkuSlConnector;
-import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.BkuSlConnector;
+import at.asit.pdfover.signer.SignatureException;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.lib.api.sign.IPlainSigner;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;

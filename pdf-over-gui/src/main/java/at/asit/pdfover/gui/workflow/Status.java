@@ -21,11 +21,11 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.SignResult;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.SignResult;
+import at.asit.pdfover.signer.SignaturePosition;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 public class Status {

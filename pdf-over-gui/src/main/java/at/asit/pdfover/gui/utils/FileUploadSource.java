@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 import org.apache.commons.httpclient.methods.multipart.PartSource;
 
-import at.asit.pdfover.signator.DocumentSource;
+import at.asit.pdfover.signer.DocumentSource;
 
 /**
  *

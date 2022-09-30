@@ -14,11 +14,6 @@
 	</properties>
     <dependencies>
 		<dependency>
-			<groupId>at.a-sit</groupId>
-			<artifactId>pdf-over-signator</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>at.gv.egiz.pdfas</groupId>
 			<artifactId>pdf-as-lib</artifactId>
 			<version>${pdfover-build.pdfas-version}</version>

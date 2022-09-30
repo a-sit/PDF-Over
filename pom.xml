@@ -83,7 +83,6 @@
 	<modules>
 		<module>pdf-over-commons</module>
 		<module>pdf-over-gui</module>
-		<module>pdf-over-signator</module>
 		<module>pdf-over-signer</module>
 	</modules>
 

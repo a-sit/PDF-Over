@@ -63,7 +63,7 @@ import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.Emblem;
+import at.asit.pdfover.signer.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignaturePlaceholder;
 

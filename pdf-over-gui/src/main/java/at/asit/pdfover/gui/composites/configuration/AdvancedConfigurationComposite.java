@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.commons.Profile;
@@ -53,7 +54,6 @@ import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.BKUs;
 
 /**
  * Composite for advanced configuration

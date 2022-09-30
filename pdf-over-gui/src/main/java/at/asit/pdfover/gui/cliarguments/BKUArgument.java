@@ -16,8 +16,8 @@
 package at.asit.pdfover.gui.cliarguments;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.signator.BKUs;
 
 /**
  * CLI Argument to set the BKU to use

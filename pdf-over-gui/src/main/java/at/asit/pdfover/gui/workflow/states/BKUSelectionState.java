@@ -23,11 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.BKUSelectionComposite;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
-import at.asit.pdfover.signator.BKUs;
 
 /**
  * Decides which BKU to use (preconfigured or let user choose)

@@ -22,8 +22,8 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.signator.BkuSlConnector;
-import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.BkuSlConnector;
+import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.pdfas.exceptions.PdfAs4SLRequestException;
 import at.gv.egiz.pdfas.common.exceptions.PDFIOException;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;

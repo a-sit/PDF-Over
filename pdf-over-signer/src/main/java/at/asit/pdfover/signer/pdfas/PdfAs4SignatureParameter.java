@@ -28,14 +28,14 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.signator.BKUs;
-import at.asit.pdfover.signator.DocumentSource;
-import at.asit.pdfover.signator.Emblem;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.DocumentSource;
+import at.asit.pdfover.signer.Emblem;
+import at.asit.pdfover.signer.SignaturePosition;
 import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
+import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
 

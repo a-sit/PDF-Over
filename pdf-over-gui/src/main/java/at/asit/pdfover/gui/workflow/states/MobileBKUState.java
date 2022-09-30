@@ -23,7 +23,7 @@ import java.util.TimerTask;
 
 // Imports
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
-import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 import org.eclipse.swt.SWT;

@@ -44,7 +44,7 @@ import at.asit.pdfover.gui.utils.Zipper;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.SignaturePosition;
 
 /**
  * Starting state of workflow proccess

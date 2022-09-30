@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.signator;
+package at.asit.pdfover.signer;
 
 // Imports
 import java.io.File;

@@ -28,11 +28,6 @@
 		</dependency>
 		<dependency>
 			<groupId>at.a-sit</groupId>
-			<artifactId>pdf-over-signator</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>at.a-sit</groupId>
 			<artifactId>pdf-over-signer</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

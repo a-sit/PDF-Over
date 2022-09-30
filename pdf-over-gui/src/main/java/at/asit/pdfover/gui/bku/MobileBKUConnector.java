@@ -23,8 +23,8 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
-import at.asit.pdfover.signator.BkuSlConnector;
-import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.BkuSlConnector;
+import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
@@ -48,7 +48,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	}
 
 	/** (non-Javadoc)
-	 * @see at.asit.pdfover.signator.BkuSlConnector#handleSLRequest(java.lang.String)
+	 * @see at.asit.pdfover.signer.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
 	@Override
 	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException {

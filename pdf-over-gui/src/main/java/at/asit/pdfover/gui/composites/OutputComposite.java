@@ -49,7 +49,7 @@ import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.pdfover.signator.DocumentSource;
+import at.asit.pdfover.signer.DocumentSource;
 
 /**
  * GUI component for Output State

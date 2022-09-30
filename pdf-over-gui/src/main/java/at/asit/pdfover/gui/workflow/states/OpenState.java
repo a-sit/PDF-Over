@@ -42,7 +42,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import at.asit.pdfover.signator.SignaturePosition;
+import at.asit.pdfover.signer.SignaturePosition;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
 
 

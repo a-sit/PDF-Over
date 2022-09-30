@@ -293,21 +293,21 @@ public class ATrustHandler {
 
 		PostMethod post = new PostMethod(mobileBKUUrl);
 		String sl_request;
-		if (request.getSignatureData() != null) {
-			sl_request = request.getRequest();
+		if (request.signatureData != null) {
+			sl_request = request.request;
 			StringPart xmlpart = new StringPart(
 					"XMLRequest", sl_request, "UTF-8");
 
 			FilePart filepart = new FilePart("fileupload",
-					new FileUploadSource(request.getSignatureData()),
+					new FileUploadSource(request.signatureData),
 					"application/pdf", "UTF-8");
 
 			Part[] parts = { xmlpart, filepart };
 
 			post.setRequestEntity(new MultipartRequestEntity(parts, post
 					.getParams()));
-		} else { /* TODO is this ever false? */
-			sl_request = request.getRequest();
+		} else {
+			sl_request = request.request;
 			post.addParameter("XMLRequest", sl_request);
 		}
 		log.trace("SL Request: " + sl_request);

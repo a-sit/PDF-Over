@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.utils.FileUploadSource;
-import at.asit.pdfover.signator.BkuSlConnector;
-import at.asit.pdfover.signator.SignatureException;
+import at.asit.pdfover.signer.BkuSlConnector;
+import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 
 /**
@@ -69,15 +69,14 @@ public class LocalBKUConnector implements BkuSlConnector {
 			HttpClient client = BKUHelper.getHttpClient();
 			PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
-			String sl_request = request.getRequest();
-			if (request.getSignatureData() == null) {
+			String sl_request = request.request;
+			if (request.signatureData == null) {
 				method.addParameter("XMLRequest", sl_request);
 			} else {
 				StringPart xmlpart = new StringPart(
 						"XMLRequest", sl_request, "UTF-8");
 
-				FilePart filepart = new FilePart("fileupload",
-						new FileUploadSource(request.getSignatureData()));
+				FilePart filepart = new FilePart("fileupload", new FileUploadSource(request.signatureData));
 
 				Part[] parts = { xmlpart, filepart };
 

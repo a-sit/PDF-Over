@@ -13,34 +13,20 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.signer.pdfas;
+package at.asit.pdfover.signer;
 
-import at.asit.pdfover.signer.ByteArrayDocumentSource;
-import at.asit.pdfover.signer.pdfas.exceptions.PdfAs4SLRequestException;
+import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
+
+// Imports
 
 /**
- * PDF - AS Security Layer Request implementation
+ *
  */
-public class PdfAs4SLRequest {
-
+public interface BkuSlConnector {
 	/**
-	 * The security layer request
+	 * @param request
+	 * @return SL Response
+	 * @throws SignatureException
 	 */
-	public final String request;
-
-	/**
-	 * The document to be signed
-	 */
-	public final ByteArrayDocumentSource signatureData;
-
-	/**
-	 * Default constructor
-	 * @param slRequest
-	 * @param signData
-	 * @throws PdfAs4SLRequestException
-	 */
-	public PdfAs4SLRequest(String slRequest, byte[] signData) throws PdfAs4SLRequestException {
-		this.request = slRequest;
-		this.signatureData = (signData == null ? null : new ByteArrayDocumentSource(signData));
-	}
+	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException;
 }
