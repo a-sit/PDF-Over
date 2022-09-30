@@ -36,7 +36,7 @@ import at.asit.pdfover.gui.workflow.states.State;
  * Workflow holds logical state of signing process and updates the current
  * logical state
  */
-public class StateMachine implements GUIProvider {
+public class StateMachine {
 
 	private static final Logger log = LoggerFactory.getLogger(StateMachine.class);
 

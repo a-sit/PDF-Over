@@ -41,7 +41,6 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.UpdateCheckManager;
 import at.asit.pdfover.gui.utils.VersionComparator;
 import at.asit.pdfover.gui.utils.Zipper;
-import at.asit.pdfover.gui.workflow.GUIProvider;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
@@ -195,7 +194,8 @@ public class PrepareConfigurationState extends State {
 						+ versionFile, ex);
 			} finally {
 				try {
-					versionReader.close();
+					if (versionReader != null)
+						versionReader.close();
 				} catch (IOException ex) {
 					// ignore
 				}
@@ -239,7 +239,6 @@ public class PrepareConfigurationState extends State {
 		try {
 			StateMachine stateMachine = getStateMachine();
 			ConfigurationManager config = stateMachine.configProvider;
-			final GUIProvider gui = stateMachine;
 			File configDir = new File(Constants.CONFIG_DIRECTORY);
 			File configFile = new File(configDir, Constants.DEFAULT_CONFIG_FILENAME);
 			if (!configDir.exists() || !configFile.exists()) {
@@ -260,7 +259,7 @@ public class PrepareConfigurationState extends State {
 				initializeFromArguments(stateMachine.cmdLineArgs, this.configFileHandler);
 			} catch (InitializationException e) {
 				log.error("Error in cmd line arguments: ", e);
-				ErrorDialog error = new ErrorDialog(gui.getMainShell(),
+				ErrorDialog error = new ErrorDialog(stateMachine.getMainShell(),
 						Messages.getString("error.CmdLineArgs") + "\n" +
 						e.getMessage(),
 						BUTTONS.OK);
@@ -279,13 +278,13 @@ public class PrepareConfigurationState extends State {
 				ErrorDialog error;
 
 				if (e.getCause() instanceof FileNotFoundException) {
-					error = new ErrorDialog(gui.getMainShell(),
+					error = new ErrorDialog(stateMachine.getMainShell(),
 						String.format(
 								Messages.getString("error.FileNotExist"),
 								e.getCause().getMessage()),
 						BUTTONS.OK);
 				} else {
-					error = new ErrorDialog(gui.getMainShell(),
+					error = new ErrorDialog(stateMachine.getMainShell(),
 							Messages.getString("error.CmdLineArgs") + "\n" +
 							e.getMessage(),
 							BUTTONS.OK);
@@ -296,7 +295,7 @@ public class PrepareConfigurationState extends State {
 
 			// Check for updates
 			if (config.getUpdateCheck())
-				UpdateCheckManager.checkNow(gui.getMainShell());
+				UpdateCheckManager.checkNow(stateMachine.getMainShell());
 
 			// Create PDF Signer
 			Status status = stateMachine.status;
