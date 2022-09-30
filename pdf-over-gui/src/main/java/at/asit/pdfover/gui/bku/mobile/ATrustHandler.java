@@ -21,8 +21,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -234,12 +232,7 @@ public class ATrustHandler extends MobileBKUHandler {
 			sessionID = MobileBKUHelper.extractSubstring(responseData, "signature.aspx?sid=", "\"");
 			viewState = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__VIEWSTATE", "value");
 			eventValidation = MobileBKUHelper.extractValueFromTagWithParam(responseData, "", "id", "__EVENTVALIDATION", "value");
-			try {
-				refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");
-			} catch (Exception e) {
-				refVal = null;
-				log.debug("No reference value");
-			}
+			refVal = MobileBKUHelper.extractSubstring(responseData, "id='vergleichswert'><b>Vergleichswert:</b>", "</div>");
 			signatureDataURL = status.baseURL + "/ShowSigobj.aspx" +
 					MobileBKUHelper.extractSubstring(responseData, "ShowSigobj.aspx", "'");
 			try {
@@ -265,27 +258,17 @@ public class ATrustHandler extends MobileBKUHandler {
 			}catch (Exception e) {
 				log.debug("No text_tan tag");
 			}
-			
-			status.fido2OptionAvailable = (responseDocument.selectFirst("#FidoButton") != null);
-			{
-				Element fidoBlock = responseDocument.selectFirst("#fidoBlock");
-
-				if (fidoBlock != null) {
-					Map<String,String> options = new HashMap<>();
-					for (Element field : fidoBlock.select("input"))
-					{
-						if (!field.hasAttr("name"))
-							continue;
-						options.put(field.attr("name"), field.attr("value"));
-						if ("credentialOptions".equals(field.attr("id")))
-							status.fido2OptionsKey = field.attr("name");
-						if ("credentialResult".equals(field.attr("id")))
-							status.fido2ResultKey = field.attr("name");
-					}
-					log.info("Fido credential options: {}", options);
-					status.fido2FormOptions = options;
-					status.qrCodeURL = null;
-				}
+			try {
+				String webauthnLink = MobileBKUHelper.extractValueFromTagWithParam(responseData, "a", "id", "FidoButton", "href");
+				log.info("Webauthn link: {}", webauthnLink);
+			} catch (Exception e) {
+				log.info("No webauthnLink");
+			}
+			try {
+				String webauthnData = MobileBKUHelper.extractValueFromTagWithParam(responseData, "input", "id", "credentialOptions", "value");
+				log.info("Fido credential options: {}", webauthnData);
+			} catch (Exception e) {
+				log.info("No webauthnData");
 			}
 
 		} else if (responseData.contains("sl:InfoboxReadResponse")) {
@@ -363,7 +346,6 @@ public class ATrustHandler extends MobileBKUHandler {
 		return executePost(client, post);
 	}
 
-
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.workflow.states.mobilebku.MobileBKUHandler#handleTANResponse(java.lang.String)
 	 */
@@ -422,40 +404,6 @@ public class ATrustHandler extends MobileBKUHandler {
 		get.getParams().setContentCharset("utf-8");
 
 		return executeGet(client, get);
-	}
-
-	/**
-	 * Cancel QR process, request FIDO2 authentication
-	 * @return the response
-	 * @throws IOException Error during posting
-	 */
-
-	public String postFIDO2Request() throws IOException {
-		ATrustStatus status = getStatus();
-
-		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient(status);
-		GetMethod get = new GetMethod(status.baseURL + "/usefido.aspx?sid=" + status.sessionID);
-		get.getParams().setContentCharset("utf-8");
-
-		return executeGet(client, get);
-	}
-
-	public String postFIDO2Result() throws IOException {
-		ATrustStatus status = getStatus();
-
-		MobileBKUHelper.registerTrustedSocketFactory();
-		HttpClient client = MobileBKUHelper.getHttpClient(status);
-
-		PostMethod post = new PostMethod(status.baseURL + "/signature.aspx?sid=" + status.sessionID);
-		post.getParams().setContentCharset("utf-8");
-		post.addParameter("__VIEWSTATE", status.viewState);
-		post.addParameter("__VIEWSTATEGENERATOR", status.viewStateGenerator);
-		post.addParameter("__EVENTVALIDATION", status.eventValidation);
-		for (Map.Entry<String, String> entry : status.fido2FormOptions.entrySet())
-			post.addParameter(entry.getKey(), entry.getValue());
-
-		return executePost(client, post);
 	}
 
 	/**
