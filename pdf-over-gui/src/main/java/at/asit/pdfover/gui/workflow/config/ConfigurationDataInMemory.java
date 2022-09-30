@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHelper;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.signator.BKUs;
@@ -131,15 +130,6 @@ public class ConfigurationDataInMemory {
 
 	/** Holds the PDF/A compatibility setting */
 	public boolean signaturePDFACompat = false;
-
-	/** Holds the mobile BKU URL */
-	public String mobileBKUURL = Constants.DEFAULT_MOBILE_BKU_URL;
-
-	/** Holds the mobile BKU type */
-	public MobileBKUs mobileBKUType = ConfigurationManager.DEFAULT_MOBILE_BKU_TYPE;
-
-	/** Holds the mobile BKU BASE64 setting */
-	protected boolean mobileBKUBase64 = false;
 
 	/** Holds the default signature position */
 	public boolean autoPositionSignature = false;

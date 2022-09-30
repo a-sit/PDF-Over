@@ -36,8 +36,6 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
-import at.asit.pdfover.gui.bku.mobile.IAIKHandler;
-import at.asit.pdfover.gui.bku.mobile.IAIKStatus;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
@@ -68,20 +66,8 @@ public class MobileBKUState extends State {
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
 		ConfigurationManager provider = stateMachine.configProvider;
-		switch(provider.getMobileBKUType()) {
-			case A_TRUST:
-				this.status = new ATrustStatus(provider);
-				this.handler = new ATrustHandler(this, stateMachine.getMainShell(), provider.getMobileBKUBase64());
-				break;
-
-			case IAIK:
-				this.status = new IAIKStatus(provider);
-				this.handler = new IAIKHandler(this, stateMachine.getMainShell());
-				break;
-
-			default:
-				throw new RuntimeException("Unexpected mobileBKUType");
-		}
+		this.status = new ATrustStatus(provider);
+		this.handler = new ATrustHandler(this, stateMachine.getMainShell(), false);
 	}
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
@@ -143,14 +129,6 @@ public class MobileBKUState extends State {
 		}
 
 		return this.mobileBKUFingerprintComposite;
-	}
-
-	/**
-	 * Get the mobile BKU URL
-	 * @return the mobile BKU URL
-	 */
-	public String getURL() {
-		return getStateMachine().configProvider.getMobileBKUURL();
 	}
 
 	/**

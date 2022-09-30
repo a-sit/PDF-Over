@@ -196,27 +196,6 @@ public class ConfigurationManager {
 		if (compat != null)
 			setSignaturePdfACompatPersistent(compat.equalsIgnoreCase(Constants.TRUE));
 
-		String bkuUrl = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_URL);
-		if (bkuUrl != null && !bkuUrl.isEmpty())
-			this.configuration.mobileBKUURL = bkuUrl;
-
-		String bkuType = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_TYPE);
-
-		if (bkuType != null && !bkuType.isEmpty())
-		{
-			try
-			{
-				this.configuration.mobileBKUType = MobileBKUs.valueOf(bkuType.trim().toUpperCase());
-			} catch (IllegalArgumentException e) {
-				log.error("Invalid BKU type: " + bkuType);
-				this.configuration.mobileBKUType = DEFAULT_MOBILE_BKU_TYPE;
-			}
-		}
-
-		String useBase64 = diskConfig.getProperty(Constants.CFG_MOBILE_BKU_BASE64);
-		if (useBase64 != null)
-			this.configuration.mobileBKUBase64 = useBase64.equalsIgnoreCase(Constants.TRUE);
-
 		String proxyPortString = diskConfig.getProperty(Constants.CFG_PROXY_PORT);
 		if (proxyPortString != null && !proxyPortString.trim().isEmpty())
 		{
@@ -367,17 +346,6 @@ public class ConfigurationManager {
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "");
 		else
 			props.setProperty(Constants.CFG_SIGNATURE_POSITION, "auto");
-
-		String mobileBKUURL = getMobileBKUURL();
-		if (!mobileBKUURL.equals(Constants.DEFAULT_MOBILE_BKU_URL))
-			props.setProperty(Constants.CFG_MOBILE_BKU_URL, mobileBKUURL);
-
-		MobileBKUs mobileBKUType = getMobileBKUType();
-		if (mobileBKUType != DEFAULT_MOBILE_BKU_TYPE)
-			props.setProperty(Constants.CFG_MOBILE_BKU_TYPE, mobileBKUType.toString());
-
-		if (getMobileBKUBase64())
-			props.setProperty(Constants.CFG_MOBILE_BKU_BASE64, Constants.TRUE);
 
 		if (Constants.THEME != Constants.Themes.DEFAULT)
 			props.setProperty(Constants.CFG_THEME, Constants.THEME.name());
@@ -726,18 +694,6 @@ public class ConfigurationManager {
 		if (outputFolder == null)
 			outputFolder = STRING_EMPTY;
 		return outputFolder;
-	}
-
-	public String getMobileBKUURL() {
-		return this.configuration.mobileBKUURL;
-	}
-
-	public MobileBKUs getMobileBKUType() {
-		return this.configuration.mobileBKUType;
-	}
-
-	public boolean getMobileBKUBase64() {
-		return this.configuration.mobileBKUBase64;
 	}
 
 	public void setSignatureNotePersistent(String note) {

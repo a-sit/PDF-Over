@@ -107,9 +107,7 @@ public class Constants {
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request";
 
 	/** Default Mobile BKU URL */
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://test1.a-trust.at/mobile/https-security-layer-request/default.aspx";
-	//public static final String DEFAULT_MOBILE_BKU_URL = "https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx";
-	public static final String DEFAULT_MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
+	public static final String MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
 
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
@@ -165,15 +163,6 @@ public class Constants {
 
 	/** The PDF/A-compatibility config parameter */
 	public static final String CFG_SIGNATURE_PDFA_COMPAT = "SIGNATURE_PDFA_COMPAT";
-
-	/** Mobile bku url config parameter */
-	public static final String CFG_MOBILE_BKU_URL = "MOBILE_BKU_URL";
-
-	/** Mobile bku type config parameter */
-	public static final String CFG_MOBILE_BKU_TYPE = "MOBILE_BKU_TYPE";
-
-	/** Mobile bku BASE64 config parameter */
-	public static final String CFG_MOBILE_BKU_BASE64 = "MOBILE_BKU_BASE64";
 
 	/** KeyStore enabled config parameter */
 	public static final String CFG_KEYSTORE_ENABLED = "KEYSTORE_ENABLED";

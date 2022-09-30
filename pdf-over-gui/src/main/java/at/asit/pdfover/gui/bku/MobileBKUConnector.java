@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUHandler;
@@ -72,7 +73,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 		do {
 			// Post SL Request
 			try {
-				String responseData = handler.postSLRequest(this.state.getURL(), request);
+				String responseData = handler.postSLRequest(Constants.MOBILE_BKU_URL, request);
 
 				// Now we have received some data lets check it:
 				log.trace("Response from mobile BKU: " + responseData);
