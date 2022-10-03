@@ -21,9 +21,14 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 // Imports
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.signer.SignatureException;
+import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
 import org.eclipse.swt.SWT;
@@ -34,8 +39,9 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
-import at.asit.pdfover.gui.bku.mobile.ATrustHandler;
-import at.asit.pdfover.gui.bku.mobile.ATrustStatus;
+import at.asit.pdfover.gui.bku.OLDMobileBKUConnector;
+import at.asit.pdfover.gui.bku.OLDmobile.ATrustHandler;
+import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.MobileBKUFingerprintComposite;
@@ -175,53 +181,59 @@ public class MobileBKUState extends State {
 		});
 	}
 
-	public void rememberCredentialsIfNecessary() {
-		if (getStateMachine().configProvider.getRememberMobilePassword())
-		{
-			getStateMachine().configProvider.setDefaultMobileNumberOverlay(status.phoneNumber);
-			getStateMachine().configProvider.setDefaultMobilePasswordOverlay(status.mobilePassword);
-		}
+	public static class UsernameAndPassword {
+		public @CheckForNull String username;
+		public @CheckForNull String password;
+		public UsernameAndPassword() {}
+		public UsernameAndPassword(@Nullable String u, @Nullable String p) { this.username = u; this.password = p; }
+	}
+	public @Nonnull UsernameAndPassword getRememberedCredentials() {
+		UsernameAndPassword r = new UsernameAndPassword();
+		storeRememberedCredentialsTo(r);
+		return r;
+	}
+	public void storeRememberedCredentialsTo(@Nonnull UsernameAndPassword output) {
+		output.username = getStateMachine().configProvider.getDefaultMobileNumber();
+		output.password = getStateMachine().configProvider.getDefaultMobilePassword();
 	}
 
-	public void clearRememberedCredentials() {
+	public void rememberCredentialsIfNecessary(@Nullable String username, @Nullable String password) {
+		if (getStateMachine().configProvider.getRememberMobilePassword())
+		{
+			getStateMachine().configProvider.setDefaultMobileNumberOverlay(username);
+			getStateMachine().configProvider.setDefaultMobilePasswordOverlay(password);
+		}
+	}
+	public void rememberCredentialsIfNecessary(@Nonnull UsernameAndPassword credentials) {
+		rememberCredentialsIfNecessary(credentials.username, credentials.password);
+	}
+
+	public void clearRememberedPassword() {
 		getStateMachine().configProvider.setDefaultMobilePasswordOverlay(null);
 		status.mobilePassword = null;
 	}
 
-	/**
-	 * Make sure phone number and password are set in the MobileBKUStatus
-	 */
-	public void checkCredentials() {
-		final ATrustStatus mobileStatus = this.status;
-		// check if we have everything we need!
-		if (mobileStatus.phoneNumber != null && !mobileStatus.phoneNumber.isEmpty() &&
-		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
-			return;
+	public @Nonnull UsernameAndPassword getCredentialsFromUser(@Nullable String currentUsername, @Nullable String errorMessage) throws UserCancelledException {
+		UsernameAndPassword r = new UsernameAndPassword(currentUsername, null);
+		getCredentialsFromUserTo(r, errorMessage);
+		return r;
+	}
 
+	public void getCredentialsFromUserTo(@Nonnull UsernameAndPassword credentials, @Nullable String errorMessage) throws UserCancelledException {
+		boolean[] cancelState = new boolean[1];
 		Display.getDefault().syncExec(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
 
-			if (!ui.userAck) {
-				// We need number and password => show UI!
-				if (mobileStatus.errorMessage != null
-						&& !mobileStatus.errorMessage.isEmpty()) {
-					// set possible error message
-					ui.setErrorMessage(mobileStatus.errorMessage);
-					mobileStatus.errorMessage = null;
-				} else {
+			if (!ui.userAck) { // We need number and password => show UI!
+				
+				if (errorMessage != null)
+					ui.setErrorMessage(errorMessage);
+				else
 					ui.setErrorMessage(Messages.getString("mobileBKU.aTrustDisclaimer"));
-				}
 
-				if (ui.getMobileNumber() == null
-						|| ui.getMobileNumber().isEmpty()) {
+				if ((ui.getMobileNumber() == null) || ui.getMobileNumber().isEmpty()) {
 					// set possible phone number
-					ui.setMobileNumber(mobileStatus.phoneNumber);
-				}
-
-				if (ui.getMobilePassword() == null
-						|| ui.getMobilePassword().isEmpty()) {
-					// set possible password
-					ui.setMobilePassword(mobileStatus.mobilePassword);
+					ui.setMobileNumber(credentials.username);
 				}
 
 				ui.setRememberPassword(getStateMachine().configProvider.getRememberMobilePassword());
@@ -240,22 +252,45 @@ public class MobileBKUState extends State {
 			if (!(ui.userCancel && ui.isRememberPassword())) /* don't allow "remember" to be enabled via cancel button */
 				getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
 
-			if (ui.userCancel) {
-				ui.userCancel = false;
-				mobileStatus.errorMessage = "cancel";
+			cancelState[0] = ui.userCancel;
+			ui.userCancel = false;
+			if (cancelState[0])
 				return;
-			}
 
 			// user hit ok
 			ui.userAck = false;
 
 			// get number and password from UI
-			mobileStatus.phoneNumber = ui.getMobileNumber();
-			mobileStatus.mobilePassword = ui.getMobilePassword();
+			credentials.username = ui.getMobileNumber();
+			credentials.password = ui.getMobilePassword();
 
 			// show waiting composite
 			getStateMachine().display(this.getWaitingComposite());
 		});
+		if (cancelState[0])
+			throw new UserCancelledException();
+	}
+
+	/**
+	 * Make sure phone number and password are set in the MobileBKUStatus
+	 * OLD METHOD (todo for nuking)
+	 */
+	public void checkCredentials() {
+		final ATrustStatus mobileStatus = this.status;
+		// check if we have everything we need!
+		if (mobileStatus.phoneNumber != null && !mobileStatus.phoneNumber.isEmpty() &&
+		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
+			return;
+
+		try {
+			String errorMessage = mobileStatus.errorMessage;
+			mobileStatus.errorMessage = null;
+			UsernameAndPassword creds = getCredentialsFromUser(mobileStatus.phoneNumber, errorMessage);
+			mobileStatus.phoneNumber = creds.username;
+			mobileStatus.mobilePassword = creds.password;
+		} catch (UserCancelledException e) {
+			mobileStatus.errorMessage = "cancel";
+		}
 	}
 
 	/**
@@ -292,7 +327,7 @@ public class MobileBKUState extends State {
 
 			if (tan.isUserCancel()) {
 				tan.setUserCancel(false);
-				clearRememberedCredentials();
+				clearRememberedPassword();
 				mobileStatus.errorMessage = "cancel";
 				return;
 			}
@@ -360,7 +395,7 @@ public class MobileBKUState extends State {
 
 			if (qr.isUserCancel()) {
 				qr.setUserCancel(false);
-				clearRememberedCredentials();
+				clearRememberedPassword();
 				status.errorMessage = "cancel";
 				return;
 			}
@@ -497,7 +532,7 @@ public class MobileBKUState extends State {
 
 			if (fingerprintComposite.isUserCancel()) {
 				fingerprintComposite.setUserCancel(false);
-				clearRememberedCredentials();
+				clearRememberedPassword();
 				status.errorMessage = "cancel";
 				return;
 			}
@@ -534,7 +569,7 @@ public class MobileBKUState extends State {
 	public void run() {
 		this.signingState = getStateMachine().status.signingState;
 
-		this.signingState.bkuConnector = new MobileBKUConnector(this);
+		this.signingState.bkuConnector = new OLDMobileBKUConnector(this);
 		this.signingState.useBase64Request = false;
 
 		if (this.threadException != null) {

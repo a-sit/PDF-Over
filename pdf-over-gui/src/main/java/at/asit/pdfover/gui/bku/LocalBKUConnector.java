@@ -69,7 +69,7 @@ public class LocalBKUConnector implements BkuSlConnector {
 			HttpClient client = BKUHelper.getHttpClient();
 			PostMethod method = new PostMethod(Constants.LOCAL_BKU_URL);
 
-			String sl_request = request.request;
+			String sl_request = request.xmlRequest;
 			if (request.signatureData == null) {
 				method.addParameter("XMLRequest", sl_request);
 			} else {

@@ -26,7 +26,7 @@ public class PdfAs4SLRequest {
 	/**
 	 * The security layer request
 	 */
-	public final String request;
+	public final String xmlRequest;
 
 	/**
 	 * The document to be signed
@@ -40,7 +40,7 @@ public class PdfAs4SLRequest {
 	 * @throws PdfAs4SLRequestException
 	 */
 	public PdfAs4SLRequest(String slRequest, byte[] signData) throws PdfAs4SLRequestException {
-		this.request = slRequest;
+		this.xmlRequest = slRequest;
 		this.signatureData = (signData == null ? null : new ByteArrayDocumentSource(signData));
 	}
 }

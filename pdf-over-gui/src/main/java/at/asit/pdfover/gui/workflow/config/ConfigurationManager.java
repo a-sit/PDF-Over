@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.bku.mobile.MobileBKUs;
+import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;

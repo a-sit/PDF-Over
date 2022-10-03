@@ -17,8 +17,11 @@ package at.asit.pdfover.commons;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 import java.util.Locale;
 import java.util.Properties;
+
+import javax.annotation.Nonnull;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -107,7 +110,7 @@ public class Constants {
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request";
 
 	/** Default Mobile BKU URL */
-	public static final String MOBILE_BKU_URL = "https://www.a-trust.at/mobile/https-security-layer-request/default.aspx";
+	public static final URI MOBILE_BKU_URL = URI.create("https://www.a-trust.at/mobile/https-security-layer-request/default.aspx");
 
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
@@ -369,5 +372,11 @@ public class Constants {
 	public static final String LABEL_SIGN_PASS = "signaturpasswort";
 
 	public static final String LABEL_BTN_IDF = "Button_Identification";
+
+	/**
+	 * for static analysis; mark a given value as definitely, contractually not null
+	 * (try to avoid its use in performance-critical code, grr java)
+	 */
+	public static <T> @Nonnull T ISNOTNULL(T value) { assert(value != null); return value; }
 
 }
