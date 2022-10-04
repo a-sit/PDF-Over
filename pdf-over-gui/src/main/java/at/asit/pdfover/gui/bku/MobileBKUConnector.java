@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -25,9 +26,12 @@ import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.NoHttpResponseException;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.ProtocolException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -172,13 +176,19 @@ public class MobileBKUConnector implements BkuSlConnector {
         return post;
     }
 
-    private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html) {
+    private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html, @Nonnull String submitButtonId) {
         HttpPost post = new HttpPost(html.formTarget);
         
         var builder = MultipartEntityBuilder.create();
         for (var pair : html.iterateFormOptions())
             builder.addTextBody(pair.getKey(), pair.getValue());
-        
+        if (html.submitButtons.containsKey(submitButtonId)) {
+            var submitInfo = html.submitButtons.get(submitButtonId);
+            builder.addTextBody(submitInfo.name, submitInfo.value);
+        } else {
+            log.warn("Attempted to use submit button #{} which does not exist. Omitting.", submitButtonId);
+        }
+
         post.setEntity(builder.build());
         return post;
     }
@@ -189,11 +199,65 @@ public class MobileBKUConnector implements BkuSlConnector {
      */
     private @Nonnull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@Nonnull ATrustParser.HTMLResult html) throws UserCancelledException {
         if (html.usernamePasswordBlock != null) {
-            while ((this.credentials.username == null) || (this.credentials.password == null)) {
-                this.state.getCredentialsFromUserTo(this.credentials, null);
+            try {
+                while ((this.credentials.username == null) || (this.credentials.password == null)) {
+                    this.state.getCredentialsFromUserTo(this.credentials, null); // TODO error message
+                }
+                html.usernamePasswordBlock.setUsernamePassword(this.credentials.username, this.credentials.password);
+                return buildFormSubmit(html, "Button_Identification");
+            } catch (UserCancelledException e) {
+                return buildFormSubmit(html, "Button_Cancel");
             }
-            html.usernamePasswordBlock.setUsernamePassword(this.credentials.username, this.credentials.password);
-            return buildFormSubmit(html);
+        }
+        if (html.qrCodeBlock != null) {
+            try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().build()) {
+                final HttpGet request = new HttpGet(html.qrCodeBlock.qrCodeURI);
+                boolean[] done = new boolean[1];
+                done[0] = false;
+                Thread longPollThread = new Thread(() -> {
+                    log.debug("longPollThread hello");
+                    while (!done[0]) {
+                        try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(html.qrCodeBlock.pollingURI))) {
+                            JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
+                            if (jsonResponse.getBoolean("Fin"))
+                                state.signalQRScanned();
+                            else if (jsonResponse.getBoolean("Wait"))
+                            {
+                                log.debug("longPollThread continue...");
+                                continue;
+                            }
+                            else if (jsonResponse.getBoolean("Error"))
+                                state.signalQRScanned(); /* will trigger reload and find error; this is the same thing a-trust does */
+                            else {
+                                log.warn("Unknown long poll response:\n{}", jsonResponse.toString(2));
+                                break;
+                            }
+                        } catch (NoHttpResponseException e) {
+                            continue;
+                        } catch (IOException | ParseException | IllegalStateException e) {
+                            log.warn("QR code long polling exception", e);
+                            /* sleep so we don't hammer a-trust too hard in case this goes wrong */
+                            try { Thread.sleep(5000); } catch (InterruptedException e2) {}
+                        }
+                    }
+                    log.debug("longPollThread goodbye");
+                });
+                try {
+                    longPollThread.start();
+                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, null);
+                    switch (result) {
+                        case UPDATE: return new HttpGet(html.htmlDocument.baseUri());
+                        case TO_FIDO2: throw new IllegalStateException();
+                        case TO_SMS: throw new IllegalStateException();
+                    }
+                } finally {
+                    done[0] = true;
+                    request.abort();
+                    try { longPollThread.join(1000); } catch (InterruptedException e) {}
+                }
+            } catch (IOException e) {
+                log.warn("closing CloseableHttpClient threw exception", e);
+            }
         }
         throw new IllegalStateException("No top-level block is set? Something has gone terribly wrong.");
     }

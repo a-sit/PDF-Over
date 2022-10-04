@@ -15,6 +15,9 @@
  */
 package at.asit.pdfover.gui.bku;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
+import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
@@ -51,7 +55,7 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 	 * @see at.asit.pdfover.signer.BkuSlConnector#handleSLRequest(java.lang.String)
 	 */
 	@Override
-	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException {
+	public String handleSLRequest(PdfAs4SLRequest request) throws SignatureException, UserCancelledException {
 		PdfAs4SigningState signingState = this.state.getSigningState();
 		signingState.signatureRequest = request;
 
@@ -120,7 +124,11 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 				boolean enterTAN = true;
 				String responseData = null;
 				if (status.qrCodeURL != null) {
-					this.state.showQR();
+					try {
+						this.state.OLDshowQR();
+					} catch (IOException | URISyntaxException e) {
+						throw new SignatureException(e);
+					}
 					if ("cancel".equals(this.state.status.errorMessage))
 						throw new SignatureException(new IllegalStateException());
 					if (status.qrCodeURL == null) {

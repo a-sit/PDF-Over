@@ -33,9 +33,13 @@ public class ATrustParser {
             log.debug("Tested for element {} -- not found.", selector);
             throw new ComponentParseFailed();
         }
-        protected @Nonnull String getAttributeEnsureNotNull(@Nonnull String selector, @Nonnull String attribute) throws ComponentParseFailed {
+        protected @Nonnull org.jsoup.nodes.Element getElementEnsureNotNull(@Nonnull String selector) throws ComponentParseFailed {
             var elm = this.htmlDocument.selectFirst(selector);
             if (elm == null) { log.warn("Expected element not found in response: {}", selector); throw new ComponentParseFailed(); }
+            return elm;
+        }
+        protected @Nonnull String getAttributeEnsureNotNull(@Nonnull String selector, @Nonnull String attribute) throws ComponentParseFailed {
+            var elm = getElementEnsureNotNull(selector);
             if (!elm.hasAttr(attribute)) { log.warn("Element {} is missing expected attribute '{}'.", selector, attribute); throw new ComponentParseFailed(); }
             return ISNOTNULL(elm.attr(attribute));
         }
@@ -55,6 +59,7 @@ public class ATrustParser {
     public static class UsernamePasswordBlock extends TopLevelFormBlock {
         private @Nonnull String usernameKey;
         private @Nonnull String passwordKey;
+        public @CheckForNull String errorMessage;
 
         public void setUsernamePassword(String username, String password) {
             formOptions.put(usernameKey, username); formOptions.put(passwordKey, password);
@@ -65,22 +70,38 @@ public class ATrustParser {
             abortIfElementMissing("#handynummer");
             this.usernameKey = getAttributeEnsureNotNull("#handynummer", "name");
             this.passwordKey = getAttributeEnsureNotNull("#signaturpasswort", "name");
-            
-            /* remove unused submit buttons */
-            // TODO: we should generalize this somehow for input type="submit"
-            // TODO: do we maybe want to use the actual cancel button?
-            formOptions.remove(getAttributeEnsureNotNull("#Button_Cancel", "name"));
-            formOptions.remove(getAttributeEnsureNotNull("#Button_localBku", "name"));
         }
     }
 
     public static class QRCodeBlock extends TopLevelFormBlock {
+        public @Nonnull String referenceValue;
         public @Nonnull URI qrCodeURI;
+        public @Nonnull URI pollingURI;
+        public @Nullable String errorMessage;
 
         private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#qrimage");
+            
+            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
             this.qrCodeURI = getURIAttributeEnsureNotNull("#qrimage", "abs:src");
+
+            var pollingScriptElm = getElementEnsureNotNull("#jsLongPoll script");
+            String pollingScript = pollingScriptElm.data();
+            int startIdx = pollingScript.indexOf("qrpoll(\"");
+            if (startIdx < 0) { log.warn("Failed to find 'qrpoll(\"' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+            startIdx += 8;
+
+            int endIdx = pollingScript.indexOf("\");", startIdx);
+            if (endIdx < 0) { log.warn("Failed to find qrpoll terminator '\");' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+
+            String pollingUriString = pollingScript.substring(startIdx, endIdx);
+            try {
+                this.pollingURI = ISNOTNULL(new URI(pollingScriptElm.baseUri()).resolve(pollingUriString));
+            } catch (URISyntaxException e) {
+                log.warn("URI '{}' could not be parsed", pollingUriString);
+                throw new ComponentParseFailed();
+            }
         }
     }
 
@@ -103,6 +124,16 @@ public class ATrustParser {
         public final @Nonnull org.jsoup.nodes.Document htmlDocument;
         public final @Nonnull URI formTarget;
         public final @Nonnull Map<String, String> formOptions = new HashMap<>();
+
+        public static class NameValuePair {
+            public final @Nonnull String name;
+            public final @Nonnull String value;
+            public NameValuePair(@Nonnull String n, @Nonnull String v) { name = n; value = v; }
+        }
+        /**
+         * map: id -> (name, value)
+         */
+        public final @Nonnull Map<String, @CheckForNull NameValuePair> submitButtons = new HashMap<>();
 
         public @Nonnull Iterable<Map.Entry<String, String>> iterateFormOptions() { return ISNOTNULL(formOptions.entrySet()); }
 
@@ -182,9 +213,17 @@ public class ATrustParser {
 
             for (var input : mainForm.select("input")) {
                 String name = input.attr("name");
-                if (name.isEmpty())
-                    continue;
-                this.formOptions.put(name, input.attr("value"));
+
+                /* special handling for submit inputs, they only get sent if they are "clicked" */
+                if ("submit".equals(input.attr("type"))) {
+                    if (name.isEmpty())
+                        this.submitButtons.put(input.attr("id"), null);
+                    else
+                        this.submitButtons.put(input.attr("id"), new NameValuePair(name, ISNOTNULL(input.attr("value"))));
+                } else {
+                    if (!name.isEmpty())
+                        this.formOptions.put(name, input.attr("value"));
+                }
             }
 
             this.fido2Link = getHrefIfExists("#FidoButton");

@@ -30,6 +30,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signer.SignatureException;
+import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 
 /**
@@ -108,11 +109,14 @@ public class SigningState extends State {
 				if (cause instanceof ConnectException)
 					message += ": " + cause.getMessage();
 				if (cause instanceof IllegalStateException) {
-					// Dummy exception - don't display error, go back to BKU Selection
-					this.setNextState(new BKUSelectionState(getStateMachine()));
-					return;
+					// TODO legacy hack
+					this.threadException = new UserCancelledException();
 				}
-
+			}
+			if (this.threadException instanceof UserCancelledException) {
+				// don't display error, go back to BKU Selection
+				this.setNextState(new BKUSelectionState(getStateMachine()));
+				return;
 			}
 
 			// if we have gotten to this point, this is an actual exception

@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.awt.Desktop;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
 
@@ -222,13 +223,13 @@ public class MobileBKUQRComposite extends StateComposite {
 	 * @param qrcode
 	 *            the qrcode to set
 	 */
-	public void setQR(InputStream qrcode) {
+	public void setQR(byte[] qrcode) {
 		if (qrcode == null) {
 			setErrorMessage(Messages.getString("error.FailedToLoadQRCode"));
 			return;
 		}
 		try {
-			this.currentQRImage = new ImageData(qrcode);
+			this.currentQRImage = new ImageData(new ByteArrayInputStream(qrcode));
 		} catch (SWTException e) {
 			log.warn("Failed to load QR code", e);
 			setErrorMessage(Messages.getString("error.FailedToLoadQRCode"));

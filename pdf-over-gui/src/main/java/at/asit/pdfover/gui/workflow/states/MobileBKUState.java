@@ -15,8 +15,11 @@
  */
 package at.asit.pdfover.gui.workflow.states;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +34,12 @@ import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -220,8 +229,7 @@ public class MobileBKUState extends State {
 	}
 
 	public void getCredentialsFromUserTo(@Nonnull UsernameAndPassword credentials, @Nullable String errorMessage) throws UserCancelledException {
-		boolean[] cancelState = new boolean[1];
-		Display.getDefault().syncExec(() -> {
+		Display.getDefault().syncCall(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
 
 			if (!ui.userAck) { // We need number and password => show UI!
@@ -252,10 +260,10 @@ public class MobileBKUState extends State {
 			if (!(ui.userCancel && ui.isRememberPassword())) /* don't allow "remember" to be enabled via cancel button */
 				getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
 
-			cancelState[0] = ui.userCancel;
-			ui.userCancel = false;
-			if (cancelState[0])
-				return;
+			if (ui.userCancel) {
+				ui.userCancel = false;
+				throw new UserCancelledException();
+			}
 
 			// user hit ok
 			ui.userAck = false;
@@ -266,9 +274,9 @@ public class MobileBKUState extends State {
 
 			// show waiting composite
 			getStateMachine().display(this.getWaitingComposite());
+
+			return true; /* dummy return for lambda type deduction */
 		});
-		if (cancelState[0])
-			throw new UserCancelledException();
 	}
 
 	/**
@@ -342,10 +350,89 @@ public class MobileBKUState extends State {
 		});
 	}
 
+	public enum QRResult {
+		/* the user has pressed the FIDO2 button */
+		TO_FIDO2,
+		/* the user has pressed the SMS button */
+		TO_SMS,
+		/* signalQRScanned has been called; this indicates that we should refresh the page */
+		UPDATE
+	};
+
+	/**
+	 * start showing the QR code at the indicated URI
+	 * this method will block until the QR code state completes
+	 * (due to QR code being scanned, or the user pressing a button)
+	 * <p>
+	 * it is the responsibility of the caller to perform AJAX long polling
+	 * @return
+	 */
+	public QRResult showQRCode(@Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable String errorMessage) throws UserCancelledException {
+		byte[] qrCode;
+		try (final CloseableHttpClient httpClient = HttpClients.createDefault()) {
+			try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(qrCodeURI))) {
+				qrCode = EntityUtils.toByteArray(response.getEntity());
+			}
+		} catch (IOException e) {
+			log.warn("Failed to load QR code.");
+			qrCode = null;
+		}
+		
+		final byte[] qrCodeCopy = qrCode; /* because java is silly */
+		return Display.getDefault().syncCall(() -> {
+			MobileBKUQRComposite qr = getMobileBKUQRComposite();
+			qr.setUserCancel(false);
+			qr.setUserSMS(false);
+			qr.setDone(false);
+
+			qr.setRefVal(status.refVal);
+			qr.setSignatureData(status.signatureDataURL);
+			qr.setErrorMessage(status.errorMessage);
+			qr.setQR(qrCodeCopy);
+			getStateMachine().display(qr);
+
+			Display display = getStateMachine().getMainShell().getDisplay();
+			while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+
+			getStateMachine().display(this.getWaitingComposite());
+
+			if (qr.isUserCancel()) {
+				clearRememberedPassword();
+				throw new UserCancelledException();
+			}
+
+			if (qr.isUserSMS())
+				return QRResult.TO_SMS;
+
+			if (qr.isDone())
+				return QRResult.UPDATE;
+			
+			throw new RuntimeException("unexpected display wake");
+		});
+	}
+
+	/**
+	 * indicate that the long polling operation completed
+	 * (any ongoing showQRCode call will then return)
+	 */
+	public void signalQRScanned() {
+		getMobileBKUQRComposite().setDone(true);
+		Display display = getStateMachine().
+				getMainShell().getDisplay();
+		display.wake();
+	}
+
 	/**
 	 * Show QR code
+	 * @throws URISyntaxException
+	 * @throws UserCancelledException
+	 * @throws IOException
 	 */
-	public void showQR() {
+	public void OLDshowQR() throws IOException, UserCancelledException, URISyntaxException {
 		final ATrustStatus status = this.status;
 		final ATrustHandler handler = this.handler;
 
@@ -358,11 +445,8 @@ public class MobileBKUState extends State {
 					String resp = handler.getSignaturePage();
 					if (handler.handleQRResponse(resp)) {
 						log.debug("Signature page response: " + resp);
-						getMobileBKUQRComposite().setDone(true);
-						Display display = getStateMachine().
-								getMainShell().getDisplay();
-						display.wake();
 						checkDone.cancel();
+						signalQRScanned();
 					}
 					Display.getDefault().wake();
 				} catch (Exception e) {
@@ -371,46 +455,10 @@ public class MobileBKUState extends State {
 			}
 		}, 0, 5000);
 
-		Display.getDefault().syncExec(() -> {
-			MobileBKUQRComposite qr = getMobileBKUQRComposite();
-
-			qr.setRefVal(status.refVal);
-			qr.setSignatureData(status.signatureDataURL);
-			qr.setErrorMessage(status.errorMessage);
-			InputStream qrcode = handler.getQRCode();
-			if (qrcode == null) {
-				this.threadException = new Exception(Messages.getString("error.FailedToLoadQRCode"));
-			}
-			qr.setQR(qrcode);
-			getStateMachine().display(qr);
-
-			Display display = getStateMachine().getMainShell().getDisplay();
-			while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
-
-			checkDone.cancel();
-
-			if (qr.isUserCancel()) {
-				qr.setUserCancel(false);
-				clearRememberedPassword();
-				status.errorMessage = "cancel";
-				return;
-			}
-
-			if (qr.isUserSMS()) {
-				qr.setUserSMS(false);
-				status.qrCodeURL = null;
-			}
-
-			if (qr.isDone())
-				qr.setDone(false);
-
-			// show waiting composite
-			getStateMachine().display(this.getWaitingComposite());
-		});
+		QRResult result = showQRCode(status.refVal, new URI(status.baseURL).resolve(status.qrCodeURL), status.errorMessage);
+		checkDone.cancel();
+		if (result == QRResult.TO_SMS)
+			status.qrCodeURL = null;
 	}
 
 	/**
@@ -569,7 +617,7 @@ public class MobileBKUState extends State {
 	public void run() {
 		this.signingState = getStateMachine().status.signingState;
 
-		this.signingState.bkuConnector = new OLDMobileBKUConnector(this);
+		this.signingState.bkuConnector = new MobileBKUConnector(this);
 		this.signingState.useBase64Request = false;
 
 		if (this.threadException != null) {

@@ -11,8 +11,10 @@ import at.asit.pdfover.signer.ByteArrayDocumentSource;
 import at.asit.pdfover.signer.SignResult;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.SignaturePosition;
+import at.asit.pdfover.signer.UserCancelledException;
 import at.gv.egiz.pdfas.common.exceptions.PDFASError;
 import at.gv.egiz.pdfas.common.exceptions.PdfAsException;
+import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
 import at.gv.egiz.pdfas.lib.api.ByteArrayDataSource;
 import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.IConfigurationConstants;
@@ -104,7 +106,7 @@ public class PdfAs4Signer {
 		}
 	}
 
-	public static SignResult sign(PdfAs4SigningState state) throws SignatureException {
+	public static SignResult sign(PdfAs4SigningState state) throws SignatureException, UserCancelledException {
 		try {
 			if (state == null) {
 				throw new SignatureException("Incorrect SigningState!");
@@ -154,6 +156,16 @@ public class PdfAs4Signer {
 				return result;
 			}
 		} catch (PdfAsException | PDFASError e) {
+			{ // TODO hack around pdf-as not handling this error code properly cf. #124
+				Throwable rootCause = e;
+				while (rootCause.getCause() != null)
+					rootCause = rootCause.getCause();
+				try { /* error code 6001 is user cancellation */
+					if (((SLPdfAsException)rootCause).getMessage().startsWith("6001 :"))
+						throw new UserCancelledException();
+				} catch (ClassCastException e2) { /* fall through to wrapped throw */}
+			}
+			
 			throw new SignatureException(e);
 		}
 	}
