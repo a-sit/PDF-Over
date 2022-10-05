@@ -57,6 +57,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
 import at.asit.pdfover.gui.utils.FileUploadSource;
+import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.LocalBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
@@ -399,25 +400,13 @@ public class ATrustHandler {
 
 		status.errorMessage = null;
 
-		final Document responseDocument = Jsoup.parse(responseData);
-
 		if (responseData.contains("ExpiresInfo.aspx?sid=")) {
 			// Certificate expiration interstitial - skip
 			if (!expiryNoticeDisplayed) {
 				Display.getDefault().syncExec(()->  {
 					Dialog d = new Dialog(ATrustHandler.this.shell, Messages.getString("common.info"), Messages.getString("mobileBKU.certExpiresSoon"), BUTTONS.YES_NO, ICON.WARNING);
 					if (d.open() == SWT.YES) {
-						log.debug("Trying to open " + ACTIVATION_URL);
-						if (Desktop.isDesktopSupported()) {
-							try {
-								Desktop.getDesktop().browse(new URI(ACTIVATION_URL));
-								return;
-							} catch (Exception e) {
-								log.debug("Error opening URL", e);
-							}
-						}
-						log.info("SWT Desktop is not supported on this platform");
-						Program.launch(ACTIVATION_URL);
+						SWTUtils.openURL(ACTIVATION_URL);
 					}
 				});
 				expiryNoticeDisplayed = true;

@@ -22,6 +22,7 @@
     </triggeringPolicy>
   </appender>
   <logger name="at.asit.pdfover" level="INFO"/>
+  <logger name="at.asit.pdfover.gui.bku" level="TRACE"/>
   <root level="WARN">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="LOGFILE"/>

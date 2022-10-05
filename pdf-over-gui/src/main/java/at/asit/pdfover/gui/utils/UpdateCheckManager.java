@@ -70,18 +70,7 @@ public final class UpdateCheckManager {
                             BUTTONS.OK_CANCEL, ICON.INFORMATION);
 
                     if (info.open() == SWT.OK)
-                    {
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse(new URI(Constants.UPDATE_URL));
-                            } catch (Exception e) {
-                                log.error("Error opening update location ", e);
-                            }
-                        } else {
-                            log.info("SWT Desktop is not supported on this platform");
-                            Program.launch(Constants.UPDATE_URL);
-                        }
-                    }
+                        SWTUtils.openURL(Constants.UPDATE_URL);
                 });
             }
 

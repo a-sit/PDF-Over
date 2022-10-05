@@ -74,6 +74,11 @@
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>at.a-sit</groupId>
+			<artifactId>webauthn-java</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

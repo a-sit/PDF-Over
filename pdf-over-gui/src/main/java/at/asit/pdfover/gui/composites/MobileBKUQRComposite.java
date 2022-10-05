@@ -20,6 +20,9 @@ import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -51,52 +54,16 @@ import at.asit.pdfover.gui.workflow.states.State;
 public class MobileBKUQRComposite extends StateComposite {
 
 	/**
-	 *
-	 */
-	private final class SMSSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public SMSSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(!MobileBKUQRComposite.this.btn_sms.getEnabled()) {
-				return;
-			}
-
-			MobileBKUQRComposite.this.setUserSMS(true);
-			MobileBKUQRComposite.this.btn_sms.setEnabled(false);
-		}
-	}
-
-	/**
-	 *
-	 */
-	private final class CancelSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public CancelSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MobileBKUQRComposite.this.setUserCancel(true);
-		}
-	}
-
-	/**
 	 * SLF4J Logger instance
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MobileBKUQRComposite.class);
 
 	private Label lblQR;
 
-	private boolean userCancel = false;
-	private boolean userSMS = false;
-	private boolean done = false;
+	private boolean userCancelClicked = false;
+	private boolean userSMSClicked = false;
+	private boolean userFIDO2Clicked = false;
+	private boolean pollingDone = false;
 
 	private Label lblRefVal;
 
@@ -104,52 +71,24 @@ public class MobileBKUQRComposite extends StateComposite {
 
 	private ImageData currentQRImage;
 
-	private String signatureData;
-
-	/**
-	 * @return the signatureData
-	 */
-	public String getSignatureData() {
-		return this.signatureData;
-	}
-
-	/**
-	 * @param signatureData
-	 *            the signatureData to set
-	 */
-	public void setSignatureData(String signatureData) {
-		this.signatureData = signatureData;
-	}
+	private URI signatureDataURI;
 
 	private Label lblError;
 	private Label lblRefValLabel;
 	private Label lblQRLabel;
 
+	private Button btn_fido2;
 	private Button btn_sms;
 	private Button btn_cancel;
 
 	private Link lnk_sig_data;
 
-	/**
-	 * @return the userCancel
-	 */
-	public boolean isUserCancel() {
-		return this.userCancel;
-	}
-
-	/**
-	 * @return the userSMS
-	 */
-	public boolean isUserSMS() {
-		return this.userSMS;
-	}
-
-	/**
-	 * @return the done
-	 */
-	public boolean isDone() {
-		return this.done;
-	}
+	public void signalPollingDone() { this.pollingDone = true; getDisplay().wake(); }
+	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.userFIDO2Clicked || this.pollingDone); }
+	public boolean wasCancelClicked() { return this.userCancelClicked; }
+	public boolean wasSMSClicked() { return this.userSMSClicked; }
+	public boolean wasFIDO2Clicked() { return this.userFIDO2Clicked; }
+	public void reset() { this.userCancelClicked = this.userSMSClicked = this.userFIDO2Clicked = this.pollingDone = false; }
 
 	/**
 	 * Set an error message
@@ -163,48 +102,10 @@ public class MobileBKUQRComposite extends StateComposite {
 					Messages.getString("error.Title") + ": " + errorMessage);
 	}
 
-	/**
-	 * @param userCancel
-	 *            the userCancel to set
-	 */
-	public void setUserCancel(boolean userCancel) {
-		this.userCancel = userCancel;
-	}
-
-	/**
-	 * @param userSMS
-	 *            the userSMS to set
-	 */
-	public void setUserSMS(boolean userSMS) {
-		this.userSMS = userSMS;
-	}
-
-	/**
-	 * @param done
-	 *            the done to set
-	 */
-	public void setDone(boolean done) {
-		this.done = done;
-	}
-
-	/**
-	 * @return the reference value
-	 */
-	public String getRefVal() {
-		return this.refVal;
-	}
-
-	/**
-	 * @param refVal
-	 *            the reference value to set
-	 */
+	public String getRefVal() { return this.refVal; }
 	public void setRefVal(String refVal) {
-		if (this.refVal != null) {
-			this.refVal = refVal.trim();
-			this.lblRefVal.setText(this.refVal);
-		} else {
-			this.lblRefVal.setText("");
-		}
+		this.refVal = (refVal != null) ? refVal.trim() : null;
+		this.lblRefVal.setText(Objects.requireNonNullElse(this.refVal, ""));
 	}
 
 	private void updateQRImage() {
@@ -238,34 +139,17 @@ public class MobileBKUQRComposite extends StateComposite {
 		updateQRImage();
 	}
 
-	/**
-	 * Selection Listener for open button
-	 */
-	private final class ShowSignatureDataListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public ShowSignatureDataListener() {
-		}
+	public void setSMSEnabled(boolean state) {
+		this.btn_sms.setEnabled(state);
+	}
 
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				String signatureData = MobileBKUQRComposite.this
-						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) {
-					log.debug("Trying to open " + signatureData);
-					if (Desktop.isDesktopSupported()) {
-						Desktop.getDesktop().browse(new URI(signatureData));
-					} else {
-						log.info("SWT Desktop is not supported on this platform");
-						Program.launch(signatureData);
-					}
-				}
-			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex);
-			}
-		}
+	public void setFIDO2Enabled(boolean state) {
+		this.btn_fido2.setEnabled(state);
+	}
+
+	public void setSignatureDataURI(@Nullable URI uri) {
+		this.signatureDataURI = uri;
+		this.lnk_sig_data.setEnabled(uri != null);
 	}
 
 	/**
@@ -317,16 +201,20 @@ public class MobileBKUQRComposite extends StateComposite {
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20);
-		this.lnk_sig_data.setEnabled(true);
-		this.lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
+		SWTUtils.addSelectionListener(lnk_sig_data, (e) -> { SWTUtils.openURL(this.signatureDataURI); });
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -5);
-		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
+		SWTUtils.addSelectionListener(btn_cancel, (e) -> { this.userCancelClicked = true; });
 
 		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -5);
-		this.btn_sms.addSelectionListener(new SMSSelectionListener());
+		SWTUtils.addSelectionListener(btn_sms, (e) -> { this.userSMSClicked = true; });
+
+		this.btn_fido2 = new Button(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(btn_fido2).right(btn_sms, -20).bottom(100, -5);
+		SWTUtils.addSelectionListener(btn_fido2, (e) -> {this.userFIDO2Clicked = true; });
+
 
 		SWTUtils.anchor(lblQR).left(50, 10).right(100, -20).top(lblRefVal, 10).bottom(btn_sms, -10);
 
@@ -364,5 +252,6 @@ public class MobileBKUQRComposite extends StateComposite {
 		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
+		SWTUtils.setLocalizedText(btn_fido2, "tanEnter.FIDO2");
 	}
 }

@@ -5,12 +5,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.text.html.HTML.Tag;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -20,6 +24,7 @@ import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.classic.RequestFailedException;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -46,6 +51,10 @@ import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
+import at.asit.webauthn.PublicKeyCredentialRequestOptions;
+import at.asit.webauthn.WebAuthN;
+import at.asit.webauthn.exceptions.WebAuthNOperationFailed;
+import at.asit.webauthn.exceptions.WebAuthNUserCancelled;
 
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
@@ -80,6 +89,9 @@ public class MobileBKUConnector implements BkuSlConnector {
         }
     }
 
+    /* some anti-infinite-loop safeguards so we don't murder the atrust servers by accident */
+    private int loopHTTPRequestCounter = 0;
+    private Long lastHTTPRequestTime = null;
     /**
      * Sends the specified request, following redirects (including meta-tag redirects) recursively
      * @return The JSOUP document retrieved
@@ -89,6 +101,16 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @throws InterruptedException
      */
     private @Nonnull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException {
+        long now = System.nanoTime();
+        if ((lastHTTPRequestTime != null) && ((now - lastHTTPRequestTime) < 2e+9)) { /* less than 2s since last request */
+            ++loopHTTPRequestCounter;
+            if (loopHTTPRequestCounter > 250)
+                throw new IOException("Infinite loop protection triggered");
+        } else {
+            loopHTTPRequestCounter = 0;
+        }
+        lastHTTPRequestTime = now;
+
         log.debug("Sending request to '{}'...", request.getUri().toString());
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             int httpStatus = response.getCode();
@@ -176,17 +198,30 @@ public class MobileBKUConnector implements BkuSlConnector {
         return post;
     }
 
-    private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html, @Nonnull String submitButtonId) {
+    private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html, @CheckForNull String submitButton) {
         HttpPost post = new HttpPost(html.formTarget);
         
         var builder = MultipartEntityBuilder.create();
         for (var pair : html.iterateFormOptions())
             builder.addTextBody(pair.getKey(), pair.getValue());
-        if (html.submitButtons.containsKey(submitButtonId)) {
-            var submitInfo = html.submitButtons.get(submitButtonId);
-            builder.addTextBody(submitInfo.name, submitInfo.value);
-        } else {
-            log.warn("Attempted to use submit button #{} which does not exist. Omitting.", submitButtonId);
+
+        if (submitButton != null) {
+            var submitButtonElm = html.htmlDocument.selectFirst(submitButton);
+            if (submitButtonElm != null) {
+                if ("input".equalsIgnoreCase(submitButtonElm.tagName())) {
+                    if ("submit".equalsIgnoreCase(submitButtonElm.attr("type"))) {
+                        String name = submitButtonElm.attr("name");
+                        if (!name.isEmpty())
+                            builder.addTextBody(name, submitButtonElm.attr("value"));
+                    } else {
+                        log.warn("Skipped specified submitButton {}, type is {} (not submit)", submitButton, submitButtonElm.attr("type"));
+                    }
+                } else {
+                    log.warn("Skipped specified submitButton {}, tag name is {} (not input)", submitButton, submitButtonElm.tagName());
+                }
+            } else {
+                log.warn("Skipped specified submitButton {}, element not found", submitButton);
+            }
         }
 
         post.setEntity(builder.build());
@@ -198,26 +233,41 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @return the next request to make, or null if the current response should be returned
      */
     private @Nonnull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@Nonnull ATrustParser.HTMLResult html) throws UserCancelledException {
+        if (html.errorBlock != null) {
+            try {
+                this.credentials.password = null;
+                this.state.clearRememberedPassword();
+
+                if (html.errorBlock.isRecoverable)
+                    this.state.showRecoverableError(html.errorBlock.errorText);
+                else
+                    this.state.showUnrecoverableError(html.errorBlock.errorText);
+                return buildFormSubmit(html, "#Button_Back");
+            } catch (UserCancelledException e) {
+                return buildFormSubmit(html, "#Button_Cancel");
+            }
+        }
         if (html.usernamePasswordBlock != null) {
             try {
                 while ((this.credentials.username == null) || (this.credentials.password == null)) {
                     this.state.getCredentialsFromUserTo(this.credentials, null); // TODO error message
                 }
                 html.usernamePasswordBlock.setUsernamePassword(this.credentials.username, this.credentials.password);
-                return buildFormSubmit(html, "Button_Identification");
+                return buildFormSubmit(html, "#Button_Identification");
             } catch (UserCancelledException e) {
-                return buildFormSubmit(html, "Button_Cancel");
+                return buildFormSubmit(html, "#Button_Cancel");
             }
         }
         if (html.qrCodeBlock != null) {
             try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().build()) {
-                final HttpGet request = new HttpGet(html.qrCodeBlock.qrCodeURI);
+                final HttpGet request = new HttpGet(html.qrCodeBlock.pollingURI);
                 boolean[] done = new boolean[1];
                 done[0] = false;
                 Thread longPollThread = new Thread(() -> {
+                    long timeout = System.nanoTime() + (300l * 1000l * 1000l * 1000l); /* a-trust timeout is 5 minutes */
                     log.debug("longPollThread hello");
                     while (!done[0]) {
-                        try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(html.qrCodeBlock.pollingURI))) {
+                        try (final CloseableHttpResponse response = httpClient.execute(request)) {
                             JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
                             if (jsonResponse.getBoolean("Fin"))
                                 state.signalQRScanned();
@@ -233,8 +283,11 @@ public class MobileBKUConnector implements BkuSlConnector {
                                 break;
                             }
                         } catch (NoHttpResponseException e) {
-                            continue;
+                            if (timeout <= System.nanoTime())
+                                state.signalQRScanned(); /* reload to find the timeout error */
+                            continue; /* httpclient timeout */
                         } catch (IOException | ParseException | IllegalStateException e) {
+                            if (done[0]) break;
                             log.warn("QR code long polling exception", e);
                             /* sleep so we don't hammer a-trust too hard in case this goes wrong */
                             try { Thread.sleep(5000); } catch (InterruptedException e2) {}
@@ -244,19 +297,54 @@ public class MobileBKUConnector implements BkuSlConnector {
                 });
                 try {
                     longPollThread.start();
-                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, null);
+                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, null);
                     switch (result) {
-                        case UPDATE: return new HttpGet(html.htmlDocument.baseUri());
-                        case TO_FIDO2: throw new IllegalStateException();
-                        case TO_SMS: throw new IllegalStateException();
+                        case UPDATE: break;
+                        case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;
+                        case TO_SMS: if (html.smsTanLink != null) return new HttpGet(html.smsTanLink); break;
                     }
+                    return new HttpGet(html.htmlDocument.baseUri());
                 } finally {
                     done[0] = true;
                     request.abort();
                     try { longPollThread.join(1000); } catch (InterruptedException e) {}
                 }
             } catch (IOException e) {
-                log.warn("closing CloseableHttpClient threw exception", e);
+                log.warn("closing long-polling HttpClient threw exception", e);
+            }
+        }
+        if (html.fido2Block != null) {
+            // TODO composite for this
+            if  (WebAuthN.isAvailable()) {
+                try {
+                    var fido2Assertion = PublicKeyCredentialRequestOptions.FromJSONString(html.fido2Block.fidoOptions).get("https://service.a-trust.at");
+
+                    Base64.Encoder base64 = Base64.getEncoder();
+                    
+                    JSONObject aTrustAssertion = new JSONObject();
+                    aTrustAssertion.put("id", fido2Assertion.id);
+                    aTrustAssertion.put("rawId", base64.encodeToString(fido2Assertion.rawId));
+                    aTrustAssertion.put("type", fido2Assertion.type);
+                    aTrustAssertion.put("extensions", new JSONObject()); // TODO fix extensions in library
+
+                    JSONObject aTrustAssertionResponse = new JSONObject();
+                    aTrustAssertion.put("response", aTrustAssertionResponse);
+                    aTrustAssertionResponse.put("authenticatorData", base64.encodeToString(fido2Assertion.response.authenticatorData));
+                    aTrustAssertionResponse.put("clientDataJson", base64.encodeToString(fido2Assertion.response.clientDataJSON));
+                    aTrustAssertionResponse.put("signature", base64.encodeToString(fido2Assertion.response.signature));
+                    if (fido2Assertion.response.userHandle != null)
+                        aTrustAssertionResponse.put("userHandle", base64.encodeToString(fido2Assertion.response.userHandle));
+                    else
+                        aTrustAssertionResponse.put("userHandle", JSONObject.NULL);
+                    
+                    html.fido2Block.setFIDOResult(aTrustAssertion.toString());
+                    return buildFormSubmit(html, "#FidoContinue");
+                } catch (WebAuthNUserCancelled e) {
+                    log.debug("WebAuthN authentication cancelled by user");
+                    throw new UserCancelledException();
+                } catch (WebAuthNOperationFailed e) {
+                    log.warn("WebAuthN authentication failed", e);
+                }
             }
         }
         throw new IllegalStateException("No top-level block is set? Something has gone terribly wrong.");

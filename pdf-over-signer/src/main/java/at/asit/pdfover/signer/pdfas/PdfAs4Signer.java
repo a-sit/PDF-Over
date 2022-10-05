@@ -160,8 +160,9 @@ public class PdfAs4Signer {
 				Throwable rootCause = e;
 				while (rootCause.getCause() != null)
 					rootCause = rootCause.getCause();
-				try { /* error code 6001 is user cancellation */
-					if (((SLPdfAsException)rootCause).getMessage().startsWith("6001 :"))
+				try { /* error code 60xx is user cancellation */
+					int errorCode = Integer.parseInt(((SLPdfAsException)rootCause).getMessage().split(":",2)[0].trim());
+					if ((6000 <= errorCode) && (errorCode <= 6099))
 						throw new UserCancelledException();
 				} catch (ClassCastException e2) { /* fall through to wrapped throw */}
 			}

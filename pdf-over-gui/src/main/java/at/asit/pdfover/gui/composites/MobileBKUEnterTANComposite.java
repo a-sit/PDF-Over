@@ -41,6 +41,8 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.internal.Nullable;
+
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTUtils;
@@ -55,11 +57,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 *
 	 */
 	private final class OkSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public OkSelectionListener() {
-		}
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -127,24 +124,20 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	String refVal;
 
-	String signatureData;
-
-	/**
-	 * @return the signatureData
-	 */
-	public String getSignatureData() {
-		return this.signatureData;
-	}
+	URI signatureDataURI;
 
 	/**
 	 * @param signatureData
 	 *            the signatureData to set
 	 */
-	public void setSignatureData(String signatureData) {
-		this.signatureData = signatureData;
+	public void setSignatureDataURI(@Nullable URI uri) {
+		this.signatureDataURI = uri;
+		this.lnk_sig_data.setEnabled(uri != null);
 	}
 
 	String tan;
+
+	private Link lnk_sig_data;
 
 	private Label lblTries;
 	private Label lblRefValLabel;
@@ -268,36 +261,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	}
 
 	/**
-	 * Selection Listener for open button
-	 */
-	private final class ShowSignatureDataListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public ShowSignatureDataListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				String signatureData = MobileBKUEnterTANComposite.this
-						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) {
-					log.debug("Trying to open " + signatureData);
-					if (Desktop.isDesktopSupported()) {
-						Desktop.getDesktop().browse(new URI(signatureData));
-					} else {
-						log.info("SWT Desktop is not supported on this platform");
-						Program.launch(signatureData);
-					}
-				}
-			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex);
-			}
-		}
-	}
-
-	/**
 	 * Create the composite.
 	 *
 	 * @param parent
@@ -368,27 +331,22 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 				if (text.length() > 3
 						&& MobileBKUEnterTANComposite.this.getRefVal()
 								.startsWith(text.trim())) {
-					MobileBKUEnterTANComposite.this.setMessage(Messages
-							.getString("error.EnteredReferenceValue"));
+					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue"));
 				}
 			}
 		});
 
-		Link lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
+		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(lnk_sig_data).right(100,-20).top(0,20);
 		lnk_sig_data.setEnabled(true);
-		lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
-		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
-		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
+		SWTUtils.addSelectionListener(lnk_sig_data, (e) -> { SWTUtils.openURL(this.signatureDataURI); });
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20);
-		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 		this.btn_ok.addSelectionListener(new OkSelectionListener());
 		
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20);
-		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
 
 		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
@@ -417,7 +375,11 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	@Override
 	public void reloadResources() {
+		SWTUtils.setLocalizedText(lnk_sig_data, "mobileBKU.show");
+		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		SWTUtils.setLocalizedText(lblTan, "tanEnter.TAN");
+		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
+		SWTUtils.setLocalizedText(btn_ok, "common.Ok");
 	}
 }

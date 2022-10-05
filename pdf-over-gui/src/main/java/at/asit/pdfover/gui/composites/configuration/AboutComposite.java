@@ -47,6 +47,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkAbout = new Link(this, SWT.WRAP);
 		SWTUtils.anchor(lnkAbout).top(0,5).right(100,-5).left(0,5);
 		SWTUtils.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.addSelectionListener(lnkAbout, (e) -> { SWTUtils.openURL(Messages.getString("config.LicenseURL")); });
 
 		this.lblDataProtection = new Label(this, SWT.WRAP);
 		SWTUtils.anchor(lblDataProtection).top(lnkAbout, 15).left(0,5).right(100,-5);
@@ -56,6 +57,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkDataProtection = new Link(this, SWT.WRAP);
 		SWTUtils.anchor(lnkDataProtection).top(lblDataProtection,10).left(0,5).right(100,-5);
 		SWTUtils.setFontHeight(lnkDataProtection, Constants.TEXT_SIZE_NORMAL);
+		SWTUtils.addSelectionListener(lnkDataProtection, (e) -> { SWTUtils.openURL(Messages.getString("config.DataProtectionURL")); });
 
 		this.lnkUpdateCheckStatus = new Link(this, SWT.NONE);
 		SWTUtils.anchor(lnkUpdateCheckStatus).bottom(100, -5).left(0,5);
@@ -84,56 +86,13 @@ public class AboutComposite extends ConfigurationCompositeBase {
 
 		SWTUtils.reanchor(lnkDataProtection).bottom(btnUpdateCheck,-5);
 
-		this.lnkAbout.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					URI url = new URI(Messages.getString("config.LicenseURL"));
-					log.debug("Trying to open " + url.toString());
-					if (Desktop.isDesktopSupported()) {
-						Desktop.getDesktop().browse(url);
-					} else {
-						log.info("AWT Desktop is not supported on this platform");
-						Program.launch(url.toString());
-					}
-				} catch (IOException ex) {
-					log.error("AboutComposite: ", ex);
-				} catch (URISyntaxException ex) {
-					log.error("AboutComposite: ", ex);
-				}
-			}
-		});
-
-		this.lnkDataProtection.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					URI url = new URI(Messages.getString("config.DataProtectionURL"));
-					log.debug("Trying to open " + url.toString());
-					if (Desktop.isDesktopSupported()) {
-						Desktop.getDesktop().browse(url);
-					} else {
-						log.info("AWT Desktop is not supported on this platform");
-						Program.launch(url.toString());
-					}
-				} catch (IOException ex) {
-					log.error("AboutComposite: ", ex);
-				} catch (URISyntaxException ex) {
-					log.error("AboutComposite: ", ex);
-				}
-			}
-		});
-
-		this.btnOpenLogDirectory.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try
-				{
-					if (Desktop.isDesktopSupported())
-						Desktop.getDesktop().open(new File(Constants.CONFIG_DIRECTORY + File.separator + "logs"));
-				} catch (Exception ex) {
-					log.warn("Failed to open log directory: ", ex);
-				}
+		SWTUtils.addSelectionListener(btnOpenLogDirectory, (e) -> {
+			try
+			{
+				if (Desktop.isDesktopSupported())
+					Desktop.getDesktop().open(new File(Constants.CONFIG_DIRECTORY + File.separator + "logs"));
+			} catch (Exception ex) {
+				log.warn("Failed to open log directory: ", ex);
 			}
 		});
 

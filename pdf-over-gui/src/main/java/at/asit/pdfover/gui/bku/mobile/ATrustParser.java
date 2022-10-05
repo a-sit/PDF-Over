@@ -24,8 +24,8 @@ public class ATrustParser {
     private static class ComponentParseFailed extends Exception {}
 
     private static class TopLevelFormBlock {
-        protected @Nonnull org.jsoup.nodes.Document htmlDocument;
-        protected @Nonnull Map<String, String> formOptions;
+        protected final @Nonnull org.jsoup.nodes.Document htmlDocument;
+        protected final @Nonnull Map<String, String> formOptions;
         protected TopLevelFormBlock(@Nonnull org.jsoup.nodes.Document d, @Nonnull Map<String,String> fO) { this.htmlDocument = d; this.formOptions = fO; }
 
         protected void abortIfElementMissing(@Nonnull String selector) throws ComponentParseFailed {
@@ -56,30 +56,49 @@ public class ATrustParser {
         }
     }
 
+    public static class ErrorBlock extends TopLevelFormBlock {
+        public final boolean isRecoverable;
+        public final @Nonnull String errorText;
+
+        private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            if (!formTarget.getPath().contains("/error.aspx"))
+                throw new ComponentParseFailed();
+            
+            this.isRecoverable = (htmlDocument.selectFirst("#Button_Back") != null);
+
+            String errorText = getElementEnsureNotNull("#Label1").ownText();
+            if (errorText.startsWith("Fehler:"))
+                errorText = errorText.substring(7);
+            this.errorText = ISNOTNULL(errorText.trim());
+        }
+    }
+
     public static class UsernamePasswordBlock extends TopLevelFormBlock {
-        private @Nonnull String usernameKey;
-        private @Nonnull String passwordKey;
-        public @CheckForNull String errorMessage;
+        private final @Nonnull String usernameKey;
+        private final @Nonnull String passwordKey;
+        public final @CheckForNull String errorMessage;
 
         public void setUsernamePassword(String username, String password) {
             formOptions.put(usernameKey, username); formOptions.put(passwordKey, password);
         }
 
-        private UsernamePasswordBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private UsernamePasswordBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#handynummer");
             this.usernameKey = getAttributeEnsureNotNull("#handynummer", "name");
             this.passwordKey = getAttributeEnsureNotNull("#signaturpasswort", "name");
+            this.errorMessage = null;
         }
     }
 
     public static class QRCodeBlock extends TopLevelFormBlock {
-        public @Nonnull String referenceValue;
-        public @Nonnull URI qrCodeURI;
-        public @Nonnull URI pollingURI;
-        public @Nullable String errorMessage;
+        public final @Nonnull String referenceValue;
+        public final @Nonnull URI qrCodeURI;
+        public final @Nonnull URI pollingURI;
+        public final @Nullable String errorMessage;
 
-        private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#qrimage");
             
@@ -102,17 +121,18 @@ public class ATrustParser {
                 log.warn("URI '{}' could not be parsed", pollingUriString);
                 throw new ComponentParseFailed();
             }
+
+            this.errorMessage = null;
         }
     }
 
     public static class Fido2Block extends TopLevelFormBlock {
-        private @Nonnull String fidoOptions;
-        private @Nonnull String credentialResultKey;
+        public final @Nonnull String fidoOptions;
+        private final @Nonnull String credentialResultKey;
 
-        public @Nonnull String getFIDOOptions() { return fidoOptions; }
         public void setFIDOResult(String result) { formOptions.put(credentialResultKey, result); }
 
-        private Fido2Block(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private Fido2Block(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#fidoBlock");
             this.fidoOptions = getAttributeEnsureNotNull("#credentialOptions", "value");
@@ -125,22 +145,15 @@ public class ATrustParser {
         public final @Nonnull URI formTarget;
         public final @Nonnull Map<String, String> formOptions = new HashMap<>();
 
-        public static class NameValuePair {
-            public final @Nonnull String name;
-            public final @Nonnull String value;
-            public NameValuePair(@Nonnull String n, @Nonnull String v) { name = n; value = v; }
-        }
-        /**
-         * map: id -> (name, value)
-         */
-        public final @Nonnull Map<String, @CheckForNull NameValuePair> submitButtons = new HashMap<>();
-
         public @Nonnull Iterable<Map.Entry<String, String>> iterateFormOptions() { return ISNOTNULL(formOptions.entrySet()); }
 
-        /* optional mode switch links (any number may or may not be null) */
+        /* optional links (any number may or may not be null) */
+        public final @CheckForNull URI signatureDataLink;
+        public final @CheckForNull URI smsTanLink;
         public final @CheckForNull URI fido2Link;
 
         /* top-level blocks (exactly one is not null) */
+        public final @CheckForNull ErrorBlock errorBlock;
         public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
         public final @CheckForNull QRCodeBlock qrCodeBlock;
         public final @CheckForNull Fido2Block fido2Block;
@@ -148,6 +161,7 @@ public class ATrustParser {
         private void validate() {
             Set<String> populated = new HashSet<>();
 
+            if (errorBlock != null) populated.add("errorBlock");
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
             if (qrCodeBlock != null) populated.add("qrCodeBlock");
             if (fido2Block != null) populated.add("fido2Block");
@@ -178,7 +192,7 @@ public class ATrustParser {
          */
         private <T extends TopLevelFormBlock> @Nullable T TryParseMainBlock(Class<T> clazz) {
             try {
-                return clazz.getDeclaredConstructor(org.jsoup.nodes.Document.class, Map.class).newInstance(this.htmlDocument, this.formOptions);
+                return clazz.getDeclaredConstructor(org.jsoup.nodes.Document.class, URI.class, Map.class).newInstance(this.htmlDocument, this.formTarget, this.formOptions);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
                 log.error("Internal parser error; check your method signatures?", e);
                 return null;
@@ -194,6 +208,7 @@ public class ATrustParser {
         }
 
         private HTMLResult(@Nonnull org.jsoup.nodes.Document htmlDocument) {
+            log.trace("Now parsing:\n{}", htmlDocument.toString());
             this.htmlDocument = htmlDocument;
 
             var forms = htmlDocument.getElementsByTag("form");
@@ -214,20 +229,21 @@ public class ATrustParser {
             for (var input : mainForm.select("input")) {
                 String name = input.attr("name");
 
-                /* special handling for submit inputs, they only get sent if they are "clicked" */
-                if ("submit".equals(input.attr("type"))) {
-                    if (name.isEmpty())
-                        this.submitButtons.put(input.attr("id"), null);
-                    else
-                        this.submitButtons.put(input.attr("id"), new NameValuePair(name, ISNOTNULL(input.attr("value"))));
-                } else {
-                    if (!name.isEmpty())
-                        this.formOptions.put(name, input.attr("value"));
-                }
+                if (name.isEmpty())
+                    continue;
+
+                /* submit inputs omitted here, they only get sent if they are "clicked", cf. MobileBKUConnector::buildFormSubmit */
+                if ("submit".equalsIgnoreCase(input.attr("type")))
+                    continue;
+                    
+                this.formOptions.put(name, input.attr("value"));
             }
 
+            this.signatureDataLink = getHrefIfExists("#LinkList a[href*=\"ShowSigobj.aspx\"]"); /* grr, they didn't give it an ID */
+            this.smsTanLink = getHrefIfExists("#SmsButton");
             this.fido2Link = getHrefIfExists("#FidoButton");
 
+            this.errorBlock = TryParseMainBlock(ErrorBlock.class);
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
             this.qrCodeBlock = TryParseMainBlock(QRCodeBlock.class);
             this.fido2Block = TryParseMainBlock(Fido2Block.class);

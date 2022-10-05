@@ -1,8 +1,13 @@
 package at.asit.pdfover.gui.utils;
 
+import java.awt.Desktop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -14,6 +19,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -169,6 +175,28 @@ public final class SWTUtils {
 			log.error("Attempted to pass object of type {} to onSelectionChanged; object does not have an accessible addSelectionListener method", swtObj.getClass().getSimpleName(), e);
 		} catch (InvocationTargetException e) {
 			log.error("Failed to add selection listener on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
+
+	public static void openURL(@Nullable URI uri) {
+		try {
+			if (uri == null) return;
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().browse(uri);
+			} else {
+				Program.launch(uri.toURL().toExternalForm());
+			}
+		} catch (Exception e) {
+			log.warn("Failed to open URI: {}", uri, e);
+		}
+	}
+
+	public static void openURL(@Nullable String uri) {
+		if (uri == null) return;
+		try {
+			openURL(new URI(uri));
+		} catch (URISyntaxException e) {
+			log.warn("Failed to open URI: {}", uri, e);
 		}
 	}
 }

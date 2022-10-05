@@ -190,6 +190,32 @@ public class MobileBKUState extends State {
 		});
 	}
 
+	/**
+	 * Show an error message to the user with "retry" or "cancel" as options
+	 * returns normally on "retry", throws UserCancelledException on "cancel"
+	 */
+	public void showRecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
+		Display.getDefault().syncCall(() -> {
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), errorMessage, BUTTONS.RETRY_CANCEL);
+			int result = error.open();
+			if (result == SWT.CANCEL)
+				throw new UserCancelledException();
+			return true; /* dummy return */
+		});
+	}
+
+	/**
+	 * Show an error message to the user with only an "ok" option
+	 * throws UserCancelledException afterwards
+	 */
+	public void showUnrecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
+		Display.getDefault().syncCall(() -> {
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), errorMessage, BUTTONS.OK);
+			error.open();
+			throw new UserCancelledException();
+		});
+	}
+
 	public static class UsernameAndPassword {
 		public @CheckForNull String username;
 		public @CheckForNull String password;
@@ -313,7 +339,7 @@ public class MobileBKUState extends State {
 			if (!tan.isUserAck()) {
 				// we need the TAN
 				tan.setRefVal(mobileStatus.refVal);
-				tan.setSignatureData(mobileStatus.signatureDataURL);
+				try { tan.setSignatureDataURI(new URI(mobileStatus.signatureDataURL)); } catch (URISyntaxException e) {}
 				tan.setErrorMessage(mobileStatus.errorMessage);
 				if (mobileStatus.tanTries < ATrustStatus.MOBILE_MAX_TAN_TRIES
 						&& mobileStatus.tanTries > 0) {
@@ -367,7 +393,7 @@ public class MobileBKUState extends State {
 	 * it is the responsibility of the caller to perform AJAX long polling
 	 * @return
 	 */
-	public QRResult showQRCode(@Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable String errorMessage) throws UserCancelledException {
+	public QRResult showQRCode(final @Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
 		byte[] qrCode;
 		try (final CloseableHttpClient httpClient = HttpClients.createDefault()) {
 			try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(qrCodeURI))) {
@@ -381,18 +407,18 @@ public class MobileBKUState extends State {
 		final byte[] qrCodeCopy = qrCode; /* because java is silly */
 		return Display.getDefault().syncCall(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
-			qr.setUserCancel(false);
-			qr.setUserSMS(false);
-			qr.setDone(false);
+			qr.reset();
 
-			qr.setRefVal(status.refVal);
-			qr.setSignatureData(status.signatureDataURL);
-			qr.setErrorMessage(status.errorMessage);
+			qr.setRefVal(referenceValue);
+			qr.setSignatureDataURI(signatureDataURI);
+			qr.setErrorMessage(errorMessage);
 			qr.setQR(qrCodeCopy);
+			qr.setSMSEnabled(showSmsTan);
+			qr.setFIDO2Enabled(showFido2);
 			getStateMachine().display(qr);
 
 			Display display = getStateMachine().getMainShell().getDisplay();
-			while (!qr.isUserCancel() && !qr.isUserSMS() && !qr.isDone()) {
+			while (!qr.isDone()) {
 				if (!display.readAndDispatch()) {
 					display.sleep();
 				}
@@ -400,18 +426,18 @@ public class MobileBKUState extends State {
 
 			getStateMachine().display(this.getWaitingComposite());
 
-			if (qr.isUserCancel()) {
+			if (qr.wasCancelClicked()) {
 				clearRememberedPassword();
 				throw new UserCancelledException();
 			}
 
-			if (qr.isUserSMS())
+			if (qr.wasSMSClicked())
 				return QRResult.TO_SMS;
-
-			if (qr.isDone())
-				return QRResult.UPDATE;
 			
-			throw new RuntimeException("unexpected display wake");
+			if (qr.wasFIDO2Clicked())
+				return QRResult.TO_FIDO2;
+
+			return QRResult.UPDATE;
 		});
 	}
 
@@ -420,10 +446,7 @@ public class MobileBKUState extends State {
 	 * (any ongoing showQRCode call will then return)
 	 */
 	public void signalQRScanned() {
-		getMobileBKUQRComposite().setDone(true);
-		Display display = getStateMachine().
-				getMainShell().getDisplay();
-		display.wake();
+		getMobileBKUQRComposite().signalPollingDone();
 	}
 
 	/**
@@ -455,7 +478,7 @@ public class MobileBKUState extends State {
 			}
 		}, 0, 5000);
 
-		QRResult result = showQRCode(status.refVal, new URI(status.baseURL).resolve(status.qrCodeURL), status.errorMessage);
+		QRResult result = showQRCode(status.refVal, new URI(status.baseURL).resolve(status.qrCodeURL), new URI(status.baseURL).resolve(status.signatureDataURL), true, false, status.errorMessage);
 		checkDone.cancel();
 		if (result == QRResult.TO_SMS)
 			status.qrCodeURL = null;

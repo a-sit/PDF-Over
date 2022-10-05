@@ -201,37 +201,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 
 	}
 
-
-	/**
-	 * Selection Listener for open button
-	 */
-	private final class ShowSignatureDataListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public ShowSignatureDataListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				String signatureData = MobileBKUFingerprintComposite.this
-						.getSignatureData();
-				if (signatureData != null && !signatureData.equals("")) {
-					log.debug("Trying to open " + signatureData);
-					if (Desktop.isDesktopSupported()) {
-						Desktop.getDesktop().browse(new URI(signatureData));
-					} else {
-						log.info("SWT Desktop is not supported on this platform");
-						Program.launch(signatureData);
-					}
-				}
-			} catch (Exception ex) {
-				log.error("OpenSelectionListener: ", ex);
-			}
-		}
-	}
-
 	/**
 	 * Create the composite.
 	 *
@@ -279,7 +248,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20);
 		this.lnk_sig_data.setEnabled(true);
-		this.lnk_sig_data.addSelectionListener(new ShowSignatureDataListener());
+		SWTUtils.addSelectionListener(lnk_sig_data, (e) -> { SWTUtils.openURL(getSignatureData()); });
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -20);
