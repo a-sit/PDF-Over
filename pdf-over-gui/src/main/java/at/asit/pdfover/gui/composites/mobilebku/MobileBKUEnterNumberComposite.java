@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.composites.mobilebku;
 
 // Imports
 import org.eclipse.swt.SWT;
@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUHelper;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;

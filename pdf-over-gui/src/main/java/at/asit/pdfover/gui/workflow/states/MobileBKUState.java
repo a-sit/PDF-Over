@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 // Imports
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import at.asit.webauthn.PublicKeyCredential;
+import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -45,17 +47,20 @@ import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
 import at.asit.pdfover.gui.bku.OLDmobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
-import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
-import at.asit.pdfover.gui.composites.MobileBKUEnterTANComposite;
-import at.asit.pdfover.gui.composites.MobileBKUFingerprintComposite;
-import at.asit.pdfover.gui.composites.MobileBKUQRComposite;
 import at.asit.pdfover.gui.composites.WaitingComposite;
-import at.asit.pdfover.gui.composites.WaitingForAppComposite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterNumberComposite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterTANComposite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUFido2Composite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUFingerprintComposite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUQRComposite;
+import at.asit.pdfover.gui.composites.mobilebku.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+
+import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -136,6 +141,16 @@ public class MobileBKUState extends State {
 		}
 
 		return this.mobileBKUFingerprintComposite;
+	}
+
+	MobileBKUFido2Composite mobileBKUFido2Composite = null;
+	MobileBKUFido2Composite getMobileBKUFido2Composite() {
+		if (this.mobileBKUFido2Composite == null) {
+			this.mobileBKUFido2Composite = getStateMachine()
+					.createComposite(MobileBKUFido2Composite.class, SWT.RESIZE, this);
+		}
+
+		return this.mobileBKUFido2Composite;
 	}
 
 	/**
@@ -330,8 +345,8 @@ public class MobileBKUState extends State {
 		private SMSTanResult(@Nonnull ResultType type) { this.type = type; this.smsTan = null; }
 	}
 
-	public SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final int triesRemaining, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
-		return Display.getDefault().syncCall(() -> {
+	public @Nonnull SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final int triesRemaining, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
+		return ISNOTNULL(Display.getDefault().syncCall(() -> {
 			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
 			
 			tan.reset();
@@ -357,7 +372,7 @@ public class MobileBKUState extends State {
 				return new SMSTanResult(SMSTanResult.ResultType.TO_FIDO2);
 			
 			return new SMSTanResult(tan.getTan());
-		});
+		}));
 	}
 
 	/**
@@ -398,8 +413,8 @@ public class MobileBKUState extends State {
 		UPDATE
 	};
 
-	public QRResult waitForQRCodeResult() throws UserCancelledException {
-		return Display.getDefault().syncCall(() -> {
+	public @Nonnull QRResult waitForQRCodeResult() throws UserCancelledException {
+		return ISNOTNULL(Display.getDefault().syncCall(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
 			Display display = getStateMachine().getMainShell().getDisplay();
@@ -423,7 +438,7 @@ public class MobileBKUState extends State {
 				return QRResult.TO_FIDO2;
 
 			return QRResult.UPDATE;
-		});
+		}));
 	}
 
 	/**
@@ -458,8 +473,8 @@ public class MobileBKUState extends State {
 		UPDATE
 	};
 
-	public AppOpenResult waitForAppOpen() throws UserCancelledException {
-		return Display.getDefault().syncCall(() -> {
+	public @Nonnull AppOpenResult waitForAppOpen() throws UserCancelledException {
+		return ISNOTNULL(Display.getDefault().syncCall(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 
 			Display display = wfa.getDisplay();
@@ -482,7 +497,7 @@ public class MobileBKUState extends State {
 				return AppOpenResult.TO_FIDO2;
 
 			return AppOpenResult.UPDATE;
-		});
+		}));
 	}
 
 	/**
@@ -562,8 +577,48 @@ public class MobileBKUState extends State {
 	 * @return a boolean true if the user has pressed the sms tan button
 	 */
 	public boolean getSMSStatus() {
-
 		return this.getMobileBKUFingerprintComposite().isUserSMS();
+	}
+
+	public static class FIDO2Result {
+		public static enum ResultType { TO_SMS, CREDENTIAL };
+		public final @Nonnull ResultType type;
+		public final @Nullable PublicKeyCredential<AuthenticatorAssertionResponse> credential;
+
+		private FIDO2Result(@Nonnull ResultType type) { this.type = type; this.credential = null; }
+		private FIDO2Result(@Nonnull PublicKeyCredential<AuthenticatorAssertionResponse> cred) { this.type = ResultType.CREDENTIAL; this.credential = cred; }
+	}
+
+	/**
+	 * prompts user for fido2 auth and blocks until result is available
+	 * @param fido2Options JSON data from A-Trust
+	 * @return
+	 * @throws UserCancelledException
+	 */
+	public @Nonnull FIDO2Result promptUserForFIDO2Auth(final @Nonnull String fido2Options, @Nullable URI signatureDataURI, final boolean showSmsTan) throws UserCancelledException {
+		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+			MobileBKUFido2Composite fido2 = getMobileBKUFido2Composite();
+			fido2.initialize(fido2Options);
+			// TODO signature data, sms tan support
+			
+			getStateMachine().display(fido2);
+
+			Display display = fido2.getDisplay();
+			while (!fido2.isDone()) {
+				if (!display.readAndDispatch())
+					display.sleep();
+			}
+
+			getStateMachine().display(this.getWaitingComposite());
+
+			if (fido2.wasUserCancelClicked())
+				throw new UserCancelledException();
+			
+			if (fido2.wasUserSMSClicked())
+				return new FIDO2Result(FIDO2Result.ResultType.TO_SMS);
+			
+			return new FIDO2Result(ISNOTNULL(fido2.getResultingCredential()));
+		}));
 	}
 
 	/*

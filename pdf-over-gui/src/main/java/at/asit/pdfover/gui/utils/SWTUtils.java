@@ -178,6 +178,13 @@ public final class SWTUtils {
 		}
 	}
 
+	/**
+	 * @see SWTUtils#addSelectionListener(Object, Consumer)
+	 */
+	public static void addSelectionListener(Object swtObj, Runnable callback) {
+		addSelectionListener(swtObj, (e) -> { callback.run(); });
+	}
+
 	public static void openURL(@Nullable URI uri) {
 		try {
 			if (uri == null) return;

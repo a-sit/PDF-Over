@@ -47,10 +47,6 @@ import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
-import at.asit.webauthn.PublicKeyCredentialRequestOptions;
-import at.asit.webauthn.WebAuthN;
-import at.asit.webauthn.exceptions.WebAuthNOperationFailed;
-import at.asit.webauthn.exceptions.WebAuthNUserCancelled;
 
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
@@ -353,38 +349,36 @@ public class MobileBKUConnector implements BkuSlConnector {
             }
         }
         if (html.fido2Block != null) {
-            // TODO composite for this
-            if  (WebAuthN.isAvailable()) {
-                try {
-                    var fido2Assertion = PublicKeyCredentialRequestOptions.FromJSONString(html.fido2Block.fidoOptions).get("https://service.a-trust.at");
+            
+            var fido2Result = this.state.promptUserForFIDO2Auth(html.fido2Block.fidoOptions, html.signatureDataLink, html.smsTanLink != null);
 
-                    Base64.Encoder base64 = Base64.getEncoder();
-                    
-                    JSONObject aTrustAssertion = new JSONObject();
-                    aTrustAssertion.put("id", fido2Assertion.id);
-                    aTrustAssertion.put("rawId", base64.encodeToString(fido2Assertion.rawId));
-                    aTrustAssertion.put("type", fido2Assertion.type);
-                    aTrustAssertion.put("extensions", new JSONObject()); // TODO fix extensions in library
-
-                    JSONObject aTrustAssertionResponse = new JSONObject();
-                    aTrustAssertion.put("response", aTrustAssertionResponse);
-                    aTrustAssertionResponse.put("authenticatorData", base64.encodeToString(fido2Assertion.response.authenticatorData));
-                    aTrustAssertionResponse.put("clientDataJson", base64.encodeToString(fido2Assertion.response.clientDataJSON));
-                    aTrustAssertionResponse.put("signature", base64.encodeToString(fido2Assertion.response.signature));
-                    if (fido2Assertion.response.userHandle != null)
-                        aTrustAssertionResponse.put("userHandle", base64.encodeToString(fido2Assertion.response.userHandle));
-                    else
-                        aTrustAssertionResponse.put("userHandle", JSONObject.NULL);
-                    
-                    html.fido2Block.setFIDOResult(aTrustAssertion.toString());
-                    return buildFormSubmit(html, "#FidoContinue");
-                } catch (WebAuthNUserCancelled e) {
-                    log.debug("WebAuthN authentication cancelled by user");
-                    throw new UserCancelledException();
-                } catch (WebAuthNOperationFailed e) {
-                    log.warn("WebAuthN authentication failed", e);
-                }
+            switch (fido2Result.type) {
+                case TO_SMS: return new HttpGet(html.smsTanLink);
+                case CREDENTIAL: break;
             }
+
+            var fido2Assertion = ISNOTNULL(fido2Result.credential);
+
+            Base64.Encoder base64 = Base64.getEncoder();
+            
+            JSONObject aTrustAssertion = new JSONObject();
+            aTrustAssertion.put("id", fido2Assertion.id);
+            aTrustAssertion.put("rawId", base64.encodeToString(fido2Assertion.rawId));
+            aTrustAssertion.put("type", fido2Assertion.type);
+            aTrustAssertion.put("extensions", new JSONObject()); // TODO fix extensions in library
+
+            JSONObject aTrustAssertionResponse = new JSONObject();
+            aTrustAssertion.put("response", aTrustAssertionResponse);
+            aTrustAssertionResponse.put("authenticatorData", base64.encodeToString(fido2Assertion.response.authenticatorData));
+            aTrustAssertionResponse.put("clientDataJson", base64.encodeToString(fido2Assertion.response.clientDataJSON));
+            aTrustAssertionResponse.put("signature", base64.encodeToString(fido2Assertion.response.signature));
+            if (fido2Assertion.response.userHandle != null)
+                aTrustAssertionResponse.put("userHandle", base64.encodeToString(fido2Assertion.response.userHandle));
+            else
+                aTrustAssertionResponse.put("userHandle", JSONObject.NULL);
+            
+            html.fido2Block.setFIDOResult(aTrustAssertion.toString());
+            return buildFormSubmit(html, "#FidoContinue");
         }
         throw new IllegalStateException("No top-level block is set? Something has gone terribly wrong.");
     }

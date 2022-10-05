@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.composites.mobilebku;
 
 // Imports
 import java.io.ByteArrayInputStream;
@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 

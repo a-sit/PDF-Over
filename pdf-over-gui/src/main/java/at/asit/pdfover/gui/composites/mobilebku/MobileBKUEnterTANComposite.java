@@ -13,7 +13,7 @@
  * See the Licence for the specific language governing permissions and
  * limitations under the Licence.
  */
-package at.asit.pdfover.gui.composites;
+package at.asit.pdfover.gui.composites.mobilebku;
 
 // Imports
 import java.net.URI;
@@ -44,6 +44,7 @@ import com.beust.jcommander.internal.Nullable;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -52,42 +53,28 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public class MobileBKUEnterTANComposite extends StateComposite {
 
-	/**
-	 *
-	 */
-	private final class OkSelectionListener extends SelectionAdapter {
+	private void validateAndConfirmTAN() {
+		String tan = this.txt_tan.getText();
 
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(!MobileBKUEnterTANComposite.this.btn_ok.getEnabled()) {
-				return;
-			}
+		tan = tan.trim();
 
-			String tan = MobileBKUEnterTANComposite.this.txt_tan.getText();
-
-			tan = tan.trim();
-
-			if (tan.isEmpty()) {
-				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.NoTan"));
-				return;
-			}
-
-			if (MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
-				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.EnteredReferenceValue"));
-				return;
-			}
-
-			if (tan.length() > 6) {
-				MobileBKUEnterTANComposite.this.setMessage(Messages
-						.getString("error.TanTooLong"));
-				return;
-			}
-
-			MobileBKUEnterTANComposite.this.tan = tan;
-			MobileBKUEnterTANComposite.this.userAck = true;
+		if (tan.isEmpty()) {
+			this.setMessage(Messages.getString("error.NoTan"));
+			return;
 		}
+
+		if (MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
+			this.setMessage(Messages.getString("error.EnteredReferenceValue"));
+			return;
+		}
+
+		if (tan.length() > 6) {
+			this.setMessage(Messages.getString("error.TanTooLong"));
+			return;
+		}
+
+		this.tan = tan;
+		this.userAck = true;
 	}
 
 	/**
@@ -270,29 +257,16 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		SWTUtils.anchor(txt_tan).left(50,10).right(100,-20).top(50,10);
 		this.txt_tan.setEditable(true);
 
-		this.txt_tan.addTraverseListener(new TraverseListener() {
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					if(MobileBKUEnterTANComposite.this.btn_ok.isEnabled()) {
-						(new OkSelectionListener()).widgetSelected(null);
-					}
-				}
+		this.txt_tan.addTraverseListener((e) -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				validateAndConfirmTAN();
 			}
 		});
 
-		this.txt_tan.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-
-				String text = MobileBKUEnterTANComposite.this.txt_tan.getText();
-				//log.debug("Current TAN: " + text);
-				if (text.length() > 3
-						&& MobileBKUEnterTANComposite.this.getRefVal()
-								.startsWith(text.trim())) {
-					MobileBKUEnterTANComposite.this.setMessage(Messages.getString("error.EnteredReferenceValue"));
-				}
-			}
+		this.txt_tan.addModifyListener((e) -> {
+			String text = this.txt_tan.getText();
+			if (text.length() > 3 && this.getRefVal().startsWith(text.trim()))
+				this.setMessage(Messages.getString("error.EnteredReferenceValue"));
 		});
 
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
@@ -302,7 +276,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_ok).right(100,-20).bottom(100,-20);
-		this.btn_ok.addSelectionListener(new OkSelectionListener());
+		SWTUtils.addSelectionListener(btn_ok, (e) -> { validateAndConfirmTAN(); });
 		
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20);

@@ -351,6 +351,12 @@ public class Constants {
 	/** Mobile phone image resource */
 	public static final String RES_IMG_MOBILE = "/img/handy.png";
 
+	/** FIDO2 logo resource */
+	public static final String RES_IMG_FIDO2 = "/img/fido_logo.png";
+
+	/** WebAuthN logo resource */
+	public static final String RES_IMG_WEBAUTHN = "/img/webauthn-logo.png";
+
 	/** Package resource path */
 	public static String RES_PKG_PATH = "/at/asit/pdfover/gui/";
 
