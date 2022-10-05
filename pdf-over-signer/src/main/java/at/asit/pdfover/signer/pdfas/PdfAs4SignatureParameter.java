@@ -46,7 +46,7 @@ public class PdfAs4SignatureParameter {
     /**
      * SLF4J Logger instance
      **/
-    static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
+    private static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
     
     /**
      * this is set by CliArguments.InvisibleProfile

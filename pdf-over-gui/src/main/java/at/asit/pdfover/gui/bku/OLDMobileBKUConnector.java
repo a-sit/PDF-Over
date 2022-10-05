@@ -176,14 +176,14 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 				}
 
 				if (enterTAN) {
-					// Get TAN
-					this.state.checkTAN();
-
-					if ("cancel".equals(this.state.status.errorMessage))
-						throw new SignatureException(new IllegalStateException());
-
-					// Post TAN
 					try {
+						// Get TAN
+						this.state.OLDcheckTAN();
+
+						if ("cancel".equals(this.state.status.errorMessage))
+							throw new SignatureException(new IllegalStateException());
+
+						// Post TAN
 						responseData = handler.postTAN();
 						log.trace("Response from mobile BKU: " + responseData);
 

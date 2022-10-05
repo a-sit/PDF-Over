@@ -250,13 +250,24 @@ public class MobileBKUConnector implements BkuSlConnector {
         if (html.usernamePasswordBlock != null) {
             try {
                 while ((this.credentials.username == null) || (this.credentials.password == null)) {
-                    this.state.getCredentialsFromUserTo(this.credentials, null); // TODO error message
+                    this.state.getCredentialsFromUserTo(this.credentials, html.usernamePasswordBlock.errorMessage);
                 }
                 html.usernamePasswordBlock.setUsernamePassword(this.credentials.username, this.credentials.password);
                 return buildFormSubmit(html, "#Button_Identification");
             } catch (UserCancelledException e) {
                 return buildFormSubmit(html, "#Button_Cancel");
             }
+        }
+        if (html.smsTanBlock != null) {
+            MobileBKUState.SMSTanResult result = this.state.getSMSTanFromUser(
+                html.smsTanBlock.referenceValue, html.smsTanBlock.triesRemaining,
+                html.signatureDataLink, html.fido2Link != null, html.smsTanBlock.errorMessage);
+            
+            switch (result.type) {
+                case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link);
+                case SMSTAN: html.smsTanBlock.setTAN(result.smsTan); return buildFormSubmit(html, "#SignButton");
+            }
+            return new HttpGet(html.htmlDocument.baseUri());
         }
         if (html.qrCodeBlock != null) {
             try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().build()) {
@@ -297,7 +308,7 @@ public class MobileBKUConnector implements BkuSlConnector {
                 });
                 try {
                     longPollThread.start();
-                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, null);
+                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, html.qrCodeBlock.errorMessage);
                     switch (result) {
                         case UPDATE: break;
                         case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;

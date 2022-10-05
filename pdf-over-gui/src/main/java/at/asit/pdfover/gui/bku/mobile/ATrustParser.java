@@ -16,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
+
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 public class ATrustParser {
@@ -60,9 +62,9 @@ public class ATrustParser {
         public final boolean isRecoverable;
         public final @Nonnull String errorText;
 
-        private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
-            if (!formTarget.getPath().contains("/error.aspx"))
+            if (!htmlDocument.baseUri().contains("/error.aspx"))
                 throw new ComponentParseFailed();
             
             this.isRecoverable = (htmlDocument.selectFirst("#Button_Back") != null);
@@ -83,11 +85,31 @@ public class ATrustParser {
             formOptions.put(usernameKey, username); formOptions.put(passwordKey, password);
         }
 
-        private UsernamePasswordBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private UsernamePasswordBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#handynummer");
             this.usernameKey = getAttributeEnsureNotNull("#handynummer", "name");
             this.passwordKey = getAttributeEnsureNotNull("#signaturpasswort", "name");
+            this.errorMessage = null;
+        }
+    }
+
+    public static class SMSTanBlock extends TopLevelFormBlock {
+        private final @Nonnull String tanKey;
+        public final @Nonnull String referenceValue;
+        public final int triesRemaining;
+        public final @CheckForNull String errorMessage;
+
+        public void setTAN(String tan) {
+            formOptions.put(tanKey, tan);
+        }
+
+        private SMSTanBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            abortIfElementMissing("#div_tan");
+            this.tanKey = getAttributeEnsureNotNull("#input_tan", "name");
+            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.triesRemaining = ATrustStatus.MOBILE_MAX_TAN_TRIES; // TODO
             this.errorMessage = null;
         }
     }
@@ -98,7 +120,7 @@ public class ATrustParser {
         public final @Nonnull URI pollingURI;
         public final @Nullable String errorMessage;
 
-        private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#qrimage");
             
@@ -132,7 +154,7 @@ public class ATrustParser {
 
         public void setFIDOResult(String result) { formOptions.put(credentialResultKey, result); }
 
-        private Fido2Block(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull URI formTarget, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private Fido2Block(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#fidoBlock");
             this.fidoOptions = getAttributeEnsureNotNull("#credentialOptions", "value");
@@ -155,6 +177,7 @@ public class ATrustParser {
         /* top-level blocks (exactly one is not null) */
         public final @CheckForNull ErrorBlock errorBlock;
         public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
+        public final @CheckForNull SMSTanBlock smsTanBlock;
         public final @CheckForNull QRCodeBlock qrCodeBlock;
         public final @CheckForNull Fido2Block fido2Block;
 
@@ -163,6 +186,7 @@ public class ATrustParser {
 
             if (errorBlock != null) populated.add("errorBlock");
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
+            if (smsTanBlock != null) populated.add("smsTanBlock");
             if (qrCodeBlock != null) populated.add("qrCodeBlock");
             if (fido2Block != null) populated.add("fido2Block");
 
@@ -192,7 +216,7 @@ public class ATrustParser {
          */
         private <T extends TopLevelFormBlock> @Nullable T TryParseMainBlock(Class<T> clazz) {
             try {
-                return clazz.getDeclaredConstructor(org.jsoup.nodes.Document.class, URI.class, Map.class).newInstance(this.htmlDocument, this.formTarget, this.formOptions);
+                return clazz.getDeclaredConstructor(org.jsoup.nodes.Document.class, Map.class).newInstance(this.htmlDocument, this.formOptions);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
                 log.error("Internal parser error; check your method signatures?", e);
                 return null;
@@ -245,6 +269,7 @@ public class ATrustParser {
 
             this.errorBlock = TryParseMainBlock(ErrorBlock.class);
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
+            this.smsTanBlock = TryParseMainBlock(SMSTanBlock.class);
             this.qrCodeBlock = TryParseMainBlock(QRCodeBlock.class);
             this.fido2Block = TryParseMainBlock(Fido2Block.class);
             

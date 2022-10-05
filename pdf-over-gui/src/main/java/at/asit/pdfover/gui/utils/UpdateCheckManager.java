@@ -1,7 +1,5 @@
 package at.asit.pdfover.gui.utils;
 
-import java.awt.Desktop;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -18,11 +16,10 @@ import at.asit.pdfover.gui.controls.Dialog.ICON;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Shell;
 
 public final class UpdateCheckManager {
-    static final Logger log = LoggerFactory.getLogger(UpdateCheckManager.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateCheckManager.class);
     private static Thread updateCheckThread = null;
     private static boolean needsCheck = false;
 

@@ -45,6 +45,7 @@ import com.beust.jcommander.internal.Nullable;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 
@@ -87,26 +88,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			}
 
 			MobileBKUEnterTANComposite.this.tan = tan;
-			MobileBKUEnterTANComposite.this.setUserAck(true);
-			MobileBKUEnterTANComposite.this.btn_ok.setEnabled(false);
-			//MobileBKUEnterTANComposite.this.state.updateStateMachine();
-			//MobileBKUEnterTANComposite.this.btn_ok.setEnabled(true);
-		}
-	}
-
-	/**
-	 *
-	 */
-	private final class CancelSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public CancelSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MobileBKUEnterTANComposite.this.setUserCancel(true);
+			MobileBKUEnterTANComposite.this.userAck = true;
 		}
 	}
 
@@ -115,16 +97,17 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(MobileBKUEnterTANComposite.class);
 
-	Text txt_tan;
+	private Text txt_tan;
 
-	boolean userAck = false;
-	boolean userCancel = false;
+	private boolean userAck = false;
+	private boolean userCancel = false;
+	private boolean userFido2 = false;
 
 	private Label lblRefVal;
 
-	String refVal;
+	private String refVal;
 
-	URI signatureDataURI;
+	private URI signatureDataURI;
 
 	/**
 	 * @param signatureData
@@ -135,7 +118,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lnk_sig_data.setEnabled(uri != null);
 	}
 
-	String tan;
+	private String tan;
 
 	private Link lnk_sig_data;
 
@@ -143,22 +126,16 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	private Label lblRefValLabel;
 	private Label lblTan;
 
-	Button btn_ok;
-	Button btn_cancel;
+	private Button btn_ok;
+	private Button btn_cancel;
+	private Button btn_fido2;
 
-	/**
-	 * @return the userAck
-	 */
-	public boolean isUserAck() {
-		return this.userAck;
-	}
+	public boolean isDone() { return (this.userAck || this.userCancel || this.userFido2); }
+	public boolean isUserAck() { return this.userAck; }
+	public boolean isUserCancel() { return this.userCancel; }
+	public boolean isUserFido2() { return this.userFido2; }
 
-	/**
-	 * @return the userCancel
-	 */
-	public boolean isUserCancel() {
-		return this.userCancel;
-	}
+	public void reset() { this.userAck = this.userCancel = this.userFido2 = false; }
 
 	/**
 	 * Set how many tries are left
@@ -166,8 +143,12 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 * @param tries
 	 */
 	public void setTries(int tries) {
-		this.lblTries.setText(tries == 1 ? Messages.getString("tanEnter.try") :
-				String.format(Messages.getString("tanEnter.tries"), tries));
+		if ((tries > 0) && (tries < ATrustStatus.MOBILE_MAX_TAN_TRIES)) {
+			if (tries > 1)
+				SWTUtils.setLocalizedText(lblTries, "tanEnter.try");
+			else
+				SWTUtils.setLocalizedText(lblTries, "tanEnter.tries", tries);
+		}
 	}
 
 	/**
@@ -182,6 +163,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 					Messages.getString("error.Title") + ": " + errorMessage);
 	}
 
+	public void setFIDO2Enabled(boolean state) {
+		this.btn_fido2.setEnabled(state);
+	}
 
 	/**
 	 * Sets the message
@@ -195,33 +179,10 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	}
 
 	/**
-	 * @param userAck
-	 *            the userAck to set
-	 */
-	public void setUserAck(boolean userAck) {
-		this.userAck = userAck;
-	}
-
-	/**
-	 * @param userCancel
-	 *            the userCancel to set
-	 */
-	public void setUserCancel(boolean userCancel) {
-		this.userCancel = userCancel;
-	}
-
-	/**
 	 * @return the reference value
 	 */
 	public String getRefVal() {
 		return this.refVal;
-	}
-
-	/**
-	 * Enables the submit button
-	 */
-	public void enableButton() {
-		this.btn_ok.setEnabled(true);
 	}
 
 	/**
@@ -347,10 +308,14 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(btn_ok, -20).bottom(100, -20);
-		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
+		SWTUtils.addSelectionListener(btn_cancel, (e) -> { this.userCancel = true; });
+
+		this.btn_fido2 = new Button(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(btn_fido2).right(btn_cancel, -20).bottom(100, -20);
+		SWTUtils.addSelectionListener(btn_fido2, (e) -> { this.userFido2 = true; });
 
 		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		SWTUtils.anchor(lblTries).right(btn_cancel, -10).bottom(100, -20);
+		SWTUtils.anchor(lblTries).right(btn_fido2, -10).bottom(100, -20);
 	}
 
 	@Override

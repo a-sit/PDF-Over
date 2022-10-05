@@ -16,7 +16,6 @@
 package at.asit.pdfover.gui.workflow.states;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,7 +37,6 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -48,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
-import at.asit.pdfover.gui.bku.OLDMobileBKUConnector;
 import at.asit.pdfover.gui.bku.OLDmobile.ATrustHandler;
 import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.composites.MobileBKUEnterNumberComposite;
@@ -327,53 +324,60 @@ public class MobileBKUState extends State {
 		}
 	}
 
+	public static class SMSTanResult {
+		public static enum ResultType { TO_FIDO2, SMSTAN };
+		public final @Nonnull ResultType type;
+		public final @CheckForNull String smsTan;
+
+		private SMSTanResult(@Nullable String smsTan) { this.type = ResultType.SMSTAN; this.smsTan = smsTan; }
+		private SMSTanResult(@Nonnull ResultType type) { this.type = type; this.smsTan = null; }
+	}
+
+	public SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final int triesRemaining, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
+			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
+			
+			tan.reset();
+			tan.setRefVal(referenceValue);
+			tan.setSignatureDataURI(signatureDataURI);
+			tan.setErrorMessage(errorMessage);
+			tan.setTries(triesRemaining);
+			tan.setFIDO2Enabled(showFido2);
+			getStateMachine().display(tan);
+
+			Display display = getStateMachine().getMainShell().getDisplay();
+			while (!tan.isDone()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+			getStateMachine().display(getWaitingComposite());
+
+			if (tan.isUserCancel())
+				throw new UserCancelledException();
+			
+			if (tan.isUserFido2())
+				return new SMSTanResult(SMSTanResult.ResultType.TO_FIDO2);
+			
+			return new SMSTanResult(tan.getTan());
+		});
+	}
+
 	/**
 	 * Make sure TAN is set in the MobileBKUStatus
 	 */
-	public void checkTAN() {
+	public void OLDcheckTAN() throws URISyntaxException {
 		final ATrustStatus mobileStatus = this.status;
-
-		Display.getDefault().syncExec(() -> {
-			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
-
-			if (!tan.isUserAck()) {
-				// we need the TAN
-				tan.setRefVal(mobileStatus.refVal);
-				try { tan.setSignatureDataURI(new URI(mobileStatus.signatureDataURL)); } catch (URISyntaxException e) {}
-				tan.setErrorMessage(mobileStatus.errorMessage);
-				if (mobileStatus.tanTries < ATrustStatus.MOBILE_MAX_TAN_TRIES
-						&& mobileStatus.tanTries > 0) {
-					// show warning message x tries left!
-					// overrides error message
-
-					tan.setTries(mobileStatus.tanTries);
-				}
-				tan.enableButton();
-				getStateMachine().display(tan);
-
-				Display display = getStateMachine().getMainShell().getDisplay();
-				while (!tan.isUserAck() && !tan.isUserCancel()) {
-					if (!display.readAndDispatch()) {
-						display.sleep();
-					}
-				}
+		
+		try {
+			SMSTanResult result = getSMSTanFromUser(mobileStatus.refVal, mobileStatus.tanTries, new URI(mobileStatus.signatureDataURL), false, mobileStatus.errorMessage);
+			if (result.type == SMSTanResult.ResultType.SMSTAN) {
+				mobileStatus.tan = result.smsTan;
 			}
-
-			if (tan.isUserCancel()) {
-				tan.setUserCancel(false);
-				clearRememberedPassword();
-				mobileStatus.errorMessage = "cancel";
-				return;
-			}
-
-			// user hit ok!
-			tan.setUserAck(false);
-
-			mobileStatus.tan = tan.getTan();
-
-			// show waiting composite
-			getStateMachine().display(getWaitingComposite());
-		});
+		} catch (UserCancelledException e) {
+			clearRememberedPassword();
+			mobileStatus.errorMessage = "cancel";
+		}
 	}
 
 	public enum QRResult {
