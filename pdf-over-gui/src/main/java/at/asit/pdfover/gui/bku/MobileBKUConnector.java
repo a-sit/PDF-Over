@@ -13,18 +13,14 @@ import java.util.regex.Pattern;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.text.html.HTML.Tag;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.client5.http.impl.classic.RequestFailedException;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -228,6 +224,67 @@ public class MobileBKUConnector implements BkuSlConnector {
         return post;
     }
 
+    private static class LongPollThread extends Thread implements AutoCloseable {
+        
+        private final CloseableHttpClient httpClient = HttpClients.createDefault();
+        private final HttpGet request;
+        private final Runnable signal;
+        private boolean done = false;
+
+        @Override
+        public void run() {
+            long timeout = System.nanoTime() + (300l * 1000l * 1000l * 1000l); /* a-trust timeout is 5 minutes */
+            log.debug("longPollThread hello");
+            while (!done) {
+                try (final CloseableHttpResponse response = httpClient.execute(request)) {
+                    JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
+                    if (jsonResponse.getBoolean("Fin"))
+                        signal.run();
+                    else if (jsonResponse.getBoolean("Wait"))
+                    {
+                        log.debug("longPollThread continue...");
+                        continue;
+                    }
+                    else if (jsonResponse.getBoolean("Error"))
+                        signal.run(); /* will trigger reload and find error; this is the same thing a-trust does */
+                    else {
+                        log.warn("Unknown long poll response:\n{}", jsonResponse.toString(2));
+                        break;
+                    }
+                } catch (NoHttpResponseException e) {
+                    if (timeout <= System.nanoTime())
+                        signal.run(); /* reload to find the timeout error */
+                    continue; /* httpclient timeout */
+                } catch (IOException | ParseException | IllegalStateException e) {
+                    if (done) break;
+                    log.warn("QR code long polling exception", e);
+                    /* sleep so we don't hammer a-trust too hard in case this goes wrong */
+                    try { Thread.sleep(5000); } catch (InterruptedException e2) {}
+                }
+            }
+            log.debug("longPollThread goodbye");
+        }
+
+        public LongPollThread(URI uri, Runnable signal) {
+            this.request = new HttpGet(uri);
+            this.signal = signal;
+        }
+
+        @Override
+        public void close() {
+            done = true;
+            if (this.request != null)
+                this.request.abort();
+
+            if (this.isAlive())
+                try { this.join(1000); } catch (InterruptedException e) {}
+            
+            if (this.httpClient != null)
+                try { this.httpClient.close(); } catch (IOException e) { log.warn("Auto-close of long-poll HTTP client threw exception", e); }
+        }
+        
+    }
+
     /**
      * Main lifting function for MobileBKU UX
      * @return the next request to make, or null if the current response should be returned
@@ -270,58 +327,29 @@ public class MobileBKUConnector implements BkuSlConnector {
             return new HttpGet(html.htmlDocument.baseUri());
         }
         if (html.qrCodeBlock != null) {
-            try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().build()) {
-                final HttpGet request = new HttpGet(html.qrCodeBlock.pollingURI);
-                boolean[] done = new boolean[1];
-                done[0] = false;
-                Thread longPollThread = new Thread(() -> {
-                    long timeout = System.nanoTime() + (300l * 1000l * 1000l * 1000l); /* a-trust timeout is 5 minutes */
-                    log.debug("longPollThread hello");
-                    while (!done[0]) {
-                        try (final CloseableHttpResponse response = httpClient.execute(request)) {
-                            JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
-                            if (jsonResponse.getBoolean("Fin"))
-                                state.signalQRScanned();
-                            else if (jsonResponse.getBoolean("Wait"))
-                            {
-                                log.debug("longPollThread continue...");
-                                continue;
-                            }
-                            else if (jsonResponse.getBoolean("Error"))
-                                state.signalQRScanned(); /* will trigger reload and find error; this is the same thing a-trust does */
-                            else {
-                                log.warn("Unknown long poll response:\n{}", jsonResponse.toString(2));
-                                break;
-                            }
-                        } catch (NoHttpResponseException e) {
-                            if (timeout <= System.nanoTime())
-                                state.signalQRScanned(); /* reload to find the timeout error */
-                            continue; /* httpclient timeout */
-                        } catch (IOException | ParseException | IllegalStateException e) {
-                            if (done[0]) break;
-                            log.warn("QR code long polling exception", e);
-                            /* sleep so we don't hammer a-trust too hard in case this goes wrong */
-                            try { Thread.sleep(5000); } catch (InterruptedException e2) {}
-                        }
-                    }
-                    log.debug("longPollThread goodbye");
-                });
-                try {
-                    longPollThread.start();
-                    MobileBKUState.QRResult result = this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, html.qrCodeBlock.errorMessage);
-                    switch (result) {
-                        case UPDATE: break;
-                        case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;
-                        case TO_SMS: if (html.smsTanLink != null) return new HttpGet(html.smsTanLink); break;
-                    }
-                    return new HttpGet(html.htmlDocument.baseUri());
-                } finally {
-                    done[0] = true;
-                    request.abort();
-                    try { longPollThread.join(1000); } catch (InterruptedException e) {}
+            try (LongPollThread longPollThread = new LongPollThread(html.qrCodeBlock.pollingURI, () -> { this.state.signalQRScanned(); })) {
+                this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, html.qrCodeBlock.errorMessage);
+                longPollThread.start();
+                var result = this.state.waitForQRCodeResult();
+                switch (result) {
+                    case UPDATE: break;
+                    case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;
+                    case TO_SMS: if (html.smsTanLink != null) return new HttpGet(html.smsTanLink); break;
                 }
-            } catch (IOException e) {
-                log.warn("closing long-polling HttpClient threw exception", e);
+                return new HttpGet(html.htmlDocument.baseUri());
+            }
+        }
+        if (html.waitingForAppBlock != null) {
+            try (LongPollThread longPollThread = new LongPollThread(html.waitingForAppBlock.pollingURI, () -> { this.state.signalAppOpened(); })) {
+                this.state.showWaitingForApp(html.waitingForAppBlock.referenceValue, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null);
+                longPollThread.start();
+                var result = this.state.waitForAppOpen();
+                switch (result) {
+                    case UPDATE: break;
+                    case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;
+                    case TO_SMS: if (html.smsTanLink != null) return new HttpGet(html.smsTanLink); break;
+                }
+                return new HttpGet(html.htmlDocument.baseUri());
             }
         }
         if (html.fido2Block != null) {

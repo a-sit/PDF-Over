@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,8 +27,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 // Imports
-import at.asit.pdfover.gui.exceptions.ATrustConnectionException;
-import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 
@@ -364,40 +361,9 @@ public class MobileBKUState extends State {
 	}
 
 	/**
-	 * Make sure TAN is set in the MobileBKUStatus
-	 */
-	public void OLDcheckTAN() throws URISyntaxException {
-		final ATrustStatus mobileStatus = this.status;
-		
-		try {
-			SMSTanResult result = getSMSTanFromUser(mobileStatus.refVal, mobileStatus.tanTries, new URI(mobileStatus.signatureDataURL), false, mobileStatus.errorMessage);
-			if (result.type == SMSTanResult.ResultType.SMSTAN) {
-				mobileStatus.tan = result.smsTan;
-			}
-		} catch (UserCancelledException e) {
-			clearRememberedPassword();
-			mobileStatus.errorMessage = "cancel";
-		}
-	}
-
-	public enum QRResult {
-		/* the user has pressed the FIDO2 button */
-		TO_FIDO2,
-		/* the user has pressed the SMS button */
-		TO_SMS,
-		/* signalQRScanned has been called; this indicates that we should refresh the page */
-		UPDATE
-	};
-
-	/**
 	 * start showing the QR code at the indicated URI
-	 * this method will block until the QR code state completes
-	 * (due to QR code being scanned, or the user pressing a button)
-	 * <p>
-	 * it is the responsibility of the caller to perform AJAX long polling
-	 * @return
-	 */
-	public QRResult showQRCode(final @Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
+	 * this method will return immediately */
+	public void showQRCode(final @Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final @Nullable String errorMessage) {
 		byte[] qrCode;
 		try (final CloseableHttpClient httpClient = HttpClients.createDefault()) {
 			try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(qrCodeURI))) {
@@ -409,7 +375,7 @@ public class MobileBKUState extends State {
 		}
 		
 		final byte[] qrCodeCopy = qrCode; /* because java is silly */
-		return Display.getDefault().syncCall(() -> {
+		Display.getDefault().syncExec(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 			qr.reset();
 
@@ -420,6 +386,21 @@ public class MobileBKUState extends State {
 			qr.setSMSEnabled(showSmsTan);
 			qr.setFIDO2Enabled(showFido2);
 			getStateMachine().display(qr);
+		});
+	}
+
+	public enum QRResult {
+		/* the user has pressed the FIDO2 button */
+		TO_FIDO2,
+		/* the user has pressed the SMS button */
+		TO_SMS,
+		/* signalQRScanned has been called; this indicates that we should refresh the page */
+		UPDATE
+	};
+
+	public QRResult waitForQRCodeResult() throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
+			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
 			Display display = getStateMachine().getMainShell().getDisplay();
 			while (!qr.isDone()) {
@@ -447,117 +428,69 @@ public class MobileBKUState extends State {
 
 	/**
 	 * indicate that the long polling operation completed
-	 * (any ongoing showQRCode call will then return)
+	 * (any ongoing waitForQRCodeResult call will then return)
 	 */
 	public void signalQRScanned() {
 		getMobileBKUQRComposite().signalPollingDone();
 	}
 
 	/**
-	 * Show QR code
-	 * @throws URISyntaxException
-	 * @throws UserCancelledException
-	 * @throws IOException
-	 */
-	public void OLDshowQR() throws IOException, UserCancelledException, URISyntaxException {
-		final ATrustStatus status = this.status;
-		final ATrustHandler handler = this.handler;
+	 * start showing the "waiting for app" screen
+	 * this method will return immediately */
+	public void showWaitingForApp(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
+		Display.getDefault().syncExec(() -> {
+			WaitingForAppComposite wfa = getWaitingForAppComposite();
+			wfa.reset();
 
-		final Timer checkDone = new Timer();
-		checkDone.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				// ping signature page to see if code has been scanned
-				try {
-					String resp = handler.getSignaturePage();
-					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp);
-						checkDone.cancel();
-						signalQRScanned();
-					}
-					Display.getDefault().wake();
-				} catch (Exception e) {
-					log.error("Error getting signature page", e);
-				}
+			// TODO composite does not currently support: refval, signature data
+			wfa.setSMSEnabled(showSmsTan);
+			wfa.setFIDO2Enabled(showFido2);
+			getStateMachine().display(wfa);
+		});
+	}
+
+	public enum AppOpenResult {
+		/* the user has pressed the FIDO2 button */
+		TO_FIDO2,
+		/* the user has pressed the SMS button */
+		TO_SMS,
+		/* signalAppOpened has been called; this indicates that we should refresh the page */
+		UPDATE
+	};
+
+	public AppOpenResult waitForAppOpen() throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
+			WaitingForAppComposite wfa = getWaitingForAppComposite();
+
+			Display display = wfa.getDisplay();
+			while (!wfa.isDone()) {
+				if (!display.readAndDispatch())
+					display.sleep();
 			}
-		}, 0, 5000);
 
-		QRResult result = showQRCode(status.refVal, new URI(status.baseURL).resolve(status.qrCodeURL), new URI(status.baseURL).resolve(status.signatureDataURL), true, false, status.errorMessage);
-		checkDone.cancel();
-		if (result == QRResult.TO_SMS)
-			status.qrCodeURL = null;
+			getStateMachine().display(this.getWaitingComposite());
+
+			if (wfa.wasCancelClicked()) {
+				clearRememberedPassword();
+				throw new UserCancelledException();
+			}
+
+			if (wfa.wasSMSClicked())
+				return AppOpenResult.TO_SMS;
+			
+			if (wfa.wasFIDO2Clicked())
+				return AppOpenResult.TO_FIDO2;
+
+			return AppOpenResult.UPDATE;
+		});
 	}
 
 	/**
-	 *  This composite notifies the user to open the signature-app
+	 * indicate that the long polling operation completed
+	 * (any ongoing waitForAppOpen call will then return)
 	 */
-	public void showOpenAppMessageWithSMSandCancel() throws SignatureException {
-
-		final ATrustStatus status = this.status;
-
-		Display.getDefault().syncExec(() -> {
-			WaitingForAppComposite waitingForAppcomposite = this.getWaitingForAppComposite();
-			getStateMachine().display(waitingForAppcomposite);
-
-			Display display = getStateMachine().getMainShell().getDisplay();
-			undecidedPolling();
-			long timeoutTime = System.nanoTime() + (300 * ((long)1e9));
-
-			while (!waitingForAppcomposite.getUserCancel() && !waitingForAppcomposite.getUserSMS()
-					&& !waitingForAppcomposite.getIsDone() && (System.nanoTime() < timeoutTime)) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
-
-			if (waitingForAppcomposite.getUserCancel()) {
-				waitingForAppcomposite.setUserCancel(false);
-				status.errorMessage = "cancel";
-				return;
-			}
-
-			if (waitingForAppcomposite.getUserSMS()) {
-				status.qrCodeURL = null;
-				waitingForAppcomposite.setUserSMS(false);
-				status.errorMessage = "sms";
-				status.isSMSTan = true;
-				// show waiting composite
-				getStateMachine().display(this.getWaitingComposite());
-				return;
-
-			}
-
-			if (waitingForAppcomposite.getIsDone())
-				waitingForAppcomposite.setIsDone(false);
-
-			if (!(System.nanoTime() < timeoutTime)) {
-				log.warn("The undecided polling got a timeout");
-				status.qrCodeURL = null;
-				status.errorMessage = "Polling Timeout";
-
-
-			}
-		});
-	}
-
-	private void undecidedPolling(){
-		final ATrustHandler handler = this.handler;
-
-		Thread pollingThread = new Thread(() -> {
-			try {
-				if (handler.handlePolling()){
-					String response = handler.getSignaturePage();
-					handler.handleCredentialsResponse(response);
-					Display.getDefault().syncExec(() ->
-							getWaitingForAppComposite().setIsDone(true));
-				}
-			} catch (ATrustConnectionException e) {
-				log.error("Error when calling polling endpoint");
-			} catch (Exception e) {
-				log.error("Exception occurred during calling polling endpoint");
-			}
-		});
-		pollingThread.start();
+	public void signalAppOpened() {
+		getWaitingForAppComposite().signalPollingDone();
 	}
 
 	/**

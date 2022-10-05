@@ -2,13 +2,8 @@ package at.asit.pdfover.gui.composites.configuration;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;

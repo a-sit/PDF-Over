@@ -56,6 +56,24 @@ public class ATrustParser {
                 throw new ComponentParseFailed();
             }
         }
+        protected @Nonnull URI getLongPollURI() throws ComponentParseFailed {
+            var pollingScriptElm = getElementEnsureNotNull("#jsLongPoll script");
+            String pollingScript = pollingScriptElm.data();
+            int startIdx = pollingScript.indexOf("qrpoll(\"");
+            if (startIdx < 0) { log.warn("Failed to find 'qrpoll(\"' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+            startIdx += 8;
+
+            int endIdx = pollingScript.indexOf("\");", startIdx);
+            if (endIdx < 0) { log.warn("Failed to find qrpoll terminator '\");' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+
+            String pollingUriString = pollingScript.substring(startIdx, endIdx);
+            try {
+                return ISNOTNULL(new URI(pollingScriptElm.baseUri()).resolve(pollingUriString));
+            } catch (URISyntaxException e) {
+                log.warn("Long-poll URI '{}' could not be parsed", pollingUriString);
+                throw new ComponentParseFailed();
+            }
+        }
     }
 
     public static class ErrorBlock extends TopLevelFormBlock {
@@ -126,25 +144,22 @@ public class ATrustParser {
             
             this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
             this.qrCodeURI = getURIAttributeEnsureNotNull("#qrimage", "abs:src");
-
-            var pollingScriptElm = getElementEnsureNotNull("#jsLongPoll script");
-            String pollingScript = pollingScriptElm.data();
-            int startIdx = pollingScript.indexOf("qrpoll(\"");
-            if (startIdx < 0) { log.warn("Failed to find 'qrpoll(\"' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
-            startIdx += 8;
-
-            int endIdx = pollingScript.indexOf("\");", startIdx);
-            if (endIdx < 0) { log.warn("Failed to find qrpoll terminator '\");' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
-
-            String pollingUriString = pollingScript.substring(startIdx, endIdx);
-            try {
-                this.pollingURI = ISNOTNULL(new URI(pollingScriptElm.baseUri()).resolve(pollingUriString));
-            } catch (URISyntaxException e) {
-                log.warn("URI '{}' could not be parsed", pollingUriString);
-                throw new ComponentParseFailed();
-            }
+            this.pollingURI = getLongPollURI();
 
             this.errorMessage = null;
+        }
+    }
+
+    public static class WaitingForAppBlock extends TopLevelFormBlock {
+        public final @Nonnull String referenceValue;
+        public final @Nonnull URI pollingURI;
+
+        private WaitingForAppBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            abortIfElementMissing("#smartphoneAnimation");
+
+            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.pollingURI = getLongPollURI();            
         }
     }
 
@@ -179,6 +194,7 @@ public class ATrustParser {
         public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
         public final @CheckForNull SMSTanBlock smsTanBlock;
         public final @CheckForNull QRCodeBlock qrCodeBlock;
+        public final @CheckForNull WaitingForAppBlock waitingForAppBlock;
         public final @CheckForNull Fido2Block fido2Block;
 
         private void validate() {
@@ -188,6 +204,7 @@ public class ATrustParser {
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
             if (smsTanBlock != null) populated.add("smsTanBlock");
             if (qrCodeBlock != null) populated.add("qrCodeBlock");
+            if (waitingForAppBlock != null) populated.add("waitingForAppBlock");
             if (fido2Block != null) populated.add("fido2Block");
 
             switch (populated.size()) {
@@ -271,6 +288,7 @@ public class ATrustParser {
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
             this.smsTanBlock = TryParseMainBlock(SMSTanBlock.class);
             this.qrCodeBlock = TryParseMainBlock(QRCodeBlock.class);
+            this.waitingForAppBlock = TryParseMainBlock(WaitingForAppBlock.class);
             this.fido2Block = TryParseMainBlock(Fido2Block.class);
             
             validate();

@@ -15,9 +15,6 @@
  */
 package at.asit.pdfover.gui.bku;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 // Imports
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +87,7 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 
 					if (responseData.contains("undecided.aspx?sid=")) {
 						// handle polling
-						this.state.showOpenAppMessageWithSMSandCancel();
+						//this.state.showOpenAppMessageWithSMSandCancel();
 
 						if (this.state.status.isSMSTan) {
 							String response = handler.postSMSRequest();
@@ -124,11 +121,11 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 				boolean enterTAN = true;
 				String responseData = null;
 				if (status.qrCodeURL != null) {
-					try {
+					/*try {
 						this.state.OLDshowQR();
 					} catch (IOException | URISyntaxException e) {
 						throw new SignatureException(e);
-					}
+					}*/
 					if ("cancel".equals(this.state.status.errorMessage))
 						throw new SignatureException(new IllegalStateException());
 					if (status.qrCodeURL == null) {
@@ -178,7 +175,7 @@ public class OLDMobileBKUConnector implements BkuSlConnector {
 				if (enterTAN) {
 					try {
 						// Get TAN
-						this.state.OLDcheckTAN();
+						//this.state.OLDcheckTAN();
 
 						if ("cancel".equals(this.state.status.errorMessage))
 							throw new SignatureException(new IllegalStateException());
