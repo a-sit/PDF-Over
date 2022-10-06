@@ -1,6 +1,7 @@
 package at.asit.pdfover.signer.pdfas;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.activation.DataSource;
@@ -155,13 +156,22 @@ public class PdfAs4Signer {
 				result.setSignedDocument(new ByteArrayDocumentSource(state.output.toByteArray()));
 				return result;
 			}
-		} catch (PdfAsException | PDFASError e) {
-			{ // TODO hack around pdf-as not handling this error code properly cf. #124
+		} catch (PdfAsException | PDFASError ex) {
+			// workaround for PDF-AS nullpointerexception intercepting the actual exception
+			// cf. issue #52
+			// this is a bit of a hack...
+			Exception e = ex;
+			{
+				if ((e instanceof PDFASError) && (e.getCause() instanceof NullPointerException))
+					e = Objects.requireNonNullElse(PdfAs4BKUSLConnector.originalExceptionSwallowedByPDFASNPE, e);
+			}
+
+			{
 				Throwable rootCause = e;
 				while (rootCause.getCause() != null)
 					rootCause = rootCause.getCause();
 				try { /* error code 60xx is user cancellation */
-					int errorCode = Integer.parseInt(((SLPdfAsException)rootCause).getMessage().split(":",2)[0].trim());
+					int errorCode = ((SLPdfAsException)rootCause).getCode();
 					if ((6000 <= errorCode) && (errorCode <= 6099))
 						throw new UserCancelledException();
 				} catch (ClassCastException e2) { /* fall through to wrapped throw */}

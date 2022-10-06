@@ -91,8 +91,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		} catch (SignatureException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (UserCancelledException e) {
-			// TODO: find out how to communicate this out to PDF-AS?
-			throw new PDFIOException("error.pdf.io.03", e);
+			throw new SLPdfAsException(6001, "Vorgang durch den Benutzer abgebrochen.");
 		}
 
 		if (element == null) {
@@ -108,12 +107,16 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		throw new PdfAsException("error.pdf.io.03");
 	}
 
+	/** hack cf. #52 */
+	public static Exception originalExceptionSwallowedByPDFASNPE = null;
 	/* (non-Javadoc)
 	 * @see at.gv.egiz.sl.util.ISLConnector#sendCMSRequest(at.gv.egiz.sl.util.RequestPackage, at.gv.egiz.pdfas.lib.api.sign.SignParameter)
 	 */
 	@Override
 	public CreateCMSSignatureResponseType sendCMSRequest(RequestPackage pack,
 			SignParameter parameter) throws PdfAsException {
+		/* outermost try blocks are a hack cf. #52 */
+try { try {
 		JAXBElement<?> element = null;
 		try {
 			
@@ -145,8 +148,7 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		} catch (SignatureException e) {
 			throw new PDFIOException("error.pdf.io.03", e);
 		} catch (UserCancelledException e) {
-			// TODO: find out how to communicate this out to PDF-AS?
-			throw new PDFIOException("error.pdf.io.03", e);
+			throw new SLPdfAsException(6001, "Vorgang durch den Benutzer abgebrochen.");
 		}
 
 		if (element == null) {
@@ -161,9 +163,10 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		} else if (element.getValue() instanceof ErrorResponseType) {
 			ErrorResponseType errorResponseType = (ErrorResponseType) element
 					.getValue();
-			throw new SLPdfAsException(errorResponseType.getErrorCode(),
-					errorResponseType.getInfo());
+			throw new SLPdfAsException(errorResponseType.getErrorCode(), errorResponseType.getInfo());
 		}
 		throw new PdfAsException("error.pdf.io.03");
+} finally { originalExceptionSwallowedByPDFASNPE = null; } } catch (Exception e) { originalExceptionSwallowedByPDFASNPE = e; throw e; }
 	}
+
 }

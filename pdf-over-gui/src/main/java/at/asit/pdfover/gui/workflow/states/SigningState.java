@@ -91,16 +91,6 @@ public class SigningState extends State {
 		}
 
 		if(this.threadException != null) {
-			// workaround for PDF-AS nullpointerexception intercepting our IllegalStateException
-			// cf. issue #52
-			// this is a bit of a hack...
-			if (status.getPreviousState() instanceof MobileBKUState)
-			{
-				String mobileBkuError = ((MobileBKUState)status.getPreviousState()).status.errorMessage;
-				if ("cancel".equals(mobileBkuError))
-					this.threadException = new SignatureException(new IllegalStateException());
-			}
-
 			String message = Messages.getString("error.Signatur");
 			if (this.threadException instanceof SignatureException) {
 				Throwable cause = this.threadException;
