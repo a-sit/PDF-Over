@@ -17,13 +17,8 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -41,91 +36,26 @@ import at.asit.pdfover.gui.workflow.states.State;
  */
 public class BKUSelectionComposite extends StateComposite {
 
-	/**
-	 * Margin for button
-	 */
-	public static final int btnMargin = 2;
-
-	/**
-	 * Listener for local bku selection
-	 */
-	private final class LocalSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public LocalSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to LOCAL");
-			setSelected(BKUs.LOCAL);
-		}
-	}
-
-	/**
-	 * Listener for mobile bku selection
-	 */
-	private final class MobileSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public MobileSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to MOBILE");
-			setSelected(BKUs.MOBILE);
-		}
-	}
-
-	/**
-	 * Listener for keystore selection
-	 */
-	private final class KSSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public KSSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			log.debug("Setting BKU to KS");
-			setSelected(BKUs.KS);
-		}
-	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory
-			.getLogger(BKUSelectionComposite.class);
+	static final Logger log = LoggerFactory.getLogger(BKUSelectionComposite.class);
 
 	private BKUs selected = BKUs.NONE;
 
+	private ClickableCanvas cc_mobile;
+	private ClickableCanvas cc_karte;
 	private Button btnMobile;
-
 	private Button btnCard;
-
 	private Button btnKS = null;
 
-	/**
-	 * Gets selected BKU type
-	 * @return BKUS enum
-	 */
-	public BKUs getSelected() {
-		return this.selected;
-	}
+	public BKUs getSelected() { return this.selected; }
 
-	/**
-	 * Sets selected BKU and updates workflow
-	 * @param selected
-	 */
 	public void setSelected(final BKUs selected) {
 		this.selected = selected;
 		this.state.updateStateMachine();
+	}
+
+	public void setLocalBKUEnabled(boolean state) {
+		this.btnCard.setEnabled(state);
+		this.cc_karte.setEnabled(false);
 	}
 
 	/**
@@ -136,7 +66,7 @@ public class BKUSelectionComposite extends StateComposite {
 		if (enabled) {
 			this.btnKS = new Button(this, SWT.NONE);
 			SWTUtils.anchor(this.btnKS).top(this.btnCard, 10).left(this.btnMobile, 0, SWT.LEFT).right(this.btnCard, 0, SWT.RIGHT);
-			this.btnKS.addSelectionListener(new KSSelectionListener());
+			SWTUtils.addSelectionListener(btnKS, () -> { setSelected(BKUs.KS); });
 
 			reloadResources();
 		} else if (this.btnKS != null) {
@@ -156,57 +86,34 @@ public class BKUSelectionComposite extends StateComposite {
 
 		this.setLayout(new FormLayout());
 
-		ClickableCanvas cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
+		this.cc_mobile = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(cc_mobile).right(50, -5).top(40, -20);
 		Image mobile = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)));
 		cc_mobile.setImage(mobile);
 		SWTUtils.setFontHeight(cc_mobile, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.addMouseDownListener(cc_mobile, () -> { setSelected(BKUs.MOBILE); });
 
-		cc_mobile.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
-				setSelected(BKUs.MOBILE);
-			}
-		});
-
-		ClickableCanvas cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
+		this.cc_karte = new ClickableCanvas(this, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(cc_karte).left(50, 5).top(40, -20);
-		Image karte = new Image(getDisplay(), new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_CARD)));
+		Image karte = new Image(getDisplay(), this.getClass().getResourceAsStream(Constants.RES_IMG_CARD));
 		cc_karte.setImage(karte);
 		SWTUtils.setFontHeight(cc_karte, Constants.TEXT_SIZE_BUTTON);
+		SWTUtils.addMouseDownListener(cc_karte, () -> { setSelected(BKUs.LOCAL); });
 
-		cc_karte.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
-				setSelected(BKUs.LOCAL);
-			}
-		});
-
-		int mobilesize = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 
 		this.btnMobile = new Button(this, SWT.NONE);
-		FormData fd_btnMobile = new FormData();
-		fd_btnMobile.top = new FormAttachment(cc_mobile, 10);
-		fd_btnMobile.right = new FormAttachment(50, -5);
-		this.btnMobile.setLayoutData(fd_btnMobile);
-		this.btnMobile.addSelectionListener(new MobileSelectionListener());
-
+		SWTUtils.anchor(btnMobile).top(cc_mobile, 10).right(50,-5);
+		int mobilesize = cc_mobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		int btnmsize = this.btnMobile.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-
-		fd_btnMobile.width = Math.max(btnmsize, mobilesize);
+		SWTUtils.reanchor(btnMobile).width(Math.max(btnmsize, mobilesize));
+		SWTUtils.addSelectionListener(btnMobile, () -> { setSelected(BKUs.MOBILE); });
 
 		this.btnCard = new Button(this, SWT.NONE);
-		FormData fd_btnCard = new FormData();
-		fd_btnCard.top = new FormAttachment(cc_karte, 10);
-		fd_btnCard.left = new FormAttachment(50, 5);
+		SWTUtils.anchor(btnCard).top(cc_karte, 10).left(50,5);
 		int cardsize = cc_karte.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-
-		this.btnCard.setLayoutData(fd_btnCard);
-		this.btnCard.addSelectionListener(new LocalSelectionListener());
-
 		int btncsize = this.btnCard.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-
-		fd_btnCard.width = Math.max(btncsize, cardsize);
+		SWTUtils.reanchor(btnCard).width(Math.max(btncsize, cardsize));
+		SWTUtils.addSelectionListener(btnCard, () -> { setSelected(BKUs.LOCAL); });
 
 		reloadResources();
 	}

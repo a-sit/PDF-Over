@@ -11,6 +11,9 @@ import javax.annotation.Nullable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -172,7 +175,7 @@ public final class SWTUtils {
 			Method m = swtObj.getClass().getMethod("addSelectionListener", SelectionListener.class);
 			m.invoke(swtObj, new SelectionAdapter() { @Override public void widgetSelected(SelectionEvent e) { callback.accept(e); } });
 		} catch (NoSuchMethodException | IllegalAccessException e) {
-			log.error("Attempted to pass object of type {} to onSelectionChanged; object does not have an accessible addSelectionListener method", swtObj.getClass().getSimpleName(), e);
+			log.error("Attempted to pass object of type {} to addSelectionListener; object does not have an accessible addSelectionListener method", swtObj.getClass().getSimpleName(), e);
 		} catch (InvocationTargetException e) {
 			log.error("Failed to add selection listener on object of type {}", swtObj.getClass().getSimpleName(), e);
 		}
@@ -183,6 +186,29 @@ public final class SWTUtils {
 	 */
 	public static void addSelectionListener(Object swtObj, Runnable callback) {
 		addSelectionListener(swtObj, (e) -> { callback.run(); });
+	}
+
+	/**
+	 * functional-interface wrapper around swtObj.addMouseListener
+	 * @param swtObj SWT widget supporting addMouseListener
+	 * @param callback mouseDown method
+	 */
+	public static void addMouseDownListener(Object swtObj, Consumer<MouseEvent> callback) {
+		try {
+			Method m = swtObj.getClass().getMethod("addMouseListener", MouseListener.class);
+			m.invoke(swtObj, new MouseAdapter() { @Override public void mouseDown (MouseEvent e) { callback.accept(e); } });
+		} catch (NoSuchMethodException | IllegalAccessException e) {
+			log.error("Attempted to pass object of type {} to addMouseDownListener; object does not have an accessible addMouseListener method", swtObj.getClass().getSimpleName(), e);
+		} catch (InvocationTargetException e) {
+			log.error("Failed to add selection listeer on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
+
+	/**
+	 * @see SWTUtils#addMouseDownListener(Object, Consumer)
+	 */
+	public static void addMouseDownListener(Object swtObj, Runnable callback) {
+		addMouseDownListener(swtObj, (e) -> { callback.run(); });
 	}
 
 	public static void openURL(@Nullable URI uri) {
