@@ -286,6 +286,11 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @return the next request to make, or null if the current response should be returned
      */
     private @Nonnull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@Nonnull ATrustParser.HTMLResult html) throws UserCancelledException {
+        if ((html.errorBlock == null) && (html.usernamePasswordBlock == null)) { /* successful username/password auth */
+            if ((this.credentials.username != null) && (this.credentials.password != null))
+                state.rememberCredentialsIfNecessary(this.credentials);
+        }
+
         if (html.errorBlock != null) {
             try {
                 this.credentials.password = null;
