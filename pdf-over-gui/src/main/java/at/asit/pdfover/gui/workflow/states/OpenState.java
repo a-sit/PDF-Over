@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.bku.LocalBKUConnector;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.PlaceholderSelectionGui;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
@@ -92,6 +93,9 @@ public class OpenState extends State {
 			/* ensure that files get closed */
 			status.getPreviousState().cleanUp();
 		}
+
+		/* force static initialization and start polling */
+		LocalBKUConnector.IsAvailable();
 
 		if (status.document == null) {
 			DataSourceSelectComposite selection = this.getSelectionComposite();

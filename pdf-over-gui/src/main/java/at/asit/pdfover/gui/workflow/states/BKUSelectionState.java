@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.bku.LocalBKUConnector;
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.composites.BKUSelectionComposite;
@@ -48,36 +49,44 @@ public class BKUSelectionState extends State {
 	private static final Logger log = LoggerFactory.getLogger(BKUSelectionState.class);
 
 	private BKUSelectionComposite selectionComposite = null;
-
 	private BKUSelectionComposite getSelectionComposite() {
 		if (this.selectionComposite == null) {
 			this.selectionComposite =
 					getStateMachine().createComposite(BKUSelectionComposite.class, SWT.RESIZE, this);
 		}
 
+		return this.selectionComposite;
+	}
+
+	private boolean isKeystoreEnabled() {
 		if (getStateMachine().configProvider.getKeyStoreEnabled()) {
 			File ks = new File(getStateMachine().configProvider.getKeyStoreFile());
-			this.selectionComposite.setKeystoreEnabled(ks.exists());
+			return ks.exists();
 		} else
-			this.selectionComposite.setKeystoreEnabled(false);
-
-		return this.selectionComposite;
+			return false;
 	}
 
 	@Override
 	public void run() {
 		Status status = getStateMachine().status;
 		State previousState = status.getPreviousState();
-		if (!(
+
+		final boolean hasLocalBKU = LocalBKUConnector.IsAvailable();
+		final boolean hasKeystore = isKeystoreEnabled();
+		if (
 		  (previousState instanceof OpenState) ||
-		  (previousState instanceof PositioningState) ||
-		  (previousState instanceof BKUSelectionState)
-		)) {
+		  (previousState instanceof PositioningState)
+		) {
+			if (!hasLocalBKU && !hasKeystore)
+				status.bku = BKUs.MOBILE;
+		} else if (!(previousState instanceof BKUSelectionState)) {
 			status.bku = BKUs.NONE;
 		}
 
 		if(status.bku == BKUs.NONE) {
 			BKUSelectionComposite selection = this.getSelectionComposite();
+			selection.setLocalBKUEnabled(hasLocalBKU);
+			selection.setKeystoreEnabled(hasKeystore);
 
 			getStateMachine().display(selection);
 			selection.layout();

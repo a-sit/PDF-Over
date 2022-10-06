@@ -17,7 +17,7 @@ package at.asit.pdfover.gui.bku;
 
 // Imports
 import java.io.IOException;
-
+import java.net.Socket;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -44,6 +44,24 @@ public class LocalBKUConnector implements BkuSlConnector {
 	 * SLF4J Logger instance
 	 **/
 	private static final Logger log = LoggerFactory.getLogger(LocalBKUConnector.class);
+
+	private static boolean isAvailable = false;
+	public static boolean IsAvailable() { return isAvailable; }
+	private static Thread pollingThread = new Thread(() -> {
+		while (true) {
+			try { Thread.sleep(isAvailable ? 30000 : 5000); } catch (InterruptedException e) {}
+			try (Socket socket = new Socket("127.0.0.1", 3495)) {
+				isAvailable = true;
+			} catch (IOException e) {
+				isAvailable = false;
+			}
+		}
+	}, "LocalBKUProbeThread");
+	static {
+		pollingThread.setDaemon(true);
+		pollingThread.start();
+	}
+	
 
 	/**
 	 * HTTP Response server HEADER
