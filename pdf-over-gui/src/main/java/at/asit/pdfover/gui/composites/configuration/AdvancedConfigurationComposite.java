@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -246,7 +248,9 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.txtSaveFilePostFix.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				performPostFixChanged(txtSaveFilePostFix.getText());
+				if (txtSaveFilePostFix.getText().trim().isEmpty())
+					txtSaveFilePostFix.setText(Constants.DEFAULT_POSTFIX);
+				performPostFixChanged(Constants.ISNOTNULL(txtSaveFilePostFix.getText()));
 			}
 		});
 
@@ -330,7 +334,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		reloadResources();
 	}
 
-	private void performPostFixChanged(String postfix) {
+	private void performPostFixChanged(@Nonnull String postfix) {
 
 		log.debug("Save file postfix changed to : {}", postfix);
 		this.configurationContainer.saveFilePostFix = postfix;
@@ -355,7 +359,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		return i;
 	}
 
-	void performBKUSelectionChanged(BKUs selected) {
+	void performBKUSelectionChanged(@Nonnull BKUs selected) {
 		log.debug("Selected BKU: {}", selected);
 		this.configurationContainer.defaultBKU = selected;
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
@@ -372,13 +376,13 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	BKUs resolveBKU(String localizedBKU) {
+	@Nonnull BKUs resolveBKU(String localizedBKU) {
 		int blen = BKUs.values().length;
 
 		for (int i = 0; i < blen; i++) {
 			String lookup = "BKU." + BKUs.values()[i].toString();
 			if (Messages.getString(lookup).equals(localizedBKU)) {
-				return BKUs.values()[i];
+				return Constants.ISNOTNULL(BKUs.values()[i]);
 			}
 		}
 
@@ -550,12 +554,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		if (outputFolder != null) {
 			performOutputFolderChanged(outputFolder);
 		}
-		String postFix = this.configurationContainer.saveFilePostFix;
-		if (postFix != null) {
-			performPostFixChanged(postFix);
-		} else {
-			performPostFixChanged(Constants.DEFAULT_POSTFIX);
-		}
+		performPostFixChanged(this.configurationContainer.saveFilePostFix);
 		performPositionSelection(this.configurationContainer.autoPositionSignature);
 		performUseMarkerSelection(this.configurationContainer.getUseMarker());
 		performUseSignatureFieldsSelection(this.configurationContainer.getUseSignatureFields());

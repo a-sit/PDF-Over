@@ -19,6 +19,10 @@ package at.asit.pdfover.gui.workflow.config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
+import java.util.Objects;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import at.asit.pdfover.commons.Profile;
 import org.eclipse.swt.graphics.Image;
@@ -33,6 +37,8 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUHelper;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
+
+import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 /**
  * Implementation of the configuration container
@@ -74,8 +80,8 @@ public class ConfigurationDataInMemory {
 	}
 
 	/** The mobile phone number */
-	protected String mobileNumber = null;
-	public String getMobileNumber() { return this.mobileNumber; }
+	protected @CheckForNull String mobileNumber = null;
+	public @CheckForNull String getMobileNumber() { return this.mobileNumber; }
 	public void setMobileNumber(String number) {
 		if(number == null || number.trim().isEmpty()) {
 			this.mobileNumber = null;
@@ -85,12 +91,12 @@ public class ConfigurationDataInMemory {
 	}
 
 	/** The mobile phone password */
-	public String mobilePassword = null;
+	public @CheckForNull String mobilePassword = null;
 
 	public boolean rememberPassword = false;
 
 	/** Holds the proxy host */
-	public String proxyHost = null;
+	public @CheckForNull String proxyHost = null;
 
 	/** Holds the proxy port number */
 	protected int proxyPort = -1;
@@ -108,25 +114,25 @@ public class ConfigurationDataInMemory {
 	}
 
 	/** Holds the proxy username */
-	public String proxyUser = null;
+	public @CheckForNull String proxyUser = null;
 
 	/** Holds the proxy password */
-	public String proxyPass = null;
+	public @CheckForNull String proxyPass = null;
 
 	/** Holds the default BKU to use */
-	public BKUs defaultBKU = BKUs.NONE;
+	public @Nonnull BKUs defaultBKU = BKUs.NONE;
 
 	/** Holds the output folder */
-	public String outputFolder = null;
+	public @CheckForNull String outputFolder = null;
 
 	/** Holds the signatureNote */
-	public String signatureNote = null;
+	public @CheckForNull String signatureNote = null;
 
 	/** Holds the locale */
-	public Locale interfaceLocale = null;
+	public @CheckForNull Locale interfaceLocale = null;
 	
 	/** Holds the signature locale */
-	public Locale signatureLocale = null;
+	public @CheckForNull Locale signatureLocale = null;
 
 	/** Holds the PDF/A compatibility setting */
 	public boolean signaturePDFACompat = false;
@@ -136,13 +142,13 @@ public class ConfigurationDataInMemory {
 
 	/** Keystore signing options */
 	public enum KeyStorePassStorageType { MEMORY, DISK };
-	public Boolean keystoreEnabled = null;
-	public String keystoreFile = null;
-	public String keystoreType = null;
-	public String keystoreAlias = null;
-	public KeyStorePassStorageType keystorePassStorageType = null;
-	public String keystoreStorePass = null;
-	public String keystoreKeyPass = null;
+	public @CheckForNull Boolean keystoreEnabled = null;
+	public @CheckForNull String keystoreFile = null;
+	public @CheckForNull String keystoreType = null;
+	public @CheckForNull String keystoreAlias = null;
+	public @CheckForNull KeyStorePassStorageType keystorePassStorageType = null;
+	public @CheckForNull String keystoreStorePass = null;
+	public @CheckForNull String keystoreKeyPass = null;
 
 	/** Whether to automatically check for updates */
 	public boolean updateCheck = true;
@@ -151,7 +157,7 @@ public class ConfigurationDataInMemory {
 	 * 
 	 * @IMPORTANT this must always be valid and non-null, even if configuration failed to load for whatever reason (it is used by error handlers!)
 	*/
-	public Point mainWindowSize = new Point(Constants.DEFAULT_MAINWINDOW_WIDTH, Constants.DEFAULT_MAINWINDOW_HEIGHT);
+	public @Nonnull Point mainWindowSize = new Point(Constants.DEFAULT_MAINWINDOW_WIDTH, Constants.DEFAULT_MAINWINDOW_HEIGHT);
 
 	/** Whether to skip the output state */
 	public boolean skipFinish = false;
@@ -176,14 +182,12 @@ public class ConfigurationDataInMemory {
 	public boolean enabledPlaceholderUsage = false;
 
 	/**	The Signature Profile */
-	protected Profile signatureProfile = null;
-	public Profile getSignatureProfile() {
-		if (this.signatureProfile == null)
-			return Profile.SIGNATURBLOCK_SMALL;
-		return this.signatureProfile;
+	protected @CheckForNull Profile signatureProfile = null;
+	public @Nonnull Profile getSignatureProfile() {
+		return ISNOTNULL(Objects.requireNonNullElse(this.signatureProfile, Profile.SIGNATURBLOCK_SMALL));
 	}
 	public void setSignatureProfile(Profile profile) { this.signatureProfile = profile; }
 
-	public String saveFilePostFix = "_signed";
+	public @Nonnull String saveFilePostFix = Constants.DEFAULT_POSTFIX;
 
 }

@@ -228,7 +228,7 @@ public class PrepareSigningState extends State {
 				this.setNextState(new KSState(getStateMachine()));
 				break;
 			default:
-				log.error("Invalid selected BKU Value \"NONE\" in PrepareSigningState!");
+				log.error("Invalid selected BKU Value \"{}\" in PrepareSigningState!", status.bku.name());
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 		}
 	}

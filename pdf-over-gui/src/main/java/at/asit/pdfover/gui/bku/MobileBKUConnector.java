@@ -103,7 +103,7 @@ public class MobileBKUConnector implements BkuSlConnector {
         }
         lastHTTPRequestTime = now;
 
-        log.debug("Sending request to '{}'...", request.getUri().toString());
+        log.debug("Sending {} request to '{}'...", request.getMethod(), request.getUri().toString());
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             int httpStatus = response.getCode();
             if ((httpStatus == HttpStatus.SC_MOVED_PERMANENTLY) || (httpStatus == HttpStatus.SC_MOVED_TEMPORARILY)) {

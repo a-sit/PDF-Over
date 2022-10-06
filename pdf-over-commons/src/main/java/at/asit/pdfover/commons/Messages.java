@@ -22,6 +22,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +51,13 @@ public class Messages {
 	 * Get the closest match to the system default Locale out of the supported locales
 	 * @return the default locale
 	 */
-	public static Locale getDefaultLocale() {
+	public static @Nonnull Locale getDefaultLocale() {
 		Locale ld = Locale.getDefault();
 		for (Locale l : Constants.SUPPORTED_LOCALES) {
 			if (l.equals(ld) || l.getLanguage().equals(ld.getLanguage()))
 				return l;
 		}
-		return Constants.SUPPORTED_LOCALES[0];
+		return Constants.ISNOTNULL(Constants.SUPPORTED_LOCALES[0]);
 	}
 
 	/**

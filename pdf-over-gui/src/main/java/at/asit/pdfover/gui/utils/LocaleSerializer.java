@@ -18,6 +18,10 @@ package at.asit.pdfover.gui.utils;
 // Imports
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
+import at.asit.pdfover.commons.Constants;
+
 /**
  *
  */
@@ -49,7 +53,7 @@ public class LocaleSerializer {
 	 * @param locale the locale
 	 * @return the parsable string
 	 */
-	public static String getParsableString(Locale locale) {
-		return locale.toString();
+	public static @Nonnull String getParsableString(Locale locale) {
+		return Constants.ISNOTNULL(locale.toString());
 	}
 }

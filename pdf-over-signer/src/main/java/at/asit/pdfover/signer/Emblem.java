@@ -85,7 +85,7 @@ public class Emblem {
 		this.originalFileName = filename;
 	}
 
-	private String getFileHash(String filename) throws IOException {
+	private static String getFileHash(String filename) throws IOException {
 		InputStream is = Files.newInputStream(Path.of(filename));
 		return DigestUtils.md5Hex(is);
 	}
