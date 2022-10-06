@@ -318,8 +318,8 @@ public class MobileBKUConnector implements BkuSlConnector {
         }
         if (html.smsTanBlock != null) {
             MobileBKUState.SMSTanResult result = this.state.getSMSTanFromUser(
-                html.smsTanBlock.referenceValue, html.smsTanBlock.triesRemaining,
-                html.signatureDataLink, html.fido2Link != null, html.smsTanBlock.errorMessage);
+                html.smsTanBlock.referenceValue, html.signatureDataLink,
+                html.fido2Link != null, html.smsTanBlock.errorMessage);
             
             switch (result.type) {
                 case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link);

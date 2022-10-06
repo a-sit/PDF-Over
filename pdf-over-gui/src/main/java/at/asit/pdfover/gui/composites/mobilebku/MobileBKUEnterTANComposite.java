@@ -37,7 +37,6 @@ import com.beust.jcommander.internal.Nullable;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
@@ -101,7 +100,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 
 	private Link lnk_sig_data;
 
-	private Label lblTries;
+	private Label lblMessage;
 	private Label lblRefValLabel;
 	private Label lblTan;
 
@@ -117,28 +116,14 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	public void reset() { this.userAck = this.userCancel = this.userFido2 = false; }
 
 	/**
-	 * Set how many tries are left
-	 *
-	 * @param tries
-	 */
-	public void setTries(int tries) {
-		if ((tries > 0) && (tries < ATrustStatus.MOBILE_MAX_TAN_TRIES)) {
-			if (tries > 1)
-				SWTUtils.setLocalizedText(lblTries, "tanEnter.try");
-			else
-				SWTUtils.setLocalizedText(lblTries, "tanEnter.tries", tries);
-		}
-	}
-
-	/**
 	 * Set an error message
 	 * @param errorMessage the error message
 	 */
 	public void setErrorMessage(String errorMessage) {
 		if (errorMessage == null)
-			this.lblTries.setText("");
+			this.lblMessage.setText("");
 		else
-			this.lblTries.setText(
+			this.lblMessage.setText(
 					Messages.getString("error.Title") + ": " + errorMessage);
 	}
 
@@ -152,9 +137,9 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 * @param msg
 	 */
 	public void setMessage(String msg) {
-		this.lblTries.setText(msg);
-		this.lblTries.redraw();
-		this.lblTries.getParent().layout(true, true);
+		this.lblMessage.setText(msg);
+		this.lblMessage.redraw();
+		this.lblMessage.getParent().layout(true, true);
 	}
 
 	/**
@@ -280,8 +265,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		SWTUtils.anchor(btn_fido2).right(btn_cancel, -20).bottom(100, -20);
 		SWTUtils.addSelectionListener(btn_fido2, (e) -> { this.userFido2 = true; });
 
-		this.lblTries = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
-		SWTUtils.anchor(lblTries).right(btn_fido2, -10).bottom(100, -20);
+		this.lblMessage = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
+		SWTUtils.anchor(lblMessage).right(btn_fido2, -10).bottom(100, -20);
 	}
 
 	@Override

@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUs;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
@@ -48,12 +47,6 @@ import static at.asit.pdfover.commons.Constants.ISNOTNULL;
  * Implementation of the configuration provider and manipulator
  */
 public class ConfigurationManager {
-
-
-	/** Default Mobile BKU type */
-	public static final MobileBKUs DEFAULT_MOBILE_BKU_TYPE = MobileBKUs.A_TRUST;
-
-
 	/**
 	 * SLF4J Logger instance
 	 **/

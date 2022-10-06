@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUHelper;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUValidator;
 import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 
@@ -87,7 +87,7 @@ public class ConfigurationDataInMemory {
 			this.mobileNumber = null;
 			return;
 		}
-		this.mobileNumber = MobileBKUHelper.normalizeMobileNumber(number);
+		this.mobileNumber = MobileBKUValidator.normalizeMobileNumber(number);
 	}
 
 	/** The mobile phone password */

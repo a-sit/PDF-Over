@@ -16,8 +16,6 @@ import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
-
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 public class ATrustParser {
@@ -115,7 +113,6 @@ public class ATrustParser {
     public static class SMSTanBlock extends TopLevelFormBlock {
         private final @Nonnull String tanKey;
         public final @Nonnull String referenceValue;
-        public final int triesRemaining;
         public final @CheckForNull String errorMessage;
 
         public void setTAN(String tan) {
@@ -127,7 +124,6 @@ public class ATrustParser {
             abortIfElementMissing("#div_tan");
             this.tanKey = getAttributeEnsureNotNull("#input_tan", "name");
             this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
-            this.triesRemaining = ATrustStatus.MOBILE_MAX_TAN_TRIES; // TODO
             this.errorMessage = null;
         }
     }

@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.gui.bku.OLDmobile.MobileBKUHelper;
+import at.asit.pdfover.gui.bku.mobile.MobileBKUValidator;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.utils.SWTUtils;
@@ -65,7 +65,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 				String password = MobileBKUEnterNumberComposite.this.txt_password.getText();
 
-				MobileBKUHelper.validatePassword(password);
+				MobileBKUValidator.validatePassword(password);
 
 				MobileBKUEnterNumberComposite.this.mobilePassword = password;
 				MobileBKUEnterNumberComposite.this.userAck = true;

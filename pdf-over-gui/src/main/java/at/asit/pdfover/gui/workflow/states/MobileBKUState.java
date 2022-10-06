@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -45,8 +43,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.bku.MobileBKUConnector;
-import at.asit.pdfover.gui.bku.OLDmobile.ATrustHandler;
-import at.asit.pdfover.gui.bku.OLDmobile.ATrustStatus;
 import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterTANComposite;
@@ -58,7 +54,6 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
@@ -72,14 +67,8 @@ public class MobileBKUState extends State {
 
 	public Exception threadException = null;
 
-	public final ATrustStatus status;
-	public final ATrustHandler handler;
-
 	public MobileBKUState(StateMachine stateMachine) {
 		super(stateMachine);
-		ConfigurationManager provider = stateMachine.configProvider;
-		this.status = new ATrustStatus(provider);
-		this.handler = new ATrustHandler(this, stateMachine.getMainShell());
 	}
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
@@ -254,7 +243,6 @@ public class MobileBKUState extends State {
 
 	public void clearRememberedPassword() {
 		getStateMachine().configProvider.setDefaultMobilePasswordOverlay(null);
-		status.mobilePassword = null;
 	}
 
 	public @Nonnull UsernameAndPassword getCredentialsFromUser(@Nullable String currentUsername, @Nullable String errorMessage) throws UserCancelledException {
@@ -314,28 +302,6 @@ public class MobileBKUState extends State {
 		});
 	}
 
-	/**
-	 * Make sure phone number and password are set in the MobileBKUStatus
-	 * OLD METHOD (todo for nuking)
-	 */
-	public void checkCredentials() {
-		final ATrustStatus mobileStatus = this.status;
-		// check if we have everything we need!
-		if (mobileStatus.phoneNumber != null && !mobileStatus.phoneNumber.isEmpty() &&
-		    mobileStatus.mobilePassword != null && !mobileStatus.mobilePassword.isEmpty())
-			return;
-
-		try {
-			String errorMessage = mobileStatus.errorMessage;
-			mobileStatus.errorMessage = null;
-			UsernameAndPassword creds = getCredentialsFromUser(mobileStatus.phoneNumber, errorMessage);
-			mobileStatus.phoneNumber = creds.username;
-			mobileStatus.mobilePassword = creds.password;
-		} catch (UserCancelledException e) {
-			mobileStatus.errorMessage = "cancel";
-		}
-	}
-
 	public static class SMSTanResult {
 		public static enum ResultType { TO_FIDO2, SMSTAN };
 		public final @Nonnull ResultType type;
@@ -345,7 +311,7 @@ public class MobileBKUState extends State {
 		private SMSTanResult(@Nonnull ResultType type) { this.type = type; this.smsTan = null; }
 	}
 
-	public @Nonnull SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final int triesRemaining, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
+	public @Nonnull SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
 		return ISNOTNULL(Display.getDefault().syncCall(() -> {
 			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
 			
@@ -353,7 +319,6 @@ public class MobileBKUState extends State {
 			tan.setRefVal(referenceValue);
 			tan.setSignatureDataURI(signatureDataURI);
 			tan.setErrorMessage(errorMessage);
-			tan.setTries(triesRemaining);
 			tan.setFIDO2Enabled(showFido2);
 			getStateMachine().display(tan);
 
@@ -512,7 +477,7 @@ public class MobileBKUState extends State {
 	 *  when fingerprint or faceid is selected in the app
 	 *  this information is shown
 	 */
-	public void showFingerPrintInformation() {
+	/*public void showFingerPrintInformation() {
 		final ATrustStatus status = this.status;
 		final ATrustHandler handler = this.handler;
 
@@ -571,7 +536,7 @@ public class MobileBKUState extends State {
 			// show waiting composite
 			getStateMachine().display(this.getWaitingComposite());
 		});
-	}
+	}*/
 
 	/**
 	 * @return a boolean true if the user has pressed the sms tan button
