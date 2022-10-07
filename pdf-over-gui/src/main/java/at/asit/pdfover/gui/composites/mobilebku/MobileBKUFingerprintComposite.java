@@ -16,6 +16,9 @@
 package at.asit.pdfover.gui.composites.mobilebku;
 
 import java.net.URI;
+import java.util.Objects;
+
+import javax.annotation.CheckForNull;
 
 // Imports
 import org.eclipse.swt.SWT;
@@ -45,6 +48,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	private Label lblFPLabel;
 	private Label lblRefVal;
 	private Button btn_sms;
+	private Button btn_fido2;
 	private Button btn_cancel;
 	private Link lnk_sig_data;
 	public URI signatureDataURI;
@@ -52,21 +56,22 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 
 	private boolean userCancelClicked = false;
 	private boolean userSMSClicked = false;
+	private boolean userFido2Clicked = false;
 	private boolean pollingDone = false;
 
 	public void signalPollingDone() { this.pollingDone = true; getDisplay().wake(); }
 	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.pollingDone); }
 	public boolean wasCancelClicked() { return this.userCancelClicked; }
 	public boolean wasSMSClicked() { return this.userSMSClicked; }
-	public boolean wasFIDO2Clicked() { return false; } // TODO
-	public void reset() { this.userCancelClicked = this.userSMSClicked = this.pollingDone = false; }
+	public boolean wasFIDO2Clicked() { return this.userFido2Clicked; }
+	public void reset() { this.userCancelClicked = this.userSMSClicked = this.userFido2Clicked = this.pollingDone = false; }
 
 	public void setSMSEnabled(boolean state) {
 		this.btn_sms.setEnabled(state);
 	}
 
 	public void setFIDO2Enabled(boolean state) {
-		// TODO
+		this.btn_fido2.setEnabled(state);
 	}
 
 	/**
@@ -77,30 +82,13 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		if (errorMessage == null)
 			this.lblError.setText("");
 		else
-			this.lblError.setText(
-					Messages.getString("error.Title") + ": " + errorMessage);
+			this.lblError.setText(Messages.getString("error.Title") + ": " + errorMessage);
 	}
 
-	/**
-	 * @return the reference value
-	 */
-	public String getRefVal() {
-		return this.refVal;
-	}
-
-	/**
-	 * @param refVal
-	 *            the reference value to set
-	 */
-	public void setRefVal(String refVal) {
-
-		if (this.refVal != null) {
-			this.refVal = refVal.trim();
-			this.lblRefVal.setText(this.refVal);
-		} else {
-			this.lblRefVal.setText("");
-		}
-
+	public String getRefVal() { return this.refVal; }
+	public void setRefVal(@CheckForNull String refVal) {
+		this.refVal = (refVal != null) ? refVal.trim() : null;
+		this.lblRefVal.setText(Objects.requireNonNullElse(this.refVal, ""));
 	}
 
 	/**
@@ -154,11 +142,15 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -20);
-		SWTUtils.addSelectionListener(btn_cancel, () -> { userCancelClicked = true; });
+		SWTUtils.addSelectionListener(btn_cancel, () -> { this.userCancelClicked = true; });
 
 		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -20);
-		SWTUtils.addSelectionListener(btn_sms, () -> { userSMSClicked = true; });
+		SWTUtils.addSelectionListener(btn_sms, () -> { this.userSMSClicked = true; });
+
+		this.btn_fido2 = new Button(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(btn_fido2).right(btn_sms, -20).bottom(100, -20);
+		SWTUtils.addSelectionListener(btn_fido2, () -> { this.userFido2Clicked = true; });
 
 		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20);
@@ -194,5 +186,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		SWTUtils.setLocalizedToolTipText(lnk_sig_data, "mobileBKU.show_tooltip");
 		SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
 		SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
+		SWTUtils.setLocalizedText(btn_fido2, "tanEnter.FIDO2");
 	}
 }
