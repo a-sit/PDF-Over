@@ -235,12 +235,12 @@ public class PositioningComposite extends StateComposite {
 
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_KP_UP:
-				sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_KP_DOWN:
-				sigYOffset += Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
+				sigYOffset -= Constants.SIGNATURE_KEYBOARD_POSITIONING_OFFSET;
 				break;
 			}
 
@@ -335,11 +335,11 @@ public class PositioningComposite extends StateComposite {
 	 * @param sigXOffset
 	 *            signature placeholder horizontal position offset
 	 * @param sigYOffset
-	 *            signature placeholder vertical position offset
+	 *            signature placeholder vertical position offset (negative is down)
 	 */
 	public void translateSignaturePosition(final int sigXOffset, final int sigYOffset) {
 		EventQueue.invokeLater(() -> {
-			this.viewer.translateSignaturePosition(sigXOffset, sigYOffset);
+			this.viewer.translateSignaturePagePosition(sigXOffset, sigYOffset);
 		});
 	}
 
@@ -350,12 +350,14 @@ public class PositioningComposite extends StateComposite {
 	 *            the signature position
 	 */
 	void setFinalPosition() {
-		if (this.currentPage == 0)
+		if (this.currentPage == 0) {
 			this.position = new SignaturePosition();
-		else
+		} else {
 			this.position = new SignaturePosition(
-					this.viewer.getSignaturePositionX(),
-					this.viewer.getSignaturePositionY(), this.currentPage);
+					this.viewer.getSigPageX(),
+					this.viewer.getSigPageY(),
+					this.currentPage);
+		}
 		PositioningComposite.this.state.updateStateMachine();
 	}
 
@@ -369,7 +371,7 @@ public class PositioningComposite extends StateComposite {
 	 * @param page
 	 *            the page the signature is on
 	 */
-	public void setPosition(float x, float y, int page) {
+	public void setPosition(double x, double y, int page) {
 		showPage(page);
 		if (this.viewer != null)
 			this.viewer.setSignaturePosition(x, y);

@@ -25,12 +25,12 @@ public class SignaturePosition {
 	/**
 	 * The x value of the position
 	 */
-	protected float x = 0;
+	protected double x = 0;
 
 	/**
 	 * The y value of the position
 	 */
-	protected float y = 0;
+	protected double y = 0;
 
 	/**
 	 * The page value of the position
@@ -55,7 +55,7 @@ public class SignaturePosition {
 	 * @param x The x value of the position
 	 * @param y The y value of the position
 	 */
-	public SignaturePosition(float x, float y) {
+	public SignaturePosition(double x, double y) {
 		this.autoPositioning = false;
 		setPosition(x, y);
 	}
@@ -66,7 +66,7 @@ public class SignaturePosition {
 	 * @param y The y value of the signature position
 	 * @param page The page value of the signature position
 	 */
-	public SignaturePosition(float x, float y, int page) {
+	public SignaturePosition(double x, double y, int page) {
 		this.autoPositioning = false;
 		setPosition(x, y);
 		setPage(page);
@@ -77,24 +77,24 @@ public class SignaturePosition {
 	 * @param x the new x value
 	 * @param y the new y value
 	 */
-	public void setPosition(float x, float y) {
+	public void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
 	/**
 	 * Gets the X value of the position
-	 * @return float the x value of the position
+	 * @return double the x value of the position
 	 */
-	public float getX() {
+	public double getX() {
 		return this.x;
 	}
 
 	/**
 	 * Gets the Y value of the position
-	 * @return float the y value of the position
+	 * @return double the y value of the position
 	 */
-	public float getY() {
+	public double getY() {
 		return this.y;
 	}
 
