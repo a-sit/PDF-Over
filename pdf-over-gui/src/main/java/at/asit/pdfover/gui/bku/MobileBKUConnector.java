@@ -291,6 +291,10 @@ public class MobileBKUConnector implements BkuSlConnector {
                 state.rememberCredentialsIfNecessary(this.credentials);
         }
 
+        if (html.interstitialBlock != null) {
+            this.state.showInformationMessage(html.interstitialBlock.interstitialMessage);
+            return buildFormSubmit(html, html.interstitialBlock.submitButton);
+        }
         if (html.errorBlock != null) {
             try {
                 this.credentials.password = null;
@@ -342,9 +346,22 @@ public class MobileBKUConnector implements BkuSlConnector {
         }
         if (html.waitingForAppBlock != null) {
             try (LongPollThread longPollThread = new LongPollThread(html.waitingForAppBlock.pollingURI, () -> { this.state.signalAppOpened(); })) {
-                this.state.showWaitingForApp(html.waitingForAppBlock.referenceValue, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null);
+                this.state.showWaitingForAppOpen(html.waitingForAppBlock.referenceValue, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null);
                 longPollThread.start();
                 var result = this.state.waitForAppOpen();
+                switch (result) {
+                    case UPDATE: break;
+                    case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;
+                    case TO_SMS: if (html.smsTanLink != null) return new HttpGet(html.smsTanLink); break;
+                }
+                return new HttpGet(html.htmlDocument.baseUri());
+            }
+        }
+        if (html.waitingForBiometryBlock != null) {
+            try (LongPollThread longPollThread = new LongPollThread(html.waitingForBiometryBlock.pollingURI, () -> { this.state.signalAppBiometryDone(); })) {
+                this.state.showWaitingForAppBiometry(html.waitingForBiometryBlock.referenceValue, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null);
+                longPollThread.start();
+                var result = this.state.waitForAppBiometry();
                 switch (result) {
                     case UPDATE: break;
                     case TO_FIDO2: if (html.fido2Link != null) return new HttpGet(html.fido2Link); break;

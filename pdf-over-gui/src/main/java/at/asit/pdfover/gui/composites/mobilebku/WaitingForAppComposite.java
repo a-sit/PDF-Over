@@ -41,13 +41,6 @@ public class WaitingForAppComposite extends StateComposite {
 	private boolean userFIDO2Clicked = false;
 	private boolean pollingDone = false;
 
-	/**
-	 * @return the isDone
-	 */
-	public Boolean getIsDone() {
-		return this.pollingDone;
-	}
-
 	public void signalPollingDone() { this.pollingDone = true; getDisplay().wake(); }
 	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.userFIDO2Clicked || this.pollingDone); }
 	public boolean wasCancelClicked() { return this.userCancelClicked; }

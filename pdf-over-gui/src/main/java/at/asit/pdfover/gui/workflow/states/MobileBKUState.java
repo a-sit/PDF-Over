@@ -51,6 +51,8 @@ import at.asit.pdfover.gui.composites.mobilebku.MobileBKUFingerprintComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUQRComposite;
 import at.asit.pdfover.gui.composites.mobilebku.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
+import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
@@ -185,6 +187,16 @@ public class MobileBKUState extends State {
 		Display.getDefault().syncExec(() -> {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), message, BUTTONS.OK);
 			error.open();
+		});
+	}
+
+	public void showInformationMessage(final @Nonnull String message) throws UserCancelledException {
+		Display.getDefault().syncCall(() -> {
+			Dialog dialog = new Dialog(getStateMachine().getMainShell(), Messages.getString("common.info"), message, BUTTONS.OK, ICON.INFORMATION);
+			int result = dialog.open();
+			if (result == SWT.CANCEL)
+				throw new UserCancelledException();
+			return true; /* dummy return to keep java happy */
 		});
 	}
 
@@ -417,7 +429,7 @@ public class MobileBKUState extends State {
 	/**
 	 * start showing the "waiting for app" screen
 	 * this method will return immediately */
-	public void showWaitingForApp(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
+	public void showWaitingForAppOpen(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
 		Display.getDefault().syncExec(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 			wfa.reset();
@@ -473,76 +485,60 @@ public class MobileBKUState extends State {
 		getWaitingForAppComposite().signalPollingDone();
 	}
 
-	/**
-	 *  when fingerprint or faceid is selected in the app
-	 *  this information is shown
-	 */
-	/*public void showFingerPrintInformation() {
-		final ATrustStatus status = this.status;
-		final ATrustHandler handler = this.handler;
-
-		Timer checkDone = new Timer();
-		checkDone.scheduleAtFixedRate(new TimerTask() {
-
-			@Override
-			public void run() {
-				// ping signature page to see if code has been scanned
-				try {
-					String resp = handler.getSignaturePage();
-					if (handler.handleQRResponse(resp)) {
-						log.debug("Signature page response: " + resp);
-						getMobileBKUFingerprintComposite().setDone(true);
-						Display display = getStateMachine().getMainShell().getDisplay();
-						display.wake();
-						checkDone.cancel();
-					}
-					Display.getDefault().wake();
-				} catch (Exception e) {
-					log.error("Error getting signature page", e);
-				}
-			}
-		}, 0, 5000);
+	public void showWaitingForAppBiometry(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
 		Display.getDefault().syncExec(() -> {
-			MobileBKUFingerprintComposite fingerprintComposite = getMobileBKUFingerprintComposite();
+			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
+			bio.reset();
 
-			fingerprintComposite.setRefVal(status.refVal);
-			fingerprintComposite.setSignatureData(status.signatureDataURL);
-			fingerprintComposite.setErrorMessage(status.errorMessage);
-			getStateMachine().display(fingerprintComposite);
-
-			Display display = getStateMachine().getMainShell().getDisplay();
-			while (!fingerprintComposite.isUserCancel() && !fingerprintComposite.isUserSMS() && !fingerprintComposite.isDone()) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
-			checkDone.cancel();
-
-			if (fingerprintComposite.isUserCancel()) {
-				fingerprintComposite.setUserCancel(false);
-				clearRememberedPassword();
-				status.errorMessage = "cancel";
-				return;
-			}
-
-			if (fingerprintComposite.isUserSMS()) {
-//					fingerprintComposite.setUserSMS(false);
-				status.qrCodeURL = null;
-			}
-
-			if (fingerprintComposite.isDone())
-				fingerprintComposite.setDone(false);
-
-			// show waiting composite
-			getStateMachine().display(this.getWaitingComposite());
+			bio.setRefVal(referenceValue);
+			bio.signatureDataURI = signatureDataURI;
+			bio.setErrorMessage(null); // TODO
+			bio.setSMSEnabled(showSmsTan);
+			bio.setFIDO2Enabled(showFido2);
+			getStateMachine().display(bio);
 		});
-	}*/
+	}
 
-	/**
-	 * @return a boolean true if the user has pressed the sms tan button
-	 */
-	public boolean getSMSStatus() {
-		return this.getMobileBKUFingerprintComposite().isUserSMS();
+	// TODO can we maybe deduplicate the various waiting screens' logic?
+
+	public enum AppBiometryResult {
+		/* the user has pressed the FIDO2 button */
+		TO_FIDO2,
+		/* the user has pressed the SMS button */
+		TO_SMS,
+		/* signalAppBiometryDone has been called; this indicates that we should refresh the page */
+		UPDATE
+	};
+
+	public @Nonnull AppBiometryResult waitForAppBiometry() throws UserCancelledException {
+		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
+
+			Display display = bio.getDisplay();
+			while (!bio.isDone()) {
+				if (!display.readAndDispatch())
+					display.sleep();
+			}
+
+			getStateMachine().display(this.getWaitingComposite());
+
+			if (bio.wasCancelClicked()) {
+				clearRememberedPassword();
+				throw new UserCancelledException();
+			}
+
+			if (bio.wasSMSClicked())
+				return AppBiometryResult.TO_SMS;
+			
+			if (bio.wasFIDO2Clicked())
+				return AppBiometryResult.TO_FIDO2;
+
+			return AppBiometryResult.UPDATE;
+		}));
+	}
+
+	public void signalAppBiometryDone() {
+		getMobileBKUFingerprintComposite().signalPollingDone();
 	}
 
 	public static class FIDO2Result {

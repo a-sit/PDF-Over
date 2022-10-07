@@ -74,6 +74,19 @@ public class ATrustParser {
         }
     }
 
+    public static class InterstitialBlock extends TopLevelFormBlock {
+        public final @Nonnull String submitButton;
+        public final @Nonnull String interstitialMessage;
+
+        private InterstitialBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            if (htmlDocument.baseUri().contains("/ExpiresInfo.aspx")) {
+                this.interstitialMessage = ISNOTNULL(getElementEnsureNotNull("#Label2").ownText());
+                this.submitButton = "#Button_Next";
+            } else { throw new ComponentParseFailed(); }
+        }
+    }
+
     public static class ErrorBlock extends TopLevelFormBlock {
         public final boolean isRecoverable;
         public final @Nonnull String errorText;
@@ -159,6 +172,19 @@ public class ATrustParser {
         }
     }
 
+    public static class WaitingForBiometryBlock extends TopLevelFormBlock {
+        public final @Nonnull String referenceValue;
+        public final @Nonnull URI pollingURI;
+
+        private WaitingForBiometryBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            abortIfElementMissing("#biometricimage");
+
+            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.pollingURI = getLongPollURI();
+        }
+    }
+
     public static class Fido2Block extends TopLevelFormBlock {
         public final @Nonnull String fidoOptions;
         private final @Nonnull String credentialResultKey;
@@ -186,21 +212,25 @@ public class ATrustParser {
         public final @CheckForNull URI fido2Link;
 
         /* top-level blocks (exactly one is not null) */
+        public final @CheckForNull InterstitialBlock interstitialBlock;
         public final @CheckForNull ErrorBlock errorBlock;
         public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
         public final @CheckForNull SMSTanBlock smsTanBlock;
         public final @CheckForNull QRCodeBlock qrCodeBlock;
         public final @CheckForNull WaitingForAppBlock waitingForAppBlock;
+        public final @CheckForNull WaitingForBiometryBlock waitingForBiometryBlock;
         public final @CheckForNull Fido2Block fido2Block;
 
         private void validate() {
             Set<String> populated = new HashSet<>();
 
+            if (interstitialBlock != null) populated.add("interstitialBlock");
             if (errorBlock != null) populated.add("errorBlock");
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
             if (smsTanBlock != null) populated.add("smsTanBlock");
             if (qrCodeBlock != null) populated.add("qrCodeBlock");
             if (waitingForAppBlock != null) populated.add("waitingForAppBlock");
+            if (waitingForBiometryBlock != null) populated.add("waitingForBiometryBlock");
             if (fido2Block != null) populated.add("fido2Block");
 
             switch (populated.size()) {
@@ -280,11 +310,13 @@ public class ATrustParser {
             this.smsTanLink = getHrefIfExists("#SmsButton");
             this.fido2Link = getHrefIfExists("#FidoButton");
 
+            this.interstitialBlock = TryParseMainBlock(InterstitialBlock.class);
             this.errorBlock = TryParseMainBlock(ErrorBlock.class);
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
             this.smsTanBlock = TryParseMainBlock(SMSTanBlock.class);
             this.qrCodeBlock = TryParseMainBlock(QRCodeBlock.class);
             this.waitingForAppBlock = TryParseMainBlock(WaitingForAppBlock.class);
+            this.waitingForBiometryBlock = TryParseMainBlock(WaitingForBiometryBlock.class);
             this.fido2Block = TryParseMainBlock(Fido2Block.class);
             
             validate();

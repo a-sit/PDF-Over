@@ -15,12 +15,12 @@
  */
 package at.asit.pdfover.gui.composites.mobilebku;
 
+import java.net.URI;
+
 // Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
@@ -29,8 +29,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -42,102 +40,33 @@ import at.asit.pdfover.gui.workflow.states.State;
  * Composite for displaying the QR code for the mobile BKU
  */
 public class MobileBKUFingerprintComposite extends StateComposite {
-
-	/**
-	 *
-	 */
-	private final class SMSSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public SMSSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(!MobileBKUFingerprintComposite.this.btn_sms.getEnabled()) {
-				return;
-			}
-
-			MobileBKUFingerprintComposite.this.setUserSMS(true);
-			MobileBKUFingerprintComposite.this.btn_sms.setEnabled(false);
-		}
-	}
-
-	/**
-	 *
-	 */
-	private final class CancelSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public CancelSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MobileBKUFingerprintComposite.this.setUserCancel(true);
-		}
-	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(MobileBKUFingerprintComposite.class);
-
-	boolean userCancel = false;
-	boolean userSMS = false;
-	boolean done = false;
-
-	private Label lblRefVal;
-
-	String refVal;
-
-	String signatureData;
-
-	/**
-	 * @return the signatureData
-	 */
-	public String getSignatureData() {
-		return this.signatureData;
-	}
-
-	/**
-	 * @param signatureData
-	 *            the signatureData to set
-	 */
-	public void setSignatureData(String signatureData) {
-		this.signatureData = signatureData;
-	}
-
 	private Label lblError;
 	private Label lblRefValLabel;
 	private Label lblFPLabel;
+	private Label lblRefVal;
+	private Button btn_sms;
+	private Button btn_cancel;
+	private Link lnk_sig_data;
+	public URI signatureDataURI;
+	private String refVal;
 
-	Button btn_sms;
-	Button btn_cancel;
+	private boolean userCancelClicked = false;
+	private boolean userSMSClicked = false;
+	private boolean pollingDone = false;
 
-	Link lnk_sig_data;
+	public void signalPollingDone() { this.pollingDone = true; getDisplay().wake(); }
+	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.pollingDone); }
+	public boolean wasCancelClicked() { return this.userCancelClicked; }
+	public boolean wasSMSClicked() { return this.userSMSClicked; }
+	public boolean wasFIDO2Clicked() { return false; } // TODO
+	public void reset() { this.userCancelClicked = this.userSMSClicked = this.pollingDone = false; }
 
-	/**
-	 * @return the userCancel
-	 */
-	public boolean isUserCancel() {
-		return this.userCancel;
+	public void setSMSEnabled(boolean state) {
+		this.btn_sms.setEnabled(state);
 	}
 
-	/**
-	 * @return the userSMS
-	 */
-	public boolean isUserSMS() {
-		return this.userSMS;
-	}
-
-	/**
-	 * @return the done
-	 */
-	public boolean isDone() {
-		return this.done;
+	public void setFIDO2Enabled(boolean state) {
+		// TODO
 	}
 
 	/**
@@ -150,30 +79,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		else
 			this.lblError.setText(
 					Messages.getString("error.Title") + ": " + errorMessage);
-	}
-
-	/**
-	 * @param userCancel
-	 *            the userCancel to set
-	 */
-	public void setUserCancel(boolean userCancel) {
-		this.userCancel = userCancel;
-	}
-
-	/**
-	 * @param userSMS
-	 *            the userSMS to set
-	 */
-	public void setUserSMS(boolean userSMS) {
-		this.userSMS = userSMS;
-	}
-
-	/**
-	 * @param done
-	 *            the done to set
-	 */
-	public void setDone(boolean done) {
-		this.done = done;
 	}
 
 	/**
@@ -245,15 +150,15 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		this.lnk_sig_data = new Link(containerComposite, SWT.NATIVE | SWT.RESIZE);
 		SWTUtils.anchor(lnk_sig_data).right(100, -20).top(0, 20);
 		this.lnk_sig_data.setEnabled(true);
-		SWTUtils.addSelectionListener(lnk_sig_data, (e) -> { SWTUtils.openURL(getSignatureData()); });
+		SWTUtils.addSelectionListener(lnk_sig_data, (e) -> { SWTUtils.openURL(this.signatureDataURI); });
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).right(100, -20).bottom(100, -20);
-		this.btn_cancel.addSelectionListener(new CancelSelectionListener());
+		SWTUtils.addSelectionListener(btn_cancel, () -> { userCancelClicked = true; });
 
 		this.btn_sms = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_sms).right(btn_cancel, -20).bottom(100, -20);
-		this.btn_sms.addSelectionListener(new SMSSelectionListener());
+		SWTUtils.addSelectionListener(btn_sms, () -> { userSMSClicked = true; });
 
 		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20);
