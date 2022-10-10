@@ -308,7 +308,7 @@ public class ATrustParser {
 
             this.signatureDataLink = getHrefIfExists("#LinkList a[href*=\"ShowSigobj.aspx\"]"); /* grr, they didn't give it an ID */
             this.smsTanLink = getHrefIfExists("#SmsButton");
-            this.fido2Link = getHrefIfExists("#FidoButton");
+            this.fido2Link = getHrefIfExists("#FidoButton"); // TODO hide the button if unsupported?
 
             this.interstitialBlock = TryParseMainBlock(InterstitialBlock.class);
             this.errorBlock = TryParseMainBlock(ErrorBlock.class);

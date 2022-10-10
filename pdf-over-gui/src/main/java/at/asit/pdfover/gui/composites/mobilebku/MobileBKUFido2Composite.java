@@ -1,5 +1,8 @@
 package at.asit.pdfover.gui.composites.mobilebku;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
 import javax.annotation.Nonnull;
 
 import org.eclipse.swt.SWT;
@@ -79,16 +82,21 @@ public class MobileBKUFido2Composite extends StateComposite {
         SWTUtils.addSelectionListener(btn_authenticate, () -> {
             SWTUtils.setLocalizedText(btn_authenticate, "common.working");
             btn_authenticate.setEnabled(false);
-            try {
-                /* let the click process first so we don't steal back focus from the fido2 popup */
-                try { Thread.sleep(10); } catch (InterruptedException e) {}
-                this.credential = PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).get("https://service.a-trust.at");
-            } catch (WebAuthNUserCancelled e) {
-                this.userCancel = true;
-            } catch (WebAuthNOperationFailed e) {
-                // TODO
-                log.error("webauthn fail", e);
-            } finally { btn_authenticate.setEnabled(true); reloadResources(); }
+            PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).asyncGet("https://service.a-trust.at")
+                .thenAccept((PublicKeyCredential<AuthenticatorAssertionResponse> result) -> {
+                    this.credential = result;
+                }).exceptionally((Throwable e) -> {
+                    if (e instanceof WebAuthNUserCancelled) {
+                        this.userCancel = true;
+                    } else {
+                        log.error("webauthn fail", e);
+                    }
+                    return null;
+                }).thenRun(() -> {
+                    btn_authenticate.setEnabled(true);
+                    reloadResources();
+                    this.getDisplay().wake();
+                });
         });
     }
 
