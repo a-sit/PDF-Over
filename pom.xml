@@ -223,6 +223,15 @@
 	</dependencyManagement>
 
 	<repositories>
+        <repository>
+			<id>local-repo</id>
+			<url>file://${pdfover-build.root-dir}/repo</url>
+		</repository>
+        <repository>
+			<id>internal-repo</id>
+			<name>Internal Repository</name>
+			<url>https://apps.egiz.gv.at/maven/</url>
+		</repository>
 		<repository>
 			<id>maven-central</id>
 			<name>Maven Central Repository</name>
@@ -232,15 +241,6 @@
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Repository for Maven 2</name>
 			<url>https://download.java.net/maven/2/</url>
-		</repository>
-		<repository>
-			<id>local-repo</id>
-			<url>file://${pdfover-build.root-dir}/repo</url>
-		</repository>
-		<repository>
-			<id>internal-repo</id>
-			<name>Internal Repository</name>
-			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
 	</repositories>
 </project>
