@@ -96,7 +96,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	 */
 	public void setSignatureDataURI(@Nullable URI uri) {
 		this.signatureDataURI = uri;
-		this.lnk_sig_data.setEnabled(uri != null);
+		this.lnk_sig_data.setVisible(uri != null);
 	}
 
 	private String tan;
