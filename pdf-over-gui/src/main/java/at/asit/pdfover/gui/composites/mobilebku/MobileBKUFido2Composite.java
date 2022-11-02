@@ -82,21 +82,20 @@ public class MobileBKUFido2Composite extends StateComposite {
         SWTUtils.addSelectionListener(btn_authenticate, () -> {
             SWTUtils.setLocalizedText(btn_authenticate, "common.working");
             btn_authenticate.setEnabled(false);
-            PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).asyncGet("https://service.a-trust.at")
-                .thenAccept((PublicKeyCredential<AuthenticatorAssertionResponse> result) -> {
-                    this.credential = result;
-                }).exceptionally((Throwable e) -> {
-                    if (e instanceof WebAuthNUserCancelled) {
+            new Thread(() -> {
+                try {
+                    this.credential = PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).get("https://service.a-trust.at");
+                } catch (Throwable t) {
+                    if (t instanceof WebAuthNUserCancelled) {
                         this.userCancel = true;
                     } else {
-                        log.error("webauthn fail", e);
+                        log.warn("webauthn operation failed", t);
                     }
-                    return null;
-                }).thenRun(() -> {
-                    btn_authenticate.setEnabled(true);
-                    reloadResources();
+                } finally {
+                    this.getDisplay().syncExec(() -> { btn_authenticate.setEnabled(true); this.reloadResources(); });
                     this.getDisplay().wake();
-                });
+                }
+            }).start();
         });
     }
 
