@@ -1,8 +1,5 @@
 package at.asit.pdfover.gui.composites.mobilebku;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-
 import javax.annotation.Nonnull;
 
 import org.eclipse.swt.SWT;
@@ -23,7 +20,6 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthn.PublicKeyCredential;
 import at.asit.webauthn.PublicKeyCredentialRequestOptions;
 import at.asit.webauthn.WebAuthN;
-import at.asit.webauthn.exceptions.WebAuthNOperationFailed;
 import at.asit.webauthn.exceptions.WebAuthNUserCancelled;
 import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
 
@@ -49,6 +45,27 @@ public class MobileBKUFido2Composite extends StateComposite {
     public PublicKeyCredential<AuthenticatorAssertionResponse> getResultingCredential() { return this.credential; }
     public boolean wasUserCancelClicked() { return userCancel; }
     public boolean wasUserSMSClicked() { return userSms; }
+
+    public void beginAuthentication() {
+        if (!btn_authenticate.isEnabled()) return;
+
+        SWTUtils.setLocalizedText(btn_authenticate, "common.working");
+        btn_authenticate.setEnabled(false);
+        new Thread(() -> {
+            try {
+                this.credential = PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).get("https://service.a-trust.at");
+            } catch (Throwable t) {
+                if (t instanceof WebAuthNUserCancelled) {
+                    this.userCancel = true;
+                } else {
+                    log.warn("webauthn operation failed", t);
+                }
+            } finally {
+                this.getDisplay().syncExec(() -> { btn_authenticate.setEnabled(true); this.reloadResources(); });
+                this.getDisplay().wake();
+            }
+        }).start();
+    }
 
     public MobileBKUFido2Composite(Composite parent, int style, State state) {
         super(parent, style, state);
@@ -79,24 +96,7 @@ public class MobileBKUFido2Composite extends StateComposite {
 
         this.btn_authenticate = new Button(containerComposite, SWT.NATIVE);
         SWTUtils.anchor(btn_authenticate).top(50, -10).left(0, 90).right(100, -90);
-        SWTUtils.addSelectionListener(btn_authenticate, () -> {
-            SWTUtils.setLocalizedText(btn_authenticate, "common.working");
-            btn_authenticate.setEnabled(false);
-            new Thread(() -> {
-                try {
-                    this.credential = PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).get("https://service.a-trust.at");
-                } catch (Throwable t) {
-                    if (t instanceof WebAuthNUserCancelled) {
-                        this.userCancel = true;
-                    } else {
-                        log.warn("webauthn operation failed", t);
-                    }
-                } finally {
-                    this.getDisplay().syncExec(() -> { btn_authenticate.setEnabled(true); this.reloadResources(); });
-                    this.getDisplay().wake();
-                }
-            }).start();
-        });
+        SWTUtils.addSelectionListener(btn_authenticate, this::beginAuthentication);
     }
 
     @Override protected void checkSubclass() {}

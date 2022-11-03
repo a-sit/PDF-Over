@@ -563,6 +563,7 @@ public class MobileBKUState extends State {
 			// TODO signature data, sms tan support
 			
 			getStateMachine().display(fido2);
+			fido2.beginAuthentication();
 
 			Display display = fido2.getDisplay();
 			while (!fido2.isDone()) {
