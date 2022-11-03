@@ -93,15 +93,26 @@ public class ATrustParser {
 
         private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
-            if (!htmlDocument.baseUri().contains("/error.aspx"))
+
+            try {
+                String documentPath = new URI(htmlDocument.baseUri()).getPath();
+                String aspxFile = documentPath.substring(documentPath.lastIndexOf('/'));
+
+                // gods this is such a hack, why can't they have a proper error element or something
+                if (!(aspxFile.startsWith("/error") && aspxFile.endsWith(".aspx")))
+                    throw new ComponentParseFailed();
+            } catch (URISyntaxException ex) {
+                log.warn("Failed to parse document base URI as URI? ({})", htmlDocument.baseUri());
                 throw new ComponentParseFailed();
-            
+            }
+
             this.isRecoverable = (htmlDocument.selectFirst("#Button_Back") != null);
 
-            String errorText = getElementEnsureNotNull("#Label1").ownText();
-            if (errorText.startsWith("Fehler:"))
-                errorText = errorText.substring(7);
-            this.errorText = ISNOTNULL(errorText.trim());
+            StringBuilder errorText = new StringBuilder(getElementEnsureNotNull("#Label1").ownText().trim());
+            var detailLabel = this.htmlDocument.selectFirst("#LabelDetail");
+            if (detailLabel != null)
+                errorText.append("\n").append(detailLabel.ownText().trim());
+            this.errorText = ISNOTNULL(errorText.toString());
         }
     }
 
