@@ -107,25 +107,17 @@ public class PositioningComposite extends StateComposite {
 				Constants.MAINBAR_ACTIVE_BACK_DARK.getBlue()));
 		this.frame.add(this.viewer, BorderLayout.CENTER);
 
-		this.btnNewPage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (PositioningComposite.this.currentPage > PositioningComposite.this.numPages)
-					showPage(PositioningComposite.this.numPages);
-				else
-					showPage(PositioningComposite.this.numPages + 1);
-				requestFocus();
-			}
+		SWTUtils.addSelectionListener(btnNewPage, () -> {
+			if (this.currentPage > this.numPages)
+				showPage(this.numPages);
+			else
+				showPage(this.numPages + 1);
+			requestFocus();
 		});
 
-		this.btnSign.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setFinalPosition();
-			}
-		});
+		SWTUtils.addSelectionListener(btnSign, this::setFinalPosition);
 
-		this.scrollbar.addSelectionListener(this.selectionListener);
+		SWTUtils.addSelectionListener(scrollbar, () -> { this.showPage(this.scrollbar.getSelection()); });
 
 		reloadResources();
 		requestFocus();
@@ -274,13 +266,6 @@ public class PositioningComposite extends StateComposite {
 
 			if (newPage != PositioningComposite.this.currentPage)
 				showPage(newPage);
-		}
-	};
-
-	private SelectionListener selectionListener = new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			PositioningComposite.this.showPage(PositioningComposite.this.scrollbar.getSelection());
 		}
 	};
 
