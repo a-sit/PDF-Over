@@ -82,8 +82,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		SWTUtils.reanchor(lnkDataProtection).bottom(btnUpdateCheck,-5);
 
 		SWTUtils.addSelectionListener(btnOpenLogDirectory, (e) -> {
-			try
-			{
+			try {
 				if (Desktop.isDesktopSupported())
 					Desktop.getDesktop().open(new File(Constants.CONFIG_DIRECTORY + File.separator + "logs"));
 			} catch (Exception ex) {
