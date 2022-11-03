@@ -503,16 +503,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationContainer.setProxyPort(port);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		// Nothing to do here
-	}
-
 	@Override
 	public void initConfiguration(ConfigurationManager provider) {
 		this.configurationContainer.autoPositionSignature = provider.getAutoPositionSignaturePersistent();

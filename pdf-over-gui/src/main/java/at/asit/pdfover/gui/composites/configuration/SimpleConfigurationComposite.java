@@ -597,16 +597,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		signatureBlockPreviewChanged();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		layout(true, true);
-	}
-
 	@Override
 	public void initConfiguration(ConfigurationManager provider) {
 		this.configurationContainer.setMobileNumber(provider.getDefaultMobileNumberPersistent());

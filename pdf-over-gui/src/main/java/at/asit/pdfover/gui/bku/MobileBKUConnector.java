@@ -56,6 +56,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     private final @Nonnull MobileBKUState state;
     public MobileBKUConnector(@Nonnull MobileBKUState state) {
         this.state = state;
+        this.wantsFido2Default = state.getConfig().getFido2ByDefault();
         state.storeRememberedCredentialsTo(this.credentials);
     }
 
@@ -281,6 +282,7 @@ public class MobileBKUConnector implements BkuSlConnector {
         
     }
 
+    private boolean wantsFido2Default;
     /**
      * Main lifting function for MobileBKU UX
      * @return the next request to make, or null if the current response should be returned
@@ -289,6 +291,11 @@ public class MobileBKUConnector implements BkuSlConnector {
         if ((html.errorBlock == null) && (html.usernamePasswordBlock == null)) { /* successful username/password auth */
             if ((this.credentials.username != null) && (this.credentials.password != null))
                 state.rememberCredentialsIfNecessary(this.credentials);
+        }
+
+        if (wantsFido2Default && (html.fido2Link != null)) {
+            wantsFido2Default = false;
+            return new HttpGet(html.fido2Link);
         }
 
         if (html.interstitialBlock != null) {

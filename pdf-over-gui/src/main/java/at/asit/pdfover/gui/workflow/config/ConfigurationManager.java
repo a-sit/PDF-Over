@@ -271,6 +271,8 @@ public class ConfigurationManager {
 		String updateCheck = diskConfig.getProperty(Constants.CFG_UPDATE_CHECK);
 		if (updateCheck != null)
 			setUpdateCheckPersistent(!updateCheck.equalsIgnoreCase(Constants.FALSE));
+
+		setFido2ByDefaultPersistent(Constants.TRUE.equalsIgnoreCase(diskConfig.getProperty(Constants.CFG_FIDO2_BY_DEFAULT)));
 		
 		log.info("Successfully loaded config from: " + getConfigurationFileName());
 		loaded = true;
@@ -368,6 +370,9 @@ public class ConfigurationManager {
 
 		if (!getUpdateCheck())
 			setProperty(props, Constants.CFG_UPDATE_CHECK, Constants.FALSE);
+		
+		if (getFido2ByDefault())
+			setProperty(props, Constants.CFG_FIDO2_BY_DEFAULT, Constants.TRUE);
 
 		setProperty(props, Constants.SIGNATURE_PROFILE, ISNOTNULL(getSignatureProfile().name()));
 
@@ -902,6 +907,12 @@ public class ConfigurationManager {
 		return this.configuration.enabledPlaceholderUsage;
 	}
 
+	public void setFido2ByDefaultPersistent(boolean bool) {
+		this.configuration.fido2ByDefault = bool;
+	}
 
+	public boolean getFido2ByDefault() {
+		return this.configuration.fido2ByDefault;
+	}
 
 }

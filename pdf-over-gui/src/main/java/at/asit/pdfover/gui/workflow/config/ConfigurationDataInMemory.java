@@ -190,4 +190,7 @@ public class ConfigurationDataInMemory {
 
 	public @Nonnull String saveFilePostFix = Constants.DEFAULT_POSTFIX;
 
+	/** whether fido2 authentication should be selected by default */
+	public boolean fido2ByDefault = false;
+
 }

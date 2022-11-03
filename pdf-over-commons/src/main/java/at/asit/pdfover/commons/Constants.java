@@ -222,6 +222,8 @@ public class Constants {
 	/** The theme */
 	public static final String CFG_THEME = "THEME";
 
+	public static final String CFG_FIDO2_BY_DEFAULT = "FIDO2_DEFAULT";
+
 	/** Download URL for accepted Certificates*/
 	public static final String CFG_DOWNLOAD_URL="DOWNLOAD_URL";
 

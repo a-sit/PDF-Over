@@ -17,6 +17,7 @@ package at.asit.pdfover.gui.workflow.states;
 
 //Imports
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 
 /**
  * Base state class
@@ -38,6 +39,8 @@ public abstract class State {
 		this.stateMachine = stateMachine;
 		this.nextState = this;
 	}
+
+	public ConfigurationManager getConfig() { return this.stateMachine.configProvider; }
 
 	/**
 	 * Gets the next logical state or null if this their is no state transition

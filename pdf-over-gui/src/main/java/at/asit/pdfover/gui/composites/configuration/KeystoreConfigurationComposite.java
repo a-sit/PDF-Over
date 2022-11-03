@@ -427,16 +427,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtKeystoreKeyPass.setText(keypass);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		layout(true, true);
-	}
-
 	@Override
 	public void initConfiguration(ConfigurationManager provider) {
 		ConfigurationDataInMemory config = this.configurationContainer;

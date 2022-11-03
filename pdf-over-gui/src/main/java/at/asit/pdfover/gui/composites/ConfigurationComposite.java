@@ -34,6 +34,7 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.composites.configuration.AboutComposite;
 import at.asit.pdfover.gui.composites.configuration.AdvancedConfigurationComposite;
 import at.asit.pdfover.gui.composites.configuration.ConfigurationCompositeBase;
+import at.asit.pdfover.gui.composites.configuration.Fido2ConfigurationComposite;
 import at.asit.pdfover.gui.composites.configuration.KeystoreConfigurationComposite;
 import at.asit.pdfover.gui.composites.configuration.SimpleConfigurationComposite;
 import at.asit.pdfover.gui.controls.ErrorDialog;
@@ -74,6 +75,8 @@ public class ConfigurationComposite extends StateComposite {
 	 */
 	ConfigurationCompositeBase keystoreConfigComposite = null;
 
+	ConfigurationCompositeBase fido2ConfigComposite;
+
 	/**
 	 * about page composite
 	 */
@@ -86,7 +89,7 @@ public class ConfigurationComposite extends StateComposite {
 				int i = 0;
 				@Override
 				public boolean hasNext() {
-					return i < 4;
+					return i < 5;
 				}
 
 				@Override
@@ -96,7 +99,8 @@ public class ConfigurationComposite extends StateComposite {
 						case 1: return simpleConfigComposite;
 						case 2: return advancedConfigComposite;
 						case 3: return keystoreConfigComposite;
-						case 4: return aboutConfigComposite;
+						case 4: return fido2ConfigComposite;
+						case 5: return aboutConfigComposite;
 					}
 					throw new NoSuchElementException();
 				}
@@ -141,6 +145,8 @@ public class ConfigurationComposite extends StateComposite {
 
 	private TabItem keystoreTabItem;
 
+	private TabItem fido2TabItem;
+
 	private TabItem aboutTabItem;
 
 	private Button btnSpeichern;
@@ -167,7 +173,6 @@ public class ConfigurationComposite extends StateComposite {
 		SWTUtils.setFontHeight(tabFolder, Constants.TEXT_SIZE_NORMAL);
 
 		this.simpleTabItem = new TabItem(this.tabFolder, SWT.NONE);
-
 		ScrolledComposite simpleCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.simpleTabItem.setControl(simpleCompositeScr);
 		this.simpleConfigComposite = new SimpleConfigurationComposite(simpleCompositeScr, SWT.NONE, state, configurationContainer);
@@ -177,7 +182,6 @@ public class ConfigurationComposite extends StateComposite {
 		simpleCompositeScr.setMinSize(simpleConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		this.advancedTabItem = new TabItem(this.tabFolder, SWT.NONE);
-
 		ScrolledComposite advancedCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.advancedTabItem.setControl(advancedCompositeScr);
 		this.advancedConfigComposite = new AdvancedConfigurationComposite(advancedCompositeScr, SWT.NONE, state, configurationContainer, this);
@@ -186,8 +190,20 @@ public class ConfigurationComposite extends StateComposite {
 		advancedCompositeScr.setExpandVertical(true);
 		advancedCompositeScr.setMinSize(advancedConfigComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
+		this.fido2TabItem = new TabItem(this.tabFolder, SWT.NONE);
+		ScrolledComposite fido2CompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
+		this.fido2TabItem.setControl(fido2CompositeScr);
+		this.fido2ConfigComposite = new Fido2ConfigurationComposite(fido2CompositeScr, SWT.NONE, state, configurationContainer);
+		fido2CompositeScr.setContent(fido2ConfigComposite);
+		fido2CompositeScr.setExpandHorizontal(true);
+		fido2CompositeScr.setExpandVertical(true);
+		fido2CompositeScr.addListener(SWT.Resize, (e) -> {
+			int widthHint = fido2CompositeScr.getClientArea().width - 50; /* offset for scroll bar */
+			fido2CompositeScr.setMinSize(null);
+			fido2CompositeScr.setMinSize(fido2CompositeScr.computeSize(widthHint, SWT.DEFAULT));
+		});
 
+		this.aboutTabItem = new TabItem(this.tabFolder, SWT.NONE);
 		ScrolledComposite aboutCompositeScr = new ScrolledComposite(this.tabFolder, (SWT.H_SCROLL | SWT.V_SCROLL));
 		this.aboutTabItem.setControl(aboutCompositeScr);
 		this.aboutConfigComposite = new AboutComposite(aboutCompositeScr, SWT.NONE, state, configurationContainer);
@@ -377,6 +393,7 @@ public class ConfigurationComposite extends StateComposite {
 	public void reloadResources() {
 		SWTUtils.setLocalizedText(simpleTabItem, "config.Simple");
 		SWTUtils.setLocalizedText(advancedTabItem, "config.Advanced");
+		SWTUtils.setLocalizedText(fido2TabItem, "config.FIDO2");
 		SWTUtils.setLocalizedText(aboutTabItem, "config.About", Constants.APP_NAME);
 		if (this.keystoreConfigComposite != null)
 			SWTUtils.setLocalizedText(keystoreTabItem, "config.Keystore");
