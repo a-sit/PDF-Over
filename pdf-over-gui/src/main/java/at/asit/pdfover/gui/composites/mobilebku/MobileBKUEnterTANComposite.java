@@ -261,15 +261,8 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		// Nothing to do
-	}
+	@Override public void doLayout() { getShell().setDefaultButton(btn_ok); }
+	@Override public void onDisplay() { txt_tan.setFocus(); }
 
 	/*
 	 * (non-Javadoc)
