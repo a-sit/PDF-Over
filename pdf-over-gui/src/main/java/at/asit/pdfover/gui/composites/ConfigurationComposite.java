@@ -353,11 +353,6 @@ public class ConfigurationComposite extends StateComposite {
 		return this.userDone;
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *

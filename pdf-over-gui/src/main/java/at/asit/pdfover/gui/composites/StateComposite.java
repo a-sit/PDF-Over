@@ -57,4 +57,7 @@ public abstract class StateComposite extends Composite {
 	 * Called when the control is .display()ed
 	 */
 	public void onDisplay() {}
+
+	// allow subclassing of SWT components
+	@Override protected final void checkSubclass() {}
 }

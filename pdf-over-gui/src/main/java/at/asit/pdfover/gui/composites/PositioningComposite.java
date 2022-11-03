@@ -313,11 +313,6 @@ public class PositioningComposite extends StateComposite {
 		});
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *

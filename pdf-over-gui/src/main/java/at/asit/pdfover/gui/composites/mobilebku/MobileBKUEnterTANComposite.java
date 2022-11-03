@@ -255,12 +255,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.lblMessage = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		SWTUtils.anchor(lblMessage).right(btn_fido2, -10).bottom(100, -20);
 	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
+	
 	@Override public void doLayout() { getShell().setDefaultButton(btn_ok); }
 	@Override public void onDisplay() { txt_tan.setFocus(); }
 

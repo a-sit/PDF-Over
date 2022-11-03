@@ -90,11 +90,6 @@ public class WaitingForAppComposite extends StateComposite {
 
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */

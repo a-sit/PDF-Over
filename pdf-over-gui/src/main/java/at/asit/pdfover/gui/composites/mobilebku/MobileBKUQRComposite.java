@@ -221,11 +221,6 @@ public class MobileBKUQRComposite extends StateComposite {
 		reloadResources();
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *

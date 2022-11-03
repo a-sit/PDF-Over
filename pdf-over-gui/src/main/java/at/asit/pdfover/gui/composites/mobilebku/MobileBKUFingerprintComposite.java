@@ -158,11 +158,6 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		reloadResources();
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *

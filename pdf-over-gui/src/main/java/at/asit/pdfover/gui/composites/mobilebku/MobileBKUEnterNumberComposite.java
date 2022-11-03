@@ -214,11 +214,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		}
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/**
 	 * enables submit button
 	 */

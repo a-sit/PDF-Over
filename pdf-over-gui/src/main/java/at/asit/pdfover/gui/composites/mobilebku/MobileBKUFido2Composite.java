@@ -100,7 +100,6 @@ public class MobileBKUFido2Composite extends StateComposite {
         SWTUtils.addSelectionListener(btn_authenticate, this::beginAuthentication);
     }
 
-    @Override protected void checkSubclass() {}
     @Override public void doLayout() { getShell().setDefaultButton(this.btn_authenticate); }
 
     @Override

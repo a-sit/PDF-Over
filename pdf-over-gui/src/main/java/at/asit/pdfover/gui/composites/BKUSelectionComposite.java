@@ -118,11 +118,6 @@ public class BKUSelectionComposite extends StateComposite {
 		reloadResources();
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
 	 */

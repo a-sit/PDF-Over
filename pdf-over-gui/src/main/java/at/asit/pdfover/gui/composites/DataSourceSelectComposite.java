@@ -270,11 +270,6 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	private Button btn_open;
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
