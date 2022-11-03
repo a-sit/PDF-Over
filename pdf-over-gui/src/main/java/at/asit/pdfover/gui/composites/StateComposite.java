@@ -52,4 +52,9 @@ public abstract class StateComposite extends Composite {
 	 * Reloads the localizeable resources
 	 */
 	public abstract void reloadResources();
+
+	/**
+	 * Called when the control is .display()ed
+	 */
+	public void onDisplay() {}
 }

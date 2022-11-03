@@ -66,6 +66,7 @@ public class MobileBKUFido2Composite extends StateComposite {
             }
         }).start();
     }
+    @Override public void onDisplay() { beginAuthentication(); }
 
     public MobileBKUFido2Composite(Composite parent, int style, State state) {
         super(parent, style, state);

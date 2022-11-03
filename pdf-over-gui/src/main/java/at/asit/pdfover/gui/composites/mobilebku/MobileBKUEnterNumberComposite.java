@@ -206,6 +206,14 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		SWTUtils.anchor(btn_remember).right(100, -10).top(0, 5);
 	}
 
+	@Override public void onDisplay() {
+		if (this.txt_number.getText().isEmpty()) {
+			this.txt_number.setFocus();
+		} else {
+			this.txt_password.setFocus();
+		}
+	}
+
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
@@ -244,7 +252,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		if (this.mobileNumber != null && !this.mobileNumber.isEmpty()) {
 			this.txt_number.setText(this.mobileNumber);
-			this.txt_password.setFocus();
 		} else {
 			this.txt_number.setText("");
 		}

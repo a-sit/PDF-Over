@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow;
+import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
@@ -147,8 +148,9 @@ public class StateMachine {
 	 * at.asit.pdfover.gui.workflow.StateMachine#display(org.eclipse.swt.widgets
 	 * .Composite)
 	 */
-	public void display(Composite composite) {
+	public void display(StateComposite composite) {
 		this.mainWindow.setTopControl(composite);
+		composite.onDisplay();
 	}
 
 	private void createMainWindow() {
