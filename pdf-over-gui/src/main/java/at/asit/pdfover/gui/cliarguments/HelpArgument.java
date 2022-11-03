@@ -19,7 +19,13 @@ package at.asit.pdfover.gui.cliarguments;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 
 /**
@@ -46,22 +52,39 @@ public class HelpArgument extends Argument {
 
 		Iterator<Argument> argumentIterator = arguments.iterator();
 
-		System.out.println(Messages.getString("argument.info.help"));
+		StringBuilder message = new StringBuilder(Messages.getString("argument.info.help"));
+		message.append("\n");
 
 		while(argumentIterator.hasNext()) {
 			Argument argument = argumentIterator.next();
-			StringBuilder sb = new StringBuilder();
 
-			for(int i = 0; i < argument.getCommandOptions().length; i++) {
-				sb.append(argument.getCommandOptions()[i]);
+			for (int i = 0; i < argument.getCommandOptions().length; i++) {
+				message.append(argument.getCommandOptions()[i]);
 
 				if(i < argument.getCommandOptions().length -1) {
-					sb.append(", ");
+					message.append(", ");
 				}
 			}
 
-			System.out.println(sb.toString() + ":");
-			System.out.println("\t" + argument.getHelpText());
+			message.append(":\n");
+			boolean first = true;
+			for (String line : argument.getHelpText().split("\\.\\s+")) {
+				message.append("  ");
+				if (first) first = false; else message.append("  ");
+				message.append(line);
+				message.append("\n");
+			}
+		}
+
+		String msg = message.toString();
+		System.out.println(msg);
+		
+		Display display = Display.getCurrent();
+		if (display != null) {
+			MessageBox box = new MessageBox(new Shell(display), SWT.ICON_INFORMATION | SWT.OK);
+			box.setText(Constants.APP_NAME_VERSION);
+			box.setMessage(msg);
+			box.open();
 		}
 
 		handler.setRequireExit(true);
