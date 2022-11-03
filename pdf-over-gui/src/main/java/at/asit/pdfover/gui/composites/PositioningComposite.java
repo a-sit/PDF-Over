@@ -26,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.eclipse.swt.SWT;
@@ -123,6 +124,8 @@ public class PositioningComposite extends StateComposite {
 		requestFocus();
 	}
 
+	@Override public void onDisplay() { if (this.viewer.getSigPagePos() == null) this.btnSign.setEnabled(false); }
+
 	/**
 	 * Set the PDF Document to display
 	 *
@@ -132,6 +135,7 @@ public class PositioningComposite extends StateComposite {
 	public void displayDocument(final PDDocument document) {
 		EventQueue.invokeLater(() -> {
 			this.viewer.setDocument(document);
+			getDisplay().asyncExec(() -> this.btnSign.setEnabled(true));
 		});
 
 		if (document != null)
@@ -333,9 +337,12 @@ public class PositioningComposite extends StateComposite {
 		if (this.currentPage == 0) {
 			this.position = new SignaturePosition();
 		} else {
+			Point2D pos = this.viewer.getSigPagePos();
+			if (pos == null) return;
+
 			this.position = new SignaturePosition(
-					this.viewer.getSigPageX(),
-					this.viewer.getSigPageY(),
+					pos.getX(),
+					pos.getY(),
 					this.currentPage);
 		}
 		PositioningComposite.this.state.updateStateMachine();
