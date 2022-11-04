@@ -560,7 +560,8 @@ public class MobileBKUState extends State {
 		return ISNOTNULL(Display.getDefault().syncCall(() -> {
 			MobileBKUFido2Composite fido2 = getMobileBKUFido2Composite();
 			fido2.initialize(fido2Options);
-			// TODO signature data, sms tan support
+			fido2.setSMSEnabled(showSmsTan);
+			fido2.setSignatureDataURI(signatureDataURI);
 			
 			getStateMachine().display(fido2);
 
