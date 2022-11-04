@@ -127,5 +127,7 @@ public class MobileBKUFido2Composite extends StateComposite {
         SWTUtils.setLocalizedText(btn_authenticate, "mobileBKU.authorize");
         SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
         SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
+        SWTUtils.setLocalizedText(lnk_sigData, "mobileBKU.show");
+        SWTUtils.setLocalizedToolTipText(lnk_sigData, "mobileBKU.show_tooltip");
     }
 }
