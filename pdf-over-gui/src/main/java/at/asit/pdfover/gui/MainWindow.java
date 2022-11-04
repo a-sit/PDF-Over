@@ -235,6 +235,7 @@ public class MainWindow {
 				} catch (IOException e1) {
 					log.error("Error saving configuration", e);
 				}
+				getShell().dispose();
 			}
 		});
 
