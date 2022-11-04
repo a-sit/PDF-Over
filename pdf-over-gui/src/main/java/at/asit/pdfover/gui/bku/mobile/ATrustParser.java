@@ -145,7 +145,7 @@ public class ATrustParser {
 
         private SMSTanBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
-            abortIfElementMissing("#div_tan");
+            abortIfElementMissing("#input_tan");
             this.tanKey = getAttributeEnsureNotNull("#input_tan", "name");
             this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
             this.errorMessage = null;

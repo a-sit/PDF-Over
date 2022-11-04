@@ -38,6 +38,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.webauthn.WebAuthN;
 
 /**
  * Composite for displaying the QR code for the mobile BKU
@@ -151,6 +152,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 		this.btn_fido2 = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_fido2).right(btn_sms, -20).bottom(100, -20);
 		SWTUtils.addSelectionListener(btn_fido2, () -> { this.userFido2Clicked = true; });
+		this.btn_fido2.setVisible(WebAuthN.isAvailable());
 
 		this.lblError = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		SWTUtils.anchor(lblError).right(btn_sms, -10).bottom(100, -20);

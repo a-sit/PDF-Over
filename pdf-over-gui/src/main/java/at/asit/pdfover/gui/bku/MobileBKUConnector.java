@@ -285,7 +285,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     private boolean wantsFido2Default;
     /**
      * Main lifting function for MobileBKU UX
-     * @return the next request to make, or null if the current response should be returned
+     * @return the next request to make
      */
     private @Nonnull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@Nonnull ATrustParser.HTMLResult html) throws UserCancelledException {
         if ((html.errorBlock == null) && (html.usernamePasswordBlock == null)) { /* successful username/password auth */

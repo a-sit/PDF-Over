@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.ProgressBar;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.webauthn.WebAuthN;
+
 import org.eclipse.swt.widgets.Button;
 
 /**
@@ -85,6 +87,7 @@ public class WaitingForAppComposite extends StateComposite {
 		this.btn_fido2 = new Button(this, SWT.NONE);
 		SWTUtils.anchor(btn_fido2).top(btn_cancel, 0, SWT.TOP).right(btn_cancel, -6);
 		SWTUtils.addSelectionListener(btn_fido2, (e) -> { this.userFIDO2Clicked = true; });
+		this.btn_fido2.setVisible(WebAuthN.isAvailable());
 
 		reloadResources();
 

@@ -43,6 +43,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
+import at.asit.webauthn.WebAuthN;
 
 /**
  * Composite for entering the TAN for the mobile BKU
@@ -251,6 +252,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.btn_fido2 = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_fido2).right(btn_cancel, -20).bottom(100, -20);
 		SWTUtils.addSelectionListener(btn_fido2, (e) -> { this.userFido2 = true; });
+		this.btn_fido2.setVisible(WebAuthN.isAvailable());
 
 		this.lblMessage = new Label(containerComposite, SWT.WRAP | SWT.NATIVE);
 		SWTUtils.anchor(lblMessage).right(btn_fido2, -10).bottom(100, -20);
