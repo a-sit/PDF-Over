@@ -258,8 +258,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		SWTUtils.anchor(lblMessage).right(btn_fido2, -10).bottom(100, -20);
 	}
 	
-	@Override public void doLayout() { getShell().setDefaultButton(btn_ok); }
-	@Override public void onDisplay() { txt_tan.setFocus(); }
+	@Override public void onDisplay() { getShell().setDefaultButton(btn_ok); txt_tan.setFocus(); }
 
 	/*
 	 * (non-Javadoc)

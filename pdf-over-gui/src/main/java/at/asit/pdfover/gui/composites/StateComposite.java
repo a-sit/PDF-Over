@@ -42,11 +42,7 @@ public abstract class StateComposite extends Composite {
 		this.state = state;
 	}
 
-	/**
-	 * Performs layout for all children in composite
-	 * (SWT layout(...) only layouts children no grandchildren!)
-	 */
-	public abstract void doLayout();
+	public final void doLayout() { this.layout(true,true); this.onDisplay(); }
 
 	/**
 	 * Reloads the localizeable resources

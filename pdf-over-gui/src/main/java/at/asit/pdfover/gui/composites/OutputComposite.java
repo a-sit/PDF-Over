@@ -420,17 +420,6 @@ public class OutputComposite extends StateComposite {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		// Nothing to do
-		this.layout(true);
-	}
-
 	/**
 	 * @return true when linux and java version <= 8
 	 *

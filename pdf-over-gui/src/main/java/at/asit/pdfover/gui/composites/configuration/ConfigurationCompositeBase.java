@@ -74,6 +74,4 @@ public abstract class ConfigurationCompositeBase extends StateComposite {
 	 * @throws Exception
 	 */
 	public abstract void validateSettings(int resumeFrom) throws Exception;
-
-	@Override public final void doLayout() { this.layout(true, true); }
 }

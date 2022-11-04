@@ -119,14 +119,6 @@ public class BKUSelectionComposite extends StateComposite {
 	}
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		this.layout(true, true);
-	}
-
-	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override

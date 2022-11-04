@@ -6,8 +6,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.jna.Platform;
 
@@ -20,7 +18,6 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthn.WebAuthN;
 
 public class Fido2ConfigurationComposite extends ConfigurationCompositeBase {
-    private static final Logger log = LoggerFactory.getLogger(Fido2ConfigurationComposite.class);
 
     private Link lnkInfoText;
     private Link unsupportedText;

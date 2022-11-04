@@ -34,13 +34,7 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
  *
  */
 public class ConfigurationUIState extends State {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ConfigurationUIState.class);
-
-
 
 	private ConfigurationComposite configurationComposite = null;
 

@@ -150,7 +150,6 @@ public class StateMachine {
 	 */
 	public void display(StateComposite composite) {
 		this.mainWindow.setTopControl(composite);
-		composite.onDisplay();
 	}
 
 	private void createMainWindow() {

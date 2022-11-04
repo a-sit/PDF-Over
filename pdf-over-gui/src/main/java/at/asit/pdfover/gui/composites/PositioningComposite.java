@@ -299,17 +299,6 @@ public class PositioningComposite extends StateComposite {
 		});
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		this.layout(true, true);
-//		requestFocus();
-	}
-
 	/**
 	 * Translate the signature placeholder position
 	 *

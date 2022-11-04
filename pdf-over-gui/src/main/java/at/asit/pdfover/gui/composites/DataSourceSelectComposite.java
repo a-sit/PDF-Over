@@ -270,14 +270,8 @@ public class DataSourceSelectComposite extends StateComposite {
 
 	private Button btn_open;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.components.StateComposite#doLayout()
-	 */
 	@Override
-	public void doLayout() {
-		this.layout(true, true);
+	public void onDisplay() {
 		this.drop_area.layout(true, true);
 	}
 

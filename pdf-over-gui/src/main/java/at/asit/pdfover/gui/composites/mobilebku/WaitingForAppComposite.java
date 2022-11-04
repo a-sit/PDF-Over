@@ -94,14 +94,6 @@ public class WaitingForAppComposite extends StateComposite {
 	}
 
 	/* (non-Javadoc)
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		// Nothing to do here
-	}
-
-	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.composites.StateComposite#reloadResources()
 	 */
 	@Override

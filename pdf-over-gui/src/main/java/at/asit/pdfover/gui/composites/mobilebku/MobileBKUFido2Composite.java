@@ -74,8 +74,7 @@ public class MobileBKUFido2Composite extends StateComposite {
                 this.getDisplay().wake();
             }
         }).start();
-    }
-    @Override public void onDisplay() { beginAuthentication(); }
+    }    
 
     public MobileBKUFido2Composite(Composite parent, int style, State state) {
         super(parent, style, state);
@@ -121,7 +120,7 @@ public class MobileBKUFido2Composite extends StateComposite {
 		SWTUtils.addSelectionListener(lnk_sigData, (e) -> { SWTUtils.openURL(this.signatureDataURI); });
     }
 
-    @Override public void doLayout() { getShell().setDefaultButton(this.btn_authenticate); }
+    @Override public void onDisplay() { getShell().setDefaultButton(this.btn_authenticate); beginAuthentication(); }
 
     @Override
     public void reloadResources() {

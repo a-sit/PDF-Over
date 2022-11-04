@@ -375,7 +375,7 @@ public class ConfigurationComposite extends StateComposite {
 	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
 	 */
 	@Override
-	public void doLayout() {
+	public void onDisplay() {
 		Control ctrl = this.compositeStack.topControl;
 		this.containerComposite.layout(true, true);
 		getShell().layout(true, true);

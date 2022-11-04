@@ -207,6 +207,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	}
 
 	@Override public void onDisplay() {
+		getShell().setDefaultButton(this.btn_ok);
 		if (this.txt_number.getText().isEmpty()) {
 			this.txt_number.setFocus();
 		} else {
@@ -219,16 +220,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 	 */
 	public void enableButton() {
 		this.btn_ok.setEnabled(true);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see at.asit.pdfover.gui.composites.StateComposite#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		getShell().setDefaultButton(this.btn_ok);
 	}
 
 	/**
