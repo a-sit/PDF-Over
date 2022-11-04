@@ -263,6 +263,19 @@ public class MobileBKUState extends State {
 		return r;
 	}
 
+	private void updateRememberPasswordSetting(boolean enabled, boolean allowEnabling) {
+		final var config = getStateMachine().configProvider;
+		if (enabled == config.getRememberMobilePassword()) /* nothing to do here */
+			return;
+		if (enabled && !allowEnabling) /* do not allow "cancel" to set the remember checkbox */
+			return;
+		config.setRememberMobilePasswordPersistent(enabled);
+		if (!enabled) { /* clear remembered info */
+			config.setDefaultMobileNumberPersistent(null);
+			config.setDefaultMobilePasswordOverlay(null);
+		}
+	}
+
 	public void getCredentialsFromUserTo(@Nonnull UsernameAndPassword credentials, @Nullable String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
@@ -292,8 +305,7 @@ public class MobileBKUState extends State {
 				}
 			}
 
-			if (!(ui.userCancel && ui.isRememberPassword())) /* don't allow "remember" to be enabled via cancel button */
-				getStateMachine().configProvider.setRememberMobilePasswordPersistent(ui.isRememberPassword());
+			updateRememberPasswordSetting(ui.isRememberPassword(), !ui.userCancel);
 
 			if (ui.userCancel) {
 				ui.userCancel = false;
