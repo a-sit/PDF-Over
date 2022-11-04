@@ -245,7 +245,7 @@ public class MobileBKUState extends State {
 	public void rememberCredentialsIfNecessary(@Nullable String username, @Nullable String password) {
 		if (getStateMachine().configProvider.getRememberMobilePassword())
 		{
-			getStateMachine().configProvider.setDefaultMobileNumberOverlay(username);
+			getStateMachine().configProvider.setDefaultMobileNumberPersistent(username);
 			getStateMachine().configProvider.setDefaultMobilePasswordOverlay(password);
 		}
 	}
