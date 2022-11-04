@@ -104,7 +104,9 @@ public class SigningState extends State {
 				}
 			}
 			if (this.threadException instanceof UserCancelledException) {
-				// don't display error, go back to BKU Selection
+				// don't display error, clear remembered password and go back to BKU Selection
+				if (this.getConfig().getRememberMobilePassword())
+					this.getConfig().setDefaultMobilePasswordOverlay(null);
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
 			}
