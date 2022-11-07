@@ -57,7 +57,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkUpdateCheckStatus = new Link(this, SWT.NONE);
 		SWTUtils.anchor(lnkUpdateCheckStatus).bottom(100, -5).left(0,5);
 		SWTUtils.setFontHeight(lnkUpdateCheckStatus, Constants.TEXT_SIZE_BUTTON);
-		UpdateCheckManager.registerStatusCallback((s) -> { latestUpdateStatus = s; getDisplay().asyncExec(() -> { RefreshUpdateStatusText(); }); });
+		UpdateCheckManager.registerStatusCallback((s) -> { if (isDisposed()) return; latestUpdateStatus = s; getDisplay().asyncExec(() -> { RefreshUpdateStatusText(); }); });
 		SWTUtils.addSelectionListener(lnkUpdateCheckStatus, (e) -> {
 			if (latestUpdateStatus == UpdateCheckManager.Status.OUTDATED)
 				Program.launch(Constants.UPDATE_URL);
