@@ -67,7 +67,7 @@ public class Fido2ConfigurationComposite extends ConfigurationCompositeBase {
         SWTUtils.setLocalizedText(grpFidoSettings, "config.fido2.Group");
         SWTUtils.setLocalizedText(btnFido2ByDefault, "config.fido2.ByDefault");
         
-        if (Platform.isLinux())
+        if (Platform.isLinux() || Platform.isMac())
             SWTUtils.setLocalizedText(unsupportedText, "config.fido2.UnsupportedTryLibFido2");
         else {
             SWTUtils.setFontStyle(unsupportedText, SWT.BOLD);
