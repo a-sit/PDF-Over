@@ -434,8 +434,13 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		config.keystoreType = provider.getKeyStoreTypePersistent();
 		config.keystoreAlias = provider.getKeyStoreAliasPersistent();
 		config.keystorePassStorageType = provider.getKeyStorePassStorageType();
-		config.keystoreStorePass = provider.getKeyStoreStorePassPersistent();
-		config.keystoreKeyPass = provider.getKeyStoreKeyPassPersistent();
+		if (config.keystorePassStorageType == KeyStorePassStorageType.DISK) {
+			config.keystoreStorePass = provider.getKeyStoreStorePassPersistent();
+			config.keystoreKeyPass = provider.getKeyStoreKeyPassPersistent();
+		} else if (config.keystorePassStorageType == KeyStorePassStorageType.MEMORY) {
+			config.keystoreStorePass = provider.getKeyStoreStorePass();
+			config.keystoreKeyPass = provider.getKeyStoreKeyPass();
+		}
 	}
 
 	/*
