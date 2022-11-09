@@ -22,7 +22,6 @@ import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthn.PublicKeyCredential;
-import at.asit.webauthn.PublicKeyCredentialRequestOptions;
 import at.asit.webauthn.WebAuthN;
 import at.asit.webauthn.exceptions.WebAuthNUserCancelled;
 import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
@@ -64,7 +63,7 @@ public class MobileBKUFido2Composite extends StateComposite {
         btn_authenticate.setEnabled(false);
         new Thread(() -> {
             try {
-                this.credential = PublicKeyCredentialRequestOptions.FromJSONString(this.fido2OptionsString).get("https://service.a-trust.at");
+                this.credential = WebAuthN.buildGetFromJSON(this.fido2OptionsString).get("https://service.a-trust.at");
             } catch (Throwable t) {
                 if (!(t instanceof WebAuthNUserCancelled)) {
                     log.warn("webauthn operation failed", t);
