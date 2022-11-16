@@ -182,6 +182,8 @@ public class SignaturePanel extends JPanel {
 		this.sigPageWidth = placeholder.getWidth(null) / 4;
 		this.sigPageHeight = placeholder.getHeight(null) / 4;
 		renderPageToImage();
+		if (this.sigPagePos != null)
+			setSignaturePosition(this.sigPagePos.getX(), this.sigPagePos.getY());
 		repaint();
 	}
 
