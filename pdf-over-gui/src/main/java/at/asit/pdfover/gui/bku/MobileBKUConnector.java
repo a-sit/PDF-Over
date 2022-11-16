@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.bku.mobile.ATrustParser;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState.UsernameAndPassword;
@@ -60,6 +61,12 @@ public class MobileBKUConnector implements BkuSlConnector {
         state.storeRememberedCredentialsTo(this.credentials);
     }
 
+    private class UserDisplayedError extends Exception {
+        private final @Nonnull String msg;
+        @Override public @Nonnull String getMessage() { return this.msg; }
+        private UserDisplayedError(@Nonnull String s) { this.msg = s; }
+    }
+
     public @Nonnull UsernameAndPassword credentials = new UsernameAndPassword();
 
     /**
@@ -75,6 +82,9 @@ public class MobileBKUConnector implements BkuSlConnector {
                 currentRequest = presentResponseToUserAndReturnNextRequest(ISNOTNULL(response.html));
             log.debug("Returning security layer response:\n{}", response.slResponse);
             return response.slResponse;
+        } catch (UserDisplayedError e) {
+            state.showUnrecoverableError(e.getMessage());
+            throw new IllegalStateException("unreachable", e); /* showUnrecoverableError always throws */
         } catch (UserCancelledException e) {
             throw e;
         } catch (Exception e) {
@@ -93,7 +103,7 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @throws URISyntaxException
      * @throws InterruptedException
      */
-    private @Nonnull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException {
+    private @Nonnull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException, UserDisplayedError {
         long now = System.nanoTime();
         if ((lastHTTPRequestTime != null) && ((now - lastHTTPRequestTime) < 2e+9)) { /* less than 2s since last request */
             ++loopHTTPRequestCounter;
@@ -115,7 +125,10 @@ public class MobileBKUConnector implements BkuSlConnector {
             }
 
             if (httpStatus != HttpStatus.SC_OK) {
-                throw new IOException("Got HTTP status " + httpStatus + " " + Optional.ofNullable(response.getReasonPhrase()).orElse("(null)"));
+                switch (httpStatus) {
+                    case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError(Messages.getString("atrusterror.http_413"));
+                    default: throw new UserDisplayedError(Messages.formatString("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)")));
+                }
             }
                         
             Header refreshHeader = response.getHeader("refresh");

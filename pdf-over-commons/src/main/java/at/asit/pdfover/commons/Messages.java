@@ -27,6 +27,8 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static at.asit.pdfover.commons.Constants.ISNOTNULL;
+
 
 /**
  * Localizes string messages for PDFOver GUI
@@ -57,7 +59,7 @@ public class Messages {
 			if (l.equals(ld) || l.getLanguage().equals(ld.getLanguage()))
 				return l;
 		}
-		return Constants.ISNOTNULL(Constants.SUPPORTED_LOCALES[0]);
+		return ISNOTNULL(Constants.SUPPORTED_LOCALES[0]);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public class Messages {
 	 * @param key
 	 * @return the localized message
 	 */
-	public static String getString(String key) {
+	public static @Nonnull String getString(String key) {
 		return getString(key, currentLocale);
 	}
 
@@ -104,9 +106,9 @@ public class Messages {
 	 * @param locale the locale to use
 	 * @return the localized message
 	 */
-	public static String getString(String key, Locale locale) {
+	public static @Nonnull String getString(String key, Locale locale) {
 		try {
-			String value = getBundle(locale).getString(key);
+			String value = ISNOTNULL(getBundle(locale).getString(key));
 
 			/* DIRTY HACK: this recognizes java 8 ("1.8") and older; these versions read .properties files as ISO-8859-1 instead of UTF-8 */
 			if (System.getProperty("java.version").startsWith("1."))
@@ -117,5 +119,9 @@ public class Messages {
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
+	}
+
+	public static @Nonnull String formatString(String key, Object... values) {
+		return ISNOTNULL(String.format(getString(key), values));
 	}
 }

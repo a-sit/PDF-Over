@@ -215,7 +215,7 @@ public class MobileBKUState extends State {
 	}
 
 	/**
-	 * Show an error message to the user with only an "ok" option
+	 * Show an error message to the user with only an "ok" option;
 	 * throws UserCancelledException afterwards
 	 */
 	public void showUnrecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
