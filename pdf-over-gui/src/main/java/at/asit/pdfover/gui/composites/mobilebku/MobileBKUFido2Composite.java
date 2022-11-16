@@ -48,7 +48,6 @@ public class MobileBKUFido2Composite extends StateComposite {
         this.fido2OptionsString = fido2Options;
         this.credential = null;
         this.userCancel = this.userSms = false;
-        this.btn_authenticate.setEnabled(WebAuthN.isAvailable());
     }
 
     public boolean isDone() { return ((this.credential != null) || this.userCancel || this.userSms); }
@@ -106,6 +105,7 @@ public class MobileBKUFido2Composite extends StateComposite {
         this.btn_authenticate = new Button(containerComposite, SWT.NATIVE);
         SWTUtils.anchor(btn_authenticate).top(50, -15).left(0, 90).right(100, -90);
         SWTUtils.addSelectionListener(btn_authenticate, this::beginAuthentication);
+        btn_authenticate.setEnabled(WebAuthN.isAvailable());
 
         this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
         SWTUtils.anchor(btn_cancel).bottom(100, -10).right(100, -10);
@@ -124,7 +124,7 @@ public class MobileBKUFido2Composite extends StateComposite {
 
     @Override
     public void reloadResources() {
-        SWTUtils.setLocalizedText(btn_authenticate, "mobileBKU.authorize");
+        SWTUtils.setLocalizedText(btn_authenticate, WebAuthN.isAvailable() ? "mobileBKU.authorize" : "common.unavailable");
         SWTUtils.setLocalizedText(btn_cancel, "common.Cancel");
         SWTUtils.setLocalizedText(btn_sms, "tanEnter.SMS");
         SWTUtils.setLocalizedText(lnk_sigData, "mobileBKU.show");

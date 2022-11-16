@@ -48,6 +48,7 @@ import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
+import at.asit.webauthn.WebAuthN;
 
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
@@ -57,7 +58,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     private final @Nonnull MobileBKUState state;
     public MobileBKUConnector(@Nonnull MobileBKUState state) {
         this.state = state;
-        this.wantsFido2Default = state.getConfig().getFido2ByDefault();
+        this.wantsFido2Default = WebAuthN.isAvailable() && state.getConfig().getFido2ByDefault();
         state.storeRememberedCredentialsTo(this.credentials);
     }
 
