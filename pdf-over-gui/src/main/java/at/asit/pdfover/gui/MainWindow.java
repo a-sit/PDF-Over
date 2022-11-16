@@ -354,7 +354,7 @@ public class MainWindow {
 			/* aboutListener */
 			(Event arg0) -> {
 				Dialog dialog = new Dialog(getShell(),
-						String.format(Messages.getString("main.about"), Constants.APP_NAME),
+						Messages.formatString("main.about", Constants.APP_NAME),
 						Constants.APP_NAME_VERSION, BUTTONS.OK, ICON.INFORMATION);
 				dialog.open();
 			},

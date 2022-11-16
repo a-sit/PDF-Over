@@ -295,7 +295,7 @@ public class OutputComposite extends StateComposite {
 
 		if (targetFile.exists()) {
 			Dialog dialog = new Dialog(getShell(), Messages.getString("common.warning"),
-					String.format(Messages.getString("output.file_ask_overwrite"), targetFile.getName()),
+					Messages.formatString("output.file_ask_overwrite", targetFile.getName()),
 					BUTTONS.OK_CANCEL, ICON.QUESTION);
 			if (dialog.open() == SWT.CANCEL)
 			{
@@ -316,7 +316,7 @@ public class OutputComposite extends StateComposite {
 			} catch (FileNotFoundException e) {
 				log.warn("Failed to open output file", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"),
+						Messages.formatString("output.save_failed",
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
@@ -325,7 +325,7 @@ public class OutputComposite extends StateComposite {
 			} catch (IOException e) {
 				log.error("I/O Error", e);
 				ErrorDialog dialog = new ErrorDialog(getShell(),
-						String.format(Messages.getString("output.save_failed"),
+						Messages.formatString("output.save_failed",
 								targetFile.getName(), e.getLocalizedMessage()),
 						BUTTONS.RETRY_CANCEL);
 				if (dialog.open() == SWT.CANCEL)
@@ -412,7 +412,7 @@ public class OutputComposite extends StateComposite {
 			} catch (IOException ex) {
 				log.error("OpenSelectionListener: ", ex);
 				ErrorDialog error = new ErrorDialog(getShell(),
-						String.format(Messages.getString("error.FailedToOpenDocument"),
+						Messages.formatString("error.FailedToOpenDocument",
 								ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
 				if (error.open() == SWT.RETRY)
 					widgetSelected(e);

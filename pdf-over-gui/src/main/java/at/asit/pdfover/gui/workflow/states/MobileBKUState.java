@@ -162,10 +162,10 @@ public class MobileBKUState extends State {
 		if (e instanceof UnknownHostException)
 		{
 			log.error("Failed to resolve hostname", e);
-			message = String.format(Messages.getString("error.CouldNotResolveHostname"), e.getMessage());
+			message = Messages.formatString("error.CouldNotResolveHostname", e.getMessage());
 		} else if (e instanceof ConnectException) {
 			log.error("Failed to connect", e);
-			message = String.format(Messages.getString("error.FailedToConnect"), e.getMessage());
+			message = Messages.formatString("error.FailedToConnect", e.getMessage());
 		} else {
 			message = Messages.getString("error.Unexpected");
 			log.error(message, e);

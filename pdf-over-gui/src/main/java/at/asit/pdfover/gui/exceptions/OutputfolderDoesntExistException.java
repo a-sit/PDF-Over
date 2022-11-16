@@ -33,7 +33,7 @@ public class OutputfolderDoesntExistException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public OutputfolderDoesntExistException(final File folder, int resumeIndex) {
-		super(String.format(Messages.getString("exception.PathNotExist"), folder.getAbsolutePath()), resumeIndex);
+		super(Messages.formatString("exception.PathNotExist", folder.getAbsolutePath()), resumeIndex);
 	}
 
 }

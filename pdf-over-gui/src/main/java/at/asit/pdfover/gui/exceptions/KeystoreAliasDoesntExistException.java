@@ -31,6 +31,6 @@ public class KeystoreAliasDoesntExistException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreAliasDoesntExistException(final String alias, int resumeIndex) {
-		super(String.format(Messages.getString("error.KeyStoreAliasExist"), alias), resumeIndex);
+		super(Messages.formatString("error.KeyStoreAliasExist", alias), resumeIndex);
 	}
 }

@@ -34,6 +34,6 @@ public class OutputfolderNotADirectoryException extends PDFOverGUIException {
 	 * @param folder The file
 	 */
 	public OutputfolderNotADirectoryException(File folder) {
-		super(String.format(Messages.getString("exception.PathNotDirectory"), folder.getAbsolutePath()));
+		super(Messages.formatString("exception.PathNotDirectory", folder.getAbsolutePath()));
 	}
 }

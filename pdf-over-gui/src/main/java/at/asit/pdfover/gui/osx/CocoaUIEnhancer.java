@@ -234,14 +234,14 @@ public class CocoaUIEnhancer {
 		final Object aboutMenuItem = invoke(nsmenuCls, appMenu, "itemAtIndex",
 				new Object[] { wrapPointer(kAboutMenuItem) });
 		final Object nsStrAbout = invoke(nsstringCls, "stringWith",
-				new Object[] { String.format(Messages.getString("main.about"), Constants.APP_NAME) });
+				new Object[] { Messages.formatString("main.about", Constants.APP_NAME) });
 		invoke(nsmenuitemCls, aboutMenuItem, "setTitle",
 				new Object[] { nsStrAbout });
 		// Rename the quit action.
 		final Object quitMenuItem = invoke(nsmenuCls, appMenu,
 				"itemAtIndex", new Object[] { wrapPointer(kQuitMenuItem) });
 		final Object nsStrQuit = invoke(nsstringCls, "stringWith",
-				new Object[] { String.format(Messages.getString("main.quit"), Constants.APP_NAME) });
+				new Object[] { Messages.formatString("main.quit", Constants.APP_NAME) });
 		invoke(nsmenuitemCls, quitMenuItem, "setTitle",
 				new Object[] { nsStrQuit });
 
@@ -250,7 +250,7 @@ public class CocoaUIEnhancer {
 				"itemAtIndex",
 				new Object[] { wrapPointer(kHideApplicationMenuItem) });
 		final Object nsStrHide = invoke(nsstringCls, "stringWith",
-				new Object[] { String.format(Messages.getString("main.hide"), Constants.APP_NAME) });
+				new Object[] { Messages.formatString("main.hide", Constants.APP_NAME) });
 		invoke(nsmenuitemCls, hideMenuItem, "setTitle",
 				new Object[] { nsStrHide });
 

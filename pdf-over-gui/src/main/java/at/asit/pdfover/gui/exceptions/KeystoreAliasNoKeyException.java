@@ -31,6 +31,6 @@ public class KeystoreAliasNoKeyException extends ResumableException {
 	 * @param resumeIndex The resume Index
 	 */
 	public KeystoreAliasNoKeyException(final String alias, int resumeIndex) {
-		super(String.format(Messages.getString("error.KeyStoreAliasNoKey"), alias), resumeIndex);
+		super(Messages.formatString("error.KeyStoreAliasNoKey", alias), resumeIndex);
 	}
 }

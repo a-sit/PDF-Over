@@ -57,7 +57,7 @@ public final class SWTUtils {
     	}
     }
     public static void setLocalizedText(Object o, String messageKey) { genericSetText(o, Messages.getString(messageKey)); }
-    public static void setLocalizedText(Object o, String formatMessageKey, Object... formatArgs) { genericSetText(o, String.format(Messages.getString(formatMessageKey), formatArgs)); }
+    public static void setLocalizedText(Object o, String formatMessageKey, Object... formatArgs) { genericSetText(o, Messages.formatString(formatMessageKey, formatArgs)); }
 
 	private static void genericSetToolTipText(Object swtObj, String text) {
 		try {

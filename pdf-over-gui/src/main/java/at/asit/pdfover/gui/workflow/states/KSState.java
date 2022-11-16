@@ -59,12 +59,12 @@ public class KSState extends State {
 
 	private void showError(String messageKey, Object... args)
 	{
-		new ErrorDialog(getStateMachine().getMainShell(), String.format(Messages.getString(messageKey), args), BUTTONS.OK).open();
+		new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString(messageKey, args), BUTTONS.OK).open();
 	}
 
 	private boolean askShouldRetry(String messageKey, Object... args)
 	{
-		return SWT.RETRY == (new ErrorDialog(getStateMachine().getMainShell(), String.format(Messages.getString(messageKey), args), BUTTONS.RETRY_CANCEL).open());
+		return SWT.RETRY == (new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString(messageKey, args), BUTTONS.RETRY_CANCEL).open());
 	}
 
 	/*

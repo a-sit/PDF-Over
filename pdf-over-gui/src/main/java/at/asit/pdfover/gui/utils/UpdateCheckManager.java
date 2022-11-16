@@ -63,7 +63,7 @@ public final class UpdateCheckManager {
                 shell.getDisplay().asyncExec(() -> {
                     Dialog info = new Dialog(shell,
                             Messages.getString("version_check.UpdateTitle"),
-                            String.format(Messages.getString("version_check.UpdateText"), version),
+                            Messages.formatString("version_check.UpdateText", version),
                             BUTTONS.OK_CANCEL, ICON.INFORMATION);
 
                     if (info.open() == SWT.OK)
