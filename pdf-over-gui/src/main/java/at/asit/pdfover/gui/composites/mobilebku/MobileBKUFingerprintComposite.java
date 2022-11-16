@@ -61,7 +61,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	private boolean pollingDone = false;
 
 	public void signalPollingDone() { this.pollingDone = true; getDisplay().wake(); }
-	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.pollingDone); }
+	public boolean isDone() { return (this.userCancelClicked || this.userSMSClicked || this.userFido2Clicked || this.pollingDone); }
 	public boolean wasCancelClicked() { return this.userCancelClicked; }
 	public boolean wasSMSClicked() { return this.userSMSClicked; }
 	public boolean wasFIDO2Clicked() { return this.userFido2Clicked; }
