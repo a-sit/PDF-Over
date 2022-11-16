@@ -95,6 +95,7 @@ public class MobileBKUFido2Composite extends StateComposite {
         ImageData webauthnLogoImg = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_WEBAUTHN));
         Label webauthnLogo = new Label(containerComposite, SWT.NATIVE);
         SWTUtils.anchor(webauthnLogo).top(0,0).left(0, 10).height(50).width(187);
+        webauthnLogo.setBackground(getBackground());
         webauthnLogo.setImage(new Image(getDisplay(), webauthnLogoImg.scaledTo(187, 50)));
 
         ImageData fidoLogoImg = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_FIDO2));
