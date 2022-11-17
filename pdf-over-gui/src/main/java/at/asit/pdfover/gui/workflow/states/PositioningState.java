@@ -121,7 +121,8 @@ public class PositioningState extends State {
 		param.targetLogoSize = Math.min(120.0, config.getLogoOnlyTargetSize()); // TODO WORKAROUND FOR #117
 
 		PdfAs4SignaturePlaceholder.For(param, (p) -> {
-			this.positionComposite.setPlaceholder(p.getAWTImage());
+			if (p.hasImage())
+				this.positionComposite.setPlaceholder(p.getAWTImage());
 		});
 
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())

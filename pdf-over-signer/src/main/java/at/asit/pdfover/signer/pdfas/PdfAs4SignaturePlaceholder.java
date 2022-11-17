@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.commons.utils.ImageUtil;
 
 /**
@@ -36,6 +37,7 @@ public final class PdfAs4SignaturePlaceholder implements Runnable {
     }
 
     private java.awt.image.BufferedImage awtImageData;
+    public boolean hasImage() { return ((this.awtImageData != null) && (this.swtImageData != null)); }
     /** AWT image data for the placeholder */
     public java.awt.image.BufferedImage getAWTImage() { return this.awtImageData; }
     private org.eclipse.swt.graphics.ImageData swtImageData;
@@ -58,8 +60,13 @@ public final class PdfAs4SignaturePlaceholder implements Runnable {
 
     @Override
     public void run() {
-        this.awtImageData = (java.awt.image.BufferedImage) this.param.getPlaceholder();
-        this.swtImageData = ImageUtil.convertToSWT(this.awtImageData);
+        if (!Profile.INVISIBLE.name().equals(this.param.getPdfAsSignatureProfileId())) {
+            this.awtImageData = (java.awt.image.BufferedImage) this.param.getPlaceholder();
+            this.swtImageData = ImageUtil.convertToSWT(this.awtImageData);
+        } else {
+            this.awtImageData = null;
+            this.swtImageData = null;
+        }
         ArrayList<Consumer<PdfAs4SignaturePlaceholder>> _callbacks;
         synchronized (this) {
             _callbacks = this.callbacks;

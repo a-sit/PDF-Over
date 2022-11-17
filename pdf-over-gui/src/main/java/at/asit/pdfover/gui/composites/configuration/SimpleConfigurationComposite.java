@@ -490,7 +490,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 						return;
 					if (this.sigPreview != null)
 						this.sigPreview.dispose();
-					this.sigPreview = new Image(this.getDisplay(), p.getSWTImage());
+					if (p.hasImage())
+						this.sigPreview = new Image(this.getDisplay(), p.getSWTImage());
 					this.cSigPreview.redraw();
 				});
 			});

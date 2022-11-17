@@ -126,7 +126,7 @@ public class PdfAs4SignatureParameter {
                 Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
 
                 // WORKAROUND for #110, manually paint a black border
-                if (!this.signatureProfile.equals(Profile.BASE_LOGO))
+                if ((placeholder != null) && !this.signatureProfile.equals(Profile.BASE_LOGO))
                 {
                     Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
                     ctx.setColor(Color.BLACK);
