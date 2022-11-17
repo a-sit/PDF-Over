@@ -278,8 +278,9 @@ public class ConfigurationManager {
 		loaded = true;
 	}
 
-	private void setProperty(Properties props, @Nonnull String key, @Nonnull String value) { props.setProperty(key, value); }
-	private void setPropertyIfNotNull(Properties props, @Nonnull String key, @CheckForNull String value) { if (value != null) setProperty(props, key, value); }
+	private void setProperty(@Nonnull Properties props, @Nonnull String key, @Nonnull String value) { props.setProperty(key, value); }
+	private void setPropertyIfNotNull(@Nonnull Properties props, @Nonnull String key, @CheckForNull String value) { if (value != null) setProperty(props, key, value); }
+	private void setPropertyIfNotBlank(@Nonnull Properties props, @Nonnull String key, @Nonnull String value) { if (!value.isEmpty()) setProperty(props, key, value); }
 	/* save to file */
 	public void saveToDisk() throws IOException {
 		String filename = this.getConfigurationFileName();
@@ -344,9 +345,9 @@ public class ConfigurationManager {
 
 		if (getKeyStoreEnabledPersistent())
 			setProperty(props, Constants.CFG_KEYSTORE_ENABLED, Constants.TRUE);
-		setPropertyIfNotNull(props, Constants.CFG_KEYSTORE_FILE, getKeyStoreFilePersistent());
-		setPropertyIfNotNull(props, Constants.CFG_KEYSTORE_TYPE, getKeyStoreTypePersistent());
-		setPropertyIfNotNull(props, Constants.CFG_KEYSTORE_ALIAS, getKeyStoreAliasPersistent());
+		setPropertyIfNotBlank(props, Constants.CFG_KEYSTORE_FILE, getKeyStoreFilePersistent());
+		setPropertyIfNotBlank(props, Constants.CFG_KEYSTORE_TYPE, getKeyStoreTypePersistent());
+		setPropertyIfNotBlank(props, Constants.CFG_KEYSTORE_ALIAS, getKeyStoreAliasPersistent());
 
 		KeyStorePassStorageType keystorePassStorageType = getKeyStorePassStorageType();
 		if (keystorePassStorageType == null)
@@ -719,15 +720,15 @@ public class ConfigurationManager {
 		return ISNOTNULL(fallThroughOnNull(this.configuration.keystoreEnabled, Boolean.FALSE));
 	}
 
-	public void setKeyStoreFilePersistent(String file) {
+	public void setKeyStoreFilePersistent(@CheckForNull String file) {
 		if (file == null || file.trim().isEmpty()) {
-			this.configuration.keystoreFile = null;
+			this.configuration.keystoreFile = "";
 		} else {
 			this.configuration.keystoreFile = file;
 		}
 	}
 
-	public void setKeyStoreFileOverlay(String file) {
+	public void setKeyStoreFileOverlay(@CheckForNull String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configurationOverlay.keystoreFile = null;
 		} else {
@@ -735,23 +736,23 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getKeyStoreFile() {
-		return fallThroughOnNull(this.configurationOverlay.keystoreFile, getKeyStoreFilePersistent());
+	public @Nonnull String getKeyStoreFile() {
+		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreFile, getKeyStoreFilePersistent()));
 	}
 
-	public @CheckForNull String getKeyStoreFilePersistent() {
-		return this.configuration.keystoreFile;
+	public @Nonnull String getKeyStoreFilePersistent() {
+		return ISNOTNULL(this.configuration.keystoreFile);
 	}
 
-	public void setKeyStoreTypePersistent(String type) {
+	public void setKeyStoreTypePersistent(@CheckForNull String type) {
 		if (type == null || type.trim().isEmpty()) {
-			this.configuration.keystoreType = null;
+			this.configuration.keystoreType = "";
 		} else {
 			this.configuration.keystoreType = type;
 		}
 	}
 
-	public void setKeyStoreTypeOverlay(String type) {
+	public void setKeyStoreTypeOverlay(@CheckForNull String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configurationOverlay.keystoreType = null;
 		} else {
@@ -759,23 +760,23 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getKeyStoreType() {
-		return fallThroughOnNull(this.configurationOverlay.keystoreType, getKeyStoreTypePersistent());
+	public @Nonnull String getKeyStoreType() {
+		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreType, getKeyStoreTypePersistent()));
 	}
 
-	public @CheckForNull String getKeyStoreTypePersistent() {
-		return this.configuration.keystoreType;
+	public @Nonnull String getKeyStoreTypePersistent() {
+		return ISNOTNULL(this.configuration.keystoreType);
 	}
 
-	public void setKeyStoreAliasPersistent(String alias) {
+	public void setKeyStoreAliasPersistent(@CheckForNull String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
-			this.configuration.keystoreAlias = null;
+			this.configuration.keystoreAlias = "";
 		} else {
 			this.configuration.keystoreAlias = alias;
 		}
 	}
 
-	public void setKeyStoreAliasOverlay(String alias) {
+	public void setKeyStoreAliasOverlay(@CheckForNull String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configurationOverlay.keystoreAlias = null;
 		} else {
@@ -783,27 +784,27 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getKeyStoreAlias() {
-		return fallThroughOnNull(this.configurationOverlay.keystoreAlias, getKeyStoreAliasPersistent());
+	public @Nonnull String getKeyStoreAlias() {
+		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreAlias, getKeyStoreAliasPersistent()));
 	}
 
-	public @CheckForNull String getKeyStoreAliasPersistent() {
-		return this.configuration.keystoreAlias;
+	public @Nonnull String getKeyStoreAliasPersistent() {
+		return ISNOTNULL(this.configuration.keystoreAlias);
 	}
 
-	public void setKeyStorePassStorageTypePersistent(KeyStorePassStorageType type) {
+	public void setKeyStorePassStorageTypePersistent(@CheckForNull KeyStorePassStorageType type) {
 		this.configuration.keystorePassStorageType = type;
 	}
 
-	public KeyStorePassStorageType getKeyStorePassStorageType() {
+	public @CheckForNull KeyStorePassStorageType getKeyStorePassStorageType() {
 		return this.configuration.keystorePassStorageType;
 	}
 
-	public void setKeyStoreStorePassPersistent(String storePass) {
+	public void setKeyStoreStorePassPersistent(@CheckForNull String storePass) {
 		this.configuration.keystoreStorePass = storePass;
 	}
 
-	public void setKeyStoreStorePassOverlay(String storePass) {
+	public void setKeyStoreStorePassOverlay(@CheckForNull String storePass) {
 		this.configurationOverlay.keystoreStorePass = storePass;
 	}
 
@@ -820,11 +821,11 @@ public class ConfigurationManager {
 		return this.configuration.keystoreStorePass;
 	}
 
-	public void setKeyStoreKeyPassPersistent(String keyPass) {
+	public void setKeyStoreKeyPassPersistent(@CheckForNull String keyPass) {
 		this.configuration.keystoreKeyPass = keyPass;
 	}
 
-	public void setKeyStoreKeyPassOverlay(String keyPass) {
+	public void setKeyStoreKeyPassOverlay(@CheckForNull String keyPass) {
 		this.configurationOverlay.keystoreKeyPass = keyPass;
 	}
 
