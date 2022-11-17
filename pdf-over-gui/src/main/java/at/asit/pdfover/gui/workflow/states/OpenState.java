@@ -40,6 +40,7 @@ import at.asit.pdfover.gui.PlaceholderSelectionGui;
 import at.asit.pdfover.gui.composites.DataSourceSelectComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
@@ -88,7 +89,7 @@ public class OpenState extends State {
 				&& !(status.getPreviousState() instanceof OpenState)) {
 			status.bku = config.getDefaultBKU();
 			status.document = null;
-			status.signaturePosition = config.getAutoPositionSignature() ? (new SignaturePosition()) : null;
+			status.signaturePosition = ((config.getSignatureProfile() == Profile.INVISIBLE) || config.getAutoPositionSignature()) ? (new SignaturePosition()) : null;
 
 			/* ensure that files get closed */
 			status.getPreviousState().cleanUp();

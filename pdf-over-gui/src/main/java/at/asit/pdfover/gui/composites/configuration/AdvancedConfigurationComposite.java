@@ -527,7 +527,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 		this.configurationContainer.proxyUser = provider.getProxyUserPersistent();
 		this.configurationContainer.proxyPass = provider.getProxyPassPersistent();
-		this.configurationContainer.setSignatureProfile(provider.getSignatureProfile());
 	}
 
 	/*
@@ -552,7 +551,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		performLocaleSelectionChanged(this.configurationContainer.interfaceLocale);
 		performPdfACompatSelection(this.configurationContainer.signaturePDFACompat);
 		performKeystoreEnabledSelection(this.configurationContainer.keystoreEnabled);
-		performSetSignatureProfile(this.configurationContainer.getSignatureProfile());
 
 		int port = this.configurationContainer.getProxyPort();
 		if (port > 0) {
@@ -564,24 +562,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			this.txtProxyHost.setText(host);
 		}
 
-	}
-
-	/**
-	 * @param profile
-	 *
-	 */
-	public void performSetSignatureProfile(Profile profile) {
-		switch (profile) {
-		case INVISIBLE:
-			this.performPositionSelection(true);
-			this.btnAutomatischePositionierung.setEnabled(false);
-			this.btnEnablePlaceholderUsage.setEnabled(false);
-			this.performEnableUsePlaceholder(false);
-			break;
-		default:
-			this.btnAutomatischePositionierung.setEnabled(true);
-			this.btnEnablePlaceholderUsage.setEnabled(true);
-		}
 	}
 
 	@Override
@@ -598,8 +578,6 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		store.setDefaultOutputFolderPersistent(this.configurationContainer.outputFolder);
 		store.setSaveFilePostFixPersistent(this.configurationContainer.saveFilePostFix);
 		store.setInterfaceLocalePersistent(this.configurationContainer.interfaceLocale);
-
-		store.setSignatureProfilePersistent(this.configurationContainer.getSignatureProfile());
 
 		String hostOld = store.getProxyHostPersistent();
 		String hostNew = this.configurationContainer.proxyHost;

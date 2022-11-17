@@ -556,9 +556,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
     	this.configurationContainer.setSignatureProfile(newProfile);
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
 
-    	if (newProfile.equals(Profile.AMTSSIGNATURBLOCK) || newProfile.equals(Profile.INVISIBLE)){
-			this.configurationContainer.autoPositionSignature = true;
-		}
 		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
 
