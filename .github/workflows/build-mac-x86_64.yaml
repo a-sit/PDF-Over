@@ -16,8 +16,20 @@ jobs:
         run: mvn -B clean install -Pmac -Dno-native-profile
       - name: Describe current commit
         run: echo "commit_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Remove Previous Build Artifacts
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            (await github.rest.actions.listArtifactsForRepo({ owner, repo })).data.artifacts
+              .filter(({ name }) => (name.startsWith('pdf-over-${{ github.ref_name }}-') && name.endsWith('macos-x86_64')))
+              .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: pdf-over-${{ github.ref_name }}-${{ env.commit_sha }}-macos-x86_64
           path: pdf-over-build/pdf-over_mac-x86_64.zip
+
+permissions:
+    contents: read
+    actions: write
