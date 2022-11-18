@@ -273,8 +273,8 @@ public class SignaturePanel extends JPanel {
 		// get the new image
 		if (newPage)
 		{
-			int renderHeight = (int)(0.5 + this.scale(actualPageSize.getHeight(), U.PAGE_REL, U.IMAGE, Dim.X));
-			int renderWidth = (int)(0.5 + this.scale(actualPageSize.getWidth(), U.PAGE_REL, U.IMAGE, Dim.Y));
+			int renderHeight = (int)(0.5 + this.scale(this.pageHeight, U.PAGE_REL, U.IMAGE, Dim.X));
+			int renderWidth = (int)(0.5 + this.scale(this.pageWidth, U.PAGE_REL, U.IMAGE, Dim.Y));
 			this.currentImage = new BufferedImage(renderWidth, renderHeight, BufferedImage.TYPE_INT_RGB);
 			Graphics g = this.currentImage.getGraphics();
 			g.setColor(Color.WHITE);
