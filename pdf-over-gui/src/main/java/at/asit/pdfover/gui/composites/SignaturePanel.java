@@ -295,8 +295,8 @@ public class SignaturePanel extends JPanel {
 		if (this.sigPagePos == null)
 		{
 			setSignaturePosition(
-				actualPageSize.getWidth() * .5,
-				actualPageSize.getHeight() * .75
+				this.pageWidth * .5,
+				this.pageHeight * .75
 			);
 		}
 	}
