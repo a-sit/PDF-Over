@@ -263,10 +263,11 @@ public class SignaturePanel extends JPanel {
 			this.currentImage = null;
 			return;
 		}
-			
+		
+		boolean isRotated = ((currentPage.getRotation()%180) == 90);
 		PDRectangle actualPageSize = currentPage.getBBox();
-		this.pageWidth = actualPageSize.getWidth();
-		this.pageHeight = actualPageSize.getHeight();
+		this.pageWidth = isRotated ? actualPageSize.getHeight() : actualPageSize.getWidth();
+		this.pageHeight = isRotated ? actualPageSize.getWidth() : actualPageSize.getHeight();
 		this.pageToImageScale = getToolkit().getScreenSize().height / this.pageHeight;
 
 		// get the new image
