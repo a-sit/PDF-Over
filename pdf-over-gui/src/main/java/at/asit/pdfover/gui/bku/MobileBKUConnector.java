@@ -312,6 +312,9 @@ public class MobileBKUConnector implements BkuSlConnector {
             return new HttpGet(html.fido2Link);
         }
 
+        if (html.autoSkipBlock != null) {
+            return buildFormSubmit(html, html.autoSkipBlock.submitButton);
+        }
         if (html.interstitialBlock != null) {
             this.state.showInformationMessage(html.interstitialBlock.interstitialMessage);
             return buildFormSubmit(html, html.interstitialBlock.submitButton);

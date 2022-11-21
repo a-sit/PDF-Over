@@ -74,6 +74,17 @@ public class ATrustParser {
         }
     }
 
+    public static class AutoSkipBlock extends TopLevelFormBlock {
+        public final @Nonnull String submitButton;
+
+        private AutoSkipBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+            super(htmlDocument, formOptions);
+            if (htmlDocument.baseUri().contains("/tanAppInfo.aspx")) {
+                this.submitButton = "#NextBtn";
+            } else { throw new ComponentParseFailed(); }
+        }
+    }
+
     public static class InterstitialBlock extends TopLevelFormBlock {
         public final @Nonnull String submitButton;
         public final @Nonnull String interstitialMessage;
@@ -223,6 +234,7 @@ public class ATrustParser {
         public final @CheckForNull URI fido2Link;
 
         /* top-level blocks (exactly one is not null) */
+        public final @CheckForNull AutoSkipBlock autoSkipBlock;
         public final @CheckForNull InterstitialBlock interstitialBlock;
         public final @CheckForNull ErrorBlock errorBlock;
         public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
@@ -235,6 +247,7 @@ public class ATrustParser {
         private void validate() {
             Set<String> populated = new HashSet<>();
 
+            if (autoSkipBlock != null) populated.add("autoSkipBlock");
             if (interstitialBlock != null) populated.add("interstitialBlock");
             if (errorBlock != null) populated.add("errorBlock");
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
@@ -321,6 +334,7 @@ public class ATrustParser {
             this.smsTanLink = getHrefIfExists("#SmsButton");
             this.fido2Link = getHrefIfExists("#FidoButton"); // TODO hide the button if unsupported?
 
+            this.autoSkipBlock = TryParseMainBlock(AutoSkipBlock.class);
             this.interstitialBlock = TryParseMainBlock(InterstitialBlock.class);
             this.errorBlock = TryParseMainBlock(ErrorBlock.class);
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
