@@ -1,5 +1,8 @@
 name: Build Windows Package
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - main
 jobs:
   build:
     runs-on: windows-latest
