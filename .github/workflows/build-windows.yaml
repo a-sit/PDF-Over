@@ -1,8 +1,12 @@
 name: Build Windows
 on:
   push:
-    branches-ignore:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: windows-latest
@@ -16,7 +20,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: mvn -B clean install -Pwindows -Dno-native-profile
+        run: mvn -B clean install -Pwindows -Pci-build -Dno-native-profile
       - name: Describe current commit
         run: echo "commit_sha=$("${{ github.sha }}".SubString(0,7))" >> $env:GITHUB_ENV
       - name: Remove Previous Build Artifacts
@@ -31,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pdf-over-${{ github.ref_name }}-${{ env.commit_sha }}-windows-x86_64
-          path: pdf-over-build/pdf-over_windows-x86_64.zip
+          path: pdf-over-build
 
 permissions:
     contents: read

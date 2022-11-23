@@ -1,5 +1,12 @@
 name: Build Linux
-on: [workflow_dispatch]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +20,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: mvn -B clean install -Plinux -Dno-native-profile
+        run: mvn -B clean install -Plinux -Pci-build -Dno-native-profile
       - name: Describe current commit
         run: echo "commit_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
       - name: Remove Previous Build Artifacts
@@ -24,11 +31,15 @@ jobs:
             (await github.rest.actions.listArtifactsForRepo({ owner, repo })).data.artifacts
               .filter(({ name }) => (name.startsWith('pdf-over-${{ github.ref_name }}-') && name.endsWith('linux-x86_64')))
               .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
+      - name: Set executable permissions
+        run: chmod +x pdf-over-build/*.sh pdf-over-build/jre/bin/*
+      - name: Tar bundle
+        run: tar -C pdf-over-build -cvf pdf-over.tar ./
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: pdf-over-${{ github.ref_name }}-${{ env.commit_sha }}-linux-x86_64
-          path: pdf-over-build/pdf-over_linux-x86_64.jar
+          path: pdf-over.tar
 
 permissions:
     contents: read

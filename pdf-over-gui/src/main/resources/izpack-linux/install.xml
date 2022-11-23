@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <izpack:installation version="5.0"
-                     xmlns:izpack="http://izpack.org/schema/installation"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+					 xmlns:izpack="http://izpack.org/schema/installation"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					 xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
 
 	<info>
 		<appname>PDF-Over</appname>
@@ -67,7 +67,7 @@
 			<file src="ReadMe.txt" targetdir="$INSTALL_PATH" />
 
 			<!-- set executable bit, do not actually execute -->
-            <executable targetfile="$INSTALL_PATH/pdf-over_linux.sh" stage="never" />
+			<executable targetfile="$INSTALL_PATH/pdf-over_linux.sh" stage="never" />
 			<executable targetfile="$INSTALL_PATH/uninstall_linux.sh" stage="never" />
 			<executable targetfile="$INSTALL_PATH/jre/bin/java" stage="never" />
 		</pack>
