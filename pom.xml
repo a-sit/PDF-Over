@@ -32,7 +32,6 @@
     
     <contributors>
         <contributor>
-			<id>tkellner</id>
 			<name>Tobias Kellner</name>
 			<email>tobias.kellner@egiz.gv.at</email>
 			<organization>EGIZ</organization>
@@ -40,9 +39,11 @@
 				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
+            <properties>
+                <scmId>tkellner</scmId>
+            </properties>
 		</contributor>
 		<contributor>
-			<id>vkrnjic</id>
 			<name>Vesna Krnjic</name>
 			<email>vesna.krnjic@egiz.gv.at</email>
 			<organization>EGIZ</organization>
@@ -50,9 +51,11 @@
 				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
+            <properties>
+                <scmId>vkrnjic</scmId>
+            </properties>
 		</contributor>
 		<contributor>
-			<id>afitzek</id>
 			<name>Andreas Fitzek</name>
 			<email>andreas.fitzek@egiz.gv.at</email>
 			<organization>EGIZ</organization>
@@ -60,9 +63,11 @@
 				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
+            <properties>
+                <scmId>afitzek</scmId>
+            </properties>
 		</contributor>
         <contributor>
-			<id>aabraham</id>
 			<name>Andreas Abraham</name>
 			<email>andreas.abraham@egiz.gv.at</email>
 			<organization>EGIZ</organization>
@@ -70,6 +75,9 @@
 				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
+            <properties>
+                <scmId>aabraham</scmId>
+            </properties>
 		</contributor>
     </contributors>
 
