@@ -1,4 +1,4 @@
-name: Build MacOS (x86_64) Package
+name: Build MacOS (x86_64)
 on: [workflow_dispatch]
 jobs:
   build:

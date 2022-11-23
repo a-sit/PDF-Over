@@ -1,4 +1,4 @@
-name: Build Windows Package
+name: Build Windows
 on:
   push:
     branches-ignore:
