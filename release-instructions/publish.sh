@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #### CONFIGURE: ######
-PUBLISH_DIR="pdf-over-build"
 LOG_DIR="/tmp/pdfover_log"
 
 #### DON'T CONFIGURE ####
-BASEDIR="`dirname $0`"
+BASEDIR="$(dirname $(dirname $0))"
+PUBLISH_DIR="$BASEDIR/pdf-over-build"
 
 TBOLDGRAY="\033[1;30m"
 TGREEN="\033[0;32m"
@@ -63,7 +63,7 @@ pids=()
 for (( i = 0 ; i < ${#profiles[@]} ; i++ )) do
 	PROFILE=${profiles[$i]}
 	begin_phase "Building profile [$PROFILE]..."
-	mvn -B install -P$PROFILE -Dno-native-profile $MVN_PARAMS > "$LOG_DIR/build_$NAME.log" 2>&1
+	mvn -B install -P$PROFILE -Dno-native-profile $MVN_PARAMS > "$LOG_DIR/build_$PROFILE.log" 2>&1
 	RETVAL=$?
 	if [ ${RETVAL} -eq 0 ]; then
 		end_phase "OK"
