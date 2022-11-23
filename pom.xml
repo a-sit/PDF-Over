@@ -14,51 +14,64 @@
 
 	<organization>
 		<name>A-SIT</name>
-		<url>http://a-sit.at/</url>
+		<url>https://technology.a-sit.at/en/</url>
 	</organization>
 
 	<developers>
 		<developer>
+            <id>iaik-jheher</id>
+            <name>Jakob Heher</name>
+            <email>jakob.heher@iaik.tugraz.at</email>
+            <organization>EGIZ</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+	</developers>
+    
+    <contributors>
+        <contributor>
 			<id>tkellner</id>
 			<name>Tobias Kellner</name>
 			<email>tobias.kellner@egiz.gv.at</email>
 			<organization>EGIZ</organization>
 			<roles>
-				<role>developer</role>
+				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
-		</developer>
-		<developer>
+		</contributor>
+		<contributor>
 			<id>vkrnjic</id>
 			<name>Vesna Krnjic</name>
 			<email>vesna.krnjic@egiz.gv.at</email>
 			<organization>EGIZ</organization>
 			<roles>
-				<role>developer</role>
+				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
-		</developer>
-		<developer>
+		</contributor>
+		<contributor>
 			<id>afitzek</id>
 			<name>Andreas Fitzek</name>
 			<email>andreas.fitzek@egiz.gv.at</email>
 			<organization>EGIZ</organization>
 			<roles>
-				<role>developer</role>
+				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
-		</developer>
-        <developer>
+		</contributor>
+        <contributor>
 			<id>aabraham</id>
 			<name>Andreas Abraham</name>
 			<email>andreas.abraham@egiz.gv.at</email>
 			<organization>EGIZ</organization>
 			<roles>
-				<role>developer</role>
+				<role>Former Developer</role>
 			</roles>
 			<timezone>+1</timezone>
-		</developer>
-	</developers>
+		</contributor>
+    </contributors>
 
 	<licenses>
 		<license>
@@ -69,15 +82,14 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:http://git.egiz.gv.at/git/pdf-over</connection>
-		<developerConnection>scm:git:git@gitlab.iaik.tugraz.at:egiz/pdf-over.git</developerConnection>
-		<url>http://git.egiz.gv.at/pdf-over</url>
+		<connection>scm:git:https://github.com/a-sit/PDF-Over.git</connection>
+		<url>https://github.com/a-sit/PDF-Over</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
-		<system>JIRA</system>
-		<url>http://jira.egovlabs.gv.at/browse/POF</url>
+		<system>Github</system>
+		<url>https://github.com/a-sit/PDF-Over/issues</url>
 	</issueManagement>
 
 	<modules>
