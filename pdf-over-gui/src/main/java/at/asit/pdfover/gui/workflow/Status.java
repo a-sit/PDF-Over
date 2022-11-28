@@ -17,6 +17,8 @@ package at.asit.pdfover.gui.workflow;
 
 // Imports
 import java.io.File;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ public class Status {
 	private static final Logger log = LoggerFactory.getLogger(Status.class);
 
 	public File document = null;
+	public Queue<File> pendingDocuments = new ArrayDeque<>();
 
 	public SignaturePosition signaturePosition = null;
 

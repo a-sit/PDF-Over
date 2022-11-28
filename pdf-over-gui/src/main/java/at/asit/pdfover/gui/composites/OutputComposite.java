@@ -282,8 +282,6 @@ public class OutputComposite extends StateComposite {
 	 * @param target the filename to save the document as
 	 *
 	 * @return saved File (or null if unsuccessful)
-	 * @throws FileNotFoundException
-	 * @throws IOException
 	 */
 	private File saveResultAsFile(File inputFolder, String target) {
 		if (target == null)

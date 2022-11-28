@@ -88,7 +88,7 @@ public class OpenState extends State {
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {
 			status.bku = config.getDefaultBKU();
-			status.document = null;
+			status.document = status.pendingDocuments.poll();
 			status.signaturePosition = ((config.getSignatureProfile() == Profile.INVISIBLE) || config.getAutoPositionSignature()) ? (new SignaturePosition()) : null;
 
 			/* ensure that files get closed */
@@ -105,6 +105,7 @@ public class OpenState extends State {
 			selection.layout();
 
 			status.document = selection.getSelected();
+			status.pendingDocuments.clear();
 
 			if (status.document == null) {
 				// Not selected yet

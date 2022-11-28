@@ -68,10 +68,6 @@ public class OutputState extends State {
 
 			// Save signed document
 			this.outputComposite.saveDocument();
-
-			if (config.getSkipFinish() && this.outputComposite.getSaveSuccessful()) {
-				getStateMachine().exit();
-			}
 		}
 
 		return this.outputComposite;
@@ -94,6 +90,14 @@ public class OutputState extends State {
 
 		OutputComposite outputComposite = this.getOutputComposite();
 
+		if (outputComposite.getSaveSuccessful()) {
+			if (!getStateMachine().status.pendingDocuments.isEmpty()) {
+				this.setNextState(new OpenState(getStateMachine()));
+				return;
+			}
+			if (getConfig().getSkipFinish())
+				getStateMachine().exit();
+		}
 		// Display dialog
 		getStateMachine().display(outputComposite);
 	}
