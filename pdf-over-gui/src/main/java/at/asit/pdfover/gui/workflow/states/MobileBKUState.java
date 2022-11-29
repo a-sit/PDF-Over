@@ -33,7 +33,6 @@ import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -52,6 +51,7 @@ import at.asit.pdfover.gui.composites.mobilebku.MobileBKUQRComposite;
 import at.asit.pdfover.gui.composites.mobilebku.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.utils.HttpClientUtils;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
@@ -369,7 +369,7 @@ public class MobileBKUState extends State {
 	 * this method will return immediately */
 	public void showQRCode(final @Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final @Nullable String errorMessage) {
 		byte[] qrCode;
-		try (final CloseableHttpClient httpClient = HttpClients.createDefault()) {
+		try (final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().build()) {
 			try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(qrCodeURI))) {
 				qrCode = EntityUtils.toByteArray(response.getEntity());
 			}
