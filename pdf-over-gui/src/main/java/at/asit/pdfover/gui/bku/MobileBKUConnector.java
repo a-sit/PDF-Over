@@ -21,7 +21,6 @@ import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -43,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.bku.mobile.ATrustParser;
+import at.asit.pdfover.gui.utils.HttpClientUtils;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState;
 import at.asit.pdfover.gui.workflow.states.MobileBKUState.UsernameAndPassword;
 import at.asit.pdfover.signer.BkuSlConnector;
@@ -77,7 +77,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     @Override
 	public String handleSLRequest(PdfAs4SLRequest slRequest) throws SignatureException, UserCancelledException {
         log.debug("Got security layer request: (has file part: {})\n{}", (slRequest.signatureData != null), slRequest.xmlRequest);
-        try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().useSystemProperties().build()) {
+        try (final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().disableRedirectHandling().build()) {
             ClassicHttpRequest currentRequest = buildInitialRequest(slRequest);
             ATrustParser.Result response;
             while ((response = sendHTTPRequest(httpClient, currentRequest)).slResponse == null)
@@ -242,7 +242,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 
     private static class LongPollThread extends Thread implements AutoCloseable {
         
-        private final CloseableHttpClient httpClient = HttpClients.createDefault();
+        private final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().build();
         private final HttpGet request;
         private final Runnable signal;
         private boolean done = false;
