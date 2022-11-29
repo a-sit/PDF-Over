@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
@@ -127,6 +128,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 
             if (httpStatus != HttpStatus.SC_OK) {
                 switch (httpStatus) {
+                    case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED: throw new UserDisplayedError(Messages.getString("error.ProxyAuthRequired"));
                     case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError(Messages.getString("atrusterror.http_413"));
                     default: throw new UserDisplayedError(Messages.formatString("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)")));
                 }
@@ -163,6 +165,9 @@ public class MobileBKUConnector implements BkuSlConnector {
             } else {
                 return ATrustParser.Parse(request.getUri(), contentType.getMimeType(), entityBody);
             }
+        } catch (ClientProtocolException e) {
+            log.warn("Failed to connect:", e);
+            throw new UserDisplayedError(Messages.formatString("error.FailedToConnect", e.getLocalizedMessage()));
         }
     }
 
