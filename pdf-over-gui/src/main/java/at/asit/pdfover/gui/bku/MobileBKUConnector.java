@@ -76,7 +76,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     @Override
 	public String handleSLRequest(PdfAs4SLRequest slRequest) throws SignatureException, UserCancelledException {
         log.debug("Got security layer request: (has file part: {})\n{}", (slRequest.signatureData != null), slRequest.xmlRequest);
-        try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().build()) {
+        try (final CloseableHttpClient httpClient = HttpClients.custom().disableRedirectHandling().useSystemProperties().build()) {
             ClassicHttpRequest currentRequest = buildInitialRequest(slRequest);
             ATrustParser.Result response;
             while ((response = sendHTTPRequest(httpClient, currentRequest)).slResponse == null)
