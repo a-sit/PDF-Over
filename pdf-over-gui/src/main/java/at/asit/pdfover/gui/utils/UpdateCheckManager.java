@@ -8,13 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.gui.bku.BKUHelper;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
@@ -49,31 +51,27 @@ public final class UpdateCheckManager {
 
     private static String latestVersionNotified = null;
     private static Status runCheck(Shell shell) {
-        HttpClient client = (HttpClient) BKUHelper.getHttpClient();
-        GetMethod method = new GetMethod(Constants.CURRENT_RELEASE_URL);
-        try {
-            client.executeMethod(method);
-            final String version = method.getResponseBodyAsString().trim();
-            if (!VersionComparator.before(Constants.APP_VERSION, version))
-                return Status.UP_TO_DATE;
+        try (final CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties().build()) { /* TODO replace post #37 merge */
+            try (final CloseableHttpResponse httpResponse = httpClient.execute(new HttpGet(Constants.CURRENT_RELEASE_URL))) {
+                final String latestVersion = EntityUtils.toString(httpResponse.getEntity()).trim();
+                if (!VersionComparator.before(Constants.APP_VERSION, latestVersion))
+                    return Status.UP_TO_DATE;
 
-            if ((latestVersionNotified == null) || VersionComparator.before(latestVersionNotified, version)) {
-                latestVersionNotified = version;
-                // invoke GUI message in main thread
-                shell.getDisplay().asyncExec(() -> {
-                    Dialog info = new Dialog(shell,
-                            Messages.getString("version_check.UpdateTitle"),
-                            Messages.formatString("version_check.UpdateText", version),
-                            BUTTONS.OK_CANCEL, ICON.INFORMATION);
+                if ((latestVersionNotified == null) || VersionComparator.before(latestVersionNotified, latestVersion)) {
+                    latestVersionNotified = latestVersion;
+                    // invoke GUI message in main thread
+                    shell.getDisplay().asyncExec(() -> {
+                        Dialog info = new Dialog(shell, Messages.getString("version_check.UpdateTitle"), Messages.formatString("version_check.UpdateText", latestVersion),
+                                                    BUTTONS.OK_CANCEL, ICON.INFORMATION);
+                        if (info.open() == SWT.OK)
+                            SWTUtils.openURL(Constants.UPDATE_URL);
+                    });
+                }
 
-                    if (info.open() == SWT.OK)
-                        SWTUtils.openURL(Constants.UPDATE_URL);
-                });
+                return Status.OUTDATED;
             }
-
-            return Status.OUTDATED;
         } catch (Exception e) {
-            log.error("Error downloading update information: ", e);
+            log.warn("Error downloading update information: ", e);
             return Status.FAILED;
         }
     }
