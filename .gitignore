@@ -12,6 +12,7 @@
 .vscode/**
 
 # Other
+bin/
 target/
 log/
 *~
