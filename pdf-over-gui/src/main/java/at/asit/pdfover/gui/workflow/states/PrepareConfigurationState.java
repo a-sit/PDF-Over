@@ -212,17 +212,26 @@ public class PrepareConfigurationState extends State {
 	 */
 	private void backupAndCreatePdfAsConfiguration(File configDir) throws InitializationException {
 		try {
-			File backup = File.createTempFile(Constants.PDF_AS_CONFIG_BACKUP_FILENAME, ".zip");
-			OutputStream os = new FileOutputStream(backup);
-			Zipper.zip(configDir + File.separator + "cfg", os, true);
-			os.close();
-			unzipPdfAsConfig(configDir);
-			File b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + ".zip");
-			int i = 1;
-			while (b.exists()) {
-				b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + i++ + ".zip");
+			File existingConfig = new File(configDir + File.separator + "cfg");
+			File backup = null;
+			if (existingConfig.exists()) {
+				backup = File.createTempFile(Constants.PDF_AS_CONFIG_BACKUP_FILENAME, ".zip");
+				try (OutputStream os = new FileOutputStream(backup)) {
+					Zipper.zip(existingConfig.getPath(), os, true);
+				}
 			}
-			backup.renameTo(b);
+
+			unzipPdfAsConfig(configDir);
+
+			if (backup != null) {
+				File b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + ".zip");
+				int i = 1;
+				while (b.exists()) {
+					b = new File(configDir, Constants.PDF_AS_CONFIG_BACKUP_FILENAME + i++ + ".zip");
+				}
+				backup.renameTo(b);
+			}
+
 			updateVersionFile(configDir);
 		} catch (FileNotFoundException e) {
 			log.error("Backup file not found", e);
