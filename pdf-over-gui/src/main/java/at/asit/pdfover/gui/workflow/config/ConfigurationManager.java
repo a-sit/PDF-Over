@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.annotation.CheckForNull;
@@ -301,7 +302,7 @@ public class ConfigurationManager {
 		setPropertyIfNotNull(props, Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
 		setProperty(props, Constants.CFG_LOGO_ONLY_SIZE, ISNOTNULL(Double.toString(getLogoOnlyTargetSize())));
 		
-		setPropertyIfNotNull(props, Constants.CFG_SIGNATURE_NOTE, getSignatureNote());
+		setProperty(props, Constants.CFG_SIGNATURE_NOTE, ISNOTNULL(Objects.requireNonNullElse(getSignatureNote(), "")));
 		setPropertyIfNotNull(props, Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
 		if (getRememberMobilePassword())
 			setProperty(props, Constants.CFG_MOBILE_PASSWORD_REMEMBER, Constants.TRUE);
