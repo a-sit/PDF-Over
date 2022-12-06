@@ -252,11 +252,6 @@
 			<name>Internal Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
-		<repository> <!-- remove this before next release! as soon as webauthn-java is on main maven -->
-			<id>internal-snapshot</id>
-			<name>Internal Repository (Snapshot)</name>
-			<url>https://apps.egiz.gv.at/maven-snapshot/</url>
-		</repository>
 		<repository>
 			<id>maven-central</id>
 			<name>Maven Central Repository</name>

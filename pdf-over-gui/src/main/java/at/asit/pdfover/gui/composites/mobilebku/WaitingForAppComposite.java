@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.webauthn.WebAuthN;
+import at.asit.webauthnclient.WebAuthN;
 
 import org.eclipse.swt.widgets.Button;
 

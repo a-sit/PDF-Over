@@ -48,7 +48,7 @@ import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
-import at.asit.webauthn.WebAuthN;
+import at.asit.webauthnclient.WebAuthN;
 
 import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 

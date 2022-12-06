@@ -15,7 +15,7 @@ import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.webauthn.WebAuthN;
+import at.asit.webauthnclient.WebAuthN;
 
 public class Fido2ConfigurationComposite extends ConfigurationCompositeBase {
 
