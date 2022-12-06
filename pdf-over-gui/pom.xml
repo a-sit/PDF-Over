@@ -429,6 +429,8 @@
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
 								<path>jre</path>
+								<bundledJre64Bit>true</bundledJre64Bit>
+								<minVersion>11</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
@@ -709,7 +711,7 @@
 			<properties>
 				<pdfover-build.bundled-jre.archive-filename>_ci-dummy_${pdfover-build.os-name}.zip</pdfover-build.bundled-jre.archive-filename>
 				<pdfover-build.bundled-jre.folder-in-archive>jre</pdfover-build.bundled-jre.folder-in-archive>
-                <pdfover-build.output-filename>.</pdfover-build.output-filename>
+				<pdfover-build.output-filename>.</pdfover-build.output-filename>
 			</properties>
 			<build>
 				<plugins>
