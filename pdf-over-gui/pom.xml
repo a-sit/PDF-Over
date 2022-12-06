@@ -76,8 +76,8 @@
 		</dependency>
 		<dependency>
 			<groupId>at.a-sit</groupId>
-			<artifactId>webauthn-java</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>webauthn-client-java</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

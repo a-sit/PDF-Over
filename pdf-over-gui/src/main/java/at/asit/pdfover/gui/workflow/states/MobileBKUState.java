@@ -27,8 +27,8 @@ import javax.annotation.Nullable;
 // Imports
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
-import at.asit.webauthn.PublicKeyCredential;
-import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
+import at.asit.webauthnclient.PublicKeyCredential;
+import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;

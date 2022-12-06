@@ -21,10 +21,10 @@ import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
-import at.asit.webauthn.PublicKeyCredential;
-import at.asit.webauthn.WebAuthN;
-import at.asit.webauthn.exceptions.WebAuthNUserCancelled;
-import at.asit.webauthn.responsefields.AuthenticatorAssertionResponse;
+import at.asit.webauthnclient.PublicKeyCredential;
+import at.asit.webauthnclient.WebAuthN;
+import at.asit.webauthnclient.exceptions.WebAuthNUserCancelled;
+import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
 
 public class MobileBKUFido2Composite extends StateComposite {
     private static final Logger log = LoggerFactory.getLogger(MobileBKUFido2Composite.class);

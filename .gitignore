@@ -15,6 +15,7 @@
 bin/
 target/
 log/
+*.log
 *~
 *pom.xml.releaseBackup
 pdf-over-build/
