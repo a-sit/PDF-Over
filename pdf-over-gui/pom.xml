@@ -45,9 +45,9 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-	      <groupId>com.google.code.gson</groupId>
-	      <artifactId>gson</artifactId>
-	      <version>2.9.0</version>
+		  <groupId>com.google.code.gson</groupId>
+		  <artifactId>gson</artifactId>
+		  <version>2.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -55,14 +55,14 @@
 			<version>20220320</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.jsoup</groupId>
-		    <artifactId>jsoup</artifactId>
-		    <version>1.14.3</version>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.14.3</version>
 		</dependency>
 		<dependency>
-		    <groupId>commons-configuration</groupId>
-		    <artifactId>commons-configuration</artifactId>
-		    <version>1.10</version>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
 		</dependency>
 		<dependency>
 			<groupId>at.a-sit</groupId>
@@ -393,6 +393,7 @@
 							<jre>
 								<path>jre</path>
 								<bundledJre64Bit>true</bundledJre64Bit>
+								<minVersion>11</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
@@ -428,6 +429,8 @@
 							<icon>src/main/resources/icons/icon.ico</icon>
 							<jre>
 								<path>jre</path>
+								<bundledJre64Bit>true</bundledJre64Bit>
+								<minVersion>11</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>${pdfover-build.version.majorVersion}.${pdfover-build.version.minorVersion}.${pdfover-build.version.incrementalVersion}.0</fileVersion>
@@ -462,7 +465,7 @@
 	</build>
 
 	<profiles>
-        <profile>
+		<profile>
 			<id>linux</id>
 			<activation>
 				<os>
@@ -478,8 +481,7 @@
 				<pdfover-build.bundled-jre.archive-filename>OpenJDK17U-jre_x64_linux_hotspot_17.0.3_7.tar.gz</pdfover-build.bundled-jre.archive-filename>
 				<pdfover-build.bundled-jre.folder-in-archive>jdk-17.0.3+7-jre</pdfover-build.bundled-jre.folder-in-archive>
 				<pdfover-build.os-name>linux</pdfover-build.os-name>
-				<pdfover-build.output-filename-without-jar>pdf-over_linux-x86_64</pdfover-build.output-filename-without-jar>
-				<pdfover-build.output-filename>${pdfover-build.output-filename-without-jar}.jar</pdfover-build.output-filename>
+				<pdfover-build.output-filename-without-jar>pdf-over_linux-x86_64</pdfover-build.output-filename-without-jar> <!-- used for izpack builds -->
 			</properties>
 			<build>
 				<plugins>
@@ -669,7 +671,7 @@
 				</plugins>
 			</build>
 		</profile>
-        <profile>
+		<profile>
 			<id>mac-aarch64</id>
 			<activation>
 				<os>
@@ -697,6 +699,51 @@
 							<execution>
 								<id>copy-mac-resources</id>
 								<phase>validate</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>ci-build</id>
+			<!-- activated by CI runners to exclude the JRE and disable build zipping; needs to come AFTER all the OS profiles since it overrides their settings -->
+			<properties>
+				<pdfover-build.bundled-jre.archive-filename>_ci-dummy_${pdfover-build.os-name}.zip</pdfover-build.bundled-jre.archive-filename>
+				<pdfover-build.bundled-jre.folder-in-archive>jre</pdfover-build.bundled-jre.folder-in-archive>
+				<pdfover-build.output-filename>.</pdfover-build.output-filename>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>truezip-maven-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>build-archive</id>
+								<phase>install</phase> <!-- re-override this in case the linux profile is active -->
+							</execution>
+						</executions>
+					</plugin>
+					<plugin> <!-- disable izpack jar -->
+						<groupId>org.codehaus.izpack</groupId>
+						<artifactId>izpack-maven-plugin</artifactId>
+						<version>5.1.3</version>
+						<executions>
+							<execution>
+								<id>standard-installer</id>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin> <!-- disable izpack resources -->
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.4.2</version>
+						<executions>
+							<execution>
+								<id>copy-izpack-resources</id>
+								<phase>none</phase>
 							</execution>
 						</executions>
 					</plugin>
@@ -788,7 +835,7 @@
 			<name>Internal Repository</name>
 			<url>https://apps.egiz.gv.at/maven/</url>
 		</repository>
-        <repository>
+		<repository>
 			<id>local-repo</id>
 			<url>file://${pdfover-build.root-dir}/repo</url>
 		</repository>
