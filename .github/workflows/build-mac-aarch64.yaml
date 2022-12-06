@@ -29,7 +29,7 @@ jobs:
           script: |
             const { owner, repo } = context.issue;
             (await github.rest.actions.listArtifactsForRepo({ owner, repo })).data.artifacts
-              .filter(({ name }) => (name.startsWith('pdf-over-${{ github.ref_name }}-') && name.endsWith('macos-aarch64')))
+              .filter(({ name }) => (name.startsWith('pdf-over-${{ github.event.pull_request.number || github.ref_name }}-') && name.endsWith('macos-aarch64')))
               .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
       - name: Set executable permissions
         run: chmod +x pdf-over-build/*.sh pdf-over-build/jre/bin/*
@@ -38,7 +38,7 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: pdf-over-${{ github.ref_name }}-${{ env.commit_sha }}-macos-aarch64
+          name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-macos-aarch64
           path: pdf-over.tar
 
 permissions:
