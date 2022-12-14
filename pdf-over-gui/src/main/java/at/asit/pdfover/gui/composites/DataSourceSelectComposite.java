@@ -17,6 +17,9 @@ package at.asit.pdfover.gui.composites;
 
 // Imports
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -54,19 +57,13 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	public void openFileDialog() {
 		FileDialog dialog = new FileDialog(
-				DataSourceSelectComposite.this.getShell(), SWT.OPEN);
+				DataSourceSelectComposite.this.getShell(), SWT.OPEN | SWT.MULTI);
 		dialog.setFilterExtensions(new String[] { "*.pdf", "*" });
 		dialog.setFilterNames(new String[] {
 				Messages.getString("common.PDFExtension_Description"),
 				Messages.getString("common.AllExtension_Description") });
-		String fileName = dialog.open();
-		File file = null;
-		if (fileName != null) {
-			file = new File(fileName);
-			if (file.exists()) {
-				DataSourceSelectComposite.this.setSelected(file);
-			}
-		}
+		dialog.open();
+		this.setSelected(dialog.getFilterPath(), dialog.getFileNames());
 	}
 
 	/**
@@ -93,15 +90,18 @@ public class DataSourceSelectComposite extends StateComposite {
 	/**
 	 * Set this value through the setter method!!
 	 */
-	private File selected = null;
+	final private List<File> selected = new ArrayList<>();
 
-	/**
-	 * Sets the selected file and calls update to the workflow
-	 *
-	 * @param selected
-	 */
-	protected void setSelected(File selected) {
-		this.selected = selected;
+	public void setSelected(String basePath, String[] fileNames) {
+		this.selected.clear();
+		if (fileNames != null) {
+			for (String fileName : fileNames) {
+				File file = new File(basePath, fileName);
+				if (file.exists()) {
+					this.selected.add(file);
+				}
+			}
+		}
 		this.state.updateStateMachine();
 	}
 
@@ -110,7 +110,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	 *
 	 * @return the selected file
 	 */
-	public File getSelected() {
+	public List<File> getSelected() {
 		return this.selected;
 	}
 
@@ -200,16 +200,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						log.error("Dropped file name was null");
 						return;
 					}
-					String[] files = (String[]) event.data;
-					if (files.length > 0) {
-						// Only taking first file ...
-						File file = new File(files[0]);
-						if (!file.exists()) {
-							log.error(Messages.formatString("error.FileNotExist", files[0]));
-							return;
-						}
-						DataSourceSelectComposite.this.setSelected(file);
-					}
+					DataSourceSelectComposite.this.setSelected("", (String[])event.data);
 				}
 			}
 

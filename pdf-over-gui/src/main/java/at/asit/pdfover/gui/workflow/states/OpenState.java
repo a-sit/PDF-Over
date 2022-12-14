@@ -88,7 +88,14 @@ public class OpenState extends State {
 		if (!(status.getPreviousState() instanceof PrepareConfigurationState)
 				&& !(status.getPreviousState() instanceof OpenState)) {
 			status.bku = config.getDefaultBKU();
-			status.document = status.pendingDocuments.poll();
+			
+			if (status.getPreviousState() instanceof OutputState) {
+				status.document = status.pendingDocuments.poll();
+			} else {
+				status.document = null;
+				status.pendingDocuments.clear();
+			}
+
 			status.signaturePosition = ((config.getSignatureProfile() == Profile.INVISIBLE) || config.getAutoPositionSignature()) ? (new SignaturePosition()) : null;
 
 			/* ensure that files get closed */
@@ -104,8 +111,15 @@ public class OpenState extends State {
 			getStateMachine().display(selection);
 			selection.layout();
 
-			status.document = selection.getSelected();
+			List<File> selectedFiles = selection.getSelected();
+			status.document = null;
 			status.pendingDocuments.clear();
+			for (File file : selectedFiles) {
+				if (status.document == null)
+					status.document = file;
+				else
+					status.pendingDocuments.add(file);
+			}
 
 			if (status.document == null) {
 				// Not selected yet
