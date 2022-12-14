@@ -18,7 +18,6 @@ package at.asit.pdfover.gui.composites;
 // Imports
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
