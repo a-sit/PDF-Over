@@ -69,3 +69,8 @@ jobs:
             for (const pr of pull_requests) {
               await upsertComment(owner, repo, pr.number, run_name, link);
             }
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
