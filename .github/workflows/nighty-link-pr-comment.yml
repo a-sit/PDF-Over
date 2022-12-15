@@ -1,7 +1,7 @@
 name: Comment nightly.link artifact on pull request
 on:
   pull_request:
-    workflows: ['Build Linux','Build MacOS (aarch64)','Build MacOS (x86_64)','Build Windows']
+    workflows: ['Build Linux']
     types: [completed]
 jobs:
   pr_comment:
@@ -42,13 +42,8 @@ jobs:
             if (!pull_requests.length) {
               return core.error("This workflow doesn't match any pull requests!");
             }
-
-            const artifacts = await github.paginate(
-              github.rest.actions.listWorkflowRunArtifacts, {owner, repo, run_id});
-            if (!artifacts.length) {
-              return core.error(`No artifacts found`);
-            }
-            let body = `Download the artifacts for this pull request:\n`;
+            
+            let body = `The following lightweight builds are available for this pull request:\n`;
             for (const art of artifacts) {
               body += `\n* [${art.name}.zip](https://nightly.link/${owner}/${repo}/actions/artifacts/${art.id}.zip)`;
             }
