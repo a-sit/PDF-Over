@@ -14,7 +14,7 @@ jobs:
           # This snippet is public-domain, taken from
           # https://github.com/oprypin/nightly.link/blob/master/.github/workflows/pr-comment.yml
           script: |
-            async function upsertComment(owner, repo, issue_number, name, link) {
+            async function upsertComment(owner, repo, issue_number, name, link, sha) {
               const {data: comments} = await github.rest.issues.listComments(
                 {owner, repo, issue_number});
 
@@ -28,13 +28,13 @@ jobs:
                 let newBody;
                 const startIdx = oldBody.indexOf(`* [${name}]`);
                 if (startIdx >= 0) {
-                    newBody = oldBody.substring(0,startIdx) + `* [${name}](${link})`;
+                    newBody = oldBody.substring(0,startIdx) + `* [${name}](${link}) at ${sha}`;
                     
                     const endIdx = oldBody.indexOf("\n", startIdx);
                     if (endIdx >= 0)
                         newBody += oldBody.substring(endIdx);
                 } else {
-                    newBody = oldBody + "\n" + `* [${name}](${link})`;
+                    newBody = oldBody + "\n" + `* [${name}](${link}) at ${sha}`;
                 }
                 
                 await github.rest.issues.updateComment({
@@ -43,7 +43,7 @@ jobs:
                   comment_id: last.id,
                 });
               } else {
-                const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* [${name}](${link})`;
+                const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* [${name}](${link}) at ${sha}`;
                 await github.rest.issues.createComment({issue_number, body: newBody, owner, repo});
               }
             }
@@ -51,6 +51,7 @@ jobs:
             const {owner, repo} = context.repo;
             const run_id = ${{github.event.workflow_run.id}};
             const run_name = "${{github.event.workflow_run.name}}".substring(6); /* strip leading "Build " prefix from name */
+            const run_sha = "${{github.event.workflow_run.head_sha}}"
 
             const pull_requests = ${{ toJSON(github.event.workflow_run.pull_requests) }};
             if (!pull_requests.length) {
@@ -67,7 +68,7 @@ jobs:
             const link = `https://nightly.link/${owner}/${repo}/actions/artifacts/${art.id}.zip`;
 
             for (const pr of pull_requests) {
-              await upsertComment(owner, repo, pr.number, run_name, link);
+              await upsertComment(owner, repo, pr.number, run_name, link, run_sha);
             }
 
 permissions:
