@@ -40,12 +40,12 @@ jobs:
                 
                 await github.rest.issues.updateComment({
                   owner, repo,
-                  newBody,
+                  body: newBody,
                   comment_id: last.id,
                 });
               } else {
                 const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* <!-- job: ${tag} --> ${link}`;
-                await github.rest.issues.createComment({issue_number, newBody, owner, repo});
+                await github.rest.issues.createComment({issue_number, body: newBody, owner, repo});
               }
             }
 
