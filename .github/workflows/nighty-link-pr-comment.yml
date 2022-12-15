@@ -28,13 +28,13 @@ jobs:
                 let newBody;
                 const startIdx = oldBody.indexOf(`* [${name}]`);
                 if (startIdx >= 0) {
-                    newBody = oldBody.substring(0,startIdx) + `* [${name}](${link}) at ${sha}`;
+                    newBody = oldBody.substring(0,startIdx) + `* [${name}](${link}) at commit ${sha}`;
                     
                     const endIdx = oldBody.indexOf("\n", startIdx);
                     if (endIdx >= 0)
                         newBody += oldBody.substring(endIdx);
                 } else {
-                    newBody = oldBody + "\n" + `* [${name}](${link}) at ${sha}`;
+                    newBody = oldBody + "\n" + `* [${name}](${link}) at commit ${sha}`;
                 }
                 
                 await github.rest.issues.updateComment({
@@ -43,7 +43,7 @@ jobs:
                   comment_id: last.id,
                 });
               } else {
-                const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* [${name}](${link}) at ${sha}`;
+                const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* [${name}](${link}) at commit ${sha}`;
                 await github.rest.issues.createComment({issue_number, body: newBody, owner, repo});
               }
             }
