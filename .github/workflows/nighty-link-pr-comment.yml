@@ -3,12 +3,12 @@ on:
   workflow_run:
     workflows: ['Build Linux','Build Windows','Build MacOS (aarch64)','Build MacOS (x86_64)']
     types: [completed]
-concurrency: nightly-link-pr-comment
 jobs:
   pr_comment:
     if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
+      - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/github-script@v6
         with:
           # This snippet is public-domain, taken from
