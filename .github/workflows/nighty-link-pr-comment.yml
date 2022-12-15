@@ -1,7 +1,7 @@
 name: Comment nightly.link artifact on pull request
 on:
-  workflow_run:
-    workflows: ['Test workflow with upload']
+  pull_request:
+    workflows: ['Build Linux','Build MacOS (aarch64)','Build MacOS (x86_64)','Build Windows']
     types: [completed]
 jobs:
   pr_comment:
