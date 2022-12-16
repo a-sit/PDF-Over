@@ -243,11 +243,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
 		SWTUtils.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42);
 		SWTUtils.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
-		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
-			}
+		SWTUtils.addSelectionListener(btnSignatureNoteDefault, e -> {
+			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
+			processSignatureNoteChanged();
 		});
 
 		this.grpLogoOnlyTargetSize = new Group(this, SWT.NONE);
