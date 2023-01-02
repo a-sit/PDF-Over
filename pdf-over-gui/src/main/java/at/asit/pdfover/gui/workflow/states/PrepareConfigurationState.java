@@ -249,7 +249,7 @@ public class PrepareConfigurationState extends State {
 				// Check PDF-AS config version
 				File versionFile = new File(configDir, Constants.CONFIG_VERSION_FILENAME);
 				String configVersion = getVersion(versionFile);
-				if (configVersion == null || VersionComparator.before(configVersion, Constants.MIN_PDF_AS_CONFIG_VERSION))
+				if (configVersion == null || VersionComparator.lessThan(configVersion, Constants.MIN_PDF_AS_CONFIG_VERSION))
 					backupAndCreatePdfAsConfiguration(configDir);
 			}
 
