@@ -87,7 +87,9 @@ step 2: use platypus to create a bundle app
   -> set Identifier "at.a-sit.PDF-Over"
   -> set Author "A-SIT"
   -> set Version to current version
-  -> check "Accepts dropped items", click Settings, check "Accept dropped files"
+  -> check "Accepts dropped items", click Settings
+    -> check "Accept dropped files"
+    -> adjust UTIs to have only "com.adobe.pdf"
   -> add "jre", "lib" and "icons" (from /tmp/pdfover-packaging) to "Bundled Files"
   -> click "Create App", this creates a new .app
   -> save it in a new subfolder, as /tmp/pdfover-packaging/platypus/PDF-Over.app
