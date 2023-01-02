@@ -15,8 +15,9 @@
 
 ==== INSTALLER CREATION (you can do this at any time if you want to test a finalized bundle, you don't need to do it on a release tag, it's independent from the previous section)
 DO THIS ON LINUX! there are some weird quirks on other platforms, cf. issue #62 (if you are on windows, setup WSL, it works perfectly fine there)
-  -> ./publish.sh -Dks-pass={keystore password} -Dks-file={path to jks keystore file}
-    -> if you only want specific binaries, use ./publish.sh --profiles {windows|linux|mac} {remaining cli arguments as above}
+  -> ./release-instructions/publish.sh -Dks-pass={keystore password} -Dks-file={path to jks keystore file}
+    -> if you only want specific binaries, use ./release-instructions/publish.sh --profiles {windows|linux|mac} {remaining cli arguments as above}
+    -> you do not need to specify keystore parameters if testing, this will produce unsigned jars
   -> this produces pdf-over-build/pdf-over_{windows|linux|mac}-{x86_64|aarch64}.{zip|jar|tar.gz} files
   -> each platform setup has to be post-processed specifically, see respective section(s) below
 
@@ -78,7 +79,7 @@ step 2: use platypus to create a bundle app
   -> open platypus
   -> set Script Path "/tmp/pdfover-packaging/pdf-over_mac.sh"
   -> set App Name "PDF-Over"
-  -> set Interface "None"
+  -> set Interface "None", disable "Remain running after execution"
     -> for debugging, it can be useful to set this to "Text Window", and enable "Remain running after execution"
   -> set Icon
     -> Select .icns File
