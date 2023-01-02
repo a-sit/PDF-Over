@@ -15,46 +15,52 @@
  */
 package at.asit.pdfover.gui.utils;
 
+import java.util.ArrayList;
 // Imports
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
  */
 public class VersionComparator implements Comparator<String> {
+	private static final class Version {
+		final List<Integer> parts;
+		final boolean isSnapshot;
+		private Version(String v) {
+			if ((this.isSnapshot = v.endsWith("-SNAPSHOT")))
+				v = v.substring(0, v.length() - 9);
+			
+			List<Integer> l = new ArrayList<Integer>();
+			for (String partStr : v.split("\\.")) {
+				int part = 0;
+				try { part = Integer.parseInt(partStr); } catch (NumberFormatException e) {}
+				l.add(part);
+			}
+
+			this.parts = l;
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int compare(String v1, String v2) {
-		String[] v1Parts = v1.split("\\.|-");
-		String[] v2Parts = v2.split("\\.|-");
+	public int compare(String v1s, String v2s) {
 
-		int length = Math.max(v1Parts.length, v2Parts.length);
-		for (int i = 0; i < length; ++i) {
-			int v1Part = 0;
-			try {
-				if (i < v1Parts.length)
-					v1Part = Integer.parseInt(v1Parts[i]);
-			} catch (NumberFormatException e) {
-				if (v1Parts[i].equals("SNAPSHOT"))
-					v1Part = Integer.MAX_VALUE;
-			}
+		Version v1 = new Version(v1s), v2 = new Version(v2s);
 
-			int v2Part = 0;
-			try {
-				if (i < v2Parts.length)
-					v2Part = Integer.parseInt(v2Parts[i]);
-			} catch (NumberFormatException e) {
-				if (v2Parts[i].equals("SNAPSHOT"))
-					v2Part = Integer.MAX_VALUE;
-			}
+		for (int i = 0, n = Math.max(v1.parts.size(), v2.parts.size()); i < n; ++i) {
+			int v1Part = ((i < v1.parts.size()) ? v1.parts.get(i) : 0);
+			int v2Part = ((i < v2.parts.size()) ? v2.parts.get(i) : 0);
 
 			if (v1Part < v2Part)
 				return -1;
 			if (v1Part > v2Part)
 				return 1;
 		}
+		if (v1.isSnapshot != v2.isSnapshot)
+			return v1.isSnapshot ? -1 : 1;
 		return 0;
 	}
 
@@ -85,7 +91,7 @@ public class VersionComparator implements Comparator<String> {
 	 * @param v2 version 2
 	 * @return v1 &lt; v2
 	 */
-	public static boolean before(String v1, String v2) {
+	public static boolean lessThan(String v1, String v2) {
 		return compare_s(v1, v2) < 0;
 	}
 
@@ -95,7 +101,7 @@ public class VersionComparator implements Comparator<String> {
 	 * @param v2 version 2
 	 * @return v1 &gt; v2
 	 */
-	public static boolean after(String v1, String v2) {
+	public static boolean greaterThan(String v1, String v2) {
 		return compare_s(v1, v2) > 0;
 	}
 }

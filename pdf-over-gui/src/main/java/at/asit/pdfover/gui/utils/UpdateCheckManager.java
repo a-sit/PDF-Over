@@ -54,10 +54,10 @@ public final class UpdateCheckManager {
         try {
             client.executeMethod(method);
             final String version = method.getResponseBodyAsString().trim();
-            if (!VersionComparator.before(Constants.APP_VERSION, version))
+            if (!VersionComparator.lessThan(Constants.APP_VERSION, version))
                 return Status.UP_TO_DATE;
 
-            if ((latestVersionNotified == null) || VersionComparator.before(latestVersionNotified, version)) {
+            if ((latestVersionNotified == null) || VersionComparator.lessThan(latestVersionNotified, version)) {
                 latestVersionNotified = version;
                 // invoke GUI message in main thread
                 shell.getDisplay().asyncExec(() -> {
