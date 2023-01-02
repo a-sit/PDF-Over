@@ -90,10 +90,8 @@ public class Constants {
 	public static final String CONFIG_VERSION_FILENAME = ".version";
 
 	/**
-	 * The minimum PDF-AS configuration version (older ones will be backed up
-	 * and updated
-	 */
-	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.2.1-snapshot";
+	 * The minimum PDF-Over version that does not need a PDF-AS update */
+	public static final String MIN_PDF_AS_CONFIG_VERSION = "4.4.4";
 
 	/** The configuration backup filename */
 	public static final String PDF_AS_CONFIG_BACKUP_FILENAME = "cfg_backup";
