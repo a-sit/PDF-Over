@@ -32,7 +32,6 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -166,15 +165,12 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.anchor(cmbSignatureProfiles).left(0,10).right(100,-10).top(0,10).bottom(100,-10);
 		SWTUtils.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
 		SWTUtils.scrollPassthrough(cmbSignatureProfiles);
-		this.cmbSignatureProfiles.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-				int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
-				Profile selected = Profile.values()[index];
-				if (!current.equals(selected)) {
-					performProfileSelectionChanged(selected);
-				}
+		SWTUtils.addSelectionListener(cmbSignatureProfiles, e -> {
+			Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
+			int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
+			Profile selected = Profile.values()[index];
+			if (!current.equals(selected)) {
+				performProfileSelectionChanged(selected);
 			}
 		});
 
@@ -189,14 +185,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.scrollPassthrough(cmbSignatureLang);
 		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 
-		this.cmbSignatureLang.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
-				Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
-				if (!currentLocale.equals(selectedLocale)) {
-					performSignatureLangSelectionChanged(selectedLocale, currentLocale);
-				}
+		SWTUtils.addSelectionListener(cmbSignatureLang, e -> {
+			Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
+			Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
+			if (!currentLocale.equals(selectedLocale)) {
+				performSignatureLangSelectionChanged(selectedLocale, currentLocale);
 			}
 		});
 
@@ -243,11 +236,9 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.btnSignatureNoteDefault = new Button(compSignatureNoteButtonContainer, SWT.NONE);
 		SWTUtils.anchor(btnSignatureNoteDefault).top(0,0).right(100,-42);
 		SWTUtils.setFontHeight(btnSignatureNoteDefault, Constants.TEXT_SIZE_BUTTON);
-		this.btnSignatureNoteDefault.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
-			}
+		SWTUtils.addSelectionListener(btnSignatureNoteDefault, e -> {
+			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, null));
+			processSignatureNoteChanged();
 		});
 
 		this.grpLogoOnlyTargetSize = new Group(this, SWT.NONE);
@@ -371,13 +362,29 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			}
 		});
 
-		this.btnClearImage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SimpleConfigurationComposite.this.processEmblemChanged(null);
+		SWTUtils.addSelectionListener(btnClearImage, e -> {
+			SimpleConfigurationComposite.this.processEmblemChanged(null);
+		});
+		SWTUtils.addSelectionListener(btnBrowseLogo, e -> {
+			FileDialog dialog = new FileDialog(
+					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
+			dialog.setFilterExtensions(new String[] {
+					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" });
+			dialog.setFilterNames(new String[] {
+					Messages.getString("common.ImageExtension_Description"),
+					Messages.getString("common.JPGExtension_Description"),
+					Messages.getString("common.PNGExtension_Description"),
+					Messages.getString("common.GIFExtension_Description"),
+					Messages.getString("common.AllExtension_Description") });
+			String fileName = dialog.open();
+			File file = null;
+			if (fileName != null) {
+				file = new File(fileName);
+				if (file.exists()) {
+					processEmblemChanged(fileName);
+				}
 			}
 		});
-		this.btnBrowseLogo.addSelectionListener(new ImageFileBrowser());
 
 		this.cSigPreview.addMouseListener(new MouseAdapter() {
 			@Override
@@ -412,40 +419,6 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		int x = (int) ((dstW / 2) - (w / 2));
 		int y = (int) ((dstH / 2) - (h / 2));
 		evt.gc.drawImage(this.sigPreview, 0, 0, srcW, srcH, x, y, (int) w, (int) h);
-	}
-
-	/**
-	 *
-	 */
-	private final class ImageFileBrowser extends SelectionAdapter {
-		/**
-		 *
-		 */
-		public ImageFileBrowser() {
-			// Nothing to do
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			FileDialog dialog = new FileDialog(
-					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[] {
-					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" });
-			dialog.setFilterNames(new String[] {
-					Messages.getString("common.ImageExtension_Description"),
-					Messages.getString("common.JPGExtension_Description"),
-					Messages.getString("common.PNGExtension_Description"),
-					Messages.getString("common.GIFExtension_Description"),
-					Messages.getString("common.AllExtension_Description") });
-			String fileName = dialog.open();
-			File file = null;
-			if (fileName != null) {
-				file = new File(fileName);
-				if (file.exists()) {
-					processEmblemChanged(fileName);
-				}
-			}
-		}
 	}
 
 	private void setEmblemFileInternal(final String filename, boolean force)
