@@ -59,7 +59,11 @@ public class InputDocumentArgument extends Argument {
 					throw new FileNotFoundException(signatureDocument);
 				}
 
-				getStatus().document = signatureDocumentFile;
+				var status = getStatus();
+				if (status.document == null)
+					status.document = signatureDocumentFile;
+				else
+					status.pendingDocuments.add(signatureDocumentFile);
 
 				return argOffset + 1;
 			}
