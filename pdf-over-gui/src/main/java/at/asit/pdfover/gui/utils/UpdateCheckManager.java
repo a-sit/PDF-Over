@@ -11,11 +11,11 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
+import at.asit.pdfover.gui.utils.HttpClientUtils;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
@@ -51,7 +51,7 @@ public final class UpdateCheckManager {
 
     private static String latestVersionNotified = null;
     private static Status runCheck(Shell shell) {
-        try (final CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties().build()) { /* TODO replace post #37 merge */
+        try (final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().build()) {
             try (final CloseableHttpResponse httpResponse = httpClient.execute(new HttpGet(Constants.CURRENT_RELEASE_URL))) {
                 final String latestVersion = EntityUtils.toString(httpResponse.getEntity()).trim();
                 if (!VersionComparator.lessThan(Constants.APP_VERSION, latestVersion))
