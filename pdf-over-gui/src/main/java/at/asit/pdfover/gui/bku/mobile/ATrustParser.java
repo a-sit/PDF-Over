@@ -110,7 +110,10 @@ public class ATrustParser {
                 String aspxFile = documentPath.substring(documentPath.lastIndexOf('/'));
 
                 // gods this is such a hack, why can't they have a proper error element or something
-                if (!(aspxFile.startsWith("/error") && aspxFile.endsWith(".aspx")))
+                if (!(
+                    (aspxFile.startsWith("/error") && aspxFile.endsWith(".aspx")) ||
+                    (aspxFile.equals("/SessionClosed.aspx"))
+                ))
                     throw new ComponentParseFailed();
             } catch (URISyntaxException ex) {
                 log.warn("Failed to parse document base URI as URI? ({})", htmlDocument.baseUri());

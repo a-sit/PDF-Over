@@ -1,0 +1,77 @@
+name: Comment nightly.link artifact on pull request
+on:
+  workflow_run:
+    workflows: ['Build Linux','Build Windows','Build MacOS (aarch64)','Build MacOS (x86_64)']
+    types: [completed]
+jobs:
+  pr_comment:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ahmadnassri/action-workflow-queue@v1
+      - uses: actions/github-script@v6
+        with:
+          # This snippet is public-domain, taken from
+          # https://github.com/oprypin/nightly.link/blob/master/.github/workflows/pr-comment.yml
+          script: |
+            async function upsertComment(owner, repo, issue_number, name, link, sha) {
+              const {data: comments} = await github.rest.issues.listComments(
+                {owner, repo, issue_number});
+
+              const marker = "<!-- bot: nightly-link -->";
+
+              const existing = comments.filter((c) => c.body.includes(marker));
+              if (existing.length > 0) {
+                const last = existing[existing.length - 1];
+                
+                const oldBody = last.body;
+                let newBody;
+                const startIdx = oldBody.indexOf(`* [${name}]`);
+                if (startIdx >= 0) {
+                    newBody = oldBody.substring(0,startIdx) + `* [${name}](${link}) at commit ${sha}`;
+                    
+                    const endIdx = oldBody.indexOf("\n", startIdx);
+                    if (endIdx >= 0)
+                        newBody += oldBody.substring(endIdx);
+                } else {
+                    newBody = oldBody + "\n" + `* [${name}](${link}) at commit ${sha}`;
+                }
+                
+                await github.rest.issues.updateComment({
+                  owner, repo,
+                  body: newBody,
+                  comment_id: last.id,
+                });
+              } else {
+                const newBody = marker + "\n" + "The following lightweight builds are available for this pull request:\n" + `* [${name}](${link}) at commit ${sha}`;
+                await github.rest.issues.createComment({issue_number, body: newBody, owner, repo});
+              }
+            }
+
+            const {owner, repo} = context.repo;
+            const run_id = ${{github.event.workflow_run.id}};
+            const run_name = "${{github.event.workflow_run.name}}".substring(6); /* strip leading "Build " prefix from name */
+            const run_sha = "${{github.event.workflow_run.head_sha}}"
+
+            const pull_requests = ${{ toJSON(github.event.workflow_run.pull_requests) }};
+            if (!pull_requests.length) {
+              return core.error("This workflow doesn't match any pull requests!");
+            }
+
+            const artifacts = await github.paginate(
+              github.rest.actions.listWorkflowRunArtifacts, {owner, repo, run_id});
+            if (!artifacts.length) {
+              return core.error("No artifacts found");
+            }
+
+            const art = artifacts[0];
+            const link = `https://nightly.link/${owner}/${repo}/actions/artifacts/${art.id}.zip`;
+
+            for (const pr of pull_requests) {
+              await upsertComment(owner, repo, pr.number, run_name, link, run_sha);
+            }
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write

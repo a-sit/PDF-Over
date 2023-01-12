@@ -54,10 +54,10 @@ public final class UpdateCheckManager {
         try (final CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties().build()) { /* TODO replace post #37 merge */
             try (final CloseableHttpResponse httpResponse = httpClient.execute(new HttpGet(Constants.CURRENT_RELEASE_URL))) {
                 final String latestVersion = EntityUtils.toString(httpResponse.getEntity()).trim();
-                if (!VersionComparator.before(Constants.APP_VERSION, latestVersion))
+                if (!VersionComparator.lessThan(Constants.APP_VERSION, latestVersion))
                     return Status.UP_TO_DATE;
 
-                if ((latestVersionNotified == null) || VersionComparator.before(latestVersionNotified, latestVersion)) {
+                if ((latestVersionNotified == null) || VersionComparator.lessThan(latestVersionNotified, latestVersion)) {
                     latestVersionNotified = latestVersion;
                     // invoke GUI message in main thread
                     shell.getDisplay().asyncExec(() -> {
