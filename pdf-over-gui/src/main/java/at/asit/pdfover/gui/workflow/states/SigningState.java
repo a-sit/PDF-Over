@@ -32,6 +32,7 @@ import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
+import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
@@ -96,8 +97,14 @@ public class SigningState extends State {
 				Throwable cause = this.threadException;
 				while (cause.getCause() != null)
 					cause = cause.getCause();
-				if (cause instanceof ConnectException)
+
+				if (cause instanceof ConnectException) {
 					message += ": " + cause.getMessage();
+				} else if (cause instanceof SLPdfAsException) {
+					var ex = ((SLPdfAsException)cause);
+					message = Messages.formatString("error.SLError", ex.getCode(), ex.getInfo());
+				}
+
 				if (cause instanceof IllegalStateException) {
 					// TODO legacy hack
 					this.threadException = new UserCancelledException();
