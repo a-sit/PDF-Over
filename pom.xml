@@ -91,6 +91,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/a-sit/PDF-Over.git</connection>
+		<developerConnection>scm:git:git@github.com:a-sit/PDF-Over.git</developerConnection>
 		<url>https://github.com/a-sit/PDF-Over</url>
 		<tag>HEAD</tag>
 	</scm>
