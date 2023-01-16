@@ -1,17 +1,19 @@
 ==== RELEASE PREPARATION (versioning)
-(this creates a release tag which has versioning fields set appropriately, tags it, and pushes it to gitlab)
+(this creates a release tag which has versioning fields set appropriately, tags it, and pushes it to github)
   -> switch to your pdf-over clone
   -> run mvn install to verify that it builds
     -> you can skip this step if you are feeling brave
   -> if using WSL, ensure that your line endings are correct
     -> git add --renormalize .
   -> to actually prep a release, run mvn release:prepare -Dresume=false
+    -> TEMPORARILY disable branch protection on the github repo before you do this
   -> this will prompt in the following order:
     -> current release version (x.y.z)
     -> current release tag (we typically use pdf-over-x.y.z)
     -> new snapshot version (new version with -SNAPSHOT suffix)
   -> it will then update version to release version, commit this & tag it with your release tag, update version to new snapshot version, and also commit this
   -> to build an installer, make sure you manually check out the release tag afterwards, before you proceed!
+    -> RE-ENABLE branch protection on the github repo before you proceed!
 
 ==== INSTALLER CREATION (you can do this at any time if you want to test a finalized bundle, you don't need to do it on a release tag, it's independent from the previous section)
 DO THIS ON LINUX! there are some weird quirks on other platforms, cf. issue #62 (if you are on windows, setup WSL, it works perfectly fine there)
@@ -104,7 +106,7 @@ step 3: sign the platypus bundle
 step 4: prepare disk image
   -> open disk utility
   -> click file (at the top of your screen!), new image, blank image
-    -> name "PDF-Over", image format "Sparse Bundle Disk Package", size 250MB
+    -> name "PDF-Over", image format "Sparse Bundle Disk Image", size 250MB
     -> save as /tmp/pdfover-packaging/pdf-over.sparsebundle
   -> this has automatically mounted the bundle as a disk (in finder sidebar)
   -> drag the following into this bundle:
@@ -117,7 +119,8 @@ step 4: prepare disk image
   -> switch Finder to icon view (if it isn't yet - it's the button to the right of the current folder name)
   -> in Finder, click "View" (at the top), "Show View Options", enable "Always open in icon view" and "Browse in icon view"
   -> set Background to "Picture", click to select, cmd+shift+g into /Volumes/PDF-Over/.background, and select background.png
-  -> adjust icon size & grid spacing until it looks centered
+  -> enable "sort -> snap to grid", adjust icon size & grid spacing until it looks centered
+    -> icon size 48x48, grid size slightly below maximum tends to give good results
 
 step 5: bundle & notarize disk image
   -> unmount the "PDF-Over" volume if it is still mounted
