@@ -1,6 +1,6 @@
 ---
-name: Feature request template
-about: Describe this issue template's purpose here.
+name: ✍️ Feature Request
+about: If something would improve your experience, tell us so we can add it.
 title: ''
 labels: "✍️ feature request"
 assignees: ''
