@@ -1,7 +1,6 @@
 package at.asit.pdfover.gui.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import org.junit.jupiter.api.Test;
 

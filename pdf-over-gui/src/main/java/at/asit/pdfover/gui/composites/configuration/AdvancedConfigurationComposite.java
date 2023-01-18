@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.gui.composites.ConfigurationComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
