@@ -1,20 +1,16 @@
 ---
-name: Feature request template
-about: Describe this issue template's purpose here.
+name: ✍️ Feature Request
+about: If something would improve your experience, tell us so we can add it.
 title: ''
 labels: "✍️ feature request"
 assignees: ''
 
 ---
 
-### Is your proposal related to a problem?
-
 <!--
-  Provide a clear and concise description of what the problem is.
-  For example, "I'm always frustrated when..."
+  These are just some suggestions for things you might want to include.
+  Feel free to remove any parts that aren't relevant to you.
 -->
-
-(Write your answer here.)
 
 ### Describe the solution you'd like
 
@@ -24,10 +20,19 @@ assignees: ''
 
 (Describe your proposed solution here.)
 
+### What problem would this solve?
+
+<!--
+  In case you think it isn't obvious. If it's obvious, feel free to remove this part.
+  We'll ask if it's not obvious to us.
+-->
+
+(Describe the context of your solution here.)
+
 ### Describe alternatives you've considered
 
 <!--
-  Let us know about other solutions you've tried or researched.
+  Let us know about other solutions you've tried or researched, if any.
 -->
 
 (Write your answer here.)
