@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -91,7 +93,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	final private List<File> selected = new ArrayList<>();
 
-	public void setSelected(String basePath, String[] fileNames) {
+	public void setSelected(@CheckForNull String basePath, String[] fileNames) {
 		this.selected.clear();
 		if (fileNames != null) {
 			for (String fileName : fileNames) {
@@ -199,7 +201,7 @@ public class DataSourceSelectComposite extends StateComposite {
 						log.error("Dropped file name was null");
 						return;
 					}
-					DataSourceSelectComposite.this.setSelected("", (String[])event.data);
+					DataSourceSelectComposite.this.setSelected(null, (String[])event.data);
 				}
 			}
 
