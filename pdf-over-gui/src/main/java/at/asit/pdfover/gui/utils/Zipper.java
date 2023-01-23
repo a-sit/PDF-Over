@@ -77,7 +77,7 @@ public class Zipper {
 			URI path = root.relativize(f.toURI());
 			ZipEntry entry = new ZipEntry(path.toString());
 			zos.putNextEntry(entry);
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[4 * 1024 * 1024];
 			int len;
 			BufferedInputStream is = new BufferedInputStream(new FileInputStream(f));
 			while ((len = is.read(buffer)) >= 0)
@@ -87,6 +87,15 @@ public class Zipper {
 			if (doDelete)
 				f.delete();
 		}
+	}
+
+	private static File sanitizePath(String targetPath, String zipEntryName) throws IOException {
+		File targetPathP = new File(targetPath);
+		File targetFile = new File(targetPath, zipEntryName);
+		if (targetFile.toPath().startsWith(targetPathP.toPath()))
+			return targetFile;
+		else
+			throw new IOException("Bad zip entry");
 	}
 
 	/**
@@ -107,7 +116,7 @@ public class Zipper {
 			if (entry.isDirectory()) {
 				log.debug("Extracting directory: " + entry.getName());
 
-				File nDir = new File(targetPath + File.separator + entry.getName());
+				File nDir = sanitizePath(targetPath, entry.getName());
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
 						throw new IOException("Failed to create dir: " + entry.getName());
@@ -115,10 +124,12 @@ public class Zipper {
 				}
 				continue;
 			}
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[4 * 1024 * 1024];
 			int len;
-			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(targetPath + File.separator + entry.getName()));
+
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(
+				sanitizePath(targetPath, entry.getName())));
+
 			while ((len = zis.read(buffer)) >= 0)
 				out.write(buffer, 0, len);
 
