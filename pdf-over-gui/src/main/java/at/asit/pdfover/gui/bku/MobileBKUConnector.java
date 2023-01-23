@@ -195,12 +195,13 @@ public class MobileBKUConnector implements BkuSlConnector {
     /**
      * Builds the initial request to A-Trust based on the specified SL request
      */
+    private static final ContentType TEXT_UTF8 = ContentType.TEXT_PLAIN.withCharset("UTF-8");
     private static @Nonnull ClassicHttpRequest buildInitialRequest(PdfAs4SLRequest slRequest) {
         HttpPost post = new HttpPost(Constants.MOBILE_BKU_URL);
         if (slRequest.signatureData != null) {
             post.setEntity(MultipartEntityBuilder.create()
                 .addBinaryBody("fileupload", slRequest.signatureData.getByteArray(), ContentType.APPLICATION_PDF, "sign.pdf")
-                .addTextBody("XMLRequest", slRequest.xmlRequest)
+                .addTextBody("XMLRequest", slRequest.xmlRequest, TEXT_UTF8)
                 .build());
         } else {
             post.setEntity(UrlEncodedFormEntityBuilder.create()
@@ -212,10 +213,10 @@ public class MobileBKUConnector implements BkuSlConnector {
 
     private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html, @CheckForNull String submitButton) {
         HttpPost post = new HttpPost(html.formTarget);
-        
+
         var builder = MultipartEntityBuilder.create();
         for (var pair : html.iterateFormOptions())
-            builder.addTextBody(pair.getKey(), pair.getValue());
+            builder.addTextBody(pair.getKey(), pair.getValue(), TEXT_UTF8);
 
         if (submitButton != null) {
             var submitButtonElm = html.htmlDocument.selectFirst(submitButton);
@@ -224,7 +225,7 @@ public class MobileBKUConnector implements BkuSlConnector {
                     if ("submit".equalsIgnoreCase(submitButtonElm.attr("type"))) {
                         String name = submitButtonElm.attr("name");
                         if (!name.isEmpty())
-                            builder.addTextBody(name, submitButtonElm.attr("value"));
+                            builder.addTextBody(name, submitButtonElm.attr("value"), TEXT_UTF8);
                     } else {
                         log.warn("Skipped specified submitButton {}, type is {} (not submit)", submitButton, submitButtonElm.attr("type"));
                     }
