@@ -299,9 +299,10 @@ public abstract class MainBarButton extends Canvas {
 	 */
 	protected void paintText(PaintEvent e) {
 		Point size = this.getSize();
-		int height = size.y;
-
-		int width = size.x;
+		final int height = size.y;
+		final int width = size.x;
+		if ((height == 0) || (width == 0))
+			return;
 
 		// e.gc.fillGradientRectangle(0, 1, width, height / 4, true);
 
@@ -336,7 +337,7 @@ public abstract class MainBarButton extends Canvas {
 
 			int w = 0;
 			Image tmp = null;
-			if(this.image.getImageData().width < width) {
+			if (this.image.getImageData().width < width) {
 				tmp = new Image(getDisplay(), this.image.getImageData());
 				w = (width - this.image.getImageData().width) / 2;
 			} else if(this.image.getImageData().width > width) {
