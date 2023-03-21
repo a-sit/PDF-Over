@@ -4,7 +4,7 @@
 
 	<groupId>at.a-sit</groupId>
 	<artifactId>pdf-over</artifactId>
-	<version>4.4.5-SNAPSHOT</version>
+	<version>4.4.5</version>
 	<packaging>pom</packaging>
 
 	<name>PDF-Over</name>
@@ -93,7 +93,7 @@
 		<connection>scm:git:https://github.com/a-sit/PDF-Over.git</connection>
 		<developerConnection>scm:git:git@github.com:a-sit/PDF-Over.git</developerConnection>
 		<url>https://github.com/a-sit/PDF-Over</url>
-		<tag>HEAD</tag>
+		<tag>pdf-over-4.4.5</tag>
 	</scm>
 
 	<issueManagement>
