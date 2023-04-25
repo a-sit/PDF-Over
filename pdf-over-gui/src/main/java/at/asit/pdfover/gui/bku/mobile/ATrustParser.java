@@ -100,6 +100,7 @@ public class ATrustParser {
 
     public static class ErrorBlock extends TopLevelFormBlock {
         public final boolean isRecoverable;
+        public final boolean requiresResponse;
         public final @Nonnull String errorText;
 
         private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
@@ -121,6 +122,7 @@ public class ATrustParser {
             }
 
             this.isRecoverable = (htmlDocument.selectFirst("#Button_Back") != null);
+            this.requiresResponse = (htmlDocument.selectFirst("#Button_Cancel") != null);
 
             StringBuilder errorText = new StringBuilder(getElementEnsureNotNull("#Label1").ownText().trim());
             var detailLabel = this.htmlDocument.selectFirst("#LabelDetail");
