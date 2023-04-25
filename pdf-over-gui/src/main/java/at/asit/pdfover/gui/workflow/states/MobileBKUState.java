@@ -206,7 +206,7 @@ public class MobileBKUState extends State {
 	 */
 	public void showRecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
-			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), errorMessage, BUTTONS.RETRY_CANCEL);
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.RETRY_CANCEL);
 			int result = error.open();
 			if (result == SWT.CANCEL)
 				throw new UserCancelledException();
@@ -220,7 +220,7 @@ public class MobileBKUState extends State {
 	 */
 	public void showUnrecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
-			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), errorMessage, BUTTONS.OK);
+			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.OK);
 			error.open();
 			throw new UserCancelledException();
 		});
