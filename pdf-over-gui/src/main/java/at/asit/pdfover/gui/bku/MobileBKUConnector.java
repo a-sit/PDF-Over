@@ -336,7 +336,10 @@ public class MobileBKUConnector implements BkuSlConnector {
                     this.state.showUnrecoverableError(html.errorBlock.errorText);
                 return buildFormSubmit(html, "#Button_Back");
             } catch (UserCancelledException e) {
-                return buildFormSubmit(html, "#Button_Cancel");
+                if (html.errorBlock.requiresResponse)
+                    return buildFormSubmit(html, "#Button_Cancel");
+                else
+                    throw e;
             }
         }
         if (html.usernamePasswordBlock != null) {
