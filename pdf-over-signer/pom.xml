@@ -10,7 +10,7 @@
 	<name>PDF-Over PDF-AS 4 Signer</name>
 	<properties>
 		<pdfover-build.root-dir>${project.basedir}/..</pdfover-build.root-dir>
-		<pdfover-build.pdfas-version>4.2.1-snapshot</pdfover-build.pdfas-version>
+		<pdfover-build.pdfas-version>4.3.2</pdfover-build.pdfas-version>
 	</properties>
     <dependencies>
 		<dependency>
