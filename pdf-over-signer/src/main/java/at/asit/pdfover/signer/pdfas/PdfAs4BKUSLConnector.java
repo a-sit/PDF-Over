@@ -107,16 +107,12 @@ public class PdfAs4BKUSLConnector extends BaseSLConnector {
 		throw new PdfAsException("error.pdf.io.03");
 	}
 
-	/** hack cf. #52 */
-	public static Exception originalExceptionSwallowedByPDFASNPE = null;
 	/* (non-Javadoc)
 	 * @see at.gv.egiz.sl.util.ISLConnector#sendCMSRequest(at.gv.egiz.sl.util.RequestPackage, at.gv.egiz.pdfas.lib.api.sign.SignParameter)
 	 */
 	@Override
 	public CreateCMSSignatureResponseType sendCMSRequest(RequestPackage pack,
 			SignParameter parameter) throws PdfAsException {
-		/* outermost try blocks are a hack cf. #52 */
-try { try {
 		JAXBElement<?> element = null;
 		try {
 			
@@ -166,7 +162,6 @@ try { try {
 			throw new SLPdfAsException(errorResponseType.getErrorCode(), errorResponseType.getInfo());
 		}
 		throw new PdfAsException("error.pdf.io.03");
-} finally { originalExceptionSwallowedByPDFASNPE = null; } } catch (Exception e) { originalExceptionSwallowedByPDFASNPE = e; throw e; }
 	}
 
 }
