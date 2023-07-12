@@ -577,6 +577,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 			log.error("Failed to set emblem!", e);
 		}
 
+		this.configurationContainer.setSignatureProfile(provider.getSignatureProfile());
 		this.configurationContainer.signatureLocale = provider.getSignatureLocale();
 		this.configurationContainer.signatureNote = provider.getSignatureNote();
 		this.configurationContainer.logoOnlyTargetSize = provider.getLogoOnlyTargetSize();
