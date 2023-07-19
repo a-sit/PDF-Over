@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -89,10 +91,10 @@ public class Zipper {
 		}
 	}
 
-	private static File sanitizePath(String targetPath, String zipEntryName) throws IOException {
-		File targetPathP = new File(targetPath);
-		File targetFile = new File(targetPath, zipEntryName);
-		if (targetFile.toPath().startsWith(targetPathP.toPath()))
+	private static Path sanitizePath(String targetPath, String zipEntryName) throws IOException {
+		Path targetPathP = Path.of(targetPath).toAbsolutePath().normalize();
+		Path targetFile = Path.of(targetPath, zipEntryName).toAbsolutePath().normalize();
+		if (targetFile.startsWith(targetPathP))
 			return targetFile;
 		else
 			throw new IOException("Bad zip entry");
@@ -116,7 +118,7 @@ public class Zipper {
 			if (entry.isDirectory()) {
 				log.debug("Extracting directory: " + entry.getName());
 
-				File nDir = sanitizePath(targetPath, entry.getName());
+				File nDir = sanitizePath(targetPath, entry.getName()).toFile();
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
 						throw new IOException("Failed to create dir: " + entry.getName());
@@ -128,7 +130,7 @@ public class Zipper {
 			int len;
 
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(
-				sanitizePath(targetPath, entry.getName())));
+				sanitizePath(targetPath, entry.getName()).toFile()));
 
 			while ((len = zis.read(buffer)) >= 0)
 				out.write(buffer, 0, len);
