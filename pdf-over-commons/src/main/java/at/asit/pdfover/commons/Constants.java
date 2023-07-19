@@ -225,6 +225,8 @@ public class Constants {
 	/** Download URL for accepted Certificates*/
 	public static final String CFG_DOWNLOAD_URL="DOWNLOAD_URL";
 
+	public static final String CFG_LAST_DIRECTORY = "LAST_SOURCE_DIRECTORY";
+
 	/* Theme constants */
 
 	/** The available themes */

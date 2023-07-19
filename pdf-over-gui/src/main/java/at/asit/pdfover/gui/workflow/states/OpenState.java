@@ -125,6 +125,8 @@ public class OpenState extends State {
 				// Not selected yet
 				return;
 			}
+
+			config.setLastOpenedDirectory(status.document.toPath().toAbsolutePath().getParent().toString());
 		}
 		log.debug("Got Datasource: " + getStateMachine().status.document.getAbsolutePath());
 
