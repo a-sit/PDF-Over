@@ -193,4 +193,6 @@ public class ConfigurationDataInMemory {
 	/** whether fido2 authentication should be selected by default */
 	public boolean fido2ByDefault = false;
 
+	public String lastOpenedDirectory = null;
+
 }

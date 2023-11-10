@@ -63,24 +63,13 @@ public class DataSourceSelectComposite extends StateComposite {
 		dialog.setFilterNames(new String[] {
 				Messages.getString("common.PDFExtension_Description"),
 				Messages.getString("common.AllExtension_Description") });
+		
+		String targetDir = this.state.getConfig().getLastOpenedDirectory();
+		if (targetDir != null)
+			dialog.setFilterPath(targetDir);
+		
 		dialog.open();
 		this.setSelected(dialog.getFilterPath(), dialog.getFileNames());
-	}
-
-	/**
-	 * Selection adapter for file browsing
-	 */
-	private final class FileBrowseDialogListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public FileBrowseDialogListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			openFileDialog();
-		}
 	}
 
 	/**
@@ -249,7 +238,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		reloadResources();
 
-		this.btn_open.addSelectionListener(new FileBrowseDialogListener());
+		SWTUtils.addSelectionListener(btn_open, (e) -> openFileDialog());
 		this.drop_area.pack();
 		this.redrawDrop();
 	}

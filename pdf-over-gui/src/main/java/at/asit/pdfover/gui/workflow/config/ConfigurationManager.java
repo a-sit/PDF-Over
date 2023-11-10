@@ -274,6 +274,8 @@ public class ConfigurationManager {
 			setUpdateCheckPersistent(!updateCheck.equalsIgnoreCase(Constants.FALSE));
 
 		setFido2ByDefaultPersistent(Constants.TRUE.equalsIgnoreCase(diskConfig.getProperty(Constants.CFG_FIDO2_BY_DEFAULT)));
+
+		setLastOpenedDirectory(diskConfig.getProperty(Constants.CFG_LAST_DIRECTORY));
 		
 		log.info("Successfully loaded config from: " + getConfigurationFileName());
 		loaded = true;
@@ -377,6 +379,8 @@ public class ConfigurationManager {
 			setProperty(props, Constants.CFG_FIDO2_BY_DEFAULT, Constants.TRUE);
 
 		setProperty(props, Constants.SIGNATURE_PROFILE, ISNOTNULL(getSignatureProfile().name()));
+
+		setPropertyIfNotNull(props, Constants.CFG_LAST_DIRECTORY, getLastOpenedDirectory());
 
 
 		FileOutputStream outputstream = new FileOutputStream(configFile, false);
@@ -915,6 +919,14 @@ public class ConfigurationManager {
 
 	public boolean getFido2ByDefault() {
 		return this.configuration.fido2ByDefault;
+	}
+
+	public void setLastOpenedDirectory(String path) {
+		this.configuration.lastOpenedDirectory = path;
+	}
+
+	public String getLastOpenedDirectory() {
+		return this.configuration.lastOpenedDirectory;
 	}
 
 }
