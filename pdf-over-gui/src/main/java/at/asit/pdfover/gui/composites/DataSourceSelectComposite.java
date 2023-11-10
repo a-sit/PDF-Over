@@ -179,8 +179,7 @@ public class DataSourceSelectComposite extends StateComposite {
 
 		DropTarget dnd_target = new DropTarget(this.drop_area, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
-		Transfer[] types = new Transfer[] { fileTransfer };
-		dnd_target.setTransfer(types);
+		dnd_target.setTransfer(new Transfer[] { fileTransfer });
 
 		dnd_target.addDropListener(new DropTargetAdapter() {
 			@Override
