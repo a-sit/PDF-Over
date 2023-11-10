@@ -351,7 +351,7 @@ public class Constants {
 	public static final String RES_IMG_CARD = "/img/karte.png";
 
 	/** Mobile phone image resource */
-	public static final String RES_IMG_MOBILE = "/img/handy.png";
+	public static final String RES_IMG_MOBILE = "/img/id_austria.png";
 
 	/** FIDO2 logo resource */
 	public static final String RES_IMG_FIDO2 = "/img/fido_logo.png";
