@@ -108,7 +108,7 @@ public class Constants {
 	public static final String LOCAL_BKU_URL = "http://127.0.0.1:3495/http-security-layer-request";
 
 	/** Default Mobile BKU URL */
-	public static final URI MOBILE_BKU_URL = URI.create("https://www.a-trust.at/mobile/https-security-layer-request/default.aspx");
+	public static final URI MOBILE_BKU_URL = URI.create("https://service.a-trust.at/mobile/https-security-layer-request/default.aspx");
 
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
