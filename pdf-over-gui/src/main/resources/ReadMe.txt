@@ -9,11 +9,11 @@ Command line arguments:
 -o:
         Sets the output folder or file to use. Example: -o <folder>
 -b:
-        Select the CCE to use. Possible values are: LOCAL, MOBILE, KS. Example: -b MOBILE
+        Select the CCE to use. Possible values are: LOCAL, MOBILE, KS. Example: -b MOBILE (to use ID Austria)
 -n:
-        Sets the telephone number to use for mobile CCE. Example: -n <number>
+        Sets the telephone number to use for mobile CCE (ID Austria). Example: -n <number>
 -p:
-        Sets the password to use for mobile CCE. Example: -p <password>
+        Sets the password to use for mobile CCE (ID Austria). Example: -p <password>
 -ks:
         Sets the keystore file. Example : -ks <keystore file>
 -kstype:

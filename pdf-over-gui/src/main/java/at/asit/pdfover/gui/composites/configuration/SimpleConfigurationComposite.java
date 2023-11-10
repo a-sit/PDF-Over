@@ -75,7 +75,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 **/
 	static final Logger log = LoggerFactory.getLogger(SimpleConfigurationComposite.class);
 
-	private Group grpHandySignatur;
+	private Group grpIDAustria;
 	private Label lblMobileNumber;
 	protected Text txtMobileNumber;
 	protected ErrorMarker txtMobileNumberErrorMarker;
@@ -121,16 +121,16 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		super(parent, style, state, container);
 		setLayout(new FormLayout());
 
-		this.grpHandySignatur = new Group(this, SWT.NONE | SWT.RESIZE);
-		SWTUtils.anchor(grpHandySignatur).right(100,-5).left(0,5).top(0,5);
-		grpHandySignatur.setLayout(new GridLayout(2, false));
-		SWTUtils.setFontHeight(grpHandySignatur, Constants.TEXT_SIZE_NORMAL);
+		this.grpIDAustria = new Group(this, SWT.NONE | SWT.RESIZE);
+		SWTUtils.anchor(grpIDAustria).right(100,-5).left(0,5).top(0,5);
+		grpIDAustria.setLayout(new GridLayout(2, false));
+		SWTUtils.setFontHeight(grpIDAustria, Constants.TEXT_SIZE_NORMAL);
 
-		this.lblMobileNumber = new Label(grpHandySignatur, SWT.NONE | SWT.RESIZE);
+		this.lblMobileNumber = new Label(grpIDAustria, SWT.NONE | SWT.RESIZE);
 		this.lblMobileNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		SWTUtils.setFontHeight(lblMobileNumber, Constants.TEXT_SIZE_NORMAL);
 
-		Composite compMobileNumerContainer = new Composite(this.grpHandySignatur, SWT.NONE);
+		Composite compMobileNumerContainer = new Composite(this.grpIDAustria, SWT.NONE);
 		compMobileNumerContainer.setLayout(new FormLayout());
 		compMobileNumerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
@@ -156,7 +156,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		this.grpSignatureProfile = new Group(this, SWT.NONE);
-		SWTUtils.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpHandySignatur, 5);
+		SWTUtils.anchor(grpSignatureProfile).right(100,-5).left(0,5).top(grpIDAustria, 5);
 		this.grpSignatureProfile.setLayout(new FormLayout());
 		SWTUtils.setFontHeight(grpSignatureProfile, Constants.TEXT_SIZE_NORMAL);
 
@@ -665,7 +665,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 	 */
 	@Override
 	public void reloadResources() {
-		SWTUtils.setLocalizedText(grpHandySignatur, "simple_config.MobileBKU_Title");
+		SWTUtils.setLocalizedText(grpIDAustria, "simple_config.MobileBKU_Title");
 		SWTUtils.setLocalizedText(lblMobileNumber, "simple_config.PhoneNumber");
 		SWTUtils.setLocalizedToolTipText(txtMobileNumber, "simple_config.ExampleNumber_ToolTip");
 		this.txtMobileNumber.setMessage(Messages.getString("simple_config.ExampleNumber"));
