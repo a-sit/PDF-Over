@@ -18,6 +18,8 @@ package at.asit.pdfover.gui.workflow.states;
 //Imports
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.eclipse.swt.SWT;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
@@ -133,6 +135,20 @@ public class OutputState extends State {
 		behavior.setActive(Buttons.POSITION, true);
 		behavior.setActive(Buttons.SIGN, true);
 		behavior.setActive(Buttons.FINAL, true);
+	}
+
+	public void enqueueNewDocuments(@Nonnull String[] pathStrs) {
+		for (String pathStr : pathStrs) {
+			if (pathStr == null) continue;
+			var path = new File(pathStr);
+			var queue = getStateMachine().status.pendingDocuments;
+			if (!queue.contains(path))
+				queue.add(path);
+		}
+		if (outputComposite.getSaveSuccessful()) {
+			this.setNextState(new OpenState(getStateMachine()));
+			this.updateStateMachine();
+		}
 	}
 
 	@Override
