@@ -176,7 +176,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.lbl_number.setAlignment(SWT.RIGHT);
 		SWTUtils.anchor(lbl_number).bottom(50, -10).right(50, -10);
 
-		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
+		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)).scaledTo(90, 90);
 		Image mobileIcon = new Image(getDisplay(), mobileIconData);
 
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);

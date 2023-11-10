@@ -206,7 +206,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		SWTUtils.setLocalizedText(lblRefValLabel, "tanEnter.ReferenceValue");
 		this.lblRefValLabel.setAlignment(SWT.RIGHT);
 
-		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE));
+		ImageData mobileIcon = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)).scaledTo(90, 90);
 		Label lbl_image = new Label(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(lbl_image).top(50, -1 * (mobileIcon.width / 2)).bottom(50, mobileIcon.width / 2).left(0, 10).width(mobileIcon.width);
 		lbl_image.setImage(new Image(getDisplay(), mobileIcon));
