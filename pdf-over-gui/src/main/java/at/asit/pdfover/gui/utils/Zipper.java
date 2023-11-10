@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -77,7 +79,7 @@ public class Zipper {
 			URI path = root.relativize(f.toURI());
 			ZipEntry entry = new ZipEntry(path.toString());
 			zos.putNextEntry(entry);
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[4 * 1024 * 1024];
 			int len;
 			BufferedInputStream is = new BufferedInputStream(new FileInputStream(f));
 			while ((len = is.read(buffer)) >= 0)
@@ -87,6 +89,15 @@ public class Zipper {
 			if (doDelete)
 				f.delete();
 		}
+	}
+
+	private static Path sanitizePath(String targetPath, String zipEntryName) throws IOException {
+		Path targetPathP = Path.of(targetPath).toAbsolutePath().normalize();
+		Path targetFile = Path.of(targetPath, zipEntryName).toAbsolutePath().normalize();
+		if (targetFile.startsWith(targetPathP))
+			return targetFile;
+		else
+			throw new IOException("Bad zip entry");
 	}
 
 	/**
@@ -107,7 +118,7 @@ public class Zipper {
 			if (entry.isDirectory()) {
 				log.debug("Extracting directory: " + entry.getName());
 
-				File nDir = new File(targetPath + File.separator + entry.getName());
+				File nDir = sanitizePath(targetPath, entry.getName()).toFile();
 				if(!nDir.exists()) {
 					if(!nDir.mkdir()) {
 						throw new IOException("Failed to create dir: " + entry.getName());
@@ -115,10 +126,12 @@ public class Zipper {
 				}
 				continue;
 			}
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[4 * 1024 * 1024];
 			int len;
-			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(targetPath + File.separator + entry.getName()));
+
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(
+				sanitizePath(targetPath, entry.getName()).toFile()));
+
 			while ((len = zis.read(buffer)) >= 0)
 				out.write(buffer, 0, len);
 
