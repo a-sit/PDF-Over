@@ -24,6 +24,12 @@ import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -48,6 +54,7 @@ import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.gui.workflow.states.OutputState;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signer.DocumentSource;
 
@@ -116,7 +123,41 @@ public class OutputComposite extends StateComposite {
 		// fd_lnk_saved_file.right = new FormAttachment(100);
 		this.lnk_saved_file.setLayoutData(fd_lnk_saved_file);
 
-		this.lnk_saved_file.addSelectionListener(new OpenSelectionListener());
+		SWTUtils.addSelectionListener(lnk_saved_file, (e) -> {
+			boolean retry;
+			do {
+				retry = false;
+				try {
+					if (outputFile == null)
+						return;
+
+					if (!outputFile.exists())
+						return;
+
+					// Normalize filename
+					File f = new File(FilenameUtils.normalize(outputFile.getAbsolutePath()));
+					log.debug("Trying to open " + f.toString());
+					// work around for the case of Linux and Java version 8
+					if (isSpecialCase()) {
+						reReloadResources(f.toString());
+						return;
+					}
+					else if (Desktop.isDesktopSupported()) {
+						Desktop.getDesktop().open(f);
+					} else {
+						log.info("AWT Desktop is not supported on this platform");
+						Program.launch(f.getAbsolutePath());
+					}
+				} catch (IOException ex) {
+					log.error("OpenSelectionListener: ", ex);
+					ErrorDialog error = new ErrorDialog(getShell(),
+							Messages.formatString("error.FailedToOpenDocument",
+									ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
+					if (error.open() == SWT.RETRY)
+						retry = true;
+				}
+			} while (retry);
+		});
 
 		FontData[] fD2 = this.lnk_saved_file.getFont().getFontData();
 		fD2[0].setHeight(Constants.TEXT_SIZE_NORMAL);
@@ -134,8 +175,46 @@ public class OutputComposite extends StateComposite {
 				SWT.CENTER);
 		this.btn_save.setLayoutData(fd_btn_save);
 
-		this.btn_save.addSelectionListener(new SaveSelectionListener());
+		SWTUtils.addSelectionListener(btn_save, () -> {
+			try {
+				saveDocument();
+			} catch (Exception ex) {
+				log.error("SaveSelectionListener: ", ex);
+			}
+		});
 		enableSaveButton(false);
+
+		DropTarget dropTarget = new DropTarget(this, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
+		final FileTransfer fileTransfer = FileTransfer.getInstance();
+		dropTarget.setTransfer(new Transfer[] { fileTransfer });
+
+		dropTarget.addDropListener(new DropTargetAdapter() {
+			@Override
+			public void drop(DropTargetEvent event) {
+				if (!fileTransfer.isSupportedType(event.currentDataType))
+					return;
+				if (event.data == null)
+					return;
+				((OutputState)OutputComposite.this.state).enqueueNewDocuments((String[])event.data);
+			}
+
+			@Override
+			public void dragOperationChanged(DropTargetEvent event) {
+				event.detail = DND.DROP_COPY;
+			}
+
+			@Override
+			public void dragEnter(DropTargetEvent event) {
+				for (int i = 0; i < event.dataTypes.length; i++) {
+					if (fileTransfer.isSupportedType(event.dataTypes[i])) {
+						event.currentDataType = event.dataTypes[i];
+						event.detail = DND.DROP_COPY;
+						return;
+					}
+				}
+				event.detail = DND.DROP_NONE;
+			}
+		});
 
 		reloadResources();
 	}
@@ -351,71 +430,6 @@ public class OutputComposite extends StateComposite {
 		String extension = FilenameUtils.getExtension(name);
 		name = FilenameUtils.removeExtension(name);
 		return name + getSaveFilePostFix() + FilenameUtils.EXTENSION_SEPARATOR  + extension;
-	}
-
-	/**
-	 * SelectionListener for save button
-	 */
-	private final class SaveSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public SaveSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				OutputComposite.this.saveDocument();
-			} catch (Exception ex) {
-				log.error("SaveSelectionListener: ", ex);
-			}
-		}
-	}
-
-	/**
-	 * Selection Listener for open button
-	 */
-	private final class OpenSelectionListener extends SelectionAdapter {
-		/**
-		 * Empty constructor
-		 */
-		public OpenSelectionListener() {
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			try {
-				if (OutputComposite.this.outputFile == null)
-					return;
-
-				if (!OutputComposite.this.outputFile.exists())
-					return;
-
-				// Normalize filename
-				File f = new File(FilenameUtils.normalize(
-						OutputComposite.this.outputFile.getAbsolutePath()));
-				log.debug("Trying to open " + f.toString());
-				// work around for the case of Linux and Java version 8
-				if (isSpecialCase()) {
-					reReloadResources(f.toString());
-					return;
-				}
-				else if (Desktop.isDesktopSupported()) {
-					Desktop.getDesktop().open(f);
-				} else {
-					log.info("AWT Desktop is not supported on this platform");
-					Program.launch(f.getAbsolutePath());
-				}
-			} catch (IOException ex) {
-				log.error("OpenSelectionListener: ", ex);
-				ErrorDialog error = new ErrorDialog(getShell(),
-						Messages.formatString("error.FailedToOpenDocument",
-								ex.getLocalizedMessage()), BUTTONS.RETRY_CANCEL);
-				if (error.open() == SWT.RETRY)
-					widgetSelected(e);
-			}
-		}
 	}
 
 	/**
