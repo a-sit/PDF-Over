@@ -171,6 +171,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
 		SWTUtils.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20);
 		this.txt_number.setEditable(true);
+		SWTUtils.addFocusGainedListener(txt_number, () -> { txt_number.selectAll(); });
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
@@ -186,6 +187,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER | SWT.NATIVE);
 		SWTUtils.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20);
 		this.txt_password.setEditable(true);
+		SWTUtils.addFocusGainedListener(txt_password, () -> { txt_password.selectAll(); });
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(lbl_password).top(50, 10).right(50, -10);

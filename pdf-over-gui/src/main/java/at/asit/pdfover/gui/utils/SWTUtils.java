@@ -11,6 +11,9 @@ import javax.annotation.Nullable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -200,7 +203,7 @@ public final class SWTUtils {
 		} catch (NoSuchMethodException | IllegalAccessException e) {
 			log.error("Attempted to pass object of type {} to addMouseDownListener; object does not have an accessible addMouseListener method", swtObj.getClass().getSimpleName(), e);
 		} catch (InvocationTargetException e) {
-			log.error("Failed to add selection listeer on object of type {}", swtObj.getClass().getSimpleName(), e);
+			log.error("Failed to add mouse-down listener on object of type {}", swtObj.getClass().getSimpleName(), e);
 		}
 	}
 
@@ -209,6 +212,29 @@ public final class SWTUtils {
 	 */
 	public static void addMouseDownListener(Object swtObj, Runnable callback) {
 		addMouseDownListener(swtObj, (e) -> { callback.run(); });
+	}
+	
+	/**
+	 * functional-interface wrapper around swtObj.addFocusListener
+	 * @param swtObj SWT widget supporting addFocusListener
+	 * @param callback focusGained method
+	 */
+	public static void addFocusGainedListener(Object swtObj, Consumer<FocusEvent> callback) {
+		try {
+			Method m = swtObj.getClass().getMethod("addFocusListener", FocusListener.class);
+			m.invoke(swtObj, new FocusAdapter() { @Override public void focusGained(FocusEvent e) { callback.accept(e); } });
+		} catch (NoSuchMethodException | IllegalAccessException e) {
+			log.error("Attempted to pass object of type {} to addFocusGainedListener; object does not have an accessible addFocusListener method", swtObj.getClass().getSimpleName(), e);
+		} catch (InvocationTargetException e) {
+			log.error("Failed to add focus gained listener on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
+
+	/**
+	 * @see SWTUtils#addFocusGainedListener(Object, Consumer)
+	 */
+	public static void addFocusGainedListener(Object swtObj, Runnable callback) {
+		addFocusGainedListener(swtObj, (e) -> { callback.run(); });
 	}
 
 	public static void openURL(@Nullable URI uri) {
