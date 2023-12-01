@@ -510,8 +510,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.configurationContainer.signatureLocale = selected;
 		this.cmbSignatureLang.select(this.getLocaleElementIndex(selected));
 
-		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous))))
+		if ((previous != null) && (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(null, previous)))) {
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(null, selected));
+			processSignatureNoteChanged();
+		}
 		
 		signatureBlockPreviewChanged();
 	}
@@ -524,8 +526,10 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
     	this.configurationContainer.setSignatureProfile(newProfile);
     	this.cmbSignatureProfiles.select(newProfile.ordinal());
 
-		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null)))
+		if (txtSignatureNote.getText().equals(getDefaultSignatureBlockNoteTextFor(oldProfile, null))) {
 			txtSignatureNote.setText(getDefaultSignatureBlockNoteTextFor(newProfile, null));
+			processSignatureNoteChanged();
+		}
 
 		this.grpSignatureLang.setVisible(newProfile.hasText());
 		this.grpSignatureNote.setVisible(newProfile.hasText());
