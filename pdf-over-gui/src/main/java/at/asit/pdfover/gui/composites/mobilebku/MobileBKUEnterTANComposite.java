@@ -31,8 +31,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.internal.Nullable;
 
@@ -42,6 +40,7 @@ import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthnclient.WebAuthN;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite for entering the TAN for the mobile BKU
@@ -71,11 +70,6 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 		this.tan = tan;
 		this.userAck = true;
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(MobileBKUEnterTANComposite.class);
 
 	private Text txt_tan;
 

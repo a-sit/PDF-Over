@@ -3,14 +3,12 @@ package at.asit.pdfover.gui.utils;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -19,8 +17,8 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
+@Slf4j
 public final class UpdateCheckManager {
-    private static final Logger log = LoggerFactory.getLogger(UpdateCheckManager.class);
     private static Thread updateCheckThread = null;
     private static boolean needsCheck = false;
 

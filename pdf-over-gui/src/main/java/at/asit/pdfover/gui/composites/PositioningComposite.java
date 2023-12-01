@@ -36,22 +36,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ScrollBar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signer.SignaturePosition;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite which allows to position the signature on a preview of the document
  */
 public class PositioningComposite extends StateComposite {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(PositioningComposite.class);
 
 	SignaturePanel viewer = null;
 	Frame frame = null;

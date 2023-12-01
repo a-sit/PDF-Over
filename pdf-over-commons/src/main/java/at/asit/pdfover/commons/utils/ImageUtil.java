@@ -32,17 +32,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class EXIFRotation {
-	private static final Logger log = LoggerFactory.getLogger(EXIFRotation.class);
 	/**
 	 * rotate by this times Math.PI / 2
 	 */

@@ -20,18 +20,16 @@ import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signer.SignResult;
 import at.asit.pdfover.signer.SignaturePosition;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Status {
-	private static final Logger log = LoggerFactory.getLogger(Status.class);
 
 	public File document = null;
 	public Queue<File> pendingDocuments = new ArrayDeque<>();

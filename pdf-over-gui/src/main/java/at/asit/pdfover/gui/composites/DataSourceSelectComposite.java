@@ -36,17 +36,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite for input document selection
  */
+@Slf4j
 public class DataSourceSelectComposite extends StateComposite {
 
 	/**
@@ -66,11 +66,6 @@ public class DataSourceSelectComposite extends StateComposite {
 		dialog.open();
 		this.setSelected(dialog.getFilterPath(), dialog.getFileNames());
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(DataSourceSelectComposite.class);
 
 	/**
 	 * Set this value through the setter method!!

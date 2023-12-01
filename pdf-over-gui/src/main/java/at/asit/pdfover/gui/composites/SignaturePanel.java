@@ -35,19 +35,15 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Messages;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class SignaturePanel extends JPanel {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(SignaturePanel.class);
 
 	/** Default serial version ID */
 	private static final long serialVersionUID = 1L;

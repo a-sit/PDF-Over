@@ -21,8 +21,6 @@ import java.lang.reflect.Constructor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow;
 import at.asit.pdfover.gui.composites.StateComposite;
@@ -32,14 +30,14 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.PrepareConfigurationState;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Workflow holds logical state of signing process and updates the current
  * logical state
  */
+@Slf4j
 public class StateMachine {
-
-	private static final Logger log = LoggerFactory.getLogger(StateMachine.class);
 
 	public final Status status;
 	public final ConfigurationManager configProvider;

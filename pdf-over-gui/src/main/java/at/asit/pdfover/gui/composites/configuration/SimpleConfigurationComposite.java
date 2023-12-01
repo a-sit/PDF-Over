@@ -47,8 +47,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -64,16 +62,13 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.pdfover.signer.Emblem;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignaturePlaceholder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(SimpleConfigurationComposite.class);
 
 	private Group grpIDAustria;
 	private Label lblMobileNumber;

@@ -24,20 +24,14 @@ import javax.swing.JOptionPane;
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.workflow.StateMachine;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import iaik.security.provider.IAIK;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main entry point for production
  */
+@Slf4j
 public class Main {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(Main.class);
 //	private static URL url=null;
 
 	/**

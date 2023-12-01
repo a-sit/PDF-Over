@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -20,9 +18,10 @@ import at.asit.pdfover.gui.utils.UpdateCheckManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AboutComposite extends ConfigurationCompositeBase {
-	static final Logger log = LoggerFactory.getLogger(AboutComposite.class);
 	private Link lnkAbout;
 	private Link lnkDataProtection;
 	private Label lblDataProtection;

@@ -21,17 +21,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class PDFFileDocumentSource implements DocumentSource {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PDFFileDocumentSource.class);
 
 	private File file;
 

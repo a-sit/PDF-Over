@@ -20,8 +20,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -34,12 +32,6 @@ public class MainBarStartButton extends MainBarButton {
 	public MainBarStartButton(Composite parent, int style) {
 		super(parent, style);
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(MainBarStartButton.class);
 
 	@Override
 	protected void paintBackground(PaintEvent e) {

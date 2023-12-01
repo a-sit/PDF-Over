@@ -21,20 +21,15 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.gui.exceptions.InitializationException;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handler to process CLI Arguments
  */
+@Slf4j
 public class ArgumentHandler {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(ArgumentHandler.class);
 
 	private Map<String, Argument> cliArguments = new LinkedHashMap<String, Argument>();
 

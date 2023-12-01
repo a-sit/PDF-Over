@@ -20,11 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import lombok.extern.slf4j.Slf4j;
 import at.asit.pdfover.commons.Messages;
 
 /**
  * CLI Argument to provide the keystore type
  */
+@Slf4j
 public class KeystoreTypeArgument extends Argument {
 	/**
 	 * Constructor
@@ -32,11 +34,6 @@ public class KeystoreTypeArgument extends Argument {
 	public KeystoreTypeArgument() {
 		super(new String[] {"-kstype"}, "argument.help.keystoretype");
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(KeystoreTypeArgument.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)

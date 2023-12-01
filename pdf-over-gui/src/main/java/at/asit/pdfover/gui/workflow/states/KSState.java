@@ -22,8 +22,6 @@ import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
 
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -38,16 +36,13 @@ import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Logical state for performing the BKU Request to a local BKU
  */
+@Slf4j
 public class KSState extends State {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(KSState.class);
 
 	/**
 	 * Constructor

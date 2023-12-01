@@ -17,8 +17,6 @@ package at.asit.pdfover.gui.workflow.states;
 
 // Imports
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -29,12 +27,13 @@ import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class ConfigurationUIState extends State {
-	private static final Logger log = LoggerFactory.getLogger(ConfigurationUIState.class);
 
 	private ConfigurationComposite configurationComposite = null;
 

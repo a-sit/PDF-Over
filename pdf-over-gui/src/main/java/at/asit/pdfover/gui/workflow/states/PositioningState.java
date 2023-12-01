@@ -22,8 +22,6 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -38,10 +36,12 @@ import at.asit.pdfover.signer.Emblem;
 import at.asit.pdfover.signer.SignaturePosition;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignaturePlaceholder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Decides where to position the signature block
  */
+@Slf4j
 public class PositioningState extends State {
 
 	/**
@@ -50,11 +50,6 @@ public class PositioningState extends State {
 	public PositioningState(StateMachine stateMachine) {
 		super(stateMachine);
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PositioningState.class);
 
 	private PositioningComposite positionComposite = null;
 
