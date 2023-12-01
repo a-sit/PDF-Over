@@ -20,8 +20,6 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -37,11 +35,13 @@ import at.asit.pdfover.signer.PDFFileDocumentSource;
 import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * User waiting state, wait for PDF Signator library to prepare document for
  * signing.
  */
+@Slf4j
 public class PrepareSigningState extends State {
 
 	/**
@@ -158,11 +158,6 @@ public class PrepareSigningState extends State {
 			}
 		}
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(PrepareSigningState.class);
 
 	PdfAs4SignatureParameter signatureParameter;
 

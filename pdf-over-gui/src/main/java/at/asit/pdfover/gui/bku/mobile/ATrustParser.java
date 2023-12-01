@@ -9,14 +9,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ATrustParser {
-    private static final Logger log = LoggerFactory.getLogger(ATrustParser.class);
-
     private static class ComponentParseFailed extends Exception {}
 
     private static class TopLevelFormBlock {

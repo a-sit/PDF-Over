@@ -22,8 +22,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
@@ -35,8 +33,6 @@ import at.asit.pdfover.gui.workflow.states.State;
  * Composite for BKU selection
  */
 public class BKUSelectionComposite extends StateComposite {
-
-	static final Logger log = LoggerFactory.getLogger(BKUSelectionComposite.class);
 
 	private BKUs selected = BKUs.NONE;
 

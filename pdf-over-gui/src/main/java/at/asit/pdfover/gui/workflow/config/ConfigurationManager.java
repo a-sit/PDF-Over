@@ -28,8 +28,6 @@ import at.asit.pdfover.commons.Profile;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.graphics.Point;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
@@ -38,16 +36,14 @@ import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import at.asit.pdfover.commons.Messages;
 
 /**
  * Implementation of the configuration provider and manipulator
  */
+@Slf4j
 public class ConfigurationManager {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(ConfigurationManager.class);
 
 	private String configurationFile = Constants.DEFAULT_CONFIG_FILENAME;
 
@@ -72,7 +68,7 @@ public class ConfigurationManager {
 
 	static public void factoryResetPersistentConfig() {
 		// tell logback to close all file handles
-		((ch.qos.logback.classic.LoggerContext)LoggerFactory.getILoggerFactory()).stop();
+		((ch.qos.logback.classic.LoggerContext)org.slf4j.LoggerFactory.getILoggerFactory()).stop();
 
 		File configDirectory = new File(Constants.CONFIG_DIRECTORY);
 		File backupDirectory = new File(Constants.CONFIG_BACKUP_DIRECTORY);

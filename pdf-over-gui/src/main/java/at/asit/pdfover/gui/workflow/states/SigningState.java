@@ -19,8 +19,6 @@ package at.asit.pdfover.gui.workflow.states;
 import java.net.ConnectException;
 
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.MainWindow.Buttons;
@@ -33,10 +31,12 @@ import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Logical state for signing process, usually show BKU Dialog during this state.
  */
+@Slf4j
 public class SigningState extends State {
 
 	/**
@@ -72,11 +72,6 @@ public class SigningState extends State {
 	public SigningState(StateMachine stateMachine) {
 		super(stateMachine);
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(SigningState.class);
 
 	Exception threadException = null;
 

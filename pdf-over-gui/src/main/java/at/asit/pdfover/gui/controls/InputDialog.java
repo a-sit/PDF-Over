@@ -34,12 +34,6 @@ import at.asit.pdfover.gui.utils.SWTUtils;
  *
  */
 public class InputDialog extends org.eclipse.swt.widgets.Dialog {
-	/**
-	 * SLF4J Logger instance
-	 **/
-//	private static final Logger log = LoggerFactory
-//			.getLogger(InputDialog.class);
-
 	private String prompt;
 	String input;
 

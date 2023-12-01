@@ -16,15 +16,14 @@
 package at.asit.pdfover.gui.cliarguments;
 
 // Imports
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.gui.exceptions.InitializationException;
+import lombok.extern.slf4j.Slf4j;
 import at.asit.pdfover.commons.Messages;
 
 /**
  * CLI Argument to provide the keystore password
  */
+@Slf4j
 public class KeystoreStorePassArgument extends Argument {
 	/**
 	 * Constructor
@@ -32,11 +31,6 @@ public class KeystoreStorePassArgument extends Argument {
 	public KeystoreStorePassArgument() {
 		super(new String[] {"-kspass"}, "argument.help.keystorestorepass");
 	}
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(KeystoreStorePassArgument.class);
 
 	/* (non-Javadoc)
 	 * @see at.asit.pdfover.gui.cliarguments.CLIArgument#handleArgument(java.lang.String[], int, at.asit.pdfover.gui.workflow.StateMachine, at.asit.pdfover.gui.cliarguments.ArgumentHandler)

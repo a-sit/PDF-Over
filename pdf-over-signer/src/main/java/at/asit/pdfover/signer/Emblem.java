@@ -18,6 +18,7 @@ package at.asit.pdfover.signer;
 // Imports
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.utils.ImageUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -35,17 +36,12 @@ import java.util.Properties;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * TODO all of this caching business is a bit of a mess
  */
+@Slf4j
 public class Emblem {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(Emblem.class);
 
 	private static final String CACHE_DIR = Constants.CONFIG_DIRECTORY;
 	private static final String CACHE_IMG_FILENAME = ".emblem.png";

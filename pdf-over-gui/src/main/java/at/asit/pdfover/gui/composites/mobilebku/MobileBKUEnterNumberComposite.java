@@ -28,8 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.bku.mobile.MobileBKUValidator;
@@ -38,15 +36,13 @@ import at.asit.pdfover.gui.exceptions.InvalidPasswordException;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite for entering the phone number for the mobile BKU
  */
+@Slf4j
 public class MobileBKUEnterNumberComposite extends StateComposite {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(MobileBKUEnterNumberComposite.class);
 
 	/**
 	 *

@@ -19,9 +19,6 @@ package at.asit.pdfover.signer.pdfas;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
@@ -39,16 +36,13 @@ import at.gv.egiz.sl.schema.InfoboxReadResponseType;
 import at.gv.egiz.sl.util.BaseSLConnector;
 import at.gv.egiz.sl.util.RequestPackage;
 import at.gv.egiz.sl.util.SLMarschaller;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class PdfAs4BKUSLConnector extends BaseSLConnector {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(PdfAs4BKUSLConnector.class);
-
 	private BkuSlConnector connector;
 
 	/**

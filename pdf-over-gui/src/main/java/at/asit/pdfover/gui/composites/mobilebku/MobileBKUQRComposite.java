@@ -33,8 +33,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -42,16 +40,13 @@ import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthnclient.WebAuthN;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite for displaying the QR code for the mobile BKU
  */
+@Slf4j
 public class MobileBKUQRComposite extends StateComposite {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(MobileBKUQRComposite.class);
 
 	private Label lblQR;
 

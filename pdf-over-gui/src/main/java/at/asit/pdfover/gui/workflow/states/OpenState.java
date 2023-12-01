@@ -29,8 +29,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 //Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.MainWindow.Buttons;
@@ -46,8 +44,7 @@ import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signer.SignaturePosition;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
-
-
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
@@ -56,6 +53,7 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 /**
  * Selects the data source for the signature process.
  */
+@Slf4j
 public class OpenState extends State {
 
 	/**
@@ -65,10 +63,6 @@ public class OpenState extends State {
 		super(stateMachine);
 	}
 
-	/**
-	 * SLF4J Logger instance
-	 **/
-	private static final Logger log = LoggerFactory.getLogger(OpenState.class);
 	private static final String advancedConfig = Constants.CONFIG_DIRECTORY + File.separator + "/cfg/advancedconfig.properties";
 
 	private DataSourceSelectComposite selectionComposite = null;

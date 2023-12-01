@@ -27,14 +27,12 @@ import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Messages;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class SWTUtils {
-
-    private static final Logger log = LoggerFactory.getLogger(SWTUtils.class);
 
     /* oh how i miss C++, and compile-time safety; this would be so much cleaner as a templated function */
     private static void genericSetText(Object swtObj, String text) {

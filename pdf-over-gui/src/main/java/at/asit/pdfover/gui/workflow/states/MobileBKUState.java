@@ -26,6 +26,7 @@ import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 import at.asit.webauthnclient.PublicKeyCredential;
 import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -33,8 +34,6 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -57,8 +56,8 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
  */
+@Slf4j
 public class MobileBKUState extends State {
-	static final Logger log = LoggerFactory.getLogger(MobileBKUState.class);
 
 	PdfAs4SigningState signingState;
 

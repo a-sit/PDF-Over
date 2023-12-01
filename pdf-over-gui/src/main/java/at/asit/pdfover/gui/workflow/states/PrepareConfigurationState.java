@@ -29,8 +29,6 @@ import java.io.OutputStream;
 
 
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.cliarguments.*;
@@ -45,16 +43,15 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signer.SignaturePosition;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Starting state of workflow proccess
  *
  * Reads configuration, command arguments and initializes configured variables
  */
+@Slf4j
 public class PrepareConfigurationState extends State {
-
-	/** SLF4J Logger instance **/
-	static final Logger log = LoggerFactory.getLogger(PrepareConfigurationState.class);
 
 	private ArgumentHandler handler;
 

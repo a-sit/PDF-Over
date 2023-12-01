@@ -22,21 +22,15 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * Localizes string messages for PDFOver GUI
  */
+@Slf4j
 public class Messages {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(Messages.class);
 
 	private static final String BUNDLE_NAME = "at.asit.pdfover.gui.messages";
 

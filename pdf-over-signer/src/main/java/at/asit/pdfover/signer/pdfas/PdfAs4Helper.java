@@ -18,9 +18,6 @@ package at.asit.pdfover.signer.pdfas;
 // Imports
 import java.io.File;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.asit.pdfover.signer.SignatureException;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
@@ -29,11 +26,6 @@ import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
  * PDF-AS 4 Helper
  */
 public class PdfAs4Helper {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(PdfAs4Helper.class);
 
 	/**
 	 * PDF-AS Object

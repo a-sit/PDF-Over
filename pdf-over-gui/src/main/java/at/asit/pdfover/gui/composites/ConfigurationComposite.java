@@ -26,8 +26,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
@@ -44,16 +42,13 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composite for hosting configuration composites
  */
+@Slf4j
 public class ConfigurationComposite extends StateComposite {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(ConfigurationComposite.class);
 
 	/**
 	 * configuration provider

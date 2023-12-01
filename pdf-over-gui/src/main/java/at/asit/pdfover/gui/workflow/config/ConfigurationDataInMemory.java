@@ -26,8 +26,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.BKUs;
 import at.asit.pdfover.commons.Constants;
@@ -40,11 +38,6 @@ import lombok.NonNull;
  * Implementation of the configuration container
  */
 public class ConfigurationDataInMemory {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(ConfigurationDataInMemory.class);
 
 	/** the emblem size (in mm) for logo only signatures */
 	public double logoOnlyTargetSize = Constants.DEFAULT_LOGO_ONLY_SIZE;

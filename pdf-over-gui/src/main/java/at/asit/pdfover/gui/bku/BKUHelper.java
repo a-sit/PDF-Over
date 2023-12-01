@@ -20,8 +20,6 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 // Imports
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.http.client.config.CookieSpecs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 
@@ -29,11 +27,6 @@ import at.asit.pdfover.commons.Constants;
  *
  */
 public class BKUHelper {
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(BKUHelper.class);
 
 	/* public static HttpClient getHttpClient(boolean useProxy) {
 	 HttpClient client = new HttpClient();

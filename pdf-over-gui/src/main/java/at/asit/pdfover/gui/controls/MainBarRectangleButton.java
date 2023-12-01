@@ -21,19 +21,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class MainBarRectangleButton extends MainBarButton {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(MainBarRectangleButton.class);
 
 	private Image enabledImg = null;
 	private Image disabledImg = null;

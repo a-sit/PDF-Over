@@ -23,16 +23,15 @@ import java.util.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * Various constants
  */
+@Slf4j
 public class Constants {
-
-	static private final Logger log = LoggerFactory.getLogger(Constants.class);
 
 	/** Application name */
 	public static final String APP_NAME = "PDF-Over";

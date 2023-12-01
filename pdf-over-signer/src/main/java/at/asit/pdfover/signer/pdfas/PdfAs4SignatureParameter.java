@@ -18,15 +18,13 @@ package at.asit.pdfover.signer.pdfas;
 //Imports
 
 import iaik.x509.X509Certificate;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.signer.DocumentSource;
 import at.asit.pdfover.signer.Emblem;
@@ -42,11 +40,8 @@ import at.asit.pdfover.commons.Profile;
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
+@Slf4j
 public class PdfAs4SignatureParameter {
-    /**
-     * SLF4J Logger instance
-     **/
-    private static final Logger log = LoggerFactory.getLogger(PdfAs4SignatureParameter.class);
     
     /**
      * this is set by CliArguments.InvisibleProfile

@@ -33,8 +33,6 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Messages;
@@ -48,10 +46,10 @@ import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.webauthnclient.WebAuthN;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
-public class MobileBKUConnector implements BkuSlConnector {
-    private static final Logger log = LoggerFactory.getLogger(MobileBKUConnector.class);
-    
+@Slf4j
+public class MobileBKUConnector implements BkuSlConnector {    
     private final @NonNull MobileBKUState state;
     public MobileBKUConnector(@NonNull MobileBKUState state) {
         this.state = state;

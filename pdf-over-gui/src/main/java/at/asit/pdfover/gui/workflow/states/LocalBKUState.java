@@ -22,8 +22,6 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.eclipse.swt.SWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.gui.MainWindow.Buttons;
@@ -36,16 +34,13 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Logical state for performing the BKU Request to a local BKU
  */
+@Slf4j
 public class LocalBKUState extends State {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(LocalBKUState.class);
 
 	/**
 	 * HTTP Response server HEADER

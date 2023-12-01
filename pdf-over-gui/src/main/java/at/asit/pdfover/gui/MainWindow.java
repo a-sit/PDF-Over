@@ -41,8 +41,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.asit.pdfover.gui.composites.StateComposite;
 import at.asit.pdfover.gui.controls.Dialog;
@@ -61,16 +59,13 @@ import at.asit.pdfover.gui.workflow.states.BKUSelectionState;
 import at.asit.pdfover.gui.workflow.states.ConfigurationUIState;
 import at.asit.pdfover.gui.workflow.states.OpenState;
 import at.asit.pdfover.gui.workflow.states.PositioningState;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The Main Window of PDF-Over 4
  */
+@Slf4j
 public class MainWindow {
-
-	/**
-	 * SLF4J Logger instance
-	 **/
-	static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 
 	private Shell shell;
 	private Composite mainbar;
