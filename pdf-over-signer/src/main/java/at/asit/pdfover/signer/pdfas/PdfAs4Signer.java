@@ -157,16 +157,27 @@ public class PdfAs4Signer {
 				return result;
 			}
 		} catch (PdfAsException | PDFASError ex) {
-			Throwable rootCause = ex;
-			while (rootCause.getCause() != null)
-				rootCause = rootCause.getCause();
-			try { /* error code 60xx is user cancellation */
-				int errorCode = ((SLPdfAsException)rootCause).getCode();
-				if ((errorCode == 6000) || (errorCode == 6001))
-					throw new UserCancelledException();
-			} catch (ClassCastException e2) { /* fall through to wrapped throw */}
+			// workaround for PDF-AS nullpointerexception intercepting the actual exception
+			// cf. issue #52
+			// this is a bit of a hack...
+			Exception e = ex;
+			{
+				if ((e instanceof PDFASError) && (e.getCause() instanceof NullPointerException))
+					e = Objects.requireNonNullElse(PdfAs4BKUSLConnector.originalExceptionSwallowedByPDFASNPE, e);
+			}
+
+			{
+				Throwable rootCause = e;
+				while (rootCause.getCause() != null)
+					rootCause = rootCause.getCause();
+				try { /* error code 60xx is user cancellation */
+					int errorCode = ((SLPdfAsException)rootCause).getCode();
+					if ((errorCode == 6000) || (errorCode == 6001))
+						throw new UserCancelledException();
+				} catch (ClassCastException e2) { /* fall through to wrapped throw */}
+			}
 			
-			throw new SignatureException(ex);
+			throw new SignatureException(e);
 		}
 	}
 }
