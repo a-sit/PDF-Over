@@ -2,9 +2,6 @@ package at.asit.pdfover.gui.composites.mobilebku;
 
 import java.net.URI;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -25,11 +22,12 @@ import at.asit.webauthnclient.PublicKeyCredential;
 import at.asit.webauthnclient.WebAuthN;
 import at.asit.webauthnclient.exceptions.WebAuthNUserCancelled;
 import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
+import lombok.NonNull;
 
 public class MobileBKUFido2Composite extends StateComposite {
     private static final Logger log = LoggerFactory.getLogger(MobileBKUFido2Composite.class);
     
-    private @Nonnull String fido2OptionsString = "";
+    private @NonNull String fido2OptionsString = "";
 
     private PublicKeyCredential<AuthenticatorAssertionResponse> credential;
     private boolean userCancel;
@@ -40,11 +38,11 @@ public class MobileBKUFido2Composite extends StateComposite {
     private Button btn_sms;
     public void setSMSEnabled(boolean state) { this.btn_sms.setEnabled(state); }
 
-    private @CheckForNull URI signatureDataURI;
+    private URI signatureDataURI;
     private Link lnk_sigData;
     public void setSignatureDataURI(URI uri) { this.signatureDataURI = uri; this.lnk_sigData.setVisible(uri != null); }
 
-    public void initialize(@Nonnull String fido2Options) {
+    public void initialize(@NonNull String fido2Options) {
         this.fido2OptionsString = fido2Options;
         this.credential = null;
         this.userCancel = this.userSms = false;

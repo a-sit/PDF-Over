@@ -24,9 +24,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Properties;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import at.asit.pdfover.commons.Profile;
 
 import org.apache.commons.io.FileUtils;
@@ -40,9 +37,8 @@ import at.asit.pdfover.gui.exceptions.InvalidEmblemFile;
 import at.asit.pdfover.gui.exceptions.InvalidPortException;
 import at.asit.pdfover.gui.utils.LocaleSerializer;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory.KeyStorePassStorageType;
+import lombok.NonNull;
 import at.asit.pdfover.commons.Messages;
-
-import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 /**
  * Implementation of the configuration provider and manipulator
@@ -281,9 +277,9 @@ public class ConfigurationManager {
 		loaded = true;
 	}
 
-	private void setProperty(@Nonnull Properties props, @Nonnull String key, @Nonnull String value) { props.setProperty(key, value); }
-	private void setPropertyIfNotNull(@Nonnull Properties props, @Nonnull String key, @CheckForNull String value) { if (value != null) setProperty(props, key, value); }
-	private void setPropertyIfNotBlank(@Nonnull Properties props, @Nonnull String key, @Nonnull String value) { if (!value.isEmpty()) setProperty(props, key, value); }
+	private void setProperty(@NonNull Properties props, @NonNull String key, @NonNull String value) { props.setProperty(key, value); }
+	private void setPropertyIfNotNull(@NonNull Properties props, @NonNull String key, String value) { if (value != null) setProperty(props, key, value); }
+	private void setPropertyIfNotBlank(@NonNull Properties props, @NonNull String key, @NonNull String value) { if (!value.isEmpty()) setProperty(props, key, value); }
 	/* save to file */
 	public void saveToDisk() throws IOException {
 		String filename = this.getConfigurationFileName();
@@ -292,19 +288,19 @@ public class ConfigurationManager {
 		Properties props = new Properties();
 		props.clear();
 
-		setProperty(props, Constants.CFG_BKU, ISNOTNULL(getDefaultBKUPersistent().name()));
+		setProperty(props, Constants.CFG_BKU, getDefaultBKUPersistent().name());
 
 		setPropertyIfNotNull(props, Constants.CFG_PROXY_HOST, getProxyHostPersistent());
 		int proxyPort = getProxyPortPersistent();
 		if (proxyPort != -1)
-			setProperty(props, Constants.CFG_PROXY_PORT, ISNOTNULL(Integer.toString(proxyPort)));
+			setProperty(props, Constants.CFG_PROXY_PORT, Integer.toString(proxyPort));
 		setPropertyIfNotNull(props, Constants.CFG_PROXY_USER, getProxyUserPersistent());
 		setPropertyIfNotNull(props, Constants.CFG_PROXY_PASS, getProxyPassPersistent());
 
 		setPropertyIfNotNull(props, Constants.CFG_EMBLEM, getDefaultEmblemPersistent());
-		setProperty(props, Constants.CFG_LOGO_ONLY_SIZE, ISNOTNULL(Double.toString(getLogoOnlyTargetSize())));
+		setProperty(props, Constants.CFG_LOGO_ONLY_SIZE, Double.toString(getLogoOnlyTargetSize()));
 		
-		setProperty(props, Constants.CFG_SIGNATURE_NOTE, ISNOTNULL(Objects.requireNonNullElse(getSignatureNote(), "")));
+		setProperty(props, Constants.CFG_SIGNATURE_NOTE, Objects.requireNonNullElse(getSignatureNote(), ""));
 		setPropertyIfNotNull(props, Constants.CFG_MOBILE_NUMBER, getDefaultMobileNumberPersistent());
 		if (getRememberMobilePassword())
 			setProperty(props, Constants.CFG_MOBILE_PASSWORD_REMEMBER, Constants.TRUE);
@@ -344,7 +340,7 @@ public class ConfigurationManager {
 			setProperty(props, Constants.CFG_SIGNATURE_POSITION, "auto");
 
 		if (Constants.THEME != Constants.Themes.DEFAULT)
-			setProperty(props, Constants.CFG_THEME, ISNOTNULL(Constants.THEME.name()));
+			setProperty(props, Constants.CFG_THEME, Constants.THEME.name());
 
 		if (getKeyStoreEnabledPersistent())
 			setProperty(props, Constants.CFG_KEYSTORE_ENABLED, Constants.TRUE);
@@ -378,7 +374,7 @@ public class ConfigurationManager {
 		if (getFido2ByDefault())
 			setProperty(props, Constants.CFG_FIDO2_BY_DEFAULT, Constants.TRUE);
 
-		setProperty(props, Constants.SIGNATURE_PROFILE, ISNOTNULL(getSignatureProfile().name()));
+		setProperty(props, Constants.SIGNATURE_PROFILE, getSignatureProfile().name());
 
 		setPropertyIfNotNull(props, Constants.CFG_LAST_DIRECTORY, getLastOpenedDirectory());
 
@@ -402,22 +398,22 @@ public class ConfigurationManager {
 	}
 	public String getConfigurationFileName() { return this.configurationFile; }
 
-	public void setDefaultBKUPersistent(@Nonnull BKUs bku) {
+	public void setDefaultBKUPersistent(@NonNull BKUs bku) {
 		this.configuration.defaultBKU = bku;
 	}
 
-	public void setDefaultBKUOverlay(@Nonnull BKUs bku) {
+	public void setDefaultBKUOverlay(@NonNull BKUs bku) {
 		this.configurationOverlay.defaultBKU = bku;
 	}
 
-	public @Nonnull BKUs getDefaultBKU() {
+	public @NonNull BKUs getDefaultBKU() {
 		BKUs bku = this.configurationOverlay.defaultBKU;
 		if (bku == BKUs.NONE)
 			bku = getDefaultBKUPersistent();
 		return bku;
 	}
 
-	public @Nonnull BKUs getDefaultBKUPersistent() {
+	public @NonNull BKUs getDefaultBKUPersistent() {
 		return this.configuration.defaultBKU;
 	}
 
@@ -453,11 +449,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getDefaultMobileNumber() {
+	public String getDefaultMobileNumber() {
 		return fallThroughOnNull(this.configurationOverlay.getMobileNumber(), getDefaultMobileNumberPersistent());
 	}
 
-	public @CheckForNull String getDefaultMobileNumberPersistent() {
+	public String getDefaultMobileNumberPersistent() {
 		return this.configuration.getMobileNumber();
 	}
 
@@ -469,7 +465,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getDefaultMobilePassword() {
+	public String getDefaultMobilePassword() {
 		/* this does not exist as a permanent config variable */
 		return this.configurationOverlay.mobilePassword;
 	}
@@ -516,11 +512,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getDefaultEmblemPath() {
+	public String getDefaultEmblemPath() {
 		return fallThroughOnNull(this.configurationOverlay.getEmblemPath(), getDefaultEmblemPersistent());
 	}
 
-	public @CheckForNull String getDefaultEmblemPersistent() {
+	public String getDefaultEmblemPersistent() {
 		return this.configuration.getEmblemPath();
 	}
 
@@ -548,11 +544,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getProxyHost() {
+	public String getProxyHost() {
 		return fallThroughOnNull(this.configurationOverlay.proxyHost, getProxyHostPersistent());
 	}
 
-	public @CheckForNull String getProxyHostPersistent() {
+	public String getProxyHostPersistent() {
 		return this.configuration.proxyHost;
 	}
 
@@ -601,11 +597,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getProxyUser() {
+	public String getProxyUser() {
 		return fallThroughOnNull(this.configurationOverlay.proxyUser, getProxyUserPersistent());
 	}
 
-	public @CheckForNull String getProxyUserPersistent() {
+	public String getProxyUserPersistent() {
 		return this.configuration.proxyUser;
 	}
 
@@ -625,11 +621,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getProxyPass() {
+	public String getProxyPass() {
 		return fallThroughOnNull(this.configurationOverlay.proxyPass, getProxyPassPersistent());
 	}
 
-	public @CheckForNull String getProxyPassPersistent() {
+	public String getProxyPassPersistent() {
 		return this.configuration.proxyPass;
 	}
 
@@ -649,11 +645,11 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getDefaultOutputFolder() {
+	public String getDefaultOutputFolder() {
 		return fallThroughOnNull(this.configurationOverlay.outputFolder, getDefaultOutputFolderPersistent());
 	}
 
-	public @CheckForNull String getDefaultOutputFolderPersistent() {
+	public String getDefaultOutputFolderPersistent() {
 		return this.configuration.outputFolder;
 	}
 
@@ -665,7 +661,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @CheckForNull String getSignatureNote() {
+	public String getSignatureNote() {
 		return this.configuration.signatureNote;
 	}
 
@@ -679,7 +675,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @Nonnull Locale getInterfaceLocale() {
+	public @NonNull Locale getInterfaceLocale() {
 		Locale locale = this.configuration.interfaceLocale;
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
@@ -694,7 +690,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @Nonnull Locale getSignatureLocale() {
+	public @NonNull Locale getSignatureLocale() {
 		Locale locale = this.configuration.signatureLocale;
 		if (locale == null)
 			locale = Messages.getDefaultLocale();
@@ -718,14 +714,14 @@ public class ConfigurationManager {
 	}
 
 	public boolean getKeyStoreEnabled() {
-		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreEnabled, getKeyStoreEnabledPersistent()));
+		return fallThroughOnNull(this.configurationOverlay.keystoreEnabled, getKeyStoreEnabledPersistent());
 	}
 
 	public boolean getKeyStoreEnabledPersistent() {
-		return ISNOTNULL(fallThroughOnNull(this.configuration.keystoreEnabled, Boolean.FALSE));
+		return fallThroughOnNull(this.configuration.keystoreEnabled, Boolean.FALSE);
 	}
 
-	public void setKeyStoreFilePersistent(@CheckForNull String file) {
+	public void setKeyStoreFilePersistent(String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configuration.keystoreFile = "";
 		} else {
@@ -733,7 +729,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public void setKeyStoreFileOverlay(@CheckForNull String file) {
+	public void setKeyStoreFileOverlay(String file) {
 		if (file == null || file.trim().isEmpty()) {
 			this.configurationOverlay.keystoreFile = null;
 		} else {
@@ -741,15 +737,15 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @Nonnull String getKeyStoreFile() {
-		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreFile, getKeyStoreFilePersistent()));
+	public @NonNull String getKeyStoreFile() {
+		return fallThroughOnNull(this.configurationOverlay.keystoreFile, getKeyStoreFilePersistent());
 	}
 
-	public @Nonnull String getKeyStoreFilePersistent() {
-		return ISNOTNULL(this.configuration.keystoreFile);
+	public @NonNull String getKeyStoreFilePersistent() {
+		return this.configuration.keystoreFile;
 	}
 
-	public void setKeyStoreTypePersistent(@CheckForNull String type) {
+	public void setKeyStoreTypePersistent(String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configuration.keystoreType = "";
 		} else {
@@ -757,7 +753,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public void setKeyStoreTypeOverlay(@CheckForNull String type) {
+	public void setKeyStoreTypeOverlay(String type) {
 		if (type == null || type.trim().isEmpty()) {
 			this.configurationOverlay.keystoreType = null;
 		} else {
@@ -765,15 +761,15 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @Nonnull String getKeyStoreType() {
-		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreType, getKeyStoreTypePersistent()));
+	public @NonNull String getKeyStoreType() {
+		return fallThroughOnNull(this.configurationOverlay.keystoreType, getKeyStoreTypePersistent());
 	}
 
-	public @Nonnull String getKeyStoreTypePersistent() {
-		return ISNOTNULL(this.configuration.keystoreType);
+	public @NonNull String getKeyStoreTypePersistent() {
+		return this.configuration.keystoreType;
 	}
 
-	public void setKeyStoreAliasPersistent(@CheckForNull String alias) {
+	public void setKeyStoreAliasPersistent(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configuration.keystoreAlias = "";
 		} else {
@@ -781,7 +777,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public void setKeyStoreAliasOverlay(@CheckForNull String alias) {
+	public void setKeyStoreAliasOverlay(String alias) {
 		if (alias == null || alias.trim().isEmpty()) {
 			this.configurationOverlay.keystoreAlias = null;
 		} else {
@@ -789,31 +785,31 @@ public class ConfigurationManager {
 		}
 	}
 
-	public @Nonnull String getKeyStoreAlias() {
-		return ISNOTNULL(fallThroughOnNull(this.configurationOverlay.keystoreAlias, getKeyStoreAliasPersistent()));
+	public @NonNull String getKeyStoreAlias() {
+		return fallThroughOnNull(this.configurationOverlay.keystoreAlias, getKeyStoreAliasPersistent());
 	}
 
-	public @Nonnull String getKeyStoreAliasPersistent() {
-		return ISNOTNULL(this.configuration.keystoreAlias);
+	public @NonNull String getKeyStoreAliasPersistent() {
+		return this.configuration.keystoreAlias;
 	}
 
-	public void setKeyStorePassStorageTypePersistent(@CheckForNull KeyStorePassStorageType type) {
+	public void setKeyStorePassStorageTypePersistent(KeyStorePassStorageType type) {
 		this.configuration.keystorePassStorageType = type;
 	}
 
-	public @CheckForNull KeyStorePassStorageType getKeyStorePassStorageType() {
+	public KeyStorePassStorageType getKeyStorePassStorageType() {
 		return this.configuration.keystorePassStorageType;
 	}
 
-	public void setKeyStoreStorePassPersistent(@CheckForNull String storePass) {
+	public void setKeyStoreStorePassPersistent(String storePass) {
 		this.configuration.keystoreStorePass = storePass;
 	}
 
-	public void setKeyStoreStorePassOverlay(@CheckForNull String storePass) {
+	public void setKeyStoreStorePassOverlay(String storePass) {
 		this.configurationOverlay.keystoreStorePass = storePass;
 	}
 
-	public @CheckForNull String getKeyStoreStorePass() {
+	public String getKeyStoreStorePass() {
 		String storePass = this.configurationOverlay.keystoreStorePass;
 		if (storePass != null)
 			return storePass;
@@ -822,19 +818,19 @@ public class ConfigurationManager {
 		return getKeyStoreStorePassPersistent();
 	}
 
-	public @CheckForNull String getKeyStoreStorePassPersistent() {
+	public String getKeyStoreStorePassPersistent() {
 		return this.configuration.keystoreStorePass;
 	}
 
-	public void setKeyStoreKeyPassPersistent(@CheckForNull String keyPass) {
+	public void setKeyStoreKeyPassPersistent(String keyPass) {
 		this.configuration.keystoreKeyPass = keyPass;
 	}
 
-	public void setKeyStoreKeyPassOverlay(@CheckForNull String keyPass) {
+	public void setKeyStoreKeyPassOverlay(String keyPass) {
 		this.configurationOverlay.keystoreKeyPass = keyPass;
 	}
 
-	public @CheckForNull String getKeyStoreKeyPass() {
+	public String getKeyStoreKeyPass() {
 		String keyPass = this.configurationOverlay.keystoreKeyPass;
 		if (keyPass != null)
 			return keyPass;
@@ -843,7 +839,7 @@ public class ConfigurationManager {
 		return getKeyStoreKeyPassPersistent();
 	}
 
-	public @CheckForNull String getKeyStoreKeyPassPersistent() {
+	public String getKeyStoreKeyPassPersistent() {
 		return this.configuration.keystoreKeyPass;
 	}
 
@@ -855,11 +851,11 @@ public class ConfigurationManager {
 		return this.configuration.updateCheck;
 	}
 
-	public void setMainWindowSizePersistent(@Nonnull Point size) {
+	public void setMainWindowSizePersistent(@NonNull Point size) {
 		this.configuration.mainWindowSize = size;
 	}
 
-	public @Nonnull Point getMainWindowSize() {
+	public @NonNull Point getMainWindowSize() {
 		return this.configuration.mainWindowSize;
 	}
 
@@ -889,16 +885,16 @@ public class ConfigurationManager {
 		if (useMarker) setUseSignatureFieldsPersistent(false);
 	}
 
-    public void setSaveFilePostFixPersistent(@Nonnull String postFix) {
+    public void setSaveFilePostFixPersistent(@NonNull String postFix) {
         this.configuration.saveFilePostFix = postFix;
     }
 
-	public @Nonnull String getSaveFilePostFix(){
+	public @NonNull String getSaveFilePostFix(){
 		return this.configuration.saveFilePostFix;
 	}
 
-	public @Nonnull Profile getSignatureProfile() {
-		return ISNOTNULL(fallThroughOnNull(this.configuration.signatureProfile, Profile.SIGNATURBLOCK_SMALL));
+	public @NonNull Profile getSignatureProfile() {
+		return fallThroughOnNull(this.configuration.signatureProfile, Profile.SIGNATURBLOCK_SMALL);
 	}
 
 	public void setSignatureProfilePersistent(Profile profile) {

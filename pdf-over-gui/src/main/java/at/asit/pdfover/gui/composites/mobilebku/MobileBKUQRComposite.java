@@ -20,9 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
@@ -101,7 +98,7 @@ public class MobileBKUQRComposite extends StateComposite {
 	}
 
 	public String getRefVal() { return this.refVal; }
-	public void setRefVal(@CheckForNull String refVal) {
+	public void setRefVal(String refVal) {
 		this.refVal = (refVal != null) ? refVal.trim() : null;
 		this.lblRefVal.setText(Objects.requireNonNullElse(this.refVal, ""));
 	}
@@ -145,7 +142,7 @@ public class MobileBKUQRComposite extends StateComposite {
 		this.btn_fido2.setEnabled(state);
 	}
 
-	public void setSignatureDataURI(@Nullable URI uri) {
+	public void setSignatureDataURI(URI uri) {
 		this.signatureDataURI = uri;
 		this.lnk_sig_data.setVisible(uri != null);
 	}

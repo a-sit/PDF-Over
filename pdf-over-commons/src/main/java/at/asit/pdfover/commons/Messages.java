@@ -15,19 +15,17 @@
  */
 package at.asit.pdfover.commons;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 // Imports
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.annotation.Nonnull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static at.asit.pdfover.commons.Constants.ISNOTNULL;
+import lombok.NonNull;
 
 
 /**
@@ -53,13 +51,13 @@ public class Messages {
 	 * Get the closest match to the system default Locale out of the supported locales
 	 * @return the default locale
 	 */
-	public static @Nonnull Locale getDefaultLocale() {
+	public static @NonNull Locale getDefaultLocale() {
 		Locale ld = Locale.getDefault();
 		for (Locale l : Constants.SUPPORTED_LOCALES) {
 			if (l.equals(ld) || l.getLanguage().equals(ld.getLanguage()))
 				return l;
 		}
-		return ISNOTNULL(Constants.SUPPORTED_LOCALES[0]);
+		return Constants.SUPPORTED_LOCALES[0];
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class Messages {
 	 * @param key
 	 * @return the localized message
 	 */
-	public static @Nonnull String getString(String key) {
+	public static @NonNull String getString(String key) {
 		return getString(key, currentLocale);
 	}
 
@@ -106,13 +104,13 @@ public class Messages {
 	 * @param locale the locale to use
 	 * @return the localized message
 	 */
-	public static @Nonnull String getString(String key, Locale locale) {
+	public static @NonNull String getString(String key, Locale locale) {
 		try {
-			String value = ISNOTNULL(getBundle(locale).getString(key));
+			String value = getBundle(locale).getString(key);
 
 			/* DIRTY HACK: this recognizes java 8 ("1.8") and older; these versions read .properties files as ISO-8859-1 instead of UTF-8 */
 			if (System.getProperty("java.version").startsWith("1."))
-				try { value = new String(value.getBytes("ISO-8859-1"), "UTF-8"); } catch (UnsupportedEncodingException e) {}
+				value = new String(value.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
 			log.trace("[{}] {}: {} -> {}", new Object[]{System.getProperty("java.version"), currentLocale, key, value});
 			return value;
@@ -121,7 +119,7 @@ public class Messages {
 		}
 	}
 
-	public static @Nonnull String formatString(String key, Object... values) {
-		return ISNOTNULL(String.format(getString(key), values));
+	public static @NonNull String formatString(String key, Object... values) {
+		return String.format(getString(key), values);
 	}
 }

@@ -21,8 +21,6 @@ import java.net.URI;
 import java.util.Locale;
 import java.util.Properties;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -380,11 +378,5 @@ public class Constants {
 	public static final String LABEL_SIGN_PASS = "signaturpasswort";
 
 	public static final String LABEL_BTN_IDF = "Button_Identification";
-
-	/**
-	 * for static analysis; mark a given value as definitely, contractually not null
-	 * (try to avoid its use in performance-critical code, grr java)
-	 */
-	public static <T> @Nonnull T ISNOTNULL(T value) { assert(value != null); return value; }
 
 }

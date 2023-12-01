@@ -8,15 +8,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static at.asit.pdfover.commons.Constants.ISNOTNULL;
+import lombok.NonNull;
 
 public class ATrustParser {
     private static final Logger log = LoggerFactory.getLogger(ATrustParser.class);
@@ -24,37 +20,37 @@ public class ATrustParser {
     private static class ComponentParseFailed extends Exception {}
 
     private static class TopLevelFormBlock {
-        protected final @Nonnull org.jsoup.nodes.Document htmlDocument;
-        protected final @Nonnull Map<String, String> formOptions;
-        protected TopLevelFormBlock(@Nonnull org.jsoup.nodes.Document d, @Nonnull Map<String,String> fO) { this.htmlDocument = d; this.formOptions = fO; }
+        protected final @NonNull org.jsoup.nodes.Document htmlDocument;
+        protected final @NonNull Map<String, String> formOptions;
+        protected TopLevelFormBlock(@NonNull org.jsoup.nodes.Document d, @NonNull Map<String,String> fO) { this.htmlDocument = d; this.formOptions = fO; }
 
-        protected void abortIfElementMissing(@Nonnull String selector) throws ComponentParseFailed {
+        protected void abortIfElementMissing(@NonNull String selector) throws ComponentParseFailed {
             if (this.htmlDocument.selectFirst(selector) != null) return;
             log.debug("Tested for element {} -- not found.", selector);
             throw new ComponentParseFailed();
         }
-        protected @Nonnull org.jsoup.nodes.Element getElementEnsureNotNull(@Nonnull String selector) throws ComponentParseFailed {
+        protected @NonNull org.jsoup.nodes.Element getElementEnsureNotNull(@NonNull String selector) throws ComponentParseFailed {
             var elm = this.htmlDocument.selectFirst(selector);
             if (elm == null) { log.warn("Expected element not found in response: {}", selector); throw new ComponentParseFailed(); }
             return elm;
         }
-        protected @Nonnull String getAttributeEnsureNotNull(@Nonnull String selector, @Nonnull String attribute) throws ComponentParseFailed {
+        protected @NonNull String getAttributeEnsureNotNull(@NonNull String selector, @NonNull String attribute) throws ComponentParseFailed {
             var elm = getElementEnsureNotNull(selector);
             if (!elm.hasAttr(attribute)) { log.warn("Element {} is missing expected attribute '{}'.", selector, attribute); throw new ComponentParseFailed(); }
-            return ISNOTNULL(elm.attr(attribute));
+            return elm.attr(attribute);
         }
-        protected @Nonnull URI getURIAttributeEnsureNotNull(@Nonnull String selector, @Nonnull String attribute) throws ComponentParseFailed {
+        protected @NonNull URI getURIAttributeEnsureNotNull(@NonNull String selector, @NonNull String attribute) throws ComponentParseFailed {
             String value = getAttributeEnsureNotNull(selector, attribute);
             try {
                 return new URI(value);
             } catch (URISyntaxException e) {
                 if (attribute.startsWith("abs:"))
-                    attribute = ISNOTNULL(attribute.substring(4));
+                    attribute = attribute.substring(4);
                 log.warn("Element {} attribute {} is '{}', could not be parsed as URI", selector, attribute, getAttributeEnsureNotNull(selector, attribute));
                 throw new ComponentParseFailed();
             }
         }
-        protected @Nonnull URI getLongPollURI() throws ComponentParseFailed {
+        protected @NonNull URI getLongPollURI() throws ComponentParseFailed {
             var pollingScriptElm = getElementEnsureNotNull("#jsLongPoll script");
             String pollingScript = pollingScriptElm.data();
             int startIdx = pollingScript.indexOf("qrpoll(\"");
@@ -66,7 +62,7 @@ public class ATrustParser {
 
             String pollingUriString = pollingScript.substring(startIdx, endIdx);
             try {
-                return ISNOTNULL(new URI(pollingScriptElm.baseUri()).resolve(pollingUriString));
+                return new URI(pollingScriptElm.baseUri()).resolve(pollingUriString);
             } catch (URISyntaxException e) {
                 log.warn("Long-poll URI '{}' could not be parsed", pollingUriString);
                 throw new ComponentParseFailed();
@@ -75,9 +71,9 @@ public class ATrustParser {
     }
 
     public static class AutoSkipBlock extends TopLevelFormBlock {
-        public final @Nonnull String submitButton;
+        public final @NonNull String submitButton;
 
-        private AutoSkipBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private AutoSkipBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             if (htmlDocument.baseUri().contains("/tanAppInfo.aspx")) {
                 this.submitButton = "#NextBtn";
@@ -86,13 +82,13 @@ public class ATrustParser {
     }
 
     public static class InterstitialBlock extends TopLevelFormBlock {
-        public final @Nonnull String submitButton;
-        public final @Nonnull String interstitialMessage;
+        public final @NonNull String submitButton;
+        public final @NonNull String interstitialMessage;
 
-        private InterstitialBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private InterstitialBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             if (htmlDocument.baseUri().contains("/ExpiresInfo.aspx")) {
-                this.interstitialMessage = ISNOTNULL(getElementEnsureNotNull("#Label2").ownText());
+                this.interstitialMessage = getElementEnsureNotNull("#Label2").ownText();
                 this.submitButton = "#Button_Next";
             } else { throw new ComponentParseFailed(); }
         }
@@ -101,9 +97,9 @@ public class ATrustParser {
     public static class ErrorBlock extends TopLevelFormBlock {
         public final boolean isRecoverable;
         public final boolean requiresResponse;
-        public final @Nonnull String errorText;
+        public final @NonNull String errorText;
 
-        private ErrorBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private ErrorBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
 
             try {
@@ -128,20 +124,20 @@ public class ATrustParser {
             var detailLabel = this.htmlDocument.selectFirst("#LabelDetail");
             if (detailLabel != null)
                 errorText.append("\n").append(detailLabel.ownText().trim());
-            this.errorText = ISNOTNULL(errorText.toString());
+            this.errorText = errorText.toString();
         }
     }
 
     public static class UsernamePasswordBlock extends TopLevelFormBlock {
-        private final @Nonnull String usernameKey;
-        private final @Nonnull String passwordKey;
-        public final @CheckForNull String errorMessage;
+        private final @NonNull String usernameKey;
+        private final @NonNull String passwordKey;
+        public final String errorMessage;
 
         public void setUsernamePassword(String username, String password) {
             formOptions.put(usernameKey, username); formOptions.put(passwordKey, password);
         }
 
-        private UsernamePasswordBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private UsernamePasswordBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#handynummer");
             this.usernameKey = getAttributeEnsureNotNull("#handynummer", "name");
@@ -151,34 +147,34 @@ public class ATrustParser {
     }
 
     public static class SMSTanBlock extends TopLevelFormBlock {
-        private final @Nonnull String tanKey;
-        public final @Nonnull String referenceValue;
-        public final @CheckForNull String errorMessage;
+        private final @NonNull String tanKey;
+        public final @NonNull String referenceValue;
+        public final String errorMessage;
 
         public void setTAN(String tan) {
             formOptions.put(tanKey, tan);
         }
 
-        private SMSTanBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private SMSTanBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#input_tan");
             this.tanKey = getAttributeEnsureNotNull("#input_tan", "name");
-            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.errorMessage = null;
         }
     }
 
     public static class QRCodeBlock extends TopLevelFormBlock {
-        public final @Nonnull String referenceValue;
-        public final @Nonnull URI qrCodeURI;
-        public final @Nonnull URI pollingURI;
-        public final @Nullable String errorMessage;
+        public final @NonNull String referenceValue;
+        public final @NonNull URI qrCodeURI;
+        public final @NonNull URI pollingURI;
+        public final String errorMessage;
 
-        private QRCodeBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private QRCodeBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#qrimage");
             
-            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.qrCodeURI = getURIAttributeEnsureNotNull("#qrimage", "abs:src");
             this.pollingURI = getLongPollURI();
 
@@ -187,38 +183,38 @@ public class ATrustParser {
     }
 
     public static class WaitingForAppBlock extends TopLevelFormBlock {
-        public final @Nonnull String referenceValue;
-        public final @Nonnull URI pollingURI;
+        public final @NonNull String referenceValue;
+        public final @NonNull URI pollingURI;
 
-        private WaitingForAppBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private WaitingForAppBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#smartphoneAnimation");
 
-            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.pollingURI = getLongPollURI();            
         }
     }
 
     public static class WaitingForBiometryBlock extends TopLevelFormBlock {
-        public final @Nonnull String referenceValue;
-        public final @Nonnull URI pollingURI;
+        public final @NonNull String referenceValue;
+        public final @NonNull URI pollingURI;
 
-        private WaitingForBiometryBlock(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private WaitingForBiometryBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#biometricimage");
 
-            this.referenceValue = ISNOTNULL(getElementEnsureNotNull("#vergleichswert").ownText());
+            this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.pollingURI = getLongPollURI();
         }
     }
 
     public static class Fido2Block extends TopLevelFormBlock {
-        public final @Nonnull String fidoOptions;
-        private final @Nonnull String credentialResultKey;
+        public final @NonNull String fidoOptions;
+        private final @NonNull String credentialResultKey;
 
         public void setFIDOResult(String result) { formOptions.put(credentialResultKey, result); }
 
-        private Fido2Block(@Nonnull org.jsoup.nodes.Document htmlDocument, @Nonnull Map<String, String> formOptions) throws ComponentParseFailed {
+        private Fido2Block(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#fidoBlock");
             this.fidoOptions = getAttributeEnsureNotNull("#credentialOptions", "value");
@@ -227,27 +223,27 @@ public class ATrustParser {
     }
 
     public static class HTMLResult {
-        public final @Nonnull org.jsoup.nodes.Document htmlDocument;
-        public final @Nonnull URI formTarget;
-        public final @Nonnull Map<String, String> formOptions = new HashMap<>();
+        public final @NonNull org.jsoup.nodes.Document htmlDocument;
+        public final @NonNull URI formTarget;
+        public final @NonNull Map<String, String> formOptions = new HashMap<>();
 
-        public @Nonnull Iterable<Map.Entry<String, String>> iterateFormOptions() { return ISNOTNULL(formOptions.entrySet()); }
+        public @NonNull Iterable<Map.Entry<String, String>> iterateFormOptions() { return formOptions.entrySet(); }
 
         /* optional links (any number may or may not be null) */
-        public final @CheckForNull URI signatureDataLink;
-        public final @CheckForNull URI smsTanLink;
-        public final @CheckForNull URI fido2Link;
+        public final URI signatureDataLink;
+        public final URI smsTanLink;
+        public final URI fido2Link;
 
         /* top-level blocks (exactly one is not null) */
-        public final @CheckForNull AutoSkipBlock autoSkipBlock;
-        public final @CheckForNull InterstitialBlock interstitialBlock;
-        public final @CheckForNull ErrorBlock errorBlock;
-        public final @CheckForNull UsernamePasswordBlock usernamePasswordBlock;
-        public final @CheckForNull SMSTanBlock smsTanBlock;
-        public final @CheckForNull QRCodeBlock qrCodeBlock;
-        public final @CheckForNull WaitingForAppBlock waitingForAppBlock;
-        public final @CheckForNull WaitingForBiometryBlock waitingForBiometryBlock;
-        public final @CheckForNull Fido2Block fido2Block;
+        public final AutoSkipBlock autoSkipBlock;
+        public final InterstitialBlock interstitialBlock;
+        public final ErrorBlock errorBlock;
+        public final UsernamePasswordBlock usernamePasswordBlock;
+        public final SMSTanBlock smsTanBlock;
+        public final QRCodeBlock qrCodeBlock;
+        public final WaitingForAppBlock waitingForAppBlock;
+        public final WaitingForBiometryBlock waitingForBiometryBlock;
+        public final Fido2Block fido2Block;
 
         private void validate() {
             Set<String> populated = new HashSet<>();
@@ -270,7 +266,7 @@ public class ATrustParser {
             throw new IllegalArgumentException("Unknown A-Trust page reached?");
         }
 
-        private @Nullable URI getHrefIfExists(String selector) {
+        private URI getHrefIfExists(String selector) {
             var elm = htmlDocument.selectFirst(selector);
             if (elm == null) return null;
 
@@ -286,7 +282,7 @@ public class ATrustParser {
         /**
          * tries to parse T using its constructor; if ComponentParseFailed is thrown, swallows it
          */
-        private <T extends TopLevelFormBlock> @Nullable T TryParseMainBlock(Class<T> clazz) {
+        private <T extends TopLevelFormBlock> T TryParseMainBlock(Class<T> clazz) {
             try {
                 return clazz.getDeclaredConstructor(org.jsoup.nodes.Document.class, Map.class).newInstance(this.htmlDocument, this.formOptions);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
@@ -303,7 +299,7 @@ public class ATrustParser {
             }
         }
 
-        private HTMLResult(@Nonnull org.jsoup.nodes.Document htmlDocument) {
+        private HTMLResult(@NonNull org.jsoup.nodes.Document htmlDocument) {
             log.trace("Now parsing:\n{}", htmlDocument.toString());
             this.htmlDocument = htmlDocument;
 
@@ -313,7 +309,7 @@ public class ATrustParser {
                 throw new IllegalArgumentException("Failed to parse A-Trust response page");
             }
 
-            var mainForm = ISNOTNULL(forms.first()); /* size check above */
+            var mainForm = forms.first(); /* size check above */
             String formAction = mainForm.absUrl("action");
             try {
                 this.formTarget = new URI(formAction);
@@ -354,16 +350,16 @@ public class ATrustParser {
     }
 
     public static class Result {
-        public final @CheckForNull String slResponse;
-        public final @CheckForNull HTMLResult html;
+        public final String slResponse;
+        public final HTMLResult html;
 
-        private Result(@Nonnull String slResponse) { this.slResponse = slResponse; this.html = null; }
-        private Result(@Nonnull org.jsoup.nodes.Document htmlDocument) { this.slResponse = null; this.html = new HTMLResult(htmlDocument); }
+        private Result(@NonNull String slResponse) { this.slResponse = slResponse; this.html = null; }
+        private Result(@NonNull org.jsoup.nodes.Document htmlDocument) { this.slResponse = null; this.html = new HTMLResult(htmlDocument); }
     }
 
-    public static @Nonnull Result Parse(@Nonnull org.jsoup.nodes.Document htmlDocument) { return new Result(htmlDocument); }
+    public static @NonNull Result Parse(@NonNull org.jsoup.nodes.Document htmlDocument) { return new Result(htmlDocument); }
 
-    public static @Nonnull Result Parse(URI baseURI, String contentType, @Nonnull String content) {
+    public static @NonNull Result Parse(URI baseURI, String contentType, @NonNull String content) {
         if (contentType.equals("text/html"))
         {
             var document = Jsoup.parse(content, baseURI.toASCIIString());

@@ -11,9 +11,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -50,26 +47,25 @@ import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SLRequest;
 import at.asit.webauthnclient.WebAuthN;
-
-import static at.asit.pdfover.commons.Constants.ISNOTNULL;
+import lombok.NonNull;
 
 public class MobileBKUConnector implements BkuSlConnector {
     private static final Logger log = LoggerFactory.getLogger(MobileBKUConnector.class);
     
-    private final @Nonnull MobileBKUState state;
-    public MobileBKUConnector(@Nonnull MobileBKUState state) {
+    private final @NonNull MobileBKUState state;
+    public MobileBKUConnector(@NonNull MobileBKUState state) {
         this.state = state;
         this.wantsFido2Default = WebAuthN.isAvailable() && state.getConfig().getFido2ByDefault();
         state.storeRememberedCredentialsTo(this.credentials);
     }
 
     private class UserDisplayedError extends Exception {
-        private final @Nonnull String msg;
-        @Override public @Nonnull String getMessage() { return this.msg; }
-        private UserDisplayedError(@Nonnull String s) { this.msg = s; }
+        private final @NonNull String msg;
+        @Override public @NonNull String getMessage() { return this.msg; }
+        private UserDisplayedError(@NonNull String s) { this.msg = s; }
     }
 
-    public @Nonnull UsernameAndPassword credentials = new UsernameAndPassword();
+    public @NonNull UsernameAndPassword credentials = new UsernameAndPassword();
 
     /**
      * This method takes the SLRequest from PDF-AS, and blocks until it has obtained a response
@@ -81,7 +77,7 @@ public class MobileBKUConnector implements BkuSlConnector {
             ClassicHttpRequest currentRequest = buildInitialRequest(slRequest);
             ATrustParser.Result response;
             while ((response = sendHTTPRequest(httpClient, currentRequest)).slResponse == null)
-                currentRequest = presentResponseToUserAndReturnNextRequest(ISNOTNULL(response.html));
+                currentRequest = presentResponseToUserAndReturnNextRequest(response.html);
             log.debug("Returning security layer response:\n{}", response.slResponse);
             return response.slResponse;
         } catch (UserDisplayedError e) {
@@ -105,7 +101,7 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @throws URISyntaxException
      * @throws InterruptedException
      */
-    private @Nonnull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException, UserDisplayedError {
+    private @NonNull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException, UserDisplayedError {
         long now = System.nanoTime();
         if ((lastHTTPRequestTime != null) && ((now - lastHTTPRequestTime) < 2e+9)) { /* less than 2s since last request */
             ++loopHTTPRequestCounter;
@@ -174,7 +170,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     /**
      * Builds a HttpRequest for the given base URI and (potentially relative) redirect path
      */
-    private static @Nonnull ClassicHttpRequest buildRedirectedRequest(URI baseURI, String redirectLocation) {
+    private static @NonNull ClassicHttpRequest buildRedirectedRequest(URI baseURI, String redirectLocation) {
         log.debug("following redirect: {}", redirectLocation);
         return new HttpGet(baseURI.resolve(redirectLocation));
     }
@@ -182,7 +178,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     /**
      * Builds a HttpRequest for redirection to a given Refresh header value
      */
-    private static @Nonnull ClassicHttpRequest buildRefreshHeaderRequest(URI baseURI, String refreshHeader) throws IOException {
+    private static @NonNull ClassicHttpRequest buildRefreshHeaderRequest(URI baseURI, String refreshHeader) throws IOException {
         // refresh value is delay in seconds, semicolon, URL=, url
         Pattern pattern = Pattern.compile("^\\s*[0-9\\.]+\\s*;\\s*(?:[uU][rR][lL]\s*=\s*)(.+)$");
         Matcher matcher = pattern.matcher(refreshHeader);
@@ -196,7 +192,7 @@ public class MobileBKUConnector implements BkuSlConnector {
      * Builds the initial request to A-Trust based on the specified SL request
      */
     private static final ContentType TEXT_UTF8 = ContentType.TEXT_PLAIN.withCharset("UTF-8");
-    private static @Nonnull ClassicHttpRequest buildInitialRequest(PdfAs4SLRequest slRequest) {
+    private static @NonNull ClassicHttpRequest buildInitialRequest(PdfAs4SLRequest slRequest) {
         HttpPost post = new HttpPost(Constants.MOBILE_BKU_URL);
         if (slRequest.signatureData != null) {
             post.setEntity(MultipartEntityBuilder.create()
@@ -211,7 +207,7 @@ public class MobileBKUConnector implements BkuSlConnector {
         return post;
     }
 
-    private static @Nonnull ClassicHttpRequest buildFormSubmit(@Nonnull ATrustParser.HTMLResult html, @CheckForNull String submitButton) {
+    private static @NonNull ClassicHttpRequest buildFormSubmit(@NonNull ATrustParser.HTMLResult html, String submitButton) {
         HttpPost post = new HttpPost(html.formTarget);
 
         var builder = MultipartEntityBuilder.create();
@@ -307,7 +303,7 @@ public class MobileBKUConnector implements BkuSlConnector {
      * Main lifting function for MobileBKU UX
      * @return the next request to make
      */
-    private @Nonnull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@Nonnull ATrustParser.HTMLResult html) throws UserCancelledException {
+    private @NonNull ClassicHttpRequest presentResponseToUserAndReturnNextRequest(@NonNull ATrustParser.HTMLResult html) throws UserCancelledException {
         if ((html.errorBlock == null) && (html.usernamePasswordBlock == null)) { /* successful username/password auth */
             if ((this.credentials.username != null) && (this.credentials.password != null))
                 state.rememberCredentialsIfNecessary(this.credentials);
@@ -412,7 +408,7 @@ public class MobileBKUConnector implements BkuSlConnector {
                 case CREDENTIAL: break;
             }
 
-            var fido2Assertion = ISNOTNULL(fido2Result.credential);
+            var fido2Assertion = fido2Result.credential;
 
             Base64.Encoder base64 = Base64.getEncoder();
             
@@ -441,8 +437,8 @@ public class MobileBKUConnector implements BkuSlConnector {
     private static class UrlEncodedFormEntityBuilder {
         private UrlEncodedFormEntityBuilder() {}
         private List<NameValuePair> values = new ArrayList<>();
-        public static @Nonnull UrlEncodedFormEntityBuilder create() { return new UrlEncodedFormEntityBuilder(); }
-        public @Nonnull UrlEncodedFormEntityBuilder add(String key, String value) { values.add(new BasicNameValuePair(key, value)); return this; }
-        public @Nonnull UrlEncodedFormEntity build() { return new UrlEncodedFormEntity(values, Charset.forName("utf-8")); }
+        public static @NonNull UrlEncodedFormEntityBuilder create() { return new UrlEncodedFormEntityBuilder(); }
+        public @NonNull UrlEncodedFormEntityBuilder add(String key, String value) { values.add(new BasicNameValuePair(key, value)); return this; }
+        public @NonNull UrlEncodedFormEntity build() { return new UrlEncodedFormEntity(values, Charset.forName("utf-8")); }
     }
 }

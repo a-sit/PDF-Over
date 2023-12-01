@@ -20,15 +20,12 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.net.UnknownHostException;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 // Imports
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4SigningState;
 import at.asit.webauthnclient.PublicKeyCredential;
 import at.asit.webauthnclient.responsefields.AuthenticatorAssertionResponse;
+import lombok.NonNull;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -56,8 +53,6 @@ import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
-
-import static at.asit.pdfover.commons.Constants.ISNOTNULL;
 
 /**
  * Logical state for performing the BKU Request to the A-Trust Mobile BKU
@@ -190,7 +185,7 @@ public class MobileBKUState extends State {
 		});
 	}
 
-	public void showInformationMessage(final @Nonnull String message) throws UserCancelledException {
+	public void showInformationMessage(final @NonNull String message) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			Dialog dialog = new Dialog(getStateMachine().getMainShell(), Messages.getString("common.info"), message, BUTTONS.OK, ICON.INFORMATION);
 			int result = dialog.open();
@@ -204,7 +199,7 @@ public class MobileBKUState extends State {
 	 * Show an error message to the user with "retry" or "cancel" as options
 	 * returns normally on "retry", throws UserCancelledException on "cancel"
 	 */
-	public void showRecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
+	public void showRecoverableError(final @NonNull String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.RETRY_CANCEL);
 			int result = error.open();
@@ -218,7 +213,7 @@ public class MobileBKUState extends State {
 	 * Show an error message to the user with only an "ok" option;
 	 * throws UserCancelledException afterwards
 	 */
-	public void showUnrecoverableError(final @Nonnull String errorMessage) throws UserCancelledException {
+	public void showUnrecoverableError(final @NonNull String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.OK);
 			error.open();
@@ -227,29 +222,29 @@ public class MobileBKUState extends State {
 	}
 
 	public static class UsernameAndPassword {
-		public @CheckForNull String username;
-		public @CheckForNull String password;
+		public String username;
+		public String password;
 		public UsernameAndPassword() {}
-		public UsernameAndPassword(@Nullable String u, @Nullable String p) { this.username = u; this.password = p; }
+		public UsernameAndPassword(String u, String p) { this.username = u; this.password = p; }
 	}
-	public @Nonnull UsernameAndPassword getRememberedCredentials() {
+	public @NonNull UsernameAndPassword getRememberedCredentials() {
 		UsernameAndPassword r = new UsernameAndPassword();
 		storeRememberedCredentialsTo(r);
 		return r;
 	}
-	public void storeRememberedCredentialsTo(@Nonnull UsernameAndPassword output) {
+	public void storeRememberedCredentialsTo(@NonNull UsernameAndPassword output) {
 		output.username = getStateMachine().configProvider.getDefaultMobileNumber();
 		output.password = getStateMachine().configProvider.getDefaultMobilePassword();
 	}
 
-	public void rememberCredentialsIfNecessary(@Nullable String username, @Nullable String password) {
+	public void rememberCredentialsIfNecessary(String username, String password) {
 		if (getStateMachine().configProvider.getRememberMobilePassword())
 		{
 			getStateMachine().configProvider.setDefaultMobileNumberPersistent(username);
 			getStateMachine().configProvider.setDefaultMobilePasswordOverlay(password);
 		}
 	}
-	public void rememberCredentialsIfNecessary(@Nonnull UsernameAndPassword credentials) {
+	public void rememberCredentialsIfNecessary(@NonNull UsernameAndPassword credentials) {
 		rememberCredentialsIfNecessary(credentials.username, credentials.password);
 	}
 
@@ -257,7 +252,7 @@ public class MobileBKUState extends State {
 		getStateMachine().configProvider.setDefaultMobilePasswordOverlay(null);
 	}
 
-	public @Nonnull UsernameAndPassword getCredentialsFromUser(@Nullable String currentUsername, @Nullable String errorMessage) throws UserCancelledException {
+	public @NonNull UsernameAndPassword getCredentialsFromUser(String currentUsername, String errorMessage) throws UserCancelledException {
 		UsernameAndPassword r = new UsernameAndPassword(currentUsername, null);
 		getCredentialsFromUserTo(r, errorMessage);
 		return r;
@@ -276,7 +271,7 @@ public class MobileBKUState extends State {
 		}
 	}
 
-	public void getCredentialsFromUserTo(@Nonnull UsernameAndPassword credentials, @Nullable String errorMessage) throws UserCancelledException {
+	public void getCredentialsFromUserTo(@NonNull UsernameAndPassword credentials, String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
 
@@ -328,15 +323,15 @@ public class MobileBKUState extends State {
 
 	public static class SMSTanResult {
 		public static enum ResultType { TO_FIDO2, SMSTAN };
-		public final @Nonnull ResultType type;
-		public final @CheckForNull String smsTan;
+		public final @NonNull ResultType type;
+		public final String smsTan;
 
-		private SMSTanResult(@Nullable String smsTan) { this.type = ResultType.SMSTAN; this.smsTan = smsTan; }
-		private SMSTanResult(@Nonnull ResultType type) { this.type = type; this.smsTan = null; }
+		private SMSTanResult(String smsTan) { this.type = ResultType.SMSTAN; this.smsTan = smsTan; }
+		private SMSTanResult(@NonNull ResultType type) { this.type = type; this.smsTan = null; }
 	}
 
-	public @Nonnull SMSTanResult getSMSTanFromUser(final @Nonnull String referenceValue, final @Nullable URI signatureDataURI, final boolean showFido2, final @Nullable String errorMessage) throws UserCancelledException {
-		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+	public @NonNull SMSTanResult getSMSTanFromUser(final @NonNull String referenceValue, final URI signatureDataURI, final boolean showFido2, final String errorMessage) throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
 			
 			tan.reset();
@@ -361,13 +356,13 @@ public class MobileBKUState extends State {
 				return new SMSTanResult(SMSTanResult.ResultType.TO_FIDO2);
 			
 			return new SMSTanResult(tan.getTan());
-		}));
+		});
 	}
 
 	/**
 	 * start showing the QR code at the indicated URI
 	 * this method will return immediately */
-	public void showQRCode(final @Nonnull String referenceValue, @Nonnull URI qrCodeURI, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final @Nullable String errorMessage) {
+	public void showQRCode(final @NonNull String referenceValue, @NonNull URI qrCodeURI, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2, final String errorMessage) {
 		byte[] qrCode;
 		try (final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().build()) {
 			try (final CloseableHttpResponse response = httpClient.execute(new HttpGet(qrCodeURI))) {
@@ -402,8 +397,8 @@ public class MobileBKUState extends State {
 		UPDATE
 	};
 
-	public @Nonnull QRResult waitForQRCodeResult() throws UserCancelledException {
-		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+	public @NonNull QRResult waitForQRCodeResult() throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
 			Display display = getStateMachine().getMainShell().getDisplay();
@@ -427,7 +422,7 @@ public class MobileBKUState extends State {
 				return QRResult.TO_FIDO2;
 
 			return QRResult.UPDATE;
-		}));
+		});
 	}
 
 	/**
@@ -441,7 +436,7 @@ public class MobileBKUState extends State {
 	/**
 	 * start showing the "waiting for app" screen
 	 * this method will return immediately */
-	public void showWaitingForAppOpen(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
+	public void showWaitingForAppOpen(final @NonNull String referenceValue, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
 		Display.getDefault().syncExec(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 			wfa.reset();
@@ -462,8 +457,8 @@ public class MobileBKUState extends State {
 		UPDATE
 	};
 
-	public @Nonnull AppOpenResult waitForAppOpen() throws UserCancelledException {
-		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+	public @NonNull AppOpenResult waitForAppOpen() throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 
 			Display display = wfa.getDisplay();
@@ -486,7 +481,7 @@ public class MobileBKUState extends State {
 				return AppOpenResult.TO_FIDO2;
 
 			return AppOpenResult.UPDATE;
-		}));
+		});
 	}
 
 	/**
@@ -497,7 +492,7 @@ public class MobileBKUState extends State {
 		getWaitingForAppComposite().signalPollingDone();
 	}
 
-	public void showWaitingForAppBiometry(final @Nonnull String referenceValue, @Nullable URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
+	public void showWaitingForAppBiometry(final @NonNull String referenceValue, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
 		Display.getDefault().syncExec(() -> {
 			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
 			bio.reset();
@@ -522,8 +517,8 @@ public class MobileBKUState extends State {
 		UPDATE
 	};
 
-	public @Nonnull AppBiometryResult waitForAppBiometry() throws UserCancelledException {
-		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+	public @NonNull AppBiometryResult waitForAppBiometry() throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
 
 			Display display = bio.getDisplay();
@@ -546,7 +541,7 @@ public class MobileBKUState extends State {
 				return AppBiometryResult.TO_FIDO2;
 
 			return AppBiometryResult.UPDATE;
-		}));
+		});
 	}
 
 	public void signalAppBiometryDone() {
@@ -555,11 +550,11 @@ public class MobileBKUState extends State {
 
 	public static class FIDO2Result {
 		public static enum ResultType { TO_SMS, CREDENTIAL };
-		public final @Nonnull ResultType type;
-		public final @Nullable PublicKeyCredential<AuthenticatorAssertionResponse> credential;
+		public final @NonNull ResultType type;
+		public final PublicKeyCredential<AuthenticatorAssertionResponse> credential;
 
-		private FIDO2Result(@Nonnull ResultType type) { this.type = type; this.credential = null; }
-		private FIDO2Result(@Nonnull PublicKeyCredential<AuthenticatorAssertionResponse> cred) { this.type = ResultType.CREDENTIAL; this.credential = cred; }
+		private FIDO2Result(@NonNull ResultType type) { this.type = type; this.credential = null; }
+		private FIDO2Result(@NonNull PublicKeyCredential<AuthenticatorAssertionResponse> cred) { this.type = ResultType.CREDENTIAL; this.credential = cred; }
 	}
 
 	/**
@@ -568,8 +563,8 @@ public class MobileBKUState extends State {
 	 * @return
 	 * @throws UserCancelledException
 	 */
-	public @Nonnull FIDO2Result promptUserForFIDO2Auth(final @Nonnull String fido2Options, @Nullable URI signatureDataURI, final boolean showSmsTan) throws UserCancelledException {
-		return ISNOTNULL(Display.getDefault().syncCall(() -> {
+	public @NonNull FIDO2Result promptUserForFIDO2Auth(final @NonNull String fido2Options, URI signatureDataURI, final boolean showSmsTan) throws UserCancelledException {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUFido2Composite fido2 = getMobileBKUFido2Composite();
 			fido2.initialize(fido2Options);
 			fido2.setSMSEnabled(showSmsTan);
@@ -591,8 +586,8 @@ public class MobileBKUState extends State {
 			if (fido2.wasUserSMSClicked())
 				return new FIDO2Result(FIDO2Result.ResultType.TO_SMS);
 			
-			return new FIDO2Result(ISNOTNULL(fido2.getResultingCredential()));
-		}));
+			return new FIDO2Result(fido2.getResultingCredential());
+		});
 	}
 
 	/*
