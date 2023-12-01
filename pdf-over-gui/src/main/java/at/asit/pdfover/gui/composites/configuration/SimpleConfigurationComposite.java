@@ -160,8 +160,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setFontHeight(cmbSignatureProfiles, Constants.TEXT_SIZE_NORMAL);
 		SWTUtils.scrollPassthrough(cmbSignatureProfiles);
 		SWTUtils.addSelectionListener(cmbSignatureProfiles, e -> {
-			Profile current = SimpleConfigurationComposite.this.configurationContainer.getSignatureProfile();
-			int index = SimpleConfigurationComposite.this.cmbSignatureProfiles.getSelectionIndex();
+			Profile current = this.configurationContainer.getSignatureProfile();
+			int index = this.cmbSignatureProfiles.getSelectionIndex();
 			Profile selected = Profile.values()[index];
 			if (!current.equals(selected)) {
 				performProfileSelectionChanged(selected);
@@ -180,8 +180,8 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cmbSignatureLang.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 
 		SWTUtils.addSelectionListener(cmbSignatureLang, e -> {
-			Locale currentLocale = SimpleConfigurationComposite.this.configurationContainer.signatureLocale;
-			Locale selectedLocale = Constants.SUPPORTED_LOCALES[SimpleConfigurationComposite.this.cmbSignatureLang.getSelectionIndex()];
+			Locale currentLocale = this.configurationContainer.signatureLocale;
+			Locale selectedLocale = Constants.SUPPORTED_LOCALES[this.cmbSignatureLang.getSelectionIndex()];
 			if (!currentLocale.equals(selectedLocale)) {
 				performSignatureLangSelectionChanged(selectedLocale, currentLocale);
 			}
@@ -292,7 +292,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		this.cSigPreview = new Canvas(containerComposite, SWT.RESIZE);
 		SWTUtils.anchor(cSigPreview).left(0, 5).right(100,-5).top(btnBrowseLogo,5).bottom(100,-5);
 		SWTUtils.setFontHeight(cSigPreview, Constants.TEXT_SIZE_NORMAL);
-		this.cSigPreview.addPaintListener(e -> SimpleConfigurationComposite.this.paintSignaturePreview(e));
+		this.cSigPreview.addPaintListener(e -> this.paintSignaturePreview(e));
 
 		DropTarget dnd_target = new DropTarget(containerComposite, DND.DROP_DEFAULT | DND.DROP_COPY);
 		final FileTransfer fileTransfer = FileTransfer.getInstance();
@@ -357,11 +357,11 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 		});
 
 		SWTUtils.addSelectionListener(btnClearImage, e -> {
-			SimpleConfigurationComposite.this.processEmblemChanged(null);
+			this.processEmblemChanged(null);
 		});
 		SWTUtils.addSelectionListener(btnBrowseLogo, e -> {
 			FileDialog dialog = new FileDialog(
-					SimpleConfigurationComposite.this.getShell(), SWT.OPEN);
+					this.getShell(), SWT.OPEN);
 			dialog.setFilterExtensions(new String[] {
 					"*.jpg;*.png;*.gif", "*.jpg", "*.png", "*.gif", "*" });
 			dialog.setFilterNames(new String[] {
