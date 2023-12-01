@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -55,6 +53,7 @@ import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.gui.workflow.config.ConfigurationDataInMemory;
 import at.asit.pdfover.gui.workflow.states.State;
+import lombok.NonNull;
 
 /**
  * Composite for advanced configuration
@@ -214,11 +213,11 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		SWTUtils.setFontHeight(btnBrowse, Constants.TEXT_SIZE_BUTTON);
 
 		SWTUtils.addSelectionListener(btnBrowse, e -> {
-			DirectoryDialog dlg = new DirectoryDialog(AdvancedConfigurationComposite.this.getShell());
+			DirectoryDialog dlg = new DirectoryDialog(this.getShell());
 
 			// Set the initial filter path according
 			// to anything they've selected or typed in
-			dlg.setFilterPath(AdvancedConfigurationComposite.this.txtOutputFolder.getText());
+			dlg.setFilterPath(this.txtOutputFolder.getText());
 			
 			// Change the title bar text
 			SWTUtils.setLocalizedText(dlg, "advanced_config.OutputFolder.Dialog_Title");
@@ -249,13 +248,13 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 			public void focusLost(FocusEvent e) {
 				if (txtSaveFilePostFix.getText().trim().isEmpty())
 					txtSaveFilePostFix.setText(Constants.DEFAULT_POSTFIX);
-				performPostFixChanged(Constants.ISNOTNULL(txtSaveFilePostFix.getText()));
+				performPostFixChanged(txtSaveFilePostFix.getText());
 			}
 		});
 
 		this.cmbLocaleAuswahl = new Combo(this.grpLocaleAuswahl, SWT.READ_ONLY);
 		SWTUtils.anchor(cmbLocaleAuswahl).right(100,-5).top(0).left(0,5);
-		SWTUtils.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);;
+		SWTUtils.setFontHeight(cmbLocaleAuswahl, Constants.TEXT_SIZE_NORMAL);
 		this.cmbLocaleAuswahl.setItems(Arrays.stream(Constants.SUPPORTED_LOCALES).map(l -> l.getDisplayLanguage()).toArray(String[]::new));
 		SWTUtils.scrollPassthrough(cmbLocaleAuswahl);
 
@@ -333,17 +332,17 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		reloadResources();
 	}
 
-	private void performPostFixChanged(@Nonnull String postfix) {
+	private void performPostFixChanged(@NonNull String postfix) {
 
 		log.debug("Save file postfix changed to : {}", postfix);
 		this.configurationContainer.saveFilePostFix = postfix;
-		AdvancedConfigurationComposite.this.txtSaveFilePostFix.setText(postfix);
+		this.txtSaveFilePostFix.setText(postfix);
 	}
 
 	void performOutputFolderChanged(String foldername) {
 		log.debug("Selected Output folder: {}", foldername);
 		this.configurationContainer.outputFolder = foldername;
-		AdvancedConfigurationComposite.this.txtOutputFolder.setText(foldername);
+		this.txtOutputFolder.setText(foldername);
 	}
 
 	int getBKUElementIndex(BKUs bku) {
@@ -358,7 +357,7 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		return i;
 	}
 
-	void performBKUSelectionChanged(@Nonnull BKUs selected) {
+	void performBKUSelectionChanged(@NonNull BKUs selected) {
 		log.debug("Selected BKU: {}", selected);
 		this.configurationContainer.defaultBKU = selected;
 		this.cmbBKUAuswahl.select(this.getBKUElementIndex(selected));
@@ -375,13 +374,13 @@ public class AdvancedConfigurationComposite extends ConfigurationCompositeBase {
 		}
 	}
 
-	@Nonnull BKUs resolveBKU(String localizedBKU) {
+	@NonNull BKUs resolveBKU(String localizedBKU) {
 		int blen = BKUs.values().length;
 
 		for (int i = 0; i < blen; i++) {
 			String lookup = "BKU." + BKUs.values()[i].toString();
 			if (Messages.getString(lookup).equals(localizedBKU)) {
-				return Constants.ISNOTNULL(BKUs.values()[i]);
+				return BKUs.values()[i];
 			}
 		}
 

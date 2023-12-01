@@ -19,8 +19,6 @@ package at.asit.pdfover.gui.composites.mobilebku;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.annotation.CheckForNull;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -60,7 +58,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 			return;
 		}
 
-		if (MobileBKUEnterTANComposite.this.refVal.startsWith(tan)) {
+		if (this.refVal.startsWith(tan)) {
 			this.setMessage(Messages.getString("error.EnteredReferenceValue"));
 			return;
 		}
@@ -147,7 +145,7 @@ public class MobileBKUEnterTANComposite extends StateComposite {
 	}
 
 	public String getRefVal() { return this.refVal; }
-	public void setRefVal(@CheckForNull String refVal) {
+	public void setRefVal(String refVal) {
 		this.refVal = (refVal != null) ? refVal.trim() : null;
 		this.lblRefVal.setText(Objects.requireNonNullElse(this.refVal, ""));
 	}

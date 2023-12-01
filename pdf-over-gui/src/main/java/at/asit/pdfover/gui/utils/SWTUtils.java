@@ -7,8 +7,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusAdapter;
@@ -53,7 +51,7 @@ public final class SWTUtils {
     		// request re-layout if possible, changing the text content will change the bounding box
     		Method m = swtObj.getClass().getMethod("requestLayout");
     		m.invoke(swtObj);
-    	} catch (NoSuchMethodException | IllegalAccessException e) {
+    	} catch (NoSuchMethodException | IllegalAccessException expected) {
     		// do nothing, this may not exist on every control we use
     	} catch (InvocationTargetException e) {
     		log.error("Failed to re-layout {}", swtObj.getClass().getSimpleName(), e);
@@ -237,7 +235,7 @@ public final class SWTUtils {
 		addFocusGainedListener(swtObj, (e) -> { callback.run(); });
 	}
 
-	public static void openURL(@Nullable URI uri) {
+	public static void openURL(URI uri) {
 		try {
 			if (uri == null) return;
 			if (Desktop.isDesktopSupported()) {
@@ -250,7 +248,7 @@ public final class SWTUtils {
 		}
 	}
 
-	public static void openURL(@Nullable String uri) {
+	public static void openURL(String uri) {
 		if (uri == null) return;
 		try {
 			openURL(new URI(uri));

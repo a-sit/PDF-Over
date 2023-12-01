@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.CheckForNull;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -31,8 +29,6 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormLayout;
@@ -57,8 +53,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	 * Open the input document selection dialog
 	 */
 	public void openFileDialog() {
-		FileDialog dialog = new FileDialog(
-				DataSourceSelectComposite.this.getShell(), SWT.OPEN | SWT.MULTI);
+		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
 		dialog.setFilterExtensions(new String[] { "*.pdf", "*" });
 		dialog.setFilterNames(new String[] {
 				Messages.getString("common.PDFExtension_Description"),
@@ -82,7 +77,7 @@ public class DataSourceSelectComposite extends StateComposite {
 	 */
 	final private List<File> selected = new ArrayList<>();
 
-	public void setSelected(@CheckForNull String basePath, String[] fileNames) {
+	public void setSelected(String basePath, String[] fileNames) {
 		this.selected.clear();
 		if (fileNames != null) {
 			for (String fileName : fileNames) {

@@ -29,7 +29,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.annotation.CheckForNull;
 import javax.swing.JPanel;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -111,7 +110,7 @@ public class SignaturePanel extends JPanel {
 	private int offY = 0;
 	/** The position of the top-left corner of the signature, in absolute page space */
 	private Point2D sigPagePos = null;
-	public @CheckForNull Point2D getSigPagePos() { return this.sigPagePos; }
+	public Point2D getSigPagePos() { return this.sigPagePos; }
 	/** The signature placeholder image */
 	private Image sigPlaceholder = null;
 	/** Width of the signature placeholder in page space */

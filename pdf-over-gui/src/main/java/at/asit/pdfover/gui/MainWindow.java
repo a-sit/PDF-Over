@@ -229,7 +229,7 @@ public class MainWindow {
 			@Override
 			public void shellClosed(ShellEvent e) {
 				log.debug("Closing main window");
-				MainWindow.this.stateMachine.configProvider.setMainWindowSizePersistent(Constants.ISNOTNULL(getShell().getSize()));
+				MainWindow.this.stateMachine.configProvider.setMainWindowSizePersistent(getShell().getSize());
 				try {
 					MainWindow.this.stateMachine.configProvider.saveToDisk();
 				} catch (IOException e1) {
@@ -349,7 +349,7 @@ public class MainWindow {
 			getShell().getDisplay(),
 			/* quitListener */
 			(Event arg0) -> {
-				MainWindow.this.stateMachine.exit();
+				this.stateMachine.exit();
 			},
 			/* aboutListener */
 			(Event arg0) -> {
@@ -360,8 +360,8 @@ public class MainWindow {
 			},
 			/* preferencesListener */
 			(Event arg0) -> {
-				if (MainWindow.this.stateMachine.status.behavior.getEnabled(Buttons.CONFIG))
-					MainWindow.this.stateMachine.jumpToState(new ConfigurationUIState(MainWindow.this.stateMachine));
+				if (this.stateMachine.status.behavior.getEnabled(Buttons.CONFIG))
+					this.stateMachine.jumpToState(new ConfigurationUIState(this.stateMachine));
 			}
 		);
 	}

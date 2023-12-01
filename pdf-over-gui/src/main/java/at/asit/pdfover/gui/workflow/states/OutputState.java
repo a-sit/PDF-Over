@@ -18,8 +18,6 @@ package at.asit.pdfover.gui.workflow.states;
 //Imports
 import java.io.File;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.swt.SWT;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
@@ -32,6 +30,7 @@ import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import lombok.NonNull;
 
 /**
  * Produces the output of the signature process. (save file, open file)
@@ -137,7 +136,7 @@ public class OutputState extends State {
 		behavior.setActive(Buttons.FINAL, true);
 	}
 
-	public void enqueueNewDocuments(@Nonnull String[] pathStrs) {
+	public void enqueueNewDocuments(@NonNull String[] pathStrs) {
 		for (String pathStr : pathStrs) {
 			if (pathStr == null) continue;
 			var path = new File(pathStr);
