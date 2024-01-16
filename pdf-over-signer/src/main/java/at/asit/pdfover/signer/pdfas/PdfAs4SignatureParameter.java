@@ -122,17 +122,7 @@ public class PdfAs4SignatureParameter {
                 param.setSignatureProfileId(sigProfile);
 
                 // 72 is the number of typography dots in an inch
-                Image placeholder = pdfas.generateVisibleSignaturePreview(param, cert, 72 * SIG_PREVIEW_SCALING_FACTOR);
-
-                // WORKAROUND for #5, manually paint a black border
-                if ((placeholder != null) && !this.signatureProfile.equals(Profile.BASE_LOGO))
-                {
-                    Graphics2D ctx = (Graphics2D)placeholder.getGraphics();
-                    ctx.setColor(Color.BLACK);
-                    ctx.drawRect(0, 0, placeholder.getWidth(null)-1, placeholder.getHeight(null)-1);
-                }
-
-                return placeholder;
+                return pdfas.generateVisibleSignaturePreview(param, cert, 72 * SIG_PREVIEW_SCALING_FACTOR);
             }
         } catch (Exception e) {
             log.error("Failed to get signature placeholder", e);
