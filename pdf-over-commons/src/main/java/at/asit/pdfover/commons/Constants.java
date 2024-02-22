@@ -106,6 +106,7 @@ public class Constants {
 
 	/** Default Mobile BKU URL */
 	public static final URI MOBILE_BKU_URL = URI.create("https://service.a-trust.at/mobile/https-security-layer-request/default.aspx");
+	public static final URI MOBILE_BKU_URL_TEST = URI.create("https://hs-abnahme.a-trust.at/mobile/https-security-layer-request/default.aspx");
 
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
