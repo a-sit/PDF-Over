@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.function.Supplier;
 
 // Imports
 import at.asit.pdfover.signer.UserCancelledException;
@@ -34,6 +35,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import at.asit.pdfover.gui.MainWindow.Buttons;
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -270,6 +272,17 @@ public class MobileBKUState extends State {
 		}
 	}
 
+	public void readAndDispatchSWTUntil(Supplier<Boolean> pred) throws UserCancelledException {
+		Shell shell = getStateMachine().getMainShell();
+		Display display = shell.getDisplay();
+		while (!pred.get()) {
+			if (!display.readAndDispatch())
+				display.sleep();
+			if (shell.isDisposed())
+				throw new UserCancelledException();
+		}
+	}
+
 	public void getCredentialsFromUserTo(@NonNull UsernameAndPassword credentials, String errorMessage) throws UserCancelledException {
 		Display.getDefault().syncCall(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
@@ -291,12 +304,7 @@ public class MobileBKUState extends State {
 				ui.enableButton();
 				getStateMachine().display(ui);
 
-				Display display = getStateMachine().getMainShell().getDisplay();
-				while (!ui.userAck && !ui.userCancel) {
-					if (!display.readAndDispatch()) {
-						display.sleep();
-					}
-				}
+				readAndDispatchSWTUntil(() -> (ui.userAck || ui.userCancel));
 			}
 
 			updateRememberPasswordSetting(ui.isRememberPassword(), !ui.userCancel);
@@ -340,12 +348,7 @@ public class MobileBKUState extends State {
 			tan.setFIDO2Enabled(showFido2);
 			getStateMachine().display(tan);
 
-			Display display = getStateMachine().getMainShell().getDisplay();
-			while (!tan.isDone()) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
+			readAndDispatchSWTUntil(() -> tan.isDone());
 			getStateMachine().display(getWaitingComposite());
 
 			if (tan.isUserCancel())
@@ -400,12 +403,7 @@ public class MobileBKUState extends State {
 		return Display.getDefault().syncCall(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
-			Display display = getStateMachine().getMainShell().getDisplay();
-			while (!qr.isDone()) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
+			readAndDispatchSWTUntil(() -> qr.isDone());
 
 			getStateMachine().display(this.getWaitingComposite());
 
@@ -460,11 +458,7 @@ public class MobileBKUState extends State {
 		return Display.getDefault().syncCall(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 
-			Display display = wfa.getDisplay();
-			while (!wfa.isDone()) {
-				if (!display.readAndDispatch())
-					display.sleep();
-			}
+			readAndDispatchSWTUntil(() -> wfa.isDone());
 
 			getStateMachine().display(this.getWaitingComposite());
 
@@ -520,11 +514,7 @@ public class MobileBKUState extends State {
 		return Display.getDefault().syncCall(() -> {
 			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
 
-			Display display = bio.getDisplay();
-			while (!bio.isDone()) {
-				if (!display.readAndDispatch())
-					display.sleep();
-			}
+			readAndDispatchSWTUntil(() -> bio.isDone());
 
 			getStateMachine().display(this.getWaitingComposite());
 
@@ -571,11 +561,7 @@ public class MobileBKUState extends State {
 			
 			getStateMachine().display(fido2);
 
-			Display display = fido2.getDisplay();
-			while (!fido2.isDone()) {
-				if (!display.readAndDispatch())
-					display.sleep();
-			}
+			readAndDispatchSWTUntil(() -> fido2.isDone());
 
 			getStateMachine().display(this.getWaitingComposite());
 

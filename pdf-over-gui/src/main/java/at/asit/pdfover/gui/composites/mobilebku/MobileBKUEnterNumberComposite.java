@@ -81,17 +81,6 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		}
 	};
 
-	/**
-	 *
-	 */
-	private final SelectionListener cancelListener = new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MobileBKUEnterNumberComposite.this.userCancel = true;
-		}
-	};
-
-
 	String mobileNumber;
 
 	String mobilePassword;
@@ -195,7 +184,7 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.btn_cancel = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_cancel).bottom(100, -20).right(btn_ok, -10);
-		this.btn_cancel.addSelectionListener(this.cancelListener);
+		SWTUtils.addSelectionListener(btn_cancel, () -> { this.userCancel = true; });
 
 		this.lbl_error = new Label(containerComposite, SWT.WRAP | SWT.NATIVE );
 		SWTUtils.anchor(lbl_error).bottom(103, -20).left(5, 0).right(btn_cancel, -10);
