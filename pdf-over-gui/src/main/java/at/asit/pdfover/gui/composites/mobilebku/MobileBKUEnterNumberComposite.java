@@ -153,14 +153,14 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		containerComposite.setLayout(new FormLayout());
 		SWTUtils.anchor(containerComposite).top(50, -120).bottom(50, 120).left(50, -200).right(50, 200);
 
+		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
+		this.lbl_number.setAlignment(SWT.RIGHT);
+		SWTUtils.anchor(lbl_number).bottom(50, -10).right(50, -10);
+
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
 		SWTUtils.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20);
 		this.txt_number.setEditable(true);
 		SWTUtils.addFocusGainedListener(txt_number, () -> { txt_number.selectAll(); });
-
-		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
-		this.lbl_number.setAlignment(SWT.RIGHT);
-		SWTUtils.anchor(lbl_number).bottom(50, -10).right(50, -10);
 
 		ImageData mobileIconData = new ImageData(this.getClass().getResourceAsStream(Constants.RES_IMG_MOBILE)).scaledTo(90, 90);
 		Image mobileIcon = new Image(getDisplay(), mobileIconData);
@@ -169,14 +169,14 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		SWTUtils.anchor(lbl_image).top(20, -1 * (mobileIconData.width / 2)).bottom(20, mobileIconData.width / 2).left(0, 10).width(mobileIconData.width);
 		lbl_image.setImage(mobileIcon);
 
+		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
+		SWTUtils.anchor(lbl_password).top(50, 10).right(50, -10);
+		this.lbl_password.setAlignment(SWT.RIGHT);
+		
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER | SWT.NATIVE);
 		SWTUtils.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20);
 		this.txt_password.setEditable(true);
 		SWTUtils.addFocusGainedListener(txt_password, () -> { txt_password.selectAll(); });
-
-		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lbl_password).top(50, 10).right(50, -10);
-		this.lbl_password.setAlignment(SWT.RIGHT);
 
 		this.btn_ok = new Button(containerComposite, SWT.NATIVE);
 		SWTUtils.anchor(btn_ok).bottom(100, -20).right(100, -20);
