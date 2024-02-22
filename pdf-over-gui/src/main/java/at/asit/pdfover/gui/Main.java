@@ -32,7 +32,28 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Main {
-//	private static URL url=null;
+	
+	public static StateMachine setup(String[] args) {
+		log.info("This is " + Constants.APP_NAME_VERSION + ", " +
+			"running on " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + ", " +
+			"powered by "+ System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + ".");
+		File configDir = new File(Constants.CONFIG_DIRECTORY);
+
+		if (!configDir.exists()) {
+			configDir.mkdir();
+		}
+
+		// force loading the IAIK JCE (cf. #95)
+		IAIK.addAsProvider();
+
+		// force keystore type (Adoptium JRE 17 still ships with JKS, cf. #95)
+		System.setProperty("javax.net.ssl.trustStoreType", "jks");
+
+		// disable display scaling for AWT components embedded in SWT (cf. #106)
+		System.setProperty("sun.java2d.uiScale", "1");
+
+		return new StateMachine(args);
+	}
 
 	/**
 	 * @param args
@@ -40,26 +61,9 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 		try {
-			log.info("This is " + Constants.APP_NAME_VERSION + ", " +
-			  "running on " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + ", " +
-			  "powered by "+ System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + ".");
-			File configDir = new File(Constants.CONFIG_DIRECTORY);
-
-			if (!configDir.exists()) {
-				configDir.mkdir();
-			}
-
-			// force loading the IAIK JCE (cf. #95)
-			IAIK.addAsProvider();
-
-			// force keystore type (Adoptium JRE 17 still ships with JKS, cf. #95)
-			System.setProperty("javax.net.ssl.trustStoreType", "jks");
-
-			// disable display scaling for AWT components embedded in SWT (cf. #106)
-			System.setProperty("sun.java2d.uiScale", "1");
-
+			StateMachine sm = setup(args);
 			log.debug("Starting stateMachine ...");
-			(new StateMachine(args)).start();
+			sm.start();
 			log.debug("Ended stateMachine ...");
 		}
 		catch (Throwable e) {
