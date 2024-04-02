@@ -29,6 +29,7 @@ import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.ProtocolException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -235,6 +236,7 @@ public class MobileBKUConnector implements BkuSlConnector {
         return post;
     }
 
+    @Slf4j
     private static class LongPollThread extends Thread implements AutoCloseable {
         
         private final CloseableHttpClient httpClient = HttpClientUtils.builderWithSettings().build();
@@ -245,38 +247,52 @@ public class MobileBKUConnector implements BkuSlConnector {
         @Override
         public void run() {
             long timeout = System.nanoTime() + (300l * 1000l * 1000l * 1000l); /* a-trust timeout is 5 minutes */
-            log.debug("longPollThread hello");
             while (!done) {
+                log.debug("LongPollThread Making request to {}...", request.getRequestUri());
                 try (final CloseableHttpResponse response = httpClient.execute(request)) {
-                    JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
-                    if (jsonResponse.getBoolean("Fin"))
-                        signal.run();
-                    else if (jsonResponse.getBoolean("Wait"))
-                    {
-                        log.debug("longPollThread continue...");
-                        continue;
+                    String jsonResponseStr = EntityUtils.toString(response.getEntity());
+                    JSONObject jsonResponse = null;
+                    try {
+                        jsonResponse = new JSONObject(jsonResponseStr);
+                        log.debug("Got long poll response:\n{}", jsonResponse.toString(2));
+                    } catch (JSONException e) {
+                        log.warn("Failed to parse long poll response:\n\"{}\"", jsonResponseStr);
+                        throw e;
                     }
-                    else if (jsonResponse.getBoolean("Error"))
-                        signal.run(); /* will trigger reload and find error; this is the same thing a-trust does */
-                    else {
+                    if (jsonResponse.getBoolean("Fin")) {
+                        signalProbablyDone();
+                    } else if (jsonResponse.getBoolean("Wait")) {
+                        continue;
+                    } else if (jsonResponse.getBoolean("Error")) {
+                        signalProbablyDone(); /* will trigger reload and find error; this is the same thing a-trust does */
+                    } else {
                         log.warn("Unknown long poll response:\n{}", jsonResponse.toString(2));
                         break;
                     }
                 } catch (NoHttpResponseException e) {
-                    if (timeout <= System.nanoTime())
-                        signal.run(); /* reload to find the timeout error */
+                    if (timeout <= System.nanoTime()) {
+                        log.debug("LongPollThread no response, expecting A-Trust timeout, triggering reload...");
+                        signalProbablyDone(); /* reload main page to find the timeout error */
+                    }
                     continue; /* httpclient timeout */
-                } catch (IOException | ParseException | IllegalStateException e) {
+                } catch (Exception e) {
                     if (done) break;
                     log.warn("QR code long polling exception", e);
                     /* sleep so we don't hammer a-trust too hard in case this goes wrong */
                     try { Thread.sleep(5000); } catch (InterruptedException e2) {}
                 }
             }
-            log.debug("longPollThread goodbye");
+            log.debug("LongPollThread goodbye");
+        }
+
+        private void signalProbablyDone() {
+            this.signal.run();
+            /* so we don't send a second request that immediately gets aborted */
+            try { Thread.sleep(500); } catch (InterruptedException e2) {}
         }
 
         public LongPollThread(URI uri, Runnable signal) {
+            log.debug("LongPollThread setup for '{}'", uri);
             this.request = new HttpGet(uri);
             this.signal = signal;
         }
