@@ -300,11 +300,14 @@ public class MobileBKUConnector implements BkuSlConnector {
         @Override
         public void close() {
             done = true;
+
             if (this.request != null)
                 this.request.abort();
 
-            if (this.isAlive())
+            if (this.isAlive()) {
+                this.interrupt();
                 try { this.join(1000); } catch (InterruptedException e) {}
+            }
             
             if (this.httpClient != null)
                 try { this.httpClient.close(); } catch (IOException e) { log.warn("Auto-close of long-poll HTTP client threw exception", e); }
