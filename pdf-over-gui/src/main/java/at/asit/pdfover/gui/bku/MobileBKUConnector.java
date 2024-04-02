@@ -278,8 +278,10 @@ public class MobileBKUConnector implements BkuSlConnector {
                 } catch (Exception e) {
                     if (done) break;
                     log.warn("QR code long polling exception", e);
-                    /* sleep so we don't hammer a-trust too hard in case this goes wrong */
-                    try { Thread.sleep(5000); } catch (InterruptedException e2) {}
+
+                    /* A-Trust does excepting handling this way, so we copy it (they might mask errors, so we should too...) */
+                    try { Thread.sleep(10000); } catch (InterruptedException e2) {}
+                    signalProbablyDone();
                 }
             }
             log.debug("LongPollThread goodbye");
