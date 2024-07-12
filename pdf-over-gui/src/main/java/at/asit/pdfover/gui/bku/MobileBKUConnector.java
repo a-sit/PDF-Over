@@ -167,7 +167,6 @@ public class MobileBKUConnector implements BkuSlConnector {
 	            }
 	        } catch (Exception e) {
 	            log.debug("Failed to connect:", e);
-	            e.printStackTrace();
 	            throw new UserDisplayedError(Messages.formatString("error.FailedToConnect", e.getLocalizedMessage()));
 	        }
         }
