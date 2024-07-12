@@ -58,7 +58,7 @@ public class MobileBKUConnector implements BkuSlConnector {
         state.storeRememberedCredentialsTo(this.credentials);
     }
 
-    private class UserDisplayedError extends Exception {
+    private static class UserDisplayedError extends Exception {
         private final @NonNull String msg;
         @Override public @NonNull String getMessage() { return this.msg; }
         private UserDisplayedError(@NonNull String s) { this.msg = s; }
@@ -101,69 +101,77 @@ public class MobileBKUConnector implements BkuSlConnector {
      * @throws InterruptedException
      */
     private @NonNull ATrustParser.Result sendHTTPRequest(CloseableHttpClient httpClient, ClassicHttpRequest request) throws IOException, ProtocolException, URISyntaxException, UserDisplayedError {
-        long now = System.nanoTime();
-        if ((lastHTTPRequestTime != null) && ((now - lastHTTPRequestTime) < 2e+9)) { /* less than 2s since last request */
-            ++loopHTTPRequestCounter;
-            if (loopHTTPRequestCounter > 250)
-                throw new IOException("Infinite loop protection triggered");
-        } else {
-            loopHTTPRequestCounter = 0;
+        while (loopHTTPRequestCounter < 50) {
+	        long now = System.nanoTime();
+	        if ((lastHTTPRequestTime != null) && ((now - lastHTTPRequestTime) < 2e+9)) { /* less than 2s since last request */
+	            ++loopHTTPRequestCounter;
+	        } else {
+	            loopHTTPRequestCounter = 0;
+	            lastHTTPRequestTime = now;
+	        }
+	
+	        log.debug("Sending {} request to '{}'...", request.getMethod(), request.getUri().toString());
+	        
+	        try (final CloseableHttpResponse response = httpClient.execute(request)) {
+	            int httpStatus = response.getCode();
+	            if ((httpStatus == HttpStatus.SC_MOVED_PERMANENTLY) || (httpStatus == HttpStatus.SC_MOVED_TEMPORARILY)) {
+	                Header redirectPath = response.getHeader("location");
+	                if (redirectPath == null)
+	                    throw new IOException("Received HTTP redirect, but no Location header.");
+	                request = buildRedirectedRequest(request.getUri(), redirectPath.getValue());
+	                continue;
+	            }
+	
+	            if (httpStatus != HttpStatus.SC_OK) {
+	                switch (httpStatus) {
+	                    case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED: throw new UserDisplayedError(Messages.getString("error.ProxyAuthRequired"));
+	                    case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError(Messages.getString("atrusterror.http_413"));
+	                    default: throw new UserDisplayedError(Messages.formatString("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)")));
+	                }
+	            }
+	                        
+	            Header refreshHeader = response.getHeader("refresh");
+	            if (refreshHeader != null) {
+	                request = buildRefreshHeaderRequest(request.getUri(), refreshHeader.getValue());
+	                continue;
+	            }
+	
+	            HttpEntity responseEntity = response.getEntity();
+	            if (responseEntity == null)
+	                throw new IOException("Did not get a HTTP body (entity == null)");
+	            
+	            ContentType contentType = ContentType.parse(responseEntity.getContentType());
+	            String entityBody = EntityUtils.toString(response.getEntity(),contentType.getCharset());
+	            if (entityBody == null)
+	                throw new IOException("Did not get a HTTP body (entity content == null)");
+	
+	            if ("text/html".equals(contentType.getMimeType())) {
+	                Document resultDocument = Jsoup.parse(entityBody, request.getUri().toASCIIString());
+	                if (resultDocument == null)
+	                {
+	                    log.debug("Failed to parse A-Trust server response as HTML:\n{}", entityBody);
+	                    throw new IOException("Failed to parse HTML");
+	                }
+	
+	                Element metaRefresh = resultDocument.selectFirst("meta[http-equiv=\"refresh\"i]");
+	                if (metaRefresh != null) {
+	                    String refreshContent = metaRefresh.attr("content");
+	                    if (!refreshContent.isEmpty()) {
+	                        request = buildRefreshHeaderRequest(request.getUri(), refreshContent);
+	                        continue;
+	                    }
+	                }
+	                return ATrustParser.Parse(resultDocument);
+	            } else {
+	                return ATrustParser.Parse(request.getUri(), contentType.getMimeType(), entityBody);
+	            }
+	        } catch (Exception e) {
+	            log.debug("Failed to connect:", e);
+	            e.printStackTrace();
+	            throw new UserDisplayedError(Messages.formatString("error.FailedToConnect", e.getLocalizedMessage()));
+	        }
         }
-        lastHTTPRequestTime = now;
-
-        log.debug("Sending {} request to '{}'...", request.getMethod(), request.getUri().toString());
-        try (final CloseableHttpResponse response = httpClient.execute(request)) {
-            int httpStatus = response.getCode();
-            if ((httpStatus == HttpStatus.SC_MOVED_PERMANENTLY) || (httpStatus == HttpStatus.SC_MOVED_TEMPORARILY)) {
-                Header redirectPath = response.getHeader("location");
-                if (redirectPath == null)
-                    throw new IOException("Received HTTP redirect, but no Location header.");
-                return sendHTTPRequest(httpClient, buildRedirectedRequest(request.getUri(), redirectPath.getValue()));
-            }
-
-            if (httpStatus != HttpStatus.SC_OK) {
-                switch (httpStatus) {
-                    case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED: throw new UserDisplayedError(Messages.getString("error.ProxyAuthRequired"));
-                    case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError(Messages.getString("atrusterror.http_413"));
-                    default: throw new UserDisplayedError(Messages.formatString("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)")));
-                }
-            }
-                        
-            Header refreshHeader = response.getHeader("refresh");
-            if (refreshHeader != null)
-                return sendHTTPRequest(httpClient, buildRefreshHeaderRequest(request.getUri(), refreshHeader.getValue()));
-
-            HttpEntity responseEntity = response.getEntity();
-            if (responseEntity == null)
-                throw new IOException("Did not get a HTTP body (entity == null)");
-            
-            ContentType contentType = ContentType.parse(responseEntity.getContentType());
-            String entityBody = EntityUtils.toString(response.getEntity(),contentType.getCharset());
-            if (entityBody == null)
-                throw new IOException("Did not get a HTTP body (entity content == null)");
-
-            if ("text/html".equals(contentType.getMimeType())) {
-                Document resultDocument = Jsoup.parse(entityBody, request.getUri().toASCIIString());
-                if (resultDocument == null)
-                {
-                    log.error("Failed to parse A-Trust server response as HTML:\n{}", entityBody);
-                    throw new IOException("Failed to parse HTML");
-                }
-
-                Element metaRefresh = resultDocument.selectFirst("meta[http-equiv=\"refresh\"i]");
-                if (metaRefresh != null) {
-                    String refreshContent = metaRefresh.attr("content");
-                    if (!refreshContent.isEmpty())
-                        return sendHTTPRequest(httpClient, buildRefreshHeaderRequest(request.getUri(), refreshContent));
-                }
-                return ATrustParser.Parse(resultDocument);
-            } else {
-                return ATrustParser.Parse(request.getUri(), contentType.getMimeType(), entityBody);
-            }
-        } catch (ClientProtocolException e) {
-            log.warn("Failed to connect:", e);
-            throw new UserDisplayedError(Messages.formatString("error.FailedToConnect", e.getLocalizedMessage()));
-        }
+        throw new IOException("Infinite loop protection triggered");
     }
 
     /**
