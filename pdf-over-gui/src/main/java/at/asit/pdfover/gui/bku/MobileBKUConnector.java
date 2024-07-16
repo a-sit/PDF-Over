@@ -25,7 +25,6 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.NoHttpResponseException;
-import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.ProtocolException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -165,8 +164,8 @@ public class MobileBKUConnector implements BkuSlConnector {
 	            } else {
 	                return ATrustParser.Parse(request.getUri(), contentType.getMimeType(), entityBody);
 	            }
-	        } catch (Exception e) {
-	            log.debug("Failed to connect:", e);
+            } catch (ClientProtocolException e) {
+                log.warn("Failed to connect:", e);
 	            throw new UserDisplayedError(Messages.formatString("error.FailedToConnect", e.getLocalizedMessage()));
 	        }
         }
