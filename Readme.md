@@ -10,7 +10,7 @@
 
 PDF-Over is a PDF signing tool for power users. It offers a seamless native experience, and aims to minimize the effort required to sign large numbers of documents.
 
-It allows automated signature positioning using [🇩🇪 signature placeholders](https://pdf.egiz.gv.at/), and supports all possible authentication factors for the ID-Austria platform. (SMSTan, App-QR, App-Biometry, and FIDO2 L2 certified security tokens.)
+It allows automated signature positioning using [🇦🇹 signature placeholders](https://pdf.egiz.gv.at/), and supports all possible authentication factors for the ID-Austria platform. (SMSTan, App-QR, App-Biometry, and FIDO2 L2 certified security tokens.)
 
 PDF-Over runs on Windows, Linux, and MacOS (separate Intel and Apple Silicon bundles are available.) The latest release downloads can always be found at [technology.a-sit.at](https://technology.a-sit.at/en/pdf-over/).
 
