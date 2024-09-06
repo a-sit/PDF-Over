@@ -1,4 +1,5 @@
 ==== RELEASE PREPARATION (versioning)
+  -> ensure that the bundled JRE is a recent version
 (this creates a release tag which has versioning fields set appropriately, tags it, and pushes it to github)
   -> switch to your pdf-over clone
   -> run mvn install to verify that it builds
