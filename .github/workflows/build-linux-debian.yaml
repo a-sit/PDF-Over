@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-linux-x86_64
-          path: pdf-over-nightly.deb
+          path: pdf-over-build/pdf-over-nightly.deb
 
 permissions:
     contents: read
