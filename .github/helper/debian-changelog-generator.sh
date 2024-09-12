@@ -23,4 +23,5 @@ tag=`git tag -l v* | sort -V | tail -1`
 
 #sed -i 's/UNRELEASED/unstable/' debian/changelog
 
-echo "done"
+echo "Generating changelog done!"
+echo " generated `wc -l debian/changelog` lines."

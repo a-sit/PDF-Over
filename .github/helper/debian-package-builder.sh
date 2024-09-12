@@ -49,6 +49,7 @@ StartupNotify=false
 Categories=Office
 EOF
 
+fpm --version
 
 fpm \
   -s dir -t deb \
@@ -57,7 +58,7 @@ fpm \
   --license EUPL-1.2 \
   --version $VERSION \
   --architecture $ARCH \
-  --deb-upstream-changelog changelog \
+  --deb-upstream-changelog debian/changelog \
   --depends bash --depends "default-jre | java-runtime (>= 17)" \
   --description "PDF-Over is your tool for frequent & efficient PDF signing." \
   --url "https://technology.a-sit.at/en/pdf-over/" \
