@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -44,12 +46,12 @@ jobs:
         run: bash .github/helper/debian-package-builder.sh
       #- name: Tar bundle
       #  run: tar -C pdf-over-build -cvf pdf-over.tar ./
-      #- name: Upload Build Artifacts
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-linux-x86_64
-      #    path: pdf-over.tar
+      - name: Upload Debian Package to Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-linux-x86_64
+          path: pdf-over-nightly.deb
 
 permissions:
     contents: read
-    #actions: write
+    actions: write

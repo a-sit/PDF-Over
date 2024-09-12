@@ -70,7 +70,7 @@ fpm \
   icons/icon144x144.png=/usr/share/pixmaps/$NAME.png
 
 # next: upload/publish $NAME-$VERSION-$ARCH.deb
-
+cp $NAME-$VERSION-$ARCH.deb $NAME.deb
 
 #mkdir experiments
 #mv $NAME-$VERSION-$ARCH.deb experiments
