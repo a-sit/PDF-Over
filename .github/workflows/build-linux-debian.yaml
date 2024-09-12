@@ -19,6 +19,10 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
           cache: maven
+      - name: Install Debian Package Builder dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install packaging-dev git-buildpackage moreutils
       - name: Build with Maven
         run: mvn -B clean install -Plinux -Pci-build -Dno-native-profile
       - name: Describe current commit
@@ -33,7 +37,9 @@ jobs:
               .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
       - name: Set executable permissions
         run: chmod +x pdf-over-build/*.sh pdf-over-build/jre/bin/*
-      - name: Set executable permissions
+      - name: Generated Debian Changelog
+        run: bash .github/helper/debian-changelog-generator.sh
+      - name: Run PDF-Over Debian Package Builder
         run: bash .github/helper/debian-package-builder.sh
       #- name: Tar bundle
       #  run: tar -C pdf-over-build -cvf pdf-over.tar ./
