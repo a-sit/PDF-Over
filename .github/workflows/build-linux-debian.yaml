@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pdf-over-nightly-${{ env.commit_sha }}-debian
-          path: pdf-over-build/pdf-over-nightly.deb
+          path: pdf-over-build/*.deb
       - name: Init Nightly PPA
         uses: actions/checkout@v3
         with:
