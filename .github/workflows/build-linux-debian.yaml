@@ -22,7 +22,8 @@ jobs:
       - name: Install Debian Package Builder dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install packaging-dev git-buildpackage moreutils
+          sudo apt-get install packaging-dev rubygems-integration git-buildpackage moreutils
+          sudo gem install fpm
       - name: Build with Maven
         run: mvn -B clean install -Plinux -Pci-build -Dno-native-profile
       - name: Describe current commit
