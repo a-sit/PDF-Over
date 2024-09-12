@@ -51,6 +51,25 @@ jobs:
         with:
           name: pdf-over-nightly-${{ env.commit_sha }}-debian
           path: pdf-over-build/pdf-over-nightly.deb
+      - name: Init Nightly PPA
+        uses: actions/checkout@v3
+        with:
+          repository: a-sit/ppa-nightly
+          ref: 'main'
+          token:  ${{ secrets.ASIT_PPA_BOT_PPA_NIGHTLY }}
+          path: ppa-nightly
+      - name: Setup Nightly PPA git config
+        run: |
+          cd ppa-nightly
+          git config user.name "A-SIT Bot"
+          git config user.email "software@a-sit.at"
+      - name: Push Debian Package to Nightly PPA
+        run: |
+          mv pdf-over-build/*.deb ppa-nightly
+          cd ppa-nightly
+          git add *.deb
+          git commit -m "New nightly package"
+          git push origin main
 
 permissions:
     contents: read
