@@ -25,6 +25,3 @@ tag=`git tag -l v* | sort -V | tail -1`
 
 echo "Generating changelog done!"
 echo " generated `wc -l debian/changelog` lines."
-
-git tag
-git log
