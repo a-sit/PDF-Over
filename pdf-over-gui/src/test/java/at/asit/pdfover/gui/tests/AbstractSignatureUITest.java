@@ -1,9 +1,5 @@
 package at.asit.pdfover.gui.tests;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,6 +38,8 @@ import lombok.NonNull;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractSignatureUITest {
 
@@ -101,8 +99,8 @@ public abstract class AbstractSignatureUITest {
                 @Override
                 public void run() {
                 	currentProfile = getCurrentProfile();
-                	setConfig(currentProfile);					
-				
+                	setConfig(currentProfile);
+
                     sm = Main.setup(new String[]{inputFile.getAbsolutePath()});
                     shell = sm.getMainShell();
 
