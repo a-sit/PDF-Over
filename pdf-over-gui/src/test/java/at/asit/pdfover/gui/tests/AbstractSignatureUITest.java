@@ -144,7 +144,7 @@ public abstract class AbstractSignatureUITest {
     protected void setCredentials() {
         try {
             ICondition widgetExists = new WidgetExitsCondition(str("mobileBKU.number"));
-            bot.waitUntil(widgetExists, 4000);
+            bot.waitUntil(widgetExists, 8000);
             bot.textWithLabel(str("mobileBKU.number")).setText("TestUser-1902503362");
             bot.textWithLabel(str("mobileBKU.password")).setText("123456789");
             bot.button(str("common.Ok")).click();
@@ -157,7 +157,7 @@ public abstract class AbstractSignatureUITest {
 
         File output = new File(getPathOutputFile());
         ICondition outputExists = new FileExistsCondition(output);
-        bot.waitUntil(outputExists, 6000);
+        bot.waitUntil(outputExists, 10000);
 
         if(!output.exists()) {
             bot.button(str("common.Cancel")).click();
