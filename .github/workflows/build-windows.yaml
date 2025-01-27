@@ -36,7 +36,7 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-windows-x86_64
+          name: pdf-over-feature-testing-${{ env.commit_sha }}}-windows-x86_64
           path: pdf-over-build
 
 permissions:
