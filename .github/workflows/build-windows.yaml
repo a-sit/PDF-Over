@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: mvn clean install -Dmaven.test.skip=true
+        run: mvn clean install -DskipTests
       - name: Run test
         run: mvn test -Pwindows -Pci-build -Dno-native-profile
       - name: Describe current commit
