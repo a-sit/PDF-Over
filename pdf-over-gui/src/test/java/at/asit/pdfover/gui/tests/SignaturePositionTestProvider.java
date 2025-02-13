@@ -27,6 +27,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import at.asit.pdfover.commons.Profile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SignaturePositionTestProvider {
     /**
@@ -60,6 +62,9 @@ public class SignaturePositionTestProvider {
     public final String REF_FILE_BASE_LOGO = "refFileBaseLogo.png";
     public final String REF_FILE_INVISIBLE = "refFileInvisible.png";
     public final String REF_FILE_TEST_NEGATIVE = "refFileTestNegative.png";
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(SignaturePositionTestProvider.class);
 
     /**
      * Map of profiles and belonging reference files which 
@@ -219,10 +224,15 @@ public class SignaturePositionTestProvider {
         refImageGraphics.dispose();
         refImage.flush();
 
-        if (negative)
-            assertFalse(same, "Images must not be the same");
-        else
-            assertTrue(same, "Images must be the same");
+        if (negative) {
+            assertFalse(same, "Images must not be the same for profile: " + currentProfile);
+            logger.info("Test passed: Images are not the same for profile: " + currentProfile);
+        } else {
+            assertTrue(same, "Images must be the same for profile: " + currentProfile);
+            logger.info("Test passed: Images are the same for profile: " + currentProfile);
+        }
+
+
     }
 
    /**
@@ -279,8 +289,7 @@ public class SignaturePositionTestProvider {
      * PDF-file after signing. The captured file is saved, as well as a modified
      * version of it. The modified version contains black rectangles for the
      * ignored areas.
-     * 
-     * @param testInfo
+     *
      *            a test info object, which is used to store the location of the
      *            reference image, as well as the location of the reference
      *            image with ignored areas
