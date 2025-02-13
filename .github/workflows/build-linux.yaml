@@ -37,10 +37,7 @@ jobs:
         with:
             name: difference-images
             path: |
-              pdf-over-gui/src/test/resources/Amtssignatur/*.png
-              pdf-over-gui/src/test/resources/BaseLogo/*.png
-              pdf-over-gui/src/test/resources/Invisible/*.png
-              pdf-over-gui/src/test/resources/SignaturblockSmallNote/*.png
+              pdf-over-gui/src/test/resources/
       - name: Describe current commit
         run: echo "commit_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
       - name: Remove Previous Build Artifacts
