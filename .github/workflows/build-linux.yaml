@@ -46,7 +46,7 @@ jobs:
       - name: Tar bundle
         run: tar -C pdf-over-build -cvf pdf-over.tar ./
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pdf-over-feature-testing-21da117-linux-x86_64
           path: pdf-over.tar
