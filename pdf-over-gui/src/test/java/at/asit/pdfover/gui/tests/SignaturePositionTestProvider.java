@@ -225,8 +225,8 @@ public class SignaturePositionTestProvider {
         refImage.flush();
 
         if (negative) {
-            assertFalse(same, "Images must not be the same for profile: " + currentProfile);
-            logger.info("Test passed: Images are not the same for profile: " + currentProfile);
+            assertFalse(same, "Images must not be the same for profile: " + currentProfile+ ", negative");
+            logger.info("Test passed: Images are not the same for profile: " + currentProfile+ ", negative");
         } else {
             assertTrue(same, "Images must be the same for profile: " + currentProfile);
             logger.info("Test passed: Images are the same for profile: " + currentProfile);
