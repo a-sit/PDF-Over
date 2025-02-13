@@ -123,7 +123,7 @@ public class SignaturePositionValidator implements AutoCloseable {
         int height = images[0].getHeight();
 
         for (BufferedImage image : images) {
-            Graphics g = image.getGraphics();
+            Graphics2D g = image.createGraphics();
             try {
                 for (Rectangle area : areas) {
                     clearIgnoredArea(g, area, height);
@@ -197,7 +197,7 @@ public class SignaturePositionValidator implements AutoCloseable {
      * @param imageHeight The total height of the image for coordinate conversion
      * @see #ZOOM The zoom factor applied to the coordinates
      */
-    private void clearIgnoredArea(Graphics g, Rectangle area, int imageHeight) {
+    private void clearIgnoredArea(Graphics2D g, Rectangle area, int imageHeight) {
         int x = (int) (area.x * ZOOM);
         int y = imageHeight - (int) (area.y * ZOOM); // Convert PDF to AWT coordinates
         int width = (int) (area.width * ZOOM);
