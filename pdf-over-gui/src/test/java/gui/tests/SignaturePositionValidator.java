@@ -124,6 +124,8 @@ public class SignaturePositionValidator implements AutoCloseable {
 
         for (BufferedImage image : images) {
             Graphics2D g = image.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             try {
                 for (Rectangle area : areas) {
                     clearIgnoredArea(g, area, height);
