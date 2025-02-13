@@ -32,7 +32,6 @@ jobs:
       - name: Run headless test
         run: mvn -X test -Plinux -Pci-build -Dno-native-profile
       - name: Upload reference directories
-        if: failure()
         uses: actions/upload-artifact@v4
         with:
             name: difference-images
