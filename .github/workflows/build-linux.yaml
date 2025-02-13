@@ -31,6 +31,12 @@ jobs:
         run: mvn -B clean install -Plinux -Pci-build -Dno-native-profile -Dmaven.test.skip=true
       - name: Run headless test
         run: mvn -X test -Plinux -Pci-build -Dno-native-profile
+      - name: Upload reference files and test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: difference-images
+          path: |
+            pdf-over-gui/src/test/resources/
       - name: Describe current commit
         run: echo "commit_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
       - name: Remove Previous Build Artifacts
