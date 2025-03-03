@@ -12,7 +12,7 @@ public class SignatureUITest extends AbstractSignatureUITest {
     @EnumSource(Profile.class)
     public void testSignatureAutoPosition() throws IOException {
         setCredentials();
-        testSignature(false, true);
+        testSignature(false, false);
     }
 
     @ParameterizedTest
