@@ -1,13 +1,14 @@
 package at.asit.pdfover.gui.tests;
 
-import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.commons.Messages;
-import at.asit.pdfover.commons.Profile;
-import at.asit.pdfover.gui.Main;
-import at.asit.pdfover.gui.workflow.StateMachine;
-import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
-import lombok.NonNull;
-import org.apache.commons.io.FilenameUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -20,12 +21,15 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
+import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.commons.Profile;
+import at.asit.pdfover.gui.Main;
+import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
+import lombok.NonNull;
+
+import org.apache.commons.io.FilenameUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,7 +95,7 @@ public class AbstractSignatureUITest {
         uiThread = null;
     }
 
-    @Test
+
     protected void setCredentials() {
         try {
             ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
@@ -113,6 +117,24 @@ public class AbstractSignatureUITest {
             bot.button(str("common.Cancel")).click();
         }
         assertTrue(output.exists(), "Received signed PDF");
+    }
+
+    protected void testSignature(boolean negative, boolean captureRefImage) throws IOException {
+        String outputFile = getPathOutputFile();
+        assertNotNull(currentProfile);
+        assertNotNull(outputFile);
+
+        try (SignaturePositionValidator provider = new SignaturePositionValidator(negative, captureRefImage, currentProfile, outputFile)) {
+            provider.verifySignaturePosition();
+        } catch (Exception e) {
+            logger.error("Error verifiying signature position", e);
+        }
+    }
+
+    @Test
+    public void verifySignatureTest() throws IOException {
+        setCredentials();
+        testSignature(false, true);
     }
 
     private static void setProperty(@NonNull Properties props, @NonNull String key, @NonNull String value) { props.setProperty(key, value); }
