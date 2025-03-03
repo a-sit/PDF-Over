@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -22,7 +19,6 @@ import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +35,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AbstractSignatureUITest {
+public abstract class AbstractSignatureUITest {
 
     private static Thread uiThread;
     private static Shell shell;
@@ -48,8 +44,9 @@ public class AbstractSignatureUITest {
 
     private static final File inputFile = new File("src/test/resources/TestFile.pdf");
     private static String outputDir = inputFile.getAbsoluteFile().getParent();
-    private Profile currentProfile = Profile.SIGNATURBLOCK_SMALL;
+    private Profile currentProfile;
     private final String postFix = "_superSigned";
+    private static final List<Profile> profiles = new ArrayList<>();
 
     private static final Logger logger = LoggerFactory
             .getLogger(AbstractSignatureUITest.class);
@@ -60,6 +57,7 @@ public class AbstractSignatureUITest {
     public static void prepareTestEnvironment() throws IOException {
         deleteTempDir();
         createTempDir();
+        setSignatureProfiles();
     }
 
     private static void deleteTempDir() throws IOException {
@@ -89,7 +87,8 @@ public class AbstractSignatureUITest {
                 public void run() {
 
                     Display.getDefault().syncExec(() -> {
-                        setConfig();
+                        currentProfile = getCurrentProfile();
+                        setConfig(currentProfile);
                         sm = Main.setup(new String[]{inputFile.getAbsolutePath()});
                         shell = sm.getMainShell();
 
@@ -170,15 +169,9 @@ public class AbstractSignatureUITest {
         }
     }
 
-    @Test
-    public void verifySignatureTest() throws IOException {
-        setCredentials();
-        testSignature(false, true);
-    }
-
     private static void setProperty(@NonNull Properties props, @NonNull String key, @NonNull String value) { props.setProperty(key, value); }
 
-    private void setConfig() {
+    private void setConfig(Profile currentProfile) {
         ConfigurationManager cm = new ConfigurationManager();
         Point size = cm.getMainWindowSize();
 
@@ -206,6 +199,20 @@ public class AbstractSignatureUITest {
         } catch (IOException e) {
             logger.warn("Failed to create configuration file.");
         }
+    }
+
+    public static void setSignatureProfiles() {
+        Collections.addAll(profiles, Profile.values());
+        assert(profiles.containsAll(EnumSet.allOf(Profile.class)));
+    }
+
+    public Profile getCurrentProfile() {
+        currentProfile = profiles.get(0);
+        profiles.remove(0);
+        if (profiles.isEmpty()) {
+            setSignatureProfiles();
+        }
+        return currentProfile;
     }
 
     /**
