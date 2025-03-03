@@ -3,8 +3,12 @@ package at.asit.pdfover.gui.tests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -16,6 +20,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -29,6 +34,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import lombok.NonNull;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +47,7 @@ public class AbstractSignatureUITest {
     private SWTBot bot;
 
     private static final File inputFile = new File("src/test/resources/TestFile.pdf");
-    private static final String outputDir = inputFile.getAbsoluteFile().getParent();
+    private static String outputDir = inputFile.getAbsoluteFile().getParent();
     private Profile currentProfile = Profile.SIGNATURBLOCK_SMALL;
     private final String postFix = "_superSigned";
 
@@ -49,6 +55,29 @@ public class AbstractSignatureUITest {
             .getLogger(AbstractSignatureUITest.class);
 
     protected String str(String k) { return Messages.getString(k); }
+
+    @BeforeAll
+    public static void prepareTestEnvironment() throws IOException {
+        deleteTempDir();
+        createTempDir();
+    }
+
+    private static void deleteTempDir() throws IOException {
+        String root = inputFile.getAbsoluteFile().getParent();
+        File dir = new File(root);
+        for (File f : Objects.requireNonNull(dir.listFiles())) {
+            if (f.getName().startsWith("output_")) {
+                FileUtils.deleteDirectory(f);
+            }
+        }
+    }
+
+    private static void createTempDir() throws IOException {
+        Path tmpDir = Files.createTempDirectory(Paths.get(inputFile.getAbsoluteFile().getParent()), "output_");
+        tmpDir.toFile().deleteOnExit();
+        outputDir = FilenameUtils.separatorsToSystem(tmpDir.toString());
+    }
+
 
     @BeforeEach
     public final void setupUITest() throws InterruptedException, BrokenBarrierException {
@@ -82,6 +111,7 @@ public class AbstractSignatureUITest {
 
     @AfterEach
     public void reset() throws InterruptedException {
+        deleteOutputFile();
         closeShell();
     }
 
@@ -117,6 +147,15 @@ public class AbstractSignatureUITest {
             bot.button(str("common.Cancel")).click();
         }
         assertTrue(output.exists(), "Received signed PDF");
+    }
+
+    private void deleteOutputFile() {
+        if (getPathOutputFile() != null) {
+            File outputFile = new File(getPathOutputFile());
+            outputFile.delete();
+            assertFalse(outputFile.exists());
+            logger.info("Deleted output file");
+        }
     }
 
     protected void testSignature(boolean negative, boolean captureRefImage) throws IOException {
