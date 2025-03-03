@@ -107,7 +107,7 @@ public class SignaturePositionValidator implements AutoCloseable {
     private void validateComparisonResult(ImageComparisonResult result) {
         String testType = isNegativeTest ? "negative" : "positive";
         assertTrue(isNegativeTest != result.isEqual(),
-                String.format("Unexpected comparison result for %s test. Images %s match.",
+                String.format("Unexpected comparison result for %s test " + currentProfile + ". Images %s match.",
                         testType, result.isEqual() ? "do" : "do not"));
     }
 

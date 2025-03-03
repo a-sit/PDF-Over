@@ -27,7 +27,7 @@ jobs:
       - name: Upload reference files and test results
         uses: actions/upload-artifact@v4
         with:
-          name: difference-images
+          name: test resources
           path: |
             pdf-over-gui/src/test/resources/
       - name: Describe current commit
