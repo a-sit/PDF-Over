@@ -25,6 +25,7 @@ jobs:
       - name: Run tests
         run: mvn -B test -Pwindows -Pci-build -Dno-native-profile -X -e
       - name: Upload reference files and test results
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: test resources
