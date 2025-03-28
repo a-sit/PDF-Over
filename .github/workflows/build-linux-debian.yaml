@@ -1,0 +1,75 @@
+name: Build Debian Package
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+          cache: maven
+      - name: Install Debian Package Builder dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install packaging-dev rubygems-integration git-buildpackage moreutils
+          sudo gem install fpm
+      - name: Build with Maven
+        run: mvn -B clean install -Plinux -Pci-build -Dno-native-profile
+      - name: Describe current commit
+        run: echo "commit_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Remove Previous Build Artifacts
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            (await github.rest.actions.listArtifactsForRepo({ owner, repo })).data.artifacts
+              .filter(({ name }) => (name.startsWith('pdf-over-${{ github.event.pull_request.number || github.ref_name }}-') && name.endsWith('linux-x86_64')))
+              .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
+      - name: Set executable permissions
+        run: chmod +x pdf-over-build/*.sh pdf-over-build/jre/bin/*
+      - name: Generated Debian Changelog
+        run: bash .github/helper/debian-changelog-generator.sh
+      - name: Run PDF-Over Debian Package Builder
+        run: bash .github/helper/debian-package-builder.sh
+      #- name: Tar bundle
+      #  run: tar -C pdf-over-build -cvf pdf-over.tar ./
+      - name: Upload Debian Package to Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-over-nightly-${{ env.commit_sha }}-debian
+          path: pdf-over-build/*.deb
+      - name: Init Nightly PPA
+        uses: actions/checkout@v3
+        with:
+          repository: a-sit/ppa-nightly
+          ref: 'main'
+          token:  ${{ secrets.ASIT_PPA_BOT_PPA_NIGHTLY }}
+          path: ppa-nightly
+      - name: Setup Nightly PPA git config
+        run: |
+          cd ppa-nightly
+          git config user.name "A-SIT Bot"
+          git config user.email "software@egiz.gv.at"
+      - name: Push Debian Package to Nightly PPA
+        run: |
+          mv pdf-over-build/*.deb ppa-nightly
+          cd ppa-nightly
+          git add *.deb
+          git commit -m "New nightly package"
+          git push origin main
+
+permissions:
+    contents: read
+    actions: write
