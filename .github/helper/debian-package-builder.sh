@@ -59,7 +59,7 @@ fpm \
   --version $VERSION \
   --architecture $ARCH \
   --deb-upstream-changelog debian/changelog \
-  --depends bash --depends "default-jre | java-runtime (>= 17)" \
+  --depends bash --depends "default-jre | java-runtime (>= 21)" \
   --description "PDF-Over is your tool for frequent & efficient PDF signing." \
   --url "https://technology.a-sit.at/en/pdf-over/" \
   --vendor "A-SIT <software@egiz.gv.at>" \
