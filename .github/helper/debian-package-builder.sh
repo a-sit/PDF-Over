@@ -40,7 +40,7 @@ cat > $NAME.desktop << EOF
 [Desktop Entry]
 Version=$VERSION
 Type=Application
-Name=$FULLNAME
+Name=$FULLNAME ($VERSION)
 Comment=Create PAdES conforming PDF signatures
 Exec=$NAME
 Icon=$NAME
