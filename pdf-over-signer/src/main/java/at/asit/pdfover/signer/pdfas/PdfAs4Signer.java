@@ -26,6 +26,7 @@ import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
 import at.gv.egiz.pdfas.sigs.pades.PAdESSigner;
 import at.gv.egiz.sl.util.ISLConnector;
 import at.knowcenter.wag.egov.egiz.pdf.TablePos;
+import at.knowcenter.wag.egov.egiz.pdf.TablePos.PAGE_MODE;
 
 /**
  * PDF AS Signer Implementation
@@ -144,7 +145,7 @@ public class PdfAs4Signer {
 					SignaturePosition sp;
 					if (tp.isXauto() && tp.isYauto())
 						sp = new SignaturePosition();
-					else if (tp.isPauto())
+					else if (tp.getPageMode() == PAGE_MODE.AUTO)
 						sp = new SignaturePosition(tp.getPosX(), tp.getPosY());
 					else if (param.getSignatureProfileId().contains(Profile.AMTSSIGNATURBLOCK.name()))
 						sp = new SignaturePosition();
