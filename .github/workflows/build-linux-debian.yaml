@@ -47,7 +47,7 @@ jobs:
       #- name: Tar bundle
       #  run: tar -C pdf-over-build -cvf pdf-over.tar ./
       - name: Upload Debian Package to Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pdf-over-nightly-${{ env.commit_sha }}-debian
           path: pdf-over-build/*.deb
