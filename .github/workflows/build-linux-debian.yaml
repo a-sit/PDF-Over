@@ -62,7 +62,7 @@ jobs:
         run: |
           cd ppa-nightly
           git config user.name "A-SIT Bot"
-          git config user.email "software@a-sit.at"
+          git config user.email "software@egiz.gv.at"
       - name: Push Debian Package to Nightly PPA
         run: |
           mv pdf-over-build/*.deb ppa-nightly
