@@ -32,7 +32,7 @@ jobs:
               .filter(({ name }) => (name.startsWith('pdf-over-${{ github.event.pull_request.number || github.ref_name }}-') && name.endsWith('windows-x86_64')))
               .forEach(({ id, name }) => { console.log('Deleting '+name+' ('+id+')'); github.rest.actions.deleteArtifact({ owner, repo, artifact_id: id }); });
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-windows-x86_64
           path: pdf-over-build
