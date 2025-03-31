@@ -1,1 +1,1 @@
-xcrun altool --notarize-app --primary-bundle-id "at.egiz.PDF-Over" --username "$ALTOOL_USERNAME" --password "$ALTOOL_PASSWORD" --file $1
+xcrun notarytool submit --apple-id "$ALTOOL_USERNAME" --team-id "9CYHJNG644" --password "$ALTOOL_PASSWORD" --wait $1

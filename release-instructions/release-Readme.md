@@ -77,6 +77,7 @@ step 1: unpack archive bundle
     -> check that it runs
       -> ./pdf-over_mac.sh
       -> (if you need to give permissions to java, navigate there in finder, then right click open to reveal the "OK" button)
+  -> fix codesign mess (run ./sign-jni.sh)
 
 step 2: use platypus to create a bundle app
   -> open platypus
@@ -95,13 +96,12 @@ step 2: use platypus to create a bundle app
     -> adjust UTIs to have only "com.adobe.pdf"
   -> add "jre", "lib" and "icons" (from /tmp/pdfover-packaging) to "Bundled Files"
   -> click "Create App", this creates a new .app
-  -> save it in a new subfolder, as /tmp/pdfover-packaging/platypus/PDF-Over.app
+  -> save it as /tmp/pdfover-packaging/PDF-Over.app
   -> check that it runs
     -> (double-click the app in Finder)
 
 step 3: sign the platypus bundle
-  -> run ./signscript.sh platypus
-  -> it needs a .app in a folder, that's why we made a subfolder :) no, don't ask me why, and feel free to invest time into fixing it
+  -> run ./signscript.sh PDF-Over.app
   -> this creates a signed app as /tmp/pdfover-packaging/pdf-over-{timestamp}/PDF-Over/PDF-Over.app
 
 step 4: prepare disk image
@@ -134,7 +134,7 @@ step 5: bundle & notarize disk image
     -> the first time, you will need to set your username & password
     -> run ./notarizeAppCommand.sh PDF-Over-{version}.dmg
     -> wait until notarization succeeds (usually <15min)
-    -> you can check with ./notarizeCheckSingleCommand.sh {uuid}
+    -> if an error occurs, you can check the log with ./checkNotaryLog.sh {uuid}
   -> bundle the notarization ticket with the .dmg
     -> xcrun stapler staple PDF-Over-{version}.dmg
   -> you are done, this is the official mac release bundle!
