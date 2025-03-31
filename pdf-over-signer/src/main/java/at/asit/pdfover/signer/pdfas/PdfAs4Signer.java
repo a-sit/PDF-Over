@@ -1,7 +1,6 @@
 package at.asit.pdfover.signer.pdfas;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Objects;
 import java.util.UUID;
 
 import javax.activation.DataSource;

@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
@@ -26,6 +28,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import at.asit.pdfover.commons.Messages;
@@ -47,7 +50,7 @@ public final class SWTUtils {
     
     	try {
     		// request re-layout if possible, changing the text content will change the bounding box
-    		Method m = swtObj.getClass().getMethod("requestLayout");
+    		Method m = swtObj.getClass().getMethod("layout");
     		m.invoke(swtObj);
     	} catch (NoSuchMethodException | IllegalAccessException expected) {
     		// do nothing, this may not exist on every control we use
@@ -253,5 +256,27 @@ public final class SWTUtils {
 		} catch (URISyntaxException e) {
 			log.warn("Failed to open URI: {}", uri, e);
 		}
+	}
+
+	@FunctionalInterface
+	public static interface Callable<T, E extends Exception> {
+		public T call() throws E;
+	};
+	@SuppressWarnings("unchecked")
+	public static <T, E extends Exception> T syncCall(Display d, Callable<T, E> fn) throws E {
+		Object[] resultHolder = new Object[]{null};
+		Exception[] exceptionHolder = new Exception[]{null};
+		d.syncExec(()->{
+			try {
+				resultHolder[0] = fn.call();
+			} catch (Exception e) {
+				exceptionHolder[0] = e;
+			}
+		});
+		if (exceptionHolder[0] != null) throw (E)exceptionHolder[0];
+		return (T)resultHolder[0];
+	}
+	public static <T, E extends Exception> T syncCall(Callable<T, E> fn) throws E {
+		return syncCall(Display.getDefault(), fn);
 	}
 }
