@@ -41,7 +41,7 @@ public class AboutComposite extends ConfigurationCompositeBase {
 		this.lnkAbout = new Link(this, SWT.WRAP);
 		SWTUtils.anchor(lnkAbout).top(0,5).right(100,-5).left(0,5);
 		SWTUtils.setFontHeight(lnkAbout, Constants.TEXT_SIZE_NORMAL);
-		SWTUtils.addSelectionListener(lnkAbout, (e) -> { SWTUtils.openURL(Messages.getString("config.LicenseURL")); });
+		SWTUtils.addSelectionListener(lnkAbout, (e) -> { SWTUtils.openURL(e.text); });
 
 		this.lblDataProtection = new Label(this, SWT.WRAP);
 		SWTUtils.anchor(lblDataProtection).top(lnkAbout, 15).left(0,5).right(100,-5);
