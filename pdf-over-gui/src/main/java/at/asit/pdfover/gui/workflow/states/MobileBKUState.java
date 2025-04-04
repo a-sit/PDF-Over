@@ -50,7 +50,6 @@ import at.asit.pdfover.gui.composites.mobilebku.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.HttpClientUtils;
-import at.asit.pdfover.gui.utils.SWTUtils;
 import at.asit.pdfover.gui.controls.Dialog;
 import at.asit.pdfover.gui.controls.ErrorDialog;
 import at.asit.pdfover.commons.Messages;
@@ -188,7 +187,7 @@ public class MobileBKUState extends State {
 	}
 
 	public void showInformationMessage(final @NonNull String message) throws UserCancelledException {
-		SWTUtils.syncCall(() -> {
+		Display.getDefault().syncCall(() -> {
 			Dialog dialog = new Dialog(getStateMachine().getMainShell(), Messages.getString("common.info"), message, BUTTONS.OK, ICON.INFORMATION);
 			int result = dialog.open();
 			if (result == SWT.CANCEL)
@@ -202,7 +201,7 @@ public class MobileBKUState extends State {
 	 * returns normally on "retry", throws UserCancelledException on "cancel"
 	 */
 	public void showRecoverableError(final @NonNull String errorMessage) throws UserCancelledException {
-		SWTUtils.syncCall(() -> {
+		Display.getDefault().syncCall(() -> {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.RETRY_CANCEL);
 			int result = error.open();
 			if (result == SWT.CANCEL)
@@ -216,7 +215,7 @@ public class MobileBKUState extends State {
 	 * throws UserCancelledException afterwards
 	 */
 	public void showUnrecoverableError(final @NonNull String errorMessage) throws UserCancelledException {
-		SWTUtils.syncCall(() -> {
+		Display.getDefault().syncCall(() -> {
 			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(), Messages.formatString("atrusterror.message", errorMessage), BUTTONS.OK);
 			error.open();
 			throw new UserCancelledException();
@@ -285,7 +284,7 @@ public class MobileBKUState extends State {
 	}
 
 	public void getCredentialsFromUserTo(@NonNull UsernameAndPassword credentials, String errorMessage) throws UserCancelledException {
-		SWTUtils.syncCall(() -> {
+		Display.getDefault().syncCall(() -> {
 			MobileBKUEnterNumberComposite ui = this.getMobileBKUEnterNumberComposite();
 
 			if (!ui.userAck) { // We need number and password => show UI!
@@ -339,7 +338,7 @@ public class MobileBKUState extends State {
 	}
 
 	public @NonNull SMSTanResult getSMSTanFromUser(final @NonNull String referenceValue, final URI signatureDataURI, final boolean showFido2, final String errorMessage) throws UserCancelledException {
-		return SWTUtils.syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUEnterTANComposite tan = getMobileBKUEnterTANComposite();
 			
 			tan.reset();
@@ -401,7 +400,7 @@ public class MobileBKUState extends State {
 	};
 
 	public @NonNull QRResult waitForQRCodeResult() throws UserCancelledException {
-		return SWTUtils.syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUQRComposite qr = getMobileBKUQRComposite();
 
 			readAndDispatchSWTUntil(() -> qr.isDone());
@@ -456,7 +455,7 @@ public class MobileBKUState extends State {
 	};
 
 	public @NonNull AppOpenResult waitForAppOpen() throws UserCancelledException {
-		return SWTUtils.syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			WaitingForAppComposite wfa = getWaitingForAppComposite();
 
 			readAndDispatchSWTUntil(() -> wfa.isDone());
@@ -512,7 +511,7 @@ public class MobileBKUState extends State {
 	};
 
 	public @NonNull AppBiometryResult waitForAppBiometry() throws UserCancelledException {
-		return SWTUtils.syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
 
 			readAndDispatchSWTUntil(() -> bio.isDone());
@@ -554,7 +553,7 @@ public class MobileBKUState extends State {
 	 * @throws UserCancelledException
 	 */
 	public @NonNull FIDO2Result promptUserForFIDO2Auth(final @NonNull String fido2Options, URI signatureDataURI, final boolean showSmsTan) throws UserCancelledException {
-		return SWTUtils.syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			MobileBKUFido2Composite fido2 = getMobileBKUFido2Composite();
 			fido2.initialize(fido2Options);
 			fido2.setSMSEnabled(showSmsTan);

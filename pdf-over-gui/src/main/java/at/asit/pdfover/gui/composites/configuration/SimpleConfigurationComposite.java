@@ -537,7 +537,7 @@ public class SimpleConfigurationComposite extends ConfigurationCompositeBase {
 
 		SWTUtils.reanchor(grpPreview).top(newProfile.hasText() ? grpSignatureNote : grpLogoOnlyTargetSize, 5);
 		this.grpPreview.setVisible(newProfile.isVisibleSignature());
-		this.grpPreview.layout();
+		this.grpPreview.requestLayout();
 		signatureBlockPreviewChanged();
 	}
 

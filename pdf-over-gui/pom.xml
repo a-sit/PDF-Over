@@ -12,7 +12,7 @@
 		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
 		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
 		<pdfover-build.staging-dir>${project.build.directory}/staging/${pdfover-build.output-filename}</pdfover-build.staging-dir>
-		<pdfover-build.swt-version>4.23</pdfover-build.swt-version>
+		<pdfover-build.swt-version>4.35</pdfover-build.swt-version>
 	</properties>
 
 	<dependencies>
