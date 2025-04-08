@@ -557,7 +557,7 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 
 		int n = keystorePassStorageTypeOptions.size();
 		cmbKeystorePassStoreType.setVisibleItemCount(n);
-		cmbKeystorePassStoreType.setItems(new String[]{});
+		cmbKeystorePassStoreType.setItems();
 		for (int i=0; i<n; ++i)
 			cmbKeystorePassStoreType.add(keystorePassStorageTypeOptions.get(i).getRight());
 	}
