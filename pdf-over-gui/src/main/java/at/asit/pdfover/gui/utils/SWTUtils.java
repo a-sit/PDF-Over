@@ -209,6 +209,29 @@ public final class SWTUtils {
 	public static void addMouseDownListener(Object swtObj, Runnable callback) {
 		addMouseDownListener(swtObj, (e) -> { callback.run(); });
 	}
+
+	/**
+	 * functional-interface wrapper around swtObj.addMouseListener
+	 * @param swtObj SWT widget supporting addMouseListener
+	 * @param callback mouseDown method
+	 */
+	public static void addMouseUpListener(Object swtObj, Consumer<MouseEvent> callback) {
+		try {
+			Method m = swtObj.getClass().getMethod("addMouseListener", MouseListener.class);
+			m.invoke(swtObj, new MouseAdapter() { @Override public void mouseUp (MouseEvent e) { callback.accept(e); } });
+		} catch (NoSuchMethodException | IllegalAccessException e) {
+			log.error("Attempted to pass object of type {} to addMouseUpListener; object does not have an accessible addMouseListener method", swtObj.getClass().getSimpleName(), e);
+		} catch (InvocationTargetException e) {
+			log.error("Failed to add mouse-up listener on object of type {}", swtObj.getClass().getSimpleName(), e);
+		}
+	}
+
+	/**
+	 * @see SWTUtils#addMouseUpListener(Object, Consumer)
+	 */
+	public static void addMouseUpListener(Object swtObj, Runnable callback) {
+		addMouseUpListener(swtObj, (e) -> { callback.run(); });
+	}
 	
 	/**
 	 * functional-interface wrapper around swtObj.addFocusListener
