@@ -254,13 +254,8 @@ public class MainWindow {
 		SWTUtils.anchor(btn_config).bottom(100).right(0,50).top(0).left(0);
 		SWTUtils.setLocalizedText(btn_config, "main.configuration");
 		SWTUtils.setLocalizedToolTipText(btn_config, "main.configuration");
-		this.btn_config.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				MainWindow.this.stateMachine
-						.jumpToState(new ConfigurationUIState(
-								MainWindow.this.stateMachine));
-			}
+		SWTUtils.addMouseUpListener(btn_config, () -> {
+			stateMachine.jumpToState(new ConfigurationUIState(stateMachine));
 		});
 		this.buttonMap.put(Buttons.CONFIG, this.btn_config);
 
@@ -279,15 +274,12 @@ public class MainWindow {
 		SWTUtils.anchor(btn_open).left(0).right(27, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_open, "common.open");
 		SWTUtils.setLocalizedToolTipText(btn_open, "common.open");
-		this.btn_open.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				if (MainWindow.this.stateMachine.status.getCurrentState() instanceof OpenState) {
-					((OpenState) MainWindow.this.stateMachine.status.getCurrentState()).openFileDialog();
-				} else {
-					MainWindow.this.stateMachine.jumpToState(new OpenState(
-							MainWindow.this.stateMachine));
-				}
+		SWTUtils.addMouseUpListener(btn_open, () -> {
+			if (!stateMachine.status.behavior.getEnabled(Buttons.OPEN)) return;
+			if (stateMachine.status.getCurrentState() instanceof OpenState) {
+				((OpenState)stateMachine.status.getCurrentState()).openFileDialog();
+			} else {
+				stateMachine.jumpToState(new OpenState(stateMachine));
 			}
 		});
 		this.buttonMap.put(Buttons.OPEN, this.btn_open);
@@ -296,12 +288,9 @@ public class MainWindow {
 		SWTUtils.anchor(btn_position).left(27, -1 * (MainBarButton.SplitFactor / 2)).right(54, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_position, "main.position");
 		SWTUtils.setLocalizedToolTipText(btn_position, "main.position");
-		this.btn_position.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				MainWindow.this.stateMachine.jumpToState(new PositioningState(
-						MainWindow.this.stateMachine));
-			}
+		SWTUtils.addMouseUpListener(btn_position, () -> {
+			if (!stateMachine.status.behavior.getEnabled(Buttons.POSITION)) return;
+			stateMachine.jumpToState(new PositioningState(stateMachine));
 		});
 		this.buttonMap.put(Buttons.POSITION, this.btn_position);
 
@@ -309,12 +298,9 @@ public class MainWindow {
 		SWTUtils.anchor(btn_sign).left(54, -1 * (MainBarButton.SplitFactor / 2)).right(81, (MainBarButton.SplitFactor / 2)).top(0).bottom(100);
 		SWTUtils.setLocalizedText(btn_sign, "main.signature");
 		SWTUtils.setLocalizedToolTipText(btn_sign, "main.signature");
-		this.btn_sign.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				MainWindow.this.stateMachine.jumpToState(new BKUSelectionState(
-						MainWindow.this.stateMachine));
-			}
+		SWTUtils.addMouseUpListener(btn_sign, () -> {
+			if (!stateMachine.status.behavior.getEnabled(Buttons.SIGN)) return;
+			stateMachine.jumpToState(new BKUSelectionState(stateMachine));
 		});
 		this.buttonMap.put(Buttons.SIGN, this.btn_sign);
 
