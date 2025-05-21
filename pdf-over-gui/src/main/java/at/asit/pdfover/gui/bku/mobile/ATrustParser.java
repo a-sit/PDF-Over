@@ -73,7 +73,7 @@ public class ATrustParser {
 
         private AutoSkipBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
-            if (htmlDocument.baseUri().contains("/tanAppInfo.aspx")) {
+            if (htmlDocument.baseUri().contains("/tanAppInfo.aspx") || htmlDocument.baseUri().contains("/UsernameInfo.aspx")) {
                 this.submitButton = "#NextBtn";
             } else { throw new ComponentParseFailed(); }
         }
