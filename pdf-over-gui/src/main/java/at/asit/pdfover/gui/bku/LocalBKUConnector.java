@@ -45,12 +45,12 @@ public class LocalBKUConnector implements BkuSlConnector {
 	public static boolean IsAvailable() { return isAvailable; }
 	private static Thread pollingThread = new Thread(() -> {
 		while (true) {
-			try { Thread.sleep(isAvailable ? 30000 : 5000); } catch (InterruptedException e) {}
 			try (Socket socket = new Socket("127.0.0.1", 3495)) {
 				isAvailable = true;
 			} catch (IOException e) {
 				isAvailable = false;
 			}
+			try { Thread.sleep(isAvailable ? 30000 : 5000); } catch (InterruptedException e) {}
 		}
 	}, "LocalBKUProbeThread");
 	static {
