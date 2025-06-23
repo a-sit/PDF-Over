@@ -165,9 +165,9 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.2</version>
+					<version>3.1.1</version>
 					<configuration>
-						<preparationGoals />
+						<preparationGoals>initialize</preparationGoals>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
 					<dependencies>
