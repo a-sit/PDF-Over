@@ -102,7 +102,6 @@ step 2: use platypus to create a bundle app
 
 step 3: sign the platypus bundle
   -> run ./signscript.sh PDF-Over.app
-  -> this creates a signed app as /tmp/pdfover-packaging/pdf-over-{timestamp}/PDF-Over/PDF-Over.app
 
 step 4: prepare disk image
   -> open disk utility
