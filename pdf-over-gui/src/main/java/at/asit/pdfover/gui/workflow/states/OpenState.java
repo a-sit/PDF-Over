@@ -163,7 +163,7 @@ public class OpenState extends State {
 											"select the fields", fields);
 									int res = gui.open();
 									if (res != -1) {
-										getStateMachine().status.searchForPlacehoderSignature = true;
+										status.searchForPlaceholderSignature = true;
 										addPlaceholderSelectionToConfig(fields.get(res));
 										this.setNextState(new BKUSelectionState(getStateMachine()));
 									}
@@ -172,7 +172,7 @@ public class OpenState extends State {
 								}
 
 							} else if (result == SWT.NO) {
-								getStateMachine().status.searchForPlacehoderSignature = false;
+								status.searchForPlaceholderSignature = false;
 							} else {
 								status.document = null;
 								return;
@@ -206,10 +206,11 @@ public class OpenState extends State {
 									signaturePlaceholderData.getTablePos().getPosY(),
 									signaturePlaceholderData.getTablePos().getPage());
 
-							status.searchForPlacehoderSignature = true;
+							status.searchForPlaceholderSignature = true;
+							status.placeholderId = signaturePlaceholderData.getId();
 
 						} else if (result == SWT.NO) {
-							status.searchForPlacehoderSignature = false;
+							status.searchForPlaceholderSignature = false;
 						} else {
 							status.document = null;
 							return;

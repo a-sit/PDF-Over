@@ -142,7 +142,8 @@ public class PrepareSigningState extends State {
 					this.state.signatureParameter.signatureNote = configuration.getSignatureNote();
 				}
 
-				this.state.signatureParameter.searchForPlaceholderSignatures = getStateMachine().status.searchForPlacehoderSignature;
+				this.state.signatureParameter.searchForPlaceholderSignatures = status.searchForPlaceholderSignature;
+				this.state.signatureParameter.placeholderId = status.placeholderId;
 				this.state.signatureParameter.signatureLanguage = configuration.getSignatureLocale().getLanguage();
 				this.state.signatureParameter.enablePDFACompat = configuration.getSignaturePdfACompat();
 				this.state.signatureParameter.signatureProfile = configuration.getSignatureProfile();
