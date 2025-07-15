@@ -48,7 +48,8 @@ public class Status {
 
 	public final MainWindowBehavior behavior;
 
-	public boolean searchForPlacehoderSignature = false;
+	public boolean searchForPlaceholderSignature = false;
+	public String placeholderId = null;
 
 	public Status() {
 		this.behavior = new MainWindowBehavior();

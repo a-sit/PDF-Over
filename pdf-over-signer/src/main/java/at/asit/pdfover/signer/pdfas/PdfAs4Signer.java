@@ -97,8 +97,11 @@ public class PdfAs4Signer {
 			param.setTransactionId(id);
 
 			if (parameter.searchForPlaceholderSignatures) {
+				param.setPlaceHolderSearchEnabled(true);
 				param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_MODE, "1");
 				param.getConfiguration().setValue(IConfigurationConstants.PLACEHOLDER_SEARCH_ENABLED, IConfigurationConstants.TRUE);
+				if (parameter.placeholderId != null)
+					param.setPlaceHolderId(parameter.placeholderId);
 			}
 
 			state.signParameter = param;

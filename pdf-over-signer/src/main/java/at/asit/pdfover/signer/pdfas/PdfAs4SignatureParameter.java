@@ -73,6 +73,7 @@ public class PdfAs4SignatureParameter {
 
 	/** Whether so look for placeholder signatures or not. */
 	public boolean searchForPlaceholderSignatures = false;
+    public String placeholderId = null;
 
     /** The size to scale the logo to (in mm) */
     public double targetLogoSize = Constants.DEFAULT_LOGO_ONLY_SIZE;
