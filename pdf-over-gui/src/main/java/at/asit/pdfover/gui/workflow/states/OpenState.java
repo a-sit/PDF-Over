@@ -206,10 +206,10 @@ public class OpenState extends State {
 									signaturePlaceholderData.getTablePos().getPosY(),
 									signaturePlaceholderData.getTablePos().getPage());
 
-							getStateMachine().status.searchForPlacehoderSignature = true;
+							status.searchForPlacehoderSignature = true;
 
 						} else if (result == SWT.NO) {
-							getStateMachine().status.searchForPlacehoderSignature = false;
+							status.searchForPlacehoderSignature = false;
 						} else {
 							status.document = null;
 							return;
