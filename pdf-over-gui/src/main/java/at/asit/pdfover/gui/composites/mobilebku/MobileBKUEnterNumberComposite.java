@@ -155,10 +155,10 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 
 		this.lbl_number = new Label(containerComposite, SWT.NATIVE);
 		this.lbl_number.setAlignment(SWT.RIGHT);
-		SWTUtils.anchor(lbl_number).bottom(50, -10).right(50, -10);
+		SWTUtils.anchor(lbl_number).bottom(50, -10).right(30, -5);
 
 		this.txt_number = new Text(containerComposite, SWT.SINGLE | SWT.NATIVE | SWT.BORDER);
-		SWTUtils.anchor(txt_number).bottom(50, -10).left(50, 10).right(100, -20);
+		SWTUtils.anchor(txt_number).bottom(50, -10).left(30, 10).right(100, -20);
 		this.txt_number.setEditable(true);
 		SWTUtils.addFocusGainedListener(txt_number, () -> { txt_number.selectAll(); });
 
@@ -170,11 +170,11 @@ public class MobileBKUEnterNumberComposite extends StateComposite {
 		lbl_image.setImage(mobileIcon);
 
 		this.lbl_password = new Label(containerComposite, SWT.NATIVE);
-		SWTUtils.anchor(lbl_password).top(50, 10).right(50, -10);
+		SWTUtils.anchor(lbl_password).top(50, 10).right(30, -5);
 		this.lbl_password.setAlignment(SWT.RIGHT);
 		
 		this.txt_password = new Text(containerComposite, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER | SWT.NATIVE);
-		SWTUtils.anchor(txt_password).top(50, 10).left(50, 10).right(100, -20);
+		SWTUtils.anchor(txt_password).top(50, 10).left(30, 10).right(100, -20);
 		this.txt_password.setEditable(true);
 		SWTUtils.addFocusGainedListener(txt_password, () -> { txt_password.selectAll(); });
 
