@@ -16,7 +16,7 @@
 package at.asit.pdfover.gui.workflow.states;
 
 //Imports
-import java.net.ConnectException;
+import java.net.SocketException;
 
 import org.eclipse.swt.SWT;
 
@@ -93,7 +93,7 @@ public class SigningState extends State {
 				while (cause.getCause() != null)
 					cause = cause.getCause();
 
-				if (cause instanceof ConnectException) {
+				if (cause instanceof SocketException) {
 					message += ": " + cause.getMessage();
 				} else if (cause instanceof SLPdfAsException) {
 					var ex = ((SLPdfAsException)cause);
