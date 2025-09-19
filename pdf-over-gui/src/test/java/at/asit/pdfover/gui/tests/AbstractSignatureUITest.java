@@ -1,5 +1,6 @@
 package at.asit.pdfover.gui.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -58,6 +61,23 @@ public abstract class AbstractSignatureUITest {
         deleteTempDir();
         createTempDir();
         setSignatureProfiles();
+        setupPdfBox();
+    }
+
+    private static void setupPdfBox() throws IOException{
+        byte[] pdfBytes;
+        try (PDDocument doc = new PDDocument()) {
+            doc.addPage(new PDPage());
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                doc.save(baos);
+                pdfBytes = baos.toByteArray();
+            }
+        }
+
+        // Load PDF to trigger initialization
+        try (PDDocument ignored = PDDocument.load(pdfBytes)) {
+
+        }
     }
 
     private static void deleteTempDir() throws IOException {
@@ -128,7 +148,7 @@ public abstract class AbstractSignatureUITest {
     protected void setCredentials() {
         try {
             ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
-            bot.waitUntil(widgetExists, 20000);
+            bot.waitUntil(widgetExists, 80000);
             bot.textWithLabel(str("mobileBKU.number")).setText("TestUser-1902503362");
             bot.textWithLabel(str("mobileBKU.password")).setText("123456789");
             bot.button(str("common.Ok")).click();
