@@ -23,7 +23,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install -Pwindows -Pci-build -Dno-native-profile -DskipTests
       - name: Run tests
-        run: mvn -B test -Pwindows -Pci-build -Dno-native-profile -X -e
+        run: mvn -B test -Pwindows -Pci-build -Dno-native-profile
       - name: Upload reference files and test results
         if: failure()
         uses: actions/upload-artifact@v4
