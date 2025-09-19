@@ -185,7 +185,7 @@ public abstract class AbstractSignatureUITest {
         try (SignaturePositionValidator provider = new SignaturePositionValidator(negative, captureRefImage, currentProfile, outputFile)) {
             provider.verifySignaturePosition();
         } catch (Exception e) {
-            logger.error("Error verifiying signature position", e);
+            fail("Error verifiying signature position", e);
         }
     }
 
