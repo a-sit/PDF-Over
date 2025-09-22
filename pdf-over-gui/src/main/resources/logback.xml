@@ -21,7 +21,7 @@
       <MaxFileSize>100KB</MaxFileSize>
     </triggeringPolicy>
   </appender>
-  <logger name="at.asit.pdfover" level="INFO"/>
+  <logger name="at.asit.pdfover" level="DEBUG"/>
   <root level="WARN">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="LOGFILE"/>
