@@ -1,0 +1,55 @@
+name: SWTBot UI Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 */4 * * *'   # optional: every 4 hours
+  workflow_dispatch:
+
+jobs:
+  ui-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-14]
+
+    env:
+      MAVEN_OPTS: -Xmx2g
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show runner info (short)
+        run: |
+          echo "OS=$RUNNER_OS ImageOS=$ImageOS ImageVersion=$ImageVersion"
+          java -version || true
+
+      - name: Set up Temurin JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # Linux needs a virtual display for SWT
+      - name: Start Xvfb (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1920x1080x24 >/dev/null 2>&1 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      # macOS: install XQuartz to get Xvfb if needed by your SWT build
+      - name: Install XQuartz (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install --cask xquartz
+          /opt/X11/bin/Xvfb :99 -screen 0 1920x1080x24 >/dev/null 2>&1 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Run SWTBot tests
+        run: mvn -B -Pmacos "-Dsurefire.rerunFailingTestsCount=0" test

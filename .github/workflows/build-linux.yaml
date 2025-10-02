@@ -1,9 +1,9 @@
 name: Build Linux
 on:
   push:
-    branches: [ "feature/automated-ui-test" ]
+    branches: [ "development/automated-ui-test" ]
   pull_request:
-    branches: [ "feature/automated-ui-test" ]
+    branches: [ "development/automated-ui-test" ]
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true

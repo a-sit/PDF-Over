@@ -275,6 +275,12 @@
 				<version>${jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.eclipse.swtbot</groupId>
+				<artifactId>org.eclipse.swtbot.junit4_x</artifactId>
+				<version>4.3.0</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
