@@ -139,15 +139,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.2.5</version>
-					<configuration>
-						<includes>
-							<include>**/*SWTBot*.java</include>
-						</includes>
-						<reuseForks>false</reuseForks>
-						<forkCount>1</forkCount>
-						<argLine>-Djava.awt.headless=false</argLine>
-					</configuration>
+					<version>3.5.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
