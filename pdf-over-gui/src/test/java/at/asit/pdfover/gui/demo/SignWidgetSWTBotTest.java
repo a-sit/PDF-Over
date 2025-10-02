@@ -33,7 +33,7 @@ public class SignWidgetSWTBotTest {
 
     @Test
     public void transitionsToSuccess() throws Exception {
-        bot.button("Start").click();
+        bot.button("Start1").click();
         bot.waitUntil(new DefaultCondition() {
             public boolean test() { return "SUCCESS".equals(widget.statusText()); }
             public String getFailureMessage() { return "Did not reach SUCCESS"; }
