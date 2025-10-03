@@ -6,6 +6,7 @@ import at.asit.pdfover.gui.demo.SignWidget;
 import at.asit.pdfover.gui.tests.FileExistsCondition;
 import at.asit.pdfover.gui.tests.WidgetExistsCondition;
 import at.asit.pdfover.gui.workflow.StateMachine;
+import at.asit.pdfover.gui.workflow.states.PositioningState;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -38,15 +39,11 @@ public class SignWidgetSWTBotTest {
         sm = Main.setup(new String[]{inputFile.getAbsolutePath()});
         shell = sm.getMainShell();
         log.debug("---------before starting state machine");
-        sm.start();
+       // sm.start();
         log.debug("-----------after starting state machine");
         bot = new SWTBot(shell);
         log.debug("------------after bot init");
-        ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
-        bot.waitUntil(widgetExists, 50000);
-        bot.textWithLabel(str("mobileBKU.number")).setText("TestUser-1902503362");
-        bot.textWithLabel(str("mobileBKU.password")).setText("123456789");
-        bot.button(str("common.Ok")).click();
+ 
     }
 
     @After
@@ -64,6 +61,8 @@ public class SignWidgetSWTBotTest {
 
     @Test
     public void setCredentials() {
+        sm.start();
+        sm.jumpToState(new PositioningState(sm));
         log.debug("--------- calling from setCredentials()");
         try {
             ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
