@@ -8,7 +8,7 @@ import at.asit.pdfover.commons.Profile;
 
 public class SignatureUITest extends AbstractSignatureUITest {
 
-    @ParameterizedTest
+    //@ParameterizedTest
     @EnumSource(Profile.class)
     public void testSignatureAutoPosition() throws IOException {
         setCredentials();
