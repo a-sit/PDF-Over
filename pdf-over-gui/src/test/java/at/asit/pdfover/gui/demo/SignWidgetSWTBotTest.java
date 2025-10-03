@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static at.asit.webauthnclient.internal.drivers.windowshello.v1.WebAuthNInterface.log;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -36,8 +37,16 @@ public class SignWidgetSWTBotTest {
         Display display = Display.getDefault();
         sm = Main.setup(new String[]{inputFile.getAbsolutePath()});
         shell = sm.getMainShell();
+        log.debug("---------before starting state machine");
         sm.start();
+        log.debug("-----------after starting state machine");
         bot = new SWTBot(shell);
+        log.debug("------------after bot init");
+        ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
+        bot.waitUntil(widgetExists, 50000);
+        bot.textWithLabel(str("mobileBKU.number")).setText("TestUser-1902503362");
+        bot.textWithLabel(str("mobileBKU.password")).setText("123456789");
+        bot.button(str("common.Ok")).click();
     }
 
     @After
@@ -55,6 +64,7 @@ public class SignWidgetSWTBotTest {
 
     @Test
     public void setCredentials() {
+        log.debug("--------- calling from setCredentials()");
         try {
             ICondition widgetExists = new WidgetExistsCondition(str("mobileBKU.number"));
             bot.waitUntil(widgetExists, 50000);
