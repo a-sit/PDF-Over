@@ -1,6 +1,6 @@
 **RELEASE PREPARATION (versioning)**
-* ensure that the bundled JRE is a recent version
   (this creates a release tag which has versioning fields set appropriately, tags it, and pushes it to github)
+* ensure that the bundled JRE is a recent version
 * switch to your pdf-over clone
 * run ```mvn install``` to verify that it builds
   (you can skip this step if you are feeling brave)
@@ -72,7 +72,7 @@ nothing to do here, just rename pdf-over_linux-x86_64.jar to PDF-Over-{version}.
       [HKEY_CLASSES_ROOT\PDF-Over.pdf\shell\open\command]                REG_SZ   ""                "C:\Path\To\PDF-Over.exe\" "%1"
       
   **at last:**
-  - click "Build" in the toolbar, this produces pdf-over/installer/windows/PDF-Over-SetupFiles/PDF-Over.msi
+  - click "Build" in the toolbar, this produces C:/temp/pdfover-packaging/PDF-Over-SetupFiles/PDF-Over.msi
   - rename this to PDF-Over-{version}.msi; you are done
 ---
 **MAC-SPECIFIC RELEASE PROCESS**
