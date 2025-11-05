@@ -16,3 +16,11 @@ PDF-Over runs on Windows, Linux, and MacOS (separate Intel and Apple Silicon bun
 
 - Inquiries and bug reports are accepted via the [issue tracker](https://github.com/a-sit/pdf-over/issues), or directed to [software@egiz.gv.at](mailto:software@egiz.gv.at).
 
+
+### Data Protection Statement
+
+The software PDF-Over processes the data required for the signature process locally on the installed device. 
+The signature process with the citizen card is carried out locally. 
+
+During the signature process using ID Austria, the PDF document to be signed is sent to the company A-Trust. 
+The storage period and further data protection information for signatures using ID Austria can be found in the [data protection declaration of A-Trust](https://www.a-trust.at/downloads/documents/datenschutzerklaerung.pdf).
