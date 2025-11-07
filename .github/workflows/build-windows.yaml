@@ -1,9 +1,10 @@
+
 name: Build Windows
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feature/automated-ui-test" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "feature/automated-ui-test" ]
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -20,7 +21,16 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: mvn -B clean install -Pwindows -Pci-build -Dno-native-profile
+        run: mvn -B clean install -Pwindows -Pci-build -Dno-native-profile -DskipTests
+      - name: Run tests
+        run: mvn -B test -Pwindows -Pci-build -Dno-native-profile
+      - name: Upload reference files and test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test resources
+          path: |
+            pdf-over-gui/src/test/resources/
       - name: Describe current commit
         run: echo "commit_sha=$("${{ github.sha }}".SubString(0,7))" >> $env:GITHUB_ENV
       - name: Remove Previous Build Artifacts
@@ -34,9 +44,9 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pdf-over-${{ github.event.pull_request.number || github.ref_name }}-${{ env.commit_sha }}-windows-x86_64
+          name: pdf-over-feature-automated-ui-test-${{ env.commit_sha }}-windows-x86_64
           path: pdf-over-build
 
 permissions:
-    contents: read
-    actions: write
+  contents: read
+  actions: write

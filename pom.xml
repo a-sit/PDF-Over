@@ -113,6 +113,7 @@
 		<maven.compiler.release>21</maven.compiler.release>
 		<pdfover-build.root-dir>${project.basedir}</pdfover-build.root-dir>
 		<pdfbox.version>2.0.34</pdfbox.version>
+		<jupiter.version>5.13.4</jupiter.version>
 	</properties>
 
 	<reporting>
@@ -259,7 +260,19 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
-				<version>5.9.0</version>
+				<version>${jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>${jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>${jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
