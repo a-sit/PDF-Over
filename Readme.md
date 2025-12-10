@@ -5,6 +5,7 @@
 [![pipeline status: Mac x86_64](https://github.com/a-sit/pdf-over/actions/workflows/build-mac-x86_64.yaml/badge.svg?branch=main)](https://github.com/a-sit/PDF-Over/actions/workflows/build-mac-x86_64.yaml?query=branch%3Amain+is%3Asuccess+event%3Apush)  
 [![pipeline status: Linux](https://github.com/a-sit/pdf-over/actions/workflows/build-linux.yaml/badge.svg?branch=main)](https://github.com/a-sit/PDF-Over/actions/workflows/build-linux.yaml?query=branch%3Amain+is%3Asuccess+event%3Apush)
 [![pipeline status: Mac aarch64](https://github.com/a-sit/pdf-over/actions/workflows/build-mac-aarch64.yaml/badge.svg?branch=main)](https://github.com/a-sit/PDF-Over/actions/workflows/build-mac-aarch64.yaml?query=branch%3Amain+is%3Asuccess+event%3Apush)
+[![pipeline status: Linux aarch64](https://github.com/a-sit/pdf-over/actions/workflows/build-linux-aarch64.yaml/badge.svg?branch=main)](https://github.com/a-sit/PDF-Over/actions/workflows/build-linux-aarch64.yaml?query=branch%3Amain+is%3Asuccess+event%3Apush)
 
 **🇦🇹 This project only works with the Austrian eGovernment platform. 🇦🇹**
 
