@@ -7,6 +7,7 @@ set -o pipefail  # don't hide errors within pipes
 # config:
 NAME="pdf-over-nightly"
 FULLNAME="PDF-Over Nightly"
+DESKTOPNAME="PDF-Over"
 VERSION="`date +"%Y%m%d.%H%M%S"`"
 ARCH="all"
 JAR_TARGET="/usr/share/java/$NAME"
@@ -36,7 +37,7 @@ EOF
 chmod +x $NAME.sh
  
 
-cat > $NAME.desktop << EOF
+cat > $DESKTOPNAME.desktop << EOF
 [Desktop Entry]
 Version=$VERSION
 Type=Application
@@ -66,7 +67,7 @@ fpm \
   --maintainer "A-SIT <software@egiz.gv.at>" \
   $jar_files \
   $NAME.sh=/usr/bin/$NAME \
-  $NAME.desktop=/usr/share/applications/$NAME.desktop \
+  $DESKTOPNAME.desktop=/usr/share/applications/$DESKTOPNAME.desktop \
   icons/icon144x144.png=/usr/share/pixmaps/$NAME.png
 
 # next: upload/publish $NAME-$VERSION-$ARCH.deb
