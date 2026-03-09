@@ -44,9 +44,8 @@ import at.asit.pdfover.gui.composites.WaitingComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterNumberComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUEnterTANComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUFido2Composite;
-import at.asit.pdfover.gui.composites.mobilebku.MobileBKUFingerprintComposite;
+import at.asit.pdfover.gui.composites.mobilebku.MobileBKUNeedsAppComposite;
 import at.asit.pdfover.gui.composites.mobilebku.MobileBKUQRComposite;
-import at.asit.pdfover.gui.composites.mobilebku.WaitingForAppComposite;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.Dialog.ICON;
 import at.asit.pdfover.gui.utils.HttpClientUtils;
@@ -70,16 +69,6 @@ public class MobileBKUState extends State {
 	}
 
 	MobileBKUEnterTANComposite mobileBKUEnterTANComposite = null;
-
-	WaitingForAppComposite waitingForAppComposite = null;
-	WaitingForAppComposite getWaitingForAppComposite() {
-		if (this.waitingForAppComposite == null) {
-			this.waitingForAppComposite = getStateMachine()
-					.createComposite(WaitingForAppComposite.class, SWT.RESIZE, this);
-		}
-
-		return this.waitingForAppComposite;
-	}
 
 	WaitingComposite waitingComposite = null;
 	WaitingComposite getWaitingComposite() {
@@ -120,14 +109,14 @@ public class MobileBKUState extends State {
 		return this.mobileBKUEnterNumberComposite;
 	}
 
-	MobileBKUFingerprintComposite mobileBKUFingerprintComposite = null;
-	MobileBKUFingerprintComposite getMobileBKUFingerprintComposite() {
-		if (this.mobileBKUFingerprintComposite == null) {
-			this.mobileBKUFingerprintComposite = getStateMachine()
-					.createComposite(MobileBKUFingerprintComposite.class, SWT.RESIZE, this);
+	MobileBKUNeedsAppComposite mobileBKUNeedsAppComposite = null;
+	MobileBKUNeedsAppComposite getMobileBKUNeedsAppComposite() {
+		if (this.mobileBKUNeedsAppComposite == null) {
+			this.mobileBKUNeedsAppComposite = getStateMachine()
+					.createComposite(MobileBKUNeedsAppComposite.class, SWT.RESIZE, this);
 		}
 
-		return this.mobileBKUFingerprintComposite;
+		return this.mobileBKUNeedsAppComposite;
 	}
 
 	MobileBKUFido2Composite mobileBKUFido2Composite = null;
@@ -430,64 +419,9 @@ public class MobileBKUState extends State {
 		getMobileBKUQRComposite().signalPollingDone();
 	}
 
-	/**
-	 * start showing the "waiting for app" screen
-	 * this method will return immediately */
-	public void showWaitingForAppOpen(final @NonNull String referenceValue, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
+	public void showWaitingForApp2FA(final @NonNull String referenceValue, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
 		Display.getDefault().syncExec(() -> {
-			WaitingForAppComposite wfa = getWaitingForAppComposite();
-			wfa.reset();
-
-			// TODO composite does not currently support: refval, signature data
-			wfa.setSMSEnabled(showSmsTan);
-			wfa.setFIDO2Enabled(showFido2);
-			getStateMachine().display(wfa);
-		});
-	}
-
-	public enum AppOpenResult {
-		/* the user has pressed the FIDO2 button */
-		TO_FIDO2,
-		/* the user has pressed the SMS button */
-		TO_SMS,
-		/* signalAppOpened has been called; this indicates that we should refresh the page */
-		UPDATE
-	};
-
-	public @NonNull AppOpenResult waitForAppOpen() throws UserCancelledException {
-		return Display.getDefault().syncCall(() -> {
-			WaitingForAppComposite wfa = getWaitingForAppComposite();
-
-			readAndDispatchSWTUntil(() -> wfa.isDone());
-
-			getStateMachine().display(this.getWaitingComposite());
-
-			if (wfa.wasCancelClicked()) {
-				clearRememberedPassword();
-				throw new UserCancelledException();
-			}
-
-			if (wfa.wasSMSClicked())
-				return AppOpenResult.TO_SMS;
-			
-			if (wfa.wasFIDO2Clicked())
-				return AppOpenResult.TO_FIDO2;
-
-			return AppOpenResult.UPDATE;
-		});
-	}
-
-	/**
-	 * indicate that the long polling operation completed
-	 * (any ongoing waitForAppOpen call will then return)
-	 */
-	public void signalAppOpened() {
-		getWaitingForAppComposite().signalPollingDone();
-	}
-
-	public void showWaitingForAppBiometry(final @NonNull String referenceValue, URI signatureDataURI, final boolean showSmsTan, final boolean showFido2) {
-		Display.getDefault().syncExec(() -> {
-			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
+			MobileBKUNeedsAppComposite bio = getMobileBKUNeedsAppComposite();
 			bio.reset();
 
 			bio.setRefVal(referenceValue);
@@ -501,18 +435,18 @@ public class MobileBKUState extends State {
 
 	// TODO can we maybe deduplicate the various waiting screens' logic?
 
-	public enum AppBiometryResult {
+	public enum App2FAResult {
 		/* the user has pressed the FIDO2 button */
 		TO_FIDO2,
 		/* the user has pressed the SMS button */
 		TO_SMS,
-		/* signalAppBiometryDone has been called; this indicates that we should refresh the page */
+		/* signalApp2FADone has been called; this indicates that we should refresh the page */
 		UPDATE
 	};
 
-	public @NonNull AppBiometryResult waitForAppBiometry() throws UserCancelledException {
+	public @NonNull App2FAResult waitForApp2FA() throws UserCancelledException {
 		return Display.getDefault().syncCall(() -> {
-			MobileBKUFingerprintComposite bio = getMobileBKUFingerprintComposite();
+			MobileBKUNeedsAppComposite bio = getMobileBKUNeedsAppComposite();
 
 			readAndDispatchSWTUntil(() -> bio.isDone());
 
@@ -524,17 +458,17 @@ public class MobileBKUState extends State {
 			}
 
 			if (bio.wasSMSClicked())
-				return AppBiometryResult.TO_SMS;
+				return App2FAResult.TO_SMS;
 			
 			if (bio.wasFIDO2Clicked())
-				return AppBiometryResult.TO_FIDO2;
+				return App2FAResult.TO_FIDO2;
 
-			return AppBiometryResult.UPDATE;
+			return App2FAResult.UPDATE;
 		});
 	}
 
-	public void signalAppBiometryDone() {
-		getMobileBKUFingerprintComposite().signalPollingDone();
+	public void signalApp2FADone() {
+		getMobileBKUNeedsAppComposite().signalPollingDone();
 	}
 
 	public static class FIDO2Result {
@@ -613,8 +547,6 @@ public class MobileBKUState extends State {
 			this.mobileBKUEnterTANComposite.dispose();
 		if (this.waitingComposite != null)
 			this.waitingComposite.dispose();
-		if (this.waitingForAppComposite != null)
-			this.waitingForAppComposite.dispose();
 	}
 
 	/*

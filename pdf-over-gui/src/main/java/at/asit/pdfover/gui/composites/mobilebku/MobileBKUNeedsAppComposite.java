@@ -39,9 +39,9 @@ import at.asit.pdfover.gui.workflow.states.State;
 import at.asit.webauthnclient.WebAuthN;
 
 /**
- * Composite for displaying the QR code for the mobile BKU
+ * Composite for generically prompting the user to confirm using mobile 2FA
  */
-public class MobileBKUFingerprintComposite extends StateComposite {
+public class MobileBKUNeedsAppComposite extends StateComposite {
 	private Label lblError;
 	private Label lblRefValLabel;
 	private Label lblFPLabel;
@@ -97,7 +97,7 @@ public class MobileBKUFingerprintComposite extends StateComposite {
 	 * @param style
 	 * @param state
 	 */
-	public MobileBKUFingerprintComposite(Composite parent, int style, State state) {
+	public MobileBKUNeedsAppComposite(Composite parent, int style, State state) {
 		super(parent, style, state);
 		setLayout(new FormLayout());
 

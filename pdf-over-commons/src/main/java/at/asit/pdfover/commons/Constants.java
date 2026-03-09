@@ -110,7 +110,7 @@ public class Constants {
 
 	/** How far to displace the signature with the arrow keys */
 	public static final int SIGNATURE_KEYBOARD_POSITIONING_OFFSET = 15;
-
+	
 	/** Current release file */
 	public static final String CURRENT_RELEASE_URL = "https://updates.a-sit.at/pdf-over/Release.txt";
 
