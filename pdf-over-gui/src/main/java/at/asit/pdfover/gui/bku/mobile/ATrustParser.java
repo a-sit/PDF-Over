@@ -180,26 +180,13 @@ public class ATrustParser {
         }
     }
 
-    public static class WaitingForAppBlock extends TopLevelFormBlock {
+    public static class WaitingForApp2FABlock extends TopLevelFormBlock {
         public final @NonNull String referenceValue;
         public final @NonNull URI pollingURI;
 
-        private WaitingForAppBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
+        private WaitingForApp2FABlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
-            abortIfElementMissing("#smartphoneAnimation");
-
-            this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
-            this.pollingURI = getLongPollURI();            
-        }
-    }
-
-    public static class WaitingForBiometryBlock extends TopLevelFormBlock {
-        public final @NonNull String referenceValue;
-        public final @NonNull URI pollingURI;
-
-        private WaitingForBiometryBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
-            super(htmlDocument, formOptions);
-            abortIfElementMissing("#biometricimage");
+            abortIfElementMissing("#smartphoneAnimation, #biometricimage, .ida-signtype #SignType");
 
             this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.pollingURI = getLongPollURI();
@@ -239,8 +226,7 @@ public class ATrustParser {
         public final UsernamePasswordBlock usernamePasswordBlock;
         public final SMSTanBlock smsTanBlock;
         public final QRCodeBlock qrCodeBlock;
-        public final WaitingForAppBlock waitingForAppBlock;
-        public final WaitingForBiometryBlock waitingForBiometryBlock;
+        public final WaitingForApp2FABlock waitingForApp2FABlock;
         public final Fido2Block fido2Block;
 
         private void validate() {
@@ -252,8 +238,7 @@ public class ATrustParser {
             if (usernamePasswordBlock != null) populated.add("usernamePasswordBlock");
             if (smsTanBlock != null) populated.add("smsTanBlock");
             if (qrCodeBlock != null) populated.add("qrCodeBlock");
-            if (waitingForAppBlock != null) populated.add("waitingForAppBlock");
-            if (waitingForBiometryBlock != null) populated.add("waitingForBiometryBlock");
+            if (waitingForApp2FABlock != null) populated.add("waitingForApp2FABlock");
             if (fido2Block != null) populated.add("fido2Block");
 
             switch (populated.size()) {
@@ -339,8 +324,7 @@ public class ATrustParser {
             this.usernamePasswordBlock = TryParseMainBlock(UsernamePasswordBlock.class);
             this.smsTanBlock = TryParseMainBlock(SMSTanBlock.class);
             this.qrCodeBlock = TryParseMainBlock(QRCodeBlock.class);
-            this.waitingForAppBlock = TryParseMainBlock(WaitingForAppBlock.class);
-            this.waitingForBiometryBlock = TryParseMainBlock(WaitingForBiometryBlock.class);
+            this.waitingForApp2FABlock = TryParseMainBlock(WaitingForApp2FABlock.class);
             this.fido2Block = TryParseMainBlock(Fido2Block.class);
             
             validate();
