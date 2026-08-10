@@ -16,28 +16,23 @@
 package at.asit.pdfover.gui.composites;
 
 // Imports
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+
+import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.signer.pdfas.PdfAs4SignatureParameter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import javax.swing.JPanel;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.rendering.PDFRenderer;
-
-import at.asit.pdfover.commons.Messages;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -168,14 +163,13 @@ public class SignaturePanel extends JPanel {
 	/**
 	 * Set the signature placeholder image
 	 * @param placeholder signature placeholder
-	 * @param width width of the placeholder in page space
-	 * @param height height of the placeholder in page space
 	 */
 	public void setSignaturePlaceholder(Image placeholder) {
 		this.sigPlaceholder = placeholder;
-		// TODO figure out why this is divided by 4 (factor ported from old code)
-		this.sigPageWidth = placeholder.getWidth(null) / 4;
-		this.sigPageHeight = placeholder.getHeight(null) / 4;
+
+		// the size gets scaled down so it looks better
+		this.sigPageWidth = placeholder.getWidth(null) / PdfAs4SignatureParameter.SIG_PREVIEW_SCALING_FACTOR;
+		this.sigPageHeight = placeholder.getHeight(null) / PdfAs4SignatureParameter.SIG_PREVIEW_SCALING_FACTOR;
 		renderPageToImage();
 		if (this.sigPagePos != null)
 			setSignaturePosition(this.sigPagePos.getX(), this.sigPagePos.getY());
@@ -304,6 +298,15 @@ public class SignaturePanel extends JPanel {
 		Dimension renderPanelSize = getSize();
 		g.setColor(getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
+
+		if (g instanceof Graphics2D){
+			// this will make the rendering look much better
+			var g2d = ((Graphics2D) g);
+			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		}
+
 		if (this.currentImage == null) {
 			g.setColor(Color.black);
 			g.drawString(Messages.getString("common.working"), getWidth() / 2 - 30, getHeight() / 2);
