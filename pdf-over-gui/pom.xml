@@ -12,12 +12,12 @@
 		<pdfover-build.root-dir>${project.basedir}${file.separator}..</pdfover-build.root-dir>
 		<pdfover-build.output-dir>${pdfover-build.root-dir}/pdf-over-build</pdfover-build.output-dir>
 		<pdfover-build.staging-dir>${project.build.directory}/staging/${pdfover-build.output-filename}</pdfover-build.staging-dir>
-		<pdfover-build.swt-version>4.35</pdfover-build.swt-version>
+		<pdfover-build.swt-version>3.129.0</pdfover-build.swt-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.swt</groupId>
+			<groupId>org.eclipse.platform</groupId>
 			<artifactId>${pdfover-build.swt-artifact-id}</artifactId>
 			<version>${pdfover-build.swt-version}</version>
 		</dependency>
@@ -191,7 +191,7 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<excludeScope>system</excludeScope> <!-- this excludes tools.jar, e.g. -->
-							<excludeGroupIds>org.codehaus.izpack,org.eclipse.swt</excludeGroupIds>
+							<excludeGroupIds>org.codehaus.izpack,org.eclipse.platform</excludeGroupIds>
 						</configuration>
 					</execution>
 					<execution>
@@ -204,7 +204,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.eclipse.swt</groupId>
+									<groupId>org.eclipse.platform</groupId>
 									<artifactId>${pdfover-build.swt-artifact-id}</artifactId>
 									<version>${pdfover-build.swt-version}</version>
 									<type>jar</type>
