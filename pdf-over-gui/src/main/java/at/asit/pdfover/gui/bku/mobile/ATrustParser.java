@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ATrustParser {
     private static class ComponentParseFailed extends Exception {}
 
+    public static record PollInfo(@NonNull URI uri, @NonNull String bearerToken) {}
     private static class TopLevelFormBlock {
         protected final @NonNull org.jsoup.nodes.Document htmlDocument;
         protected final @NonNull Map<String, String> formOptions;
@@ -48,20 +49,28 @@ public class ATrustParser {
                 throw new ComponentParseFailed();
             }
         }
-        protected @NonNull URI getLongPollURI() throws ComponentParseFailed {
+        protected @NonNull PollInfo getLongPollInfo() throws ComponentParseFailed {
             var pollingScriptElm = getElementEnsureNotNull("#jsLongPoll script");
             String pollingScript = pollingScriptElm.data();
             int startIdx = pollingScript.indexOf("qrpoll(\"");
             if (startIdx < 0) { log.warn("Failed to find 'qrpoll(\"' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
             startIdx += 8;
 
-            int endIdx = pollingScript.indexOf("\");", startIdx);
-            if (endIdx < 0) { log.warn("Failed to find qrpoll terminator '\");' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+            int midIdx = pollingScript.indexOf("\", \"", startIdx);
+            if (midIdx < 0) { log.warn("Failed to find qrpoll midpoint '\", \"' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+            String pollingUriString = pollingScript.substring(startIdx, midIdx);
 
-            String pollingUriString = pollingScript.substring(startIdx, endIdx);
+            int endIdx = pollingScript.indexOf("\");", midIdx+4);
+            if (endIdx < 0) { log.warn("Failed to find qrpoll terminator '\");' in jsLongPoll script:\n{}", pollingScript); throw new ComponentParseFailed(); }
+            String pollingSid = pollingScript.substring(midIdx+4, endIdx);
+
+            
             try {
-                return new URI(pollingScriptElm.baseUri()).resolve(pollingUriString);
-            } catch (URISyntaxException e) {
+                return new PollInfo(
+                    new URI(pollingScriptElm.baseUri()).resolve(pollingUriString),
+                    pollingSid
+                );
+            } catch (URISyntaxException|IllegalArgumentException e) {
                 log.warn("Long-poll URI '{}' could not be parsed", pollingUriString);
                 throw new ComponentParseFailed();
             }
@@ -165,7 +174,7 @@ public class ATrustParser {
     public static class QRCodeBlock extends TopLevelFormBlock {
         public final @NonNull String referenceValue;
         public final @NonNull URI qrCodeURI;
-        public final @NonNull URI pollingURI;
+        public final @NonNull PollInfo pollingInfo;
         public final String errorMessage;
 
         private QRCodeBlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
@@ -174,7 +183,7 @@ public class ATrustParser {
             
             this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
             this.qrCodeURI = getURIAttributeEnsureNotNull("#qrimage", "abs:src");
-            this.pollingURI = getLongPollURI();
+            this.pollingInfo = getLongPollInfo();
 
             this.errorMessage = null;
         }
@@ -182,14 +191,14 @@ public class ATrustParser {
 
     public static class WaitingForApp2FABlock extends TopLevelFormBlock {
         public final @NonNull String referenceValue;
-        public final @NonNull URI pollingURI;
+        public final @NonNull PollInfo pollingInfo;
 
         private WaitingForApp2FABlock(@NonNull org.jsoup.nodes.Document htmlDocument, @NonNull Map<String, String> formOptions) throws ComponentParseFailed {
             super(htmlDocument, formOptions);
             abortIfElementMissing("#smartphoneAnimation, #biometricimage, .ida-signtype #SignType");
 
             this.referenceValue = getElementEnsureNotNull("#vergleichswert").ownText();
-            this.pollingURI = getLongPollURI();
+            this.pollingInfo = getLongPollInfo();
         }
     }
 
