@@ -299,9 +299,10 @@ public class MobileBKUConnector implements BkuSlConnector {
             try { Thread.sleep(500); } catch (InterruptedException e2) {}
         }
 
-        public LongPollThread(URI uri, Runnable signal) {
+        public LongPollThread(ATrustParser.PollInfo uri, Runnable signal) {
             log.debug("LongPollThread setup for '{}'", uri);
-            this.request = new HttpGet(uri);
+            this.request = new HttpGet(uri.uri());
+            this.request.addHeader("Authorization", "Bearer "+uri.bearerToken());
             this.signal = signal;
         }
 
@@ -386,7 +387,7 @@ public class MobileBKUConnector implements BkuSlConnector {
             return new HttpGet(html.htmlDocument.baseUri());
         }
         if (html.qrCodeBlock != null) {
-            try (LongPollThread longPollThread = new LongPollThread(html.qrCodeBlock.pollingURI, () -> { this.state.signalQRScanned(); })) {
+            try (LongPollThread longPollThread = new LongPollThread(html.qrCodeBlock.pollingInfo, () -> { this.state.signalQRScanned(); })) {
                 this.state.showQRCode(html.qrCodeBlock.referenceValue, html.qrCodeBlock.qrCodeURI, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null, html.qrCodeBlock.errorMessage);
                 longPollThread.start();
                 var result = this.state.waitForQRCodeResult();
@@ -399,7 +400,7 @@ public class MobileBKUConnector implements BkuSlConnector {
             }
         }
         if (html.waitingForApp2FABlock != null) {
-            try (LongPollThread longPollThread = new LongPollThread(html.waitingForApp2FABlock.pollingURI, () -> { this.state.signalApp2FADone(); })) {
+            try (LongPollThread longPollThread = new LongPollThread(html.waitingForApp2FABlock.pollingInfo, () -> { this.state.signalApp2FADone(); })) {
                 this.state.showWaitingForApp2FA(html.waitingForApp2FABlock.referenceValue, html.signatureDataLink, html.smsTanLink != null, html.fido2Link != null);
                 longPollThread.start();
                 var result = this.state.waitForApp2FA();
