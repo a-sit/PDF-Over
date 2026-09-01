@@ -15,50 +15,50 @@
  */
 package at.asit.pdfover.gui.composites;
 
-// Imports
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import javax.swing.JPanel;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import at.asit.pdfover.commons.Messages;
+import at.asit.pdfover.commons.utils.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *
+ * Displays a PDF page and allows the user to place the signature placeholder.
  */
 @Slf4j
-public class SignaturePanel extends JPanel {
-
-	/** Default serial version ID */
-	private static final long serialVersionUID = 1L;
+public class SignaturePanel extends Canvas {
 
 	/** The PDF file being displayed */
 	private PDDocument pdf = null;
 	private PDFRenderer renderer = null;
 
 	/** The image of the rendered PDF page being displayed */
-	Image currentImage = null;
+	private Image currentImage = null;
 
 	/** The current scale for rendering pdf to image */
 	private float pageToImageScale;
 	/** The current scale for rendering image to screen */
-	private double imageToScreenScale;
+	private double imageToScreenScale = 1.0;
 	/* scaling */
 	private enum U {
 		/* (0,0) is bottom-left of page */
@@ -106,6 +106,7 @@ public class SignaturePanel extends JPanel {
 	private int offY = 0;
 	/** The position of the top-left corner of the signature, in absolute page space */
 	private Point2D sigPagePos = null;
+	private Point2D pendingSigPagePos = null;
 	public Point2D getSigPagePos() { return this.sigPagePos; }
 	/** The signature placeholder image */
 	private Image sigPlaceholder = null;
@@ -114,31 +115,36 @@ public class SignaturePanel extends JPanel {
 	/** Height of the signature placeholder in page space */
 	private int sigPageHeight = 0;
 	/** Color of the signature placeholder border */
-	private Color sigPlaceholderBorderColor = Color.BLUE;
+	private Color sigPlaceholderBorderColor = null;
 	/** Current page */
 	private int currentPageNo = 0;
 	/** Number of pages in the document */
 	private int numPages = 0;
 	/** Cursor types */
 	private static enum Cursors {DEFAULT, HAND, MOVE};
-	/** Default arrow cursor */
-	private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-	/** Hand cursor */
-	private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-	/** Move cursor */
-	private final Cursor moveCursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 	/** Current cursor */
 	private Cursors currentCursor = Cursors.DEFAULT;
+	private final AtomicInteger renderGeneration = new AtomicInteger();
+	private final Object renderLock = new Object();
+	private boolean doDrag = false;
+	private int dragXOffset = 0;
+	private int dragYOffset = 0;
+	private Runnable signaturePositionAvailableCallback = null;
 
 	/**
 	 * Create a new PagePanel.
 	 */
-	public SignaturePanel() {
-		super(new BorderLayout());
+	public SignaturePanel(Composite parent, int style) {
+		super(parent, style | SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED);
 		setDocument(null);
-		setFocusable(true);
+		addPaintListener(e -> paint(e.gc));
 		addMouseListener(this.mouseListener);
-		addMouseMotionListener(this.mouseListener);
+		addMouseMoveListener(this.mouseMoveListener);
+		addDisposeListener(e -> {
+			this.renderGeneration.incrementAndGet();
+			disposeCurrentImage();
+			disposePlaceholder();
+		});
 	}
 
 	/**
@@ -146,40 +152,55 @@ public class SignaturePanel extends JPanel {
 	 * @param pdf the PDFFile to be displayed
 	 */
 	public void setDocument(PDDocument pdf) {
-		this.pdf = pdf;
-		this.sigPagePos = null;
-		if (pdf != null)
-		{
-			this.renderer = new PDFRenderer(pdf);
-			this.numPages = pdf.getNumberOfPages();
-			this.currentPageNo = -1;
-			showPage(this.numPages);
+		if (isDisposed())
+			return;
+		this.renderGeneration.incrementAndGet();
+		synchronized (this.renderLock) {
+			this.pdf = pdf;
+			this.sigPagePos = null;
+			this.pendingSigPagePos = null;
+			if (pdf != null)
+			{
+				this.renderer = new PDFRenderer(pdf);
+				this.numPages = pdf.getNumberOfPages();
+				this.currentPageNo = -1;
+			}
+			else
+			{
+				this.renderer = null;
+				this.currentPageNo = 0;
+				this.numPages = 0;
+			}
 		}
-		else
-		{
-			this.renderer = null;
-			this.currentPageNo = 0;
-			this.numPages = 0;
-			renderPageToImage();
-			repaint();
+		if (pdf != null)
+			showPage(this.numPages);
+		else {
+			disposeCurrentImage();
+			if (!isDisposed())
+				redraw();
 		}
 	}
 
 	/**
 	 * Set the signature placeholder image
 	 * @param placeholder signature placeholder
-	 * @param width width of the placeholder in page space
-	 * @param height height of the placeholder in page space
 	 */
-	public void setSignaturePlaceholder(Image placeholder) {
-		this.sigPlaceholder = placeholder;
-		// TODO figure out why this is divided by 4 (factor ported from old code)
-		this.sigPageWidth = placeholder.getWidth(null) / 4;
-		this.sigPageHeight = placeholder.getHeight(null) / 4;
-		renderPageToImage();
+	public void setSignaturePlaceholder(ImageData placeholder) {
+		if (isDisposed())
+			return;
+		disposePlaceholder();
+		if (placeholder != null) {
+			this.sigPlaceholder = new Image(getDisplay(), placeholder);
+			// TODO figure out why this is divided by 4 (factor ported from old code)
+			this.sigPageWidth = placeholder.width / 4;
+			this.sigPageHeight = placeholder.height / 4;
+		} else {
+			this.sigPageWidth = 0;
+			this.sigPageHeight = 0;
+		}
 		if (this.sigPagePos != null)
 			setSignaturePosition(this.sigPagePos.getX(), this.sigPagePos.getY());
-		repaint();
+		redraw();
 	}
 
 	/**
@@ -187,7 +208,15 @@ public class SignaturePanel extends JPanel {
 	 * @param color new signature placeholder border color
 	 */
 	public void setSignaturePlaceholderBorderColor(Color color) {
+		if (isDisposed())
+			return;
 		this.sigPlaceholderBorderColor = color;
+	}
+
+	public void setSignaturePositionAvailableCallback(Runnable callback) {
+		if (isDisposed())
+			return;
+		this.signaturePositionAvailableCallback = callback;
 	}
 
 	/**
@@ -195,19 +224,12 @@ public class SignaturePanel extends JPanel {
 	 * @param page the number of the page to display
 	 */
 	public void showPage(int page) {
+		if (isDisposed())
+			return;
 		if (this.currentPageNo == page) return;
 		this.currentPageNo = page;
 		renderPageToImage();
-		repaint();
-	}
-
-	/**
-	 * Add and display a new page at the end of the document
-	 *
-	 * This page has the same dimensions as the old last page
-	 */
-	public void addNewLastPage() {
-		showPage(this.numPages + 1);
+		redraw();
 	}
 
 	/**
@@ -217,181 +239,217 @@ public class SignaturePanel extends JPanel {
 	 */
 	public void setSignaturePosition(double x, double y)
 	{
+		if (isDisposed())
+			return;
+		if (this.pageWidth <= 0 || this.pageHeight <= 0) {
+			this.pendingSigPagePos = new Point2D.Double(x, y);
+			return;
+		}
+		boolean hadNoSignaturePosition = (this.sigPagePos == null);
 		this.sigPagePos = new Point2D.Double(
 			clamp(x, 0, this.pageWidth - this.sigPageWidth),
 			clamp(y, this.sigPageHeight, this.pageHeight)
 		);
-		repaint();
+		if (hadNoSignaturePosition && this.signaturePositionAvailableCallback != null)
+			this.signaturePositionAvailableCallback.run();
+		redraw();
 	}
 
 	public void translateSignaturePagePosition(float dX, float dY) {
-		setSignaturePosition(this.sigPagePos.getX() + dX, this.sigPagePos.getY() + dY);
+		if (isDisposed())
+			return;
+		if (this.sigPagePos != null)
+			setSignaturePosition(this.sigPagePos.getX() + dX, this.sigPagePos.getY() + dY);
+	}
+
+	private void disposeCurrentImage() {
+		if (this.currentImage != null && !this.currentImage.isDisposed())
+			this.currentImage.dispose();
+		this.currentImage = null;
+	}
+
+	private void disposePlaceholder() {
+		if (this.sigPlaceholder != null && !this.sigPlaceholder.isDisposed())
+			this.sigPlaceholder.dispose();
+		this.sigPlaceholder = null;
 	}
 
 	/**
 	 * Stop the generation of any previous page, and draw the new one.
-	 *
-	 * @param page the PDFPage to draw.
 	 */
-	private synchronized void renderPageToImage() {
-		if (this.pdf == null)
-		{
-			this.currentImage = null;
+	private void renderPageToImage() {
+		if (isDisposed())
 			return;
-		}
+		final int generation = this.renderGeneration.incrementAndGet();
+		final int pageNo = this.currentPageNo;
+		final int screenHeight = getShell().getMonitor().getBounds().height;
+		final Display display = getDisplay();
 
-		boolean newPage = false;
-		PDPage currentPage;
-		// set up the new page
-		if (this.currentPageNo > this.numPages)
-		{
-			// New last page - use old last page as template
-			currentPage = this.pdf.getPage(this.numPages-1);
-			newPage = true;
-		}
-		else
-			currentPage = this.pdf.getPage(this.currentPageNo-1);
-
-
-		if (currentPage == null) {
-			// no page
-			this.currentImage = null;
-			return;
-		}
-		
-		boolean isRotated = ((currentPage.getRotation()%180) == 90);
-		PDRectangle actualPageSize = currentPage.getBBox();
-		this.pageWidth = isRotated ? actualPageSize.getHeight() : actualPageSize.getWidth();
-		this.pageHeight = isRotated ? actualPageSize.getWidth() : actualPageSize.getHeight();
-		this.pageToImageScale = getToolkit().getScreenSize().height / this.pageHeight;
-
-		// get the new image
-		if (newPage)
-		{
-			int renderHeight = (int)(0.5 + this.scale(this.pageHeight, U.PAGE_REL, U.IMAGE, Dim.X));
-			int renderWidth = (int)(0.5 + this.scale(this.pageWidth, U.PAGE_REL, U.IMAGE, Dim.Y));
-			this.currentImage = new BufferedImage(renderWidth, renderHeight, BufferedImage.TYPE_INT_RGB);
-			Graphics g = this.currentImage.getGraphics();
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, renderWidth, renderHeight);
-		}
-		else
-		{
-			int whichPage = Math.min(this.currentPageNo, this.numPages);
+		Thread renderThread = new Thread(() -> {
+			ImageData imageData = null;
+			float renderedPageWidth = 0;
+			float renderedPageHeight = 0;
+			float renderedScale = 1;
 
 			try {
-				this.currentImage = renderer.renderImage(whichPage-1, this.pageToImageScale);
-			} catch (IOException e) {
-				log.error(String.format("Failed to render image for page %d of %d", whichPage, this.numPages), e);
-				this.currentImage = null;
-			}
-		}
+				synchronized (this.renderLock) {
+					if (this.pdf == null || generation != this.renderGeneration.get())
+						return;
 
-		if (this.sigPagePos == null)
-		{
-			setSignaturePosition(
-				this.pageWidth * .5,
-				this.pageHeight * .25
-			);
-		}
+					boolean newPage = false;
+					PDPage currentPage;
+					if (pageNo > this.numPages)
+					{
+						currentPage = this.pdf.getPage(this.numPages-1);
+						newPage = true;
+					}
+					else
+						currentPage = this.pdf.getPage(pageNo-1);
+
+					if (currentPage == null)
+						return;
+
+					boolean isRotated = ((currentPage.getRotation()%180) == 90);
+					PDRectangle actualPageSize = currentPage.getBBox();
+					renderedPageWidth = isRotated ? actualPageSize.getHeight() : actualPageSize.getWidth();
+					renderedPageHeight = isRotated ? actualPageSize.getWidth() : actualPageSize.getHeight();
+					renderedScale = screenHeight / renderedPageHeight;
+
+					if (newPage)
+					{
+						int renderHeight = (int)(0.5 + (renderedPageHeight * renderedScale));
+						int renderWidth = (int)(0.5 + (renderedPageWidth * renderedScale));
+						BufferedImage blankImage = new BufferedImage(renderWidth, renderHeight, BufferedImage.TYPE_INT_RGB);
+						java.awt.Graphics g = blankImage.getGraphics();
+						g.setColor(java.awt.Color.WHITE);
+						g.fillRect(0, 0, renderWidth, renderHeight);
+						g.dispose();
+						imageData = ImageUtil.convertToSWT(blankImage);
+					}
+					else
+					{
+						int whichPage = Math.min(pageNo, this.numPages);
+						BufferedImage renderedImage = this.renderer.renderImage(whichPage-1, renderedScale);
+						imageData = ImageUtil.convertToSWT(convertToRGB(renderedImage));
+					}
+				}
+			} catch (IOException e) {
+				log.error(String.format("Failed to render image for page %d of %d", Math.min(pageNo, this.numPages), this.numPages), e);
+			} catch (RuntimeException e) {
+				log.error(String.format("Failed to prepare image for page %d of %d", Math.min(pageNo, this.numPages), this.numPages), e);
+			}
+
+			final ImageData finalImageData = imageData;
+			final float finalPageWidth = renderedPageWidth;
+			final float finalPageHeight = renderedPageHeight;
+			final float finalScale = renderedScale;
+			if (display.isDisposed())
+				return;
+			display.asyncExec(() -> {
+				if (isDisposed() || generation != this.renderGeneration.get())
+					return;
+				disposeCurrentImage();
+				this.pageWidth = finalPageWidth;
+				this.pageHeight = finalPageHeight;
+				this.pageToImageScale = finalScale;
+				if (finalImageData != null)
+					this.currentImage = new Image(display, finalImageData);
+				if (this.pendingSigPagePos != null) {
+					Point2D pendingPosition = this.pendingSigPagePos;
+					this.pendingSigPagePos = null;
+					setSignaturePosition(pendingPosition.getX(), pendingPosition.getY());
+				} else if (this.sigPagePos != null) {
+					setSignaturePosition(this.sigPagePos.getX(), this.sigPagePos.getY());
+				} else if (this.sigPagePos == null && this.pageWidth > 0 && this.pageHeight > 0) {
+					setSignaturePosition(this.pageWidth * .5, this.pageHeight * .25);
+				}
+				redraw();
+			});
+		}, "PDF-Over page renderer");
+		renderThread.setDaemon(true);
+		renderThread.start();
+	}
+
+	private static BufferedImage convertToRGB(BufferedImage image) {
+		if (image.getType() == BufferedImage.TYPE_INT_RGB)
+			return image;
+		BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		java.awt.Graphics g = rgbImage.getGraphics();
+		g.drawImage(image, 0, 0, java.awt.Color.WHITE, null);
+		g.dispose();
+		return rgbImage;
 	}
 
 	/**
 	 * Draw the image.
 	 */
-	@Override
-	public void paint(Graphics g) {
-		Dimension renderPanelSize = getSize();
-		g.setColor(getBackground());
-		g.fillRect(0, 0, getWidth(), getHeight());
+	private void paint(GC gc) {
+		Point renderPanelSize = getSize();
+		gc.setBackground(getBackground());
+		gc.fillRectangle(0, 0, renderPanelSize.x, renderPanelSize.y);
 		if (this.currentImage == null) {
-			g.setColor(Color.black);
-			g.drawString(Messages.getString("common.working"), getWidth() / 2 - 30, getHeight() / 2);
+			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			gc.drawString(Messages.getString("common.working"), Math.max(0, renderPanelSize.x / 2 - 30), Math.max(0, renderPanelSize.y / 2), true);
 		} else {
+			Rectangle imageBounds = this.currentImage.getBounds();
 			this.imageToScreenScale = Math.min(
-				renderPanelSize.getWidth() / this.currentImage.getWidth(null),
-				renderPanelSize.getHeight() / this.currentImage.getHeight(null));
-			// draw the image
-			int actualRenderWidth = (int)(this.currentImage.getWidth(null) * this.imageToScreenScale);
-			int actualRenderHeight = (int)(this.currentImage.getHeight(null) * this.imageToScreenScale);
+				renderPanelSize.x / (double)imageBounds.width,
+				renderPanelSize.y / (double)imageBounds.height);
+			int actualRenderWidth = (int)(imageBounds.width * this.imageToScreenScale);
+			int actualRenderHeight = (int)(imageBounds.height * this.imageToScreenScale);
 
-			// draw it centered within the panel
-			this.offX = (renderPanelSize.width - actualRenderWidth) / 2;
-			this.offY = (renderPanelSize.height - actualRenderHeight) / 2;
+			this.offX = (renderPanelSize.x - actualRenderWidth) / 2;
+			this.offY = (renderPanelSize.y - actualRenderHeight) / 2;
 
-			// draw document
-			g.drawImage(this.currentImage, this.offX, this.offY, actualRenderWidth, actualRenderHeight, null);
-			
+			gc.drawImage(this.currentImage, 0, 0, imageBounds.width, imageBounds.height, this.offX, this.offY, actualRenderWidth, actualRenderHeight);
 
-			// draw signature
+			if (this.sigPagePos == null)
+				return;
+
 			int sigX = (int) this.scale(this.sigPagePos.getX(), U.PAGE_ABS, U.SCREEN_ABS, Dim.X);
 			int sigY = (int) this.scale(this.sigPagePos.getY(), U.PAGE_ABS, U.SCREEN_ABS, Dim.Y);
 			if (this.sigPlaceholder == null) {
-				g.setColor(Color.red);
-				g.drawRect(sigX, sigY, 100, 40);
+				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+				gc.drawRectangle(sigX, sigY, 100, 40);
 			}
 			else {
+				Rectangle placeholderBounds = this.sigPlaceholder.getBounds();
 				int sigScreenWidth = (int)this.scale(this.sigPageWidth, U.PAGE_REL, U.SCREEN_REL, Dim.X);
 				int sigScreenHeight = (int)this.scale(this.sigPageHeight, U.PAGE_REL, U.SCREEN_REL, Dim.Y);
-				g.drawImage(this.sigPlaceholder, sigX, sigY, sigScreenWidth, sigScreenHeight, null);
-				g.setColor(this.sigPlaceholderBorderColor);
-				g.drawRect(sigX, sigY, sigScreenWidth-1, sigScreenHeight-1);
+				gc.drawImage(this.sigPlaceholder, 0, 0, placeholderBounds.width, placeholderBounds.height, sigX, sigY, sigScreenWidth, sigScreenHeight);
+				gc.setForeground(this.sigPlaceholderBorderColor != null ? this.sigPlaceholderBorderColor : getDisplay().getSystemColor(SWT.COLOR_BLUE));
+				gc.drawRectangle(sigX, sigY, sigScreenWidth-1, sigScreenHeight-1);
 			}
 		}
 	}
 
-	/**
-	 * Handles notification of the fact that some part of the image changed.
-	 * Repaints that portion.
-	 *
-	 * @return true if more updates are desired.
-	 */
-	@Override
-	public boolean imageUpdate(Image img, int infoflags, int x, int y,
-			int width, int height) {
-		if ((infoflags & (SOMEBITS | ALLBITS)) != 0) {
-			repaint(x + this.offX, y + this.offY, width, height);
+	private MouseMoveListener mouseMoveListener = evt -> {
+		if (this.doDrag) {
+			updateSigPosDrag(evt);
+			return;
 		}
-		return ((infoflags & (ALLBITS | ERROR | ABORT)) == 0);
-	}
+		try {
+			boolean onSig = isOnSignature(evt);
+			setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
+		} catch (NullPointerException e) {
+			// do nothing
+		}
+	};
 
 	private MouseAdapter mouseListener = new MouseAdapter() {
-
-		private boolean doDrag = false;
-		private int dragXOffset = 0;
-		private int dragYOffset = 0;
-
-		private void updateSigPosDrag(MouseEvent evt) {
-			SignaturePanel.this.setSignaturePosition(
-				SignaturePanel.this.scale(evt.getX() - this.dragXOffset, U.SCREEN_ABS, U.PAGE_ABS, Dim.X),
-				SignaturePanel.this.scale(evt.getY() - this.dragYOffset, U.SCREEN_ABS, U.PAGE_ABS, Dim.Y)
-			);
-		}
-
-		/** Handles a mouseMoved event */
-		@Override
-		public void mouseMoved(MouseEvent evt) {
-			try {
-				boolean onSig = isOnSignature(evt);
-				setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
-			} catch (NullPointerException e) {
-				// do nothing
-			}
-		}
-
 		/** Handles a mousePressed event */
 		@Override
-		public void mousePressed(MouseEvent evt) {
-			if (evt.getButton() == MouseEvent.BUTTON1)
+		public void mouseDown(MouseEvent evt) {
+			if (evt.button == 1)
 			{
-				this.doDrag = true;
+				setFocus();
+				SignaturePanel.this.doDrag = true;
 				if (isOnSignature(evt)) {
-					/* offsets (in screen units) from top-left corner of signature to cursor on drag start */
-					this.dragXOffset = (int)(evt.getX() - SignaturePanel.this.scale(SignaturePanel.this.sigPagePos.getX(), U.PAGE_ABS, U.SCREEN_ABS, Dim.X));
-					this.dragYOffset = (int)(evt.getY() - SignaturePanel.this.scale(SignaturePanel.this.sigPagePos.getY(), U.PAGE_ABS, U.SCREEN_ABS, Dim.Y));
+					SignaturePanel.this.dragXOffset = (int)(evt.x - SignaturePanel.this.scale(SignaturePanel.this.sigPagePos.getX(), U.PAGE_ABS, U.SCREEN_ABS, Dim.X));
+					SignaturePanel.this.dragYOffset = (int)(evt.y - SignaturePanel.this.scale(SignaturePanel.this.sigPagePos.getY(), U.PAGE_ABS, U.SCREEN_ABS, Dim.Y));
 				} else {
-					this.dragXOffset = 0;
-					this.dragYOffset = 0;
+					SignaturePanel.this.dragXOffset = 0;
+					SignaturePanel.this.dragYOffset = 0;
 				}
 				updateSigPosDrag(evt);
 				setCursor(Cursors.MOVE);
@@ -400,21 +458,19 @@ public class SignaturePanel extends JPanel {
 
 		/** Handles a mouseReleased event */
 		@Override
-		public void mouseReleased(MouseEvent evt) {
-			this.doDrag = false;
+		public void mouseUp(MouseEvent evt) {
+			SignaturePanel.this.doDrag = false;
 			boolean onSig = isOnSignature(evt);
 			setCursor(onSig ? Cursors.HAND : Cursors.DEFAULT);
 		}
-
-		/**
-		 * Handles a mouseDragged event.
-		 */
-		@Override
-		public void mouseDragged(MouseEvent evt) {
-			if (this.doDrag)
-				updateSigPosDrag(evt);
-		}
 	};
+
+	private void updateSigPosDrag(MouseEvent evt) {
+		setSignaturePosition(
+			scale(evt.x - this.dragXOffset, U.SCREEN_ABS, U.PAGE_ABS, Dim.X),
+			scale(evt.y - this.dragYOffset, U.SCREEN_ABS, U.PAGE_ABS, Dim.Y)
+		);
+	}
 
 	/**
 	 * Sets the mouse cursor
@@ -425,25 +481,21 @@ public class SignaturePanel extends JPanel {
 		if (this.currentCursor == cursor)
 			return;
 		this.currentCursor = cursor;
-		Cursor cur = null;
 		switch (cursor) {
 			case DEFAULT:
-				cur = this.defaultCursor;
+				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 				break;
 			case HAND:
-				cur = this.handCursor;
+				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 				break;
 			case MOVE:
-				cur = this.moveCursor;
+				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
 				break;
 		}
-		this.getParent().setCursor(cur);
 	}
 
 	/**
 	 * Check whether given point is on signature placeholder
-	 * @param x x coordinate (screen)
-	 * @param y y coordinate (screen)
 	 * @return true if given point is on signature placeholder
 	 */
 	private boolean isOnSignature(MouseEvent evt)
@@ -451,13 +503,11 @@ public class SignaturePanel extends JPanel {
 		if (this.sigPagePos == null)
 			return false;
 
-		Rectangle2D sig = new Rectangle2D.Double(
-			this.scale(this.sigPagePos.getX(), U.PAGE_ABS, U.SCREEN_ABS, Dim.X),
-			this.scale(this.sigPagePos.getY(), U.PAGE_ABS, U.SCREEN_ABS, Dim.Y),
-			this.scale(this.sigPageWidth, U.PAGE_REL, U.SCREEN_REL, Dim.X),
-			this.scale(this.sigPageHeight, U.PAGE_REL, U.SCREEN_REL, Dim.Y)
-		);
-		return sig.contains(evt.getX(), evt.getY());
+		double sigX = this.scale(this.sigPagePos.getX(), U.PAGE_ABS, U.SCREEN_ABS, Dim.X);
+		double sigY = this.scale(this.sigPagePos.getY(), U.PAGE_ABS, U.SCREEN_ABS, Dim.Y);
+		double sigWidth = this.scale(this.sigPageWidth, U.PAGE_REL, U.SCREEN_REL, Dim.X);
+		double sigHeight = this.scale(this.sigPageHeight, U.PAGE_REL, U.SCREEN_REL, Dim.Y);
+		return (evt.x >= sigX) && (evt.x <= (sigX + sigWidth)) && (evt.y >= sigY) && (evt.y <= (sigY + sigHeight));
 	}
 
 	/**

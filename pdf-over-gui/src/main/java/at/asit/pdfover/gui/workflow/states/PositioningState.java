@@ -63,6 +63,8 @@ public class PositioningState extends State {
 
 		if (this.document != null)
 		{
+			if (this.positionComposite != null && !this.positionComposite.isDisposed())
+				this.positionComposite.clearDocument();
 			try { this.document.close(); } catch (IOException e) { log.warn("Failed to close PDF", e); }
 			this.document = null;
 		}
@@ -117,7 +119,7 @@ public class PositioningState extends State {
 
 		PdfAs4SignaturePlaceholder.For(param, (p) -> {
 			if (p.hasImage())
-				this.positionComposite.setPlaceholder(p.getAWTImage());
+				this.positionComposite.setPlaceholder(p.getSWTImage());
 		});
 
 		if (this.previousPosition != null && !this.previousPosition.useAutoPositioning())
