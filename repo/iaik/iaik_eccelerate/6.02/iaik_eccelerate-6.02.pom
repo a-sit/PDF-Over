@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>iaik</groupId>
-  <artifactId>iaik_eccelerate_cms</artifactId>
-  <version>3.01</version>
+  <artifactId>iaik_eccelerate</artifactId>
+  <version>6.02</version>
   <description>POM was created from install:install-file</description>
 </project>

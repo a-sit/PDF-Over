@@ -16,8 +16,8 @@
 package at.asit.pdfover.signer.pdfas;
 
 // Imports
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
 
 import at.asit.pdfover.signer.BkuSlConnector;
 import at.asit.pdfover.signer.SignatureException;
