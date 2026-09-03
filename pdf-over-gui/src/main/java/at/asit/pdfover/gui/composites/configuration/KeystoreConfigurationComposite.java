@@ -450,8 +450,10 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 		String ks = config.keystoreFile;
 		performKeystoreFileChanged(ks);
 		performKeystoreTypeChanged(config.keystoreType);
-		performKeystorePassStorageTypeChanged(config.keystorePassStorageType);
 		performKeystoreStorePassChanged(config.keystoreStorePass);
+		performKeystoreKeyPassChanged(config.keystoreKeyPass);
+		// attn: order matters here, password fields need to come before storage type (since the storage type setter sets them from the text boxes)
+		performKeystorePassStorageTypeChanged(config.keystorePassStorageType);
 		try {
 			File ksf = new File(ks);
 			if (ksf.exists() && config.keystoreStorePass != null)
@@ -460,7 +462,6 @@ public class KeystoreConfigurationComposite extends ConfigurationCompositeBase {
 			log.info("Failed to load keystore on init", e);
 		}
 		performKeystoreAliasChanged(config.keystoreAlias);
-		performKeystoreKeyPassChanged(config.keystoreKeyPass);
 	}
 
 	@Override
