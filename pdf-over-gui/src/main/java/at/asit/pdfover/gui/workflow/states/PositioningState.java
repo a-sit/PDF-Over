@@ -19,6 +19,7 @@ package at.asit.pdfover.gui.workflow.states;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.eclipse.swt.SWT;
@@ -75,7 +76,7 @@ public class PositioningState extends State {
 		PDDocument pdf = null;
 		try
 		{
-			pdf = PDDocument.load(documentPath);
+			pdf = Loader.loadPDF(documentPath);
 			if (pdf.getNumberOfPages() > 0)
 				pdf.getPage(0);
 			else

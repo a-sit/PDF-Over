@@ -4,6 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>iaik</groupId>
   <artifactId>iaik_cms</artifactId>
-  <version>2.15</version>
+  <version>5.1.1</version>
   <description>POM was created from install:install-file</description>
 </project>

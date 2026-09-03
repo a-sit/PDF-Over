@@ -1,5 +1,18 @@
 #!/bin/bash
 
+orig="$PWD"
+if [[ "$orig" != /tmp/* ]]; then
+    tmp=$(mktemp -d)
+
+    mvn clean
+    cp -a . "$tmp/repo"
+
+    cd "$tmp/repo"
+    ./release-instructions/publish.sh "$@"
+
+    cp -a pdf-over-build "$orig/"
+fi
+
 #### CONFIGURE: ######
 LOG_DIR="/tmp/pdfover_log"
 

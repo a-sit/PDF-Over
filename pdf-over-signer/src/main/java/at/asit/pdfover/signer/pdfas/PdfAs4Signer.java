@@ -3,8 +3,6 @@ package at.asit.pdfover.signer.pdfas;
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
-import javax.activation.DataSource;
-
 import at.asit.pdfover.commons.Constants;
 import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.signer.ByteArrayDocumentSource;
@@ -87,7 +85,7 @@ public class PdfAs4Signer {
 
 			PdfAs4SigningState state = new PdfAs4SigningState();
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			DataSource input = new ByteArrayDataSource(parameter.inputDocument.getByteArray());
+			ByteArrayDataSource input = new ByteArrayDataSource(parameter.inputDocument.getByteArray());
 			SignParameter param = PdfAsFactory.createSignParameter(config, input, output);
 			if (sigPos != null) {
 				param.setSignaturePosition(sigPos);

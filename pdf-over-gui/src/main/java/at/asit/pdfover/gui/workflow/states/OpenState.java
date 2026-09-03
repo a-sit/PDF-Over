@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import at.gv.egiz.pdfas.lib.impl.pdfbox2.placeholder.SignatureFieldsAndPlaceHolderExtractor;
-
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 //Imports
@@ -43,6 +42,7 @@ import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.gui.workflow.config.ConfigurationManager;
 import at.asit.pdfover.signer.SignaturePosition;
+import at.gv.egiz.pdfas.lib.impl.pdfbox3.PDFBoxPlaceholderExtractor;
 import at.gv.egiz.pdfas.lib.impl.placeholder.SignaturePlaceholderData;
 import lombok.extern.slf4j.Slf4j;
 
@@ -127,7 +127,7 @@ public class OpenState extends State {
 		// scan for signature placeholders
 		// - see if we want to scan for placeholders in the settings
 		if (config.getEnablePlaceholderUsage()) {
-			try (PDDocument pddocument = PDDocument.load(getStateMachine().status.document)) {
+			try (PDDocument pddocument = Loader.loadPDF(getStateMachine().status.document)) {
 				// - scan for placeholders
 				boolean useSignatureFields = config.getUseSignatureFields();
 				boolean useMarker = config.getUseMarker();
@@ -135,7 +135,7 @@ public class OpenState extends State {
 				//first check the signature fields placeholder
 				if (useSignatureFields) {
 
-					List<String> fields = SignatureFieldsAndPlaceHolderExtractor.findEmptySignatureFields(pddocument);
+					List<String> fields = PDFBoxPlaceholderExtractor.findEmptySignatureFields(pddocument);
 
 					if (fields.size() > 0) {
 						while (true)
@@ -183,7 +183,7 @@ public class OpenState extends State {
 					// second check if qr code placeholder search is enabled
 				} else if (useMarker) {
 
-					SignaturePlaceholderData signaturePlaceholderData = SignatureFieldsAndPlaceHolderExtractor.getNextUnusedSignaturePlaceHolder(pddocument);
+					SignaturePlaceholderData signaturePlaceholderData = PDFBoxPlaceholderExtractor.getNextUnusedSignaturePlaceholder(pddocument);
 
 					if (null != signaturePlaceholderData) {
 
