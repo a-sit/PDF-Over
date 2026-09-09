@@ -51,7 +51,7 @@ else
 	end_phase "FAILED"
 fi
 
-profiles=( linux windows mac mac-aarch64 )
+profiles=( linux linux-aarch64 windows mac mac-aarch64 )
 if [[ "$1" != "" ]] && [[ "$1" == "--profiles" ]]; then
 	profiles=( $2 )
 	shift
