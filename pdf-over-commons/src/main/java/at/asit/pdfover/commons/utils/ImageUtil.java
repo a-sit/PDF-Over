@@ -167,9 +167,14 @@ public final class ImageUtil {
 	}
 
 	public static java.awt.Image debugDisplayImage(java.awt.Image image) {
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(new ImageIcon(image)));
-		JOptionPane.showMessageDialog(null, new JScrollPane(panel));
+		// note that the image does not render correctly
+		// if this function is called from an AWT Event thread
+		// wrapping it all in a thread seams to fix the problem
+		new Thread(() -> {
+			JPanel panel = new JPanel();
+			panel.add(new JLabel(new ImageIcon(image)));
+			JOptionPane.showMessageDialog(null, new JScrollPane(panel));
+		}).start();
 		return image;
 	}
 

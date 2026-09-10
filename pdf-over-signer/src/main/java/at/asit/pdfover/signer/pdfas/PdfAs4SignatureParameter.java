@@ -17,13 +17,9 @@ package at.asit.pdfover.signer.pdfas;
 
 //Imports
 
-import iaik.x509.X509Certificate;
-import lombok.extern.slf4j.Slf4j;
-
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.util.Locale;
-
+import at.asit.pdfover.commons.BKUs;
+import at.asit.pdfover.commons.Constants;
+import at.asit.pdfover.commons.Profile;
 import at.asit.pdfover.signer.DocumentSource;
 import at.asit.pdfover.signer.Emblem;
 import at.asit.pdfover.signer.SignaturePosition;
@@ -31,16 +27,25 @@ import at.gv.egiz.pdfas.lib.api.Configuration;
 import at.gv.egiz.pdfas.lib.api.PdfAs;
 import at.gv.egiz.pdfas.lib.api.PdfAsFactory;
 import at.gv.egiz.pdfas.lib.api.sign.SignParameter;
-import at.asit.pdfover.commons.BKUs;
-import at.asit.pdfover.commons.Constants;
-import at.asit.pdfover.commons.Profile;
+import iaik.x509.X509Certificate;
+import lombok.extern.slf4j.Slf4j;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Locale;
 
 /**
  * Implementation of SignatureParameter for PDF-AS 4 Library
  */
 @Slf4j
 public class PdfAs4SignatureParameter {
-    
+
+    /**
+     * This value scales the preview image that is generated, we then downscale
+     * it with filtering to get a cleaner image
+     */
+    public static final int SIG_PREVIEW_SCALING_FACTOR = 2;
+
     /**
      * this is set by CliArguments.InvisibleProfile
      * TODO: this is a no good, very bad, hack
@@ -116,12 +121,15 @@ public class PdfAs4SignatureParameter {
                 }
                 SignParameter param = PdfAsFactory.createSignParameter(conf, null, null);
                 param.setSignatureProfileId(sigProfile);
-                
-                return pdfas.generateVisibleSignaturePreview(param, cert, 72 * 4);
+
+                // 72 is the number of typography dots in an inch
+                return pdfas.generateVisibleSignaturePreview(param, cert, 72 * SIG_PREVIEW_SCALING_FACTOR);
             }
         } catch (Exception e) {
             log.error("Failed to get signature placeholder", e);
-            return new BufferedImage(229, 77, BufferedImage.TYPE_INT_RGB);
+            // these hardcoded values come from pdfas.generateVisibleSignaturePreview(param, cert, 72);
+            // we then scale them so the calculations in SignaturePanel.setSignaturePlaceholder are correct
+            return new BufferedImage(229 * SIG_PREVIEW_SCALING_FACTOR, 82 * SIG_PREVIEW_SCALING_FACTOR, BufferedImage.TYPE_INT_RGB);
         }
     }
 
