@@ -17,7 +17,9 @@ package at.asit.pdfover.gui.workflow.states;
 
 //Imports
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
+import org.apache.hc.client5.http.HttpHostConnectException;
 import org.eclipse.swt.SWT;
 
 import at.asit.pdfover.gui.MainWindowBehavior;
@@ -31,6 +33,7 @@ import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -93,8 +96,10 @@ public class SigningState extends State {
 				while (cause.getCause() != null)
 					cause = cause.getCause();
 
-				if (cause instanceof SocketException) {
-					message += ": " + cause.getMessage();
+				if (cause instanceof UnknownHostException) {
+					message = Messages.formatString("error.CouldNotResolveHostname", cause.getMessage());
+				} else if (cause instanceof SocketException) {
+					message = Messages.formatString("error.FailedToConnect", cause.getMessage());
 				} else if (cause instanceof SLPdfAsException) {
 					var ex = ((SLPdfAsException)cause);
 					message = Messages.formatString("error.SLError", ex.getCode(), ex.getInfo());
@@ -104,13 +109,14 @@ public class SigningState extends State {
 					// TODO legacy hack
 					this.threadException = new UserCancelledException();
 				}
-			}
-			if (this.threadException instanceof UserCancelledException) {
+			} else if (this.threadException instanceof UserCancelledException) {
 				// don't display error, clear remembered password and go back to BKU Selection
 				if (this.getConfig().getRememberMobilePassword())
 					this.getConfig().setDefaultMobilePasswordOverlay(null);
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
+			} else {
+				message += ": " + this.threadException.getClass().getSimpleName();
 			}
 
 			// if we have gotten to this point, this is an actual exception
