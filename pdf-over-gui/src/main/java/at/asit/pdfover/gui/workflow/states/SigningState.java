@@ -18,6 +18,7 @@ package at.asit.pdfover.gui.workflow.states;
 //Imports
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 import org.apache.hc.client5.http.HttpHostConnectException;
 import org.eclipse.swt.SWT;
@@ -60,7 +61,7 @@ public class SigningState extends State {
 		public void run() {
 			try {
 				Status status = this.state.getStateMachine().status;
-				status.signResult = PdfAs4Signer.sign(status.signingState);
+				status.signResult = Objects.requireNonNull(PdfAs4Signer.sign(status.signingState));
 			} catch(Exception e) {
 				this.state.threadException = e;
 			} finally {
@@ -90,7 +91,9 @@ public class SigningState extends State {
 		}
 
 		if(this.threadException != null) {
-			String message = Messages.getString("error.Signatur");
+			String message = Messages.formatString("error.Signatur",
+				this.threadException.getClass().getSimpleName(),
+				Objects.requireNonNullElse(this.threadException.getMessage(), "(null)"));
 			if (this.threadException instanceof SignatureException) {
 				Throwable cause = this.threadException;
 				while (cause.getCause() != null)
@@ -115,8 +118,6 @@ public class SigningState extends State {
 					this.getConfig().setDefaultMobilePasswordOverlay(null);
 				this.setNextState(new BKUSelectionState(getStateMachine()));
 				return;
-			} else {
-				message += ": " + this.threadException.getClass().getSimpleName();
 			}
 
 			// if we have gotten to this point, this is an actual exception
