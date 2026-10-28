@@ -20,21 +20,19 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
-import org.apache.hc.client5.http.HttpHostConnectException;
 import org.eclipse.swt.SWT;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signer.SignatureException;
 import at.asit.pdfover.signer.UserCancelledException;
 import at.asit.pdfover.signer.pdfas.PdfAs4Signer;
 import at.gv.egiz.pdfas.common.exceptions.SLPdfAsException;
-import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
