@@ -60,7 +60,7 @@ public class MobileBKUConnector implements BkuSlConnector {
     private static class UserDisplayedError extends Exception {
         private final @NonNull String msg;
         @Override public @NonNull String getMessage() { return this.msg; }
-        private UserDisplayedError(@NonNull String s) { this.msg = s; }
+        private UserDisplayedError(@NonNull String key, Object... values) { this.msg = Messages.formatString(key, values); }
     }
 
     public @NonNull UsernameAndPassword credentials = new UsernameAndPassword();
@@ -123,9 +123,9 @@ public class MobileBKUConnector implements BkuSlConnector {
 	
 	            if (httpStatus != HttpStatus.SC_OK) {
 	                switch (httpStatus) {
-	                    case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED: throw new UserDisplayedError(Messages.getString("error.ProxyAuthRequired"));
-	                    case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError(Messages.getString("atrusterror.http_413"));
-	                    default: throw new UserDisplayedError(Messages.formatString("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)")));
+	                    case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED: throw new UserDisplayedError("error.ProxyAuthRequired");
+	                    case HttpStatus.SC_REQUEST_TOO_LONG: throw new UserDisplayedError("atrusterror.http_413");
+	                    default: throw new UserDisplayedError("atrusterror.http_generic", httpStatus, Optional.ofNullable(response.getReasonPhrase()).orElse("(null)"));
 	                }
 	            }
 	                        
@@ -151,6 +151,10 @@ public class MobileBKUConnector implements BkuSlConnector {
 	                    log.debug("Failed to parse A-Trust server response as HTML:\n{}", entityBody);
 	                    throw new IOException("Failed to parse HTML");
 	                }
+
+                    if (resultDocument.selectFirst("body > *") == null) {
+                        throw new UserDisplayedError("atrusterror.empty_document");
+                    }
 	
 	                Element metaRefresh = resultDocument.selectFirst("meta[http-equiv=\"refresh\"i]");
 	                if (metaRefresh != null) {
@@ -160,6 +164,7 @@ public class MobileBKUConnector implements BkuSlConnector {
 	                        continue;
 	                    }
 	                }
+                    
 	                return ATrustParser.Parse(resultDocument);
 	            } else {
 	                return ATrustParser.Parse(request.getUri(), contentType.getMimeType(), entityBody);

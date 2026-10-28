@@ -17,14 +17,16 @@ package at.asit.pdfover.gui.workflow.states;
 
 //Imports
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Objects;
 
 import org.eclipse.swt.SWT;
 
-import at.asit.pdfover.gui.MainWindowBehavior;
+import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.MainWindow.Buttons;
+import at.asit.pdfover.gui.MainWindowBehavior;
 import at.asit.pdfover.gui.controls.Dialog.BUTTONS;
 import at.asit.pdfover.gui.controls.ErrorDialog;
-import at.asit.pdfover.commons.Messages;
 import at.asit.pdfover.gui.workflow.StateMachine;
 import at.asit.pdfover.gui.workflow.Status;
 import at.asit.pdfover.signer.SignatureException;
@@ -57,7 +59,7 @@ public class SigningState extends State {
 		public void run() {
 			try {
 				Status status = this.state.getStateMachine().status;
-				status.signResult = PdfAs4Signer.sign(status.signingState);
+				status.signResult = Objects.requireNonNull(PdfAs4Signer.sign(status.signingState));
 			} catch(Exception e) {
 				this.state.threadException = e;
 			} finally {
@@ -87,14 +89,18 @@ public class SigningState extends State {
 		}
 
 		if(this.threadException != null) {
-			String message = Messages.getString("error.Signatur");
+			String message = Messages.formatString("error.Signatur",
+				this.threadException.getClass().getSimpleName(),
+				Objects.requireNonNullElse(this.threadException.getMessage(), "(null)"));
 			if (this.threadException instanceof SignatureException) {
 				Throwable cause = this.threadException;
 				while (cause.getCause() != null)
 					cause = cause.getCause();
 
-				if (cause instanceof SocketException) {
-					message += ": " + cause.getMessage();
+				if (cause instanceof UnknownHostException) {
+					message = Messages.formatString("error.CouldNotResolveHostname", cause.getMessage());
+				} else if (cause instanceof SocketException) {
+					message = Messages.formatString("error.FailedToConnect", cause.getMessage());
 				} else if (cause instanceof SLPdfAsException) {
 					var ex = ((SLPdfAsException)cause);
 					message = Messages.formatString("error.SLError", ex.getCode(), ex.getInfo());
@@ -104,8 +110,7 @@ public class SigningState extends State {
 					// TODO legacy hack
 					this.threadException = new UserCancelledException();
 				}
-			}
-			if (this.threadException instanceof UserCancelledException) {
+			} else if (this.threadException instanceof UserCancelledException) {
 				// don't display error, clear remembered password and go back to BKU Selection
 				if (this.getConfig().getRememberMobilePassword())
 					this.getConfig().setDefaultMobilePasswordOverlay(null);

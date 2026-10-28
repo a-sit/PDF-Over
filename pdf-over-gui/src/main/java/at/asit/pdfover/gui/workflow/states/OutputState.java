@@ -76,18 +76,6 @@ public class OutputState extends State {
 
 	@Override
 	public void run() {
-		Status status = getStateMachine().status;
-
-		if (status.signResult == null) {
-			ErrorDialog error = new ErrorDialog(getStateMachine().getMainShell(),
-					Messages.getString("error.Signatur"), BUTTONS.RETRY_CANCEL);
-			if(error.open() == SWT.RETRY) {
-				this.setNextState(new PrepareSigningState(getStateMachine()));
-			} else {
-				this.setNextState(new BKUSelectionState(getStateMachine()));
-			}
-			return;
-		}
 
 		OutputComposite outputComposite = this.getOutputComposite();
 

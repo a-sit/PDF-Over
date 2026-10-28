@@ -523,13 +523,7 @@ public class MobileBKUState extends State {
 		this.signingState.bkuConnector = new MobileBKUConnector(this);
 		this.signingState.useBase64Request = false;
 
-		if (this.threadException != null) {
-			displayError(this.threadException);
-			return;
-		}
-
-		getStateMachine().display(
-				this.getWaitingComposite());
+		getStateMachine().display(this.getWaitingComposite());
 
 		this.setNextState(new SigningState(getStateMachine()));
 	}
